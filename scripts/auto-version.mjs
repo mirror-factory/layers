@@ -13,6 +13,13 @@
 import { readFileSync, writeFileSync } from "fs";
 import { execSync } from "child_process";
 
+// Guard against infinite hook loops: skip if the just-made commit is itself
+// a version bump created by this script, or if AUTO_VERSION_SKIP is set.
+const lastMsg = execSync("git log -1 --pretty=%s").toString().trim();
+if (lastMsg.startsWith("chore: bump to ") || process.env.AUTO_VERSION_SKIP === "1") {
+  process.exit(0);
+}
+
 // 1. Read current version
 const pkg = JSON.parse(readFileSync("package.json", "utf8"));
 const [major, minor, patch] = pkg.version.split(".").map(Number);
