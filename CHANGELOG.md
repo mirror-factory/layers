@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.17] — 2026-04-17
+
+### Documentation
+- docs: SETUP.md — complete env + deploy guide (`80ecd34`)
+
+
 ## [0.1.16] — 2026-04-17
 
 ### Documentation
