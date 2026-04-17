@@ -31,10 +31,9 @@ import { test, expect, type Page } from '@playwright/test';
  */
 const PAGES = [
   { path: '/', name: 'Home' },
-  { path: '/brand', name: 'Brand Studio' },
-  // Add your pages:
-  // { path: '/dashboard', name: 'Dashboard' },
-  // { path: '/settings', name: 'Settings' },
+  { path: '/record', name: 'Record' },
+  { path: '/chat', name: 'Chat' },
+  { path: '/observability', name: 'Observability' },
 ];
 
 const VIEWPORTS = [

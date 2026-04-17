@@ -1,44 +1,58 @@
 # llms.txt — Machine-readable project description for AI agents
 # Standard: https://llmstxt.org
-#
-# This file gives AI coding tools (Claude Code, Cursor, Copilot, etc.)
-# instant context about your project without reading every file.
-#
-# CUSTOMIZE: Replace all placeholders below with your project details.
-# REGENERATE: Run `pnpm docs:generate` to rebuild from registries.
 
-> Project: [Your Project Name]
-> Version: 0.0.1
+> Project: audio-layer
+> Version: 0.1.x
+> Purpose: Multi-platform audio intake + meeting transcription app.
 > Stack: Next.js 15, React 19, TypeScript, Tailwind CSS v4, Vercel AI SDK v6
-> Database: Supabase (PostgreSQL + pgvector)
-> Testing: Vitest (unit), Playwright (E2E), Expect CLI (AI browser)
+> Shells: Web (hosted on Vercel), Capacitor (iOS + Android), Tauri (macOS + Windows)
+> Transcription: AssemblyAI Universal-3 Pro (direct — NOT routed via Gateway)
+> LLM Gateway: Vercel AI Gateway (Claude Sonnet 4.6 default for summaries)
+> Observability: Langfuse via OTEL (auto-traces all AI SDK calls)
+> Testing: Vitest (unit), Playwright (E2E)
 > Package Manager: pnpm
 
-## Architecture
-- AI SDK v6 with tool system (client-side + server-side tools)
-- Dynamic registries: TOOL_META, API_ROUTES (single source of truth)
-- Tiered context: Tier 1 (always), Tier 2 (summary), Tier 3 (on-demand)
-- Multi-provider: Vercel AI Gateway (Anthropic, Google, OpenAI)
+## Routes
+- `/`                      Hub
+- `/record`                V1 pipeline: upload or mic-record audio → transcript + structured summary
+- `/chat`                  Reference chat with tool calls (from starter kit)
+- `/observability`         AI call logs / costs / errors dashboard
+- `POST /api/transcribe`   Upload audio → create AssemblyAI job → return id
+- `GET  /api/transcribe/[id]`  Poll job status; on completion, summarize + cache
+- `POST /api/chat`         Streaming chat endpoint
+- `GET  /api/ai-logs`      Observability log feed (list/stats/errors)
 
 ## Key Files
-- AGENTS.md — Agent context (always in context, compressed registry)
-- CLAUDE.md — Project instructions for Claude Code
-- lib/ai/tool-meta.ts — Tool registry (single source of truth)
-- lib/registry/api-routes.ts — API route registry
-- app/api/chat/route.ts — Main chat endpoint
-- lib/ai/prompts/ — System prompts
+- AGENTS.md                          Agent context (locked stack, do-not-do list)
+- instrumentation.ts                 Next.js instrumentation → Langfuse OTEL bootstrap
+- lib/langfuse-setup.ts              Langfuse span processor
+- lib/ai/telemetry.ts                withTelemetry() config + in-memory log ring buffer
+- lib/ai/tool-meta.ts                Tool registry (single source of truth)
+- lib/assemblyai/client.ts           AssemblyAI SDK factory (cached)
+- lib/assemblyai/schema.ts           Zod schema for MeetingSummary
+- lib/assemblyai/summary.ts          generateObject through Gateway with telemetry
+- lib/assemblyai/cache.ts            In-memory summary cache (FIFO, 500 entries)
+- lib/assemblyai/types.ts            Client↔Server transcribe response types
+- app/api/transcribe/route.ts        POST: upload + submit
+- app/api/transcribe/[id]/route.ts   GET: poll + summarize on completion
+- app/record/page.tsx                /record UI (upload + mic recorder)
+- components/audio-recorder.tsx      MediaRecorder wrapper (browser mic)
+- components/transcript-view.tsx     Speaker-segmented transcript + summary panel
+
+## Locked Decisions (do not re-debate)
+- Transcription engine: AssemblyAI Universal-3 Pro. Batch uses `speech_model: 'best'`. Streaming uses `u3-rt-pro` (next PR).
+- Vercel AI Gateway does NOT route STT providers as of April 2026. AssemblyAI goes DIRECT.
+- Desktop shell: Tauri (not Electron).
+- Mobile shell: Capacitor.
+- Every `generateText` / `generateObject` / `streamText` call spreads `withTelemetry({ label })` — enforced by `pnpm compliance`.
 
 ## Testing
-- `pnpm typecheck` — TypeScript validation (must pass)
-- `pnpm test` — Unit tests (must pass)
-- `pnpm test:e2e` — Playwright E2E (must pass)
-- `pnpm compliance` — Pattern enforcement checker
-- `pnpm eval:tools:live` — Real AI tool tests (~$0.01)
-
-## Docs
-- docs/architecture/ — System design
-- docs/guides/ — How-to guides
-- docs/reference/ — Auto-generated from registries
+- `pnpm typecheck`       TypeScript
+- `pnpm test`            Vitest unit tests
+- `pnpm test:smoke`      Playwright smoke on main routes
+- `pnpm test:e2e`        Full Playwright suite
+- `pnpm compliance`      Pattern enforcement (telemetry, no @ts-nocheck, etc.)
+- `pnpm build`           Next.js production build
 
 ## AI SDK v6 Patterns (CRITICAL)
 - Use `inputSchema` NOT `parameters`
@@ -46,19 +60,9 @@
 - Message format: `message.parts[]` NOT `message.content`
 - Tool states: input-streaming | input-available | output-available | output-error
 - `addToolOutput` NOT `addToolResult`; `sendMessage` NOT `append`
+- Use `generateObject({ schema, ... })` for structured output (e.g., MeetingSummary)
 
-## Registries
-All registries are dynamic — add in one place, everything derives:
-- New tool → TOOL_META → tests, docs, renderers auto-update
-- New route → API_ROUTES → tests, docs auto-update
-- Run `pnpm docs:generate` to rebuild reference docs
-
-## Compliance
-Run `pnpm compliance` to check:
-- Telemetry on all AI calls
-- No @ts-nocheck in tests
-- Smoke tests exist
-- Reasoning display implemented
-- Nightly CI configured
-- Docs are fresh
-- llms.txt exists
+## Docs
+- docs/architecture/ — System design
+- docs/guides/       — How-to guides
+- docs/reference/    — Auto-generated from registries

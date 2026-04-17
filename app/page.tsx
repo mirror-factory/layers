@@ -90,6 +90,12 @@ export default function Home() {
             </div>
             <div className="ml-auto flex flex-wrap gap-3">
               <Link
+                href="/record"
+                className="rounded-full bg-emerald-400 px-4 py-2 text-sm font-medium text-neutral-950 transition hover:bg-emerald-300"
+              >
+                Open Record
+              </Link>
+              <Link
                 href="/chat"
                 className="rounded-full bg-cyan-400 px-4 py-2 text-sm font-medium text-neutral-950 transition hover:bg-cyan-300"
               >
@@ -203,6 +209,14 @@ export default function Home() {
                 <div className="rounded-2xl bg-neutral-950/80 p-4">
                   <p className="font-medium text-neutral-100">/</p>
                   <p className="mt-1">The central hub you are reading now.</p>
+                </div>
+                <div className="rounded-2xl bg-neutral-950/80 p-4">
+                  <p className="font-medium text-neutral-100">/record</p>
+                  <p className="mt-1">
+                    Upload or record audio, transcribe via AssemblyAI
+                    Universal-3 Pro, and get a structured meeting summary from
+                    the Gateway.
+                  </p>
                 </div>
                 <div className="rounded-2xl bg-neutral-950/80 p-4">
                   <p className="font-medium text-neutral-100">/chat</p>

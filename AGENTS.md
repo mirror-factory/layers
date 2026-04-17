@@ -52,6 +52,8 @@ Audio intake + meeting transcription app. Multi-platform: web (Next.js), iOS + A
 - Dashboard stub at `/observability`
 
 ## Key Files
+
+### Chat reference (from starter kit)
 - `app/api/chat/route.ts` — Chat API (streamText + tools + telemetry)
 - `app/chat/page.tsx` — Chat UI (useChat, message.parts[], tool rendering)
 - `lib/ai/tools.ts` — 3 tool definitions (server + client)
@@ -62,11 +64,26 @@ Audio intake + meeting transcription app. Multi-platform: web (Next.js), iOS + A
 - `components/tool-card.tsx` — Generic tool card UI
 - `components/chat-input.tsx` — Textarea + submit
 
+### Transcribe pipeline (V1 batch)
+- `lib/assemblyai/client.ts` — AssemblyAI SDK factory (reads `ASSEMBLYAI_API_KEY`)
+- `lib/assemblyai/schema.ts` — Zod `MeetingSummarySchema` (summary, keyPoints, actionItems, decisions, participants)
+- `lib/assemblyai/summary.ts` — `summarizeMeeting()` via `generateObject` through Gateway with `withTelemetry`
+- `lib/assemblyai/cache.ts` — In-memory FIFO cache (500 entries) for completed summaries
+- `lib/assemblyai/types.ts` — Transcribe API response types (shared by route + page)
+- `app/api/transcribe/route.ts` — POST: multipart form → upload to AssemblyAI → submit job → return id
+- `app/api/transcribe/[id]/route.ts` — GET: fetch job; on completion summarize + cache + return
+- `app/record/page.tsx` — UI: mic recorder + file upload, polls every 3s
+- `components/audio-recorder.tsx` — MediaRecorder browser mic wrapper
+- `components/transcript-view.tsx` — Speaker-segmented transcript + summary sidebar
+
 ## Common Gotchas
 - Client-side tools (askQuestion) have NO execute function — they pause the stream
 - Tool parts have `part.type === 'tool-{toolName}'`, strip the 'tool-' prefix to get the name
 - Silent tools should render nothing in the chat UI
 - Use `sendMessage({ text })` not `append`
+- Transcribe routes use `runtime = 'nodejs'` (AssemblyAI SDK needs Node APIs; edge won't work)
+- `/api/transcribe` accepts files up to 100MB (sanity cap). Larger files need storage-backed flow (future PR).
+- Summary cache is per-process in-memory — lost on redeploy; production needs Supabase meetings table.
 
 ## Audio Capture Rules (per platform)
 - Web (browser): mic only via `getUserMedia` — no system audio available

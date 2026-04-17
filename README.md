@@ -14,6 +14,7 @@ pnpm dev
 
 Then open:
 - http://localhost:3000 — Hub
+- http://localhost:3000/record — upload or record audio → transcript + summary
 - http://localhost:3000/chat — reference chat with tool calls
 - http://localhost:3000/observability — AI call logs / costs / errors
 
@@ -55,6 +56,12 @@ Husky pre-commit runs typecheck + test; pre-push re-runs them plus compliance.
 
 All front-ends (web, mobile, desktop) call the same hosted `https://<app>.vercel.app/api/*` routes. Audio capture is native per-platform; uploads/streams go to the server-side AssemblyAI integration.
 
+## V1 pipeline (shipped)
+
+`/record` → `POST /api/transcribe` → AssemblyAI Universal-3 Pro batch (`speech_model: 'best'`) → `GET /api/transcribe/[id]` (poll every 3s) → on completion, Gateway-routed Claude Sonnet 4.6 runs `generateObject` against `MeetingSummarySchema` → render speaker-segmented transcript + structured summary (key points, decisions, action items, participants).
+
+Every LLM call goes through `withTelemetry()` → Langfuse + `/observability`.
+
 ## Next up
 
-Transcription pipeline (upload → AssemblyAI pre-recorded → transcript + summary render), then streaming + native shells.
+Streaming transcription (AssemblyAI `u3-rt-pro` WebSocket) for live captions. Then Tauri shell with native system-audio capture (Core Audio / ScreenCaptureKit / WASAPI). Then Capacitor for mobile.
