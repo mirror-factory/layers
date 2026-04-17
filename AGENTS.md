@@ -1,10 +1,22 @@
-# AI Starter Kit — Reference App
+# audio-layer — Agent Context
 
-## Tech Stack
+## Product
+
+Audio intake + meeting transcription app. Multi-platform: web (Next.js), iOS + Android (Capacitor), macOS + Windows (Tauri). No bot in the meeting — audio captured at OS level. Pricing tiers: Core $15/mo, Pro $25/mo, 25 free meetings.
+
+## Tech Stack (LOCKED — do not re-debate)
 - Frontend: Next.js 15 (App Router), React 19, TypeScript
 - Styling: Tailwind CSS v4
-- AI: Vercel AI SDK v6 with AI Gateway
-- Testing: Vitest (unit)
+- AI LLM calls: Vercel AI SDK v6 via AI Gateway (default `anthropic/claude-sonnet-4-6`)
+- **Transcription: AssemblyAI Universal-3 Pro — DIRECT, not via Gateway.**
+  - Streaming: `u3-rt-pro` at `wss://api.assemblyai.com/v3/realtime/ws`
+  - Batch: `speech_model: 'best'` at `api.assemblyai.com/v2/transcript`
+  - Env: `ASSEMBLYAI_API_KEY`
+  - The Vercel AI Gateway does NOT route audio/STT providers as of April 2026 — confirmed by hitting `https://ai-gateway.vercel.sh/v1/models` (types are `language | embedding | image | video | reranking` only).
+- Mobile shell: Capacitor wrapping static-exported Next.js + native audio plugins
+- Desktop shell: **Tauri** (not Electron) — OS webview + Rust bridge for Core Audio / ScreenCaptureKit / WASAPI
+- Observability: Langfuse via OTEL (auto on every AI SDK call)
+- Testing: Vitest (unit), Playwright (e2e/visual/mobile)
 - Package Manager: pnpm
 
 ## AI SDK v6 Patterns (CRITICAL)
@@ -55,3 +67,18 @@
 - Tool parts have `part.type === 'tool-{toolName}'`, strip the 'tool-' prefix to get the name
 - Silent tools should render nothing in the chat UI
 - Use `sendMessage({ text })` not `append`
+
+## Audio Capture Rules (per platform)
+- Web (browser): mic only via `getUserMedia` — no system audio available
+- Capacitor (iOS): mic only. iOS sandbox blocks other-app audio; speaker-mode workaround for virtual calls.
+- Capacitor (Android): mic via `AudioRecord`; system audio via `MediaProjection` (Android 10+) — behavior varies by device, treat as best-effort.
+- Tauri (macOS): mic via AVFoundation + system audio via ScreenCaptureKit (macOS 13+). Requires Microphone + Screen Recording permissions.
+- Tauri (Windows): mic + WASAPI loopback for system audio. Mic permission only.
+- Always send ≥16 kHz PCM to AssemblyAI. Sub-16 kHz degrades accuracy even on U-3 Pro.
+- Multi-channel billing: sending mic + system as separate channels doubles cost but improves diarization — use `multichannel: true` only when the UX benefit justifies it.
+
+## Do Not Do
+- Do not route AssemblyAI through the Vercel AI Gateway. It's not supported.
+- Do not suggest Deepgram, Whisper, or other STT providers as the default. AssemblyAI U-3 Pro is the locked engine. Alternative providers only come up for cost/fallback discussions if the user explicitly raises them.
+- Do not propose Electron. Desktop is Tauri.
+- Do not remove or rename `audio-layer` to a product name; the repo stays `audio-layer`.

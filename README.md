@@ -41,6 +41,20 @@ Husky pre-commit runs typecheck + test; pre-push re-runs them plus compliance.
 - **Playwright** — smoke, visual-regression, mobile
 - **Research cache** — `.claude/research/` with freshness enforcement
 
+## Product stack (locked)
+
+| Layer | Choice |
+|---|---|
+| Web app (core) | Next.js 15 + AI SDK v6, hosted on Vercel |
+| iOS + Android | Capacitor wrapping the static-exported web app + native audio plugins |
+| macOS + Windows | Tauri (not Electron) — thin OS-webview shell, Rust bridge for system audio (Core Audio / ScreenCaptureKit / WASAPI) |
+| Transcription — streaming | **AssemblyAI Universal-3 Pro** (`u3-rt-pro`, wss://api.assemblyai.com/v3/realtime/ws) — direct, not via Gateway |
+| Transcription — batch | **AssemblyAI Universal-3 Pro** (`speech_model: 'best'`) — direct, not via Gateway |
+| Summary LLM | Vercel AI Gateway (default `anthropic/claude-sonnet-4-6`) |
+| Observability | Langfuse OTEL (auto-traces every LLM call) + in-app `/observability` dashboard |
+
+All front-ends (web, mobile, desktop) call the same hosted `https://<app>.vercel.app/api/*` routes. Audio capture is native per-platform; uploads/streams go to the server-side AssemblyAI integration.
+
 ## Next up
 
-Granola Mode features: audio capture, Deepgram Nova-3 streaming, meeting schema, AI summary, export (MD/PDF/audio), intake-form extraction, Stripe, landing page.
+Transcription pipeline (upload → AssemblyAI pre-recorded → transcript + summary render), then streaming + native shells.
