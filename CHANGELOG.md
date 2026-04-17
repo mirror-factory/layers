@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.5] — 2026-04-17
+
+### Added
+- feat: streaming transcription (u3-rt-pro) + /record/live (`017e7a6`)
+
+
 ## [0.1.4] — 2026-04-17
 
 ### Added
