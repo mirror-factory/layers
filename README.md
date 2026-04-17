@@ -148,6 +148,25 @@ stripe listen --forward-to localhost:3000/api/stripe/webhook
 
 The meeting routes are NOT paywalled yet — that ships when we have real customers and a clear "free 25 meetings" cutoff to enforce.
 
+## Desktop shell (Tauri scaffold)
+
+`src-tauri/` is a minimal Tauri 2.x scaffold that wraps the hosted
+Next.js app in an OS webview for macOS / Windows / Linux. **Native
+system-audio capture is not implemented yet** — the Rust commands
+return a "not implemented" error on purpose, so the browser fallback
+(mic-only via AudioWorklet on `/record/live`) keeps working.
+
+To develop the shell:
+
+```bash
+cargo install tauri-cli --version "^2.0"
+cargo tauri dev   # starts pnpm dev + opens the native window
+```
+
+See `src-tauri/README.md` for the platform-specific audio roadmap
+(ScreenCaptureKit on macOS, WASAPI loopback on Windows,
+PulseAudio/PipeWire monitor on Linux).
+
 ## Next up
 
-Tauri shell with native system-audio capture (Core Audio / ScreenCaptureKit / WASAPI). Then Capacitor for iOS/Android mic-only.
+Real native audio bridges in the Tauri shell. Capacitor for iOS/Android (mic-only). Real sign-in (email magic link / OAuth). Paywall the meeting routes once the free-tier cutoff is decided.

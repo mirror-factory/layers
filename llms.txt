@@ -50,6 +50,7 @@
 - app/api/stripe/webhook/route.ts    Raw-body signature verification → setSubscriptionState
 - app/pricing/page.tsx               Pricing landing
 - app/pricing/pricing-buttons.tsx    Client subscribe button
+- src-tauri/                         Tauri 2.x desktop shell scaffold (system-audio commands stubbed)
 - middleware.ts                      Per-request Supabase session refresh + anonymous sign-in on first visit
 - lib/supabase/user.ts               getSupabaseUser() + getCurrentUserId() — cookie-bound anon-role client
 - lib/supabase/server.ts             Server-side Supabase client factory (service-role; bypasses RLS)

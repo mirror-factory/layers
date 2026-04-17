@@ -76,6 +76,13 @@ Audio intake + meeting transcription app. Multi-platform: web (Next.js), iOS + A
 - `components/audio-recorder.tsx` — MediaRecorder browser mic wrapper
 - `components/transcript-view.tsx` — Speaker-segmented transcript + summary sidebar
 
+### Desktop shell (Tauri 2.x scaffold)
+- `src-tauri/` — Cargo + tauri.conf.json + capabilities + minimal Rust entrypoint. Wraps the Next.js app in an OS webview.
+- Dev URL = `http://localhost:3000`; production frontendDist points at the hosted Vercel app.
+- Native commands (`start_system_audio_capture`, `stop_system_audio_capture`) are STUBBED — they return errors. Wire them when adding ScreenCaptureKit / WASAPI / cpal bridges.
+- No `cargo` / `tauri` commands are added to `package.json`. Build with `cargo tauri dev` / `cargo tauri build` from the repo root.
+- `src-tauri/Cargo.lock` and `src-tauri/target/` are gitignored.
+
 ### Billing (Stripe)
 - `lib/stripe/client.ts` — `getStripe()` (null when STRIPE_SECRET_KEY missing) + `priceIdForTier()` / `tierForPriceId()` (env-driven)
 - `lib/stripe/profiles.ts` — service-role helpers: `getOrCreateProfile()`, `setStripeCustomerId()`, `setSubscriptionState()`. Why service-role: webhook is anonymous from the user's perspective so the cookie-bound anon client can't satisfy RLS on writes.
