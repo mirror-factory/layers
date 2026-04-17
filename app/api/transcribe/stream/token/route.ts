@@ -19,6 +19,7 @@ import { NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import { getAssemblyAI } from "@/lib/assemblyai/client";
 import { getMeetingsStore } from "@/lib/meetings/store";
+import { checkQuota } from "@/lib/billing/quota";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -30,6 +31,20 @@ const SPEECH_MODEL =
   process.env.ASSEMBLYAI_STREAMING_MODEL ?? "u3-rt-pro";
 
 export async function POST(): Promise<NextResponse> {
+  const quota = await checkQuota();
+  if (!quota.allowed) {
+    return NextResponse.json(
+      {
+        error: `Free-tier limit reached (${quota.meetingsUsed}/${quota.limit} meetings). Upgrade to keep recording.`,
+        code: "free_limit_reached",
+        upgradeUrl: "/pricing",
+        meetingsUsed: quota.meetingsUsed,
+        limit: quota.limit,
+      },
+      { status: 402 },
+    );
+  }
+
   const client = getAssemblyAI();
 
   let token: string;

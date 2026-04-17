@@ -83,6 +83,13 @@ Audio intake + meeting transcription app. Multi-platform: web (Next.js), iOS + A
 - No `cargo` / `tauri` commands are added to `package.json`. Build with `cargo tauri dev` / `cargo tauri build` from the repo root.
 - `src-tauri/Cargo.lock` and `src-tauri/target/` are gitignored.
 
+### Quota / paywall
+- `lib/billing/quota.ts` — `checkQuota()` + `FREE_TIER_MEETING_LIMIT = 25`. Counts the current user's meetings via the user-scoped Supabase client (RLS does the scoping). Active / trialing subscriptions bypass.
+- Enforced server-side in `app/api/transcribe/route.ts` (batch) and `app/api/transcribe/stream/token/route.ts` (live). Returns HTTP 402 + `{ code: "free_limit_reached", upgradeUrl: "/pricing" }`.
+- Both client recorders (`app/record/page.tsx`, `components/live-recorder.tsx`) detect 402 and surface the upgrade message inline.
+- Fail-open: a transient DB read failure does NOT lock the user out; we just don't tick the meter.
+- Dev mode without Supabase: quota always allows.
+
 ### Billing (Stripe)
 - `lib/stripe/client.ts` — `getStripe()` (null when STRIPE_SECRET_KEY missing) + `priceIdForTier()` / `tierForPriceId()` (env-driven)
 - `lib/stripe/profiles.ts` — service-role helpers: `getOrCreateProfile()`, `setStripeCustomerId()`, `setSubscriptionState()`. Why service-role: webhook is anonymous from the user's perspective so the cookie-bound anon client can't satisfy RLS on writes.

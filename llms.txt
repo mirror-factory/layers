@@ -48,6 +48,7 @@
 - lib/assemblyai/summary.ts          generateObject through Gateway with telemetry
 - lib/assemblyai/intake.ts           IntakeFormSchema + extractIntakeForm() — second generateObject per meeting
 - lib/assemblyai/types.ts            Client↔Server transcribe response types
+- lib/billing/quota.ts               checkQuota() — 25 free meetings, subscription bypass, HTTP 402 contract
 - lib/stripe/client.ts               getStripe() factory (null when env missing) + tier↔price-id mapping
 - lib/stripe/profiles.ts             Service-role profile helpers: getOrCreateProfile, setStripeCustomerId, setSubscriptionState
 - app/api/stripe/checkout/route.ts   POST { tier } → Checkout Session URL

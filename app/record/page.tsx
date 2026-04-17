@@ -56,6 +56,17 @@ export default function RecordPage() {
         method: "POST",
         body: form,
       });
+      if (res.status === 402) {
+        // Free-tier limit hit — surface the upgrade CTA inline.
+        const data = await res
+          .json()
+          .catch(() => ({ error: "Free-tier limit reached." }));
+        setError(
+          `${data.error ?? "Free-tier limit reached."} Open /pricing to subscribe.`,
+        );
+        setStage("error");
+        return;
+      }
       if (!res.ok) {
         const msg = await safeErrorMessage(res);
         throw new Error(msg);

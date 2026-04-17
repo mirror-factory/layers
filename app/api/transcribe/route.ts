@@ -19,6 +19,7 @@ import { NextResponse } from "next/server";
 import { getAssemblyAI, getBatchModel } from "@/lib/assemblyai/client";
 import type { TranscribeStartResponse } from "@/lib/assemblyai/types";
 import { getMeetingsStore } from "@/lib/meetings/store";
+import { checkQuota } from "@/lib/billing/quota";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -41,6 +42,22 @@ export async function POST(request: Request): Promise<NextResponse> {
     return NextResponse.json(
       { error: "Missing 'audio' file in form data" },
       { status: 400 },
+    );
+  }
+
+  // Free-tier quota gate. Subscriptions and dev-mode (no Supabase)
+  // bypass; otherwise enforce the 25-meeting lifetime cap.
+  const quota = await checkQuota();
+  if (!quota.allowed) {
+    return NextResponse.json(
+      {
+        error: `Free-tier limit reached (${quota.meetingsUsed}/${quota.limit} meetings). Upgrade to keep recording.`,
+        code: "free_limit_reached",
+        upgradeUrl: "/pricing",
+        meetingsUsed: quota.meetingsUsed,
+        limit: quota.limit,
+      },
+      { status: 402 },
     );
   }
 

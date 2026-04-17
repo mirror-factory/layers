@@ -103,6 +103,14 @@ export function LiveRecorder() {
       const res = await fetch("/api/transcribe/stream/token", {
         method: "POST",
       });
+      if (res.status === 402) {
+        const data = await res
+          .json()
+          .catch(() => ({ error: "Free-tier limit reached." }));
+        throw new Error(
+          `${data.error ?? "Free-tier limit reached."} Visit /pricing to subscribe.`,
+        );
+      }
       if (!res.ok) throw new Error(`Token request failed: ${res.status}`);
       token = (await res.json()) as TokenResponse;
     } catch (err) {
