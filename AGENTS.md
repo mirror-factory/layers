@@ -87,6 +87,14 @@ Audio intake + meeting transcription app. Multi-platform: web (Next.js), iOS + A
 - `app/meetings/page.tsx` — server-rendered recent-meetings list
 - `app/meetings/[id]/page.tsx` — detail view; `components/meeting-detail-poller.tsx` keeps non-terminal rows live
 
+### Streaming pipeline (V2 live)
+- `app/api/transcribe/stream/token/route.ts` — POST mints AssemblyAI ephemeral token (10 min TTL, 1 hr max session), allocates UUID meetingId, inserts Meetings row with status=processing
+- `app/api/transcribe/stream/finalize/route.ts` — POST validates body with Zod (utterances schema), summarizes via Gateway, upserts Meetings row to completed
+- `app/record/live/page.tsx` — /record/live UI
+- `components/live-recorder.tsx` — AudioContext + AudioWorklet + StreamingTranscriber; tears down on unmount
+- `components/live-transcript-view.tsx` — finalized turns + current partial
+- `public/worklets/pcm-downsampler.js` — AudioWorklet: 48k/44.1k → 16k int16 LE, ~150 ms chunks; no imports (worklet scope)
+
 ## Common Gotchas
 - Client-side tools (askQuestion) have NO execute function — they pause the stream
 - Tool parts have `part.type === 'tool-{toolName}'`, strip the 'tool-' prefix to get the name
@@ -96,6 +104,9 @@ Audio intake + meeting transcription app. Multi-platform: web (Next.js), iOS + A
 - `/api/transcribe` accepts files up to 100MB (sanity cap). Larger files need storage-backed flow (future PR).
 - MeetingsStore falls back to in-memory when SUPABASE_URL is unset — state is lost on redeploy. Production MUST configure Supabase and run `lib/supabase/schema.sql`.
 - `getSupabaseServer()` uses the service-role key and bypasses RLS. Never import it from client components.
+- Streaming: import `StreamingTranscriber` from `'assemblyai'` (main entry), NOT `'assemblyai/streaming'` — the subpath only re-exports the old v2 RealtimeTranscriber.
+- Streaming sample rate is locked at 16 kHz; higher mic rates MUST go through the AudioWorklet + BiquadFilter anti-alias chain.
+- Ephemeral tokens are minted server-side ONLY. Never send `ASSEMBLYAI_API_KEY` to the browser.
 
 ## Audio Capture Rules (per platform)
 - Web (browser): mic only via `getUserMedia` — no system audio available

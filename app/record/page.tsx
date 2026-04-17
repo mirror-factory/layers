@@ -141,6 +141,12 @@ export default function RecordPage() {
           </div>
           <div className="flex items-center gap-3 text-xs">
             <Link
+              href="/record/live"
+              className="rounded-md border border-emerald-700 bg-emerald-900/30 px-3 py-1.5 text-emerald-200 hover:bg-emerald-900/50"
+            >
+              Live mode
+            </Link>
+            <Link
               href="/meetings"
               className="text-neutral-500 hover:text-neutral-300"
             >

@@ -13,18 +13,21 @@
 > Package Manager: pnpm
 
 ## Routes
-- `/`                            Hub
-- `/record`                      V1 pipeline: upload or mic-record → redirects to /meetings/[id] on completion
-- `/meetings`                    Recent recordings (persisted)
-- `/meetings/[id]`               Single-meeting detail (transcript + summary); polls while non-terminal
-- `/chat`                        Reference chat with tool calls (from starter kit)
-- `/observability`               AI call logs / costs / errors dashboard
-- `POST /api/transcribe`         Upload audio → submit AssemblyAI job → insert Meetings row → return id
-- `GET  /api/transcribe/[id]`    Poll job; on completion summarize + persist into MeetingsStore
-- `GET  /api/meetings`           List recent meetings (limit=50, max=200)
-- `GET  /api/meetings/[id]`      Fetch single persisted meeting
-- `POST /api/chat`               Streaming chat endpoint
-- `GET  /api/ai-logs`            Observability log feed (list/stats/errors)
+- `/`                                     Hub
+- `/record`                               V1 batch: upload or mic-record → redirects to /meetings/[id] on completion
+- `/record/live`                          V2 streaming (u3-rt-pro): live transcript, persists on Stop
+- `/meetings`                             Recent recordings (persisted)
+- `/meetings/[id]`                        Single-meeting detail (transcript + summary); polls while non-terminal
+- `/chat`                                 Reference chat with tool calls (from starter kit)
+- `/observability`                        AI call logs / costs / errors dashboard
+- `POST /api/transcribe`                  Upload audio → submit AssemblyAI job → insert Meetings row → return id
+- `GET  /api/transcribe/[id]`             Poll batch job; on completion summarize + persist into MeetingsStore
+- `POST /api/transcribe/stream/token`     Mint AssemblyAI ephemeral token + allocate meetingId
+- `POST /api/transcribe/stream/finalize`  Persist streaming transcript + summary at session end
+- `GET  /api/meetings`                    List recent meetings (limit=50, max=200)
+- `GET  /api/meetings/[id]`               Fetch single persisted meeting
+- `POST /api/chat`                        Streaming chat endpoint
+- `GET  /api/ai-logs`                     Observability log feed (list/stats/errors)
 
 ## Key Files
 - AGENTS.md                          Agent context (locked stack, do-not-do list)
@@ -42,16 +45,22 @@
 - lib/meetings/store-supabase.ts     Supabase-backed MeetingsStore implementation
 - lib/meetings/store-in-memory.ts    Dev fallback (FIFO 500 entries)
 - lib/meetings/types.ts              Meeting, MeetingListItem, MeetingInsert, MeetingUpdate
-- app/api/transcribe/route.ts        POST: upload + submit + insert Meetings row
-- app/api/transcribe/[id]/route.ts   GET: poll + summarize on completion + persist
-- app/api/meetings/route.ts          GET list
-- app/api/meetings/[id]/route.ts     GET single
-- app/record/page.tsx                /record UI (upload + mic recorder); redirects to /meetings/[id]
-- app/meetings/page.tsx              Recent meetings list
-- app/meetings/[id]/page.tsx         Meeting detail (server-rendered + client poller)
-- components/meeting-detail-poller.tsx   Polls /api/transcribe/[id] then router.refresh() on completion
-- components/audio-recorder.tsx      MediaRecorder wrapper (browser mic)
-- components/transcript-view.tsx     Speaker-segmented transcript + summary panel
+- app/api/transcribe/route.ts                        POST: upload + submit + insert Meetings row
+- app/api/transcribe/[id]/route.ts                   GET: poll + summarize on completion + persist
+- app/api/transcribe/stream/token/route.ts           POST: mint AssemblyAI ephemeral token + meetingId
+- app/api/transcribe/stream/finalize/route.ts        POST: summarize + persist at stream end
+- app/api/meetings/route.ts                          GET list
+- app/api/meetings/[id]/route.ts                     GET single
+- app/record/page.tsx                                Batch UI (upload + mic recorder); redirects to /meetings/[id]
+- app/record/live/page.tsx                           Streaming UI (u3-rt-pro)
+- app/meetings/page.tsx                              Recent meetings list
+- app/meetings/[id]/page.tsx                         Meeting detail (server-rendered + client poller)
+- components/meeting-detail-poller.tsx               Polls /api/transcribe/[id] then router.refresh() on completion
+- components/audio-recorder.tsx                      MediaRecorder wrapper (browser mic)
+- components/live-recorder.tsx                       AudioContext+Worklet+StreamingTranscriber session
+- components/live-transcript-view.tsx                Finalized + partial turn rendering
+- components/transcript-view.tsx                     Speaker-segmented transcript + summary panel
+- public/worklets/pcm-downsampler.js                 AudioWorklet: 48k/44.1k → 16k int16 LE, 150 ms chunks
 
 ## Locked Decisions (do not re-debate)
 - Transcription engine: AssemblyAI Universal-3 Pro. Batch uses `speech_model: 'best'`. Streaming uses `u3-rt-pro` (next PR).

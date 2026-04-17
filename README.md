@@ -24,7 +24,8 @@ psql "$SUPABASE_DB_URL" -f lib/supabase/schema.sql
 
 Then open:
 - http://localhost:3000 — Hub
-- http://localhost:3000/record — upload or record audio → routed to detail on completion
+- http://localhost:3000/record — batch mode (upload or record audio)
+- http://localhost:3000/record/live — streaming mode (u3-rt-pro, live captions)
 - http://localhost:3000/meetings — recent recordings (persisted)
 - http://localhost:3000/meetings/[id] — single meeting detail
 - http://localhost:3000/chat — reference chat with tool calls
@@ -88,6 +89,29 @@ GET /api/meetings/[id]  → Meeting
 - **Persistence** — `meetings` table in Supabase (`lib/supabase/schema.sql`). If `SUPABASE_URL` is unset, falls back to an in-memory store for zero-setup local dev.
 - **Observability** — every LLM call goes through `withTelemetry()` → Langfuse + `/observability`.
 
+## V2 pipeline — streaming (shipped)
+
+```
+/record/live
+  └→ POST /api/transcribe/stream/token        (mint ephemeral token,
+                                               insert Meetings row)
+  └→ AudioContext + AudioWorklet              (48k mic → 16k PCM int16)
+  └→ wss://api.assemblyai.com/v3/realtime/ws  (direct browser connection
+                                               with the temp token, model
+                                               u3-rt-pro, speakerLabels)
+  └→ Turn events                              (partial + final; partial
+                                               updates the live UI, final
+                                               appends to transcript)
+  └→ Stop button
+      └→ POST /api/transcribe/stream/finalize (summarize via Gateway,
+                                               persist via MeetingsStore)
+      └→ redirect /meetings/[id]
+```
+
+- Browser never sees the AssemblyAI API key — only short-lived tokens (10 min TTL, max 1 hr session).
+- AudioWorklet is served from `public/worklets/pcm-downsampler.js`; pre-filtered by a BiquadFilter low-pass at 7 kHz to prevent decimation aliasing.
+- Browser mic only for V1. System-audio capture requires native bridges — comes with the Tauri shell.
+
 ## Next up
 
-Streaming transcription (AssemblyAI `u3-rt-pro` WebSocket) for live captions. Then Tauri shell with native system-audio capture (Core Audio / ScreenCaptureKit / WASAPI). Then Capacitor for mobile.
+Tauri shell with native system-audio capture (Core Audio / ScreenCaptureKit / WASAPI). Then Capacitor for iOS/Android mic-only. Auth (Clerk or Supabase Auth). Export (MD / PDF / audio). Stripe.

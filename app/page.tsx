@@ -225,6 +225,14 @@ export default function Home() {
                   </p>
                 </div>
                 <div className="rounded-2xl bg-neutral-950/80 p-4">
+                  <p className="font-medium text-neutral-100">/record/live</p>
+                  <p className="mt-1">
+                    Live streaming transcription over WebSocket with
+                    partial-turn updates. Uses the u3-rt-pro model and
+                    ephemeral tokens.
+                  </p>
+                </div>
+                <div className="rounded-2xl bg-neutral-950/80 p-4">
                   <p className="font-medium text-neutral-100">/meetings</p>
                   <p className="mt-1">
                     Recent recordings persisted in Supabase (or the dev
