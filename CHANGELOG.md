@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.2] — 2026-04-17
+
+### Other
+- chore: lock product stack — AssemblyAI U-3 Pro, Capacitor, Tauri (`b8fdec2`)
+
+
 ## [0.1.1] — 2026-04-17
 
 ### Fixed
