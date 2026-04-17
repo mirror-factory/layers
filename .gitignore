@@ -48,5 +48,9 @@ Thumbs.db
 *.swp
 *.swo
 
+# Capacitor — native projects regenerate per-workstation for now
+ios/
+android/
+
 # TypeScript
 tsconfig.tsbuildinfo

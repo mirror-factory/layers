@@ -151,6 +151,16 @@ stripe listen --forward-to localhost:3000/api/stripe/webhook
 
 The meeting routes are NOT paywalled yet — that ships when we have real customers and a clear "free 25 meetings" cutoff to enforce.
 
+## Mobile shell (Capacitor)
+
+`capacitor.config.ts` + `mobile/README.md` set up an iOS + Android
+WebView wrapper around the live hosted Next.js app. The native
+`ios/` and `android/` projects are gitignored and regenerated
+per-workstation with `npx cap add ios` / `npx cap add android`
+(needs Xcode and the Android SDK respectively). Mic capture works
+through the WebView's `getUserMedia`; system audio is structurally
+limited on iOS and best-effort via `MediaProjection` on Android.
+
 ## Desktop shell (Tauri scaffold)
 
 `src-tauri/` is a minimal Tauri 2.x scaffold that wraps the hosted

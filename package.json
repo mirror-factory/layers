@@ -37,6 +37,9 @@
   "dependencies": {
     "@ai-sdk/gateway": "^3.0.103",
     "@ai-sdk/react": "^3.0.0",
+    "@capacitor/android": "^8.3.1",
+    "@capacitor/core": "^8.3.1",
+    "@capacitor/ios": "^8.3.1",
     "@langfuse/otel": "^4.6.1",
     "@opentelemetry/sdk-node": "^0.205.0",
     "@react-pdf/renderer": "^4.5.1",
@@ -52,6 +55,7 @@
   },
   "devDependencies": {
     "@ai-sdk/devtools": "^0.0.15",
+    "@capacitor/cli": "^8.3.1",
     "@eslint/js": "^10.0.1",
     "@next/eslint-plugin-next": "^15.3.0",
     "@playwright/test": "^1.59.1",

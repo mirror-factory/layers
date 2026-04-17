@@ -76,6 +76,12 @@ Audio intake + meeting transcription app. Multi-platform: web (Next.js), iOS + A
 - `components/audio-recorder.tsx` — MediaRecorder browser mic wrapper
 - `components/transcript-view.tsx` — Speaker-segmented transcript + summary sidebar
 
+### Mobile shell (Capacitor)
+- `capacitor.config.ts` — appId `com.thenearfactory.audiolayer`, `server.url` points at hosted Vercel app in production / localhost in dev. iOS contentInset = "always"; Android allows cleartext only in dev.
+- `mobile/README.md` — workstation setup (Xcode + Android SDK), first-time `npx cap add ios|android`, mic-permission manifest entries, native-audio constraints (iOS sandbox limits, Android MediaProjection).
+- Native `ios/` and `android/` projects are **gitignored** — they require platform SDKs to regenerate per-workstation. We'll commit them once a real mobile dev joins.
+- The WebView loads the live hosted app, so `/record`, `/record/live`, `/sign-in`, `/pricing`, etc. work without a static export. AssemblyAI streaming + Stripe checkout + Supabase auth all flow through the same backend.
+
 ### Desktop shell (Tauri 2.x)
 - `src-tauri/` — Cargo + tauri.conf.json + capabilities + Rust entrypoint. Wraps the Next.js app in an OS webview.
 - Dev URL = `http://localhost:3000`; production frontendDist points at the hosted Vercel app.
