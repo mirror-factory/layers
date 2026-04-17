@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.14] — 2026-04-17
+
+### Added
+- feat: native mic capture via cpal + Tauri-aware LiveRecorder (4/6) (`751c7c0`)
+
+
 ## [0.1.13] — 2026-04-17
 
 ### Added
