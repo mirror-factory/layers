@@ -11,7 +11,7 @@
  */
 
 import { AssemblyAI } from "assemblyai";
-import type { SpeechModel } from "assemblyai";
+import type { TranscriptParams } from "assemblyai";
 
 function getApiKey(): string {
   const key = process.env.ASSEMBLYAI_API_KEY;
@@ -36,6 +36,10 @@ export function __resetAssemblyAIClient(): void {
   cached = null;
 }
 
-export function getBatchModel(): SpeechModel {
-  return (process.env.ASSEMBLYAI_BATCH_MODEL as SpeechModel) ?? "best";
+/** Map legacy env value to the new speech_models array. */
+export function getBatchSpeechModels(): TranscriptParams["speech_models"] {
+  const env = process.env.ASSEMBLYAI_BATCH_MODEL ?? "best";
+  // "best" was the old alias for Universal-3 Pro pre-recorded
+  if (env === "best") return ["universal-3-pro"];
+  return [env];
 }
