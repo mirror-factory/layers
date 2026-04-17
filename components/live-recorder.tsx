@@ -23,6 +23,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { LiveTranscriptView } from "./live-transcript-view";
+import { isTauri, loadTauriBridge } from "@/lib/tauri/bridge";
 
 export interface LiveTurn {
   id: string;
@@ -63,6 +64,8 @@ export function LiveRecorder() {
   const meetingIdRef = useRef<string | null>(null);
   const finalizedRef = useRef<LiveTurn[]>([]);
 
+  const usingTauriRef = useRef(false);
+
   const teardown = useCallback(async () => {
     try {
       if (timerRef.current) clearInterval(timerRef.current);
@@ -73,6 +76,11 @@ export function LiveRecorder() {
         /* ignore */
       }
       transcriberRef.current = null;
+      if (usingTauriRef.current) {
+        const bridge = await loadTauriBridge();
+        await bridge?.invoke("stop_mic_capture").catch(() => {});
+        usingTauriRef.current = false;
+      }
       workletNodeRef.current?.disconnect();
       workletNodeRef.current = null;
       mediaStreamRef.current?.getTracks().forEach((t) => t.stop());
@@ -142,6 +150,65 @@ export function LiveRecorder() {
     // which bundles the Web WebSocket-backed StreamingTranscriber.
     const { StreamingTranscriber } = await import("assemblyai");
 
+    const transcriber = new StreamingTranscriber({
+      token: token.token,
+      sampleRate: token.sampleRate,
+      speechModel:
+        token.speechModel as import("assemblyai").StreamingSpeechModel,
+      formatTurns: true,
+      speakerLabels: true,
+    });
+    transcriberRef.current = transcriber;
+
+    transcriber.on("turn", (event) => {
+      const turn: LiveTurn = {
+        id: `${event.turn_order}`,
+        speaker: event.speaker_label ?? null,
+        text: event.transcript,
+        startMs: event.words[0]?.start ?? 0,
+        endMs: event.words[event.words.length - 1]?.end ?? 0,
+      };
+      if (event.end_of_turn) {
+        finalizedRef.current = [...finalizedRef.current, turn];
+        setFinalizedTurns(finalizedRef.current);
+        setPartial(null);
+      } else {
+        setPartial(turn);
+      }
+    });
+
+    transcriber.on("error", (err) => {
+      console.error("StreamingTranscriber error", err);
+      setError(err.message);
+      setStage("error");
+    });
+
+    await transcriber.connect();
+
+    // Audio source: prefer the native Tauri cpal capture when running
+    // inside the desktop shell (avoids the getUserMedia permission
+    // dialog and gives us a clean handoff for future system-audio
+    // mixing). Falls back to AudioWorklet in any normal browser.
+    if (isTauri()) {
+      const bridge = await loadTauriBridge();
+      if (bridge) {
+        const channel = bridge.channel<ArrayBuffer | number[]>();
+        channel.onMessage((data) => {
+          try {
+            const buf = data instanceof ArrayBuffer
+              ? data
+              : new Uint8Array(data).buffer;
+            transcriber.sendAudio(buf);
+          } catch {
+            /* ignore transient: closed socket during teardown */
+          }
+        });
+        await bridge.invoke("start_mic_capture", { onChunk: channel.raw });
+        usingTauriRef.current = true;
+        return;
+      }
+    }
+
     const stream = await navigator.mediaDevices.getUserMedia({
       audio: {
         echoCancellation: true,
@@ -177,41 +244,6 @@ export function LiveRecorder() {
     const silent = ctx.createGain();
     silent.gain.value = 0;
     worklet.connect(silent).connect(ctx.destination);
-
-    const transcriber = new StreamingTranscriber({
-      token: token.token,
-      sampleRate: token.sampleRate,
-      speechModel:
-        token.speechModel as import("assemblyai").StreamingSpeechModel,
-      formatTurns: true,
-      speakerLabels: true,
-    });
-    transcriberRef.current = transcriber;
-
-    transcriber.on("turn", (event) => {
-      const turn: LiveTurn = {
-        id: `${event.turn_order}`,
-        speaker: event.speaker_label ?? null,
-        text: event.transcript,
-        startMs: event.words[0]?.start ?? 0,
-        endMs: event.words[event.words.length - 1]?.end ?? 0,
-      };
-      if (event.end_of_turn) {
-        finalizedRef.current = [...finalizedRef.current, turn];
-        setFinalizedTurns(finalizedRef.current);
-        setPartial(null);
-      } else {
-        setPartial(turn);
-      }
-    });
-
-    transcriber.on("error", (err) => {
-      console.error("StreamingTranscriber error", err);
-      setError(err.message);
-      setStage("error");
-    });
-
-    await transcriber.connect();
 
     worklet.port.onmessage = (e: MessageEvent<ArrayBuffer>) => {
       try {

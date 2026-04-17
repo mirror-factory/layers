@@ -76,12 +76,15 @@ Audio intake + meeting transcription app. Multi-platform: web (Next.js), iOS + A
 - `components/audio-recorder.tsx` — MediaRecorder browser mic wrapper
 - `components/transcript-view.tsx` — Speaker-segmented transcript + summary sidebar
 
-### Desktop shell (Tauri 2.x scaffold)
-- `src-tauri/` — Cargo + tauri.conf.json + capabilities + minimal Rust entrypoint. Wraps the Next.js app in an OS webview.
+### Desktop shell (Tauri 2.x)
+- `src-tauri/` — Cargo + tauri.conf.json + capabilities + Rust entrypoint. Wraps the Next.js app in an OS webview.
 - Dev URL = `http://localhost:3000`; production frontendDist points at the hosted Vercel app.
-- Native commands (`start_system_audio_capture`, `stop_system_audio_capture`) are STUBBED — they return errors. Wire them when adding ScreenCaptureKit / WASAPI / cpal bridges.
-- No `cargo` / `tauri` commands are added to `package.json`. Build with `cargo tauri dev` / `cargo tauri build` from the repo root.
-- `src-tauri/Cargo.lock` and `src-tauri/target/` are gitignored.
+- Implemented Rust commands: `ping`, `start_mic_capture(channel)`, `stop_mic_capture()`. Mic capture uses `cpal`, decimates to 16 kHz int16 LE in Rust, emits ~150 ms PCM chunks via `tauri::ipc::Channel<Vec<u8>>`.
+- Stubbed: `start_system_audio_capture` / `stop_system_audio_capture` return explicit "not implemented" errors. Roadmap: ScreenCaptureKit (macOS 15+), WASAPI loopback (Windows), PipeWire monitor (Linux).
+- `lib/tauri/bridge.ts` — `isTauri()` + `loadTauriBridge()` lazy-loader. Imports `@tauri-apps/api/core` through a string variable so the regular web bundle never resolves it.
+- `components/live-recorder.tsx` prefers the Tauri capture channel inside the desktop shell, falls back to AudioWorklet in normal browsers — no UI change required.
+- No `cargo`/`tauri` scripts in package.json (keeps Rust toolchain off the critical path for web devs). Build with `cargo tauri dev` / `cargo tauri build` from the repo root.
+- **Verification gap:** the Rust code was not compiled in CI / the build environment that produced this branch — no Rust toolchain available. Verify with `cargo tauri dev` on a real workstation before shipping.
 
 ### Quota / paywall
 - `lib/billing/quota.ts` — `checkQuota()` + `FREE_TIER_MEETING_LIMIT = 25`. Counts the current user's meetings via the user-scoped Supabase client (RLS does the scoping). Active / trialing subscriptions bypass.

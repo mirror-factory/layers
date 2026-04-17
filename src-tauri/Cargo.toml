@@ -1,7 +1,7 @@
 [package]
 name = "audio-layer"
 version = "0.1.0"
-description = "audio-layer desktop shell — system-audio capture for the hosted Next.js app"
+description = "audio-layer desktop shell — mic + system-audio capture for the hosted Next.js app"
 authors = ["The Near Factory"]
 edition = "2021"
 rust-version = "1.77"
@@ -19,13 +19,12 @@ tauri-plugin-shell = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 
-# ─── Audio capture stubs ───────────────────────────────────────────
-# Native audio bridges are NOT implemented yet. When we wire them:
-#   - cpal: cross-platform input capture (mic + Linux PulseAudio)
-#   - screencapturekit-rs (macOS 13+): system-audio loopback
-#   - windows = { ... }: WASAPI loopback for Windows
-# Keeping the deps absent on purpose — adding them pulls a heavy
-# native toolchain we don't need until the recorder commands land.
+# Cross-platform mic capture: macOS (CoreAudio), Windows (WASAPI),
+# Linux (ALSA / PulseAudio / PipeWire). The system-audio LOOPBACK
+# path is platform-specific (ScreenCaptureKit on macOS, WASAPI
+# loopback on Windows) and is staged for a separate PR — see the
+# todo!() arms in src/lib.rs.
+cpal = "0.15"
 
 [features]
 custom-protocol = ["tauri/custom-protocol"]

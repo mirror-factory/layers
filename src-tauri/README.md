@@ -50,24 +50,38 @@ cargo tauri build
 
 Produces signed installers in `src-tauri/target/release/bundle/`.
 
-## Native audio roadmap
+## Native audio status
 
-The browser already gets mic via `getUserMedia`. What the desktop
-shell adds is system-audio loopback so the user doesn't need to mix
-mic + speaker output manually:
+**Implemented (this commit):**
 
-- **macOS** (13+): `screencapturekit-rs` for system audio,
-  `cpal` for mic. Requires Microphone + Screen Recording permissions
-  (declared in `Info.plist`).
-- **Windows**: `wasapi` crate for loopback + mic. Mic permission only.
-- **Linux**: `cpal` for mic + a PulseAudio / PipeWire monitor source
-  for system audio.
+- `start_mic_capture(channel)` / `stop_mic_capture()` — opens the
+  default input device via `cpal` (CoreAudio on macOS, WASAPI on
+  Windows, ALSA / PulseAudio / PipeWire on Linux), sums to mono,
+  decimates to 16 kHz with the same linear interpolator the JS
+  worklet uses, packs to int16 LE, and ships ~150 ms chunks back
+  through a `tauri::ipc::Channel<Vec<u8>>`.
+- The browser-side `LiveRecorder` component (`components/
+  live-recorder.tsx`) detects `window.__TAURI__` and prefers this
+  channel over the AudioWorklet path. It still falls back to
+  `getUserMedia` automatically in any normal browser.
 
-Captured audio is downsampled to 16 kHz int16 LE in Rust (cleaner than
-the JS AudioWorklet path) and emitted to the JS layer via a
-`tauri::ipc::Channel`. The existing `LiveRecorder` component branches
-on `window.__TAURI__` to feed the channel into `StreamingTranscriber`
-in place of (or in addition to) the browser mic stream.
+**Honest disclaimer:** this Rust code was authored against the
+cpal 0.15 + Tauri 2 docs; it has NOT been compiled or run from
+this environment (no Rust toolchain available). `cargo tauri dev`
+on a real workstation is the verification path.
+
+**Not yet implemented — system-audio loopback:**
+
+- **macOS** (15+): `screencapturekit` crate. Requires Screen
+  Recording permission declared in `Info.plist`.
+- **Windows**: `wasapi` crate (loopback flag).
+- **Linux**: PipeWire monitor source (or PulseAudio `monitor`
+  device exposed via `cpal`).
+
+The plumbing on the JS side is ready — the `LiveRecorder` mixes
+whatever PCM the channel emits, so adding system-audio capture
+later is a Rust-only change (start/stop_system_audio_capture
+currently return an explicit "not implemented" error).
 
 ## Icons
 
