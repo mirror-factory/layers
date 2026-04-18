@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.39] — 2026-04-18
+
+### Added
+- feat: OKLCH dynamic theme system with light/dark mode + theme toggle (`ffc778a`)
+
+
 ## [0.1.38] — 2026-04-18
 
 ### Fixed
