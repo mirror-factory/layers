@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.30] — 2026-04-18
+
+### Fixed
+- fix: add .vercelignore (exclude 2.4GB Tauri target) + correct titleBarStyle casing (`5b29125`)
+
+
 ## [0.1.29] — 2026-04-18
 
 ### Fixed
