@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.43] — 2026-04-18
+
+### Other
+- chore: trigger GitHub deploy with dashboard env vars (`54fb563`)
+
+
 ## [0.1.42] — 2026-04-18
 
 ### Other
