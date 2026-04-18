@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.25] — 2026-04-18
+
+### Added
+- feat: always-visible nav bar + comprehensive design system spec (`6c428ea`)
+
+
 ## [0.1.24] — 2026-04-18
 
 ### Added
