@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.21] — 2026-04-18
+
+### Added
+- feat: Tauri macOS system audio + Capacitor setup + PWA manifest (`bbee798`)
+
+
 ## [0.1.20] — 2026-04-18
 
 ### Other
