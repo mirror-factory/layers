@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.23] — 2026-04-18
+
+### Documentation
+- docs: rewrite README as single-page index pointing to all docs (`016fd4d`)
+
+
 ## [0.1.22] — 2026-04-18
 
 ### Documentation
