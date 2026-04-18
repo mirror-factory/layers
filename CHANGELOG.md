@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.20] — 2026-04-18
+
+### Other
+- Merge remote-tracking branch 'origin/main' into claude/research-vercel-ai-starter-AbOFX (`aa9cd5f`)
+
+
 ## [0.1.19] — 2026-04-17
 
 ### Added
