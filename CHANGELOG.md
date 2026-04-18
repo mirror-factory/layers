@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.37] — 2026-04-18
+
+### Documentation
+- docs: shared workspaces implementation spec (`e3e57b6`)
+
+
 ## [0.1.36] — 2026-04-18
 
 ### Added
