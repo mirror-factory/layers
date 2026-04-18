@@ -12,9 +12,10 @@
   "app": {
     "windows": [
       {
-        "title": "audio-layer",
+        "title": "Layer One",
         "titleBarStyle": "Overlay",
         "hiddenTitle": true,
+        "backgroundColor": [10, 10, 10, 255],
         "width": 1100,
         "height": 760,
         "minWidth": 720,

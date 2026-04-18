@@ -4,7 +4,7 @@ import { NavBar } from "@/components/nav-bar";
 import { CapacitorInit } from "@/components/capacitor-init";
 
 export const metadata: Metadata = {
-  title: "audio-layer",
+  title: "Layer One",
   description:
     "Record meetings. Transcribe with AssemblyAI Universal-3 Pro. Summarize with the Gateway. Multi-platform (web, Tauri desktop, Capacitor mobile).",
   manifest: "/manifest.webmanifest",
@@ -59,6 +59,19 @@ export default function RootLayout({
         }}
       >
         <CapacitorInit />
+        {/* Tauri drag region — invisible bar at top for window dragging */}
+        <div
+          data-tauri-drag-region="true"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: "28px",
+            zIndex: 9999,
+            WebkitAppRegion: "drag" as unknown as string,
+          }}
+        />
         {children}
         <NavBar />
       </body>
