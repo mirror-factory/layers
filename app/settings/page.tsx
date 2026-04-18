@@ -9,7 +9,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import type { ModelSettings } from "@/lib/settings-shared";
+import type { ModelSettings, ModelOption } from "@/lib/settings-shared";
 import { MODEL_OPTIONS } from "@/lib/settings-shared";
 
 type Status = "idle" | "saving" | "saved" | "error";
@@ -58,7 +58,7 @@ export default function SettingsPage() {
           title="Summarization model"
           description="LLM used for meeting summaries and intake form extraction. Routed through the Vercel AI Gateway."
         />
-        <Select
+        <ModelPicker
           value={settings.summaryModel}
           options={MODEL_OPTIONS.summary}
           onChange={(v) => save({ summaryModel: v })}
@@ -72,7 +72,7 @@ export default function SettingsPage() {
           title="Transcription — pre-recorded"
           description="AssemblyAI model for batch uploads via /record. Higher quality models cost more per hour of audio."
         />
-        <Select
+        <ModelPicker
           value={settings.batchSpeechModel}
           options={MODEL_OPTIONS.batchSpeech}
           onChange={(v) => save({ batchSpeechModel: v })}
@@ -86,7 +86,7 @@ export default function SettingsPage() {
           title="Transcription — real-time"
           description="AssemblyAI streaming model for live recording via /record/live. Determines latency and accuracy of real-time captions."
         />
-        <Select
+        <ModelPicker
           value={settings.streamingSpeechModel}
           options={MODEL_OPTIONS.streamingSpeech}
           onChange={(v) => save({ streamingSpeechModel: v })}
@@ -132,27 +132,45 @@ function SectionHeader({
   );
 }
 
-function Select({
+function ModelPicker({
   value,
   options,
   onChange,
 }: {
   value: string;
-  options: ReadonlyArray<{ value: string; label: string }>;
+  options: readonly ModelOption[];
   onChange: (value: string) => void;
 }) {
   return (
-    <select
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className="w-full rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-200 outline-none focus:border-blue-500"
-    >
-      {options.map((opt) => (
-        <option key={opt.value} value={opt.value}>
-          {opt.label}
-        </option>
-      ))}
-    </select>
+    <div className="space-y-2">
+      {options.map((opt) => {
+        const isActive = value === opt.value;
+        return (
+          <button
+            key={opt.value}
+            type="button"
+            onClick={() => onChange(opt.value)}
+            className={`flex w-full min-h-[44px] items-center justify-between rounded-lg border px-4 py-3 text-left transition ${
+              isActive
+                ? "border-emerald-600 bg-emerald-950/30"
+                : "border-neutral-800 bg-neutral-900/60 hover:border-neutral-700"
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              {isActive && (
+                <span className="text-emerald-400 text-xs">&#10003;</span>
+              )}
+              <span
+                className={`text-sm ${isActive ? "text-emerald-200 font-medium" : "text-neutral-300"}`}
+              >
+                {opt.label}
+              </span>
+            </div>
+            <span className="text-xs text-neutral-500">{opt.price}</span>
+          </button>
+        );
+      })}
+    </div>
   );
 }
 

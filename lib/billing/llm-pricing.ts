@@ -28,15 +28,19 @@ export const COST_PER_M_TOKENS: Record<string, ModelPricing> = {
   "gemini-2.5-flash": { input: 0.15, output: 0.6 },
   "gemini-3.1-flash-image-preview": { input: 0.5, output: 3.0 },
   "gemini-3-pro-image-preview": { input: 2.0, output: 12.0 },
-  // Anthropic
+  // Anthropic (April 2026)
+  "claude-opus-4-7": { input: 5.0, output: 25.0, cachedInput: 0.5 },
   "claude-sonnet-4-6": { input: 3.0, output: 15.0, cachedInput: 0.3 },
-  "claude-opus-4-6": { input: 15.0, output: 75.0, cachedInput: 1.5 },
-  "claude-haiku-4-5": { input: 0.8, output: 4.0, cachedInput: 0.08 },
-  // OpenAI
+  "claude-opus-4-6": { input: 5.0, output: 25.0, cachedInput: 0.5 },
+  "claude-haiku-4-5": { input: 1.0, output: 5.0, cachedInput: 0.1 },
+  // OpenAI (April 2026)
   "gpt-4.1": { input: 2.0, output: 8.0 },
   "gpt-4.1-mini": { input: 0.4, output: 1.6 },
   "gpt-4.1-nano": { input: 0.1, output: 0.4 },
   "o4-mini": { input: 1.1, output: 4.4 },
+  // Google (April 2026)
+  "gemini-2.5-pro": { input: 1.25, output: 10.0, cachedInput: 0.125 },
+  "gemini-2.0-flash": { input: 0.1, output: 0.4, cachedInput: 0.01 },
 };
 
 /** Default fallback when the model id doesn't match anything in the table. */
