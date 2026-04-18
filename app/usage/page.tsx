@@ -11,6 +11,7 @@
  */
 
 import Link from "next/link";
+import { TopBar } from "@/components/top-bar";
 import { formatUsd } from "@/lib/billing/llm-pricing";
 import { getUsageSummary } from "@/lib/billing/usage";
 
@@ -27,21 +28,19 @@ export default async function UsagePage() {
     : "Free";
 
   return (
-    <main className="min-h-dvh bg-neutral-950 px-4 pb-20 pt-4 md:px-6 md:pt-6">
+    <main className="min-h-dvh bg-neutral-950 px-4 pb-20 md:px-6">
+      <TopBar title="Usage" />
       <div className="mx-auto max-w-5xl space-y-6">
-        <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h1 className="text-lg font-semibold text-neutral-200">Usage</h1>
-            <p className="text-xs text-neutral-500">
-              Lifetime + this-month totals for meetings, transcription
-              minutes, STT spend, and LLM spend.
-              {usage.llm.source === "langfuse"
-                ? " LLM numbers come from Langfuse."
-                : usage.llm.source === "local"
-                  ? " LLM numbers come from locally-stored cost breakdowns."
-                  : " LLM numbers unavailable."}
-            </p>
-          </div>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <p className="flex-1 text-xs text-neutral-500">
+            Lifetime + this-month totals for meetings, transcription
+            minutes, STT spend, and LLM spend.
+            {usage.llm.source === "langfuse"
+              ? " LLM numbers come from Langfuse."
+              : usage.llm.source === "local"
+                ? " LLM numbers come from locally-stored cost breakdowns."
+                : " LLM numbers unavailable."}
+          </p>
           <div className="flex items-center gap-3 text-xs">
             <Link
               href="/pricing"
@@ -55,11 +54,8 @@ export default async function UsagePage() {
             >
               All meetings
             </Link>
-            <Link href="/" className="min-h-[44px] flex items-center text-neutral-500 hover:text-neutral-300">
-              ← Hub
-            </Link>
           </div>
-        </header>
+        </div>
 
         <section
           aria-label="Headline totals"

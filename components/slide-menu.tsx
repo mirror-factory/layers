@@ -10,6 +10,8 @@ const MENU_ITEMS = [
   { label: "Usage", href: "/usage" },
   { label: "Pricing", href: "/pricing" },
   { label: "Profile", href: "/profile" },
+  { label: "Docs", href: "/docs" },
+  { label: "Sign In", href: "/sign-in" },
 ] as const;
 
 export function SlideMenu() {
@@ -130,15 +132,7 @@ export function SlideMenu() {
           })}
         </nav>
 
-        {/* Sign in/out at bottom */}
-        <div className="px-3 pb-8" style={{ paddingBottom: "max(env(safe-area-inset-bottom), 32px)" }}>
-          <button
-            className="flex min-h-[44px] w-full items-center rounded-[var(--radius-md)] px-3 text-[15px] font-medium"
-            style={{ color: "var(--text-muted)" }}
-          >
-            Sign In
-          </button>
-        </div>
+        <div style={{ paddingBottom: "max(env(safe-area-inset-bottom), 32px)" }} />
       </div>
     </>
   );

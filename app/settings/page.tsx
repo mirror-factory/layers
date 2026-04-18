@@ -7,8 +7,8 @@
 
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import { TopBar } from "@/components/top-bar";
 import type { ModelSettings, ModelOption } from "@/lib/settings-shared";
 import { MODEL_OPTIONS } from "@/lib/settings-shared";
 
@@ -113,17 +113,9 @@ export default function SettingsPage() {
 
 function Shell({ children }: { children: React.ReactNode }) {
   return (
-    <main className="min-h-dvh bg-neutral-950 px-4 pb-20 pt-10 md:px-6">
+    <main className="min-h-dvh bg-neutral-950 px-4 pb-20 md:px-6">
+      <TopBar title="Settings" />
       <div className="mx-auto max-w-2xl space-y-6 rounded-2xl border border-neutral-800 bg-neutral-900/40 p-4 md:p-6">
-        <header className="flex items-center justify-between">
-          <h1 className="text-lg font-semibold text-neutral-100">Settings</h1>
-          <Link
-            href="/"
-            className="min-h-[44px] flex items-center text-xs text-neutral-500 hover:text-neutral-300"
-          >
-            ← Hub
-          </Link>
-        </header>
         {children}
       </div>
     </main>

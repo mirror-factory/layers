@@ -8,6 +8,7 @@
  */
 
 import Link from "next/link";
+import { TopBar } from "@/components/top-bar";
 import { PricingButtons } from "./pricing-buttons";
 
 const TIERS = [
@@ -62,12 +63,10 @@ const TIERS = [
 
 export default function PricingPage() {
   return (
-    <div className="min-h-dvh bg-neutral-950 px-4 py-10 md:px-6 md:py-16">
+    <div className="min-h-dvh bg-neutral-950 px-4 pb-10 md:px-6">
+      <TopBar title="Pricing" />
       <div className="mx-auto max-w-5xl space-y-10">
         <header className="space-y-3 text-center">
-          <p className="text-xs uppercase tracking-[0.24em] text-emerald-400/80">
-            Pricing
-          </p>
           <h1 className="text-3xl font-semibold tracking-tight text-neutral-100 md:text-4xl">
             Best-in-class transcription. Fair monthly pricing.
           </h1>
@@ -128,7 +127,7 @@ export default function PricingPage() {
 
         <footer className="text-center text-xs text-neutral-500">
           <Link href="/" className="hover:text-neutral-300">
-            ← Back to hub
+            Back to hub
           </Link>
         </footer>
       </div>

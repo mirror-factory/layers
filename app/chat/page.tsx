@@ -3,7 +3,7 @@
 import { useChat } from "@ai-sdk/react";
 import { lastAssistantMessageIsCompleteWithToolCalls } from "ai";
 import { useState, useEffect, useRef } from "react";
-import Link from "next/link";
+import { TopBar } from "@/components/top-bar";
 import { ChatMessage, type ChatMessageProps } from "@/components/chat-message";
 import { ChatInput } from "@/components/chat-input";
 
@@ -37,29 +37,7 @@ export default function ChatPage() {
 
   return (
     <div className="flex h-dvh flex-col">
-      {/* Header */}
-      <header className="shrink-0 border-b border-neutral-800 bg-neutral-950 px-4 py-3">
-        <div className="mx-auto flex max-w-3xl items-center gap-3">
-          <h1 className="text-sm font-semibold tracking-wide text-neutral-200">
-            AI Starter Kit
-          </h1>
-          <span className="rounded bg-neutral-800 px-2 py-0.5 text-[10px] font-medium text-neutral-400">
-            reference
-          </span>
-          <Link
-            href="/"
-            className="text-xs text-neutral-500 hover:text-neutral-300"
-          >
-            Hub
-          </Link>
-          <Link
-            href="/observability"
-            className="ml-auto text-xs text-neutral-500 hover:text-neutral-300"
-          >
-            Observability
-          </Link>
-        </div>
-      </header>
+      <TopBar title="Chat" />
 
       {/* Messages */}
       <div

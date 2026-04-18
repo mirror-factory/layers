@@ -7,6 +7,7 @@
  */
 
 import Link from "next/link";
+import { TopBar } from "@/components/top-bar";
 import { getMeetingsStore } from "@/lib/meetings/store";
 import type { MeetingListItem } from "@/lib/meetings/types";
 
@@ -23,31 +24,21 @@ export default async function MeetingsPage() {
   }
 
   return (
-    <div className="min-h-dvh bg-neutral-950 px-4 pb-20 pt-4 md:px-6 md:pt-6">
+    <div className="min-h-dvh bg-neutral-950 px-4 pb-20 md:px-6">
+      <TopBar title="Meetings" />
       <div className="mx-auto max-w-4xl space-y-6">
-        <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h1 className="text-lg font-semibold text-neutral-200">Meetings</h1>
-            <p className="text-xs text-neutral-500">
-              Recent recordings stored in the MeetingsStore. Each row is
-              clickable.
-            </p>
-          </div>
-          <div className="flex items-center gap-3 text-xs">
-            <Link
-              href="/record"
-              className="min-h-[44px] flex items-center rounded-md border border-emerald-700 bg-emerald-900/30 px-3 py-1.5 text-emerald-200 hover:bg-emerald-900/50"
-            >
-              + New recording
-            </Link>
-            <Link
-              href="/"
-              className="min-h-[44px] flex items-center text-neutral-500 hover:text-neutral-300"
-            >
-              ← Hub
-            </Link>
-          </div>
-        </header>
+        <div className="flex items-center gap-3 text-xs">
+          <p className="flex-1 text-xs text-neutral-500">
+            Recent recordings stored in the MeetingsStore. Each row is
+            clickable.
+          </p>
+          <Link
+            href="/record"
+            className="min-h-[44px] flex items-center rounded-md border border-emerald-700 bg-emerald-900/30 px-3 py-1.5 text-emerald-200 hover:bg-emerald-900/50"
+          >
+            + New recording
+          </Link>
+        </div>
 
         {loadError ? (
           <div

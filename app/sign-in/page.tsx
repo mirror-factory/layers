@@ -14,6 +14,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { TopBar } from "@/components/top-bar";
 import { getSupabaseBrowser } from "@/lib/supabase/browser";
 
 type Stage = "idle" | "sending" | "sent" | "error";
@@ -50,15 +51,13 @@ export default function SignInPage() {
   };
 
   return (
-    <main className="min-h-dvh bg-neutral-950 px-4 pb-20 pt-16">
+    <main className="min-h-dvh bg-neutral-950 px-4 pb-20">
+      <TopBar title="Sign In" />
       <div className="mx-auto max-w-md space-y-6 rounded-2xl border border-neutral-800 bg-neutral-900/40 p-4 md:p-6">
-        <header className="space-y-1">
-          <h1 className="text-lg font-semibold text-neutral-100">Sign in</h1>
-          <p className="text-xs text-neutral-500">
-            Enter your email — we&apos;ll send you a magic link. No password
-            required.
-          </p>
-        </header>
+        <p className="text-xs text-neutral-500">
+          Enter your email — we&apos;ll send you a magic link. No password
+          required.
+        </p>
 
         {/* Google OAuth */}
         <button
@@ -136,10 +135,7 @@ export default function SignInPage() {
           </form>
         )}
 
-        <footer className="flex flex-wrap items-center justify-between gap-2 text-xs text-neutral-500">
-          <Link href="/" className="min-h-[44px] flex items-center hover:text-neutral-300">
-            &larr; Back to hub
-          </Link>
+        <footer className="flex flex-wrap items-center justify-end gap-2 text-xs text-neutral-500">
           <Link
             href="/sign-up"
             className="text-emerald-400 hover:text-emerald-300"

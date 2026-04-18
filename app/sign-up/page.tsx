@@ -11,6 +11,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { TopBar } from "@/components/top-bar";
 import { getSupabaseBrowser } from "@/lib/supabase/browser";
 
 type Stage = "idle" | "sending" | "sent" | "error";
@@ -50,17 +51,13 @@ export default function SignUpPage() {
   };
 
   return (
-    <main className="min-h-dvh bg-neutral-950 px-4 py-16">
+    <main className="min-h-dvh bg-neutral-950 px-4 pb-16">
+      <TopBar title="Sign Up" />
       <div className="mx-auto max-w-md space-y-6 rounded-2xl border border-neutral-800 bg-neutral-900/40 p-6">
-        <header className="space-y-1">
-          <h1 className="text-lg font-semibold text-neutral-100">
-            Create account
-          </h1>
-          <p className="text-xs text-neutral-500">
-            Sign up with Google or enter your email — we&apos;ll send you a
-            verification link.
-          </p>
-        </header>
+        <p className="text-xs text-neutral-500">
+          Sign up with Google or enter your email — we&apos;ll send you a
+          verification link.
+        </p>
 
         {/* Google OAuth */}
         <button
@@ -151,10 +148,7 @@ export default function SignUpPage() {
           </form>
         )}
 
-        <footer className="flex items-center justify-between text-xs text-neutral-500">
-          <Link href="/" className="hover:text-neutral-300">
-            &larr; Back to hub
-          </Link>
+        <footer className="flex items-center justify-end text-xs text-neutral-500">
           <Link
             href="/sign-in"
             className="text-emerald-400 hover:text-emerald-300"

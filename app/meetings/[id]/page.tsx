@@ -9,6 +9,7 @@
 
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { TopBar } from "@/components/top-bar";
 import { getMeetingsStore } from "@/lib/meetings/store";
 import { TranscriptView } from "@/components/transcript-view";
 import { IntakeFormView } from "@/components/intake-form-view";
@@ -31,13 +32,14 @@ export default async function MeetingDetailPage({ params }: Props) {
     meeting.status === "completed" || meeting.status === "error";
 
   return (
-    <div className="min-h-dvh bg-neutral-950 px-4 pb-20 pt-4 md:px-6 md:pt-6">
+    <div className="min-h-dvh bg-neutral-950 px-4 pb-20 md:px-6">
+      <TopBar title="Meeting" />
       <div className="mx-auto max-w-5xl space-y-6">
-        <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">
-            <h1 className="truncate text-lg font-semibold text-neutral-100">
+            <h2 className="truncate text-lg font-semibold text-neutral-100">
               {meeting.title ?? "Untitled recording"}
-            </h1>
+            </h2>
             <p className="mt-0.5 text-xs text-neutral-500">
               {new Date(meeting.createdAt).toLocaleString()}
               {typeof meeting.durationSeconds === "number"
@@ -66,14 +68,8 @@ export default async function MeetingDetailPage({ params }: Props) {
                 </a>
               </>
             ) : null}
-            <Link
-              href="/meetings"
-              className="min-h-[44px] flex items-center text-neutral-500 hover:text-neutral-300"
-            >
-              ← All meetings
-            </Link>
           </div>
-        </header>
+        </div>
 
         {!isTerminal ? <MeetingDetailPoller id={meeting.id} /> : null}
 

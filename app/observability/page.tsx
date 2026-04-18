@@ -9,23 +9,21 @@
  * This inline version shows the pattern without external dependencies.
  */
 
+import { TopBar } from "@/components/top-bar";
+
 export default function ObservabilityPage() {
   return (
-    <div className="min-h-dvh bg-neutral-950 px-4 pb-20 pt-4 md:px-6 md:pt-6">
+    <div className="min-h-dvh bg-neutral-950 px-4 pb-20 md:px-6">
+      <TopBar title="Observability" />
       <div className="mx-auto max-w-4xl space-y-6">
-        <header>
-          <h1 className="text-lg font-semibold text-neutral-200">
-            AI Observability
-          </h1>
-          <p className="text-sm text-neutral-500">
-            Monitor AI calls, costs, and errors. In production, this page
-            connects to file-based or Supabase log backends via{" "}
-            <code className="rounded bg-neutral-800 px-1 py-0.5 text-xs text-neutral-300">
-              /api/ai-logs
-            </code>
-            .
-          </p>
-        </header>
+        <p className="text-sm text-neutral-500">
+          Monitor AI calls, costs, and errors. In production, this page
+          connects to file-based or Supabase log backends via{" "}
+          <code className="rounded bg-neutral-800 px-1 py-0.5 text-xs text-neutral-300">
+            /api/ai-logs
+          </code>
+          .
+        </p>
 
         {/* Placeholder cards */}
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
@@ -66,7 +64,7 @@ export default function ObservabilityPage() {
           href="/chat"
           className="inline-flex min-h-[44px] items-center rounded-lg border border-neutral-700 px-4 py-2 text-xs text-neutral-400 hover:border-neutral-500 hover:text-neutral-200"
         >
-          Back to Chat
+          Go to Chat
         </a>
       </div>
     </div>

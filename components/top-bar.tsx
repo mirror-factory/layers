@@ -16,7 +16,7 @@ export function TopBar({ title, showBack = true }: TopBarProps) {
       className="sticky top-0 z-50 flex h-[44px] items-center justify-between px-2"
       style={{
         backgroundColor: "var(--bg-primary)",
-        marginTop: "max(env(safe-area-inset-top), 28px)",
+        marginTop: "env(safe-area-inset-top, 0px)",
       }}
     >
       {/* Left: back button */}

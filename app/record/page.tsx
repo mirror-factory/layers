@@ -11,6 +11,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { TopBar } from "@/components/top-bar";
 import { AudioRecorder } from "@/components/audio-recorder";
 import type {
   TranscribeResultResponse,
@@ -139,38 +140,28 @@ export default function RecordPage() {
   const busy = stage === "uploading" || stage === "processing";
 
   return (
-    <div className="min-h-dvh bg-neutral-950 px-4 pb-20 pt-4 md:px-6 md:pt-6">
+    <div className="min-h-dvh bg-neutral-950 px-4 pb-20 md:px-6">
+      <TopBar title="Record" />
       <div className="mx-auto max-w-5xl space-y-6">
-        <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h1 className="text-lg font-semibold text-neutral-200">Record</h1>
-            <p className="text-xs text-neutral-500">
-              Upload an audio file or record from your mic. AssemblyAI
-              Universal-3 Pro handles transcription; the Gateway generates the
-              summary.
-            </p>
-          </div>
-          <div className="flex items-center gap-3 text-xs">
-            <Link
-              href="/record/live"
-              className="min-h-[44px] rounded-md border border-emerald-700 bg-emerald-900/30 px-3 py-1.5 flex items-center text-emerald-200 hover:bg-emerald-900/50"
-            >
-              Live mode
-            </Link>
-            <Link
-              href="/meetings"
-              className="min-h-[44px] flex items-center text-neutral-500 hover:text-neutral-300"
-            >
-              All meetings
-            </Link>
-            <Link
-              href="/"
-              className="min-h-[44px] flex items-center text-neutral-500 hover:text-neutral-300"
-            >
-              ← Hub
-            </Link>
-          </div>
-        </header>
+        <div className="flex items-center gap-3 text-xs">
+          <p className="flex-1 text-xs text-neutral-500">
+            Upload an audio file or record from your mic. AssemblyAI
+            Universal-3 Pro handles transcription; the Gateway generates the
+            summary.
+          </p>
+          <Link
+            href="/record/live"
+            className="min-h-[44px] rounded-md border border-emerald-700 bg-emerald-900/30 px-3 py-1.5 flex items-center text-emerald-200 hover:bg-emerald-900/50"
+          >
+            Live mode
+          </Link>
+          <Link
+            href="/meetings"
+            className="min-h-[44px] flex items-center text-neutral-500 hover:text-neutral-300"
+          >
+            All meetings
+          </Link>
+        </div>
 
         <section
           aria-label="Input"

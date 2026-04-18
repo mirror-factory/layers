@@ -2,15 +2,16 @@
  * /docs — renders the MFDR and other documentation inline.
  */
 
-import Link from "next/link";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { TopBar } from "@/components/top-bar";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export default async function DocsPage() {
   let mfdrContent = "";
+  let readmeContent = "";
   try {
     mfdrContent = await readFile(
       join(process.cwd(), "docs/mfdr/MFDR-001.md"),
@@ -19,36 +20,40 @@ export default async function DocsPage() {
   } catch {
     mfdrContent = "# Document not found\n\nMFDR-001.md could not be loaded.";
   }
+  try {
+    readmeContent = await readFile(
+      join(process.cwd(), "README.md"),
+      "utf-8",
+    );
+  } catch {
+    readmeContent = "";
+  }
 
-  // Simple markdown to HTML conversion (no external deps)
-  const html = markdownToHtml(mfdrContent);
+  const mfdrHtml = markdownToHtml(mfdrContent);
+  const readmeHtml = readmeContent ? markdownToHtml(readmeContent) : "";
 
   return (
     <main
-      className="min-h-dvh px-4 py-10 md:px-6"
+      className="min-h-dvh px-4 md:px-6"
       style={{ backgroundColor: "var(--bg-primary)", color: "var(--text-primary)" }}
     >
+      <TopBar title="Docs" />
       <div className="mx-auto max-w-3xl">
-        <header className="mb-8 flex items-center justify-between">
-          <h1
-            className="text-lg font-semibold"
-            style={{ color: "var(--text-primary)" }}
-          >
-            Documentation
-          </h1>
-          <Link
-            href="/"
-            className="text-xs min-h-[44px] flex items-center"
-            style={{ color: "var(--text-muted)" }}
-          >
-            ← Home
-          </Link>
-        </header>
 
-        <nav className="mb-8 flex gap-3 text-sm">
+        <nav className="mb-8 flex flex-wrap gap-2 text-sm">
+          <a
+            href="#readme"
+            className="px-3 py-1.5 rounded-md min-h-[44px] flex items-center"
+            style={{
+              backgroundColor: "var(--bg-tertiary)",
+              color: "var(--text-primary)",
+            }}
+          >
+            README
+          </a>
           <a
             href="#mfdr-001"
-            className="px-3 py-1.5 rounded-md"
+            className="px-3 py-1.5 rounded-md min-h-[44px] flex items-center"
             style={{
               backgroundColor: "var(--accent-muted)",
               color: "var(--accent)",
@@ -58,10 +63,19 @@ export default async function DocsPage() {
           </a>
         </nav>
 
+        {readmeHtml && (
+          <article
+            id="readme"
+            className="prose-custom"
+            style={{ marginBottom: "var(--space-3xl)" }}
+            dangerouslySetInnerHTML={{ __html: readmeHtml }}
+          />
+        )}
+
         <article
           id="mfdr-001"
           className="prose-custom"
-          dangerouslySetInnerHTML={{ __html: html }}
+          dangerouslySetInnerHTML={{ __html: mfdrHtml }}
         />
       </div>
 
