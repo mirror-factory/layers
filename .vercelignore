@@ -1,0 +1,6 @@
+src-tauri/target
+ios
+android
+.evidence
+test-results
+node_modules
