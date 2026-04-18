@@ -14,15 +14,28 @@ import { MODEL_OPTIONS } from "@/lib/settings-shared";
 
 type Status = "idle" | "saving" | "saved" | "error";
 
+interface DynamicModel {
+  value: string;
+  label: string;
+  price: string;
+  provider: string;
+}
+
 export default function SettingsPage() {
   const [settings, setSettings] = useState<ModelSettings | null>(null);
   const [status, setStatus] = useState<Status>("idle");
+  const [llmModels, setLlmModels] = useState<DynamicModel[] | null>(null);
 
   useEffect(() => {
     fetch("/api/settings")
       .then((r) => r.json())
       .then(setSettings)
       .catch(() => setStatus("error"));
+    // Fetch live model list from Gateway
+    fetch("/api/models")
+      .then((r) => r.json())
+      .then(setLlmModels)
+      .catch(() => {/* fallback to static list */});
   }, []);
 
   async function save(patch: Partial<ModelSettings>) {
@@ -60,7 +73,7 @@ export default function SettingsPage() {
         />
         <ModelPicker
           value={settings.summaryModel}
-          options={MODEL_OPTIONS.summary}
+          options={llmModels ?? MODEL_OPTIONS.summary}
           onChange={(v) => save({ summaryModel: v })}
         />
       </section>

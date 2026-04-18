@@ -13,7 +13,7 @@ export interface ModelSettings {
 }
 
 export const DEFAULTS: ModelSettings = {
-  summaryModel: "anthropic/claude-sonnet-4-6",
+  summaryModel: "google/gemini-2.5-flash-lite",
   batchSpeechModel: "universal-3-pro",
   streamingSpeechModel: "u3-rt-pro",
 };
