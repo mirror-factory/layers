@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.33] — 2026-04-18
+
+### Added
+- feat: use newest models (GPT-5.4 Nano, Gemini 3.1) + add meeting chat to roadmap (`e110cbb`)
+
+
 ## [0.1.32] — 2026-04-18
 
 ### Added
