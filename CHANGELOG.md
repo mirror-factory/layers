@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.0.6] — 2026-04-18
+
+### Documentation
+- docs: update MFDR-001 with MLPerf/Interspeech/HF benchmark data (`820b032`)
+
+
 ## [0.0.5] — 2026-04-18
 
 ### Documentation
