@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.44] — 2026-04-18
+
+### Fixed
+- fix: correct Vercel URL to audio-layer.vercel.app (`0674cde`)
+
+
 ## [0.1.43] — 2026-04-18
 
 ### Other
