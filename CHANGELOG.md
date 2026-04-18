@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.0.3] — 2026-04-18
+
+### Added
+- feat: /docs page renders MFDR-001 inline with styled markdown (`1c8bdc6`)
+
+
 ## [0.0.2] — 2026-04-18
 
 ### Documentation
