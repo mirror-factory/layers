@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.0.9] — 2026-04-18
+
+### Fixed
+- fix: remove pnpm version conflict in CI workflow (`3d7e356`)
+
+
 ## [0.0.8] — 2026-04-18
 
 ### Other
