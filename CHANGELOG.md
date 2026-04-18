@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.52] — 2026-04-18
+
+### Documentation
+- docs: Mirror Factory Design Review — full product + architecture spec (`eaf4887`)
+
+
 ## [0.1.51] — 2026-04-18
 
 ### Added
