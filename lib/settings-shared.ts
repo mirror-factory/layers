@@ -42,14 +42,16 @@ export const MODEL_OPTIONS = {
     { value: "google/gemini-2.0-flash", label: "Gemini 2.0 Flash", price: "$0.10 / $0.40 per 1M tokens" },
   ] as ModelOption[],
   batchSpeech: [
-    { value: "universal-3-pro", label: "Universal-3 Pro", price: "$0.21/hr + addons" },
-    { value: "universal-2", label: "Universal-2", price: "$0.15/hr + addons" },
-    { value: "nano", label: "Nano", price: "$0.09/hr" },
+    { value: "universal-3-pro", label: "Universal-3 Pro (best accuracy)", price: "$0.21/hr + addons" },
+    { value: "slam-1", label: "Slam-1 (advanced)", price: "$0.27/hr" },
+    { value: "universal-2", label: "Universal-2 (99 languages)", price: "$0.15/hr + addons" },
+    { value: "nano", label: "Nano (fastest, cheapest)", price: "$0.12/hr" },
   ] as ModelOption[],
   streamingSpeech: [
     { value: "u3-rt-pro", label: "Universal-3 Pro RT (best quality)", price: "$0.45/hr" },
-    { value: "u3-rt-agent", label: "Universal-3 RT Agent (low latency)", price: "$0.45/hr" },
+    { value: "u3-pro", label: "Universal-3 Pro (standard)", price: "$0.45/hr" },
     { value: "universal-streaming-multilingual", label: "Universal Streaming (multilingual)", price: "$0.15/hr" },
     { value: "universal-streaming-english", label: "Universal Streaming (English only)", price: "$0.15/hr" },
+    { value: "whisper-rt", label: "Whisper RT", price: "$0.15/hr" },
   ] as ModelOption[],
 } as const;
