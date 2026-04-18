@@ -19,16 +19,15 @@ const config: CapacitorConfig = {
   // it's only used as a fallback bundle for offline / failed loads.
   webDir: "public",
   server: {
+    // For physical devices: use the Vercel deployment URL.
+    // For simulator/dev: override with CAPACITOR_SERVER_URL=http://localhost:3000
+    // For physical device on local network: CAPACITOR_SERVER_URL=http://192.168.x.x:3000
     url:
       process.env.CAPACITOR_SERVER_URL ??
-      (process.env.NODE_ENV === "production"
-        ? "https://audio-layer.vercel.app"
-        : "http://localhost:3000"),
-    // Allow plain HTTP only in dev — production must be https.
-    cleartext: process.env.NODE_ENV !== "production",
+      "https://layer-1-audio.vercel.app",
+    cleartext: !!process.env.CAPACITOR_SERVER_URL,
     androidScheme: "https",
-    // Allow WebSocket connections to AssemblyAI for live streaming
-    allowNavigation: ["api.assemblyai.com"],
+    allowNavigation: ["api.assemblyai.com", "layer-1-audio.vercel.app"],
   },
   ios: {
     contentInset: "always",
