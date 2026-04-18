@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.27] — 2026-04-18
+
+### Added
+- feat: update model options with latest pricing from all providers (`61dd895`)
+
+
 ## [0.1.26] — 2026-04-18
 
 ### Documentation
