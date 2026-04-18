@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.22] — 2026-04-18
+
+### Documentation
+- docs: handoff package — ARCHITECTURE, API, COSTS, OPERATIONS, PLATFORMS (`e8de922`)
+
+
 ## [0.1.21] — 2026-04-18
 
 ### Added
