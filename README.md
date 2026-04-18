@@ -1,213 +1,134 @@
 # audio-layer
 
-The first standalone product built on the Layers platform by The Near Factory.
+Multi-platform audio intake and meeting transcription app. Built on Next.js 15 + Vercel AI SDK v6 + AssemblyAI Universal-3 Pro. Ships as a web app, a Tauri desktop shell (macOS / Windows / Linux), and a Capacitor mobile shell (iOS / Android) — all wrapping the same hosted backend.
 
-Bootstrapped from [mirror-factory/vercel-ai-starter-kit](https://github.com/mirror-factory/vercel-ai-starter-kit) — Next.js 15 + AI SDK v6 + TypeScript + Tailwind v4 + pnpm, with Langfuse observability, Claude Code hooks, registries, and enforcement gates.
+---
 
-## Quickstart
+## Start here
+
+| You are | Go to |
+|---|---|
+| Running this for the first time | [SETUP.md](./SETUP.md) — env vars, API keys, dashboard clicks |
+| Trying to understand the code | [ARCHITECTURE.md](./ARCHITECTURE.md) — request flow, state, observability, auth |
+| Looking for a specific route | [API.md](./API.md) — every endpoint, request/response shape |
+| Calculating costs / margins | [COSTS.md](./COSTS.md) — per-meeting math, at scale, break-even |
+| Operating the deployed app | [OPERATIONS.md](./OPERATIONS.md) — daily runbook, monitoring, troubleshooting, testing |
+| Building desktop / mobile binaries | [PLATFORMS.md](./PLATFORMS.md) — toolchain, signing, distribution per platform |
+| Checking what's not yet proven | [VERIFICATION_GAPS.md](./VERIFICATION_GAPS.md) — honest list of what's untested end-to-end |
+| Writing code as an AI agent | [AGENTS.md](./AGENTS.md) — locked decisions, file map, do-not-do list |
+
+Platform-specific docs live next to the code:
+- [src-tauri/README.md](./src-tauri/README.md) — desktop shell internals
+- [mobile/README.md](./mobile/README.md) — Capacitor setup workflow
+
+---
+
+## Quickstart — web only
+
+Minimum keys to record one meeting end to end:
 
 ```bash
+git clone https://github.com/mirror-factory/audio-layer
+cd audio-layer
 pnpm install
-cp .env.example .env.local   # fill in AI_GATEWAY_API_KEY, ASSEMBLYAI_API_KEY, LANGFUSE_*, SUPABASE_*
+cp .env.example .env.local
+
+# Edit .env.local and set at least:
+#   AI_GATEWAY_API_KEY=vck_...       (vercel.com → AI Gateway)
+#   ASSEMBLYAI_API_KEY=...            (assemblyai.com, free $50 credit)
+
 pnpm dev
+# → http://localhost:3000/record
 ```
 
-Optional — set up Supabase persistence + auth (otherwise runs
-against an in-memory dev store; state lost on redeploy):
+Upload a short audio clip or record from your mic; you'll get a speaker-segmented transcript + AI summary + structured intake form in 10–30 seconds. Without Supabase configured, meetings live in-memory and vanish on reload — see [SETUP.md](./SETUP.md) for the full tier stack (persistence, auth, billing, observability).
+
+## Quickstart — desktop or mobile
 
 ```bash
-# 1. In the Supabase SQL Editor, run:
-cat lib/supabase/schema.sql
-# Or:
-psql "$SUPABASE_DB_URL" -f lib/supabase/schema.sql
+# Desktop (macOS / Windows / Linux)
+cargo install tauri-cli --version "^2.0"
+cargo tauri dev
 
-# 2. Enable Anonymous Sign-Ins:
-#    Supabase dashboard → Authentication → Providers →
-#    "Allow anonymous sign-ins" = ON
+# Mobile (on a Mac with Xcode + Android Studio)
+bash mobile/setup.sh
+npx cap open ios       # or: npx cap open android
 ```
 
-When Supabase is configured, every visitor gets an anonymous user id
-on first request (via `middleware.ts`). RLS policies on the
-`meetings` table enforce per-user isolation automatically — no UI
-sign-in flow yet. Real sign-in (email magic link / OAuth) can be
-added later without breaking existing rows; Supabase supports
-upgrading anonymous accounts in place via `linkIdentity()`.
+Full prerequisites + build + distribution: [PLATFORMS.md](./PLATFORMS.md).
 
-Then open:
-- http://localhost:3000 — Hub
-- http://localhost:3000/record — batch mode (upload or record audio)
-- http://localhost:3000/record/live — streaming mode (u3-rt-pro, live captions)
-- http://localhost:3000/meetings — recent recordings (persisted)
-- http://localhost:3000/meetings/[id] — single meeting detail
-- http://localhost:3000/chat — reference chat with tool calls
-- http://localhost:3000/observability — AI call logs / costs / errors
+---
+
+## Tech stack
+
+```
+Frontend     Next.js 15 (App Router) · React 19 · Tailwind v4 · TypeScript
+Backend      Next.js Route Handlers (Node.js runtime) on Vercel
+Auth         Supabase (anonymous on first visit, magic link upgrade)
+DB           Supabase Postgres (meetings + profiles, RLS enforced)
+LLM          Vercel AI Gateway (Claude Sonnet 4.6 default, user-selectable)
+STT          AssemblyAI Universal-3 Pro (batch + streaming, direct)
+Billing      Stripe (Checkout + signed webhook → profiles)
+Observability Langfuse via OTel (auto-traces every AI SDK call)
+Export       @react-pdf/renderer + Markdown serializer
+Desktop      Tauri 2.x (cpal mic + macOS ScreenCaptureKit system audio)
+Mobile       Capacitor 8 (WebView wraps live app)
+Tests        Vitest (106) + Playwright e2e (6 specs)
+```
+
+## Repo layout
+
+```
+app/            Next.js routes (pages + API)
+components/    React components
+lib/
+  ai/           AI SDK integration + telemetry
+  assemblyai/   STT client + summary + intake
+  billing/      Pricing tables, quota, usage aggregator
+  meetings/     Store (Supabase + in-memory) + export
+  stripe/       Client + profile helpers
+  supabase/     Schema + auth helpers
+  observability/ Langfuse client
+public/         Static assets + PWA manifest + audio worklet
+src-tauri/      Desktop shell (Rust)
+mobile/         Capacitor config + setup scripts
+tests/          Vitest unit + Playwright e2e
+scripts/        Compliance + drift + load test + research helpers
+docs/           Generated reference
+```
+
+Full file-by-file map: [ARCHITECTURE.md § Key modules](./ARCHITECTURE.md).
+
+---
 
 ## Gates
 
 ```bash
 pnpm typecheck   # tsc --noEmit
-pnpm test        # vitest (unit + registry-sync)
-pnpm compliance  # 12 automated checks from the starter kit
-pnpm build       # next build
-pnpm lint        # eslint flat config
+pnpm test        # vitest (106 passing)
+pnpm test:e2e    # playwright (6 specs)
+pnpm compliance  # 12 pattern checks from the starter kit
+pnpm build       # next build — 23 routes
+pnpm test:all    # everything above, sequentially
 ```
 
-Husky pre-commit runs typecheck + test; pre-push re-runs them plus compliance.
+Husky pre-commit runs typecheck + test. Pre-push re-runs them and compliance.
 
-## What's wired
+---
 
-- **AI SDK v6** via `@ai-sdk/gateway` — routing, fallbacks, semantic caching
-- **Langfuse OTEL** — auto-tracing for every `generateText` / `streamText` call (see `instrumentation.ts` + `lib/langfuse-setup.ts`)
-- **Telemetry middleware** — `withTelemetry()` wraps AI calls, feeds the `/observability` dashboard
-- **Tool registry** — `lib/ai/tool-meta.ts` single source of truth, enforced by registry-sync tests
-- **Claude Code hooks** — `.claude/hooks/*.py` for session startup, reground, format
-- **Skills** — `.claude/skills/*` for observability-debug, wire-telemetry, compliance-fix, visual-qa, context7-first
-- **Nightly CI** — `.github/workflows/nightly.yml`
-- **Playwright** — smoke, visual-regression, mobile
-- **Research cache** — `.claude/research/` with freshness enforcement
+## Project status
 
-## Product stack (locked)
+- Web app: **ready for production** once env vars are set and schema.sql is run.
+- Cost + usage tracking: wired end to end (`/usage`, `/meetings/[id]` cost panel, Langfuse overlay).
+- Auth: anonymous + email magic link.
+- Billing: Stripe Checkout + webhook. Paywall at 25 free meetings.
+- Desktop: code in place, needs compile verification on a Mac (Rust toolchain not in this build env).
+- Mobile: scaffold + setup automation, needs `bash mobile/setup.sh` on a Mac with Xcode + Android SDK.
 
-| Layer | Choice |
-|---|---|
-| Web app (core) | Next.js 15 + AI SDK v6, hosted on Vercel |
-| iOS + Android | Capacitor wrapping the static-exported web app + native audio plugins |
-| macOS + Windows | Tauri (not Electron) — thin OS-webview shell, Rust bridge for system audio (Core Audio / ScreenCaptureKit / WASAPI) |
-| Transcription — streaming | **AssemblyAI Universal-3 Pro** (`u3-rt-pro`, wss://api.assemblyai.com/v3/realtime/ws) — direct, not via Gateway |
-| Transcription — batch | **AssemblyAI Universal-3 Pro** (`speech_model: 'best'`) — direct, not via Gateway |
-| Summary LLM | Vercel AI Gateway (default `anthropic/claude-sonnet-4-6`) |
-| Observability | Langfuse OTEL (auto-traces every LLM call) + in-app `/observability` dashboard |
+See [VERIFICATION_GAPS.md](./VERIFICATION_GAPS.md) for the honest list of what's not yet proven end to end.
 
-All front-ends (web, mobile, desktop) call the same hosted `https://<app>.vercel.app/api/*` routes. Audio capture is native per-platform; uploads/streams go to the server-side AssemblyAI integration.
+---
 
-## V1 pipeline (shipped)
+## License
 
-```
-/record
-  └→ POST /api/transcribe        (AssemblyAI upload + submit, insert Meetings row)
-  └→ GET  /api/transcribe/[id]   (poll every 3s; on completion: summarize + persist)
-  └→ redirect /meetings/[id]     (detail view)
-
-/meetings             — list, most recent first
-/meetings/[id]        — speaker-segmented transcript + structured summary
-                         (while processing, polls until terminal, then refresh)
-GET /api/meetings       → MeetingListItem[]
-GET /api/meetings/[id]  → Meeting
-```
-
-- **Transcription** — AssemblyAI Universal-3 Pro batch (`speech_model: 'best'`, `speaker_labels`, `entity_detection`). Direct, not via the Gateway.
-- **Summary** — Gateway Claude Sonnet 4.6 via `generateObject(MeetingSummarySchema)`: `title`, `summary`, `keyPoints`, `actionItems`, `decisions`, `participants`.
-- **Persistence** — `meetings` table in Supabase (`lib/supabase/schema.sql`). If `SUPABASE_URL` is unset, falls back to an in-memory store for zero-setup local dev.
-- **Observability** — every LLM call goes through `withTelemetry()` → Langfuse + `/observability`.
-
-## V2 pipeline — streaming (shipped)
-
-```
-/record/live
-  └→ POST /api/transcribe/stream/token        (mint ephemeral token,
-                                               insert Meetings row)
-  └→ AudioContext + AudioWorklet              (48k mic → 16k PCM int16)
-  └→ wss://api.assemblyai.com/v3/realtime/ws  (direct browser connection
-                                               with the temp token, model
-                                               u3-rt-pro, speakerLabels)
-  └→ Turn events                              (partial + final; partial
-                                               updates the live UI, final
-                                               appends to transcript)
-  └→ Stop button
-      └→ POST /api/transcribe/stream/finalize (summarize via Gateway,
-                                               persist via MeetingsStore)
-      └→ redirect /meetings/[id]
-```
-
-- Browser never sees the AssemblyAI API key — only short-lived tokens (10 min TTL, max 1 hr session).
-- AudioWorklet is served from `public/worklets/pcm-downsampler.js`; pre-filtered by a BiquadFilter low-pass at 7 kHz to prevent decimation aliasing.
-- Browser mic only for V1. System-audio capture requires native bridges — comes with the Tauri shell.
-
-## Export
-
-`/meetings/[id]` exports the recording in two formats:
-
-- **Markdown** — `GET /api/meetings/[id]/export?format=md`. GitHub-flavored, action items as `- [ ]` checkboxes.
-- **PDF** — `GET /api/meetings/[id]/export?format=pdf`. Server-rendered with `@react-pdf/renderer`; same sections and ordering as the Markdown output. Lazy-loaded so the heavier PDF deps don't slow the Markdown path.
-
-## Cost + usage visibility
-
-Every completed meeting stores a `cost_breakdown` row containing:
-
-- STT: mode (batch/streaming), model, duration, rate/hour, base + add-on cost
-- LLM: one record per call (summary, intake) with model, input/output tokens, cached tokens, computed cost
-- Total USD for the meeting
-
-Two surfaces:
-
-- **`/meetings/[id]`** — per-meeting cost panel with 3 headline tiles (STT, LLM, Total) and a table of LLM calls.
-- **`/usage`** — lifetime + this-month totals: meetings, minutes, STT spend, LLM spend, free-tier remaining, subscription status. LLM numbers overlay from Langfuse when configured and it reports traces for the user; otherwise falls back to locally-computed cost.
-
-Pricing tables live in `lib/billing/llm-pricing.ts` and `lib/billing/assemblyai-pricing.ts` — review quarterly against published rates.
-
-### Langfuse serverless flush
-
-`lib/langfuse-setup.ts` exports `flushLangfuse()`. Every AI-calling route ends with `after(flushLangfuse)` — without this, Vercel's serverless cold-freeze drops buffered OTel spans and Langfuse shows zero tokens / zero cost even though traces arrive. This is the documented fix from [langfuse.com/docs/integrations/vercel-ai-sdk](https://langfuse.com/docs/integrations/vercel-ai-sdk).
-
-## Intake-form extraction
-
-Every completed meeting (batch and streaming) now also runs through `extractIntakeForm()` — a second `generateObject` call against `IntakeFormSchema`: intent, primary participant, organization, contact info, budget, timeline, decision makers, requirements, pain points, next steps. Both calls run in parallel via `Promise.allSettled` so a failure in one doesn't block the other. The intake panel renders on `/meetings/[id]` only when at least one field has content; the prompt explicitly tells the LLM to leave fields blank rather than invent CRM data.
-
-## Pricing & billing
-
-`/pricing` shows Free / Core $15 / Pro $25 tiers (matches the product brief). Subscribe buttons hit `POST /api/stripe/checkout` and redirect to Stripe-hosted Checkout. Webhook at `POST /api/stripe/webhook` validates signatures and syncs subscription state into the `profiles` table.
-
-For local dev:
-
-```bash
-# Install Stripe CLI then:
-stripe listen --forward-to localhost:3000/api/stripe/webhook
-# Copy the printed whsec_* into STRIPE_WEBHOOK_SECRET.
-# Create monthly products + prices for Core $15 and Pro $25 in the
-# Stripe dashboard, then drop the price ids into STRIPE_PRICE_CORE
-# and STRIPE_PRICE_PRO.
-```
-
-The meeting routes are NOT paywalled yet — that ships when we have real customers and a clear "free 25 meetings" cutoff to enforce.
-
-## Mobile shell (Capacitor)
-
-Bundle ID `com.mirrorfactory.audiolayer`. The WebView loads the live hosted Next.js app via `server.url` in `capacitor.config.ts` — same backend as web + desktop.
-
-First-time setup on a Mac with Xcode + Android Studio installed:
-
-```bash
-bash mobile/setup.sh
-```
-
-That runs `npx cap add ios|android` and idempotently patches:
-
-- `ios/App/App/Info.plist` → `NSMicrophoneUsageDescription`, `UIBackgroundModes[audio]`, localhost ATS exception
-- `android/app/src/main/AndroidManifest.xml` → `RECORD_AUDIO` + `MODIFY_AUDIO_SETTINGS`
-- `android/app/.../MainActivity.*` → `onPermissionRequest` override on WebChromeClient so the WebView's `getUserMedia()` actually works
-
-Then `npx cap open ios|android` to run on a simulator or device. See `mobile/README.md` for troubleshooting.
-
-## PWA
-
-`public/manifest.webmanifest` + Next.js metadata wire a basic PWA — users can "Add to Home Screen" and get a standalone launcher. Real icons go in `public/icons/` (placeholder README there explains how to regenerate with `@capacitor/assets`).
-
-## Desktop shell (Tauri 2.x)
-
-`src-tauri/` wraps the hosted Next.js app in an OS webview. Bundle identifier `com.mirrorfactory.audiolayer`. Commands exposed to JS:
-
-- `start_mic_capture(channel)` / `stop_mic_capture()` — cross-platform via cpal.
-- `start_system_audio_capture(channel)` — **macOS only** (ScreenCaptureKit, `macos_14_0` feature). Windows / Linux stubs return "not wired yet" until WASAPI loopback and PipeWire monitor land.
-
-On first `start_system_audio_capture` call macOS prompts for Screen Recording permission. `NSMicrophoneUsageDescription` is in `src-tauri/Info.plist`.
-
-```bash
-cargo install tauri-cli --version "^2.0"
-cargo tauri dev    # starts pnpm dev + opens the native window
-```
-
-See `src-tauri/README.md` for platform-by-platform notes and `VERIFICATION_GAPS.md` for what's unverified (Rust compile, system-audio extraction helper).
-
-## Next up
-
-Real native audio bridges in the Tauri shell. Capacitor for iOS/Android (mic-only). Real sign-in (email magic link / OAuth). Paywall the meeting routes once the free-tier cutoff is decided.
+All rights reserved — Mirror Factory. Internal project; not open source.
