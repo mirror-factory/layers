@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.29] — 2026-04-18
+
+### Fixed
+- fix: native shell transcription — iOS codec fallback + AssemblyAI WebSocket (`e19cc8d`)
+
+
 ## [0.1.28] — 2026-04-18
 
 ### Fixed
