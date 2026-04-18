@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.45] — 2026-04-18
+
+### Fixed
+- fix: point Capacitor to Pro project layer-1-audio.vercel.app (`00178b3`)
+
+
 ## [0.1.44] — 2026-04-18
 
 ### Fixed
