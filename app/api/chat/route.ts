@@ -34,7 +34,15 @@ export async function POST(req: Request) {
   };
 
   try {
-    const { messages } = (await req.json()) as { messages: UIMessage[] };
+    const body = await req.json();
+    const messages = (body.messages ?? []) as UIMessage[];
+
+    if (!messages.length) {
+      return new Response(
+        JSON.stringify({ error: "No messages provided" }),
+        { status: 400, headers: { "Content-Type": "application/json" } },
+      );
+    }
 
     // Convert UI messages to model messages (async in v6)
     const modelMessages = await convertToModelMessages(messages, {
