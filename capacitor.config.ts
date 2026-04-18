@@ -27,6 +27,8 @@ const config: CapacitorConfig = {
     // Allow plain HTTP only in dev — production must be https.
     cleartext: process.env.NODE_ENV !== "production",
     androidScheme: "https",
+    // Allow WebSocket connections to AssemblyAI for live streaming
+    allowNavigation: ["api.assemblyai.com"],
   },
   ios: {
     contentInset: "always",

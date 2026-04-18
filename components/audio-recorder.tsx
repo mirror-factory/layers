@@ -50,7 +50,8 @@ export function AudioRecorder({ disabled, onRecorded }: Props) {
         },
       });
       streamRef.current = stream;
-      const rec = new MediaRecorder(stream, { mimeType: pickMimeType() });
+      const mime = pickMimeType();
+      const rec = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined);
       recorderRef.current = rec;
       rec.ondataavailable = (e) => {
         if (e.data.size > 0) chunksRef.current.push(e.data);
@@ -114,7 +115,14 @@ function formatElapsed(s: number): string {
 }
 
 function pickMimeType(): string {
-  const candidates = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4"];
+  // iOS WKWebView only supports audio/mp4; desktop browsers prefer webm/opus.
+  const candidates = [
+    "audio/webm;codecs=opus",
+    "audio/webm",
+    "audio/mp4",
+    "audio/aac",
+    "audio/ogg;codecs=opus",
+  ];
   for (const c of candidates) {
     if (
       typeof MediaRecorder !== "undefined" &&
@@ -123,5 +131,6 @@ function pickMimeType(): string {
       return c;
     }
   }
-  return "audio/webm";
+  // Fallback: let the browser pick its default
+  return "";
 }
