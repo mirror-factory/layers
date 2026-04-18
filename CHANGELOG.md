@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.42] — 2026-04-18
+
+### Other
+- debug: add env var diagnostic endpoint + middleware logging (`632a0b4`)
+
+
 ## [0.1.41] — 2026-04-18
 
 ### Fixed
