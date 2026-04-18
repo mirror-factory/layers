@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.51] — 2026-04-18
+
+### Added
+- feat: complete UI redesign — one-tap recording, hamburger menu, white bar fixes (`d3eedf1`)
+
+
 ## [0.1.50] — 2026-04-18
 
 ### Fixed
