@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.0.5] — 2026-04-18
+
+### Documentation
+- docs: add competitor transcription accuracy benchmarks to MFDR-001 (`4ff55ed`)
+
+
 ## [0.0.4] — 2026-04-18
 
 ### Documentation
