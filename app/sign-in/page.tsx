@@ -32,7 +32,7 @@ export default function SignInPage() {
           if (err) {
             setError("Sign in failed: " + err.message);
           } else {
-            router.push(params.get("next") ?? "/");
+            window.location.href = params.get("next") ?? "/";
           }
         });
       return;
@@ -42,7 +42,7 @@ export default function SignInPage() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         if (event === "SIGNED_IN" && session) {
-          router.push(params.get("next") ?? "/");
+          window.location.href = params.get("next") ?? "/";
         }
       }
     );
