@@ -4,22 +4,34 @@ import { LandingPage } from "./landing";
 import { RecorderHome } from "./recorder";
 
 export default async function HomePage() {
-  // Check if user is authenticated (not anonymous)
-  const url = process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anon = process.env.SUPABASE_ANON_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   let isAuthenticated = false;
 
-  if (url && anon) {
+  if (url && anonKey) {
     const cookieStore = await cookies();
-    const supabase = createServerClient(url, anon, {
+
+    const supabase = createServerClient(url, anonKey, {
       cookies: {
-        getAll() { return cookieStore.getAll(); },
-        setAll() { /* read-only in server component */ },
+        getAll() {
+          return cookieStore.getAll();
+        },
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options)
+            );
+          } catch {
+            // setAll called from Server Component — safe to ignore
+            // since middleware handles session refresh
+          }
+        },
       },
     });
-    const { data } = await supabase.auth.getUser();
-    isAuthenticated = !!data.user && data.user.is_anonymous !== true && !!data.user.email;
+
+    const { data: { user } } = await supabase.auth.getUser();
+    isAuthenticated = !!user && user.is_anonymous !== true && !!user.email;
   }
 
   if (isAuthenticated) {

@@ -1,12 +1,14 @@
 "use client";
 
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { createBrowserClient } from "@supabase/ssr";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 let instance: SupabaseClient | null = null;
 
 /**
  * Browser-side Supabase client (singleton).
- * Returns null when NEXT_PUBLIC_ env vars are missing.
+ * Uses @supabase/ssr's createBrowserClient which properly syncs
+ * cookies with the server middleware.
  */
 export function getSupabaseBrowser(): SupabaseClient | null {
   if (instance) return instance;
@@ -16,6 +18,6 @@ export function getSupabaseBrowser(): SupabaseClient | null {
 
   if (!url || !anonKey) return null;
 
-  instance = createClient(url, anonKey);
+  instance = createBrowserClient(url, anonKey);
   return instance;
 }

@@ -1,63 +1,79 @@
 /**
- * Next.js middleware:
- * 1. Gate /dev-kit dashboard behind DEV_KIT_DASHBOARD_SECRET
- * 2. Inject x-request-id on every request
- * 3. Ensure every visitor has a Supabase session (anonymous sign-in)
+ * Next.js middleware — Supabase SSR best practices pattern.
+ *
+ * Critical: the setAll callback MUST update both the request cookies
+ * AND recreate the response. Without this, the browser and server
+ * go out of sync and the user's session gets dropped.
+ *
+ * See: https://supabase.com/docs/guides/getting-started/ai-prompts/nextjs-supabase-auth
  */
-import { NextResponse, type NextRequest } from 'next/server';
-import { devKitAuthGuard, isDevKitPath } from './lib/middleware-dev-kit';
-import { createServerClient } from '@supabase/ssr';
+import { NextResponse, type NextRequest } from "next/server";
+import { createServerClient } from "@supabase/ssr";
+import { devKitAuthGuard, isDevKitPath } from "./lib/middleware-dev-kit";
 
-function generateRequestId(): string {
-  return `req_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
-}
-
-export async function middleware(req: NextRequest) {
-  // 1. Gate the dev-kit dashboard
-  if (isDevKitPath(req.nextUrl.pathname)) {
-    const blocked = devKitAuthGuard(req);
+export async function middleware(request: NextRequest) {
+  // Dev-kit dashboard gate
+  if (isDevKitPath(request.nextUrl.pathname)) {
+    const blocked = devKitAuthGuard(request);
     if (blocked) return blocked;
   }
 
-  // 2. Inject x-request-id
-  const incoming = req.headers.get('x-request-id');
-  const requestId = incoming && /^[\w_-]{1,64}$/.test(incoming) ? incoming : generateRequestId();
+  // Supabase session proxy — this is the official pattern
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  const requestHeaders = new Headers(req.headers);
-  requestHeaders.set('x-request-id', requestId);
-
-  const response = NextResponse.next({ request: { headers: requestHeaders } });
-  response.headers.set('x-request-id', requestId);
-
-  // 3. Supabase anonymous session (for API routes that need user_id)
-  const url = process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anon = process.env.SUPABASE_ANON_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-  if (url && anon) {
-    const supabase = createServerClient(url, anon, {
-      cookies: {
-        getAll() {
-          return req.cookies.getAll();
-        },
-        setAll(items) {
-          for (const { name, value, options } of items) {
-            response.cookies.set(name, value, options);
-          }
-        },
-      },
-    });
-
-    const { data } = await supabase.auth.getUser();
-    if (!data.user) {
-      await supabase.auth.signInAnonymously().catch(() => {});
-    }
+  if (!url || !anonKey) {
+    return NextResponse.next({ request });
   }
 
-  return response;
+  let supabaseResponse = NextResponse.next({ request });
+
+  const supabase = createServerClient(url, anonKey, {
+    cookies: {
+      getAll() {
+        return request.cookies.getAll();
+      },
+      setAll(cookiesToSet) {
+        // 1. Update the request cookies (so server components see them)
+        cookiesToSet.forEach(({ name, value }) =>
+          request.cookies.set(name, value)
+        );
+
+        // 2. Recreate the response with updated request
+        supabaseResponse = NextResponse.next({ request });
+
+        // 3. Set cookies on the response (so browser stores them)
+        cookiesToSet.forEach(({ name, value, options }) =>
+          supabaseResponse.cookies.set(name, value, options)
+        );
+      },
+    },
+  });
+
+  // IMPORTANT: Do not add code between createServerClient and getUser().
+  // A simple mistake here can cause random session drops.
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  // If no user at all, sign in anonymously (for API routes that need user_id)
+  if (!user) {
+    await supabase.auth.signInAnonymously().catch(() => {});
+  }
+
+  // Inject x-request-id for observability
+  const requestId = `req_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+  supabaseResponse.headers.set("x-request-id", requestId);
+
+  // IMPORTANT: return the supabaseResponse as-is. Do not create a new
+  // NextResponse — the cookies on supabaseResponse keep browser and
+  // server in sync. Modifying or replacing it breaks auth.
+  return supabaseResponse;
 }
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|worklets/|.*\\.(?:png|jpg|jpeg|gif|webp|svg|ico|js\\.map|css\\.map)$).*)',
+    "/((?!_next/static|_next/image|favicon.ico|worklets/|.*\\.(?:png|jpg|jpeg|gif|webp|svg|ico)$).*)",
   ],
 };
