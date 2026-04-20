@@ -1,0 +1,35 @@
+#!/bin/sh
+# AI Dev Kit - Post-commit hook (informational, never blocks)
+# All commands are non-blocking -- failures are silently ignored.
+
+CYAN='\033[0;36m'
+NC='\033[0m'
+
+info() {
+  printf "${CYAN}[INFO]${NC} %s\n" "$1"
+}
+
+# ---------------------------------------------------------------------------
+# 1. Auto-version bump
+# ---------------------------------------------------------------------------
+info "Running auto-version bump..."
+node scripts/auto-version.mjs 2>/dev/null || true
+
+# ---------------------------------------------------------------------------
+# 2. CHANGELOG update
+# ---------------------------------------------------------------------------
+info "Updating CHANGELOG..."
+node scripts/update-changelog.mjs 2>/dev/null || true
+
+# ---------------------------------------------------------------------------
+# 3. Quick doctor (continuous enforcement -- catches drift immediately)
+# ---------------------------------------------------------------------------
+# Non-blocking but visible. The idea: run_id + registries + catalog
+# freshness + brand + budget wiring can drift between pre-push runs
+# (e.g. when you rebase, check out a different branch, or cherry-pick).
+# post-commit prints a one-line status so drift gets caught in-loop
+# instead of surfacing only on the eventual push.
+if command -v npx >/dev/null 2>&1; then
+  info "Quick health check..."
+  npx ai-dev-kit doctor 2>/dev/null | tail -5 || true
+fi
