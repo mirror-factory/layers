@@ -28,8 +28,8 @@ export function TranscriptView({ utterances, summary }: TranscriptViewProps) {
             {utterances.map((u, i) => (
               <div key={i} className="flex gap-3">
                 <div className="shrink-0 mt-0.5">
-                  <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#262626] text-xs font-semibold text-[var(--text-secondary)]">
-                    {u.speaker ?? "?"}
+                  <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[var(--bg-card-hover)] text-xs font-semibold text-[var(--text-muted)]">
+                    {u.speaker ?? "·"}
                   </span>
                 </div>
                 <div className="flex-1 min-w-0">
@@ -73,8 +73,9 @@ export function TranscriptView({ utterances, summary }: TranscriptViewProps) {
                   {summary.keyPoints.map((kp, i) => (
                     <li
                       key={i}
-                      className="text-sm text-[var(--text-secondary)] pl-3 border-l-2 border-[#14b8a6]/30"
+                      className="text-sm text-[var(--text-secondary)] flex gap-2"
                     >
+                      <span className="text-[#14b8a6] shrink-0">·</span>
                       {kp}
                     </li>
                   ))}
@@ -114,8 +115,9 @@ export function TranscriptView({ utterances, summary }: TranscriptViewProps) {
                   {summary.decisions.map((d, i) => (
                     <li
                       key={i}
-                      className="text-sm text-[var(--text-secondary)] pl-3 border-l-2 border-[#14b8a6]/30"
+                      className="text-sm text-[var(--text-secondary)] flex gap-2"
                     >
+                      <span className="text-[#14b8a6] shrink-0">·</span>
                       {d}
                     </li>
                   ))}
@@ -132,7 +134,7 @@ export function TranscriptView({ utterances, summary }: TranscriptViewProps) {
                   {summary.participants.map((p, i) => (
                     <span
                       key={i}
-                      className="text-xs bg-[#262626] text-[var(--text-secondary)] px-2 py-1 rounded-md"
+                      className="text-xs bg-[var(--bg-card-hover)] text-[var(--text-secondary)] px-2 py-1 rounded-md"
                     >
                       {p}
                     </span>

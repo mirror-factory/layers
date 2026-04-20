@@ -307,8 +307,8 @@ export function LiveRecorder({
           disabled={state === "connecting" || state === "finalizing"}
           className={`shrink-0 flex items-center justify-center rounded-full transition-all duration-700 ease-out disabled:opacity-50 ${
             isActive
-              ? "w-12 h-12 bg-white/5 border border-red-400/40 text-red-400 hover:border-red-400/70 hover:bg-red-400/10"
-              : "w-20 h-20 bg-white/5 border-2 border-[#14b8a6]/40 text-[#14b8a6] hover:border-[#14b8a6]/70 hover:text-[#2dd4bf] hover:shadow-[0_0_40px_rgba(20,184,166,0.15)]"
+              ? "w-12 h-12 bg-[var(--bg-card)] border border-red-500/30 text-red-500 hover:border-red-500/60 hover:bg-red-500/5"
+              : "w-20 h-20 bg-[var(--bg-card)] border-2 border-[#14b8a6]/40 text-[#14b8a6] hover:border-[#14b8a6]/70 hover:text-[#0d9488]"
           }`}
           aria-label={isActive ? "Stop recording" : "Start recording"}
         >
@@ -334,13 +334,13 @@ export function LiveRecorder({
               {formatDuration(duration)}
             </span>
             {isActive && (
-              <span className="text-xs text-red-400/70 uppercase tracking-wider animate-in fade-in duration-500">
+              <span className="text-xs text-red-500/70 uppercase tracking-wider animate-in fade-in duration-500">
                 {state === "finalizing" ? "Processing" : state === "connecting" ? "Connecting" : "Recording"}
               </span>
             )}
           </div>
           {isActive ? (
-            <div className="flex items-center gap-4 mt-1 text-xs text-white/40 animate-in fade-in slide-in-from-left-2 duration-500">
+            <div className="flex items-center gap-4 mt-1 text-xs text-[var(--text-muted)] animate-in fade-in slide-in-from-left-2 duration-500">
               {turnCount > 0 && (
                 <span>{turnCount} {turnCount === 1 ? "segment" : "segments"}</span>
               )}
@@ -359,8 +359,8 @@ export function LiveRecorder({
         {/* Live indicator — only when active, fades in */}
         {isActive && (
           <div className="shrink-0 flex items-center gap-1.5 animate-in fade-in duration-700">
-            <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
-            <span className="text-[10px] text-red-400/70 uppercase tracking-wider font-medium">
+            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+            <span className="text-[10px] text-red-500/70 uppercase tracking-wider font-medium">
               Live
             </span>
           </div>
@@ -368,7 +368,7 @@ export function LiveRecorder({
       </div>
 
       {error && (
-        <p className="text-sm text-red-400 text-center mt-3 max-w-xs mx-auto">{error}</p>
+        <p className="text-sm text-red-500 text-center mt-3 max-w-xs mx-auto">{error}</p>
       )}
     </div>
   );
