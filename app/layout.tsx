@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { VercelToolbar } from "@vercel/toolbar/next";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -46,6 +47,7 @@ export default function RootLayout({
         }}
       >
         {children}
+        {process.env.VERCEL_TOOLBAR === "1" && <VercelToolbar />}
       </body>
     </html>
   );
