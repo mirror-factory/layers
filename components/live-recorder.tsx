@@ -267,47 +267,101 @@ export function LiveRecorder({
     onStateChange?.(state);
   }, [state, onStateChange]);
 
-  return (
-    <div className="flex flex-col items-center gap-6">
-      <div className="relative">
+  const isActive = state === "recording" || state === "finalizing";
+  const wordCount = turnsRef.current.reduce((sum, t) => sum + t.text.split(/\s+/).filter(Boolean).length, 0);
+  const turnCount = turnsRef.current.length;
+
+  // Idle layout: centered mic, timer below
+  if (!isActive && state !== "connecting") {
+    return (
+      <div className="flex flex-col items-center gap-5">
         <button
-          onClick={state === "idle" ? start : state === "recording" ? stop : undefined}
-          disabled={state === "connecting" || state === "finalizing"}
-          className={`flex items-center justify-center w-20 h-20 rounded-full transition-all duration-500 disabled:opacity-50 ${
-            state === "recording"
-              ? "bg-white/5 border-2 border-red-400/60 text-red-400 shadow-[0_0_30px_rgba(239,68,68,0.15)]"
-              : "bg-white/5 border-2 border-[#14b8a6]/40 text-[#14b8a6] hover:border-[#14b8a6]/70 hover:text-[#2dd4bf] hover:shadow-[0_0_40px_rgba(20,184,166,0.15)]"
-          }`}
-          aria-label={state === "recording" ? "Stop recording" : "Start recording"}
+          onClick={start}
+          className="flex items-center justify-center w-20 h-20 rounded-full bg-white/5 border-2 border-[#14b8a6]/40 text-[#14b8a6] hover:border-[#14b8a6]/70 hover:text-[#2dd4bf] hover:shadow-[0_0_40px_rgba(20,184,166,0.15)] transition-all duration-500"
+          aria-label="Start recording"
         >
-          {state === "connecting" || state === "finalizing" ? (
-            <Loader2 size={28} className="animate-spin" />
-          ) : state === "recording" ? (
-            <Square size={18} fill="currentColor" />
+          <Mic size={28} strokeWidth={1.5} />
+        </button>
+        <div className="text-center">
+          <div className="text-2xl font-semibold text-[var(--text-primary)] tabular-nums">
+            {formatDuration(duration)}
+          </div>
+          <div className="text-xs text-[var(--text-muted)] mt-1">
+            Tap to start live transcription
+          </div>
+        </div>
+        {error && (
+          <p className="text-sm text-red-400 text-center max-w-xs">{error}</p>
+        )}
+      </div>
+    );
+  }
+
+  // Connecting layout
+  if (state === "connecting") {
+    return (
+      <div className="flex flex-col items-center gap-5">
+        <div className="flex items-center justify-center w-20 h-20 rounded-full bg-white/5 border-2 border-[#14b8a6]/30">
+          <Loader2 size={28} className="animate-spin text-[#14b8a6]" />
+        </div>
+        <div className="text-xs text-[var(--text-muted)]">Connecting...</div>
+        {error && (
+          <p className="text-sm text-red-400 text-center max-w-xs">{error}</p>
+        )}
+      </div>
+    );
+  }
+
+  // Recording / Finalizing layout: stop button left, timer + context centered
+  return (
+    <div className="w-full">
+      <div className="flex items-center gap-4 px-2">
+        {/* Stop button — left side */}
+        <button
+          onClick={state === "recording" ? stop : undefined}
+          disabled={state === "finalizing"}
+          className="shrink-0 flex items-center justify-center w-12 h-12 rounded-full bg-white/5 border border-red-400/40 text-red-400 hover:border-red-400/70 hover:bg-red-400/10 transition-all duration-300 disabled:opacity-50"
+          aria-label="Stop recording"
+        >
+          {state === "finalizing" ? (
+            <Loader2 size={16} className="animate-spin" />
           ) : (
-            <Mic size={28} strokeWidth={1.5} />
+            <Square size={14} fill="currentColor" />
           )}
         </button>
 
-        {state === "recording" && (
-          <span className="absolute -inset-2 rounded-full border border-red-400/20 animate-ping pointer-events-none" />
-        )}
-      </div>
-
-      <div className="text-center">
-        <div className="text-2xl font-semibold text-[#e5e5e5] tabular-nums">
-          {formatDuration(duration)}
+        {/* Timer + context — centered */}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-baseline gap-3">
+            <span className="text-3xl font-semibold text-[var(--text-primary)] tabular-nums tracking-tight">
+              {formatDuration(duration)}
+            </span>
+            <span className="text-xs text-red-400/70 uppercase tracking-wider">
+              {state === "finalizing" ? "Processing" : "Recording"}
+            </span>
+          </div>
+          <div className="flex items-center gap-4 mt-1 text-xs text-[var(--text-muted)]">
+            {turnCount > 0 && (
+              <span>{turnCount} {turnCount === 1 ? "segment" : "segments"}</span>
+            )}
+            {wordCount > 0 && (
+              <span>{wordCount} {wordCount === 1 ? "word" : "words"}</span>
+            )}
+            {turnCount === 0 && <span>Listening...</span>}
+          </div>
         </div>
-        <div className="text-xs text-[#737373] mt-1">
-          {state === "idle" && "Tap to start live transcription"}
-          {state === "connecting" && "Connecting..."}
-          {state === "recording" && "Recording — tap to stop"}
-          {state === "finalizing" && "Processing..."}
+
+        {/* Live indicator — right side */}
+        <div className="shrink-0 flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
+          <span className="text-[10px] text-red-400/70 uppercase tracking-wider font-medium">
+            Live
+          </span>
         </div>
       </div>
 
       {error && (
-        <p className="text-sm text-[#ef4444] text-center max-w-xs">{error}</p>
+        <p className="text-sm text-red-400 text-center mt-3 max-w-xs mx-auto">{error}</p>
       )}
     </div>
   );
