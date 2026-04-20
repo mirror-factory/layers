@@ -43,40 +43,46 @@ const DEMO_SUMMARY = {
 
 const FEATURES = [
   {
+    icon: Brain,
+    title: "Structured extraction",
+    desc: "Budgets, timelines, decision makers, action items — not just summaries. Every conversation becomes structured, actionable data.",
+    large: true,
+  },
+  {
     icon: Mic,
     title: "Live transcription",
     desc: "Real-time streaming with speaker diarization. No bot in your meeting.",
-  },
-  {
-    icon: Brain,
-    title: "Structured extraction",
-    desc: "Budgets, timelines, decision makers, action items — not just summaries.",
+    large: false,
   },
   {
     icon: FileText,
     title: "Intake forms",
     desc: "Every conversation auto-generates CRM-ready structured data.",
+    large: false,
   },
   {
     icon: DollarSign,
     title: "Cost transparency",
     desc: "See exactly what each meeting costs. Pick your own AI model.",
+    large: false,
   },
   {
     icon: Shield,
     title: "Your data, your models",
     desc: "Choose from 9 LLMs and 5 speech models. Zero vendor lock-in.",
+    large: false,
   },
   {
     icon: Smartphone,
     title: "Multi-platform",
     desc: "Web, macOS desktop, and iOS — one codebase, instant updates.",
+    large: false,
   },
 ];
 
 /* ─────────────────────────── Demo Hook ─────────────────────────── */
 
-type DemoPhase = "waiting" | "recording" | "processing" | "summary";
+type DemoPhase = "waiting" | "recording" | "summary";
 
 function useRecordingDemo() {
   const [phase, setPhase] = useState<DemoPhase>("waiting");
@@ -112,19 +118,14 @@ function useRecordingDemo() {
       }, 1200 * (i + 1));
     });
 
-    // After all lines, transition to processing
+    // After all lines, transition directly to summary (no processing state)
     const totalTime = 1200 * (DEMO_TRANSCRIPT_LINES.length + 1);
     setTimeout(() => {
-      setPhase("processing");
+      setPhase("summary");
       setDemoAudioLevel(0);
       if (timerRef.current) clearInterval(timerRef.current);
       if (audioTimerRef.current) clearInterval(audioTimerRef.current);
     }, totalTime);
-
-    // After processing, show summary
-    setTimeout(() => {
-      setPhase("summary");
-    }, totalTime + 2000);
   }, []);
 
   // Auto-start and loop
@@ -208,32 +209,55 @@ export function LandingPage() {
   const demoShaderState = phase === "recording" ? "recording" : "idle";
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)]">
+    <div className="min-h-screen bg-[var(--bg-primary)] text-white dark:text-white light:text-gray-900">
+      {/* ───── Top Navigation ───── */}
+      <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-[var(--bg-primary)]/80 border-b border-white/[0.04] dark:border-white/[0.04] light:border-gray-200/50">
+        <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
+          <Link href="/" className="text-lg font-bold text-white dark:text-white light:text-gray-900 tracking-tight">
+            Layer One
+          </Link>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/sign-in"
+              className="px-5 py-2 text-sm text-white/70 hover:text-white dark:text-white/70 dark:hover:text-white light:text-gray-600 light:hover:text-gray-900 transition-colors"
+            >
+              Sign in
+            </Link>
+            <Link
+              href="/sign-up"
+              className="px-5 py-2 text-sm bg-[#14b8a6] hover:bg-[#0d9488] text-white font-medium rounded-full transition-all duration-300"
+            >
+              Get started
+            </Link>
+          </div>
+        </div>
+      </nav>
+
       {/* ───── SECTION 1: Hero ───── */}
-      <section className="relative flex flex-col items-center justify-center px-4 pt-24 pb-16">
+      <section className="relative flex flex-col items-center justify-center px-4 pt-32 pb-16">
         {/* Mirror Factory badge */}
         <a
           href="https://mirrorfactory.ai"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-xs text-[var(--text-muted)] opacity-50 hover:opacity-80 transition-opacity mb-12"
+          className="inline-flex items-center gap-1.5 text-xs text-white/40 dark:text-white/40 light:text-gray-400 hover:text-white/60 dark:hover:text-white/60 light:hover:text-gray-600 transition-opacity mb-12"
         >
           A Mirror Factory product
         </a>
 
-        <h1 className="text-6xl sm:text-7xl lg:text-8xl font-bold tracking-tight text-center">
+        <h1 className="text-6xl sm:text-7xl lg:text-8xl font-bold tracking-tight text-center text-white dark:text-white light:text-gray-900">
           Layer One
         </h1>
-        <p className="text-xl sm:text-2xl text-[var(--text-muted)] mt-4 text-center">
+        <p className="text-xl sm:text-2xl text-white/60 dark:text-white/60 light:text-gray-500 mt-4 text-center">
           Audio Intelligence
         </p>
-        <p className="text-sm sm:text-base text-[var(--text-muted)] mt-3 max-w-md mx-auto text-center opacity-60 leading-relaxed">
+        <p className="text-sm sm:text-base text-white/40 dark:text-white/40 light:text-gray-400 mt-3 max-w-md mx-auto text-center leading-relaxed">
           Capture, transcribe, and extract structured data from every
           conversation — budgets, timelines, decisions, action items.
         </p>
 
         {/* Shader line below text */}
-        <div className="w-full max-w-3xl mt-10" style={{ height: 120 }}>
+        <div className="w-full max-w-3xl mt-12" style={{ height: 120 }}>
           <WebGLShader
             state={heroState}
             audioLevel={heroAudio}
@@ -242,7 +266,7 @@ export function LandingPage() {
         </div>
 
         {/* CTAs */}
-        <div className="flex items-center justify-center gap-4 mt-10">
+        <div className="flex items-center justify-center gap-4 mt-12">
           <Link
             href="/sign-up"
             className="px-8 py-3 bg-[#14b8a6] hover:bg-[#0d9488] text-white font-medium rounded-full transition-all duration-300 hover:shadow-[0_0_30px_rgba(20,184,166,0.2)]"
@@ -251,48 +275,89 @@ export function LandingPage() {
           </Link>
           <Link
             href="/sign-in"
-            className="px-8 py-3 border border-white/10 hover:border-white/20 text-[var(--text-secondary)] hover:text-[var(--text-primary)] rounded-full transition-all duration-300"
+            className="px-8 py-3 border border-white/10 hover:border-white/20 text-white/60 hover:text-white dark:text-white/60 dark:hover:text-white light:border-gray-300 light:hover:border-gray-400 light:text-gray-600 light:hover:text-gray-900 rounded-full transition-all duration-300"
           >
             Sign in
           </Link>
         </div>
-        <p className="text-xs text-[var(--text-muted)] mt-4 opacity-40">
+        <p className="text-xs text-white/40 dark:text-white/40 light:text-gray-400 mt-4">
           25 meetings free. No credit card.
         </p>
       </section>
 
-      {/* ───── SECTION 2: Interactive Demo ───── */}
-      <section className="px-4 py-20 max-w-3xl mx-auto">
-        <h2 className="text-2xl sm:text-3xl font-bold text-center mb-3">
+      {/* ───── SECTION 2: Features (Bento Grid) ───── */}
+      <section className="px-4 py-24 max-w-5xl mx-auto">
+        <h2 className="text-2xl sm:text-3xl font-bold text-center mb-3 text-white dark:text-white light:text-gray-900">
+          Built for real conversations
+        </h2>
+        <p className="text-sm text-white/40 dark:text-white/40 light:text-gray-400 text-center mb-14 max-w-md mx-auto">
+          Everything you need to capture, understand, and act on meetings.
+        </p>
+
+        {/* Bento grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {FEATURES.map((f) => (
+            <div
+              key={f.title}
+              className={`group p-7 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:border-white/[0.12] transition-all duration-300 hover:bg-white/[0.05] dark:bg-white/[0.03] dark:border-white/[0.06] dark:hover:border-white/[0.12] dark:hover:bg-white/[0.05] light:bg-gray-50 light:border-gray-200 light:hover:border-gray-300 light:hover:bg-gray-100 ${
+                f.large ? "sm:col-span-2 lg:col-span-2" : ""
+              }`}
+            >
+              <div className="w-11 h-11 rounded-xl bg-[#14b8a6]/10 flex items-center justify-center mb-5 group-hover:bg-[#14b8a6]/20 transition-colors duration-300">
+                <f.icon
+                  size={22}
+                  className="text-[#14b8a6]"
+                  strokeWidth={1.5}
+                />
+              </div>
+              <h3 className="text-base font-semibold mb-2 text-white dark:text-white light:text-gray-900">
+                {f.title}
+              </h3>
+              <p className="text-sm text-white/50 dark:text-white/50 light:text-gray-500 leading-relaxed">
+                {f.desc}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ───── SECTION 3: Interactive Demo ───── */}
+      <section className="px-4 py-24 max-w-3xl mx-auto">
+        <h2 className="text-2xl sm:text-3xl font-bold text-center mb-3 text-white dark:text-white light:text-gray-900">
           See it in action
         </h2>
-        <p className="text-sm text-[var(--text-muted)] text-center mb-10 opacity-60">
+        <p className="text-sm text-white/40 dark:text-white/40 light:text-gray-400 text-center mb-12">
           Watch Layer One capture and analyze a real meeting in seconds.
         </p>
 
         {/* Demo container — glass card */}
-        <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm overflow-hidden">
+        <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] dark:border-white/[0.06] dark:bg-white/[0.02] light:border-gray-200 light:bg-white backdrop-blur-sm overflow-hidden">
           {/* Recorder chrome */}
           {(phase === "recording" || phase === "waiting") && (
-            <div className="flex items-center justify-between px-5 py-3 border-b border-white/[0.06]">
+            <div className="flex items-center justify-between px-5 py-3 border-b border-white/[0.06] dark:border-white/[0.06] light:border-gray-200">
+              {/* Left: stop button */}
               <div className="flex items-center gap-3">
-                <button className="w-9 h-9 rounded-lg bg-white/[0.06] flex items-center justify-center" aria-label="Stop">
-                  <Square size={14} className="text-[var(--text-primary)]" fill="currentColor" />
+                <button className="w-8 h-8 rounded-lg bg-white/[0.06] dark:bg-white/[0.06] light:bg-gray-100 flex items-center justify-center" aria-label="Stop">
+                  <Square size={12} className="text-white dark:text-white light:text-gray-700" fill="currentColor" />
                 </button>
               </div>
-              <div className="flex flex-col items-center">
-                <span className="text-sm font-mono text-[var(--text-primary)]">
+              {/* Center: timer + RECORDING */}
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-mono text-white dark:text-white light:text-gray-900">
                   {formatTime(elapsedSeconds)}
                 </span>
-                <span className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider">
-                  {phase === "recording" ? "Recording" : "Ready"}
-                </span>
+                {phase === "recording" && (
+                  <span className="text-[10px] text-white/60 dark:text-white/60 light:text-gray-500 uppercase tracking-wider font-medium">
+                    Recording
+                  </span>
+                )}
               </div>
-              <div className="flex items-center gap-2">
+              {/* Right: LIVE indicator */}
+              <div className="flex items-center gap-1.5">
                 {phase === "recording" && (
                   <>
                     <Circle
-                      size={8}
+                      size={7}
                       className="text-red-500 animate-pulse"
                       fill="currentColor"
                     />
@@ -327,7 +392,7 @@ export function LandingPage() {
                   <span className="text-xs font-semibold text-[#14b8a6] mr-2">
                     {line.speaker}
                   </span>
-                  <span className="text-sm text-[var(--text-secondary)] leading-relaxed">
+                  <span className="text-sm text-white/70 dark:text-white/70 light:text-gray-700 leading-relaxed">
                     {line.text}
                   </span>
                 </div>
@@ -335,24 +400,14 @@ export function LandingPage() {
             </div>
           )}
 
-          {/* Processing state */}
-          {phase === "processing" && (
-            <div className="px-5 py-12 flex flex-col items-center justify-center gap-3">
-              <div className="w-5 h-5 border-2 border-[#14b8a6] border-t-transparent rounded-full animate-spin" />
-              <p className="text-sm text-[var(--text-muted)]">
-                Analyzing conversation...
-              </p>
-            </div>
-          )}
-
           {/* Summary result */}
           {phase === "summary" && (
             <div className="px-5 py-5 space-y-5 animate-[fadeSlideIn_0.5s_ease-out_both]">
               <div>
-                <h3 className="text-base font-semibold mb-1">
+                <h3 className="text-base font-semibold mb-1 text-white dark:text-white light:text-gray-900">
                   {DEMO_SUMMARY.title}
                 </h3>
-                <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider">
+                <p className="text-[10px] text-white/40 dark:text-white/40 light:text-gray-400 uppercase tracking-wider">
                   7 transcript lines &middot; 3 speakers &middot; 0:08 duration
                 </p>
               </div>
@@ -365,7 +420,7 @@ export function LandingPage() {
                   {DEMO_SUMMARY.decisions.map((d, i) => (
                     <li
                       key={i}
-                      className="text-sm text-[var(--text-secondary)] flex items-start gap-2"
+                      className="text-sm text-white/60 dark:text-white/60 light:text-gray-600 flex items-start gap-2"
                     >
                       <span className="text-[#14b8a6] mt-1 shrink-0">
                         &bull;
@@ -384,13 +439,13 @@ export function LandingPage() {
                   {DEMO_SUMMARY.actionItems.map((a, i) => (
                     <li
                       key={i}
-                      className="text-sm text-[var(--text-secondary)] flex items-start gap-2"
+                      className="text-sm text-white/60 dark:text-white/60 light:text-gray-600 flex items-start gap-2"
                     >
                       <span className="text-[#14b8a6] mt-1 shrink-0">
                         &bull;
                       </span>
                       <span>
-                        <span className="font-medium text-[var(--text-primary)]">
+                        <span className="font-medium text-white dark:text-white light:text-gray-900">
                           {a.owner}:
                         </span>{" "}
                         {a.task}
@@ -404,105 +459,75 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* ───── SECTION 3: Features ───── */}
-      <section className="px-4 py-20 max-w-4xl mx-auto">
-        <h2 className="text-2xl sm:text-3xl font-bold text-center mb-3">
-          Built for real conversations
-        </h2>
-        <p className="text-sm text-[var(--text-muted)] text-center mb-12 opacity-60">
-          Everything you need to capture, understand, and act on meetings.
-        </p>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {FEATURES.map((f) => (
-            <div
-              key={f.title}
-              className="group p-6 rounded-2xl bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.12] transition-all duration-300 hover:bg-white/[0.04]"
-            >
-              <div className="w-10 h-10 rounded-xl bg-[#14b8a6]/10 flex items-center justify-center mb-4 group-hover:bg-[#14b8a6]/15 transition-colors duration-300">
-                <f.icon
-                  size={20}
-                  className="text-[#14b8a6]"
-                  strokeWidth={1.5}
-                />
-              </div>
-              <h3 className="text-sm font-semibold mb-2">{f.title}</h3>
-              <p className="text-xs text-[var(--text-muted)] leading-relaxed">
-                {f.desc}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* ───── SECTION 4: Pricing ───── */}
-      <section className="px-4 py-20 max-w-3xl mx-auto text-center">
-        <h2 className="text-2xl sm:text-3xl font-bold mb-3">
+      <section id="pricing" className="px-4 py-24 max-w-4xl mx-auto text-center">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-3 text-white dark:text-white light:text-gray-900">
           Simple pricing
         </h2>
-        <p className="text-sm text-[var(--text-muted)] mb-10 opacity-60">
+        <p className="text-sm text-white/40 dark:text-white/40 light:text-gray-400 mb-14 max-w-sm mx-auto">
           Start free. Upgrade when you need more.
         </p>
-        <div className="grid sm:grid-cols-3 gap-5">
+        <div className="grid sm:grid-cols-3 gap-6">
           {/* Free */}
-          <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.12] transition-all duration-300">
-            <div className="text-xs text-[var(--text-muted)] uppercase tracking-wider mb-2">
+          <div className="p-8 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:border-white/[0.12] transition-all duration-300 dark:bg-white/[0.03] dark:border-white/[0.06] light:bg-white light:border-gray-200 light:hover:border-gray-300">
+            <div className="text-xs text-white/40 dark:text-white/40 light:text-gray-400 uppercase tracking-wider mb-3 font-medium">
               Free
             </div>
-            <div className="text-3xl font-bold mb-1">$0</div>
-            <div className="text-xs text-[var(--text-muted)] mb-4">
+            <div className="text-4xl font-bold mb-1 text-white dark:text-white light:text-gray-900">$0</div>
+            <div className="text-xs text-white/40 dark:text-white/40 light:text-gray-400 mb-6">
               /month
             </div>
-            <div className="text-sm text-[var(--text-secondary)]">
+            <div className="text-sm text-white/60 dark:text-white/60 light:text-gray-600 font-medium">
               25 meetings
             </div>
-            <div className="text-xs text-[var(--text-muted)] mt-1">
+            <div className="text-xs text-white/40 dark:text-white/40 light:text-gray-400 mt-2">
               All features included
             </div>
           </div>
 
           {/* Core — highlighted */}
-          <div className="p-6 rounded-2xl bg-white/[0.02] border border-[#14b8a6]/30 hover:border-[#14b8a6]/50 transition-all duration-300 relative">
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 bg-[#14b8a6] text-white text-[10px] font-semibold uppercase tracking-wider rounded-full">
+          <div className="p-8 rounded-2xl bg-white/[0.03] border border-[#14b8a6]/30 hover:border-[#14b8a6]/50 transition-all duration-300 relative dark:bg-white/[0.03] light:bg-white light:border-[#14b8a6]/30">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-[#14b8a6] text-white text-[10px] font-semibold uppercase tracking-wider rounded-full">
               Popular
             </div>
-            <div className="text-xs text-[#14b8a6] uppercase tracking-wider mb-2">
+            <div className="text-xs text-[#14b8a6] uppercase tracking-wider mb-3 font-medium">
               Core
             </div>
-            <div className="text-3xl font-bold mb-1">
+            <div className="text-4xl font-bold mb-1 text-white dark:text-white light:text-gray-900">
               $15
-              <span className="text-sm font-normal text-[var(--text-muted)]">
+              <span className="text-sm font-normal text-white/40 dark:text-white/40 light:text-gray-400 ml-1">
                 /mo
               </span>
             </div>
-            <div className="text-xs text-[var(--text-muted)] mb-4">
+            <div className="text-xs text-white/40 dark:text-white/40 light:text-gray-400 mb-6">
               billed monthly
             </div>
-            <div className="text-sm text-[var(--text-secondary)]">
+            <div className="text-sm text-white/60 dark:text-white/60 light:text-gray-600 font-medium">
               Unlimited meetings
             </div>
-            <div className="text-xs text-[var(--text-muted)] mt-1">
+            <div className="text-xs text-white/40 dark:text-white/40 light:text-gray-400 mt-2">
               Priority processing
             </div>
           </div>
 
           {/* Pro */}
-          <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.12] transition-all duration-300">
-            <div className="text-xs text-[var(--text-muted)] uppercase tracking-wider mb-2">
+          <div className="p-8 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:border-white/[0.12] transition-all duration-300 dark:bg-white/[0.03] dark:border-white/[0.06] light:bg-white light:border-gray-200 light:hover:border-gray-300">
+            <div className="text-xs text-white/40 dark:text-white/40 light:text-gray-400 uppercase tracking-wider mb-3 font-medium">
               Pro
             </div>
-            <div className="text-3xl font-bold mb-1">
+            <div className="text-4xl font-bold mb-1 text-white dark:text-white light:text-gray-900">
               $25
-              <span className="text-sm font-normal text-[var(--text-muted)]">
+              <span className="text-sm font-normal text-white/40 dark:text-white/40 light:text-gray-400 ml-1">
                 /mo
               </span>
             </div>
-            <div className="text-xs text-[var(--text-muted)] mb-4">
+            <div className="text-xs text-white/40 dark:text-white/40 light:text-gray-400 mb-6">
               billed monthly
             </div>
-            <div className="text-sm text-[var(--text-secondary)]">
+            <div className="text-sm text-white/60 dark:text-white/60 light:text-gray-600 font-medium">
               Unlimited + priority
             </div>
-            <div className="text-xs text-[var(--text-muted)] mt-1">
+            <div className="text-xs text-white/40 dark:text-white/40 light:text-gray-400 mt-2">
               Team features &amp; API access
             </div>
           </div>
@@ -510,38 +535,54 @@ export function LandingPage() {
       </section>
 
       {/* ───── SECTION 5: Footer ───── */}
-      <footer className="px-4 py-12 border-t border-white/[0.04]">
-        <div className="max-w-3xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-[var(--text-muted)] opacity-50">
-            Layer One Audio &middot;{" "}
-            <a
-              href="https://mirrorfactory.ai"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-[var(--text-secondary)] transition-colors"
-            >
-              A Mirror Factory product
-            </a>
-          </p>
-          <div className="flex items-center gap-6">
-            <Link
-              href="/sign-up"
-              className="text-xs text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors"
-            >
-              Sign up
-            </Link>
-            <Link
-              href="/sign-in"
-              className="text-xs text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors"
-            >
-              Sign in
-            </Link>
-            <a
-              href="#pricing"
-              className="text-xs text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors"
-            >
-              Pricing
-            </a>
+      <footer className="px-4 py-16 border-t border-white/[0.04] dark:border-white/[0.04] light:border-gray-200">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div className="flex flex-col items-center sm:items-start gap-2">
+              <span className="text-sm font-semibold text-white dark:text-white light:text-gray-900">
+                Layer One Audio
+              </span>
+              <p className="text-xs text-white/40 dark:text-white/40 light:text-gray-400">
+                A{" "}
+                <a
+                  href="https://mirrorfactory.ai"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white/50 hover:text-white/70 dark:text-white/50 dark:hover:text-white/70 light:text-gray-500 light:hover:text-gray-700 transition-colors underline underline-offset-2"
+                >
+                  Mirror Factory
+                </a>
+                {" "}product
+              </p>
+            </div>
+            <div className="flex items-center gap-8">
+              <Link
+                href="/sign-up"
+                className="text-xs text-white/40 hover:text-white/70 dark:text-white/40 dark:hover:text-white/70 light:text-gray-400 light:hover:text-gray-600 transition-colors"
+              >
+                Sign up
+              </Link>
+              <Link
+                href="/sign-in"
+                className="text-xs text-white/40 hover:text-white/70 dark:text-white/40 dark:hover:text-white/70 light:text-gray-400 light:hover:text-gray-600 transition-colors"
+              >
+                Sign in
+              </Link>
+              <a
+                href="#pricing"
+                className="text-xs text-white/40 hover:text-white/70 dark:text-white/40 dark:hover:text-white/70 light:text-gray-400 light:hover:text-gray-600 transition-colors"
+              >
+                Pricing
+              </a>
+              <a
+                href="https://mirrorfactory.ai"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-white/40 hover:text-white/70 dark:text-white/40 dark:hover:text-white/70 light:text-gray-400 light:hover:text-gray-600 transition-colors"
+              >
+                mirrorfactory.ai
+              </a>
+            </div>
           </div>
         </div>
       </footer>
