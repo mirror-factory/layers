@@ -24,7 +24,7 @@ export function TranscriptView({ utterances, summary }: TranscriptViewProps) {
         {utterances.length === 0 ? (
           <p className="text-sm text-[var(--text-muted)]">No utterances available.</p>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-3 max-h-[60vh] overflow-y-auto" style={{ scrollbarWidth: "none" }}>
             {utterances.map((u, i) => (
               <div key={i} className="flex gap-3">
                 <div className="shrink-0 mt-0.5">
