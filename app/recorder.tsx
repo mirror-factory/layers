@@ -86,12 +86,12 @@ export function RecorderHome() {
   const hasTranscript = turns.length > 0 || partial;
 
   return (
-    <div className="min-h-screen flex flex-col bg-[var(--bg-primary)]">
+    <div className="h-screen flex flex-col overflow-hidden bg-[var(--bg-primary)]">
       <TopBar title="" />
 
-      <main className="flex-1 flex flex-col items-center px-4 pt-8 pb-8 max-w-3xl mx-auto w-full">
-        {/* Recorder */}
-        <div className="w-full flex flex-col items-center">
+      <main className="flex-1 flex flex-col items-center px-4 pt-6 pb-4 max-w-3xl mx-auto w-full min-h-0 overflow-hidden">
+        {/* Recorder — fixed height */}
+        <div className="w-full flex-shrink-0 flex flex-col items-center">
           <LiveRecorder
             onTranscriptUpdate={handleTranscriptUpdate}
             onSessionEnd={handleSessionEnd}
@@ -100,8 +100,8 @@ export function RecorderHome() {
           />
         </div>
 
-        {/* Shader — between mic and transcript, audio-reactive */}
-        <div className="w-full mt-8 mb-4" style={{ height: 120 }}>
+        {/* Shader — fixed height */}
+        <div className="w-full flex-shrink-0 mt-6 mb-3" style={{ height: 100 }}>
           <WebGLShader
             audioLevel={audioLevel}
             state={shaderState}
@@ -109,7 +109,7 @@ export function RecorderHome() {
           />
         </div>
 
-        {/* Live transcript — fills remaining height */}
+        {/* Live transcript — takes ALL remaining height, scrolls internally */}
         {hasTranscript && (
           <div className="w-full flex-1 min-h-0 animate-in fade-in slide-in-from-bottom-2 duration-500">
             <div className="glass-panel rounded-xl p-4 h-full overflow-y-auto" style={{ scrollbarWidth: "none" }}>
@@ -118,9 +118,9 @@ export function RecorderHome() {
           </div>
         )}
 
-        {/* Recent Meetings — fades out and slides down when recording starts */}
+        {/* Recent Meetings — only visible when not recording, scrollable */}
         <section
-          className={`w-full mt-8 transition-all duration-700 ease-out ${
+          className={`w-full flex-1 min-h-0 mt-4 flex flex-col transition-all duration-700 ease-out overflow-hidden ${
             meetingsFading
               ? "opacity-0 translate-y-8 pointer-events-none"
               : "opacity-100 translate-y-0"
@@ -145,7 +145,7 @@ export function RecorderHome() {
               </p>
             </div>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-2 flex-1 overflow-y-auto min-h-0" style={{ scrollbarWidth: "none" }}>
               {recentMeetings.map((m) => (
                 <Link
                   key={m.id}
