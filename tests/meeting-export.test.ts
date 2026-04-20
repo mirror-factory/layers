@@ -96,8 +96,8 @@ describe("meetingToMarkdown", () => {
       makeMeeting({
         summary: null,
         utterances: [
-          { speaker: "Alice", text: "Hello everyone" },
-          { speaker: "Bob", text: "Hi Alice" },
+          { speaker: "Alice", text: "Hello everyone", start: 0, end: 1000, confidence: 0.99 },
+          { speaker: "Bob", text: "Hi Alice", start: 1000, end: 2000, confidence: 0.98 },
         ],
       }),
     );
