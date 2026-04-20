@@ -86,8 +86,8 @@ export default function HomePage() {
   const hasTranscript = turns.length > 0 || partial;
 
   return (
-    <div className="min-h-screen flex flex-col bg-black">
-      <TopBar title="Layer One" />
+    <div className="min-h-screen flex flex-col bg-[var(--bg-primary)]">
+      <TopBar title="" />
 
       <main className="flex-1 flex flex-col items-center px-4 pt-8 pb-8 max-w-3xl mx-auto w-full">
         {/* Recorder */}
@@ -131,7 +131,7 @@ export default function HomePage() {
           }`}
         >
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-xs font-medium text-white/30 uppercase tracking-widest">
+            <h2 className="text-xs font-medium text-[var(--text-muted)] uppercase tracking-widest">
               Recent
             </h2>
             <Link
@@ -144,23 +144,23 @@ export default function HomePage() {
 
           {recentMeetings.length === 0 ? (
             <div className="text-center py-8">
-              <p className="text-sm text-white/20">
+              <p className="text-sm text-[var(--text-muted)]">
                 No meetings yet. Tap the mic to start.
               </p>
             </div>
           ) : (
-            <div className="space-y-px">
+            <div className="space-y-2">
               {recentMeetings.map((m) => (
                 <Link
                   key={m.id}
                   href={`/meetings/${m.id}`}
-                  className="flex items-center justify-between rounded-lg px-4 py-3 hover:bg-white/[0.03] transition-colors duration-200"
+                  className="flex items-center justify-between rounded-lg px-4 py-3 bg-[var(--bg-card)] hover:bg-[var(--bg-card-hover)] border border-[var(--border-card)] transition-colors duration-200"
                 >
                   <div className="min-w-0 flex-1">
-                    <div className="text-sm text-white/70 truncate">
+                    <div className="text-sm text-[var(--text-primary)] truncate">
                       {m.title ?? "Untitled recording"}
                     </div>
-                    <div className="text-xs text-white/25 mt-0.5">
+                    <div className="text-xs text-[var(--text-muted)] mt-0.5">
                       {new Date(m.createdAt).toLocaleDateString()}
                       {m.durationSeconds
                         ? ` · ${Math.round(m.durationSeconds / 60)} min`

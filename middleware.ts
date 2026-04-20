@@ -70,8 +70,12 @@ export async function middleware(req: NextRequest) {
 
     // 4. Protect non-public pages from anonymous users
     if (isProtectedPath(req.nextUrl.pathname)) {
-      const isAnonymous = data.user?.is_anonymous ?? true;
-      if (!data.user || isAnonymous) {
+      // A user is "real" if they have an email or identity linked.
+      // is_anonymous === true means they signed in anonymously.
+      // is_anonymous === undefined/false means email/OAuth sign-in.
+      const isAnonymous = data.user?.is_anonymous === true;
+      const hasEmail = !!data.user?.email;
+      if (!data.user || (isAnonymous && !hasEmail)) {
         // Redirect to sign-in for protected pages
         const signInUrl = new URL('/sign-in', req.url);
         signInUrl.searchParams.set('next', req.nextUrl.pathname);
