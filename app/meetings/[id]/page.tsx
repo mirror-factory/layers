@@ -35,15 +35,15 @@ export default async function MeetingDetailPage({
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-semibold text-[#e5e5e5]">
+            <h2 className="text-lg font-semibold text-[var(--text-primary)]">
               {meeting.title ?? "Untitled recording"}
             </h2>
             <div className="flex items-center gap-3 mt-1">
-              <span className="text-xs text-[#525252]">
+              <span className="text-xs text-[var(--text-muted)]">
                 {new Date(meeting.createdAt).toLocaleString()}
               </span>
               {meeting.durationSeconds != null && (
-                <span className="text-xs text-[#525252]">
+                <span className="text-xs text-[var(--text-muted)]">
                   {Math.round(meeting.durationSeconds / 60)} min
                 </span>
               )}
@@ -62,11 +62,11 @@ export default async function MeetingDetailPage({
 
         {/* Error state */}
         {meeting.status === "error" && (
-          <div className="bg-[#171717] rounded-xl p-4 border border-[#ef4444]/20">
+          <div className="bg-[var(--bg-card)] rounded-xl p-4 border border-[#ef4444]/20">
             <div className="text-sm text-[#ef4444] font-medium">
               Processing Error
             </div>
-            <p className="text-xs text-[#a3a3a3] mt-1">
+            <p className="text-xs text-[var(--text-secondary)] mt-1">
               {meeting.error ?? "An unknown error occurred."}
             </p>
           </div>

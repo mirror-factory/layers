@@ -7,10 +7,10 @@ interface IntakeFormViewProps {
 function Field({ label, value }: { label: string; value: string | null }) {
   return (
     <div>
-      <dt className="text-xs font-medium text-[#737373] uppercase tracking-wider mb-1">
+      <dt className="text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider mb-1">
         {label}
       </dt>
-      <dd className="text-sm text-[#d4d4d4]">{value ?? "N/A"}</dd>
+      <dd className="text-sm text-[var(--text-primary)]">{value ?? "N/A"}</dd>
     </div>
   );
 }
@@ -18,16 +18,16 @@ function Field({ label, value }: { label: string; value: string | null }) {
 function ListField({ label, items }: { label: string; items: string[] }) {
   return (
     <div>
-      <dt className="text-xs font-medium text-[#737373] uppercase tracking-wider mb-1">
+      <dt className="text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider mb-1">
         {label}
       </dt>
       <dd>
         {items.length === 0 ? (
-          <span className="text-sm text-[#525252]">None</span>
+          <span className="text-sm text-[var(--text-muted)]">None</span>
         ) : (
           <ul className="space-y-1">
             {items.map((item, i) => (
-              <li key={i} className="text-sm text-[#d4d4d4]">
+              <li key={i} className="text-sm text-[var(--text-primary)]">
                 {item}
               </li>
             ))}
@@ -41,18 +41,18 @@ function ListField({ label, items }: { label: string; items: string[] }) {
 export function IntakeFormView({ intakeForm }: IntakeFormViewProps) {
   if (!intakeForm) {
     return (
-      <div className="bg-[#171717] rounded-xl p-4 lg:p-6">
-        <h3 className="text-sm font-semibold text-[#e5e5e5] mb-4 uppercase tracking-wider">
+      <div className="bg-[var(--bg-card)] rounded-xl p-4 lg:p-6">
+        <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4 uppercase tracking-wider">
           Intake Form
         </h3>
-        <p className="text-sm text-[#525252]">No intake data available.</p>
+        <p className="text-sm text-[var(--text-muted)]">No intake data available.</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-[#171717] rounded-xl p-4 lg:p-6">
-      <h3 className="text-sm font-semibold text-[#e5e5e5] mb-4 uppercase tracking-wider">
+    <div className="bg-[var(--bg-card)] rounded-xl p-4 lg:p-6">
+      <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4 uppercase tracking-wider">
         Intake Form
       </h3>
       <dl className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
