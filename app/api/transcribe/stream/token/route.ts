@@ -32,10 +32,10 @@ export const POST = withRoute(async (req, ctx) => {
 
   // Mint ephemeral streaming token
   const token = await withExternalCall(
-    { vendor: "assemblyai", operation: "realtime.createTemporaryToken", requestId: ctx.requestId },
+    { vendor: "assemblyai", operation: "streaming.createTemporaryToken", requestId: ctx.requestId },
     () =>
-      client.realtime.createTemporaryToken({
-        expires_in: 600, // 10 min
+      client.streaming.createTemporaryToken({
+        expires_in_seconds: 600, // 10 min
       }),
   );
 
