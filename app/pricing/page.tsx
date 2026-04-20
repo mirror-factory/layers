@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Check, Loader2 } from "lucide-react";
 import { TopBar } from "@/components/top-bar";
 
@@ -51,7 +50,6 @@ const TIERS = [
 ];
 
 export default function PricingPage() {
-  const router = useRouter();
   const [loadingTier, setLoadingTier] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -73,7 +71,7 @@ export default function PricingPage() {
 
       const { url } = await res.json();
       if (url) {
-        window.location.href = url;
+        globalThis.location.assign(url);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Checkout failed");
@@ -82,15 +80,15 @@ export default function PricingPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-[var(--bg-primary)]">
       <TopBar title="Pricing" showBack />
 
       <main className="flex-1 px-4 py-8 max-w-4xl mx-auto w-full">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-semibold text-[#f5f5f5] mb-2">
+        <div className="text-center mb-10">
+          <h2 className="text-2xl font-semibold text-[var(--text-primary)] mb-2">
             Simple, transparent pricing
           </h2>
-          <p className="text-sm text-[#a3a3a3]">
+          <p className="text-sm text-[var(--text-secondary)]">
             Start free. Upgrade when you need more.
           </p>
         </div>
@@ -99,32 +97,32 @@ export default function PricingPage() {
           {TIERS.map((tier) => (
             <div
               key={tier.name}
-              className={`bg-[#171717] rounded-xl p-5 flex flex-col ${
+              className={`glass-card rounded-2xl p-6 flex flex-col transition-all duration-300 ${
                 tier.highlight
-                  ? "border-2 border-[#14b8a6] ring-1 ring-[#14b8a6]/20"
-                  : "border border-[#262626]"
+                  ? "border-[#14b8a6] ring-1 ring-[#14b8a6]/20 shadow-lg shadow-[#14b8a6]/5"
+                  : ""
               }`}
             >
-              <div className="mb-4">
-                <h3 className="text-sm font-semibold text-[#e5e5e5]">
+              <div className="mb-5">
+                <h3 className="text-sm font-medium text-[var(--text-secondary)] uppercase tracking-wider">
                   {tier.name}
                 </h3>
-                <div className="flex items-baseline gap-1 mt-1">
-                  <span className="text-3xl font-semibold text-[#f5f5f5]">
+                <div className="flex items-baseline gap-1 mt-2">
+                  <span className="text-4xl font-semibold text-[var(--text-primary)]">
                     {tier.price}
                   </span>
-                  <span className="text-xs text-[#525252]">{tier.period}</span>
+                  <span className="text-xs text-[var(--text-muted)]">{tier.period}</span>
                 </div>
               </div>
 
-              <ul className="space-y-2 mb-6 flex-1">
+              <ul className="space-y-3 mb-6 flex-1">
                 {tier.features.map((f, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm">
+                  <li key={i} className="flex items-start gap-2.5 text-sm">
                     <Check
                       size={14}
                       className="text-[#14b8a6] shrink-0 mt-0.5"
                     />
-                    <span className="text-[#a3a3a3]">{f}</span>
+                    <span className="text-[var(--text-secondary)]">{f}</span>
                   </li>
                 ))}
               </ul>
@@ -133,10 +131,10 @@ export default function PricingPage() {
                 <button
                   onClick={() => handleCheckout(tier.tier!)}
                   disabled={loadingTier !== null}
-                  className={`w-full py-2.5 rounded-lg text-sm font-medium min-h-[44px] transition-colors duration-200 ${
+                  className={`w-full py-3 rounded-xl text-sm font-medium min-h-[44px] transition-all duration-200 ${
                     tier.highlight
-                      ? "bg-[#14b8a6] hover:bg-[#0d9488] text-white"
-                      : "bg-[#262626] hover:bg-[#404040] text-[#d4d4d4]"
+                      ? "bg-[#14b8a6] hover:bg-[#0d9488] text-white shadow-lg shadow-[#14b8a6]/20"
+                      : "bg-white/[0.05] hover:bg-white/[0.08] text-[var(--text-primary)] border border-white/[0.08]"
                   } disabled:opacity-50`}
                 >
                   {loadingTier === tier.tier ? (
@@ -148,7 +146,7 @@ export default function PricingPage() {
               )}
 
               {!tier.cta && (
-                <div className="text-center text-xs text-[#525252] py-2.5">
+                <div className="text-center text-xs text-[var(--text-muted)] py-3">
                   Current plan
                 </div>
               )}

@@ -16,6 +16,7 @@ import {
   User,
   BookOpen,
   Activity,
+  Map,
 } from "lucide-react";
 
 interface SlideMenuProps {
@@ -33,6 +34,7 @@ const NAV_ITEMS = [
   { href: "/pricing", label: "Pricing", icon: CreditCard },
   { href: "/usage", label: "Usage", icon: BarChart3 },
   { href: "/profile", label: "Profile", icon: User },
+  { href: "/roadmap", label: "Roadmap", icon: Map },
   { href: "/docs", label: "Documentation", icon: BookOpen },
   { href: "/observability", label: "Observability", icon: Activity },
 ];
@@ -63,7 +65,7 @@ export function SlideMenu({ open, onClose }: SlideMenuProps) {
       {/* Overlay */}
       {open && (
         <div
-          className="fixed inset-0 z-50 bg-black/60 transition-opacity duration-300"
+          className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm transition-opacity duration-300"
           onClick={onClose}
           aria-hidden="true"
         />
@@ -71,19 +73,19 @@ export function SlideMenu({ open, onClose }: SlideMenuProps) {
 
       {/* Panel */}
       <nav
-        className={`fixed top-0 right-0 z-50 h-full w-[280px] bg-[#171717] border-l border-[#262626] transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 z-50 h-full w-[280px] bg-[#0a0a0a]/95 backdrop-blur-2xl border-l border-white/[0.06] transform transition-transform duration-300 ease-out ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
         style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
         aria-label="Main navigation"
       >
-        <div className="flex items-center justify-between px-4 h-[44px] border-b border-[#262626]">
-          <span className="text-xs font-semibold text-[#737373] uppercase tracking-wider">
+        <div className="flex items-center justify-between px-4 h-[44px] border-b border-white/[0.06]">
+          <span className="text-xs font-medium text-[var(--text-muted)] uppercase tracking-widest">
             Menu
           </span>
           <button
             onClick={onClose}
-            className="flex items-center justify-center w-[44px] h-[44px] text-[#a3a3a3] hover:text-[#d4d4d4] transition-colors duration-200"
+            className="flex items-center justify-center w-[44px] h-[44px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-200"
             aria-label="Close menu"
           >
             <X size={20} />
@@ -98,10 +100,10 @@ export function SlideMenu({ open, onClose }: SlideMenuProps) {
                 <Link
                   href={href}
                   onClick={onClose}
-                  className={`flex items-center gap-3 px-4 py-3 min-h-[44px] text-sm transition-colors duration-200 ${
+                  className={`flex items-center gap-3 px-4 py-3 min-h-[44px] text-sm transition-all duration-200 ${
                     isActive
-                      ? "text-[#14b8a6] bg-[#134e4a]/30"
-                      : "text-[#a3a3a3] hover:text-[#d4d4d4] hover:bg-[#262626]/50"
+                      ? "text-[#14b8a6] bg-[#14b8a6]/[0.08]"
+                      : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/[0.03]"
                   }`}
                 >
                   <Icon size={18} />

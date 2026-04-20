@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { Loader2, Mail, CheckCircle2 } from "lucide-react";
-import { TopBar } from "@/components/top-bar";
+import Link from "next/link";
 import { getSupabaseBrowser } from "@/lib/supabase/browser";
+import { WebGLShader } from "@/components/ui/web-gl-shader";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
@@ -41,82 +42,102 @@ export default function SignInPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <TopBar title="Sign In" showBack />
+    <div className="min-h-screen flex flex-col relative">
+      {/* Shader background */}
+      <WebGLShader intensity={0.2} speed={0.6} />
 
-      <main className="flex-1 flex items-center justify-center px-4">
+      <main className="relative z-10 flex-1 flex items-center justify-center px-4">
         <div className="w-full max-w-sm">
-          {sent ? (
-            <div className="text-center space-y-4">
-              <CheckCircle2 size={48} className="text-[#22c55e] mx-auto" />
-              <h2 className="text-lg font-semibold text-[#e5e5e5]">
-                Check your email
-              </h2>
-              <p className="text-sm text-[#a3a3a3]">
-                We sent a magic link to{" "}
-                <span className="text-[#d4d4d4] font-medium">{email}</span>
-              </p>
-              <button
-                onClick={() => {
-                  setSent(false);
-                  setEmail("");
-                }}
-                className="text-sm text-[#14b8a6] hover:underline"
-              >
-                Use a different email
-              </button>
-            </div>
-          ) : (
-            <>
-              <div className="text-center mb-6">
-                <h2 className="text-lg font-semibold text-[#e5e5e5] mb-1">
-                  Sign in to Layer One
-                </h2>
-                <p className="text-sm text-[#525252]">
-                  Enter your email for a magic link
-                </p>
-              </div>
+          {/* Branding */}
+          <div className="text-center mb-8">
+            <h1 className="text-2xl font-semibold text-white tracking-tight">
+              Layer One
+            </h1>
+            <p className="text-xs text-[var(--text-muted)] mt-1 tracking-wide uppercase">
+              Audio Intelligence
+            </p>
+          </div>
 
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="relative">
-                  <Mail
-                    size={16}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-[#525252]"
-                  />
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="you@example.com"
-                    required
-                    className="w-full bg-[#171717] text-[#d4d4d4] text-sm border border-[#262626] rounded-lg pl-10 pr-3 py-2.5 min-h-[44px] focus:border-[#14b8a6] focus:outline-none placeholder-[#525252] transition-colors duration-200"
-                    style={{
-                      fontFamily:
-                        'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace',
-                    }}
-                  />
+          {/* Card */}
+          <div className="glass-panel rounded-2xl p-6">
+            {sent ? (
+              <div className="text-center space-y-4">
+                <CheckCircle2 size={48} className="text-[#22c55e] mx-auto" />
+                <h2 className="text-lg font-semibold text-[var(--text-primary)]">
+                  Check your email
+                </h2>
+                <p className="text-sm text-[var(--text-secondary)]">
+                  We sent a magic link to{" "}
+                  <span className="text-white font-medium">{email}</span>
+                </p>
+                <button
+                  onClick={() => {
+                    setSent(false);
+                    setEmail("");
+                  }}
+                  className="text-sm text-[#14b8a6] hover:text-[#5eead4] transition-colors duration-200"
+                >
+                  Use a different email
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="text-center mb-6">
+                  <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-1">
+                    Sign in
+                  </h2>
+                  <p className="text-sm text-[var(--text-muted)]">
+                    Enter your email for a magic link
+                  </p>
                 </div>
 
-                <button
-                  type="submit"
-                  disabled={loading || !email.trim()}
-                  className="w-full py-2.5 bg-[#14b8a6] hover:bg-[#0d9488] text-white font-medium rounded-lg min-h-[44px] disabled:opacity-50 transition-colors duration-200"
-                >
-                  {loading ? (
-                    <Loader2 size={18} className="animate-spin mx-auto" />
-                  ) : (
-                    "Send magic link"
-                  )}
-                </button>
-              </form>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="relative">
+                    <Mail
+                      size={16}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]"
+                    />
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="you@example.com"
+                      required
+                      className="w-full bg-white/[0.05] text-white text-sm border border-white/[0.1] rounded-xl pl-10 pr-3 py-3 min-h-[44px] focus:border-[#14b8a6] focus:outline-none focus:ring-1 focus:ring-[#14b8a6]/30 placeholder-[var(--text-muted)] transition-all duration-200"
+                    />
+                  </div>
 
-              {error && (
-                <p className="text-sm text-[#ef4444] text-center mt-3">
-                  {error}
+                  <button
+                    type="submit"
+                    disabled={loading || !email.trim()}
+                    className="w-full py-3 bg-[#14b8a6] hover:bg-[#0d9488] text-white font-medium rounded-xl min-h-[44px] disabled:opacity-50 transition-all duration-200 shadow-lg shadow-[#14b8a6]/20"
+                  >
+                    {loading ? (
+                      <Loader2 size={18} className="animate-spin mx-auto" />
+                    ) : (
+                      "Send magic link"
+                    )}
+                  </button>
+                </form>
+
+                <p className="text-xs text-[var(--text-muted)] text-center mt-4">
+                  Don&apos;t have an account?{" "}
+                  <Link
+                    href="/sign-up"
+                    className="text-[#14b8a6] hover:text-[#5eead4] transition-colors duration-200"
+                  >
+                    Sign up
+                  </Link>
                 </p>
-              )}
-            </>
-          )}
+
+                {error && (
+                  <p className="text-sm text-[#ef4444] text-center mt-3">
+                    {error}
+                  </p>
+                )}
+              </>
+            )}
+          </div>
         </div>
       </main>
     </div>

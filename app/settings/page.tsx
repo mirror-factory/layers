@@ -49,7 +49,7 @@ export default function SettingsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col bg-[var(--bg-primary)]">
         <TopBar title="Settings" showBack />
         <div className="flex-1 flex items-center justify-center">
           <Loader2 size={24} className="text-[#14b8a6] animate-spin" />
@@ -59,12 +59,12 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-[var(--bg-primary)]">
       <TopBar title="Settings" showBack />
 
       <main className="flex-1 px-4 py-6 max-w-xl mx-auto w-full space-y-8">
         <div className="flex items-center gap-2">
-          <h2 className="text-lg font-semibold text-[#e5e5e5]">
+          <h2 className="text-lg font-semibold text-[var(--text-primary)]">
             Model Preferences
           </h2>
           {saving && (
@@ -120,19 +120,15 @@ function SelectGroup({
   onChange,
 }: SelectGroupProps) {
   return (
-    <div>
-      <label className="block text-sm font-medium text-[#e5e5e5] mb-1">
+    <div className="glass-card rounded-xl p-4">
+      <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
         {label}
       </label>
-      <p className="text-xs text-[#525252] mb-2">{description}</p>
+      <p className="text-xs text-[var(--text-muted)] mb-3">{description}</p>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full bg-[#171717] text-[#d4d4d4] text-sm border border-[#262626] rounded-lg px-3 py-2.5 min-h-[44px] focus:border-[#14b8a6] focus:outline-none transition-colors duration-200 appearance-none cursor-pointer"
-        style={{
-          fontFamily:
-            'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace',
-        }}
+        className="w-full bg-white/[0.05] text-[var(--text-primary)] text-sm border border-white/[0.08] rounded-lg px-3 py-2.5 min-h-[44px] focus:border-[#14b8a6] focus:outline-none transition-colors duration-200 appearance-none cursor-pointer"
       >
         {options.map((opt) => (
           <option key={opt.value} value={opt.value}>

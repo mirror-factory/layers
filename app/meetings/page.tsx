@@ -21,38 +21,38 @@ export default async function MeetingsPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-[var(--bg-primary)]">
       <TopBar title="Meetings" showBack />
 
       <main className="flex-1 px-4 py-6 max-w-3xl mx-auto w-full">
         {meetings.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 gap-4">
-            <p className="text-sm text-[#525252]">No meetings yet.</p>
+            <p className="text-sm text-[var(--text-muted)]">No meetings yet.</p>
             <Link
-              href="/record"
-              className="text-sm text-[#14b8a6] hover:underline"
+              href="/"
+              className="text-sm text-[#14b8a6] hover:text-[#5eead4] transition-colors duration-200"
             >
               Record your first meeting
             </Link>
           </div>
         ) : (
-          <div className="space-y-2">
+          <div className="space-y-1">
             {meetings.map((m) => (
               <Link
                 key={m.id}
                 href={`/meetings/${m.id}`}
-                className="flex items-center justify-between bg-[#171717] hover:bg-[#262626] rounded-lg px-4 py-3 transition-colors duration-200"
+                className="flex items-center justify-between glass-card rounded-lg px-4 py-3 transition-all duration-200 group"
               >
                 <div className="min-w-0 flex-1">
-                  <div className="text-sm text-[#d4d4d4] truncate">
+                  <div className="text-sm text-[var(--text-primary)] truncate group-hover:text-white transition-colors duration-200">
                     {m.title ?? "Untitled recording"}
                   </div>
                   <div className="flex items-center gap-3 mt-0.5">
-                    <span className="text-xs text-[#525252]">
+                    <span className="text-xs text-[var(--text-muted)]">
                       {new Date(m.createdAt).toLocaleDateString()}
                     </span>
                     {m.durationSeconds != null && (
-                      <span className="text-xs text-[#525252]">
+                      <span className="text-xs text-[var(--text-muted)]">
                         {Math.round(m.durationSeconds / 60)} min
                       </span>
                     )}

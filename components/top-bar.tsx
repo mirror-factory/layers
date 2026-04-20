@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Menu } from "lucide-react";
 import { SlideMenu } from "./slide-menu";
+import { ThemeToggle } from "./theme-toggle";
 
 interface TopBarProps {
   title: string;
@@ -13,11 +14,24 @@ interface TopBarProps {
 export function TopBar({ title, showBack = false }: TopBarProps) {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <>
       <header
-        className="sticky top-0 z-40 flex items-center justify-between bg-[#0a0a0a]/95 backdrop-blur-sm border-b border-[#262626]"
+        className={`sticky top-0 z-40 flex items-center justify-between transition-all duration-300 ${
+          scrolled
+            ? "bg-black/70 backdrop-blur-xl border-b border-white/[0.06]"
+            : "bg-transparent border-b border-transparent"
+        }`}
         style={{
           height: "calc(44px + env(safe-area-inset-top, 0px))",
           paddingTop: "env(safe-area-inset-top, 0px)",
@@ -27,7 +41,7 @@ export function TopBar({ title, showBack = false }: TopBarProps) {
           {showBack && (
             <button
               onClick={() => router.back()}
-              className="flex items-center justify-center w-[44px] h-[44px] text-[#a3a3a3] hover:text-[#d4d4d4] transition-colors duration-200"
+              className="flex items-center justify-center w-[44px] h-[44px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-200"
               aria-label="Go back"
             >
               <ArrowLeft size={20} />
@@ -35,17 +49,20 @@ export function TopBar({ title, showBack = false }: TopBarProps) {
           )}
         </div>
 
-        <h1 className="text-sm font-semibold text-[#e5e5e5] truncate px-2">
+        <h1 className="text-sm font-medium text-[var(--text-primary)] truncate px-2 tracking-wide">
           {title}
         </h1>
 
-        <button
-          onClick={() => setMenuOpen(true)}
-          className="flex items-center justify-center w-[44px] h-[44px] text-[#a3a3a3] hover:text-[#d4d4d4] transition-colors duration-200"
-          aria-label="Open menu"
-        >
-          <Menu size={20} />
-        </button>
+        <div className="flex items-center">
+          <ThemeToggle />
+          <button
+            onClick={() => setMenuOpen(true)}
+            className="flex items-center justify-center w-[44px] h-[44px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-200"
+            aria-label="Open menu"
+          >
+            <Menu size={20} />
+          </button>
+        </div>
       </header>
 
       <SlideMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
