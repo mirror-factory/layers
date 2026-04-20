@@ -46,43 +46,37 @@ const FEATURES = [
     icon: Brain,
     title: "Structured extraction",
     desc: "Budgets, timelines, decision makers, action items — not just summaries. Every conversation becomes structured, actionable data.",
-    large: true,
   },
   {
     icon: Mic,
     title: "Live transcription",
     desc: "Real-time streaming with speaker diarization. No bot in your meeting.",
-    large: false,
   },
   {
     icon: FileText,
     title: "Intake forms",
     desc: "Every conversation auto-generates CRM-ready structured data.",
-    large: false,
   },
   {
     icon: DollarSign,
     title: "Cost transparency",
     desc: "See exactly what each meeting costs. Pick your own AI model.",
-    large: false,
   },
   {
     icon: Shield,
     title: "Your data, your models",
     desc: "Choose from 9 LLMs and 5 speech models. Zero vendor lock-in.",
-    large: false,
   },
   {
     icon: Smartphone,
     title: "Multi-platform",
     desc: "Web, macOS desktop, and iOS — one codebase, instant updates.",
-    large: false,
   },
 ];
 
 /* ─────────────────────────── Demo Hook ─────────────────────────── */
 
-type DemoPhase = "waiting" | "recording" | "summary";
+type DemoPhase = "waiting" | "recording" | "summarizing" | "summary";
 
 function useRecordingDemo() {
   const [phase, setPhase] = useState<DemoPhase>("waiting");
@@ -118,14 +112,18 @@ function useRecordingDemo() {
       }, 1200 * (i + 1));
     });
 
-    // After all lines, transition directly to summary (no processing state)
+    // After all lines, transition to summarizing then summary
     const totalTime = 1200 * (DEMO_TRANSCRIPT_LINES.length + 1);
     setTimeout(() => {
-      setPhase("summary");
+      setPhase("summarizing");
       setDemoAudioLevel(0);
       if (timerRef.current) clearInterval(timerRef.current);
       if (audioTimerRef.current) clearInterval(audioTimerRef.current);
     }, totalTime);
+
+    setTimeout(() => {
+      setPhase("summary");
+    }, totalTime + 2500);
   }, []);
 
   // Auto-start and loop
@@ -153,42 +151,21 @@ function useRecordingDemo() {
 /* ─────────────────────────── Hero Shader Cycling ─────────────────────────── */
 
 function useHeroShaderCycle() {
-  const [heroState, setHeroState] = useState<"idle" | "recording">("idle");
   const [heroAudio, setHeroAudio] = useState(0);
 
   useEffect(() => {
-    let audioTimer: ReturnType<typeof setInterval> | null = null;
+    // Always show the 3 colored lines with gentle organic movement
+    let t = 0;
+    const timer = setInterval(() => {
+      t += 0.08;
+      setHeroAudio(0.25 + 0.35 * Math.abs(Math.sin(t)) + 0.1 * Math.sin(t * 2.3));
+    }, 60);
 
-    const cycle = () => {
-      // Go to recording for 4 seconds
-      setHeroState("recording");
-      let t = 0;
-      audioTimer = setInterval(() => {
-        t += 0.12;
-        setHeroAudio(0.3 + 0.5 * Math.abs(Math.sin(t)));
-      }, 60);
-
-      setTimeout(() => {
-        // Back to idle
-        setHeroState("idle");
-        setHeroAudio(0);
-        if (audioTimer) clearInterval(audioTimer);
-      }, 4000);
-    };
-
-    // First cycle after 3 seconds
-    const firstTimeout = setTimeout(cycle, 3000);
-    // Then every 10 seconds
-    const interval = setInterval(cycle, 10000);
-
-    return () => {
-      clearTimeout(firstTimeout);
-      clearInterval(interval);
-      if (audioTimer) clearInterval(audioTimer);
-    };
+    return () => clearInterval(timer);
   }, []);
 
-  return { heroState, heroAudio };
+  // Always "recording" state so all 3 lines show with color
+  return { heroState: "recording" as const, heroAudio };
 }
 
 /* ─────────────────────────── Helpers ─────────────────────────── */
@@ -206,7 +183,7 @@ export function LandingPage() {
   const { phase, visibleLines, elapsedSeconds, demoAudioLevel } =
     useRecordingDemo();
 
-  const demoShaderState = phase === "recording" ? "recording" : "idle";
+  const demoShaderState = phase === "recording" ? "recording" : phase === "summarizing" ? "summarizing" : "idle";
 
   return (
     <div className="min-h-screen bg-[var(--bg-primary)] text-white dark:text-white light:text-gray-900">
@@ -235,19 +212,17 @@ export function LandingPage() {
 
       {/* ───── SECTION 1: Hero ───── */}
       <section className="relative flex flex-col items-center justify-center px-4 pt-32 pb-16">
-        {/* Mirror Factory badge */}
+        <h1 className="text-6xl sm:text-7xl lg:text-8xl font-bold tracking-tight text-center text-white dark:text-white light:text-gray-900">
+          Layer One
+        </h1>
         <a
           href="https://mirrorfactory.ai"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-xs text-white/40 dark:text-white/40 light:text-gray-400 hover:text-white/60 dark:hover:text-white/60 light:hover:text-gray-600 transition-opacity mb-12"
+          className="inline-flex items-center gap-1.5 text-sm text-[#14b8a6] hover:text-[#2dd4bf] transition-colors mt-2"
         >
-          A Mirror Factory product
+          by Mirror Factory
         </a>
-
-        <h1 className="text-6xl sm:text-7xl lg:text-8xl font-bold tracking-tight text-center text-white dark:text-white light:text-gray-900">
-          Layer One
-        </h1>
         <p className="text-xl sm:text-2xl text-white/60 dark:text-white/60 light:text-gray-500 mt-4 text-center">
           Audio Intelligence
         </p>
@@ -299,9 +274,7 @@ export function LandingPage() {
           {FEATURES.map((f) => (
             <div
               key={f.title}
-              className={`group p-7 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:border-white/[0.12] transition-all duration-300 hover:bg-white/[0.05] dark:bg-white/[0.03] dark:border-white/[0.06] dark:hover:border-white/[0.12] dark:hover:bg-white/[0.05] light:bg-gray-50 light:border-gray-200 light:hover:border-gray-300 light:hover:bg-gray-100 ${
-                f.large ? "sm:col-span-2 lg:col-span-2" : ""
-              }`}
+              className="group p-7 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:border-white/[0.12] transition-all duration-300 hover:bg-white/[0.05] dark:bg-white/[0.03] dark:border-white/[0.06] dark:hover:border-white/[0.12] dark:hover:bg-white/[0.05] light:bg-gray-50 light:border-gray-200 light:hover:border-gray-300 light:hover:bg-gray-100"
             >
               <div className="w-11 h-11 rounded-xl bg-[#14b8a6]/10 flex items-center justify-center mb-5 group-hover:bg-[#14b8a6]/20 transition-colors duration-300">
                 <f.icon
@@ -383,7 +356,7 @@ export function LandingPage() {
 
           {/* Transcript streaming */}
           {phase === "recording" && visibleLines > 0 && (
-            <div className="px-5 py-4 space-y-3 max-h-[260px] overflow-y-auto">
+            <div className="px-5 py-4 space-y-3 overflow-y-auto" style={{ scrollbarWidth: "none" }}>
               {DEMO_TRANSCRIPT_LINES.slice(0, visibleLines).map((line, i) => (
                 <div
                   key={i}
@@ -397,6 +370,18 @@ export function LandingPage() {
                   </span>
                 </div>
               ))}
+            </div>
+          )}
+
+          {/* Summarizing transition */}
+          {phase === "summarizing" && (
+            <div className="flex flex-col items-center justify-center py-12 gap-3 animate-[fadeSlideIn_0.4s_ease-out_both]">
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#14b8a6] animate-pulse" style={{ animationDelay: "0ms" }} />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#14b8a6] animate-pulse" style={{ animationDelay: "200ms" }} />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#14b8a6] animate-pulse" style={{ animationDelay: "400ms" }} />
+              </div>
+              <p className="text-sm text-white/50">Summarizing your notes...</p>
             </div>
           )}
 
