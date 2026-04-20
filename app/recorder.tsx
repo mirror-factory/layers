@@ -109,10 +109,10 @@ export function RecorderHome() {
           />
         </div>
 
-        {/* Live transcript — fixed height, scrolls internally */}
+        {/* Live transcript — fills remaining height */}
         {hasTranscript && (
-          <div className="w-full animate-in fade-in slide-in-from-bottom-2 duration-500">
-            <div className="glass-panel rounded-xl p-4 overflow-y-auto" style={{ maxHeight: "40vh", scrollbarWidth: "none" }}>
+          <div className="w-full flex-1 min-h-0 animate-in fade-in slide-in-from-bottom-2 duration-500">
+            <div className="glass-panel rounded-xl p-4 h-full overflow-y-auto" style={{ scrollbarWidth: "none" }}>
               <LiveTranscriptView turns={turns} partial={partial} />
             </div>
           </div>

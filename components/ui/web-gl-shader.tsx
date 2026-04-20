@@ -186,9 +186,11 @@ export function WebGLShader({
         className="absolute inset-0 w-full h-full"
         style={{ filter: "var(--shader-filter, none)" }}
       />
-      {/* Dark overlays on left and right edges — fades the shader into the page bg */}
+      {/* Fade overlays — all four edges blend into page bg */}
       <div className="absolute inset-y-0 left-0 w-[20%] bg-gradient-to-r from-[var(--bg-primary)] to-transparent" />
       <div className="absolute inset-y-0 right-0 w-[20%] bg-gradient-to-l from-[var(--bg-primary)] to-transparent" />
+      <div className="absolute inset-x-0 top-0 h-[30%] bg-gradient-to-b from-[var(--bg-primary)] to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-[30%] bg-gradient-to-t from-[var(--bg-primary)] to-transparent" />
     </div>
   )
 }
