@@ -71,23 +71,25 @@ export function WebGLShader({
         float g = 0.05 / abs(p.y + sin((gx + time) * xScale) * yScale);
         float b = 0.05 / abs(p.y + sin((bx + time) * xScale) * yScale);
 
-        // Horizontal edge fade — lines dissolve into nothing at edges
+        // Horizontal edge fade — 25% on each side
         float normX = gl_FragCoord.x / resolution.x;
-        float edgeFade = smoothstep(0.0, 0.15, normX) * smoothstep(0.0, 0.15, 1.0 - normX);
+        float edgeFade = smoothstep(0.0, 0.25, normX) * smoothstep(0.0, 0.25, 1.0 - normX);
 
         r *= edgeFade;
         g *= edgeFade;
         b *= edgeFade;
 
-        gl_FragColor = vec4(r, g, b, 1.0);
+        // Alpha = line brightness. Black areas become fully transparent.
+        float a = clamp(max(r, max(g, b)), 0.0, 1.0);
+        gl_FragColor = vec4(r, g, b, a);
       }
     `
 
     const initScene = () => {
       r.scene = new THREE.Scene()
-      r.renderer = new THREE.WebGLRenderer({ canvas })
+      r.renderer = new THREE.WebGLRenderer({ canvas, alpha: true, premultipliedAlpha: false })
       r.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-      r.renderer.setClearColor(new THREE.Color(0x000000))
+      r.renderer.setClearColor(new THREE.Color(0x000000), 0)
       r.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, -1)
 
       r.uniforms = {
@@ -119,15 +121,16 @@ export function WebGLShader({
       smoothAudioRef.current += (audioRef.current - smoothAudioRef.current) * 0.06
       const audio = smoothAudioRef.current
 
-      // IDLE: frozen / static. Only animate when recording or summarizing.
-      if (s === "recording") {
+      // Idle: very slow drift so it feels alive but calm
+      if (s === "idle") {
+        r.uniforms.time.value += 0.003
+      } else if (s === "recording") {
         r.uniforms.time.value += 0.012
       } else if (s === "summarizing") {
         r.uniforms.time.value += 0.025
-      } else if (s === "done") {
-        r.uniforms.time.value += 0.003
+      } else {
+        r.uniforms.time.value += 0.002
       }
-      // idle: time does NOT advance — lines are static
 
       let targetY: number, targetDist: number
       if (s === "recording") {
@@ -188,7 +191,7 @@ export function WebGLShader({
     <div ref={containerRef} className={`relative overflow-hidden ${className}`} style={{ pointerEvents: "none" }}>
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full mix-blend-screen dark:mix-blend-screen"
+        className="absolute inset-0 w-full h-full"
       />
     </div>
   )
