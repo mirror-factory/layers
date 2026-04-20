@@ -24,6 +24,10 @@ interface Turn {
 interface LiveRecorderProps {
   onTranscriptUpdate: (turns: Turn[], partial: string) => void;
   onSessionEnd: (meetingId: string) => void;
+  /** Called ~15x/sec with mic RMS level 0-1 for audio visualization */
+  onAudioLevel?: (level: number) => void;
+  /** Called when recorder state changes */
+  onStateChange?: (state: "idle" | "connecting" | "recording" | "finalizing") => void;
 }
 
 type RecorderState = "idle" | "connecting" | "recording" | "finalizing";
@@ -31,12 +35,15 @@ type RecorderState = "idle" | "connecting" | "recording" | "finalizing";
 export function LiveRecorder({
   onTranscriptUpdate,
   onSessionEnd,
+  onAudioLevel,
+  onStateChange,
 }: LiveRecorderProps) {
   const [state, setState] = useState<RecorderState>("idle");
   const [duration, setDuration] = useState(0);
   const [error, setError] = useState<string | null>(null);
 
   const stateRef = useRef<RecorderState>("idle");
+  const meterRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const workletRef = useRef<AudioWorkletNode | null>(null);
@@ -53,6 +60,10 @@ export function LiveRecorder({
   };
 
   const cleanup = useCallback(() => {
+    if (meterRef.current) {
+      clearInterval(meterRef.current);
+      meterRef.current = null;
+    }
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
@@ -116,10 +127,27 @@ export function LiveRecorder({
       workletRef.current = worklet;
       source.connect(worklet);
       // Must connect to destination for process() to fire.
-      // Use a silent gain node to avoid playing mic audio through speakers.
       const silentGain = audioCtx.createGain();
       silentGain.gain.value = 0;
       worklet.connect(silentGain);
+
+      // Audio level metering for visualization
+      if (onAudioLevel) {
+        const analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 256;
+        source.connect(analyser);
+        const dataArray = new Uint8Array(analyser.frequencyBinCount);
+        meterRef.current = setInterval(() => {
+          analyser.getByteTimeDomainData(dataArray);
+          let sum = 0;
+          for (let i = 0; i < dataArray.length; i++) {
+            const v = (dataArray[i] - 128) / 128;
+            sum += v * v;
+          }
+          const rms = Math.sqrt(sum / dataArray.length);
+          onAudioLevel(Math.min(1, rms * 4));
+        }, 60);
+      }
       silentGain.connect(audioCtx.destination);
 
       // 4. Connect WebSocket to AssemblyAI
@@ -234,6 +262,10 @@ export function LiveRecorder({
   useEffect(() => {
     return cleanup;
   }, [cleanup]);
+
+  useEffect(() => {
+    onStateChange?.(state);
+  }, [state, onStateChange]);
 
   return (
     <div className="flex flex-col items-center gap-6">

@@ -44,7 +44,7 @@ export default function SignUpPage() {
   return (
     <div className="min-h-screen flex flex-col relative">
       {/* Shader background */}
-      <WebGLShader intensity={0.2} speed={0.6} />
+      <WebGLShader state="idle" />
 
       <main className="relative z-10 flex-1 flex items-center justify-center px-4">
         <div className="w-full max-w-sm">

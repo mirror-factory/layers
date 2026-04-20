@@ -25,14 +25,16 @@ interface MeetingItem {
   durationSeconds: number | null;
 }
 
+type ShaderState = "idle" | "recording" | "summarizing" | "done";
+
 export default function HomePage() {
   const router = useRouter();
   const [turns, setTurns] = useState<Turn[]>([]);
   const [partial, setPartial] = useState("");
   const [recentMeetings, setRecentMeetings] = useState<MeetingItem[]>([]);
-  const [isRecording, setIsRecording] = useState(false);
-
-  const shaderIntensity = isRecording ? 0.7 : 0.25;
+  const [shaderState, setShaderState] = useState<ShaderState>("idle");
+  const [audioLevel, setAudioLevel] = useState(0);
+  const [meetingsFading, setMeetingsFading] = useState(false);
 
   useEffect(() => {
     fetch("/api/meetings?limit=5")
@@ -45,112 +47,147 @@ export default function HomePage() {
     (newTurns: Turn[], newPartial: string) => {
       setTurns([...newTurns]);
       setPartial(newPartial);
-      if (!isRecording && (newTurns.length > 0 || newPartial)) {
-        setIsRecording(true);
+    },
+    [],
+  );
+
+  const handleStateChange = useCallback(
+    (recState: "idle" | "connecting" | "recording" | "finalizing") => {
+      if (recState === "connecting") {
+        setMeetingsFading(true);
+        setShaderState("idle");
+      } else if (recState === "recording") {
+        setShaderState("recording");
+      } else if (recState === "finalizing") {
+        setShaderState("summarizing");
+        setAudioLevel(0);
+      } else {
+        setShaderState("idle");
+        setMeetingsFading(false);
       }
     },
-    [isRecording],
+    [],
   );
 
   const handleSessionEnd = useCallback(
     (meetingId: string) => {
-      setIsRecording(false);
+      setShaderState("done");
       setTimeout(() => {
         router.push(`/meetings/${meetingId}`);
-      }, 1500);
+      }, 2000);
     },
     [router],
   );
 
+  const handleAudioLevel = useCallback((level: number) => {
+    setAudioLevel(level);
+  }, []);
+
+  const hasTranscript = turns.length > 0 || partial;
+
   return (
-    <div className="min-h-screen flex flex-col relative">
-      {/* WebGL Shader Background */}
-      <WebGLShader intensity={shaderIntensity} speed={isRecording ? 1.4 : 0.8} />
+    <div className="min-h-screen flex flex-col bg-black">
+      <TopBar title="Layer One" />
 
-      {/* Content layer */}
-      <div className="relative z-10 flex flex-col min-h-screen">
-        <TopBar title="Layer One" />
+      <main className="flex-1 flex flex-col items-center px-4 pt-8 pb-8 max-w-3xl mx-auto w-full">
+        {/* Recorder */}
+        <div className="w-full flex flex-col items-center">
+          <LiveRecorder
+            onTranscriptUpdate={handleTranscriptUpdate}
+            onSessionEnd={handleSessionEnd}
+            onAudioLevel={handleAudioLevel}
+            onStateChange={handleStateChange}
+          />
+        </div>
 
-        <main className="flex-1 flex flex-col items-center justify-center px-4 pb-8">
-          {/* Recorder - centered hero */}
-          <div className="flex flex-col items-center justify-center flex-1 min-h-[40vh]">
-            <LiveRecorder
-              onTranscriptUpdate={handleTranscriptUpdate}
-              onSessionEnd={handleSessionEnd}
-            />
+        {/* Shader — between mic and transcript, audio-reactive */}
+        <div className="w-full my-4" style={{ height: 120 }}>
+          <WebGLShader
+            audioLevel={audioLevel}
+            state={shaderState}
+            className="w-full h-full"
+          />
+        </div>
+
+        {/* Live transcript — animates in when recording */}
+        <div
+          className={`w-full transition-all duration-700 ease-out ${
+            hasTranscript
+              ? "opacity-100 translate-y-0 max-h-[50vh]"
+              : "opacity-0 translate-y-4 max-h-0"
+          } overflow-hidden`}
+        >
+          <div className="glass-panel rounded-xl p-4 overflow-y-auto max-h-[50vh]">
+            <LiveTranscriptView turns={turns} partial={partial} />
+          </div>
+        </div>
+
+        {/* Recent Meetings — fades out and slides down when recording starts */}
+        <section
+          className={`w-full mt-8 transition-all duration-700 ease-out ${
+            meetingsFading
+              ? "opacity-0 translate-y-8 pointer-events-none"
+              : "opacity-100 translate-y-0"
+          }`}
+        >
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-xs font-medium text-white/30 uppercase tracking-widest">
+              Recent
+            </h2>
+            <Link
+              href="/meetings"
+              className="text-xs text-[#14b8a6]/70 hover:text-[#14b8a6] transition-colors"
+            >
+              View all
+            </Link>
           </div>
 
-          {/* Live transcript area */}
-          {(turns.length > 0 || partial) && (
-            <div className="w-full max-w-2xl mx-auto mb-8 glass-panel rounded-2xl p-5 max-h-[40vh] overflow-y-auto">
-              <LiveTranscriptView turns={turns} partial={partial} />
+          {recentMeetings.length === 0 ? (
+            <div className="text-center py-8">
+              <p className="text-sm text-white/20">
+                No meetings yet. Tap the mic to start.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-px">
+              {recentMeetings.map((m) => (
+                <Link
+                  key={m.id}
+                  href={`/meetings/${m.id}`}
+                  className="flex items-center justify-between rounded-lg px-4 py-3 hover:bg-white/[0.03] transition-colors duration-200"
+                >
+                  <div className="min-w-0 flex-1">
+                    <div className="text-sm text-white/70 truncate">
+                      {m.title ?? "Untitled recording"}
+                    </div>
+                    <div className="text-xs text-white/25 mt-0.5">
+                      {new Date(m.createdAt).toLocaleDateString()}
+                      {m.durationSeconds
+                        ? ` · ${Math.round(m.durationSeconds / 60)} min`
+                        : ""}
+                    </div>
+                  </div>
+                  <StatusChip status={m.status} />
+                </Link>
+              ))}
             </div>
           )}
-
-          {/* Recent Meetings - bottom tray */}
-          <section className="w-full max-w-2xl mx-auto">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-xs font-medium text-[var(--text-muted)] uppercase tracking-widest">
-                Recent
-              </h2>
-              <Link
-                href="/meetings"
-                className="text-xs text-[var(--accent-mint)] hover:text-[#5eead4] transition-colors duration-200"
-              >
-                View all
-              </Link>
-            </div>
-
-            {recentMeetings.length === 0 ? (
-              <div className="glass-card rounded-xl p-5 text-center">
-                <p className="text-sm text-[var(--text-muted)]">
-                  No meetings yet. Tap the mic to start.
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-1">
-                {recentMeetings.map((m) => (
-                  <Link
-                    key={m.id}
-                    href={`/meetings/${m.id}`}
-                    className="flex items-center justify-between glass-card rounded-lg px-4 py-3 transition-all duration-200 group"
-                  >
-                    <div className="min-w-0 flex-1">
-                      <div className="text-sm text-[var(--text-primary)] truncate group-hover:text-white transition-colors duration-200">
-                        {m.title ?? "Untitled recording"}
-                      </div>
-                      <div className="text-xs text-[var(--text-muted)] mt-0.5">
-                        {new Date(m.createdAt).toLocaleDateString()}
-                        {m.durationSeconds
-                          ? ` \u00b7 ${Math.round(m.durationSeconds / 60)} min`
-                          : ""}
-                      </div>
-                    </div>
-                    <StatusChip status={m.status} />
-                  </Link>
-                ))}
-              </div>
-            )}
-          </section>
-        </main>
-      </div>
+        </section>
+      </main>
     </div>
   );
 }
 
 function StatusChip({ status }: { status: string }) {
-  const config: Record<string, { bg: string; text: string }> = {
-    completed: { bg: "bg-[#22c55e]/10", text: "text-[#22c55e]" },
-    processing: { bg: "bg-[#14b8a6]/10", text: "text-[#14b8a6]" },
-    queued: { bg: "bg-[#eab308]/10", text: "text-[#eab308]" },
-    error: { bg: "bg-[#ef4444]/10", text: "text-[#ef4444]" },
+  const colors: Record<string, string> = {
+    completed: "text-emerald-400/80",
+    processing: "text-[#14b8a6]/80",
+    queued: "text-amber-400/80",
+    error: "text-red-400/80",
   };
-  const c = config[status] ?? config.processing;
 
   return (
-    <span
-      className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-md ${c.bg} ${c.text}`}
-    >
+    <span className={`text-[10px] font-medium uppercase tracking-wider ${colors[status] ?? colors.processing}`}>
       {status}
     </span>
   );
