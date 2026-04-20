@@ -3,6 +3,11 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   serverExternalPackages: [
     "@opentelemetry/sdk-node",
+    "@opentelemetry/api",
+    "@opentelemetry/otlp-grpc-exporter-base",
+    "@opentelemetry/exporter-trace-otlp-grpc",
+    "@opentelemetry/exporter-logs-otlp-grpc",
+    "@grpc/grpc-js",
     "@langfuse/otel",
     "langfuse",
   ],
@@ -11,8 +16,6 @@ const nextConfig: NextConfig = {
   },
   webpack: (config, { isServer }) => {
     if (isServer) {
-      // Externalize all OpenTelemetry + gRPC packages to avoid bundling
-      // Node.js built-ins (http, https, zlib, net, tls, dns, etc.)
       const orig = config.externals;
       config.externals = [
         ...(Array.isArray(orig) ? orig : orig ? [orig] : []),
