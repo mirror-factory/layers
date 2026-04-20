@@ -137,23 +137,29 @@ export function LiveRecorder({
         try {
           const msg = JSON.parse(event.data);
 
-          if (msg.message_type === "FinalTranscript") {
-            const turn: Turn = {
-              speaker: msg.speaker ?? null,
-              text: msg.text ?? "",
-              start: msg.audio_start ?? 0,
-              end: msg.audio_end ?? 0,
-              confidence: msg.confidence ?? 0,
-              final: true,
-            };
-            turnsRef.current = [...turnsRef.current, turn];
-            partialRef.current = "";
-            onTranscriptUpdate(turnsRef.current, partialRef.current);
-          } else if (msg.message_type === "PartialTranscript") {
-            partialRef.current = msg.text ?? "";
+          if (msg.type === "Turn") {
+            const transcript = msg.transcript ?? msg.utterance ?? "";
+            if (msg.end_of_turn) {
+              // Finalized turn — add to turns list
+              const firstWord = msg.words?.[0];
+              const lastWord = msg.words?.[msg.words.length - 1];
+              const turn: Turn = {
+                speaker: msg.speaker ?? null,
+                text: transcript,
+                start: firstWord?.start ?? 0,
+                end: lastWord?.end ?? 0,
+                confidence: firstWord?.confidence ?? 0,
+                final: true,
+              };
+              turnsRef.current = [...turnsRef.current, turn];
+              partialRef.current = "";
+            } else {
+              // Partial turn — show as typing indicator
+              partialRef.current = transcript;
+            }
             onTranscriptUpdate(turnsRef.current, partialRef.current);
           }
-          // SessionBegins, SessionTerminated — no action needed
+          // Begin, SpeechStarted — no action needed
         } catch {
           // ignore malformed messages
         }
