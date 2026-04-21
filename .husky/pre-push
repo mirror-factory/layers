@@ -243,6 +243,62 @@ if [ -f "playwright.config.ts" ] || [ -f "playwright.config.js" ]; then
 fi
 
 # ---------------------------------------------------------------------------
+# 5y. TEST-MANIFEST drift -- committed tests match regenerated output
+# ---------------------------------------------------------------------------
+if [ -f "scripts/check-manifest-drift.ts" ]; then
+  info "Checking test manifest drift..."
+  if npx tsx scripts/check-manifest-drift.ts; then
+    pass "Manifest drift OK"
+  else
+    fail "Committed tests drifted from TEST-MANIFEST.yaml -- see above"
+    exit 1
+  fi
+fi
+
+# ---------------------------------------------------------------------------
+# 5y1. Dependency vulnerabilities -- CRITICAL/HIGH block, stale audit blocks
+# ---------------------------------------------------------------------------
+if [ -f "scripts/check-dependencies.ts" ]; then
+  info "Checking dependency vulnerabilities..."
+  if npx tsx scripts/check-dependencies.ts; then
+    pass "Dependencies OK"
+  else
+    fail "Dependency check blocked -- see above"
+    exit 1
+  fi
+fi
+
+# ---------------------------------------------------------------------------
+# 5z. Context7 docs-lookup coverage -- every flagged library touched on
+#     this branch needs a matching Context7/docs lookup. Closes the
+#     "non-Claude-Code editor bypasses PreToolUse hook" gap.
+# ---------------------------------------------------------------------------
+if [ -f "scripts/check-docs-lookup-coverage.ts" ]; then
+  info "Checking Context7 docs lookup coverage..."
+  if npx tsx scripts/check-docs-lookup-coverage.ts; then
+    pass "Docs lookup coverage OK"
+  else
+    fail "Docs lookup coverage blocked -- see above"
+    exit 1
+  fi
+fi
+
+# ---------------------------------------------------------------------------
+# 6a. Expect AI coverage gate -- fail-closed once pages.yaml has routes +
+#     grace window elapses (7 days). Forces "every user-facing route has
+#     an AI browser test" instead of the soft-conditional old behavior.
+# ---------------------------------------------------------------------------
+if [ -f "scripts/check-expect-coverage.ts" ]; then
+  info "Checking expect AI coverage..."
+  if npx tsx scripts/check-expect-coverage.ts; then
+    pass "Expect coverage OK"
+  else
+    fail "Expect coverage gate blocked -- see above"
+    exit 1
+  fi
+fi
+
+# ---------------------------------------------------------------------------
 # 6. Expect AI browser tests (if configured)
 # ---------------------------------------------------------------------------
 if [ -f "expect.config.ts" ] || [ -f "expect.config.js" ] || grep -q '"@anthropic-ai/expect"' package.json 2>/dev/null; then

@@ -35,7 +35,14 @@ ALLOWLIST_FILE = Path('.claude/hooks/context7-allowlist.txt')
 # Libraries that have churned enough in recent memory to require a fresh
 # lookup before edits. Keep the list tight -- overuse will train agents
 # to bypass the block.
-FLAGGED_LIBRARIES = [
+# Base list of libraries that have churned enough to require fresh docs
+# before edits. Extended dynamically in _flagged_libraries() from:
+#   1. package.json dependencies + devDependencies
+#   2. .ai-dev-kit/registries/*.json vendor entries
+# 0.2.9: the dynamic extension closes the "agent edits a new SDK not on
+# the hardcoded list -> no block" gap. Every external dependency in the
+# project is now gated by default.
+BASE_FLAGGED_LIBRARIES = [
     'assemblyai',
     '@ai-sdk/',
     'ai',                     # Vercel AI SDK
@@ -50,6 +57,72 @@ FLAGGED_LIBRARIES = [
 
 LOOKUP_FRESHNESS_SECONDS = 3600  # 1 hour
 
+# Standard-library / build-tool packages we explicitly DON'T gate. These
+# don't churn fast enough to need a Context7 lookup per edit.
+DO_NOT_FLAG = {
+    'react', 'react-dom', 'next', 'typescript', 'node', '@types/node',
+    '@types/react', '@types/react-dom', 'eslint', 'prettier', 'vitest',
+    '@playwright/test', 'playwright', 'tailwindcss', 'postcss', 'autoprefixer',
+    'tsx', 'zod', 'clsx', 'lucide-react', 'class-variance-authority',
+}
+
+
+def _flagged_libraries() -> list[str]:
+    """Compose the flagged list from BASE + package.json + registries.
+
+    Cached per-process via a module-level flag so multiple hook calls in
+    the same Claude Code session reuse the result.
+    """
+    global _FLAGGED_CACHE
+    try:
+        if _FLAGGED_CACHE is not None:
+            return _FLAGGED_CACHE
+    except NameError:
+        pass
+
+    flagged = list(BASE_FLAGGED_LIBRARIES)
+
+    # Union package.json deps.
+    pkg_path = Path('package.json')
+    if pkg_path.exists():
+        try:
+            pkg = json.loads(pkg_path.read_text())
+            for section in ('dependencies', 'devDependencies', 'peerDependencies'):
+                for dep in (pkg.get(section) or {}).keys():
+                    if dep in DO_NOT_FLAG:
+                        continue
+                    if dep.startswith('@types/'):
+                        continue
+                    if dep not in flagged:
+                        flagged.append(dep)
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    # Union registry vendor names (.ai-dev-kit/registries/*.json).
+    reg_dir = Path('.ai-dev-kit/registries')
+    if reg_dir.exists():
+        for f in reg_dir.glob('*.json'):
+            if f.name == 'registry.schema.json':
+                continue
+            try:
+                data = json.loads(f.read_text())
+                vendor = data.get('vendor')
+                if isinstance(vendor, str) and vendor and vendor not in flagged:
+                    flagged.append(vendor)
+            except (json.JSONDecodeError, OSError):
+                pass
+
+    _FLAGGED_CACHE = flagged
+    return flagged
+
+
+_FLAGGED_CACHE: list[str] | None = None
+
+
+# Retained for backward compat. External callers still resolve through
+# the function above.
+FLAGGED_LIBRARIES = BASE_FLAGGED_LIBRARIES
+
 IMPORT_RE = re.compile(r'''from\s+['"`]([^'"`]+)['"`]''')
 
 
@@ -62,10 +135,12 @@ def libraries_in_file(path: str) -> list[str]:
     except OSError:
         return []
     found: list[str] = []
+    # Resolve the dynamic flagged list (BASE + package.json + registries).
+    flagged = _flagged_libraries()
     for m in IMPORT_RE.finditer(content):
         imp = m.group(1)
-        for flag in FLAGGED_LIBRARIES:
-            if imp == flag or imp.startswith(flag):
+        for flag in flagged:
+            if imp == flag or imp.startswith(flag) or imp.startswith(flag + '/'):
                 if flag not in found:
                     found.append(flag)
     return found
