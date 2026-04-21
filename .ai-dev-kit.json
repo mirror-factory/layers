@@ -1,6 +1,6 @@
 {
   "version": "0.2.13",
-  "installedAt": "2026-04-21T02:23:46.284Z",
+  "installedAt": "2026-04-21T02:48:39.851Z",
   "modules": [
     "core",
     "gateway",
@@ -16,12 +16,5 @@
   ],
   "projectType": "nextjs-15",
   "packageManager": "pnpm",
-  "files": [
-    "app/dev-kit/dependencies/page.tsx",
-    "app/dev-kit/features/[name]/page.tsx",
-    "app/dev-kit/features/page.tsx",
-    "app/dev-kit/index/page.tsx",
-    "lib/langfuse-setup.ts",
-    "instrumentation.ts"
-  ]
+  "files": []
 }
