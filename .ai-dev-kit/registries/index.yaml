@@ -1,0 +1,31 @@
+# index.yaml -- top-level project graph, aggregated from every other source of
+# truth in .ai-dev-kit/.
+#
+# Schema:   .ai-dev-kit/schemas/project-index.schema.json
+# Writer:   scripts/sync-project-index.ts (runs on pre-commit)
+# Consumer: /dev-kit/index dashboard (GET /api/dev-kit/index)
+#
+# Do NOT hand-edit. Every field on this file is overwritten by the sync script
+# on the next commit. To change what appears here:
+#   - feature metadata -> edit features/<name>/SPEC.md / DESIGN-READY.md /
+#                         TEST-MANIFEST.yaml
+#   - project name/stack -> edit package.json
+#   - registry counts -> add / remove entries in the matching registry file
+#   - 30-day totals -> these roll up from .ai-dev-kit/state/runs/history/ and
+#                      .ai-logs/; there is no other knob
+
+kind: project-index
+schema_version: 1
+last_synced_on: null
+project:
+  name: ""
+  stack: []
+  spec_path: ""
+features: []
+registries: []
+totals_30d:
+  ai_calls: 0
+  vendor_calls: 0
+  cost_usd: 0
+  tests_run: 0
+  skill_invocations: 0

@@ -91,16 +91,30 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# 5a. Sync dynamic registries (components, pages, tools, skills) -- non-blocking
+# 5a. Sync dynamic registries + project index + test contracts (best-effort)
 # ---------------------------------------------------------------------------
-# Refreshes .ai-dev-kit/registries/{components,pages,tools,skills}.yaml from
-# the current filesystem. Best-effort; a failure here doesn't block the
-# commit but doctor's "registries freshness" check will flag stale state.
 if [ -f "scripts/sync-registries.ts" ]; then
   npx tsx scripts/sync-registries.ts
-  # Stage any registry updates so they land with this commit -- otherwise the
-  # file on disk drifts from HEAD and the next run duplicates work.
-  git add .ai-dev-kit/registries/*.yaml tests/visual/*.spec.ts 2>/dev/null || true
+fi
+if [ -f "scripts/sync-test-contracts.ts" ]; then
+  npx tsx scripts/sync-test-contracts.ts
+fi
+if [ -f "scripts/sync-project-index.ts" ]; then
+  npx tsx scripts/sync-project-index.ts
+fi
+git add .ai-dev-kit/registries/*.yaml tests/visual/*.spec.ts 2>/dev/null || true
+
+# ---------------------------------------------------------------------------
+# 5a0. TEST-MANIFEST coverage gate (0.2.10) -- SPEC acceptance -> manifest
+# ---------------------------------------------------------------------------
+if [ -f "scripts/check-test-manifest-coverage.ts" ]; then
+  info "Checking test manifest coverage..."
+  if npx tsx scripts/check-test-manifest-coverage.ts; then
+    pass "Manifest coverage OK"
+  else
+    fail "Test manifest missing coverage -- see above"
+    exit 1
+  fi
 fi
 
 # ---------------------------------------------------------------------------
@@ -143,6 +157,20 @@ if [ -f "scripts/check-brand-tokens.ts" ]; then
     pass "Brand tokens clean"
   else
     fail "Brand token violations -- see output above"
+    exit 1
+  fi
+fi
+
+# ---------------------------------------------------------------------------
+# 5b1. Design-first gate -- block UI commits when design system is empty
+# ---------------------------------------------------------------------------
+# Enforces "tokens + system BEFORE .tsx" contract. API-only commits pass.
+if [ -f "scripts/check-design-ready.ts" ]; then
+  info "Checking design-first gate..."
+  if npx tsx scripts/check-design-ready.ts; then
+    pass "Design gate OK"
+  else
+    fail "Design-first gate blocked -- see above"
     exit 1
   fi
 fi

@@ -41,6 +41,9 @@
     "tests/evals/eval-helpers.ts",
     "tests/unit/code-review.test.ts",
     "scripts/check-brand-compliance.mts",
-    "scripts/check-budget.ts"
+    "scripts/check-budget.ts",
+    "scripts/sync-dependencies.ts",
+    "scripts/generate-playwright-from-manifest.ts",
+    "scripts/generate-expect-from-manifest.ts"
   ]
 }
