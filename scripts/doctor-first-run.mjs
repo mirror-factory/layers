@@ -15,7 +15,8 @@ import { existsSync, writeFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 
 // Quietly no-op in CI or when the kit hasn't been initialized.
-if (process.env.CI === 'true') process.exit(0);
+if (process.env.CI) process.exit(0);
+if (process.env.VERCEL) process.exit(0);
 if (!existsSync('.ai-dev-kit.json')) process.exit(0);
 if (existsSync('.ai-dev-kit.doctor-ran')) process.exit(0);
 
