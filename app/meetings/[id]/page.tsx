@@ -78,6 +78,7 @@ export default async function MeetingDetailPage({
             <TranscriptView
               utterances={meeting.utterances}
               summary={meeting.summary}
+              meetingId={meeting.id}
             />
             <IntakeFormView intakeForm={meeting.intakeForm} />
             <MeetingCostPanel costBreakdown={meeting.costBreakdown} />
