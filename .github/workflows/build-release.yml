@@ -15,7 +15,7 @@ jobs:
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
@@ -30,14 +30,16 @@ jobs:
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: npx electron-builder --config electron-builder.yml --mac
+      - run: npx electron-builder --config electron-builder.yml --mac --publish never
       - uses: actions/upload-artifact@v4
         with:
           name: electron-mac
-          path: dist-electron/*.dmg
+          path: |
+            dist-electron/*.dmg
+            dist-electron/*.zip
 
   electron-windows:
     name: Electron (Windows)
@@ -47,14 +49,16 @@ jobs:
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: npx electron-builder --config electron-builder.yml --win
+      - run: npx electron-builder --config electron-builder.yml --win --publish never
       - uses: actions/upload-artifact@v4
         with:
           name: electron-windows
-          path: dist-electron/*.exe
+          path: |
+            dist-electron/*.exe
+            dist-electron/*.msi
 
   capacitor-android:
     name: Capacitor (Android APK)
@@ -64,7 +68,7 @@ jobs:
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
       - uses: actions/setup-java@v4
         with:
@@ -87,7 +91,7 @@ jobs:
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: npx cap sync ios
