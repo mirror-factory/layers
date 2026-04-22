@@ -6,6 +6,7 @@ import { z } from "zod";
 import { withRoute } from "@/lib/with-route";
 import { searchMeetings } from "@/lib/embeddings/search";
 import { getCurrentUserId } from "@/lib/supabase/user";
+import { getSupabaseServer } from "@/lib/supabase/server";
 
 const SearchBodySchema = z.object({
   query: z.string().min(1, "query is required"),
@@ -33,7 +34,36 @@ export const POST = withRoute(async (req) => {
     );
   }
 
-  const results = await searchMeetings(body.query, userId, body.limit);
+  // Try semantic/hybrid search first
+  const semanticResults = await searchMeetings(body.query, userId, body.limit);
 
-  return NextResponse.json({ results });
+  if (semanticResults.length > 0) {
+    return NextResponse.json({ results: semanticResults, mode: "semantic" });
+  }
+
+  // Fallback: basic text search on the meetings table directly
+  const supabase = getSupabaseServer();
+  if (!supabase) {
+    return NextResponse.json({ results: [], mode: "none" });
+  }
+
+  const { data: textResults } = await supabase
+    .from("meetings")
+    .select("id, title, text, status, created_at")
+    .eq("user_id", userId)
+    .eq("status", "completed")
+    .or(`title.ilike.%${body.query}%,text.ilike.%${body.query}%`)
+    .order("created_at", { ascending: false })
+    .limit(body.limit ?? 10);
+
+  const results = (textResults ?? []).map((m: { id: string; title: string | null; text: string | null; created_at: string }) => ({
+    meetingId: m.id,
+    chunkText: m.text?.substring(0, 200) ?? "",
+    chunkType: "full-text",
+    similarity: 1,
+    meetingTitle: m.title,
+    meetingDate: m.created_at,
+  }));
+
+  return NextResponse.json({ results, mode: "text" });
 });
