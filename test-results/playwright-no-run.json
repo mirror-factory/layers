@@ -1,0 +1,752 @@
+{
+  "config": {
+    "configFile": "/Users/alfonso/Documents/GitHub/audio-layer/playwright.config.ts",
+    "rootDir": "/Users/alfonso/Documents/GitHub/audio-layer/tests/e2e",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/alfonso/Documents/GitHub/audio-layer/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile-light",
+        "name": "mobile-light",
+        "testDir": "/Users/alfonso/Documents/GitHub/audio-layer/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/alfonso/Documents/GitHub/audio-layer/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile-dark",
+        "name": "mobile-dark",
+        "testDir": "/Users/alfonso/Documents/GitHub/audio-layer/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/alfonso/Documents/GitHub/audio-layer/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "tablet-light",
+        "name": "tablet-light",
+        "testDir": "/Users/alfonso/Documents/GitHub/audio-layer/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/alfonso/Documents/GitHub/audio-layer/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "tablet-dark",
+        "name": "tablet-dark",
+        "testDir": "/Users/alfonso/Documents/GitHub/audio-layer/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/alfonso/Documents/GitHub/audio-layer/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop-light",
+        "name": "desktop-light",
+        "testDir": "/Users/alfonso/Documents/GitHub/audio-layer/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/alfonso/Documents/GitHub/audio-layer/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop-dark",
+        "name": "desktop-dark",
+        "testDir": "/Users/alfonso/Documents/GitHub/audio-layer/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "html",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/playwright-no-run.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.59.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "mobile-polish.spec.ts",
+      "file": "mobile-polish.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Sign-in page",
+          "file": "mobile-polish.spec.ts",
+          "line": 14,
+          "column": 6,
+          "specs": [
+            {
+              "title": "renders Google OAuth button",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-light",
+                  "projectName": "mobile-light",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3311,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-23T03:12:38.653Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/alfonso/Documents/GitHub/audio-layer/test-results/mobile-polish-Sign-in-page-renders-Google-OAuth-button-mobile-light/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4e1ce1ef0109f0bc710d-d875e894a344768d28e1",
+              "file": "mobile-polish.spec.ts",
+              "line": 15,
+              "column": 7
+            },
+            {
+              "title": "renders email + password form",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-light",
+                  "projectName": "mobile-light",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 446,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-23T03:12:42.514Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/alfonso/Documents/GitHub/audio-layer/test-results/mobile-polish-Sign-in-page-renders-email-password-form-mobile-light/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4e1ce1ef0109f0bc710d-16a34e4e32be87cf8384",
+              "file": "mobile-polish.spec.ts",
+              "line": 21,
+              "column": 7
+            },
+            {
+              "title": "has or divider between Google and email",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-light",
+                  "projectName": "mobile-light",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 474,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-23T03:12:42.964Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/alfonso/Documents/GitHub/audio-layer/test-results/mobile-polish-Sign-in-page-0c924-er-between-Google-and-email-mobile-light/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4e1ce1ef0109f0bc710d-502a4f809f7fe5521ced",
+              "file": "mobile-polish.spec.ts",
+              "line": 27,
+              "column": 7
+            },
+            {
+              "title": "renders Google OAuth button",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-dark",
+                  "projectName": "mobile-dark",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 632,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-23T03:12:46.846Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/alfonso/Documents/GitHub/audio-layer/test-results/mobile-polish-Sign-in-page-renders-Google-OAuth-button-mobile-dark/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4e1ce1ef0109f0bc710d-c435f407cd31964b1dc6",
+              "file": "mobile-polish.spec.ts",
+              "line": 15,
+              "column": 7
+            },
+            {
+              "title": "renders email + password form",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-dark",
+                  "projectName": "mobile-dark",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 460,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-23T03:12:47.630Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/alfonso/Documents/GitHub/audio-layer/test-results/mobile-polish-Sign-in-page-renders-email-password-form-mobile-dark/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4e1ce1ef0109f0bc710d-6659ec5ad8c40a659401",
+              "file": "mobile-polish.spec.ts",
+              "line": 21,
+              "column": 7
+            },
+            {
+              "title": "has or divider between Google and email",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-dark",
+                  "projectName": "mobile-dark",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 413,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-23T03:12:48.095Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/alfonso/Documents/GitHub/audio-layer/test-results/mobile-polish-Sign-in-page-0c924-er-between-Google-and-email-mobile-dark/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4e1ce1ef0109f0bc710d-3854058dba5e985e6c59",
+              "file": "mobile-polish.spec.ts",
+              "line": 27,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Sign-up page",
+          "file": "mobile-polish.spec.ts",
+          "line": 35,
+          "column": 6,
+          "specs": [
+            {
+              "title": "renders Google OAuth button",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-light",
+                  "projectName": "mobile-light",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 629,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-23T03:12:43.444Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/alfonso/Documents/GitHub/audio-layer/test-results/mobile-polish-Sign-up-page-renders-Google-OAuth-button-mobile-light/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4e1ce1ef0109f0bc710d-206c2c429349fc517147",
+              "file": "mobile-polish.spec.ts",
+              "line": 36,
+              "column": 7
+            },
+            {
+              "title": "renders Google OAuth button",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-dark",
+                  "projectName": "mobile-dark",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 414,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-23T03:12:48.512Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/alfonso/Documents/GitHub/audio-layer/test-results/mobile-polish-Sign-up-page-renders-Google-OAuth-button-mobile-dark/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4e1ce1ef0109f0bc710d-2aaa76e7f46fdf2b2dc7",
+              "file": "mobile-polish.spec.ts",
+              "line": 36,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "CSS utilities exist",
+          "file": "mobile-polish.spec.ts",
+          "line": 43,
+          "column": 6,
+          "specs": [
+            {
+              "title": "transcript-grid class applies grid background",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-light",
+                  "projectName": "mobile-light",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1022,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-23T03:12:44.077Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/alfonso/Documents/GitHub/audio-layer/test-results/mobile-polish-CSS-utilitie-9bd1e-ass-applies-grid-background-mobile-light/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4e1ce1ef0109f0bc710d-9db1a513941c26773a26",
+              "file": "mobile-polish.spec.ts",
+              "line": 44,
+              "column": 7
+            },
+            {
+              "title": "h-screen-safe and min-h-screen-safe classes exist",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-light",
+                  "projectName": "mobile-light",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 829,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-23T03:12:45.104Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/alfonso/Documents/GitHub/audio-layer/test-results/mobile-polish-CSS-utilitie-7337a-h-screen-safe-classes-exist-mobile-light/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4e1ce1ef0109f0bc710d-228a8ff7e59772cd21ce",
+              "file": "mobile-polish.spec.ts",
+              "line": 61,
+              "column": 7
+            },
+            {
+              "title": "transcript-grid class applies grid background",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-dark",
+                  "projectName": "mobile-dark",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 520,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-23T03:12:48.930Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/alfonso/Documents/GitHub/audio-layer/test-results/mobile-polish-CSS-utilitie-9bd1e-ass-applies-grid-background-mobile-dark/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4e1ce1ef0109f0bc710d-8071487881f9ea338109",
+              "file": "mobile-polish.spec.ts",
+              "line": 44,
+              "column": 7
+            },
+            {
+              "title": "h-screen-safe and min-h-screen-safe classes exist",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-dark",
+                  "projectName": "mobile-dark",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 516,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-23T03:12:49.455Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/alfonso/Documents/GitHub/audio-layer/test-results/mobile-polish-CSS-utilitie-7337a-h-screen-safe-classes-exist-mobile-dark/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4e1ce1ef0109f0bc710d-43434274500162f36ab6",
+              "file": "mobile-polish.spec.ts",
+              "line": 61,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Home page",
+          "file": "mobile-polish.spec.ts",
+          "line": 84,
+          "column": 6,
+          "specs": [
+            {
+              "title": "renders without errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-light",
+                  "projectName": "mobile-light",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 599,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-23T03:12:45.938Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/alfonso/Documents/GitHub/audio-layer/test-results/mobile-polish-Home-page-renders-without-errors-mobile-light/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4e1ce1ef0109f0bc710d-c535fc2bad896c9c3805",
+              "file": "mobile-polish.spec.ts",
+              "line": 85,
+              "column": 7
+            },
+            {
+              "title": "renders without errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-dark",
+                  "projectName": "mobile-dark",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 516,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-04-23T03:12:49.976Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/alfonso/Documents/GitHub/audio-layer/test-results/mobile-polish-Home-page-renders-without-errors-mobile-dark/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4e1ce1ef0109f0bc710d-b2b9d5fcad6805f08bb4",
+              "file": "mobile-polish.spec.ts",
+              "line": 85,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-04-23T03:12:38.359Z",
+    "duration": 12162.653,
+    "expected": 14,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
