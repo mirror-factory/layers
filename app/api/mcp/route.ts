@@ -2,8 +2,6 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 import { NextRequest, NextResponse } from "next/server";
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { z } from "zod";
 import { jwtVerify } from "jose";
 import { validateApiKey } from "@/lib/mcp/auth";
@@ -15,7 +13,7 @@ const JWT_SECRET = new TextEncoder().encode(
 );
 
 // ---------------------------------------------------------------------------
-// Auth helper — supports both OAuth JWT and legacy API keys
+// Auth — supports both OAuth JWT and legacy API keys
 // ---------------------------------------------------------------------------
 
 function extractBearerToken(req: NextRequest): string | null {
@@ -25,231 +23,192 @@ function extractBearerToken(req: NextRequest): string | null {
 }
 
 async function authenticateToken(token: string): Promise<{ userId: string } | null> {
-  // Try JWT first (OAuth flow)
   try {
     const { payload } = await jwtVerify(token, JWT_SECRET, { issuer: "layer-one-audio" });
-    if (payload.sub) {
-      return { userId: payload.sub };
-    }
+    if (payload.sub) return { userId: payload.sub };
   } catch {
-    // Not a valid JWT — try API key
+    // Not a JWT — try API key
   }
-
-  // Fallback: legacy API key
   return validateApiKey(token);
 }
 
 // ---------------------------------------------------------------------------
-// Create MCP server with tools
+// JSON-RPC types
 // ---------------------------------------------------------------------------
 
-function createMcpServer(userId: string) {
-  const server = new McpServer({
-    name: "layer-one-audio",
-    version: "1.0.0",
-  });
+interface JsonRpcRequest {
+  jsonrpc: "2.0";
+  id: string | number | null;
+  method: string;
+  params?: Record<string, unknown>;
+}
 
-  server.tool(
-    "search_meetings",
-    "Search through meeting transcripts, summaries, and data using natural language. Returns ranked results by semantic similarity.",
-    {
-      query: z.string().describe("Natural language search query"),
-      limit: z.number().int().min(1).max(50).optional().describe("Max results (default 10)"),
-    },
-    async ({ query, limit }) => {
-      const results = await searchMeetings(query, userId, limit ?? 10);
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(results, null, 2) }],
-      };
-    },
-  );
+function rpcResult(id: string | number | null, result: unknown) {
+  return { jsonrpc: "2.0" as const, id, result };
+}
 
-  server.tool(
-    "get_meeting",
-    "Get full details of a specific meeting including transcript, summary, and cost breakdown.",
-    {
-      meeting_id: z.string().describe("The meeting ID"),
-    },
-    async ({ meeting_id }) => {
-      const store = await getMeetingsStore();
-      const meeting = await store.get(meeting_id);
-      return {
-        content: [{ type: "text" as const, text: meeting ? JSON.stringify(meeting, null, 2) : "Meeting not found" }],
-      };
-    },
-  );
-
-  server.tool(
-    "list_meetings",
-    "List recent meetings with their status, title, and duration.",
-    {
-      limit: z.number().int().min(1).max(100).optional().describe("Max meetings (default 20)"),
-    },
-    async ({ limit }) => {
-      const store = await getMeetingsStore();
-      const meetings = await store.list(limit ?? 20);
-      return {
-        content: [{ type: "text" as const, text: JSON.stringify(meetings, null, 2) }],
-      };
-    },
-  );
-
-  server.tool(
-    "get_transcript",
-    "Get the full transcript text of a meeting.",
-    {
-      meeting_id: z.string().describe("The meeting ID"),
-    },
-    async ({ meeting_id }) => {
-      const store = await getMeetingsStore();
-      const meeting = await store.get(meeting_id);
-      return {
-        content: [{ type: "text" as const, text: meeting?.text ?? "No transcript available" }],
-      };
-    },
-  );
-
-  server.tool(
-    "get_summary",
-    "Get the AI-generated summary of a meeting including key points, action items, and decisions.",
-    {
-      meeting_id: z.string().describe("The meeting ID"),
-    },
-    async ({ meeting_id }) => {
-      const store = await getMeetingsStore();
-      const meeting = await store.get(meeting_id);
-      return {
-        content: [{ type: "text" as const, text: meeting?.summary ? JSON.stringify(meeting.summary, null, 2) : "No summary available" }],
-      };
-    },
-  );
-
-  server.tool(
-    "start_recording",
-    "Start a new audio recording session. Note: recording must be initiated from the app UI.",
-    {},
-    async () => {
-      return {
-        content: [{ type: "text" as const, text: "Recording must be started from the app UI. Navigate to /record/live in the Layer One Audio app." }],
-      };
-    },
-  );
-
-  // ---------------------------------------------------------------------------
-  // MCP Resources — browsable meeting data
-  // ---------------------------------------------------------------------------
-
-  server.resource(
-    "meetings-list",
-    "meetings://list",
-    { description: "List of all your meetings", mimeType: "application/json" },
-    async () => {
-      const store = await getMeetingsStore();
-      const meetings = await store.list(50);
-      const formatted = meetings.map((m) => ({
-        id: m.id,
-        title: m.title ?? "Untitled",
-        date: m.createdAt,
-        duration: m.durationSeconds ? `${Math.round(m.durationSeconds / 60)} min` : null,
-        status: m.status,
-      }));
-      return {
-        contents: [{
-          uri: "meetings://list",
-          mimeType: "application/json",
-          text: JSON.stringify(formatted, null, 2),
-        }],
-      };
-    },
-  );
-
-  server.resource(
-    "meeting-detail",
-    "meetings://detail/{meetingId}",
-    { description: "Full details of a specific meeting", mimeType: "application/json" },
-    async (uri) => {
-      const meetingId = uri.pathname.split("/").pop() ?? "";
-      const store = await getMeetingsStore();
-      const meeting = await store.get(meetingId);
-      return {
-        contents: [{
-          uri: uri.href,
-          mimeType: "application/json",
-          text: meeting ? JSON.stringify({
-            id: meeting.id,
-            title: meeting.title,
-            date: meeting.createdAt,
-            duration: meeting.durationSeconds,
-            status: meeting.status,
-            summary: meeting.summary,
-            utteranceCount: meeting.utterances.length,
-            transcript: meeting.text?.substring(0, 5000),
-          }, null, 2) : "Meeting not found",
-        }],
-      };
-    },
-  );
-
-  return server;
+function rpcError(id: string | number | null, code: number, message: string) {
+  return { jsonrpc: "2.0" as const, id, error: { code, message } };
 }
 
 // ---------------------------------------------------------------------------
-// Stateless handler — one transport per request
+// Tool definitions
 // ---------------------------------------------------------------------------
 
-async function handleMcpRequest(req: NextRequest): Promise<Response> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "https://audio-layer.vercel.app");
+const TOOLS = [
+  {
+    name: "search_meetings",
+    description: "Search meeting transcripts, summaries using natural language. Returns ranked results.",
+    inputSchema: { type: "object", properties: { query: { type: "string", description: "Search query" }, limit: { type: "number", description: "Max results (default 10)" } }, required: ["query"] },
+  },
+  {
+    name: "get_meeting",
+    description: "Get full details of a meeting including transcript, summary, and cost.",
+    inputSchema: { type: "object", properties: { meeting_id: { type: "string" } }, required: ["meeting_id"] },
+  },
+  {
+    name: "list_meetings",
+    description: "List recent meetings with status, title, and duration.",
+    inputSchema: { type: "object", properties: { limit: { type: "number", description: "Max meetings (default 20)" } } },
+  },
+  {
+    name: "get_transcript",
+    description: "Get the full transcript text of a meeting.",
+    inputSchema: { type: "object", properties: { meeting_id: { type: "string" } }, required: ["meeting_id"] },
+  },
+  {
+    name: "get_summary",
+    description: "Get the AI-generated summary including key points, action items, decisions.",
+    inputSchema: { type: "object", properties: { meeting_id: { type: "string" } }, required: ["meeting_id"] },
+  },
+];
 
-  // Authenticate
-  const token = extractBearerToken(req);
-  if (!token) {
-    return new NextResponse(
-      JSON.stringify({ error: "Authorization required" }),
-      {
-        status: 401,
-        headers: {
-          "Content-Type": "application/json",
-          "WWW-Authenticate": `Bearer resource_metadata="${baseUrl}/.well-known/oauth-protected-resource"`,
-        },
-      },
-    );
+async function executeTool(name: string, args: Record<string, unknown>, userId: string) {
+  const store = await getMeetingsStore();
+
+  switch (name) {
+    case "search_meetings": {
+      const query = z.string().parse(args.query);
+      const limit = z.number().optional().parse(args.limit) ?? 10;
+      const results = await searchMeetings(query, userId, limit);
+      return JSON.stringify(results, null, 2);
+    }
+    case "get_meeting": {
+      const meeting = await store.get(z.string().parse(args.meeting_id));
+      return meeting ? JSON.stringify(meeting, null, 2) : "Meeting not found";
+    }
+    case "list_meetings": {
+      const limit = z.number().optional().parse(args.limit) ?? 20;
+      const meetings = await store.list(limit);
+      return JSON.stringify(meetings, null, 2);
+    }
+    case "get_transcript": {
+      const meeting = await store.get(z.string().parse(args.meeting_id));
+      return meeting?.text ?? "No transcript available";
+    }
+    case "get_summary": {
+      const meeting = await store.get(z.string().parse(args.meeting_id));
+      return meeting?.summary ? JSON.stringify(meeting.summary, null, 2) : "No summary available";
+    }
+    default:
+      throw new Error(`Unknown tool: ${name}`);
   }
-
-  const auth = await authenticateToken(token);
-  if (!auth) {
-    return new NextResponse(
-      JSON.stringify({ error: "Invalid or expired token" }),
-      {
-        status: 401,
-        headers: {
-          "Content-Type": "application/json",
-          "WWW-Authenticate": `Bearer resource_metadata="${baseUrl}/.well-known/oauth-protected-resource"`,
-        },
-      },
-    );
-  }
-
-  const server = createMcpServer(auth.userId);
-  const transport = new WebStandardStreamableHTTPServerTransport({
-    sessionIdGenerator: undefined, // stateless
-  });
-
-  await server.connect(transport);
-
-  const response = await transport.handleRequest(req);
-
-  return response;
 }
 
-// Streamable HTTP needs both GET (SSE) and POST (messages)
+// ---------------------------------------------------------------------------
+// Route handler
+// ---------------------------------------------------------------------------
+
+function getBaseUrl() {
+  if (process.env.NEXT_PUBLIC_APP_URL) return process.env.NEXT_PUBLIC_APP_URL;
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  return "https://audio-layer.vercel.app";
+}
+
+function unauthorizedResponse(baseUrl: string) {
+  return new NextResponse(
+    JSON.stringify({ jsonrpc: "2.0", error: { code: -32000, message: "Authorization required" } }),
+    {
+      status: 401,
+      headers: {
+        "Content-Type": "application/json",
+        "WWW-Authenticate": `Bearer resource_metadata="${baseUrl}/.well-known/oauth-protected-resource"`,
+      },
+    },
+  );
+}
+
 export async function GET(req: NextRequest) {
-  return handleMcpRequest(req);
+  const baseUrl = getBaseUrl();
+  const token = extractBearerToken(req);
+  if (!token) return unauthorizedResponse(baseUrl);
+  const auth = await authenticateToken(token);
+  if (!auth) return unauthorizedResponse(baseUrl);
+
+  // GET with Accept: text/event-stream = SSE endpoint (not needed for stateless)
+  return NextResponse.json(rpcError(null, -32600, "GET not supported in stateless mode"), { status: 405 });
 }
 
 export async function POST(req: NextRequest) {
-  return handleMcpRequest(req);
+  const baseUrl = getBaseUrl();
+
+  // Auth
+  const token = extractBearerToken(req);
+  if (!token) return unauthorizedResponse(baseUrl);
+  const auth = await authenticateToken(token);
+  if (!auth) return unauthorizedResponse(baseUrl);
+
+  // Parse JSON-RPC
+  let rpc: JsonRpcRequest;
+  try {
+    rpc = await req.json();
+  } catch {
+    return NextResponse.json(rpcError(null, -32700, "Parse error"), { status: 400 });
+  }
+
+  if (rpc.jsonrpc !== "2.0") {
+    return NextResponse.json(rpcError(rpc.id, -32600, "Invalid JSON-RPC version"), { status: 400 });
+  }
+
+  switch (rpc.method) {
+    case "initialize":
+      return NextResponse.json(rpcResult(rpc.id, {
+        protocolVersion: "2024-11-05",
+        capabilities: { tools: { listChanged: false } },
+        serverInfo: { name: "layer-one-audio", version: "1.0.0" },
+      }));
+
+    case "notifications/initialized":
+      return NextResponse.json(rpcResult(rpc.id, {}));
+
+    case "tools/list":
+      return NextResponse.json(rpcResult(rpc.id, { tools: TOOLS }));
+
+    case "tools/call": {
+      const params = rpc.params ?? {};
+      const toolName = params.name as string;
+      const toolArgs = (params.arguments ?? {}) as Record<string, unknown>;
+
+      if (!TOOLS.find((t) => t.name === toolName)) {
+        return NextResponse.json(rpcError(rpc.id, -32602, `Unknown tool: ${toolName}`));
+      }
+
+      try {
+        const text = await executeTool(toolName, toolArgs, auth.userId);
+        return NextResponse.json(rpcResult(rpc.id, {
+          content: [{ type: "text", text }],
+        }));
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : "Tool execution failed";
+        return NextResponse.json(rpcError(rpc.id, -32603, msg));
+      }
+    }
+
+    default:
+      return NextResponse.json(rpcError(rpc.id, -32601, `Method not found: ${rpc.method}`));
+  }
 }
 
-export async function DELETE(req: NextRequest) {
-  return handleMcpRequest(req);
+export async function DELETE() {
+  return NextResponse.json(rpcResult(null, {}));
 }
