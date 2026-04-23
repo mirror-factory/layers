@@ -139,17 +139,21 @@ function unauthorizedResponse(baseUrl: string) {
 }
 
 export async function GET(req: NextRequest) {
-  const baseUrl = getBaseUrl();
-  const token = extractBearerToken(req);
-  if (!token) return unauthorizedResponse(baseUrl);
-  const auth = await authenticateToken(token);
-  if (!auth) return unauthorizedResponse(baseUrl);
-
-  // GET with Accept: text/event-stream = SSE endpoint (not needed for stateless)
-  return NextResponse.json(rpcError(null, -32600, "GET not supported in stateless mode"), { status: 405 });
+  try {
+    const baseUrl = getBaseUrl();
+    const token = extractBearerToken(req);
+    if (!token) return unauthorizedResponse(baseUrl);
+    const auth = await authenticateToken(token);
+    if (!auth) return unauthorizedResponse(baseUrl);
+    return NextResponse.json(rpcError(null, -32600, "GET not supported in stateless mode"), { status: 405 });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    return NextResponse.json({ error: msg }, { status: 500 });
+  }
 }
 
 export async function POST(req: NextRequest) {
+  try {
   const baseUrl = getBaseUrl();
 
   // Auth
@@ -206,6 +210,10 @@ export async function POST(req: NextRequest) {
 
     default:
       return NextResponse.json(rpcError(rpc.id, -32601, `Method not found: ${rpc.method}`));
+  }
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    return NextResponse.json({ error: msg, stack: err instanceof Error ? err.stack : undefined }, { status: 500 });
   }
 }
 
