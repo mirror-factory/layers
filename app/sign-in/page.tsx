@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Loader2, Mail, Lock } from "lucide-react";
 import Link from "next/link";
@@ -18,6 +18,14 @@ function GoogleIcon({ className }: { className?: string }) {
 }
 
 export default function SignInPage() {
+  return (
+    <Suspense>
+      <SignInForm />
+    </Suspense>
+  );
+}
+
+function SignInForm() {
   const searchParams = useSearchParams();
   const isOAuthFlow = searchParams.get("oauth") === "1";
   const [email, setEmail] = useState("");
