@@ -1,24 +1,13 @@
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-import { NextResponse } from "next/server";
+import { protectedResourceHandler } from "mcp-handler";
 
-/**
- * Protected Resource Metadata (RFC 9728)
- * Tells MCP clients where to get tokens for this server.
- */
-export function GET() {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL?.trim() ?? "https://audio-layer.vercel.app";
+const BASE_URL = "https://audio-layer.vercel.app";
 
-  return NextResponse.json({
-    resource: `${baseUrl}/api/mcp`,
-    authorization_servers: [`${baseUrl}`],
-    bearer_methods_supported: ["header"],
-    scopes_supported: ["mcp:tools"],
-  }, {
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Cache-Control": "public, max-age=3600",
-    },
-  });
-}
+const handler = protectedResourceHandler({
+  authServerUrls: [BASE_URL],
+  resourceUrl: `${BASE_URL}/api/mcp/mcp`,
+});
+
+export { handler as GET };
