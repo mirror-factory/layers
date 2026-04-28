@@ -261,8 +261,10 @@ fi
 if [ -f "playwright.config.ts" ] || [ -f "playwright.config.js" ]; then
   echo ""
   echo "[pre-push] Running Playwright E2E tests..."
+  set +e
   npx playwright test --reporter=list 2>&1
   PW_EXIT=$?
+  set -e
   if [ $PW_EXIT -ne 0 ]; then
     echo "  [warn] Playwright tests failed (review before deploying)"
   else
@@ -332,8 +334,10 @@ fi
 if [ -f "expect.config.ts" ] || [ -f "expect.config.js" ] || grep -q '"@anthropic-ai/expect"' package.json 2>/dev/null; then
   echo ""
   echo "[pre-push] Running Expect AI browser tests..."
+  set +e
   npx expect test 2>&1
   EXPECT_EXIT=$?
+  set -e
   if [ $EXPECT_EXIT -ne 0 ]; then
     echo "  [warn] Expect tests failed (review before deploying)"
   else
@@ -347,8 +351,10 @@ fi
 if [ -d ".storybook" ]; then
   echo ""
   echo "[pre-push] Running Storybook tests..."
+  set +e
   npx test-storybook 2>/dev/null
   SB_EXIT=$?
+  set -e
   if [ $SB_EXIT -ne 0 ]; then
     echo "  [warn] Storybook tests had issues"
   else
@@ -360,8 +366,10 @@ fi
 if grep -q "vitest-axe\|@axe-core" package.json 2>/dev/null; then
   echo ""
   echo "[pre-push] Running accessibility tests..."
+  set +e
   npx vitest run --grep "accessibility\|a11y\|axe" 2>&1
   A11Y_EXIT=$?
+  set -e
   if [ $A11Y_EXIT -ne 0 ]; then
     echo "  [warn] Accessibility tests failed"
   else
