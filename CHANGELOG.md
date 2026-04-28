@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.7] — 2026-04-28
+
+### Fixed
+- fix: remove stale assemblyai model alias (`467daed`)
+
+
 ## [0.1.6] — 2026-04-28
 
 ### Fixed
