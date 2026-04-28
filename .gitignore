@@ -48,6 +48,8 @@ tests/e2e/visual-regression.spec.ts-snapshots/
 storybook-static/
 .schema-snapshots/
 coverage/
+!app/api/dev-kit/coverage/
+!app/api/dev-kit/coverage/route.ts
 .ai-logs/
 .evidence/
 .artifacts/
