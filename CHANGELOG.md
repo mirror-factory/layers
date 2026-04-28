@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.9] — 2026-04-28
+
+### Other
+- chore: retrigger ci with deployment secrets (`d74fb1e`)
+
+
 ## [0.1.8] — 2026-04-28
 
 ### Fixed
