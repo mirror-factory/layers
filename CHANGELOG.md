@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.8] — 2026-04-28
+
+### Fixed
+- fix: narrow append deprecation check (`a8b9c64`)
+
+
 ## [0.1.7] — 2026-04-28
 
 ### Fixed
