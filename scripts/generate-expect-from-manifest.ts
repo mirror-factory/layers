@@ -7,8 +7,8 @@
  * Invocation:
  *   npx tsx scripts/generate-expect-from-manifest.ts <feature>
  *
- * The Expect generator turns structured steps into natural-language
- * assertions against @anthropic-ai/expect. Where the action has a description,
+ * The Expect generator turns structured steps into route-owned natural-language
+ * plans for expect-cli. Where the action has a description,
  * that description is used verbatim as the toMatch() sentence. Where it
  * does not, the generator falls back to a synthesized sentence from the
  * action + locator.
@@ -51,93 +51,26 @@ function sentenceFor(step: Step): string {
   }
 }
 
-function renderStep(step: Step): string[] {
-  const lines: string[] = [];
-  switch (step.action) {
-    case 'navigate':
-      lines.push(`      await page.goto(${quoteString(step.to)});`);
-      lines.push(`      await expect(page).toMatch(${quoteString(sentenceFor(step))});`);
-      break;
-    case 'click':
-      lines.push(`      await page.click(${quoteString(step.locator)});`);
-      break;
-    case 'type':
-      lines.push(`      await page.fill(${quoteString(step.locator)}, ${quoteString(step.text)});`);
-      break;
-    case 'expect_visible':
-    case 'expect_text':
-    case 'expect_text_contains':
-      lines.push(`      await expect(page).toMatch(${quoteString(sentenceFor(step))});`);
-      break;
-    case 'expect_text_grows': {
-      const within = typeof step.within_seconds === 'number' ? step.within_seconds : 10;
-      const minChars = typeof step.min_growth_chars === 'number' ? step.min_growth_chars : 20;
-      const sample = typeof step.sample_ms === 'number' ? step.sample_ms : 500;
-      lines.push(`      // Poll the locator's text length; assert it grows by at least ${minChars} chars`);
-      lines.push(`      // within ${within}s, sampling every ${sample}ms.`);
-      lines.push(`      {`);
-      lines.push(`        const deadline = Date.now() + ${within * 1000};`);
-      lines.push(`        const start = (await page.locator(${quoteString(step.locator)}).textContent()) ?? '';`);
-      lines.push(`        let grew = false;`);
-      lines.push(`        while (Date.now() < deadline) {`);
-      lines.push(`          const now = (await page.locator(${quoteString(step.locator)}).textContent()) ?? '';`);
-      lines.push(`          if (now.length - start.length >= ${minChars}) { grew = true; break; }`);
-      lines.push(`          await new Promise((r) => setTimeout(r, ${sample}));`);
-      lines.push(`        }`);
-      lines.push(`        if (!grew) throw new Error(${quoteString(`expect_text_grows: ${step.locator} did not grow by ${minChars} chars in ${within}s`)});`);
-      lines.push(`      }`);
-      lines.push(`      await expect(page).toMatch(${quoteString(sentenceFor(step))});`);
-      break;
-    }
-    case 'expect_count_at_least':
-      lines.push(`      await expect(page).toMatch(${quoteString(sentenceFor(step))});`);
-      break;
-    case 'feed_audio_fixture':
-      lines.push(`      // TODO(manifest): wire up audio fixture injection for ${step.fixture}.`);
-      lines.push(`      // Expect cannot drive the MediaStream directly -- mount your project's`);
-      lines.push(`      // test-mode mic shim here, or escape_hatch with language: expect.`);
-      lines.push(`      await expect(page).toMatch(${quoteString(sentenceFor(step))});`);
-      break;
-    case 'escape_hatch':
-      if (step.language === 'expect') {
-        lines.push(`      // escape_hatch: ${step.reason.replace(/\n/g, ' ')}`);
-        for (const codeLine of step.code.split('\n')) {
-          lines.push(`      ${codeLine}`);
-        }
-      } else {
-        lines.push(`      // escape_hatch (language: ${step.language}) skipped in expect generator.`);
-        lines.push(`      // reason: ${step.reason.replace(/\n/g, ' ')}`);
-      }
-      break;
-  }
-  return lines;
-}
-
-function renderFlow(flowName: string, description: string | undefined, steps: Step[]): string[] {
-  const lines: string[] = [];
-  lines.push(`  test(${quoteString(flowName)}, async ({ page }) => {`);
-  if (description) lines.push(`    // ${description.replace(/\n/g, ' ')}`);
-  for (const step of steps) {
-    lines.push(...renderStep(step));
-  }
-  lines.push('  });');
-  return lines;
-}
-
 function render(feature: string, manifest: Manifest): string {
   const lines: string[] = [];
   lines.push(`// AUTO-GENERATED from features/${feature}/TEST-MANIFEST.yaml -- edit the manifest, not this file.`);
   lines.push(`// Regenerate: npx tsx scripts/generate-expect-from-manifest.ts ${feature}`);
   lines.push(`// Or via CLI:  ai-dev-kit manifest generate ${feature}`);
   lines.push('');
-  lines.push(`import { test, expect } from '@anthropic-ai/expect';`);
-  lines.push('');
-  lines.push(`test.describe(${quoteString('expect: ' + feature)}, () => {`);
+  lines.push(`export const EXPECT_FEATURE = ${quoteString(feature)};`);
+  lines.push(`export const EXPECT_PLAN = [`);
   for (const flow of manifest.user_flows) {
-    lines.push(...renderFlow(flow.name, flow.description, flow.steps));
-    lines.push('');
+    lines.push(`  {`);
+    lines.push(`    name: ${quoteString(flow.name)},`);
+    if (flow.description) lines.push(`    description: ${quoteString(flow.description)},`);
+    lines.push(`    steps: [`);
+    for (const step of flow.steps) {
+      lines.push(`      ${quoteString(sentenceFor(step))},`);
+    }
+    lines.push(`    ],`);
+    lines.push(`  },`);
   }
-  lines.push('});');
+  lines.push(`];`);
   lines.push('');
   return lines.join('\n');
 }

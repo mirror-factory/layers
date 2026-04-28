@@ -44,28 +44,27 @@ function skeleton(route: string, slug: string): string {
   return `/**
  * Auto-scaffolded by scaffold-expect-tests.ts for ${route}.
  *
- * Expect drives a real browser and makes natural-language assertions. Fill
- * in the golden-path user flow for this route; extend with edge cases.
+ * Expect CLI drives a real browser from a natural-language plan. This file is
+ * a route-owned test plan so coverage cannot drift as pages are added.
  *
- * Start .skip so pre-push passes until you author real assertions. Un-skip
- * when ready.
+ * Run:
+ *   pnpm exec expect tui -u http://localhost:3001${route.includes('[') ? route.replace(/\[[^\]]+\]/g, 'sample') : route} \\
+ *     --browser-mode headless \\
+ *     -m "Use tests/expect/${slug}.expect.ts as the route plan. Verify the page loads, the primary action is discoverable, empty/loading/error states are readable, and mobile layout has no horizontal overflow." \\
+ *     -y
  *
- * Run: pnpm exec expect tests/expect/${slug}.expect.ts
+ * Keep this file focused on user-visible behavior. Add route-specific checks
+ * under EXPECT_PLAN as the page grows.
  */
-import { test, expect } from '@anthropic-ai/expect';
 
-test.describe.skip('expect: ${route}', () => {
-  test('user can load the page', async ({ page }) => {
-    await page.goto('${route.includes('[') ? route.replace(/\\[[^\\]]+\\]/g, 'sample') : route}');
-    await expect(page).toMatch('the page is visibly rendered with no console errors');
-  });
+export const EXPECT_ROUTE = ${JSON.stringify(route)};
 
-  // TODO: Add the specific user flows this route supports.
-  // Examples:
-  //   test('user can ...', async ({ page }) => { ... })
-  //   test('error state is readable', async ({ page }) => { ... })
-  //   test('mobile viewport works', async ({ page }) => { ... })
-});
+export const EXPECT_PLAN = [
+  'Load the route and confirm the page is visibly rendered with no console errors.',
+  'Confirm the primary user action is discoverable and has a clear label.',
+  'Confirm empty, loading, and blocked states use readable copy.',
+  'Set a mobile viewport and confirm the page has no horizontal overflow.',
+];
 `;
 }
 

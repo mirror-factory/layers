@@ -1,7 +1,7 @@
 #!/usr/bin/env tsx
 /**
- * check-expect-coverage -- pre-push gate that requires AI browser tests
- * (@anthropic-ai/expect) for every page in pages.yaml.
+ * check-expect-coverage -- pre-push gate that requires Expect AI browser test
+ * plans for every page in pages.yaml.
  *
  * Motivation: visual regression catches "did it render" but not "does it
  * behave like a user expects". Expect AI drives a real browser and
@@ -10,7 +10,7 @@
  *
  * Policy:
  *   * If pages.yaml is empty or missing: no-op (API-only project).
- *   * If pages.yaml has routes AND @anthropic-ai/expect is NOT a dep:
+ *   * If pages.yaml has routes AND Expect is NOT a dep:
  *     warn-only on first push, FAIL on second push (tracked via
  *     .ai-dev-kit/state/expect-grace.json timestamp). Grace window is
  *     7 days so projects can adopt gradually.
@@ -19,13 +19,11 @@
  *   * Bypass: EXPECT_SKIP=1 (logged by audit-rebuild as silent regression).
  */
 
-import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { existsSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 const CWD = process.cwd();
 const PAGES = join(CWD, '.ai-dev-kit', 'registries', 'pages.yaml');
-const GRACE = join(CWD, '.ai-dev-kit', 'state', 'expect-grace.json');
-const GRACE_DAYS = 7;
 
 if (process.env.EXPECT_SKIP === '1') {
   console.log('[check-expect-coverage] EXPECT_SKIP=1 set; skipping (silent regression).');
@@ -56,18 +54,8 @@ function hasExpectDep(): boolean {
   try {
     const pkg = JSON.parse(readFileSync(join(CWD, 'package.json'), 'utf-8'));
     const all = { ...(pkg.dependencies ?? {}), ...(pkg.devDependencies ?? {}) };
-    return '@anthropic-ai/expect' in all;
+    return 'expect-cli' in all || '@anthropic-ai/expect' in all;
   } catch { return false; }
-}
-
-function readGrace(): { first_seen?: string } {
-  if (!existsSync(GRACE)) return {};
-  try { return JSON.parse(readFileSync(GRACE, 'utf-8')); } catch { return {}; }
-}
-
-function writeGrace(state: Record<string, unknown>): void {
-  mkdirSync(dirname(GRACE), { recursive: true });
-  writeFileSync(GRACE, JSON.stringify(state, null, 2));
 }
 
 const routes = loadRoutes();
@@ -79,9 +67,9 @@ if (routes.length === 0) {
 if (!hasExpectDep()) {
   // 0.2.8: grace window removed. If pages.yaml has user-facing routes,
   // the project needs AI browser tests. Period. Bypass via EXPECT_SKIP=1.
-  console.error('[check-expect-coverage] BLOCKED: @anthropic-ai/expect not installed.');
+  console.error('[check-expect-coverage] BLOCKED: expect-cli not installed.');
   console.error('  ' + routes.length + ' route(s) in pages.yaml need AI browser tests.');
-  console.error('  Install: pnpm add -D @anthropic-ai/expect');
+  console.error('  Install: pnpm add -D expect-cli');
   console.error('  Then scaffold: pnpm exec tsx scripts/scaffold-expect-tests.ts');
   console.error('  Bypass (logged as silent regression): EXPECT_SKIP=1');
   process.exit(1);

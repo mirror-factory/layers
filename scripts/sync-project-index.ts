@@ -43,7 +43,6 @@ function inferStatus(feature: string): Status {
   const dir = join(CWD, 'features', feature);
   const hasSpec = existsSync(join(dir, 'SPEC.md'));
   const hasDesignReady = existsSync(join(dir, 'DESIGN-READY.md'));
-  const hasManifest = existsSync(join(dir, 'TEST-MANIFEST.yaml'));
   const hasWireframes = existsSync(join(dir, 'wireframes')) && readdirSync(join(dir, 'wireframes')).length > 0;
   if (!hasSpec) return 'drafting';
   if (!hasDesignReady) return hasWireframes ? 'designing' : 'drafting';
@@ -101,7 +100,7 @@ function readStack(): string[] {
     if (deps['@supabase/supabase-js']) stack.push('supabase');
     if (deps.langfuse) stack.push('langfuse');
     if (deps['@playwright/test']) stack.push('playwright');
-    if (deps['@anthropic-ai/expect']) stack.push('expect');
+    if (deps['expect-cli'] || deps['@anthropic-ai/expect']) stack.push('expect');
     return stack;
   } catch { return []; }
 }
