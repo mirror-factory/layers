@@ -252,4 +252,7 @@ jobs:
           echo "- **Actor:** ${{ github.actor }}" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Pre-deploy validation
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: npx ai-dev-kit deploy validate
