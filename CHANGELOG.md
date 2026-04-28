@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.6] — 2026-04-28
+
+### Fixed
+- fix: track dev-kit coverage route (`fb65911`)
+
+
 ## [0.1.5] — 2026-04-28
 
 ### Fixed
