@@ -6,7 +6,12 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
 const source = path.join(root, "docs/design/app-store-screenshots.html");
-const outputDir = path.join(root, "output/app-store");
+const stamp =
+  process.env.APP_STORE_SCREENSHOT_RUN_ID ??
+  new Date().toISOString().slice(0, 10);
+const outputDir =
+  process.env.APP_STORE_OUTPUT_DIR ??
+  path.join(root, "docs", "app-store", "marketing-screenshots", stamp);
 
 const shots = [
   "01-fast-record",
@@ -36,3 +41,19 @@ for (const id of shots) {
 }
 
 await browser.close();
+
+await fs.writeFile(
+  path.join(outputDir, "metadata.json"),
+  JSON.stringify(
+    {
+      generatedAt: new Date().toISOString(),
+      source: path.relative(root, source),
+      shots,
+    },
+    null,
+    2,
+  ),
+  "utf8",
+);
+
+console.log(`Wrote ${shots.length} App Store screenshots to ${path.relative(root, outputDir)}`);

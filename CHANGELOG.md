@@ -85,6 +85,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Runnable API smoke harness** — replaced the missing `start-server-and-test` dependency with `scripts/run-api-smoke.mjs`, added route behavior tests, and documented MCP/API testing in `docs/MCP_AND_API.md`.
 - **Meeting detail chat** — completed meeting pages now include a meeting-scoped AI chat panel with Sales, Interview, and Standup templates grounded through `getMeetingDetails`.
 - **App Store screenshot set** — added five editable marketing screenshots covering fast capture, private recording, intake notes, library chat, and provider-cost controls.
+- **Release feature matrix** — added `docs/FEATURE_TEST_MARKETING_MATRIX.md` as the combined QA, feature inventory, screenshot asset, and marketing-pillar source of truth.
+- **Current release screenshots** — added iPhone, iPad, and App Store benefit screenshot sets for the 2026-04-29 release pass.
 - **Calendar OAuth setup** — added Google/Outlook connect, callback, disconnect, encrypted token storage, token refresh, and upcoming-event fetching for the home calendar panel.
 - **Calendar-aware recording context** — live recordings now inherit the next calendar event title through token creation, autosave, finalize, and local drafts.
 - **Calendar-aware recording reminders** — Settings can schedule recording reminders from fixed presets or from the next connected calendar event.
@@ -97,6 +99,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Webhook delivery visibility** — added recent delivery listing for user webhooks plus a Supabase migration for webhook destinations and delivery logs.
 - **Local meeting chat fallback** — completed meeting chat can now answer from saved notes, actions, decisions, intake fields, and transcript segments when no AI model is configured.
 - **Recorder voice commands** — live recording now recognizes "Hey Layers" commands, removes the last transcript segment on scratch/remove requests, and passes action-style commands as private note-generation directives.
+- **MCP App visual polish** — updated the Claude MCP dashboard preview to use the current Layer One pastel/glass visual language.
 
 ### Fixed
 

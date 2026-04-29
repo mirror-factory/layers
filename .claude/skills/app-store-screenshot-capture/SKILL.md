@@ -31,10 +31,21 @@ marketing, iPhone, iPad, or presentable product screenshots.
    `docs/app-store/device-screenshots/<YYYY-MM-DD>/`.
 5. Keep secrets out of committed files and final messages.
 
+For the five App Store benefit/marketing screenshots, run:
+
+```bash
+node scripts/generate-app-store-screenshots.mjs
+```
+
+The default folder is
+`docs/app-store/marketing-screenshots/<YYYY-MM-DD>/`.
+
 ## Notes
 
 - The script captures the live app UI but mocks recent meetings, calendar
   events, and recording preflight responses so screenshots are stable.
+- The marketing script renders `docs/design/app-store-screenshots.html`, so
+  update that source when the product visual direction changes.
 - Capture both light and dark mode unless the user asks for one theme.
 - Prefer committed screenshot folders under `docs/app-store/`; keep temporary
   Playwright artifacts under `output/`.

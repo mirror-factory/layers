@@ -36,6 +36,7 @@ tunnel such as `ngrok http 3001` when testing from Claude's remote connector UI.
   - `get_transcript`
   - `get_summary`
   - `start_recording`
+  - `prepare_notes_push`
   - `show_meeting_dashboard`
 
 ## Required Production Environment
@@ -136,7 +137,7 @@ curl -sS http://localhost:3001/api/mcp/mcp \
   -d '{"jsonrpc":"2.0","id":2,"method":"tools/list","params":{}}'
 ```
 
-Expected: a `tools` response containing the seven tools listed above.
+Expected: a `tools` response containing the eight tools listed above.
 
 ## Local UI Preview
 

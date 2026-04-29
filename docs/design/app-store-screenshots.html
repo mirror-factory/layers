@@ -6,18 +6,19 @@
     <title>Layer One App Store Screenshots</title>
     <style>
       :root {
-        --ink: #10201f;
-        --muted: #5b706d;
-        --paper: #f7fbf8;
-        --panel: #ffffff;
-        --line: #d9e8e4;
-        --mint: #0f9f93;
-        --mint-strong: #047c70;
-        --lime: #d7f36a;
-        --plum: #4d355a;
-        --navy: #14313d;
-        --coral: #ff7f68;
-        --shadow: 0 38px 100px rgba(14, 40, 37, 0.22);
+        --ink: #071123;
+        --muted: #667185;
+        --soft: #f7fbfb;
+        --card: rgba(255, 255, 255, 0.84);
+        --border: rgba(9, 25, 55, 0.12);
+        --violet: #7267ff;
+        --violet-soft: #dcd8ff;
+        --mint: #48d8bb;
+        --mint-soft: #ddfbf5;
+        --aqua: #5fc7ef;
+        --danger: #e15757;
+        --shadow: 0 42px 120px rgba(36, 54, 94, 0.18);
+        --shadow-soft: 0 20px 70px rgba(36, 54, 94, 0.11);
       }
 
       * {
@@ -26,7 +27,7 @@
 
       body {
         margin: 0;
-        background: #ecf3f0;
+        background: #edf4f5;
         color: var(--ink);
         font-family:
           Inter,
@@ -50,76 +51,50 @@
         height: 2796px;
         overflow: hidden;
         background:
-          radial-gradient(
-            circle at 20% 6%,
-            rgba(215, 243, 106, 0.46),
-            transparent 28%
-          ),
-          radial-gradient(
-            circle at 90% 16%,
-            rgba(255, 127, 104, 0.2),
-            transparent 24%
-          ),
-          linear-gradient(180deg, #fbfffc 0%, #edf7f3 100%);
+          radial-gradient(circle at 12% 0%, rgba(184, 164, 255, 0.42), transparent 32%),
+          radial-gradient(circle at 96% 8%, rgba(105, 234, 205, 0.48), transparent 34%),
+          linear-gradient(180deg, #fbfbff 0%, #f4fbfa 100%);
       }
 
       .store-shot.dark {
+        color: #f7fbff;
         background:
-          radial-gradient(
-            circle at 10% 8%,
-            rgba(15, 159, 147, 0.45),
-            transparent 27%
-          ),
-          radial-gradient(
-            circle at 90% 22%,
-            rgba(215, 243, 106, 0.18),
-            transparent 26%
-          ),
-          linear-gradient(180deg, #092421 0%, #132a34 100%);
-        color: #f4fffc;
-      }
-
-      .store-shot.split {
-        background:
-          radial-gradient(
-            circle at 22% 4%,
-            rgba(255, 127, 104, 0.24),
-            transparent 24%
-          ),
-          linear-gradient(155deg, #f8fcf9 0 52%, #dff3ed 52% 100%);
+          radial-gradient(circle at 10% 0%, rgba(114, 103, 255, 0.42), transparent 34%),
+          radial-gradient(circle at 98% 12%, rgba(72, 216, 187, 0.34), transparent 36%),
+          linear-gradient(180deg, #151837 0%, #071421 100%);
       }
 
       .copy {
         position: absolute;
-        z-index: 2;
-        top: 112px;
-        left: 96px;
-        right: 96px;
+        z-index: 5;
+        top: 96px;
+        left: 86px;
+        right: 86px;
       }
 
-      .kicker {
-        margin: 0 0 28px;
-        color: var(--mint-strong);
+      .brand {
+        margin: 0 0 26px;
+        color: #118b7d;
         font-size: 42px;
-        font-weight: 760;
+        font-weight: 780;
         letter-spacing: 0;
       }
 
-      .dark .kicker {
-        color: var(--lime);
+      .dark .brand {
+        color: var(--mint);
       }
 
       h1 {
-        max-width: 1020px;
+        max-width: 1080px;
         margin: 0;
-        font-size: 112px;
+        font-size: 106px;
         line-height: 0.94;
-        letter-spacing: 0;
         font-weight: 820;
+        letter-spacing: 0;
       }
 
       .sub {
-        max-width: 890px;
+        max-width: 900px;
         margin: 34px 0 0;
         color: var(--muted);
         font-size: 38px;
@@ -128,472 +103,521 @@
       }
 
       .dark .sub {
-        color: rgba(244, 255, 252, 0.72);
+        color: rgba(247, 251, 255, 0.72);
       }
 
       .phone {
         position: absolute;
-        z-index: 1;
         left: 125px;
-        bottom: -44px;
+        bottom: -54px;
         width: 1040px;
-        height: 2060px;
-        border: 18px solid #10201f;
-        border-radius: 108px;
-        background: #f8fbf9;
-        box-shadow: var(--shadow);
+        height: 2040px;
         overflow: hidden;
+        border: 18px solid #071123;
+        border-radius: 110px;
+        background:
+          radial-gradient(circle at 12% 0%, rgba(184, 164, 255, 0.26), transparent 32%),
+          radial-gradient(circle at 100% 0%, rgba(105, 234, 205, 0.34), transparent 36%),
+          #f8fbfb;
+        box-shadow: var(--shadow);
       }
 
       .dark .phone {
-        border-color: #071615;
-        background: #0f2523;
-        box-shadow: 0 42px 120px rgba(0, 0, 0, 0.45);
+        border-color: #050912;
+        background:
+          radial-gradient(circle at 12% 0%, rgba(114, 103, 255, 0.28), transparent 36%),
+          radial-gradient(circle at 100% 0%, rgba(72, 216, 187, 0.18), transparent 36%),
+          #0b1323;
       }
 
       .notch {
         position: absolute;
-        top: 22px;
+        top: 28px;
         left: 50%;
+        z-index: 10;
         width: 310px;
-        height: 40px;
+        height: 38px;
         transform: translateX(-50%);
         border-radius: 999px;
-        background: #10201f;
-        z-index: 4;
+        background: #071123;
+      }
+
+      .dark .notch {
+        background: #050912;
       }
 
       .app {
         height: 100%;
-        padding: 96px 54px 62px;
-        background:
-          radial-gradient(
-            circle at 50% 12%,
-            rgba(15, 159, 147, 0.13),
-            transparent 26%
-          ),
-          #f9fcfa;
-      }
-
-      .dark .app {
-        background:
-          radial-gradient(
-            circle at 50% 12%,
-            rgba(15, 159, 147, 0.24),
-            transparent 28%
-          ),
-          #0f2523;
-      }
-
-      .topbar,
-      .row,
-      .tabs,
-      .pill-row,
-      .chatbar,
-      .price-row {
-        display: flex;
-        align-items: center;
+        padding: 96px 54px 72px;
       }
 
       .topbar {
+        display: flex;
+        align-items: center;
         justify-content: space-between;
         margin-bottom: 62px;
-        font-size: 32px;
-        font-weight: 760;
+        font-size: 31px;
+        font-weight: 780;
       }
 
-      .icon-button {
+      .orb {
+        width: 58px;
+        height: 58px;
+        border-radius: 50%;
+        background: conic-gradient(from 20deg, #071123 0 74%, #c8cce0 74% 100%);
+      }
+
+      .avatar {
         display: grid;
         place-items: center;
-        width: 62px;
-        height: 62px;
-        border: 1px solid var(--line);
-        border-radius: 22px;
-        color: var(--mint-strong);
-        background: rgba(255, 255, 255, 0.78);
+        width: 66px;
+        height: 66px;
+        border-radius: 50%;
+        background: linear-gradient(145deg, #ffc5ca, #8f85ff);
+        color: white;
+        font-size: 24px;
+        font-weight: 800;
+        box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.5);
       }
 
-      .dark .icon-button {
+      .panel {
+        border: 1px solid var(--border);
+        border-radius: 44px;
+        background: var(--card);
+        box-shadow: var(--shadow-soft);
+      }
+
+      .dark .panel,
+      .dark .mini,
+      .dark .transcript-line,
+      .dark .calendar-card {
         border-color: rgba(255, 255, 255, 0.12);
-        background: rgba(255, 255, 255, 0.06);
-        color: var(--lime);
+        background: rgba(255, 255, 255, 0.075);
       }
 
-      .record-module {
-        padding: 56px 44px 44px;
-        border: 1px solid var(--line);
-        border-radius: 42px;
-        background: rgba(255, 255, 255, 0.82);
-        box-shadow: 0 24px 76px rgba(15, 38, 35, 0.1);
+      .record-card {
+        display: flex;
+        min-height: 1120px;
+        padding: 74px 56px 64px;
+        text-align: center;
+        flex-direction: column;
+        align-items: center;
       }
 
-      .dark .record-module,
-      .dark .card,
-      .dark .note-card,
-      .dark .search-panel,
-      .dark .cost-panel {
-        border-color: rgba(255, 255, 255, 0.11);
-        background: rgba(255, 255, 255, 0.08);
-      }
-
-      .dark .status,
-      .dark .meta,
-      .dark .privacy-row,
-      .dark .provider small {
-        color: rgba(244, 255, 252, 0.72);
-      }
-
-      .dark .margin,
-      .dark .section-label {
-        color: var(--lime);
-      }
-
-      .dark .badge {
-        background: rgba(215, 243, 106, 0.16);
-        color: var(--lime);
-      }
-
-      .status {
+      .date-line {
         display: inline-flex;
         align-items: center;
         gap: 14px;
-        color: var(--muted);
-        font-size: 26px;
+        color: #26387c;
+        font-size: 30px;
+        font-weight: 560;
+      }
+
+      .dark .date-line {
+        color: rgba(247, 251, 255, 0.76);
+      }
+
+      .time {
+        margin-top: 46px;
+        font-size: 130px;
+        line-height: 1;
         font-weight: 720;
+        letter-spacing: 0;
       }
 
-      .dot {
-        width: 14px;
-        height: 14px;
-        border-radius: 50%;
-        background: var(--mint);
-        box-shadow: 0 0 0 10px rgba(15, 159, 147, 0.11);
+      .time small {
+        color: #8a94a6;
+        font-size: 46px;
+        font-weight: 620;
       }
 
-      .waves {
+      .ribbon {
         position: relative;
-        height: 210px;
-        margin: 28px 0 26px;
-        overflow: hidden;
+        width: 760px;
+        height: 220px;
+        margin: 72px 0 62px;
+        overflow: visible;
       }
 
-      .wave {
+      .ribbon::before {
+        content: "";
         position: absolute;
-        left: -30px;
-        width: 1020px;
-        height: 160px;
-        opacity: 0.8;
+        inset: 20px 0 0;
+        background:
+          radial-gradient(ellipse at center, rgba(114, 103, 255, 0.22), transparent 62%),
+          radial-gradient(ellipse at 58% 42%, rgba(72, 216, 187, 0.16), transparent 58%);
+        filter: blur(18px);
       }
 
-      .wave path {
+      .ribbon svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .ribbon path {
         fill: none;
-        stroke: var(--mint);
+      }
+
+      .mesh {
+        stroke: rgba(114, 103, 255, 0.14);
+        stroke-width: 2;
+      }
+
+      .line-a {
+        fill: none;
+        stroke: rgba(72, 216, 187, 0.7);
+        stroke-width: 9;
         stroke-linecap: round;
       }
 
-      .wave.one {
-        top: 20px;
+      .line-b {
+        fill: none;
+        stroke: rgba(114, 103, 255, 0.82);
+        stroke-width: 7;
+        stroke-linecap: round;
       }
 
-      .wave.two {
-        top: 50px;
-        opacity: 0.36;
+      .line-c {
+        fill: none;
+        stroke: rgba(255, 255, 255, 0.88);
+        stroke-width: 3;
+        stroke-linecap: round;
       }
 
-      .timer {
-        text-align: center;
-        font-size: 96px;
-        font-weight: 820;
-        letter-spacing: 0;
+      .caption {
+        margin: 0;
+        font-size: 28px;
+        color: var(--muted);
+        line-height: 1.35;
+      }
+
+      .dark .caption {
+        color: rgba(247, 251, 255, 0.72);
+      }
+
+      .meeting-pill {
+        margin: 26px 0 46px;
+        padding: 16px 32px;
+        border: 2px solid rgba(72, 216, 187, 0.36);
+        border-radius: 999px;
+        background: rgba(221, 251, 245, 0.72);
+        color: #071123;
+        font-size: 30px;
       }
 
       .start {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 18px;
-        width: 100%;
-        height: 96px;
-        margin-top: 36px;
-        border: 0;
-        border-radius: 28px;
-        background: var(--ink);
+        gap: 22px;
+        width: 760px;
+        height: 104px;
+        border-radius: 999px;
+        background: #0b1328;
         color: white;
-        font-size: 32px;
-        font-weight: 780;
+        font-size: 34px;
+        font-weight: 820;
+        box-shadow: 0 28px 78px rgba(7, 17, 35, 0.22);
       }
 
       .dark .start {
-        background: var(--lime);
-        color: #12211f;
+        background: rgba(255, 255, 255, 0.94);
+        color: #071123;
       }
 
-      .tabs {
-        gap: 18px;
-        margin: 32px 0;
-      }
-
-      .tab {
-        flex: 1;
-        display: grid;
-        place-items: center;
-        min-height: 92px;
-        border: 1px solid var(--line);
-        border-radius: 28px;
-        background: rgba(255, 255, 255, 0.72);
-        color: var(--muted);
-        font-size: 27px;
-        font-weight: 690;
-      }
-
-      .card,
-      .note-card,
-      .search-panel,
-      .cost-panel {
-        border: 1px solid var(--line);
-        border-radius: 34px;
-        background: rgba(255, 255, 255, 0.8);
-        box-shadow: 0 14px 42px rgba(16, 32, 31, 0.08);
-      }
-
-      .card {
-        padding: 30px;
-        margin-top: 18px;
-      }
-
-      .card-title {
-        margin: 0 0 10px;
-        font-size: 30px;
-        font-weight: 760;
-      }
-
-      .meta {
-        color: var(--muted);
-        font-size: 24px;
-      }
-
-      .badge {
-        display: inline-flex;
-        align-items: center;
-        min-height: 48px;
-        padding: 0 18px;
-        border-radius: 999px;
-        background: rgba(15, 159, 147, 0.12);
-        color: var(--mint-strong);
-        font-size: 22px;
-        font-weight: 800;
-      }
-
-      .privacy {
-        margin-top: 80px;
-        padding: 44px;
-      }
-
-      .privacy-title {
-        margin: 0;
-        font-size: 42px;
-        line-height: 1.04;
-        font-weight: 820;
-      }
-
-      .privacy-grid {
+      .mini-list {
         display: grid;
         gap: 18px;
         margin-top: 34px;
       }
 
-      .privacy-row {
-        display: flex;
+      .mini {
+        display: grid;
+        min-height: 120px;
+        grid-template-columns: 92px 1fr;
+        gap: 24px;
         align-items: center;
-        gap: 20px;
-        color: var(--muted);
-        font-size: 29px;
-        font-weight: 640;
+        padding: 18px 24px;
+        border: 1px solid var(--border);
+        border-radius: 28px;
+        background: rgba(255, 255, 255, 0.72);
+        text-align: left;
       }
 
-      .check {
+      .duration {
         display: grid;
         place-items: center;
-        width: 42px;
-        height: 42px;
-        border-radius: 50%;
-        background: var(--mint);
-        color: white;
-        font-weight: 900;
+        width: 74px;
+        height: 74px;
+        border: 2px solid rgba(9, 25, 55, 0.1);
+        border-radius: 24px;
+        color: #253147;
+        font-size: 23px;
+        font-weight: 860;
+        line-height: 0.9;
       }
 
-      .note-card {
-        padding: 36px;
-        margin-top: 22px;
+      .duration span {
+        color: #7c8798;
+        font-size: 14px;
+        font-weight: 820;
+        letter-spacing: 0.04em;
       }
 
-      .note-head {
+      .mini-title {
+        margin: 0 0 6px;
+        font-size: 27px;
+        font-weight: 790;
+      }
+
+      .mini-meta {
+        color: var(--muted);
+        font-size: 22px;
+      }
+
+      .live-layout {
+        display: grid;
+        gap: 28px;
+      }
+
+      .live-head {
         display: flex;
+        align-items: center;
         justify-content: space-between;
-        gap: 22px;
-        margin-bottom: 30px;
+        padding: 30px;
       }
 
-      .note-title {
+      .live-title {
         margin: 0;
-        font-size: 36px;
+        font-size: 32px;
         font-weight: 820;
       }
 
-      .section-label {
-        margin: 28px 0 14px;
-        color: var(--mint-strong);
-        font-size: 23px;
-        font-weight: 840;
-      }
-
-      .task {
-        display: grid;
-        grid-template-columns: 34px 1fr;
-        gap: 18px;
-        margin: 20px 0;
-        color: var(--ink);
-        font-size: 28px;
-        line-height: 1.22;
-        font-weight: 610;
-      }
-
-      .dark .task {
-        color: rgba(244, 255, 252, 0.88);
-      }
-
-      .box {
-        width: 34px;
-        height: 34px;
-        border: 3px solid var(--mint);
-        border-radius: 10px;
-      }
-
-      .pill-row {
-        gap: 16px;
-        flex-wrap: wrap;
-      }
-
-      .pill {
-        padding: 15px 19px;
-        border-radius: 999px;
-        background: rgba(77, 53, 90, 0.1);
-        color: var(--plum);
-        font-size: 22px;
-        font-weight: 780;
-      }
-
-      .search-panel {
-        padding: 34px;
-        margin-top: 26px;
-      }
-
-      .chatbar {
-        gap: 18px;
-        min-height: 82px;
-        padding: 0 24px;
-        border: 1px solid var(--line);
-        border-radius: 26px;
-        background: white;
+      .live-sub {
+        margin: 7px 0 0;
         color: var(--muted);
+        font-size: 21px;
+      }
+
+      .stop {
+        display: grid;
+        place-items: center;
+        width: 78px;
+        height: 78px;
+        border: 2px solid rgba(225, 87, 87, 0.24);
+        border-radius: 50%;
+        color: var(--danger);
+        font-size: 30px;
+      }
+
+      .live-card {
+        padding: 48px 42px;
+      }
+
+      .record-time {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 22px;
+        margin-top: 32px;
+        font-size: 76px;
+        font-weight: 720;
+      }
+
+      .record-time span {
+        color: var(--mint);
+        font-size: 24px;
+        font-weight: 820;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .transcript {
+        display: grid;
+        gap: 18px;
+        margin-top: 34px;
+      }
+
+      .transcript-line {
+        padding: 28px;
+        border: 1px solid var(--border);
+        border-radius: 26px;
+        background: rgba(255, 255, 255, 0.74);
+        text-align: left;
+      }
+
+      .transcript-line p {
+        margin: 0;
         font-size: 26px;
-        font-weight: 620;
+        line-height: 1.25;
+      }
+
+      .stamp {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 13px;
+        color: var(--muted);
+        font-size: 18px;
+        font-weight: 700;
+      }
+
+      .listening {
+        color: var(--mint);
+      }
+
+      .calendar-stack {
+        display: grid;
+        gap: 22px;
+      }
+
+      .calendar-card {
+        display: grid;
+        grid-template-columns: 124px 1fr;
+        gap: 28px;
+        align-items: center;
+        min-height: 176px;
+        padding: 28px;
+        border: 1px solid var(--border);
+        border-radius: 34px;
+        background: rgba(255, 255, 255, 0.76);
+        text-align: left;
+      }
+
+      .cal-icon {
+        display: grid;
+        place-items: center;
+        width: 112px;
+        height: 112px;
+        border-radius: 30px;
+        background: var(--mint-soft);
+        color: #071123;
+        font-size: 42px;
+        font-weight: 860;
+      }
+
+      .cal-icon span {
+        display: block;
+        color: #118b7d;
+        font-size: 18px;
+        letter-spacing: 0.12em;
+      }
+
+      .calendar-title {
+        margin: 0 0 7px;
+        font-size: 31px;
+        font-weight: 820;
+      }
+
+      .calendar-meta {
+        margin: 0;
+        color: #25c796;
+        font-size: 23px;
+        font-weight: 760;
+      }
+
+      .tag-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-top: 32px;
+      }
+
+      .tag {
+        padding: 14px 18px;
+        border: 1px solid rgba(72, 216, 187, 0.28);
+        border-radius: 999px;
+        background: rgba(221, 251, 245, 0.65);
+        color: #0c8278;
+        font-size: 21px;
+        font-weight: 790;
+      }
+
+      .search-box {
+        margin-top: 28px;
+        padding: 32px;
+      }
+
+      .query {
+        min-height: 88px;
+        padding: 26px;
+        border: 1px solid var(--border);
+        border-radius: 28px;
+        background: rgba(255, 255, 255, 0.78);
+        color: var(--muted);
+        font-size: 25px;
       }
 
       .answer {
-        margin-top: 28px;
+        margin-top: 22px;
         padding: 30px;
-        border-radius: 28px;
-        background: #eff8f4;
+        border-radius: 30px;
+        background: linear-gradient(145deg, rgba(221, 251, 245, 0.95), rgba(220, 216, 255, 0.65));
       }
 
       .answer strong {
         display: block;
-        margin-bottom: 16px;
+        margin-bottom: 14px;
         font-size: 30px;
       }
 
       .answer p {
         margin: 0;
-        color: var(--muted);
-        font-size: 26px;
-        line-height: 1.28;
+        color: #4c596b;
+        font-size: 25px;
+        line-height: 1.32;
       }
 
-      .library-list {
-        display: grid;
-        gap: 18px;
-        margin-top: 28px;
-      }
-
-      .mini-meeting {
+      .source-row {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        min-height: 86px;
+        min-height: 82px;
+        margin-top: 14px;
         padding: 0 22px;
         border-radius: 24px;
-        background: rgba(255, 255, 255, 0.72);
-        font-size: 24px;
-        font-weight: 690;
+        background: rgba(255, 255, 255, 0.76);
+        font-size: 23px;
+        font-weight: 720;
       }
 
-      .cost-panel {
-        padding: 34px;
-        margin-top: 26px;
+      .price-grid {
+        display: grid;
+        gap: 16px;
+        margin-top: 30px;
       }
 
       .price-row {
-        justify-content: space-between;
-        min-height: 98px;
-        border-bottom: 1px solid var(--line);
-        font-size: 27px;
-        font-weight: 700;
-      }
-
-      .price-row:last-child {
-        border-bottom: 0;
-      }
-
-      .provider {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-      }
-
-      .provider small {
-        color: var(--muted);
-        font-size: 21px;
-        font-weight: 620;
-      }
-
-      .margin {
-        color: var(--mint-strong);
-        font-size: 31px;
-        font-weight: 840;
-      }
-
-      .footer-callout {
-        position: absolute;
-        left: 96px;
-        right: 96px;
-        bottom: 92px;
-        z-index: 5;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        min-height: 104px;
-        padding: 0 34px;
-        border-radius: 32px;
-        background: rgba(16, 32, 31, 0.9);
-        color: white;
-        font-size: 28px;
-        font-weight: 750;
-        backdrop-filter: blur(18px);
+        min-height: 112px;
+        padding: 0 28px;
+        border-radius: 28px;
+        background: rgba(255, 255, 255, 0.09);
+        border: 1px solid rgba(255, 255, 255, 0.12);
       }
 
-      .footer-callout span:last-child {
-        color: var(--lime);
+      .price-row p {
+        margin: 0;
+        font-size: 25px;
+        font-weight: 780;
+      }
+
+      .price-row small {
+        display: block;
+        margin-top: 5px;
+        color: rgba(247, 251, 255, 0.62);
+        font-size: 18px;
+        font-weight: 620;
+      }
+
+      .price {
+        color: var(--mint);
+        font-size: 30px;
+        font-weight: 840;
       }
     </style>
   </head>
@@ -601,51 +625,28 @@
     <main class="board">
       <section class="store-shot" id="01-fast-record">
         <div class="copy">
-          <p class="kicker">Layer One</p>
-          <h1>Open. Tap. Record.</h1>
-          <p class="sub">
-            A fast capture screen built for jumping into real meetings without
-            hunting through menus.
-          </p>
+          <p class="brand">Layer One</p>
+          <h1>Open and start recording fast.</h1>
+          <p class="sub">A quiet capture screen for the moment a real conversation begins.</p>
         </div>
         <div class="phone">
           <div class="notch"></div>
           <div class="app">
-            <div class="topbar">
-              <span>Layer One</span>
-              <span class="icon-button">⌘</span>
-            </div>
-            <div class="record-module">
-              <div class="status"><span class="dot"></span> Ready</div>
-              <div class="waves">
-                <svg class="wave one" viewBox="0 0 900 160">
-                  <path
-                    d="M0 86 C 110 26, 180 122, 292 76 S 466 28, 590 82 S 760 118, 900 52"
-                    stroke-width="9"
-                  />
-                </svg>
-                <svg class="wave two" viewBox="0 0 900 160">
-                  <path
-                    d="M0 96 C 120 50, 190 126, 300 82 S 475 44, 606 86 S 756 116, 900 64"
-                    stroke-width="18"
-                  />
+            <div class="topbar"><span class="orb"></span><span>Layer One</span><span class="avatar">AM</span></div>
+            <div class="panel record-card">
+              <div class="date-line">Tuesday, April 28</div>
+              <div class="time">9:09 <small>:55 PM</small></div>
+              <div class="ribbon">
+                <svg viewBox="0 0 760 220">
+                  <path class="mesh" d="M30 126 C180 92 290 146 390 116 S575 100 730 136" />
+                  <path class="line-a" d="M26 120 C150 106 240 142 360 114 S560 92 726 138" />
+                  <path class="line-b" d="M24 132 C164 86 250 154 372 118 S556 106 724 128" />
+                  <path class="line-c" d="M40 128 C168 104 258 140 374 120 S552 108 710 130" />
                 </svg>
               </div>
-              <div class="timer">00:00</div>
-              <button class="start">● Start recording</button>
-            </div>
-            <div class="tabs">
-              <div class="tab">Meetings</div>
-              <div class="tab">Search</div>
-              <div class="tab">Chat</div>
-            </div>
-            <div class="card">
-              <p class="card-title">Revenue sync</p>
-              <div class="meta">Today · 42 min</div>
-            </div>
-            <div class="card">
-              <p class="card-title">Client intake review</p>
-              <div class="meta">Yesterday · 31 min</div>
+              <p class="caption">Tap to start taking notes</p>
+              <div class="meeting-pill">Investor update prep · 2:30 PM</div>
+              <div class="start">Start recording</div>
             </div>
           </div>
         </div>
@@ -653,50 +654,44 @@
 
       <section class="store-shot dark" id="02-bot-free">
         <div class="copy">
-          <p class="kicker">Private by default</p>
-          <h1>No meeting bot in the room.</h1>
-          <p class="sub">
-            Record from your own device and keep the experience quiet for
-            clients, teams, and sensitive calls.
-          </p>
+          <p class="brand">No meeting bot</p>
+          <h1>Record without changing the room.</h1>
+          <p class="sub">Layer One listens from your device, writes notes live, and keeps the call natural.</p>
         </div>
         <div class="phone">
           <div class="notch"></div>
           <div class="app">
-            <div class="topbar">
-              <span>Live Recording</span>
-              <span class="icon-button">●</span>
-            </div>
-            <div class="record-module">
-              <div class="status"><span class="dot"></span> Recording</div>
-              <div class="waves">
-                <svg class="wave one" viewBox="0 0 900 160">
-                  <path
-                    d="M0 72 C 130 134, 196 22, 310 82 S 500 124, 612 70 S 760 28, 900 92"
-                    stroke-width="9"
-                  />
-                </svg>
-                <svg class="wave two" viewBox="0 0 900 160">
-                  <path
-                    d="M0 92 C 118 38, 220 128, 326 76 S 512 38, 626 82 S 772 130, 900 66"
-                    stroke-width="18"
-                  />
-                </svg>
+            <div class="topbar"><span class="orb"></span><span>Live note</span><span class="avatar">AM</span></div>
+            <div class="live-layout">
+              <div class="panel live-head">
+                <div>
+                  <p class="live-title">Untitled live note</p>
+                  <p class="live-sub">Writing notes while you talk</p>
+                </div>
+                <div class="stop">■</div>
               </div>
-              <div class="timer">12:47</div>
-              <button class="start">Finish and save</button>
-            </div>
-            <div class="card privacy">
-              <p class="privacy-title">Designed for real conversations.</p>
-              <div class="privacy-grid">
-                <div class="privacy-row">
-                  <span class="check">✓</span> No attendee bot
+              <div class="panel live-card">
+                <div class="ribbon">
+                  <svg viewBox="0 0 760 220">
+                    <path class="line-a" d="M30 124 C150 156 246 78 370 122 S560 166 728 104" />
+                    <path class="line-b" d="M28 138 C170 82 250 164 384 116 S574 86 730 134" />
+                    <path class="line-c" d="M44 132 C172 116 268 138 384 120 S572 110 710 128" />
+                  </svg>
                 </div>
-                <div class="privacy-row">
-                  <span class="check">✓</span> Starts from phone or desktop
-                </div>
-                <div class="privacy-row">
-                  <span class="check">✓</span> Notes stay in your library
+                <div class="record-time">02:57 <span>Live</span></div>
+                <div class="transcript">
+                  <div class="transcript-line">
+                    <div class="stamp"><span>1:35</span><span>Transcript</span></div>
+                    <p>We need the pilot scope before Friday.</p>
+                  </div>
+                  <div class="transcript-line">
+                    <div class="stamp"><span>1:48</span><span>Key point</span></div>
+                    <p>The client cares most about onboarding speed and security review.</p>
+                  </div>
+                  <div class="transcript-line">
+                    <div class="stamp listening"><span>2:57</span><span>Listening</span></div>
+                    <p>Turning the next steps into clean notes as the meeting continues.</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -704,54 +699,47 @@
         </div>
       </section>
 
-      <section class="store-shot split" id="03-structured-intake">
+      <section class="store-shot" id="03-structured-intake">
         <div class="copy">
-          <p class="kicker">Beyond summaries</p>
-          <h1>Turn calls into intake.</h1>
-          <p class="sub">
-            Capture decisions, owners, risks, budgets, and client details in a
-            reusable meeting record.
-          </p>
+          <p class="brand">Calendar context</p>
+          <h1>Your next meeting is already understood.</h1>
+          <p class="sub">Connect Google Calendar or Outlook so the note starts with title, time, and context.</p>
         </div>
         <div class="phone">
           <div class="notch"></div>
           <div class="app">
-            <div class="topbar">
-              <span>Client intake review</span>
-              <span class="icon-button">↗</span>
-            </div>
-            <div class="note-card">
-              <div class="note-head">
-                <p class="note-title">Acme onboarding</p>
-                <span class="badge">Completed</span>
+            <div class="topbar"><span class="orb"></span><span>Coming up</span><span class="avatar">AM</span></div>
+            <div class="panel record-card">
+              <div class="calendar-stack">
+                <div class="calendar-card">
+                  <div class="cal-icon"><span>APR</span>28</div>
+                  <div>
+                    <p class="calendar-meta">2:30 PM - 3:00 PM</p>
+                    <p class="calendar-title">Investor update prep</p>
+                    <p class="mini-meta">Google Meet</p>
+                  </div>
+                </div>
+                <div class="calendar-card">
+                  <div class="cal-icon"><span>APR</span>29</div>
+                  <div>
+                    <p class="calendar-meta">11:00 AM - 11:45 AM</p>
+                    <p class="calendar-title">Design review</p>
+                    <p class="mini-meta">Zoom</p>
+                  </div>
+                </div>
               </div>
-              <div class="pill-row">
-                <span class="pill">Budget: $48k</span>
-                <span class="pill">Owner: Maya</span>
-                <span class="pill">Risk: timeline</span>
+              <div class="tag-row">
+                <span class="tag">Auto title</span>
+                <span class="tag">Next meeting</span>
+                <span class="tag">Notes ready</span>
               </div>
-              <p class="section-label">Decisions</p>
-              <div class="task">
-                <span class="box"></span
-                ><span>Move forward with two-week pilot.</span>
+              <div class="ribbon">
+                <svg viewBox="0 0 760 220">
+                  <path class="line-a" d="M28 126 C180 92 286 148 390 116 S580 98 732 136" />
+                  <path class="line-b" d="M26 136 C164 88 250 154 374 118 S560 106 724 128" />
+                </svg>
               </div>
-              <div class="task">
-                <span class="box"></span
-                ><span>Route implementation notes to the product team.</span>
-              </div>
-              <p class="section-label">Next steps</p>
-              <div class="task">
-                <span class="box"></span
-                ><span>Send scope draft by Friday.</span>
-              </div>
-              <div class="task">
-                <span class="box"></span
-                ><span>Confirm data access before kickoff.</span>
-              </div>
-            </div>
-            <div class="footer-callout">
-              <span>Less cleanup after calls</span>
-              <span>More signal</span>
+              <div class="start">Connect calendar</div>
             </div>
           </div>
         </div>
@@ -759,44 +747,35 @@
 
       <section class="store-shot" id="04-ask-library">
         <div class="copy">
-          <p class="kicker">Ask your history</p>
-          <h1>Your meeting library becomes searchable.</h1>
-          <p class="sub">
-            Find the exact promise, quote, objection, or follow-up across every
-            recorded conversation.
-          </p>
+          <p class="brand">Meeting library</p>
+          <h1>Ask what happened across every call.</h1>
+          <p class="sub">Find promises, objections, owners, and decisions without digging through raw transcripts.</p>
         </div>
         <div class="phone">
           <div class="notch"></div>
           <div class="app">
-            <div class="topbar">
-              <span>Library Chat</span>
-              <span class="icon-button">⌕</span>
-            </div>
-            <div class="search-panel">
-              <div class="chatbar">Ask: What did Acme need before kickoff?</div>
-              <div class="answer">
-                <strong>Answer from 3 meetings</strong>
-                <p>
-                  Acme needs SSO access, a pilot scope draft, and the security
-                  review link before kickoff.
-                </p>
+            <div class="topbar"><span class="orb"></span><span>Ask Layer One</span><span class="avatar">AM</span></div>
+            <div class="panel record-card">
+              <div class="search-box panel">
+                <div class="query">What did Acme need before kickoff?</div>
+                <div class="answer">
+                  <strong>Answer from 3 meetings</strong>
+                  <p>Acme needs SSO access, a pilot scope draft, and the security review link before kickoff.</p>
+                </div>
+                <div class="source-row"><span>Acme onboarding</span><span class="tag">2 refs</span></div>
+                <div class="source-row"><span>Security review</span><span class="tag">1 ref</span></div>
+                <div class="source-row"><span>Revenue sync</span><span class="tag">1 ref</span></div>
               </div>
-              <div class="library-list">
-                <div class="mini-meeting">
-                  <span>Acme onboarding</span><span class="badge">2 refs</span>
+              <div class="mini-list">
+                <div class="mini">
+                  <div class="duration">28<br /><span>MIN</span></div>
+                  <div><p class="mini-title">Founder pipeline review</p><div class="mini-meta">Decisions, owners, risks</div></div>
                 </div>
-                <div class="mini-meeting">
-                  <span>Security review</span><span class="badge">1 ref</span>
-                </div>
-                <div class="mini-meeting">
-                  <span>Revenue sync</span><span class="badge">1 ref</span>
+                <div class="mini">
+                  <div class="duration">37<br /><span>MIN</span></div>
+                  <div><p class="mini-title">Enterprise intake call</p><div class="mini-meta">Budget and next steps</div></div>
                 </div>
               </div>
-            </div>
-            <div class="footer-callout">
-              <span>No more digging through notes</span>
-              <span>Ask once</span>
             </div>
           </div>
         </div>
@@ -804,53 +783,29 @@
 
       <section class="store-shot dark" id="05-cost-control">
         <div class="copy">
-          <p class="kicker">Built to scale</p>
-          <h1>Control models, minutes, and margin.</h1>
-          <p class="sub">
-            Provider switching and usage visibility help teams grow without
-            guessing what each meeting costs.
-          </p>
+          <p class="brand">Built to scale</p>
+          <h1>Know the cost of every meeting.</h1>
+          <p class="sub">Model routing, transcription pricing, and plan margins stay visible as usage grows.</p>
         </div>
         <div class="phone">
           <div class="notch"></div>
           <div class="app">
-            <div class="topbar">
-              <span>Plan controls</span>
-              <span class="icon-button">⚙</span>
-            </div>
-            <div class="cost-panel">
-              <div class="price-row">
-                <div class="provider">
-                  <span>Pro plan</span>
-                  <small>900 minutes included</small>
-                </div>
-                <span class="margin">$19</span>
+            <div class="topbar"><span class="orb"></span><span>Plan controls</span><span class="avatar">AM</span></div>
+            <div class="panel live-card">
+              <div class="price-grid">
+                <div class="price-row"><p>Transcription lane<small>Universal Streaming Multilingual 1</small></p><span class="price">$0.15/hr</span></div>
+                <div class="price-row"><p>Default notes model<small>Fast AI first, premium only when needed</small></p><span class="price">GPT 5.4 nano</span></div>
+                <div class="price-row"><p>Core plan<small>Unlimited meetings with cost controls</small></p><span class="price">$15/mo</span></div>
+                <div class="price-row"><p>1,000 customers<small>Scenario planning for growth</small></p><span class="price">$15k MRR</span></div>
               </div>
-              <div class="price-row">
-                <div class="provider">
-                  <span>Transcription lane</span>
-                  <small>Deepgram, AssemblyAI, or local</small>
-                </div>
-                <span class="badge">Switchable</span>
+              <div class="ribbon">
+                <svg viewBox="0 0 760 220">
+                  <path class="line-a" d="M24 126 C150 112 264 150 384 116 S568 96 728 132" />
+                  <path class="line-b" d="M24 138 C176 86 268 160 394 118 S570 104 726 128" />
+                  <path class="line-c" d="M40 132 C176 114 278 138 394 122 S568 112 710 128" />
+                </svg>
               </div>
-              <div class="price-row">
-                <div class="provider">
-                  <span>AI notes lane</span>
-                  <small>Fast model first, premium model when needed</small>
-                </div>
-                <span class="badge">Efficient</span>
-              </div>
-              <div class="price-row">
-                <div class="provider">
-                  <span>1,000 customers</span>
-                  <small>Scenario planning for growth</small>
-                </div>
-                <span class="margin">$19k MRR</span>
-              </div>
-            </div>
-            <div class="footer-callout">
-              <span>Usage is a business metric</span>
-              <span>Not a surprise</span>
+              <p class="caption">Usage becomes a business metric, not a surprise.</p>
             </div>
           </div>
         </div>

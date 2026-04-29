@@ -114,39 +114,43 @@ export function getLayerOneMeetingDashboardHtml(): string {
   <style>
     :root {
       color-scheme: dark;
-      --bg: #070d0b;
-      --panel: #101815;
-      --panel-strong: #13241f;
-      --text: #edf8f4;
-      --muted: #91a7a0;
-      --border: #243a34;
-      --accent: #14b8a6;
-      --accent-strong: #74f0df;
-      --accent-soft: rgba(20, 184, 166, 0.12);
-      --danger: #ff6b78;
-      --danger-soft: rgba(255, 107, 120, 0.12);
-      --warning: #f8c15c;
-      --warning-soft: rgba(248, 193, 92, 0.12);
-      --shadow: none;
-      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+      --bg: #091324;
+      --panel: rgba(255, 255, 255, 0.08);
+      --panel-strong: rgba(255, 255, 255, 0.12);
+      --surface: rgba(255, 255, 255, 0.06);
+      --text: #f7fbff;
+      --muted: rgba(247, 251, 255, 0.66);
+      --border: rgba(255, 255, 255, 0.14);
+      --accent: #48d8bb;
+      --accent-strong: #6ff5dd;
+      --accent-soft: rgba(72, 216, 187, 0.14);
+      --violet-soft: rgba(114, 103, 255, 0.2);
+      --danger: #ff7b88;
+      --danger-soft: rgba(255, 123, 136, 0.14);
+      --warning: #ffd27a;
+      --warning-soft: rgba(255, 210, 122, 0.14);
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.24);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
     [data-theme="light"] {
       color-scheme: light;
-      --bg: #f4faf7;
-      --panel: #ffffff;
-      --panel-strong: #eaf7f2;
-      --text: #17221e;
-      --muted: #60716b;
-      --border: #d8e7e1;
-      --accent: #14b8a6;
-      --accent-strong: #087d71;
-      --accent-soft: rgba(20, 184, 166, 0.1);
-      --danger: #cc3340;
-      --danger-soft: rgba(204, 51, 64, 0.1);
-      --warning: #8a5a00;
-      --warning-soft: rgba(138, 90, 0, 0.1);
-      --shadow: 0 16px 36px rgba(19, 48, 42, 0.1);
+      --bg: #f6fbfb;
+      --panel: rgba(255, 255, 255, 0.84);
+      --panel-strong: rgba(255, 255, 255, 0.94);
+      --surface: rgba(246, 250, 252, 0.92);
+      --text: #071123;
+      --muted: #697587;
+      --border: rgba(9, 25, 55, 0.12);
+      --accent: #48d8bb;
+      --accent-strong: #128a7f;
+      --accent-soft: rgba(72, 216, 187, 0.16);
+      --violet-soft: rgba(114, 103, 255, 0.12);
+      --danger: #d85d65;
+      --danger-soft: rgba(216, 93, 101, 0.11);
+      --warning: #986b10;
+      --warning-soft: rgba(255, 210, 122, 0.22);
+      --shadow: 0 20px 70px rgba(36, 54, 94, 0.12);
     }
 
     * {
@@ -155,7 +159,10 @@ export function getLayerOneMeetingDashboardHtml(): string {
 
     body {
       margin: 0;
-      background: var(--bg);
+      background:
+        radial-gradient(circle at 0% 0%, var(--violet-soft), transparent 38%),
+        radial-gradient(circle at 100% 8%, var(--accent-soft), transparent 42%),
+        var(--bg);
       color: var(--text);
       font-size: 13px;
       line-height: 1.4;
@@ -173,10 +180,11 @@ export function getLayerOneMeetingDashboardHtml(): string {
       gap: 12px;
       margin-bottom: 12px;
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 18px;
       background: var(--panel);
-      padding: 12px;
+      padding: 16px;
       box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
     }
 
     .eyebrow {
@@ -184,15 +192,15 @@ export function getLayerOneMeetingDashboardHtml(): string {
       color: var(--accent-strong);
       font-size: 10px;
       font-weight: 800;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
     }
 
     h1 {
       margin: 0;
-      font-size: 17px;
+      font-size: 18px;
       line-height: 1.2;
-      font-weight: 700;
+      font-weight: 760;
       letter-spacing: 0;
     }
 
@@ -205,7 +213,7 @@ export function getLayerOneMeetingDashboardHtml(): string {
     button {
       min-height: 34px;
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 999px;
       background: var(--panel-strong);
       color: var(--text);
       padding: 0 12px;
@@ -239,10 +247,11 @@ export function getLayerOneMeetingDashboardHtml(): string {
     .stat {
       min-width: 0;
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 16px;
       background: var(--panel);
-      padding: 10px 11px;
+      padding: 12px 13px;
       box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
     }
 
     .stat span {
@@ -263,7 +272,7 @@ export function getLayerOneMeetingDashboardHtml(): string {
 
     .list {
       display: grid;
-      gap: 8px;
+      gap: 10px;
     }
 
     .meeting {
@@ -272,11 +281,12 @@ export function getLayerOneMeetingDashboardHtml(): string {
       gap: 10px;
       align-items: center;
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 18px;
       background: var(--panel);
-      padding: 12px;
+      padding: 14px;
       box-shadow: var(--shadow);
       transition: border-color 160ms ease, background 160ms ease;
+      backdrop-filter: blur(18px);
     }
 
     .meeting:hover {
@@ -302,7 +312,7 @@ export function getLayerOneMeetingDashboardHtml(): string {
       border-radius: 999px;
       background: var(--accent-soft);
       color: var(--accent-strong);
-      padding: 5px 8px;
+      padding: 6px 9px;
       font-size: 11px;
       font-weight: 800;
       letter-spacing: 0.05em;
@@ -325,7 +335,7 @@ export function getLayerOneMeetingDashboardHtml(): string {
     .empty,
     .error {
       border: 1px dashed var(--border);
-      border-radius: 8px;
+      border-radius: 18px;
       background: var(--panel);
       color: var(--muted);
       padding: 16px;
