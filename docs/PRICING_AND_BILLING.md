@@ -63,7 +63,7 @@ User clicks "Subscribe" on /pricing
 1. Toggle Stripe to **live mode** in dashboard
 2. Create live products + prices (same structure as test)
 3. Set live `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_CORE`, `STRIPE_PRICE_PRO` in Vercel env vars
-4. Add production webhook endpoint: `https://audio-layer.vercel.app/api/stripe/webhook`
+4. Add production webhook endpoint: `https://layers.mirrorfactory.ai/api/stripe/webhook`
 5. Verify webhook receives events
 
 ---

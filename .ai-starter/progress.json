@@ -73,12 +73,11 @@
     ".claude/skills/linear-pm/bootstrap/layers-bootstrap.md",
     ".claude/skills/linear-pm/README.md",
     ".env.example",
-    "app/api/stripe/webhook/route.ts"
+    "app/api/stripe/webhook/route.ts",
+    "app/profile/page.tsx"
   ],
   "evidenceStatus": [
-    "companions: 48 pending / 90 satisfied",
-    "observed-change:.env.example",
-    "observed-change:app/api/stripe/webhook/route.ts"
+    "companions: 48 pending / 90 satisfied"
   ],
-  "updatedAt": "2026-04-30T23:33:56.989072Z"
+  "updatedAt": "2026-04-30T23:40:59.951520Z"
 }

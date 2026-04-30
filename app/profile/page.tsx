@@ -262,7 +262,7 @@ export default function ProfilePage() {
 {`{
   "mcpServers": {
     "layers": {
-      "url": "https://audio-layer.vercel.app/api/mcp/mcp",
+      "url": "${process.env.NEXT_PUBLIC_APP_URL ?? "https://layers.mirrorfactory.ai"}/api/mcp/mcp",
       "headers": {
         "Authorization": "Bearer YOUR_API_KEY"
       }
