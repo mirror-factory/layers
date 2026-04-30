@@ -358,8 +358,6 @@
       "tests/e2e/navigation.spec.ts",
       "tests/e2e/smoke.spec.ts",
       "tests/e2e/visual-regression.spec.ts",
-      "tests/e2e/visual-regression.spec.ts-snapshots/home-mobile-tablet-dark-darwin.png",
-      "tests/e2e/visual-regression.spec.ts-snapshots/home-mobile-tablet-light-darwin.png",
       "tests/visual/chat-input.spec.ts",
       "tests/visual/chat-message.spec.ts",
       "tests/visual/meeting-chat.spec.ts"
@@ -3106,20 +3104,6 @@
       "tests/e2e/app-ask-page.smoke.spec.ts",
       "tests/e2e/feature-checklist.spec.ts",
       "tests/e2e/meetings.spec.ts",
-      "tests/e2e/visual-regression.spec.ts-snapshots/home-desktop-mobile-dark-darwin.png",
-      "tests/e2e/visual-regression.spec.ts-snapshots/home-desktop-mobile-light-darwin.png",
-      "tests/e2e/visual-regression.spec.ts-snapshots/home-desktop-tablet-dark-darwin.png",
-      "tests/e2e/visual-regression.spec.ts-snapshots/home-desktop-tablet-light-darwin.png",
-      "tests/e2e/visual-regression.spec.ts-snapshots/home-mobile-desktop-dark-darwin.png",
-      "tests/e2e/visual-regression.spec.ts-snapshots/home-mobile-desktop-light-darwin.png",
-      "tests/e2e/visual-regression.spec.ts-snapshots/home-mobile-mobile-dark-darwin.png",
-      "tests/e2e/visual-regression.spec.ts-snapshots/home-mobile-mobile-light-darwin.png",
-      "tests/e2e/visual-regression.spec.ts-snapshots/home-mobile-tablet-dark-darwin.png",
-      "tests/e2e/visual-regression.spec.ts-snapshots/home-mobile-tablet-light-darwin.png",
-      "tests/e2e/visual-regression.spec.ts-snapshots/home-tablet-mobile-dark-darwin.png",
-      "tests/e2e/visual-regression.spec.ts-snapshots/home-tablet-mobile-light-darwin.png",
-      "tests/e2e/visual-regression.spec.ts-snapshots/home-tablet-tablet-dark-darwin.png",
-      "tests/e2e/visual-regression.spec.ts-snapshots/home-tablet-tablet-light-darwin.png",
       "tests/visual/README.md",
       "tests/visual/ai-debug-panel.spec.ts-snapshots/ai-debug-panel-tablet-dark-tablet-dark-darwin.png",
       "tests/visual/ai-debug-panel.spec.ts-snapshots/ai-debug-panel-tablet-light-tablet-light-darwin.png",
@@ -3289,8 +3273,6 @@
       "tests/e2e/navigation.spec.ts",
       "tests/e2e/smoke.spec.ts",
       "tests/e2e/visual-regression.spec.ts",
-      "tests/e2e/visual-regression.spec.ts-snapshots/home-mobile-tablet-dark-darwin.png",
-      "tests/e2e/visual-regression.spec.ts-snapshots/home-mobile-tablet-light-darwin.png",
       "tests/visual/chat-input.spec.ts",
       "tests/visual/chat-message.spec.ts",
       "tests/visual/meeting-chat.spec.ts"
@@ -3613,34 +3595,6 @@
       "docs/EMBEDDINGS_AND_SEARCH.md",
       "docs/apis/app-api-dev-kit-cost-route.md",
       "docs/features/app-dev-kit-cost-page.md"
-    ],
-    "coverage": {
-      "hasUnit": true,
-      "hasStory": false,
-      "hasVisual": true,
-      "hasEval": false
-    }
-  },
-  {
-    "id": "route:dev-kit-coverage",
-    "kind": "route",
-    "name": "dev-kit-coverage",
-    "sourcePaths": [
-      "app/dev-kit/coverage/page.tsx"
-    ],
-    "tests": [
-      "tests/contracts/app-api-dev-kit-coverage-route.contract.test.ts",
-      "tests/integration/app-api-dev-kit-coverage-route.failure-modes.test.ts",
-      "tests/integration/app-api-dev-kit-coverage-route.test.ts"
-    ],
-    "stories": [],
-    "visualSpecs": [
-      "tests/e2e/app-dev-kit-coverage-page.smoke.spec.ts"
-    ],
-    "evals": [],
-    "docs": [
-      "docs/apis/app-api-dev-kit-coverage-route.md",
-      "docs/features/app-dev-kit-coverage-page.md"
     ],
     "coverage": {
       "hasUnit": true,
@@ -4149,7 +4103,6 @@
     ],
     "evals": [],
     "docs": [
-      "docs/.DS_Store",
       "docs/APP_STORE_SCREENSHOTS.md",
       "docs/BUILD_SPEC.md",
       "docs/CALENDAR_INTEGRATION.md",
@@ -4694,8 +4647,6 @@
       "tests/e2e/top-bar.visual.spec.ts",
       "tests/e2e/transcript-view.visual.spec.ts",
       "tests/e2e/visual-regression.spec.ts",
-      "tests/e2e/visual-regression.spec.ts-snapshots/home-desktop-mobile-dark-darwin.png",
-      "tests/e2e/visual-regression.spec.ts-snapshots/home-desktop-mobile-light-darwin.png",
       "tests/e2e/web-gl-shader.visual.spec.ts",
       "tests/visual/README.md",
       "tests/visual/ai-debug-panel.spec.ts",

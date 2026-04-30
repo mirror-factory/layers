@@ -13,7 +13,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-30T13:57:26.393Z"
+    "lastCheckedAt": "2026-04-30T17:09:15.341Z"
   },
   {
     "id": "docs-apis-api-ai-logs-errors-md",
@@ -31,7 +31,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-26T22:08:36.882Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.364Z"
   },
   {
     "id": "docs-apis-api-ai-logs-md",
@@ -49,7 +49,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-26T22:08:36.881Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.368Z"
   },
   {
     "id": "docs-apis-api-ai-logs-stats-md",
@@ -67,7 +67,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-26T22:08:36.882Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.368Z"
   },
   {
     "id": "docs-apis-api-control-plane-md",
@@ -85,7 +85,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-26T22:08:36.883Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.368Z"
   },
   {
     "id": "docs-apis-app-api-admin-pricing-activate-route-md",
@@ -103,7 +103,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.774Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.368Z"
   },
   {
     "id": "docs-apis-app-api-admin-pricing-route-md",
@@ -121,7 +121,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.774Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.368Z"
   },
   {
     "id": "docs-apis-app-api-ai-logs-errors-route-md",
@@ -139,7 +139,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.775Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.368Z"
   },
   {
     "id": "docs-apis-app-api-ai-logs-route-md",
@@ -157,7 +157,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.775Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.368Z"
   },
   {
     "id": "docs-apis-app-api-ai-logs-stats-route-md",
@@ -175,7 +175,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.775Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.368Z"
   },
   {
     "id": "docs-apis-app-api-auth-api-key-route-md",
@@ -193,7 +193,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.776Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.368Z"
   },
   {
     "id": "docs-apis-app-api-auth-send-email-route-md",
@@ -211,7 +211,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.776Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.368Z"
   },
   {
     "id": "docs-apis-app-api-calendar-callback-provider-route-md",
@@ -229,7 +229,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.776Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.368Z"
   },
   {
     "id": "docs-apis-app-api-calendar-connect-provider-route-md",
@@ -247,7 +247,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.776Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.368Z"
   },
   {
     "id": "docs-apis-app-api-calendar-disconnect-provider-route-md",
@@ -265,7 +265,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.777Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.368Z"
   },
   {
     "id": "docs-apis-app-api-calendar-upcoming-route-md",
@@ -283,7 +283,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.777Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.368Z"
   },
   {
     "id": "docs-apis-app-api-chat-route-md",
@@ -301,7 +301,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.777Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.368Z"
   },
   {
     "id": "docs-apis-app-api-control-plane-evidence-export-route-md",
@@ -319,7 +319,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.778Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.368Z"
   },
   {
     "id": "docs-apis-app-api-control-plane-route-md",
@@ -337,7 +337,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.778Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.368Z"
   },
   {
     "id": "docs-apis-app-api-dev-kit-config-name-route-md",
@@ -355,7 +355,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.778Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.368Z"
   },
   {
     "id": "docs-apis-app-api-dev-kit-connectors-route-md",
@@ -373,7 +373,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.779Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.368Z"
   },
   {
     "id": "docs-apis-app-api-dev-kit-cost-route-md",
@@ -391,7 +391,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.779Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.368Z"
   },
   {
     "id": "docs-apis-app-api-dev-kit-coverage-route-md",
@@ -409,7 +409,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.779Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.368Z"
   },
   {
     "id": "docs-apis-app-api-dev-kit-dependencies-route-md",
@@ -427,7 +427,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.779Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.368Z"
   },
   {
     "id": "docs-apis-app-api-dev-kit-deployments-route-md",
@@ -445,7 +445,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.780Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.368Z"
   },
   {
     "id": "docs-apis-app-api-dev-kit-design-system-route-md",
@@ -463,7 +463,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.780Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.372Z"
   },
   {
     "id": "docs-apis-app-api-dev-kit-evals-id-route-md",
@@ -481,7 +481,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.780Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.372Z"
   },
   {
     "id": "docs-apis-app-api-dev-kit-evals-route-md",
@@ -499,7 +499,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.780Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.372Z"
   },
   {
     "id": "docs-apis-app-api-dev-kit-features-name-route-md",
@@ -517,7 +517,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.781Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.372Z"
   },
   {
     "id": "docs-apis-app-api-dev-kit-features-route-md",
@@ -535,7 +535,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.781Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.372Z"
   },
   {
     "id": "docs-apis-app-api-dev-kit-index-route-md",
@@ -553,7 +553,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.781Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.372Z"
   },
   {
     "id": "docs-apis-app-api-dev-kit-logs-unified-route-md",
@@ -571,7 +571,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.782Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.372Z"
   },
   {
     "id": "docs-apis-app-api-dev-kit-overview-route-md",
@@ -589,7 +589,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.782Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.372Z"
   },
   {
     "id": "docs-apis-app-api-dev-kit-registries-route-md",
@@ -607,7 +607,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.782Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.372Z"
   },
   {
     "id": "docs-apis-app-api-dev-kit-regressions-route-md",
@@ -625,7 +625,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.782Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.372Z"
   },
   {
     "id": "docs-apis-app-api-dev-kit-runs-route-md",
@@ -643,7 +643,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.783Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.372Z"
   },
   {
     "id": "docs-apis-app-api-dev-kit-runs-run-id-route-md",
@@ -661,7 +661,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.783Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.372Z"
   },
   {
     "id": "docs-apis-app-api-dev-kit-sessions-id-route-md",
@@ -679,7 +679,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.784Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.372Z"
   },
   {
     "id": "docs-apis-app-api-dev-kit-sessions-route-md",
@@ -697,7 +697,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.783Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.372Z"
   },
   {
     "id": "docs-apis-app-api-dev-kit-status-route-md",
@@ -715,7 +715,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.784Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.376Z"
   },
   {
     "id": "docs-apis-app-api-dev-kit-tools-route-md",
@@ -732,7 +732,7 @@
       "lib/ai/tool-meta.ts",
       "lib/registry.ts"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.784Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.376Z"
   },
   {
     "id": "docs-apis-app-api-embeddings-backfill-route-md",
@@ -750,7 +750,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.785Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.376Z"
   },
   {
     "id": "docs-apis-app-api-health-route-md",
@@ -768,7 +768,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.785Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.376Z"
   },
   {
     "id": "docs-apis-app-api-mcp-transport-route-md",
@@ -786,7 +786,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.785Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.376Z"
   },
   {
     "id": "docs-apis-app-api-meetings-id-export-route-md",
@@ -804,7 +804,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-29T20:07:55.860Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.376Z"
   },
   {
     "id": "docs-apis-app-api-meetings-id-notes-package-route-md",
@@ -822,7 +822,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-29T20:55:42.777Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.376Z"
   },
   {
     "id": "docs-apis-app-api-meetings-id-route-md",
@@ -840,7 +840,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.786Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.376Z"
   },
   {
     "id": "docs-apis-app-api-meetings-route-md",
@@ -858,7 +858,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.785Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.376Z"
   },
   {
     "id": "docs-apis-app-api-models-route-md",
@@ -876,7 +876,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.787Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.376Z"
   },
   {
     "id": "docs-apis-app-api-oauth-authorize-route-md",
@@ -894,7 +894,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.787Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.376Z"
   },
   {
     "id": "docs-apis-app-api-oauth-callback-route-md",
@@ -912,7 +912,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.787Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.376Z"
   },
   {
     "id": "docs-apis-app-api-oauth-consent-route-md",
@@ -930,7 +930,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.788Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.376Z"
   },
   {
     "id": "docs-apis-app-api-oauth-revoke-route-md",
@@ -948,7 +948,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.788Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.376Z"
   },
   {
     "id": "docs-apis-app-api-oauth-token-route-md",
@@ -966,7 +966,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.788Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.376Z"
   },
   {
     "id": "docs-apis-app-api-observability-health-route-md",
@@ -984,7 +984,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.788Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.376Z"
   },
   {
     "id": "docs-apis-app-api-search-route-md",
@@ -1002,7 +1002,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.789Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.376Z"
   },
   {
     "id": "docs-apis-app-api-settings-route-md",
@@ -1020,7 +1020,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.789Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.380Z"
   },
   {
     "id": "docs-apis-app-api-stripe-checkout-route-md",
@@ -1038,7 +1038,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.789Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.380Z"
   },
   {
     "id": "docs-apis-app-api-stripe-webhook-route-md",
@@ -1056,7 +1056,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.789Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.380Z"
   },
   {
     "id": "docs-apis-app-api-transcribe-id-route-md",
@@ -1074,7 +1074,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.790Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.380Z"
   },
   {
     "id": "docs-apis-app-api-transcribe-route-md",
@@ -1092,7 +1092,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.790Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.380Z"
   },
   {
     "id": "docs-apis-app-api-transcribe-stream-autosave-route-md",
@@ -1110,7 +1110,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.790Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.380Z"
   },
   {
     "id": "docs-apis-app-api-transcribe-stream-finalize-route-md",
@@ -1128,7 +1128,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.790Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.380Z"
   },
   {
     "id": "docs-apis-app-api-transcribe-stream-preflight-route-md",
@@ -1146,7 +1146,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.791Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.380Z"
   },
   {
     "id": "docs-apis-app-api-transcribe-stream-token-route-md",
@@ -1164,7 +1164,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.791Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.380Z"
   },
   {
     "id": "docs-apis-app-api-webhooks-deliveries-route-md",
@@ -1183,7 +1183,7 @@
       ".codex/hooks/",
       ".codex/hooks.json"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.792Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.380Z"
   },
   {
     "id": "docs-apis-app-api-webhooks-route-md",
@@ -1202,7 +1202,7 @@
       ".codex/hooks/",
       ".codex/hooks.json"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.791Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.380Z"
   },
   {
     "id": "docs-apis-meetings-i-export-md",
@@ -1220,7 +1220,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-29T20:22:37.274Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.380Z"
   },
   {
     "id": "docs-apis-meetings-i-notes-package-md",
@@ -1238,7 +1238,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-29T21:00:35.686Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.380Z"
   },
   {
     "id": "docs-app-store-screenshots-md",
@@ -1255,7 +1255,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-29T23:33:41.055Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.358Z"
   },
   {
     "id": "docs-brand-guide-md",
@@ -1272,7 +1272,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-29T23:36:18.543Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.544Z"
   },
   {
     "id": "docs-build-spec-md",
@@ -1289,7 +1289,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-29T23:38:12.654Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.359Z"
   },
   {
     "id": "docs-calendar-integration-md",
@@ -1306,7 +1306,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-29T23:33:41.052Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.359Z"
   },
   {
     "id": "docs-claude-mcp-testing-md",
@@ -1323,7 +1323,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-30T00:00:51.156Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.359Z"
   },
   {
     "id": "docs-competitive-landscape-and-gtm-md",
@@ -1340,7 +1340,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-30T13:07:44.847Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.360Z"
   },
   {
     "id": "docs-components-agent-builder-md",
@@ -1358,7 +1358,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-28T22:21:23.583Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.544Z"
   },
   {
     "id": "docs-components-audio-wave-ribbon-md",
@@ -1376,7 +1376,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-29T23:33:41.058Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.548Z"
   },
   {
     "id": "docs-components-session-workspace-md",
@@ -1394,7 +1394,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-29T19:40:09.539Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.548Z"
   },
   {
     "id": "docs-embeddings-and-search-md",
@@ -1411,7 +1411,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-29T23:40:48.658Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.360Z"
   },
   {
     "id": "docs-feature-test-marketing-matrix-md",
@@ -1428,7 +1428,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-29T14:47:06.856Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.360Z"
   },
   {
     "id": "docs-feature-test-plan-md",
@@ -1445,7 +1445,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T21:18:05.121Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.360Z"
   },
   {
     "id": "docs-features-app-admin-pricing-page-md",
@@ -1463,7 +1463,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.797Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.548Z"
   },
   {
     "id": "docs-features-app-agent-builder-page-md",
@@ -1481,7 +1481,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-29T14:47:29.341Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.550Z"
   },
   {
     "id": "docs-features-app-ai-starter-page-md",
@@ -1499,7 +1499,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.797Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.550Z"
   },
   {
     "id": "docs-features-app-ask-page-md",
@@ -1517,7 +1517,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.798Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.550Z"
   },
   {
     "id": "docs-features-app-auth-callback-route-md",
@@ -1535,7 +1535,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.798Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.550Z"
   },
   {
     "id": "docs-features-app-auth-confirm-page-md",
@@ -1553,7 +1553,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.798Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.550Z"
   },
   {
     "id": "docs-features-app-auth-sign-out-route-md",
@@ -1571,7 +1571,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.798Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.550Z"
   },
   {
     "id": "docs-features-app-chat-page-md",
@@ -1589,7 +1589,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.798Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.550Z"
   },
   {
     "id": "docs-features-app-control-plane-page-md",
@@ -1607,7 +1607,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.799Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.550Z"
   },
   {
     "id": "docs-features-app-dev-kit-config-page-md",
@@ -1625,7 +1625,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.799Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.550Z"
   },
   {
     "id": "docs-features-app-dev-kit-connectors-page-md",
@@ -1643,7 +1643,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.799Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.550Z"
   },
   {
     "id": "docs-features-app-dev-kit-cost-page-md",
@@ -1661,7 +1661,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.799Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.550Z"
   },
   {
     "id": "docs-features-app-dev-kit-coverage-page-md",
@@ -1679,7 +1679,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.800Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.550Z"
   },
   {
     "id": "docs-features-app-dev-kit-dependencies-page-md",
@@ -1697,7 +1697,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.800Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.550Z"
   },
   {
     "id": "docs-features-app-dev-kit-deployments-page-md",
@@ -1715,7 +1715,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.800Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.550Z"
   },
   {
     "id": "docs-features-app-dev-kit-design-system-page-md",
@@ -1733,7 +1733,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.800Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-dev-kit-evals-id-page-md",
@@ -1751,7 +1751,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.801Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-dev-kit-evals-page-md",
@@ -1769,7 +1769,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.801Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-dev-kit-features-name-page-md",
@@ -1787,7 +1787,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.802Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-dev-kit-features-page-md",
@@ -1805,7 +1805,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.801Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-dev-kit-index-page-md",
@@ -1823,7 +1823,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.802Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-dev-kit-page-md",
@@ -1841,7 +1841,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.799Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-dev-kit-registries-page-md",
@@ -1859,7 +1859,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.802Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-dev-kit-regressions-page-md",
@@ -1877,7 +1877,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.803Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-dev-kit-runs-page-md",
@@ -1895,7 +1895,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.803Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-dev-kit-runs-run-id-page-md",
@@ -1913,7 +1913,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.803Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-dev-kit-sessions-id-page-md",
@@ -1931,7 +1931,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.804Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-dev-kit-sessions-page-md",
@@ -1949,7 +1949,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.803Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-dev-kit-status-page-md",
@@ -1967,7 +1967,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.804Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-dev-kit-tools-page-md",
@@ -1984,7 +1984,7 @@
       "lib/ai/tool-meta.ts",
       "lib/registry.ts"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.804Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-docs-page-md",
@@ -2002,7 +2002,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.804Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-download-page-md",
@@ -2020,7 +2020,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-30T13:04:53.399Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-meetings-id-page-md",
@@ -2038,7 +2038,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.806Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-meetings-page-md",
@@ -2056,7 +2056,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.805Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-oauth-consent-page-md",
@@ -2074,7 +2074,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.807Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-observability-page-md",
@@ -2092,7 +2092,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.807Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-page-md",
@@ -2110,7 +2110,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-29T23:48:44.536Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-pricing-page-md",
@@ -2128,7 +2128,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.812Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-profile-page-md",
@@ -2146,7 +2146,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.812Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-record-live-page-md",
@@ -2164,7 +2164,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.813Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-record-page-md",
@@ -2182,7 +2182,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.813Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-roadmap-page-md",
@@ -2200,7 +2200,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.814Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-search-page-md",
@@ -2218,7 +2218,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.815Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-settings-page-md",
@@ -2236,7 +2236,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.815Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-sign-in-page-md",
@@ -2254,7 +2254,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.816Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-sign-up-page-md",
@@ -2272,7 +2272,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.816Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-usage-page-md",
@@ -2290,7 +2290,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.816Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.552Z"
   },
   {
     "id": "docs-features-app-well-known-oauth-authorization-server-route-md",
@@ -2308,7 +2308,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.817Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.556Z"
   },
   {
     "id": "docs-features-app-well-known-oauth-protected-resource-route-md",
@@ -2326,7 +2326,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T14:23:28.818Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.556Z"
   },
   {
     "id": "docs-frontend-surface-audit-md",
@@ -2343,7 +2343,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-29T23:36:18.541Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.360Z"
   },
   {
     "id": "docs-guides-ai-starter-hub-md",
@@ -2361,7 +2361,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-26T22:08:36.880Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.556Z"
   },
   {
     "id": "docs-home-ui-polish-md",
@@ -2378,7 +2378,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-29T23:36:18.542Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.360Z"
   },
   {
     "id": "docs-launch-checklist-md",
@@ -2395,7 +2395,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-30T13:54:04.146Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.360Z"
   },
   {
     "id": "docs-mcp-and-api-md",
@@ -2412,7 +2412,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-30T00:00:51.156Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.360Z"
   },
   {
     "id": "docs-mfdr-mfdr-001-md",
@@ -2430,7 +2430,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-29T23:36:18.539Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.556Z"
   },
   {
     "id": "docs-notes-push-workflow-md",
@@ -2447,7 +2447,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-29T23:33:41.052Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.360Z"
   },
   {
     "id": "docs-pricing-admin-md",
@@ -2464,7 +2464,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-30T13:04:53.400Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.360Z"
   },
   {
     "id": "docs-pricing-and-billing-md",
@@ -2481,7 +2481,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-30T13:07:20.103Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.360Z"
   },
   {
     "id": "docs-recording-reliability-md",
@@ -2498,7 +2498,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-29T23:33:41.057Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.360Z"
   },
   {
     "id": "docs-recording-reminders-md",
@@ -2515,7 +2515,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T03:46:46.115Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.364Z"
   },
   {
     "id": "docs-reference-openai-codex-runtime-md",
@@ -2534,7 +2534,7 @@
       ".codex/config.toml",
       "AGENTS.md"
     ],
-    "lastCheckedAt": "2026-04-26T22:08:36.881Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.556Z"
   },
   {
     "id": "docs-roadmap-md",
@@ -2551,7 +2551,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-29T23:36:18.538Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.556Z"
   },
   {
     "id": "docs-schemas-and-registries-md",
@@ -2568,7 +2568,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-24T22:52:36.482Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.364Z"
   },
   {
     "id": "docs-simple-ui-direction-md",
@@ -2585,7 +2585,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-29T23:36:18.538Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.364Z"
   },
   {
     "id": "docs-style-guide-md",
@@ -2602,7 +2602,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-29T23:36:18.540Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.556Z"
   },
   {
     "id": "docs-supabase-mcp-oauth-setup-md",
@@ -2619,7 +2619,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-29T23:36:18.538Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.364Z"
   },
   {
     "id": "docs-transcription-provider-matrix-md",
@@ -2636,7 +2636,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-30T13:07:44.847Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.364Z"
   },
   {
     "id": "docs-ui-style-variations-md",
@@ -2653,7 +2653,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-27T01:11:39.375Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.364Z"
   },
   {
     "id": "docs-v1-plan-md",
@@ -2670,7 +2670,7 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-29T23:36:18.540Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.364Z"
   },
   {
     "id": "openai-codex-agents-md",
@@ -2686,7 +2686,7 @@
     "triggerPaths": [
       "AGENTS.md"
     ],
-    "lastCheckedAt": "2026-04-30T13:57:28.539Z"
+    "lastCheckedAt": "2026-04-30T17:09:18.734Z"
   },
   {
     "id": "openai-codex-hooks",
@@ -2704,7 +2704,7 @@
       ".codex/config.toml",
       ".codex/hooks/"
     ],
-    "lastCheckedAt": "2026-04-30T13:57:28.539Z"
+    "lastCheckedAt": "2026-04-30T17:09:18.734Z"
   },
   {
     "id": "openai-docs-mcp",
@@ -2721,7 +2721,7 @@
       ".codex/config.toml",
       "AGENTS.md"
     ],
-    "lastCheckedAt": "2026-04-30T13:57:28.539Z"
+    "lastCheckedAt": "2026-04-30T17:09:18.734Z"
   },
   {
     "id": "readme-md",
@@ -2737,6 +2737,6 @@
       "components/",
       "lib/"
     ],
-    "lastCheckedAt": "2026-04-29T23:36:18.536Z"
+    "lastCheckedAt": "2026-04-30T16:51:11.252Z"
   }
 ]

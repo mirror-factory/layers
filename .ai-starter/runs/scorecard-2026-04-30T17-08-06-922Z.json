@@ -1,10 +1,11 @@
 {
-  "generatedAt": "2026-04-30T17:09:23.923Z",
+  "generatedAt": "2026-04-30T17:08:06.921Z",
   "planId": "2026-04-30T13-52-45-473Z-create-launch-checklist-and-agen",
   "score": 97,
   "blockers": [
+    "No screenshot evidence found.",
     "No Expect replay evidence has been captured yet.",
-    "Pending companion coverage for 47 surface(s)."
+    "Pending companion coverage for 48 surface(s)."
   ],
   "recommendations": [
     "Refresh the active plan if scope changed.",
@@ -39,23 +40,23 @@
     "browserProof": {
       "expectFlows": 53,
       "replays": 0,
-      "screenshots": 1
+      "screenshots": 0
     },
     "evidence": {
-      "total": 204,
-      "screenshots": 1,
+      "total": 201,
+      "screenshots": 0,
       "videos": 0,
       "traces": 0,
       "reports": 41
     },
     "companions": {
       "total": 138,
-      "pending": 47,
-      "satisfied": 91
+      "pending": 48,
+      "satisfied": 90
     },
     "hooks": {
       "registered": 24,
-      "observed": 90,
+      "observed": 82,
       "blocked": 4
     }
   }

@@ -31,11 +31,13 @@
     "Companions satisfied for app/.well-known/oauth-protected-resource/route.ts"
   ],
   "filesInFlight": [
-    ".claude/skills/wire-telemetry/SKILL.md"
+    ".claude/skills/wire-telemetry/SKILL.md",
+    "scripts/ai-starter-core.ts"
   ],
   "evidenceStatus": [
     "companions: 1 pending / 138 satisfied",
-    "observed-change:.claude/skills/wire-telemetry/SKILL.md"
+    "observed-change:.claude/skills/wire-telemetry/SKILL.md",
+    "observed-change:scripts/ai-starter-core.ts"
   ],
-  "updatedAt": "2026-04-30T17:04:48.788370Z"
+  "updatedAt": "2026-04-30T17:10:38.164404Z"
 }

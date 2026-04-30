@@ -1,10 +1,10 @@
 {
   "planId": "2026-04-30T13-52-45-473Z-create-launch-checklist-and-agen",
-  "actionKey": "2026-04-30T13-52-45-473Z-create-launch-checklist-and-agen:pending-companions:pnpm companions",
-  "reason": "pending-companions",
-  "command": "pnpm companions",
+  "actionKey": "2026-04-30T13-52-45-473Z-create-launch-checklist-and-agen:scorecard-blockers:pnpm sync && pnpm score",
+  "reason": "scorecard-blockers",
+  "command": "pnpm sync && pnpm score",
   "count": 1,
   "maxIterations": 5,
-  "telemetryLineCount": 41,
-  "stopHookActive": false
+  "telemetryLineCount": 96,
+  "stopHookActive": true
 }

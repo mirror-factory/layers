@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-30T17:09:23.923Z",
+  "generatedAt": "2026-04-30T17:09:11.424Z",
   "planId": "2026-04-30T13-52-45-473Z-create-launch-checklist-and-agen",
   "score": 97,
   "blockers": [
@@ -42,7 +42,7 @@
       "screenshots": 1
     },
     "evidence": {
-      "total": 204,
+      "total": 203,
       "screenshots": 1,
       "videos": 0,
       "traces": 0,
@@ -55,7 +55,7 @@
     },
     "hooks": {
       "registered": 24,
-      "observed": 90,
+      "observed": 89,
       "blocked": 4
     }
   }

@@ -1,6 +1,6 @@
 {
-  "status": "configured",
-  "updatedAt": "2026-04-30T13:57:30.834Z",
+  "status": "needs-env",
+  "updatedAt": "2026-04-30T17:09:22.176Z",
   "configPath": ".ai-starter/config.json",
   "envExamplePath": ".env.example",
   "localEnvPath": ".env.local",
@@ -29,8 +29,18 @@
     "designInputSource": "defaults"
   },
   "requiredGroups": 1,
-  "satisfiedGroups": 1,
-  "missingGroups": [],
+  "satisfiedGroups": 0,
+  "missingGroups": [
+    {
+      "id": "ai-gateway-auth",
+      "label": "Vercel AI Gateway authentication",
+      "anyOf": [
+        "AI_GATEWAY_API_KEY",
+        "VERCEL_OIDC_TOKEN"
+      ],
+      "reason": "Required for local model calls through the Vercel AI Gateway."
+    }
+  ],
   "configuredIntegrations": [
     "vercel-ai-gateway"
   ],
@@ -54,6 +64,6 @@
   "policyProfile": "strict",
   "setupCommand": "pnpm exec ai-starter-kit setup",
   "notes": [
-    "Setup config and local env contract are satisfied."
+    "Secrets are never stored by the starter. Add missing values to .env.local or pull from Vercel."
   ]
 }
