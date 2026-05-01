@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.55] — 2026-05-01
+
+### Other
+- M2(PROD-406): public /docs pages — index, MCP, REST API, errors (`9ab0ab9`)
+
+
 ## [0.1.54] — 2026-05-01
 
 ### Other
