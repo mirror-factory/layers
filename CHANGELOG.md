@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.46] — 2026-05-01
+
+### Other
+- Fix(PROD-385): hook-tester runaway — per-hook 15s SIGKILL timeout (`797d289`)
+
+
 ## [0.1.45] — 2026-05-01
 
 ### Other
