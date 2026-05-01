@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.38] — 2026-05-01
+
+### Other
+- Inner pages: Calendar + Settings sync as "Coming soon", MCP stays live (`5c4d54e`)
+
+
 ## [0.1.37] — 2026-05-01
 
 ### Other
