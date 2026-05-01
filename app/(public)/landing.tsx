@@ -4,6 +4,12 @@ import Link from "next/link";
 import { Bricolage_Grotesque } from "next/font/google";
 import AudioWaveRibbon from "@/components/audio-wave-ribbon";
 import { LayersLogoMark } from "@/components/layers-logo";
+import {
+  ChatGPTLogo,
+  ClaudeLogo,
+  GeminiLogo,
+  McpGlyph,
+} from "@/components/ai-tool-logos";
 
 /*
  * Layers homepage — Paper Calm v1.0
@@ -71,12 +77,6 @@ const PRICING = [
 
 const TRUST_LOGOS = ["Linear", "Vercel", "dribbble", "Notion", "Lattice", "Retool"];
 
-const WORKS_WITH = [
-  { label: "ChatGPT", color: "var(--layers-mint)" },
-  { label: "Claude", color: "var(--layers-violet)" },
-  { label: "Gemini", color: "var(--layers-blue)" },
-  { label: "MCP clients", color: "var(--brand-accent-subtle, var(--layers-mint))" },
-];
 
 export function LandingPage() {
   return (
@@ -86,6 +86,7 @@ export function LandingPage() {
       <SectionMemory />
       <SectionSearch />
       <SectionReuse />
+      <SectionConnect />
       <SectionPricing />
       <FinalCta />
 
@@ -308,42 +309,6 @@ function Hero() {
             </Link>
           </div>
 
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              flexWrap: "wrap",
-              gap: 10,
-              marginTop: 8,
-            }}
-          >
-            <span
-              style={{
-                fontSize: "0.75rem",
-                color: "var(--fg-faint)",
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                marginRight: 4,
-              }}
-            >
-              Works with
-            </span>
-            {WORKS_WITH.map((w) => (
-              <span key={w.label} className="home-pill">
-                <span
-                  aria-hidden
-                  style={{
-                    width: 6,
-                    height: 6,
-                    borderRadius: 999,
-                    background: w.color,
-                    boxShadow: `0 0 0 3px color-mix(in oklch, ${w.color} 18%, transparent)`,
-                  }}
-                />
-                {w.label}
-              </span>
-            ))}
-          </div>
         </div>
 
         <HeroComposition />
@@ -897,11 +862,11 @@ function SectionMemory() {
             <span className="home-italic-serif">every meeting.</span>
           </>
         }
-        lede="Layers builds a structured record of what your team decided, owns, and said — and feeds that context to the AI tools you already use."
+        lede="Layers builds a structured record of what your team decided, owns, and said — and keeps it in one searchable memory you can act on."
         bullets={[
-          "Decisions, actions, and customer signal — captured automatically",
-          "Speaker-aware. Topic-aware. Updated as the meeting unfolds",
-          "Shared with ChatGPT, Claude, Gemini, and any MCP-aware tool",
+          "Decisions, actions, and intake captured automatically",
+          "Refreshed as the meeting unfolds — every transcript turn",
+          "Cross-meeting memory your team can search and reuse",
         ]}
         media={<MemoryMediaCard />}
         mediaSide="right"
@@ -1383,6 +1348,220 @@ function ReuseMediaCard() {
   );
 }
 
+/* ─────────────── Connect / MCP ─────────────── */
+
+function SectionConnect() {
+  return (
+    <section
+      aria-labelledby="home-connect-heading"
+      className="section-shell"
+    >
+      <NumberedSection
+        index="04"
+        eyebrow="Connect to your AI tools"
+        heading={
+          <>
+            Bring meeting memory into{" "}
+            <span className="home-italic-serif">the AI you already use.</span>
+          </>
+        }
+        lede="Layers ships an MCP server. Any Model Context Protocol client — ChatGPT, Claude, Gemini, or your own — can search and reason across your meetings without copying transcripts around."
+        bullets={[
+          "Authenticated MCP server scoped per workspace",
+          "Tools for search, decisions, actions, and meeting detail",
+          "Connect once — every meeting becomes context for your AI",
+        ]}
+        media={<ConnectMediaCard />}
+        mediaSide="left"
+      />
+    </section>
+  );
+}
+
+function ConnectMediaCard() {
+  const tools = [
+    {
+      name: "ChatGPT",
+      sub: "OpenAI",
+      brand: "var(--layers-mint)",
+      Icon: ChatGPTLogo,
+    },
+    {
+      name: "Claude",
+      sub: "Anthropic",
+      brand: "var(--layers-violet)",
+      Icon: ClaudeLogo,
+    },
+    {
+      name: "Gemini",
+      sub: "Google",
+      brand: "var(--layers-blue)",
+      Icon: GeminiLogo,
+    },
+    {
+      name: "Any MCP client",
+      sub: "Model Context Protocol",
+      brand: "var(--brand-accent-subtle, var(--layers-mint))",
+      Icon: McpGlyph,
+    },
+  ];
+
+  return (
+    <div
+      aria-hidden
+      style={{
+        background: "var(--bg-surface)",
+        border: "1px solid var(--border-default)",
+        borderRadius: "var(--radius-2xl, 20px)",
+        padding: "20px 22px 22px",
+        boxShadow:
+          "0 28px 60px -32px color-mix(in oklch, var(--layers-violet) 22%, transparent)",
+        display: "grid",
+        gap: 16,
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 12,
+          flexWrap: "wrap",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span
+            aria-hidden
+            style={{
+              width: 8,
+              height: 8,
+              borderRadius: 999,
+              background: "var(--layers-mint)",
+              boxShadow:
+                "0 0 0 4px color-mix(in oklch, var(--layers-mint) 18%, transparent)",
+            }}
+          />
+          <span
+            style={{
+              fontSize: "0.78rem",
+              fontWeight: 600,
+              color: "var(--fg-default)",
+            }}
+          >
+            Layers MCP server
+          </span>
+        </div>
+        <span
+          style={{
+            fontSize: "0.7rem",
+            color: "var(--fg-muted)",
+            letterSpacing: "0.02em",
+          }}
+        >
+          search · decisions · actions · meeting detail
+        </span>
+      </div>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
+          gap: 10,
+        }}
+      >
+        {tools.map(({ name, sub, brand, Icon }) => (
+          <div
+            key={name}
+            style={{
+              display: "grid",
+              gridTemplateColumns: "auto 1fr",
+              gap: 12,
+              alignItems: "center",
+              padding: "12px 14px",
+              borderRadius: "var(--radius-lg, 14px)",
+              background:
+                "color-mix(in oklch, var(--bg-page) 78%, var(--bg-surface) 22%)",
+              border: "1px solid var(--border-subtle)",
+            }}
+          >
+            <span
+              aria-hidden
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: 10,
+                background:
+                  "color-mix(in oklch, " + brand + " 14%, var(--bg-surface) 86%)",
+                color: brand,
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                border:
+                  "1px solid color-mix(in oklch, " +
+                  brand +
+                  " 28%, transparent)",
+              }}
+            >
+              <Icon size={20} />
+            </span>
+            <div style={{ display: "grid", gap: 2 }}>
+              <span
+                style={{
+                  fontSize: "0.86rem",
+                  fontWeight: 600,
+                  color: "var(--fg-default)",
+                  letterSpacing: "-0.005em",
+                }}
+              >
+                {name}
+              </span>
+              <span
+                style={{
+                  fontSize: "0.7rem",
+                  color: "var(--fg-muted)",
+                }}
+              >
+                {sub}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div
+        style={{
+          padding: "12px 14px",
+          borderRadius: "var(--radius-lg, 14px)",
+          background:
+            "color-mix(in oklch, var(--layers-mint-tint) 30%, var(--bg-surface) 70%)",
+          border:
+            "1px solid color-mix(in oklch, var(--layers-mint) 30%, transparent)",
+          fontSize: "0.78rem",
+          fontFamily: "var(--font-mono, ui-monospace)",
+          color: "var(--fg-default)",
+          display: "grid",
+          gap: 4,
+        }}
+      >
+        <span style={{ color: "var(--fg-muted)" }}>
+          // call from your AI client
+        </span>
+        <span>
+          layers.search
+          <span style={{ color: "var(--fg-muted)" }}>(</span>
+          <span style={{ color: "var(--layers-violet)" }}>
+            &quot;onboarding objections&quot;
+          </span>
+          <span style={{ color: "var(--fg-muted)" }}>)</span>
+        </span>
+        <span style={{ color: "var(--fg-muted)" }}>
+          → 18 meetings · 3 decisions · 4 action items
+        </span>
+      </div>
+    </div>
+  );
+}
+
 /* ─────────────── Numbered section primitive ─────────────── */
 
 function NumberedSection({
@@ -1554,7 +1733,7 @@ function SectionPricing() {
                 fontWeight: 600,
               }}
             >
-              04
+              05
             </span>
             <span aria-hidden style={{ height: 1, width: 28, background: "var(--border-default)" }} />
             <span className="home-eyebrow">Built for teams at every stage</span>
@@ -1837,12 +2016,6 @@ function FinalCta() {
           >
             Coming soon
           </button>
-          <Link
-            href="mailto:support@mirrorfactory.ai?subject=Demo%20request"
-            className="btn-ghost"
-          >
-            Book a demo
-          </Link>
         </div>
 
         <div
