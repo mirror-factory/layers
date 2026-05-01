@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.56] — 2026-05-01
+
+### Other
+- M2(PROD-384): public /changelog page from CHANGELOG.md (`b954d60`)
+
+
 ## [0.1.55] — 2026-05-01
 
 ### Other
