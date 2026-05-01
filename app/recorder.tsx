@@ -793,23 +793,22 @@ function HomeInsightTip() {
       className="home-insight-tip home-mcp-tip home-mcp-tip-clean"
       aria-label="MCP connection"
     >
-      <div className="home-insight-copy home-mcp-copy-centered">
-        <p className="home-insight-kicker">
+      <div className="home-mcp-clean-stack">
+        <p className="home-mcp-clean-kicker">
           <span aria-hidden="true" className="home-mcp-kicker-dot" />
           MCP ready
         </p>
-        <h3>Connect your AI tools</h3>
-        <p>
-          Plug Layers into ChatGPT, Claude, Gemini, or any MCP-aware client and
-          let them pull meeting memory on demand.
+        <h3 className="home-mcp-clean-headline">Connect your AI tools</h3>
+        <p className="home-mcp-clean-body">
+          Plug Layers into ChatGPT, Claude, Gemini, or any MCP-aware client.
         </p>
         <Link
           href="/profile"
-          className="home-mcp-link home-mcp-link-pulse"
+          className="home-mcp-clean-cta"
           aria-label="Set up the Layers MCP connection"
         >
-          <Sparkles size={13} aria-hidden="true" />
-          Set up MCP connection
+          <Sparkles size={14} aria-hidden="true" />
+          <span>Set up MCP connection</span>
         </Link>
       </div>
 
@@ -819,50 +818,98 @@ function HomeInsightTip() {
             box-shadow: 0 0 0 0 color-mix(in oklch, var(--layers-mint) 50%, transparent);
           }
           70% {
-            box-shadow: 0 0 0 10px color-mix(in oklch, var(--layers-mint) 0%, transparent);
+            box-shadow: 0 0 0 8px color-mix(in oklch, var(--layers-mint) 0%, transparent);
           }
         }
-        @keyframes mcpButtonHalo {
+        @keyframes mcpCtaHalo {
           0%, 100% {
             box-shadow:
-              0 1px 0 color-mix(in oklch, var(--layers-mint) 28%, transparent),
-              0 0 0 0 color-mix(in oklch, var(--layers-mint) 38%, transparent);
+              0 1px 0 color-mix(in oklch, var(--layers-mint) 30%, transparent),
+              0 0 0 0 color-mix(in oklch, var(--layers-mint) 36%, transparent);
           }
           50% {
             box-shadow:
-              0 1px 0 color-mix(in oklch, var(--layers-mint) 28%, transparent),
-              0 0 0 10px color-mix(in oklch, var(--layers-mint) 0%, transparent);
+              0 1px 0 color-mix(in oklch, var(--layers-mint) 30%, transparent),
+              0 0 0 8px color-mix(in oklch, var(--layers-mint) 0%, transparent);
           }
         }
         :global(.home-mcp-tip-clean) {
-          display: grid;
-          place-items: center;
-          padding: clamp(28px, 4vw, 44px) clamp(20px, 4vw, 36px);
-          text-align: center;
+          padding: clamp(20px, 2.4vw, 28px);
         }
-        :global(.home-mcp-copy-centered) {
-          max-width: 32ch;
+        :global(.home-mcp-clean-stack) {
           display: grid;
           gap: 10px;
-          justify-items: center;
+          justify-items: start;
+          text-align: left;
+          max-width: 38ch;
+        }
+        :global(.home-mcp-clean-kicker) {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          margin: 0;
+          font-size: 0.62rem;
+          font-weight: 700;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: var(--layers-mint, #0f766e);
         }
         :global(.home-mcp-kicker-dot) {
           display: inline-block;
           width: 7px;
           height: 7px;
           border-radius: 999px;
-          background: var(--layers-mint);
-          margin-right: 6px;
-          vertical-align: 1px;
+          background: var(--layers-mint, #0f766e);
           animation: mcpKickerPulse 2.2s ease-out infinite;
         }
-        :global(.home-mcp-link-pulse) {
-          animation: mcpButtonHalo 2.6s ease-in-out infinite;
+        :global(.home-mcp-clean-headline) {
+          margin: 0;
+          font-size: clamp(1.05rem, 0.94rem + 0.4vw, 1.25rem) !important;
+          font-weight: 600;
+          line-height: 1.2;
+          letter-spacing: -0.012em;
+          color: var(--text-primary);
+        }
+        :global(.home-mcp-clean-body) {
+          margin: 0 !important;
+          font-size: 0.84rem !important;
+          line-height: 1.5 !important;
+          color: var(--text-secondary, var(--fg-muted));
+          max-width: 36ch !important;
+        }
+        :global(.home-mcp-clean-cta) {
+          display: inline-flex !important;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          margin-top: 6px !important;
+          padding: 9px 16px !important;
+          min-height: 38px !important;
+          width: auto !important;
+          border-radius: 999px !important;
+          background: var(--layers-mint-soft, #b6efd9) !important;
+          color: var(--layers-ink, #0f1f33) !important;
+          border: 1px solid color-mix(in oklch, var(--layers-mint) 38%, var(--layers-ink) 8%) !important;
+          font-size: 0.82rem !important;
+          font-weight: 600 !important;
+          line-height: 1 !important;
+          letter-spacing: -0.005em !important;
+          text-decoration: none !important;
+          white-space: nowrap;
+          animation: mcpCtaHalo 2.6s ease-in-out infinite;
+          transition: transform 160ms ease, background-color 220ms ease;
+        }
+        :global(.home-mcp-clean-cta:hover) {
+          background: color-mix(in oklch, var(--layers-mint-soft) 86%, var(--layers-mint) 14%) !important;
+          transform: translateY(-1px);
         }
         @media (prefers-reduced-motion: reduce) {
           :global(.home-mcp-kicker-dot),
-          :global(.home-mcp-link-pulse) {
+          :global(.home-mcp-clean-cta) {
             animation: none !important;
+          }
+          :global(.home-mcp-clean-cta:hover) {
+            transform: none;
           }
         }
       `}</style>
