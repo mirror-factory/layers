@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.47] — 2026-05-01
+
+### Other
+- Wire(PROD-380): macOS DMG signing + notarization config (no creds yet) (`91a5192`)
+
+
 ## [0.1.46] — 2026-05-01
 
 ### Other

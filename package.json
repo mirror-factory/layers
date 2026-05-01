@@ -1,6 +1,6 @@
 {
   "name": "audio-layer",
-  "version": "0.1.46",
+  "version": "0.1.47",
   "private": true,
   "main": "electron/main.js",
   "scripts": {
@@ -110,6 +110,9 @@
     "next": "15.5.15",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "react-markdown": "^10.1.0",
+    "rehype-sanitize": "^6.0.0",
+    "remark-gfm": "^4.0.1",
     "resend": "^6.12.0",
     "shadcn": "^4.3.1",
     "stripe": "^22.0.2",
