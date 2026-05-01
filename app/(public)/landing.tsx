@@ -1569,6 +1569,12 @@ function SectionConnect() {
   );
 }
 
+const CONNECT_TAGLINES = [
+  "Your context, wherever you work.",
+  "Searched, scoped, and ready to call.",
+  "Every meeting becomes a tool your AI can use.",
+];
+
 function ConnectMediaCard() {
   const tools = [
     {
@@ -1580,7 +1586,8 @@ function ConnectMediaCard() {
     {
       name: "Claude",
       sub: "Anthropic",
-      brand: "var(--layers-violet)",
+      // Anthropic's actual brand color (the warm orange / "crail").
+      brand: "#d97757",
       Icon: ClaudeLogo,
     },
     {
@@ -1590,6 +1597,25 @@ function ConnectMediaCard() {
       Icon: GeminiLogo,
     },
   ];
+
+  // Cycle through the rows: highlight one at a time as "Connected"
+  // so the row reads as Layers MCP → ChatGPT → Claude → Gemini → loop.
+  const [activeIdx, setActiveIdx] = useState(0);
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setActiveIdx((i) => (i + 1) % tools.length);
+    }, 2200);
+    return () => window.clearInterval(id);
+  }, [tools.length]);
+
+  // Rotate the tagline underneath every ~6.6s (3× the row cycle).
+  const [taglineIdx, setTaglineIdx] = useState(0);
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setTaglineIdx((i) => (i + 1) % CONNECT_TAGLINES.length);
+    }, 6600);
+    return () => window.clearInterval(id);
+  }, []);
 
   return (
     <div
@@ -1654,86 +1680,113 @@ function ConnectMediaCard() {
           gap: 10,
         }}
       >
-        {tools.map(({ name, sub, brand, Icon }) => (
-          <div
-            key={name}
-            style={{
-              display: "grid",
-              gridTemplateColumns: "auto 1fr auto",
-              gap: 14,
-              alignItems: "center",
-              padding: "14px 16px",
-              borderRadius: "var(--radius-lg, 14px)",
-              background:
-                "color-mix(in oklch, var(--bg-page) 78%, var(--bg-surface) 22%)",
-              border: "1px solid var(--border-subtle)",
-            }}
-          >
-            <span
-              aria-hidden
+        {tools.map(({ name, sub, brand, Icon }, idx) => {
+          const isActive = idx === activeIdx;
+          return (
+            <div
+              key={name}
+              className={`mcp-row ${isActive ? "is-active" : ""}`}
               style={{
-                width: 40,
-                height: 40,
-                borderRadius: 10,
-                background:
-                  "color-mix(in oklch, " + brand + " 14%, var(--bg-surface) 86%)",
-                color: brand,
-                display: "inline-flex",
+                display: "grid",
+                gridTemplateColumns: "auto 1fr auto",
+                gap: 14,
                 alignItems: "center",
-                justifyContent: "center",
-                border:
-                  "1px solid color-mix(in oklch, " +
-                  brand +
-                  " 28%, transparent)",
+                padding: "14px 16px",
+                borderRadius: "var(--radius-lg, 14px)",
+                background: isActive
+                  ? `color-mix(in oklch, ${brand} 8%, var(--bg-surface) 92%)`
+                  : "color-mix(in oklch, var(--bg-page) 78%, var(--bg-surface) 22%)",
+                border: `1px solid ${
+                  isActive
+                    ? `color-mix(in oklch, ${brand} 38%, transparent)`
+                    : "var(--border-subtle)"
+                }`,
+                boxShadow: isActive
+                  ? `0 0 0 4px color-mix(in oklch, ${brand} 12%, transparent)`
+                  : "none",
+                transition: "background 320ms ease, border-color 320ms ease, box-shadow 320ms ease",
               }}
             >
-              <Icon size={22} />
-            </span>
-            <div style={{ display: "grid", gap: 2 }}>
               <span
+                aria-hidden
                 style={{
-                  fontSize: "0.92rem",
-                  fontWeight: 600,
-                  color: "var(--fg-default)",
-                  letterSpacing: "-0.005em",
+                  width: 40,
+                  height: 40,
+                  borderRadius: 10,
+                  background: `color-mix(in oklch, ${brand} ${
+                    isActive ? "22%" : "14%"
+                  }, var(--bg-surface) ${isActive ? "78%" : "86%"})`,
+                  color: brand,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  border: `1px solid color-mix(in oklch, ${brand} ${
+                    isActive ? "44%" : "28%"
+                  }, transparent)`,
+                  transition: "background 320ms ease, border-color 320ms ease",
                 }}
               >
-                {name}
+                <Icon size={22} />
               </span>
+              <div style={{ display: "grid", gap: 2 }}>
+                <span
+                  style={{
+                    fontSize: "0.92rem",
+                    fontWeight: 600,
+                    color: "var(--fg-default)",
+                    letterSpacing: "-0.005em",
+                  }}
+                >
+                  {name}
+                </span>
+                <span
+                  style={{
+                    fontSize: "0.74rem",
+                    color: "var(--fg-muted)",
+                  }}
+                >
+                  {sub}
+                </span>
+              </div>
               <span
+                aria-hidden
                 style={{
-                  fontSize: "0.74rem",
-                  color: "var(--fg-muted)",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                  fontSize: "0.68rem",
+                  fontWeight: 600,
+                  letterSpacing: "0.06em",
+                  textTransform: "uppercase",
+                  color: brand,
+                  padding: "4px 10px",
+                  borderRadius: "var(--radius-pill)",
+                  background: isActive
+                    ? `color-mix(in oklch, ${brand} 16%, var(--bg-surface) 84%)`
+                    : "transparent",
+                  border: `1px solid color-mix(in oklch, ${brand} ${
+                    isActive ? "40%" : "0%"
+                  }, transparent)`,
+                  transition: "background 320ms ease, border-color 320ms ease",
                 }}
               >
-                {sub}
+                <span
+                  style={{
+                    width: 6,
+                    height: 6,
+                    borderRadius: 999,
+                    background: brand,
+                    boxShadow: isActive
+                      ? `0 0 0 4px color-mix(in oklch, ${brand} 26%, transparent)`
+                      : "none",
+                    animation: isActive ? "mcpDotPulse 2.2s ease-out" : "none",
+                  }}
+                />
+                {isActive ? "Connected" : "MCP"}
               </span>
             </div>
-            <span
-              aria-hidden
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 6,
-                fontSize: "0.68rem",
-                fontWeight: 600,
-                letterSpacing: "0.06em",
-                textTransform: "uppercase",
-                color: brand,
-              }}
-            >
-              <span
-                style={{
-                  width: 6,
-                  height: 6,
-                  borderRadius: 999,
-                  background: brand,
-                }}
-              />
-              MCP
-            </span>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <div
@@ -1767,17 +1820,57 @@ function ConnectMediaCard() {
         </span>
       </div>
 
-      <p
+      <div
+        aria-live="polite"
         style={{
-          margin: 0,
-          fontSize: "0.75rem",
-          color: "var(--fg-muted)",
+          position: "relative",
+          height: 22,
           textAlign: "center",
-          letterSpacing: "0.005em",
+          overflow: "hidden",
         }}
       >
-        Works with any Model Context Protocol client.
-      </p>
+        {CONNECT_TAGLINES.map((line, i) => {
+          const isShown = i === taglineIdx;
+          return (
+            <p
+              key={line}
+              style={{
+                margin: 0,
+                position: "absolute",
+                inset: 0,
+                fontSize: "0.78rem",
+                fontWeight: 500,
+                color: "var(--fg-default)",
+                letterSpacing: "-0.005em",
+                opacity: isShown ? 1 : 0,
+                transform: isShown ? "translateY(0)" : "translateY(6px)",
+                transition: "opacity 480ms ease, transform 480ms ease",
+              }}
+            >
+              {line}
+            </p>
+          );
+        })}
+      </div>
+
+      <style jsx>{`
+        @keyframes mcpDotPulse {
+          0% {
+            box-shadow: 0 0 0 0 color-mix(in oklch, currentColor 50%, transparent);
+          }
+          70% {
+            box-shadow: 0 0 0 8px color-mix(in oklch, currentColor 0%, transparent);
+          }
+          100% {
+            box-shadow: 0 0 0 0 color-mix(in oklch, currentColor 0%, transparent);
+          }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          :global(.mcp-row) {
+            transition: none !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }
