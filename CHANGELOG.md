@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.49] — 2026-05-01
+
+### Other
+- Polish(PROD-398/399/400/401): chat auto-scroll + markdown + radii + transcript pill (`61032b9`)
+
+
 ## [0.1.48] — 2026-05-01
 
 ### Other
