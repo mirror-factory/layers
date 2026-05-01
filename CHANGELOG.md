@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.35] — 2026-05-01
+
+### Other
+- Homepage: drop orphan stats, drop trust bar, flip MCP, center pricing (`26764ce`)
+
+
 ## [0.1.34] — 2026-05-01
 
 ### Other
