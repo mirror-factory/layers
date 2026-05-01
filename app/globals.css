@@ -1668,6 +1668,11 @@ body {
       #f8fbff 43%,
       #eaf8f1 100%
     ) !important;
+  /* Pin the gradient to the viewport so it never cuts off when the page
+     scrolls past its natural extent — the content scrolls over the
+     gradient instead of revealing a hard edge below it. */
+  background-attachment: fixed !important;
+  background-color: #eaf8f1 !important;
   color: var(--text-primary);
 }
 

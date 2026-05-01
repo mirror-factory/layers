@@ -789,56 +789,83 @@ function UpcomingMeetingsPanel({
 
 function HomeInsightTip() {
   return (
-    <aside className="home-insight-tip home-mcp-tip" aria-label="MCP connection">
-      <span className="home-mcp-art home-mcp-orbit" aria-hidden="true">
-        <span className="home-mcp-hub">
-          <BriefcaseBusiness size={28} />
-        </span>
-        {MCP_PROVIDER_MARKS.map((provider, index) => (
-          <span
-            className={`home-mcp-node home-mcp-node-${index + 1} is-${provider.tone}`}
-            key={provider.name}
-          >
-            {provider.productId ? (
-              <ProductLogo
-                id={provider.productId}
-                showName={false}
-                className="home-mcp-node-logo"
-              />
-            ) : (
-              <span className="home-mcp-xai-mark">{provider.mark}</span>
-            )}
-          </span>
-        ))}
-        <span className="home-mcp-flow-line home-mcp-flow-line-one" />
-        <span className="home-mcp-flow-line home-mcp-flow-line-two" />
-      </span>
-      <div className="home-insight-copy">
-        <p className="home-insight-kicker">MCP ready</p>
+    <aside
+      className="home-insight-tip home-mcp-tip home-mcp-tip-clean"
+      aria-label="MCP connection"
+    >
+      <div className="home-insight-copy home-mcp-copy-centered">
+        <p className="home-insight-kicker">
+          <span aria-hidden="true" className="home-mcp-kicker-dot" />
+          MCP ready
+        </p>
         <h3>Connect your AI tools</h3>
         <p>
-          Give Claude, ChatGPT, Gemini, and other clients permission to pull
-          meeting memory when you ask.
+          Plug Layers into ChatGPT, Claude, Gemini, or any MCP-aware client and
+          let them pull meeting memory on demand.
         </p>
-        <div className="home-mcp-provider-grid" aria-label="Supported MCP clients">
-          {MCP_PROVIDER_MARKS.map((provider) => (
-            <span className={`home-mcp-provider is-${provider.tone}`} key={provider.name}>
-              {provider.productId ? (
-                <ProductLogo id={provider.productId} />
-              ) : (
-                <>
-                  <span className="home-mcp-xai-mark">{provider.mark}</span>
-                  {provider.name}
-                </>
-              )}
-            </span>
-          ))}
-        </div>
-        <Link href="/profile" className="home-mcp-link">
+        <Link
+          href="/profile"
+          className="home-mcp-link home-mcp-link-pulse"
+          aria-label="Set up the Layers MCP connection"
+        >
           <Sparkles size={13} aria-hidden="true" />
-          Set up MCP
+          Set up MCP connection
         </Link>
       </div>
+
+      <style jsx>{`
+        @keyframes mcpKickerPulse {
+          0%, 100% {
+            box-shadow: 0 0 0 0 color-mix(in oklch, var(--layers-mint) 50%, transparent);
+          }
+          70% {
+            box-shadow: 0 0 0 10px color-mix(in oklch, var(--layers-mint) 0%, transparent);
+          }
+        }
+        @keyframes mcpButtonHalo {
+          0%, 100% {
+            box-shadow:
+              0 1px 0 color-mix(in oklch, var(--layers-mint) 28%, transparent),
+              0 0 0 0 color-mix(in oklch, var(--layers-mint) 38%, transparent);
+          }
+          50% {
+            box-shadow:
+              0 1px 0 color-mix(in oklch, var(--layers-mint) 28%, transparent),
+              0 0 0 10px color-mix(in oklch, var(--layers-mint) 0%, transparent);
+          }
+        }
+        :global(.home-mcp-tip-clean) {
+          display: grid;
+          place-items: center;
+          padding: clamp(28px, 4vw, 44px) clamp(20px, 4vw, 36px);
+          text-align: center;
+        }
+        :global(.home-mcp-copy-centered) {
+          max-width: 32ch;
+          display: grid;
+          gap: 10px;
+          justify-items: center;
+        }
+        :global(.home-mcp-kicker-dot) {
+          display: inline-block;
+          width: 7px;
+          height: 7px;
+          border-radius: 999px;
+          background: var(--layers-mint);
+          margin-right: 6px;
+          vertical-align: 1px;
+          animation: mcpKickerPulse 2.2s ease-out infinite;
+        }
+        :global(.home-mcp-link-pulse) {
+          animation: mcpButtonHalo 2.6s ease-in-out infinite;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          :global(.home-mcp-kicker-dot),
+          :global(.home-mcp-link-pulse) {
+            animation: none !important;
+          }
+        }
+      `}</style>
     </aside>
   );
 }
