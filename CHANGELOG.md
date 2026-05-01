@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.20] — 2026-05-01
+
+### Other
+- Fix iOS release workflow sync (`6af9202`)
+
+
 ## [0.1.19] — 2026-05-01
 
 ### Other
