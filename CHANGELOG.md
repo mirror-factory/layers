@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.57] — 2026-05-01
+
+### Other
+- Speed: vitest pool=threads — full suite from 10min to 2s (`b98e43c`)
+
+
 ## [0.1.56] — 2026-05-01
 
 ### Other
