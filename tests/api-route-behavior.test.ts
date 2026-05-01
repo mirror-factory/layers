@@ -1,5 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
+import {
+  fixtureMeetingListItems,
+  fixtureMeetings,
+} from "./fixtures/meetings";
+import { fixtureUsers } from "./fixtures/users";
 
 const mocks = vi.hoisted(() => ({
   getCurrentUserId: vi.fn(),
@@ -45,6 +50,7 @@ const calendarRoute = await import("@/app/api/calendar/upcoming/route");
 const calendarConnectRoute = await import("@/app/api/calendar/connect/[provider]/route");
 const calendarDisconnectRoute = await import("@/app/api/calendar/disconnect/[provider]/route");
 const settingsRoute = await import("@/app/api/settings/route");
+const meetingsRoute = await import("@/app/api/meetings/route");
 const meetingRoute = await import("@/app/api/meetings/[id]/route");
 const notesPackageRoute = await import("@/app/api/meetings/[id]/notes-package/route");
 const chatRoute = await import("@/app/api/chat/route");
@@ -95,6 +101,27 @@ describe("high-risk API route behavior", () => {
     expect(mocks.searchMeetings).not.toHaveBeenCalled();
   });
 
+  it("POST /api/search rejects max-length query abuse before searching", async () => {
+    mocks.getCurrentUserId.mockResolvedValue(fixtureUsers.owner.id);
+
+    const res = await searchRoute.POST(
+      jsonRequest("/api/search", "POST", { query: "x".repeat(501) }),
+    );
+    const body = await res.json();
+
+    expect(res.status).toBe(400);
+    expect(res.headers.get("x-request-id")).toBe("req_test");
+    expect(body.error).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          message: "query is too long",
+          path: ["query"],
+        }),
+      ]),
+    );
+    expect(mocks.searchMeetings).not.toHaveBeenCalled();
+  });
+
   it("POST /api/search returns semantic results scoped to the current user", async () => {
     mocks.getCurrentUserId.mockResolvedValue("user_a");
     mocks.searchMeetings.mockResolvedValue([
@@ -114,6 +141,49 @@ describe("high-risk API route behavior", () => {
     expect(res.status).toBe(200);
     expect(mocks.searchMeetings).toHaveBeenCalledWith("budget", "user_a", 3);
     expect(body).toMatchObject({ mode: "semantic", results: [{ meetingId: "meeting_1" }] });
+  });
+
+  it("POST /api/search fallback text search filters by the current user", async () => {
+    mocks.getCurrentUserId.mockResolvedValue(fixtureUsers.owner.id);
+    mocks.searchMeetings.mockResolvedValue([]);
+    const query = {
+      select: vi.fn(),
+      eq: vi.fn(),
+      or: vi.fn(),
+      order: vi.fn(),
+      limit: vi.fn().mockResolvedValue({
+        data: [
+          {
+            id: fixtureMeetingListItems.ownerPlanning.id,
+            title: fixtureMeetingListItems.ownerPlanning.title,
+            text: "Owner scoped onboarding flow notes.",
+            status: "completed",
+            created_at: fixtureMeetingListItems.ownerPlanning.createdAt,
+          },
+        ],
+        error: null,
+      }),
+    };
+    query.select.mockReturnValue(query);
+    query.eq.mockReturnValue(query);
+    query.or.mockReturnValue(query);
+    query.order.mockReturnValue(query);
+    const from = vi.fn(() => query);
+    mocks.getSupabaseServer.mockReturnValue({ from });
+
+    const res = await searchRoute.POST(
+      jsonRequest("/api/search", "POST", { query: "onboarding", limit: 5 }),
+    );
+    const body = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(from).toHaveBeenCalledWith("meetings");
+    expect(query.eq).toHaveBeenCalledWith("user_id", fixtureUsers.owner.id);
+    expect(query.eq).toHaveBeenCalledWith("status", "completed");
+    expect(body).toMatchObject({
+      mode: "text",
+      results: [{ meetingId: fixtureMeetingListItems.ownerPlanning.id }],
+    });
   });
 
   it("GET /api/calendar/upcoming returns a disconnected overview without auth", async () => {
@@ -418,6 +488,43 @@ describe("high-risk API route behavior", () => {
     await expect(res.json()).resolves.toMatchObject({ error: "Missing id" });
   });
 
+  it("GET /api/meetings returns only the store-scoped current-user list", async () => {
+    const list = vi.fn().mockResolvedValue([
+      {
+        id: fixtureMeetingListItems.ownerPlanning.id,
+        status: fixtureMeetingListItems.ownerPlanning.status,
+        title: fixtureMeetingListItems.ownerPlanning.title,
+        durationSeconds: fixtureMeetingListItems.ownerPlanning.durationSeconds,
+        createdAt: fixtureMeetingListItems.ownerPlanning.createdAt,
+      },
+    ]);
+    mocks.getMeetingsStore.mockResolvedValue({
+      insert: vi.fn(),
+      update: vi.fn(),
+      list,
+      get: vi.fn(),
+      delete: vi.fn(),
+    });
+
+    const res = await meetingsRoute.GET(jsonRequest("/api/meetings?limit=2", "GET"));
+    const body = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(res.headers.get("x-request-id")).toBe("req_test");
+    expect(list).toHaveBeenCalledWith(2);
+    expect(body).toEqual([
+      expect.objectContaining({
+        id: fixtureMeetingListItems.ownerPlanning.id,
+        title: "Product planning",
+      }),
+    ]);
+    expect(body).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ id: fixtureMeetingListItems.intruderPlanning.id }),
+      ]),
+    );
+  });
+
   it("GET /api/meetings/[id] returns 404 when store lookup misses", async () => {
     mocks.getMeetingsStore.mockResolvedValue({
       insert: vi.fn(),
@@ -434,6 +541,32 @@ describe("high-risk API route behavior", () => {
 
     expect(res.status).toBe(404);
     await expect(res.json()).resolves.toMatchObject({ error: "Meeting not found" });
+  });
+
+  it("GET /api/meetings/[id] returns 404 for a wrong-user meeting probe", async () => {
+    mocks.getMeetingsStore.mockResolvedValue({
+      insert: vi.fn(),
+      update: vi.fn(),
+      list: vi.fn(),
+      get: vi.fn().mockImplementation(async (id: string) =>
+        id === fixtureMeetingListItems.intruderPlanning.id ? null : fixtureMeetings.ownerPlanning,
+      ),
+      delete: vi.fn(),
+    });
+
+    const res = await meetingRoute.GET(
+      jsonRequest(`/api/meetings/${fixtureMeetingListItems.intruderPlanning.id}`, "GET"),
+      {
+        requestId: "req_test",
+        startedAt: Date.now(),
+        params: { id: fixtureMeetingListItems.intruderPlanning.id },
+      },
+    );
+    const body = await res.json();
+
+    expect(res.status).toBe(404);
+    expect(res.headers.get("x-request-id")).toBe("req_test");
+    expect(body).toMatchObject({ error: "Meeting not found" });
   });
 
   it("DELETE /api/meetings/[id] deletes an empty zero-minute recording", async () => {

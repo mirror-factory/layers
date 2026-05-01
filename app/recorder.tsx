@@ -19,6 +19,7 @@ import {
   SlidersHorizontal,
   Sparkles,
   Trash2,
+  UsersRound,
 } from "lucide-react";
 import { AudioWaveRibbon } from "@/components/audio-wave-ribbon";
 import { TopBar } from "@/components/top-bar";
@@ -66,6 +67,7 @@ interface CalendarMeetingItem {
   startsAt: string;
   endsAt: string | null;
   location: string | null;
+  attendeesCount?: number;
 }
 
 interface CalendarOverview {
@@ -77,6 +79,7 @@ interface CalendarOverview {
   providerSetupRequired?: boolean;
   reauthRequired?: boolean;
   calendarFetchFailed?: boolean;
+  calendarRateLimited?: boolean;
 }
 
 type CaptureState = "idle" | "recording" | "saving" | "done";
@@ -109,6 +112,9 @@ export function RecorderHome() {
   const [audioLevel, setAudioLevel] = useState(0);
   const [recorderSnapshot, setRecorderSnapshot] =
     useState<LiveRecorderSnapshot | null>(null);
+  const [selectedCalendarEventId, setSelectedCalendarEventId] =
+    useState<string | null>(null);
+  const queuedCalendarStartIdRef = useRef<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -136,6 +142,7 @@ export function RecorderHome() {
               providerSetupRequired: Boolean(data.providerSetupRequired),
               reauthRequired: Boolean(data.reauthRequired),
               calendarFetchFailed: Boolean(data.calendarFetchFailed),
+              calendarRateLimited: Boolean(data.calendarRateLimited),
             });
           }
         })
@@ -194,9 +201,20 @@ export function RecorderHome() {
   );
 
   const hasTranscript = turns.length > 0 || partial.length > 0;
-  const meetingContext = pickRecordingCalendarContext(
-    calendarOverview.items,
-    calendarOverview.provider,
+  const selectedCalendarItem = useMemo(
+    () =>
+      selectedCalendarEventId
+        ? calendarOverview.items.find((item) => item.id === selectedCalendarEventId) ?? null
+        : null,
+    [calendarOverview.items, selectedCalendarEventId],
+  );
+  const meetingContext = useMemo(
+    () =>
+      pickRecordingCalendarContext(
+        selectedCalendarItem ? [selectedCalendarItem] : calendarOverview.items,
+        calendarOverview.provider,
+      ),
+    [calendarOverview.items, calendarOverview.provider, selectedCalendarItem],
   );
   const isLiveWorkspace = captureState !== "idle" || hasTranscript;
   const liveSignals = useMemo(
@@ -227,6 +245,24 @@ export function RecorderHome() {
   const handleDeleteRecentMeeting = useCallback((meetingId: string) => {
     setRecentMeetings((items) => items.filter((item) => item.id !== meetingId));
   }, []);
+  const handleRecordCalendarMeeting = useCallback((meetingId: string) => {
+    queuedCalendarStartIdRef.current = meetingId;
+    setSelectedCalendarEventId(meetingId);
+  }, []);
+
+  useEffect(() => {
+    const queuedCalendarStartId = queuedCalendarStartIdRef.current;
+    if (
+      !queuedCalendarStartId ||
+      captureState !== "idle" ||
+      meetingContext?.calendarEventId !== queuedCalendarStartId
+    ) {
+      return;
+    }
+
+    queuedCalendarStartIdRef.current = null;
+    void recorderRef.current?.start();
+  }, [captureState, meetingContext]);
 
   return (
     <div className="paper-calm-page recorder-page session-workspace-page min-h-screen-safe flex flex-col">
@@ -369,6 +405,8 @@ export function RecorderHome() {
               <UpcomingMeetingsPanel
                 overview={calendarOverview}
                 meetingsFading={meetingsFading}
+                selectedEventId={selectedCalendarEventId}
+                onRecordMeeting={handleRecordCalendarMeeting}
               />
               <HomeInsightTip />
             </div>
@@ -390,6 +428,8 @@ export function RecorderHome() {
             <UpcomingMeetingsPanel
               overview={calendarOverview}
               meetingsFading={meetingsFading}
+              selectedEventId={selectedCalendarEventId}
+              onRecordMeeting={handleRecordCalendarMeeting}
             />
           </div>
         )}
@@ -597,12 +637,18 @@ function formatFullSessionDate(date: Date): string {
 function UpcomingMeetingsPanel({
   overview,
   meetingsFading,
+  selectedEventId,
+  onRecordMeeting,
 }: {
   overview: CalendarOverview;
   meetingsFading: boolean;
+  selectedEventId?: string | null;
+  onRecordMeeting?: (meetingId: string) => void;
 }) {
   const hasUpcoming = overview.items.length > 0;
-  const emptyCopy = overview.reauthRequired
+  const emptyCopy = overview.calendarRateLimited
+    ? "Google Calendar is rate limited right now. You can still start recording manually."
+    : overview.reauthRequired && overview.connected
     ? "Reconnect your calendar to keep upcoming meetings available before recording."
     : overview.providerSetupRequired || overview.setupRequired
       ? "Calendar setup is ready in Settings once provider credentials are configured."
@@ -636,8 +682,12 @@ function UpcomingMeetingsPanel({
         <div className="home-calendar-list">
           {overview.items.map((item) => {
             const dateParts = formatCalendarDateTile(item.startsAt);
+            const isSelected = selectedEventId === item.id;
             return (
-              <div className="home-calendar-event" key={item.id}>
+              <div
+                className={`home-calendar-event ${isSelected ? "is-selected" : ""}`}
+                key={item.id}
+              >
                 <time
                   className="home-calendar-date-tile"
                   dateTime={item.startsAt}
@@ -652,7 +702,20 @@ function UpcomingMeetingsPanel({
                     <span>{formatCalendarDateLine(item.startsAt, item.endsAt)}</span>
                   </div>
                   <p>{item.title}</p>
-                  {item.location && <span>{item.location}</span>}
+                  <div className="home-calendar-event-meta">
+                    {item.location && <span>{item.location}</span>}
+                    <span>
+                      <UsersRound size={12} aria-hidden="true" />
+                      {item.attendeesCount ?? 0} attendees
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    className="home-calendar-record-button"
+                    onClick={() => onRecordMeeting?.(item.id)}
+                  >
+                    {isSelected ? "Recording this" : "Record this"}
+                  </button>
                 </div>
               </div>
             );

@@ -25,6 +25,18 @@ export interface CalendarEventItem {
   startsAt: string;
   endsAt: string | null;
   location: string | null;
+  attendeesCount: number;
+}
+
+export class CalendarProviderError extends Error {
+  constructor(
+    public readonly provider: CalendarProvider,
+    public readonly status: number,
+    message: string,
+  ) {
+    super(message);
+    this.name = "CalendarProviderError";
+  }
 }
 
 interface ProviderDefinition {
@@ -258,6 +270,7 @@ function parseGoogleEvent(raw: unknown): CalendarEventItem | null {
     startsAt,
     endsAt: normalizeDateTime(asString(end?.dateTime) ?? asString(end?.date)),
     location: asString(event.location),
+    attendeesCount: Array.isArray(event.attendees) ? event.attendees.length : 0,
   };
 }
 
@@ -277,6 +290,7 @@ function parseOutlookEvent(raw: unknown): CalendarEventItem | null {
     startsAt,
     endsAt: normalizeDateTime(asString(end?.dateTime)),
     location: asString(location?.displayName),
+    attendeesCount: Array.isArray(event.attendees) ? event.attendees.length : 0,
   };
 }
 
@@ -301,7 +315,13 @@ export async function fetchUpcomingCalendarEvents(
 
     const response = await fetch(url, { headers });
     const body = asRecord(await response.json().catch(() => null));
-    if (!response.ok || !body) throw new Error("Google Calendar events failed");
+    if (!response.ok || !body) {
+      throw new CalendarProviderError(
+        "google",
+        response.status,
+        "Google Calendar events failed",
+      );
+    }
 
     const items = Array.isArray(body.items) ? body.items : [];
     return items.map(parseGoogleEvent).filter((item): item is CalendarEventItem => Boolean(item));
@@ -312,11 +332,17 @@ export async function fetchUpcomingCalendarEvents(
   url.searchParams.set("endDateTime", horizon.toISOString());
   url.searchParams.set("$orderby", "start/dateTime");
   url.searchParams.set("$top", String(limit));
-  url.searchParams.set("$select", "id,subject,start,end,location");
+  url.searchParams.set("$select", "id,subject,start,end,location,attendees");
 
   const response = await fetch(url, { headers });
   const body = asRecord(await response.json().catch(() => null));
-  if (!response.ok || !body) throw new Error("Outlook Calendar events failed");
+  if (!response.ok || !body) {
+    throw new CalendarProviderError(
+      "outlook",
+      response.status,
+      "Outlook Calendar events failed",
+    );
+  }
 
   const items = Array.isArray(body.value) ? body.value : [];
   return items.map(parseOutlookEvent).filter((item): item is CalendarEventItem => Boolean(item));

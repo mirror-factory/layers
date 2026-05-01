@@ -842,10 +842,10 @@ const config: CapacitorConfig = {
   webDir: "public",           // fallback bundle for offline
   backgroundColor: "#0a0a0a",
   server: {
-    url: process.env.CAPACITOR_SERVER_URL ?? "https://audio-layer.vercel.app",
+    url: process.env.CAPACITOR_SERVER_URL ?? "https://layers.mirrorfactory.ai",
     cleartext: !!process.env.CAPACITOR_SERVER_URL,
     androidScheme: "https",
-    allowNavigation: ["api.assemblyai.com", "audio-layer.vercel.app"],
+    allowNavigation: ["api.assemblyai.com", "layers.mirrorfactory.ai"],
   },
   ios: {
     contentInset: "always",
@@ -879,7 +879,7 @@ const config: CapacitorConfig = {
     "beforeDevCommand": "pnpm dev",
     "beforeBuildCommand": "pnpm build",
     "devUrl": "http://localhost:3000",
-    "frontendDist": "https://audio-layer.vercel.app"
+    "frontendDist": "https://layers.mirrorfactory.ai"
   },
   "app": {
     "windows": [{
@@ -993,7 +993,7 @@ const config: CapacitorConfig = {
 
 | Variable | Value |
 |---|---|
-| `NEXT_PUBLIC_APP_URL` | `http://localhost:3000` locally; `https://<app>.vercel.app` in prod |
+| `NEXT_PUBLIC_APP_URL` | `http://localhost:3000` locally; `https://layers.mirrorfactory.ai` in prod |
 
 ---
 

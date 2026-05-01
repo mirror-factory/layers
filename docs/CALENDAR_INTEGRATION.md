@@ -67,13 +67,25 @@ If no calendar is connected, the home screen shows a compact connect action.
 
 If a calendar is connected, `/api/calendar/upcoming` decrypts the access token,
 refreshes it when needed, and fetches the next events from Google Calendar or
-Microsoft Graph. If credentials or the encryption key are missing, the UI
-stays usable and points the user back to Settings.
+Microsoft Graph. If the dedicated `calendar_connections` table is not ready,
+the MVP fallback uses Supabase's Google `session.provider_token` when the user
+signed in with Calendar read scope.
+
+The base Google sign-in buttons request:
+
+```text
+openid email profile https://www.googleapis.com/auth/calendar.readonly
+```
+
+If credentials, the encryption key, or a valid provider token are missing, the
+UI stays usable and points the user back to Settings.
 
 ## Product Behavior
 
 - The recorder now uses the next usable calendar event title as the meeting
   title when creating a live recording session.
+- Upcoming meeting rows show the event time, attendee count, and a "Record
+  this" action that selects that event before starting recording.
 - Autosave and finalize preserve that title so the completed note keeps the
   user's calendar context instead of being overwritten by a generic generated
   title.

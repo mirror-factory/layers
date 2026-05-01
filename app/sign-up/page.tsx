@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Loader2, Mail, Lock } from "lucide-react";
 import Link from "next/link";
 import { getSupabaseBrowser } from "@/lib/supabase/browser";
+import { GOOGLE_CALENDAR_AUTH_SCOPES } from "@/lib/auth/google-oauth";
 
 function GoogleIcon({ className }: { className?: string }) {
   return (
@@ -93,7 +94,10 @@ export default function SignUpPage() {
                     if (!supabase) throw new Error("Auth not configured");
                     const { error: authError } = await supabase.auth.signInWithOAuth({
                       provider: "google",
-                      options: { redirectTo: `${window.location.origin}/auth/callback` },
+                      options: {
+                        scopes: GOOGLE_CALENDAR_AUTH_SCOPES,
+                        redirectTo: `${window.location.origin}/auth/callback`,
+                      },
                     });
                     if (authError) throw authError;
                   } catch (err) {

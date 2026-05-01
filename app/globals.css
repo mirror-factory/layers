@@ -1308,6 +1308,11 @@ body {
   padding: 0.85rem;
 }
 
+.home-calendar-event.is-selected {
+  border-color: color-mix(in oklch, var(--accent-mint) 54%, var(--border-card));
+  background: color-mix(in oklch, var(--accent-mint) 8%, var(--surface-control));
+}
+
 .home-calendar-date-tile {
   display: grid;
   width: 3.35rem;
@@ -1367,12 +1372,44 @@ body {
   line-height: 1.25;
 }
 
-.home-calendar-event-copy > span {
-  display: block;
+.home-calendar-event-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.7rem;
   margin-top: 0.18rem;
+}
+
+.home-calendar-event-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
   color: var(--text-muted);
   font-size: 0.78rem;
   line-height: 1.35;
+}
+
+.home-calendar-record-button {
+  margin-top: 0.65rem;
+  min-height: 34px;
+  border: 1px solid color-mix(in oklch, var(--accent-mint) 34%, var(--border-card));
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--accent-mint) 9%, white);
+  color: color-mix(in oklch, var(--accent-mint) 70%, var(--paper-calm-ink));
+  padding: 0 0.8rem;
+  font-size: 0.74rem;
+  font-weight: 760;
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.home-calendar-record-button:hover {
+  border-color: color-mix(in oklch, var(--accent-mint) 58%, var(--border-card));
+  background: color-mix(in oklch, var(--accent-mint) 15%, white);
+  color: var(--paper-calm-ink);
+  transform: translateY(-1px);
 }
 
 .home-calendar-empty {
@@ -4801,6 +4838,11 @@ body {
   border-color: rgba(11, 18, 32, 0.08);
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.72);
+}
+
+.paper-calm-page.recorder-page .home-calendar-event.is-selected {
+  border-color: rgba(20, 184, 166, 0.34);
+  background: rgba(236, 253, 245, 0.76);
 }
 
 .paper-calm-page.recorder-page .home-calendar-date-tile {

@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { Loader2, Mail, Lock } from "lucide-react";
 import Link from "next/link";
 import { getSupabaseBrowser } from "@/lib/supabase/browser";
+import { GOOGLE_CALENDAR_AUTH_SCOPES } from "@/lib/auth/google-oauth";
 
 function GoogleIcon({ className }: { className?: string }) {
   return (
@@ -80,6 +81,7 @@ function SignInForm() {
       const { error: authError } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
+          scopes: GOOGLE_CALENDAR_AUTH_SCOPES,
           redirectTo: isOAuthFlow
             ? `${window.location.origin}${getPostLoginRedirect()}`
             : `${window.location.origin}/auth/callback`,

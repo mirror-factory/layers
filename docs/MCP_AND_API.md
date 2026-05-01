@@ -72,7 +72,7 @@ Claude Desktop, Claude Code, OAuth, and local API-key test paths.
 Initialize:
 
 ```bash
-curl -sS https://audio-layer.vercel.app/api/mcp/mcp \
+curl -sS https://layers.mirrorfactory.ai/api/mcp/mcp \
   -H 'content-type: application/json' \
   -H 'accept: application/json, text/event-stream' \
   -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"manual-smoke","version":"0.1.0"}}}'
@@ -81,7 +81,7 @@ curl -sS https://audio-layer.vercel.app/api/mcp/mcp \
 List tools:
 
 ```bash
-curl -sS https://audio-layer.vercel.app/api/mcp/mcp \
+curl -sS https://layers.mirrorfactory.ai/api/mcp/mcp \
   -H 'content-type: application/json' \
   -H 'accept: application/json, text/event-stream' \
   -H 'authorization: Bearer lo1_your_api_key' \
@@ -91,7 +91,7 @@ curl -sS https://audio-layer.vercel.app/api/mcp/mcp \
 Search meetings:
 
 ```bash
-curl -sS https://audio-layer.vercel.app/api/mcp/mcp \
+curl -sS https://layers.mirrorfactory.ai/api/mcp/mcp \
   -H 'content-type: application/json' \
   -H 'accept: application/json, text/event-stream' \
   -H 'authorization: Bearer lo1_your_api_key' \
@@ -101,7 +101,7 @@ curl -sS https://audio-layer.vercel.app/api/mcp/mcp \
 Show the Claude MCP App meeting dashboard:
 
 ```bash
-curl -sS https://audio-layer.vercel.app/api/mcp/mcp \
+curl -sS https://layers.mirrorfactory.ai/api/mcp/mcp \
   -H 'content-type: application/json' \
   -H 'accept: application/json, text/event-stream' \
   -H 'authorization: Bearer lo1_your_api_key' \

@@ -9,10 +9,10 @@ const config: CapacitorConfig = {
   server: {
     url:
       process.env.CAPACITOR_SERVER_URL ??
-      "https://audio-layer.vercel.app",
+      "https://layers.mirrorfactory.ai",
     cleartext: !!process.env.CAPACITOR_SERVER_URL,
     androidScheme: "https",
-    allowNavigation: ["api.assemblyai.com", "audio-layer.vercel.app"],
+    allowNavigation: ["api.assemblyai.com", "layers.mirrorfactory.ai"],
   },
   ios: {
     backgroundColor: "#0a0a0a",

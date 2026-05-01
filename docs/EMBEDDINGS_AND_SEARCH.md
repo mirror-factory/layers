@@ -222,7 +222,7 @@ Connection config for Claude Desktop / `.mcp.json`:
 {
   "mcpServers": {
     "layers": {
-      "url": "https://audio-layer.vercel.app/api/mcp/mcp",
+      "url": "https://layers.mirrorfactory.ai/api/mcp/mcp",
       "headers": {
         "Authorization": "Bearer YOUR_API_KEY"
       }

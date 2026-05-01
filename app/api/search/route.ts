@@ -9,7 +9,10 @@ import { getCurrentUserId } from "@/lib/supabase/user";
 import { getSupabaseServer } from "@/lib/supabase/server";
 
 const SearchBodySchema = z.object({
-  query: z.string().min(1, "query is required"),
+  query: z
+    .string()
+    .min(1, "query is required")
+    .max(500, "query is too long"),
   limit: z.number().int().min(1).max(50).optional(),
 });
 

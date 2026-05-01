@@ -13,7 +13,7 @@ const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 
 const DEV_URL = "http://localhost:3000";
-const PROD_URL = "https://audio-layer.vercel.app";
+const PROD_URL = "https://layers.mirrorfactory.ai";
 const isDev = process.env.NODE_ENV === "development" || !app.isPackaged;
 
 let mainWindow;
