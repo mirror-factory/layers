@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.21] — 2026-05-01
+
+### Other
+- Regenerate iOS project in release workflow (`2652fed`)
+
+
 ## [0.1.20] — 2026-05-01
 
 ### Other
