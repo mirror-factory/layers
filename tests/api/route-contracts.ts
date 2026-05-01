@@ -118,6 +118,9 @@ export const apiRouteContracts = [
   route("/api/oauth/consent", "app/api/oauth/consent/route.ts", ["POST"], "oauth", false, [302, 400, 401, 503], {
     POST: { body: {}, expectStatuses: [400, 401, 503] },
   }),
+  route("/api/oauth/register", "app/api/oauth/register/route.ts", ["POST"], "oauth", false, [201, 400], {
+    POST: { body: {}, expectStatuses: [400] },
+  }),
   route("/api/oauth/revoke", "app/api/oauth/revoke/route.ts", ["POST"], "oauth", false, [200, 400, 503], {
     POST: { body: {}, expectStatuses: [400, 503] },
   }),
