@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.50] — 2026-05-01
+
+### Other
+- Fix(PROD-385): hook-tester syncStarterSystem now opt-in via HOOK_TESTER_SYNC=1 (`e60d441`)
+
+
 ## [0.1.49] — 2026-05-01
 
 ### Other
