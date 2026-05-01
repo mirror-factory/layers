@@ -1,91 +1,20 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
-  ArrowRight,
-  CalendarDays,
   CheckCircle2,
-  FileText,
-  ListChecks,
+  ChevronDown,
+  Mail,
   Mic2,
+  NotepadText,
   Search,
-  ShieldCheck,
   Sparkles,
-  Users,
 } from "lucide-react";
 import AudioWaveRibbon from "@/components/audio-wave-ribbon";
-import { LayersLogo } from "@/components/layers-logo";
-import { ProductLogo, type ProductLogoId } from "@/components/product-logos";
-import { PublicSiteNav } from "@/components/public-site-nav";
+import { LayersLogo, LayersLogoMark } from "@/components/layers-logo";
+import { ProductLogo } from "@/components/product-logos";
 
-const TRANSCRIPT_LINES = [
-  ["00:04", "Let's lock the onboarding decision before the next customer call."],
-  ["00:18", "Jamie owns the first-run copy. Alex owns the pricing deck."],
-  ["00:35", "Ship the activation flow first, then follow with team sharing."],
-  ["00:52", "Pull the customer objections into the launch brief."],
-];
-
-const MEMORY_OUTPUTS = [
-  {
-    title: "Decisions",
-    count: "2",
-    items: ["Ship onboarding first", "Position launch around private meeting memory"],
-  },
-  {
-    title: "Actions",
-    count: "4",
-    items: ["Jamie: first-run copy", "Alex: pricing deck", "Taylor: analytics events"],
-  },
-  {
-    title: "Intake",
-    count: "3",
-    items: ["Customer objections", "Timeline pressure", "Stakeholder names"],
-  },
-];
-
-const AI_TOOLS: Array<{
-  id: ProductLogoId;
-  question: string;
-  answer: string;
-}> = [
-  {
-    id: "chatgpt",
-    question: "What did we decide about onboarding?",
-    answer:
-      "Ship onboarding first, reduce the first-run steps, and measure activation rate plus time-to-value.",
-  },
-  {
-    id: "claude",
-    question: "Draft the follow-up from the product planning call.",
-    answer:
-      "The follow-up should recap the onboarding decision, owners, pricing deck deadline, and customer-objection brief.",
-  },
-  {
-    id: "gemini",
-    question: "What risks were raised for the launch plan?",
-    answer:
-      "The team flagged integration timing, unclear enterprise positioning, and missing analytics events.",
-  },
-];
-
-const USE_CASES = [
-  {
-    icon: Users,
-    title: "For teams that need memory, not another bot",
-    body: "Founders, product teams, and GTM teams can record privately and still leave with decisions, owners, and follow-up context.",
-  },
-  {
-    icon: FileText,
-    title: "Built around the actual meeting artifact",
-    body: "Transcript, summary, decisions, actions, intake, usage, and search live together instead of scattered across tools.",
-  },
-  {
-    icon: Sparkles,
-    title: "Ready for the AI tools you already use",
-    body: "Layers turns meetings into reusable context for ChatGPT, Claude, Gemini, MCP clients, and your internal workflows.",
-  },
-];
+const TRUSTED_TEAMS = ["Linear", "Vercel", "dribbble", "Notion", "Lattice", "Retool"];
 
 const PRICING_TIERS = [
   {
@@ -94,7 +23,7 @@ const PRICING_TIERS = [
     cadence: "25 meetings included",
     href: "/sign-up",
     cta: "Start free",
-    features: ["25 meetings lifetime", "Live and uploaded recordings", "Searchable meeting library"],
+    features: ["25 meetings lifetime", "AI summaries", "Searchable memory"],
   },
   {
     name: "Core",
@@ -103,7 +32,7 @@ const PRICING_TIERS = [
     href: "/pricing",
     cta: "See Core",
     featured: true,
-    features: ["Unlimited meetings", "Enhanced speech-to-text", "Decisions, actions, and intake"],
+    features: ["Unlimited meetings", "AI memory and search", "Share and export"],
   },
   {
     name: "Pro",
@@ -111,116 +40,137 @@ const PRICING_TIERS = [
     cadence: "per user / month",
     href: "/pricing",
     cta: "See Pro",
-    features: ["Team memory", "Advanced model routing", "Admin and priority support"],
+    features: ["Team memory", "Advanced privacy", "Priority support"],
   },
 ];
 
-function useLandingAudioLevel() {
-  const [level, setLevel] = useState(0.34);
+function LandingNav() {
+  return (
+    <header className="reference-nav">
+      <Link href="/" className="reference-brand" aria-label="Layers home">
+        <LayersLogo />
+      </Link>
 
-  useEffect(() => {
-    let t = 0;
-    const timer = window.setInterval(() => {
-      t += 0.08;
-      const broad = Math.sin(t * 0.72) * 0.14;
-      const detail = Math.sin(t * 1.9 + 0.4) * 0.08;
-      const pulse = Math.abs(Math.sin(t * 0.38)) * 0.11;
-      setLevel(0.34 + broad + detail + pulse);
-    }, 70);
+      <nav className="reference-nav-links" aria-label="Homepage navigation">
+        <a href="#product">Product</a>
+        <a href="#solutions">
+          Solutions
+          <ChevronDown size={13} aria-hidden="true" />
+        </a>
+        <Link href="/pricing">Pricing</Link>
+        <a href="#resources">
+          Resources
+          <ChevronDown size={13} aria-hidden="true" />
+        </a>
+      </nav>
 
-    return () => window.clearInterval(timer);
-  }, []);
-
-  return level;
+      <div className="reference-nav-actions">
+        <Link href="/sign-in">Sign in</Link>
+        <Link href="/sign-up" className="reference-nav-cta">
+          Start free
+        </Link>
+      </div>
+    </header>
+  );
 }
 
-function AppCapturePreview({ audioLevel }: { audioLevel: number }) {
+function HeroMockup() {
   return (
-    <div className="memory-app-preview" aria-label="Layers app preview">
-      <div className="memory-app-window">
-        <div className="memory-app-topbar">
+    <div className="reference-hero-visual" aria-label="Layers recording workspace preview">
+      <div className="reference-orbit" aria-hidden="true" />
+      <div className="reference-floating-note reference-note-memory">
+        <span />
+        <div>
+          <strong>AI memory</strong>
+          <small>Always learning</small>
+        </div>
+      </div>
+      <div className="reference-floating-stat reference-stat-decisions">
+        <span>Decisions</span>
+        <strong>2</strong>
+        <small>Captured</small>
+      </div>
+      <div className="reference-floating-stat reference-stat-actions">
+        <span>Actions</span>
+        <strong>4</strong>
+        <small>Assigned</small>
+      </div>
+      <div className="reference-floating-stat reference-stat-followups">
+        <span>Follow-ups</span>
+        <strong>2</strong>
+        <small>Planned</small>
+      </div>
+
+      <div className="reference-app-window">
+        <div className="reference-app-topbar">
           <LayersLogo />
           <span>Recording workspace</span>
           <small>Private capture</small>
         </div>
 
-        <div className="memory-app-grid">
-          <section className="memory-recorder-pane">
-            <div className="memory-pane-heading">
-              <span>
-                <CalendarDays size={15} aria-hidden="true" />
-                Product planning
-              </span>
+        <div className="reference-app-grid">
+          <section className="reference-recording-card" aria-label="Recording state">
+            <div className="reference-card-line">
+              <span>Product planning</span>
               <strong>10:13 AM</strong>
             </div>
-            <div className="memory-recorder-clock">
-              <span>00</span>
-              <span>13</span>
-              <small>live</small>
+            <div className="reference-clock">
+              00:13
+              <span>Live</span>
             </div>
-            <div className="memory-recorder-wave" aria-hidden="true">
+            <div className="reference-wave">
               <AudioWaveRibbon
                 active
-                audioLevel={audioLevel}
-                height={118}
-                motion={1.28}
-                sensitivity={1.04}
+                audioLevel={0.68}
+                height={104}
+                motion={1.12}
+                sensitivity={0.88}
                 texture="clean"
               />
             </div>
-            <div className="memory-capture-controls">
+            <div className="reference-recording-footer">
               <span>
-                <Mic2 size={16} aria-hidden="true" />
+                <Mic2 size={14} aria-hidden="true" />
                 Recording locally
               </span>
               <button type="button">Stop</button>
             </div>
           </section>
 
-          <section className="memory-transcript-pane">
-            <div className="memory-pane-heading">
-              <span>
-                <FileText size={15} aria-hidden="true" />
-                Live transcript
-              </span>
+          <section className="reference-transcript-card" aria-label="Live transcript">
+            <div className="reference-card-line">
+              <span>Live transcript</span>
               <small>Speaker aware</small>
             </div>
-            <div className="memory-transcript-list">
-              {TRANSCRIPT_LINES.map(([time, text]) => (
-                <p key={time}>
-                  <time>{time}</time>
-                  <span>{text}</span>
-                </p>
-              ))}
-            </div>
+            {[
+              ["00:04", "Let's lock the onboarding decision before the next customer call."],
+              ["00:18", "Jamie owns the first-run copy. Alex owns the pricing deck."],
+              ["00:35", "Ship the activation flow first, then follow with team sharing."],
+              ["00:52", "Pull the customer objections into the launch doc."],
+            ].map(([time, text]) => (
+              <p key={time}>
+                <time>{time}</time>
+                <span>{text}</span>
+              </p>
+            ))}
           </section>
 
-          <section className="memory-output-summary">
-            <div className="memory-pane-heading">
-              <span>
-                <ListChecks size={15} aria-hidden="true" />
-                Meeting memory
-              </span>
+          <section className="reference-memory-card" aria-label="Meeting memory">
+            <div className="reference-card-line">
+              <span>Meeting memory</span>
               <small>Updating</small>
             </div>
-            <div className="memory-output-stack">
-              {MEMORY_OUTPUTS.map((column) => (
-                <article key={column.title}>
-                  <h3>
-                    {column.title}
-                    <span>{column.count}</span>
-                  </h3>
-                  <ul>
-                    {column.items.map((item) => (
-                      <li key={item}>
-                        <CheckCircle2 size={13} aria-hidden="true" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </article>
-              ))}
-            </div>
+            {[
+              ["Decisions", "2"],
+              ["Actions", "4"],
+              ["Intake", "3"],
+              ["Follow-up", "2"],
+            ].map(([label, count]) => (
+              <p key={label}>
+                <span>{label}</span>
+                <strong>{count}</strong>
+              </p>
+            ))}
           </section>
         </div>
       </div>
@@ -228,253 +178,300 @@ function AppCapturePreview({ audioLevel }: { audioLevel: number }) {
   );
 }
 
-function ToolCard({
-  tool,
-  active,
-  onSelect,
+function MemoryVisual() {
+  return (
+    <div className="reference-visual-panel reference-memory-visual" aria-label="Meeting memory card">
+      <div className="reference-soft-wave" aria-hidden="true" />
+      <article>
+        <div className="reference-panel-header">
+          <span>
+            <NotepadText size={15} aria-hidden="true" />
+            Meeting memory
+          </span>
+          <small>Updating</small>
+        </div>
+        <h3>What happened</h3>
+        <p>Reviewed onboarding flow and activation metrics.</p>
+        <div className="reference-decision-row">
+          Decision: Ship activation flow before team sharing.
+        </div>
+        <div className="reference-action-row">
+          Action: Jamie to draft first-run copy by Friday.
+        </div>
+        <footer>
+          <CheckCircle2 size={14} aria-hidden="true" />
+          Generated by Layers
+        </footer>
+      </article>
+      <span className="reference-sparkle-badge">
+        <Sparkles size={22} aria-hidden="true" />
+      </span>
+    </div>
+  );
+}
+
+function SearchVisual() {
+  return (
+    <div className="reference-visual-panel reference-search-visual" aria-label="Search memory preview">
+      <div className="reference-search-bar">
+        <Search size={17} aria-hidden="true" />
+        <span>onboarding objections</span>
+        <kbd>Cmd K</kbd>
+      </div>
+      {[
+        ["00:35", "Product planning", "Decision: ship onboarding first"],
+        ["12:08", "Customer feedback", "Objection: setup takes too much time"],
+        ["27:42", "GTM sync", "Action: add ROI stats to deck"],
+      ].map(([time, title, body]) => (
+        <article key={time}>
+          <time>{time}</time>
+          <div>
+            <strong>{title}</strong>
+            <p>{body}</p>
+          </div>
+        </article>
+      ))}
+      <div className="reference-found-card">
+        <CheckCircle2 size={15} aria-hidden="true" />
+        <span>
+          Found in
+          <strong>18 meetings</strong>
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function AssetsVisual() {
+  return (
+    <div className="reference-visual-panel reference-assets-visual" aria-label="Reusable assets preview">
+      <div className="reference-output-tabs">
+        <span className="is-active">Outputs</span>
+        <span>Templates</span>
+        <span>Integrations</span>
+      </div>
+      <div className="reference-output-grid">
+        {[
+          ["Summary doc", "Product planning - May 16", "W"],
+          ["Decision log", "Q2 Roadmap", "S"],
+          ["Action tracker", "12 tasks", "OK"],
+          ["Customer update", "Weekly digest", "Mail"],
+        ].map(([title, detail, icon]) => (
+          <article key={title}>
+            <strong>{title}</strong>
+            <span>{detail}</span>
+            <i>{icon}</i>
+          </article>
+        ))}
+      </div>
+      <div className="reference-share-card">
+        <span>Share to</span>
+        <strong>N</strong>
+        <strong>Slack</strong>
+        <strong>Drive</strong>
+        <strong>...</strong>
+      </div>
+    </div>
+  );
+}
+
+function PricingPreview() {
+  return (
+    <div className="reference-pricing-cards" aria-label="Pricing preview">
+      {PRICING_TIERS.map((tier) => (
+        <article className={tier.featured ? "is-featured" : ""} key={tier.name}>
+          <div className="reference-price-name">
+            <span>{tier.name}</span>
+            {tier.featured ? <small>Most popular</small> : null}
+          </div>
+          <strong>{tier.price}</strong>
+          <p>{tier.cadence}</p>
+          <ul>
+            {tier.features.map((feature) => (
+              <li key={feature}>
+                <CheckCircle2 size={14} aria-hidden="true" />
+                {feature}
+              </li>
+            ))}
+          </ul>
+          <Link href={tier.href}>{tier.cta}</Link>
+        </article>
+      ))}
+    </div>
+  );
+}
+
+function FeatureCopy({
+  index,
+  eyebrow,
+  title,
+  body,
+  bullets,
 }: {
-  tool: (typeof AI_TOOLS)[number];
-  active: boolean;
-  onSelect: () => void;
+  index: string;
+  eyebrow: string;
+  title: string;
+  body: string;
+  bullets: string[];
 }) {
   return (
-    <button
-      type="button"
-      className={`memory-ai-tool-card ${active ? "is-active" : ""}`}
-      onClick={onSelect}
-      aria-pressed={active}
-    >
-      <ProductLogo id={tool.id} />
-      <span className="memory-ai-question">{tool.question}</span>
-      <span className="memory-ai-answer">{tool.answer}</span>
-      <span className="memory-ai-source">
-        <ShieldCheck size={14} aria-hidden="true" />
-        Sourced from Layers memory
+    <div className="reference-feature-copy">
+      <span className="reference-kicker">
+        {index}
+        <strong>{eyebrow}</strong>
       </span>
-    </button>
-  );
-}
-
-function SearchMemoryPanel() {
-  return (
-    <section className="memory-section memory-search-section">
-      <div className="memory-section-copy">
-        <span className="memory-section-kicker">Search</span>
-        <h2>Find the decision without reopening every transcript.</h2>
-        <p>
-          Search meeting memory by customer, owner, action item, topic, or exact
-          quote. Layers keeps the original source attached.
-        </p>
-      </div>
-      <div className="memory-search-panel">
-        <div className="memory-search-bar">
-          <Search size={16} aria-hidden="true" />
-          <span>onboarding objections</span>
-          <kbd>Cmd K</kbd>
-        </div>
-        <div className="memory-search-results">
-          {[
-            ["Product planning", "Decision: ship onboarding first", "00:35"],
-            ["Customer feedback", "Objection: setup asks too much too soon", "12:08"],
-            ["GTM sync", "Owner: Alex to revise pricing deck", "04:44"],
-          ].map(([title, body, time]) => (
-            <article key={title}>
-              <time>{time}</time>
-              <div>
-                <strong>{title}</strong>
-                <p>{body}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function StructuredOutputsPanel() {
-  return (
-    <section className="memory-section memory-outputs-section">
-      <div className="memory-section-copy">
-        <span className="memory-section-kicker">Outputs</span>
-        <h2>The result looks like work your team can use.</h2>
-        <p>
-          Layers does not stop at a transcript. Every meeting produces summary,
-          decisions, actions, intake, follow-up context, and clean exports.
-        </p>
-      </div>
-      <div className="memory-output-panel">
-        <div className="memory-output-tabs" aria-label="Output tabs">
-          {["Summary", "Decisions", "Actions", "Intake", "Follow-up"].map((tab, index) => (
-            <span className={index === 1 ? "is-active" : ""} key={tab}>
-              {tab}
-            </span>
-          ))}
-        </div>
-        <div className="memory-output-columns">
-          {MEMORY_OUTPUTS.map((column) => (
-            <article className="memory-output-column" key={column.title}>
-              <h3>
-                {column.title}
-                <span>{column.count}</span>
-              </h3>
-              <ul>
-                {column.items.map((item) => (
-                  <li key={item}>
-                    <CheckCircle2 size={14} aria-hidden="true" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
+      <h2>{title}</h2>
+      <p>{body}</p>
+      <ul>
+        {bullets.map((bullet) => (
+          <li key={bullet}>
+            <CheckCircle2 size={15} aria-hidden="true" />
+            {bullet}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
 export function LandingPage() {
-  const audioLevel = useLandingAudioLevel();
-  const [activeTool, setActiveTool] = useState(0);
-  const selectedTool = useMemo(() => AI_TOOLS[activeTool], [activeTool]);
-
   return (
-    <main className="memory-landing min-h-screen-safe">
-      <PublicSiteNav />
+    <main className="reference-landing min-h-screen-safe">
+      <LandingNav />
 
-      <section className="memory-hero memory-hero-app">
-        <div className="memory-hero-copy">
-          <span className="memory-hero-kicker">Private meeting memory for product and GTM teams</span>
-          <h1>Record the conversation. Ship the follow-through.</h1>
+      <section className="reference-hero" id="product">
+        <div className="reference-hero-copy">
+          <h1>AI memory for your meetings.</h1>
+          <p className="reference-script">Decisions that move work forward.</p>
           <p>
-            Layers captures meetings without joining as a bot, then turns the
-            conversation into searchable memory, decisions, action items, and
-            context your AI tools can use.
+            Layers remembers what matters from every conversation so your team
+            can make better decisions and ship faster.
           </p>
-          <div className="memory-hero-actions">
-            <Link href="/sign-up" className="memory-button memory-button-primary">
+          <div className="reference-hero-actions">
+            <Link href="/sign-up" className="reference-primary-button">
               Start free
-              <ArrowRight size={16} aria-hidden="true" />
             </Link>
-            <Link href="/download" className="memory-button memory-button-secondary">
-              See download options
+            <Link href="#how-it-works" className="reference-secondary-button">
+              See how it works
             </Link>
           </div>
-          <div className="memory-ai-strip" aria-label="AI tool support">
+          <div className="reference-tool-strip" aria-label="Supported AI tools">
             <span>Works with</span>
-            <ProductLogo id="chatgpt" />
-            <ProductLogo id="claude" />
-            <ProductLogo id="gemini" />
-            <span className="memory-mcp-chip">MCP clients</span>
+            <div>
+              <ProductLogo id="chatgpt" />
+              <ProductLogo id="claude" />
+              <ProductLogo id="gemini" />
+              <span className="reference-mcp-chip">
+                <Sparkles size={14} aria-hidden="true" />
+                MCP clients
+              </span>
+            </div>
           </div>
         </div>
 
-        <div className="memory-hero-wave" aria-hidden="true">
-          <AudioWaveRibbon
-            active
-            audioLevel={audioLevel * 0.82}
-            height={150}
-            motion={1.15}
-            sensitivity={0.92}
-            texture="clean"
-          />
-        </div>
-
-        <AppCapturePreview audioLevel={audioLevel} />
+        <HeroMockup />
       </section>
 
-      <section className="memory-use-case-grid" aria-label="Why teams use Layers">
-        {USE_CASES.map((item) => {
-          const Icon = item.icon;
-
-          return (
-            <article key={item.title}>
-              <Icon size={18} aria-hidden="true" />
-              <h2>{item.title}</h2>
-              <p>{item.body}</p>
-            </article>
-          );
-        })}
-      </section>
-
-      <section className="memory-panel memory-tools-panel" aria-labelledby="ai-tools-heading">
-        <div className="memory-panel-heading">
-          <div>
-            <span className="memory-section-kicker">AI context</span>
-            <h2 id="ai-tools-heading">Ask your AI tools what happened.</h2>
-            <p>
-              ChatGPT, Claude, Gemini, and MCP clients can answer from the same
-              meeting source instead of whatever was manually copied over.
-            </p>
-          </div>
-          <span className="memory-selected-tool">
-            <ProductLogo id={selectedTool.id} />
-            selected
-          </span>
+      <section className="reference-trust" aria-label="Trusted by product and GTM teams">
+        <div>
+          <span />
+          <p>Trusted by product and GTM teams</p>
+          <span />
         </div>
-        <div className="memory-tool-grid">
-          {AI_TOOLS.map((tool, index) => (
-            <ToolCard
-              key={tool.id}
-              tool={tool}
-              active={index === activeTool}
-              onSelect={() => setActiveTool(index)}
-            />
+        <ul>
+          {TRUSTED_TEAMS.map((team) => (
+            <li key={team}>{team}</li>
           ))}
-        </div>
+        </ul>
       </section>
 
-      <SearchMemoryPanel />
-      <StructuredOutputsPanel />
-
-      <section className="memory-section memory-pricing-section" id="pricing">
-        <div className="memory-section-copy">
-          <span className="memory-section-kicker">Pricing</span>
-          <h2>Start free. Upgrade when meeting memory becomes daily infrastructure.</h2>
-          <p>
-            Plans stay simple so teams can evaluate the workflow before they
-            commit to more usage and shared workspace controls.
-          </p>
-        </div>
-        <div className="memory-pricing-grid">
-          {PRICING_TIERS.map((tier) => (
-            <article
-              className={`memory-price-card ${tier.featured ? "is-featured" : ""}`}
-              key={tier.name}
-            >
-              <div>
-                <span className="memory-price-name">
-                  {tier.name}
-                  {tier.featured ? <small>Most teams start here</small> : null}
-                </span>
-                <strong>{tier.price}</strong>
-                <p>{tier.cadence}</p>
-              </div>
-              <ul>
-                {tier.features.map((feature) => (
-                  <li key={feature}>
-                    <CheckCircle2 size={14} aria-hidden="true" />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-              <Link href={tier.href}>{tier.cta}</Link>
-            </article>
-          ))}
-        </div>
+      <section className="reference-feature-row" id="how-it-works">
+        <FeatureCopy
+          index="01"
+          eyebrow="AI memory that works for you"
+          title="Your AI copilots learn from every meeting."
+          body="Layers captures the full picture - context, decisions, actions, and follow-ups - and keeps it organized in one intelligent memory."
+          bullets={[
+            "Speaker-aware transcripts",
+            "Automatic summaries and decisions",
+            "Action items with owners and due dates",
+          ]}
+        />
+        <MemoryVisual />
       </section>
 
-      <footer className="memory-footer">
+      <section className="reference-feature-row is-flipped">
+        <SearchVisual />
+        <FeatureCopy
+          index="02"
+          eyebrow="Search that finds answers"
+          title="Find the decision without reopening every transcript."
+          body="Search across meeting memory, not files. Layers surfaces precise moments, so you get answers in seconds."
+          bullets={[
+            "Natural language search",
+            "Jump to the exact moment",
+            "Filter by meeting, topic, people, and more",
+          ]}
+        />
+      </section>
+
+      <section className="reference-feature-row" id="solutions">
+        <FeatureCopy
+          index="03"
+          eyebrow="Reuse what matters"
+          title="Turn conversations into reusable assets."
+          body="Layers turns meeting memory into the outputs your team actually uses automatically."
+          bullets={[
+            "Summaries, docs, and updates",
+            "Action trackers and decision logs",
+            "Share to tools your team already uses",
+          ]}
+        />
+        <AssetsVisual />
+      </section>
+
+      <section className="reference-feature-row reference-pricing-section" id="resources">
+        <FeatureCopy
+          index="04"
+          eyebrow="Built for teams at every stage"
+          title="Simple pricing. Serious value."
+          body="Start free. Upgrade when your team is ready to do more with meeting memory."
+          bullets={[]}
+        />
+        <PricingPreview />
+      </section>
+
+      <section className="reference-cta">
+        <div className="reference-cta-mark">
+          <LayersLogoMark size={48} animated />
+        </div>
+        <div>
+          <h2>Ready to make every meeting count?</h2>
+          <p>Join teams that ship faster with better context.</p>
+        </div>
+        <nav aria-label="Get started">
+          <Link href="/sign-up" className="reference-primary-button">
+            Start free
+          </Link>
+          <Link href="/download" className="reference-secondary-button">
+            Book a demo
+          </Link>
+        </nav>
+      </section>
+
+      <footer className="reference-footer">
         <LayersLogo />
         <nav aria-label="Footer">
-          <Link href="/download">Download</Link>
+          <a href="#product">Product</a>
+          <a href="#solutions">Solutions</a>
           <Link href="/pricing">Pricing</Link>
+          <a href="#resources">Resources</a>
           <Link href="/privacy">Privacy</Link>
           <Link href="/terms">Terms</Link>
-          <Link href="/account-deletion">Delete account</Link>
-          <Link href="/sign-in">Sign in</Link>
-          <Link href="/sign-up">Start free</Link>
+          <a href="mailto:admin@mirrorfactory.ai">
+            <Mail size={14} aria-hidden="true" />
+            Contact
+          </a>
         </nav>
       </footer>
     </main>
