@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.30] — 2026-05-01
+
+### Documentation
+- docs: add GETTING_STARTED entry point + platform brand SVGs on /download (`cbf0666`)
+
+
 ## [0.1.29] — 2026-05-01
 
 ### Other
