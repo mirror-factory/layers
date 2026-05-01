@@ -196,6 +196,15 @@ Single source of truth for "how much are we spending right now":
 
 **Weekly ritual:** Monday morning, founder copies running totals into a single spreadsheet (`docs/ops/burn-tracker.xlsx` once created — currently lives in operator's head). Cross-check against caps; adjust if any vendor is consistently <30% of cap.
 
+### Internal alert webhook (PROD-371)
+
+Set `ALERT_WEBHOOK_URL` to a Slack incoming webhook (`https://hooks.slack.com/services/...`) in Vercel envs (Production + Preview). The synthetic alert dispatcher at `POST /api/internal/alerts` posts a Slack-Block-Kit payload when any threshold breaches; full table in [`INCIDENT_RUNBOOK.md`](./INCIDENT_RUNBOOK.md#health-endpoint--alerts). When the env is unset, the dispatcher emits an `alert.would_fire` log line instead — useful for previewing thresholds before wiring a real channel.
+
+| Env var | Required for | Notes |
+| --- | --- | --- |
+| `INTERNAL_ADMIN_TOKEN` | `/api/internal/health` + `/api/internal/alerts` in production | Random 32-char string; rotate alongside other secrets. Optional in dev. |
+| `ALERT_WEBHOOK_URL` | Real Slack delivery | Slack-compatible incoming webhook. Falls back to log-only when unset. |
+
 ---
 
 ## Cost per meeting (gross-margin sanity check)

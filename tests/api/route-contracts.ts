@@ -95,6 +95,11 @@ export const apiRouteContracts = [
   route("/api/dev-kit/tools", "app/api/dev-kit/tools/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
   route("/api/embeddings/backfill", "app/api/embeddings/backfill/route.ts", ["POST"], "service", true, badRequestOrUnavailable),
   route("/api/health", "app/api/health/route.ts", ["GET"], "public", true, [200, 503]),
+  route("/api/internal/alerts", "app/api/internal/alerts/route.ts", ["GET", "POST"], "service", true, [200, 401], {
+    GET: { expectStatuses: [200, 401] },
+    POST: { expectStatuses: [200, 401] },
+  }),
+  route("/api/internal/health", "app/api/internal/health/route.ts", ["GET"], "service", true, [200, 401]),
   route("/api/mcp/[transport]", "app/api/mcp/[transport]/route.ts", ["GET", "POST", "DELETE"], "mcp-bearer", false, [200, 400, 401, 404, 405], {
     POST: {
       body: { jsonrpc: "2.0", id: 1, method: "initialize", params: {} },

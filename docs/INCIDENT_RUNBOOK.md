@@ -178,6 +178,83 @@
 
 ---
 
+## Health endpoint + alerts
+
+PROD-371 wires two internal endpoints for the alpha. Both live under `/api/internal/*` and gate behind `INTERNAL_ADMIN_TOKEN`. Source: `app/api/internal/health/route.ts`, `app/api/internal/alerts/route.ts`, `lib/observability/event-buffer.ts`, `lib/observability/alerts.ts`.
+
+### Manual health snapshot
+
+```bash
+curl -H "Authorization: Bearer $INTERNAL_ADMIN_TOKEN" \
+  https://layers.mirrorfactory.ai/api/internal/health
+```
+
+In local development, set neither `INTERNAL_ADMIN_TOKEN` nor `NODE_ENV=production` and the route is open:
+
+```bash
+curl http://localhost:3000/api/internal/health
+```
+
+Response shape:
+
+```json
+{
+  "uptime_seconds": 1234,
+  "vendors": {
+    "supabase": "ok | degraded | down | not-configured",
+    "ai_gateway": "...",
+    "assemblyai": "...",
+    "stripe": "..."
+  },
+  "recent_errors": {
+    "stripe_webhook_failures_last_hour": 0,
+    "recording_failures_last_hour": 0,
+    "auth_errors_last_hour": 0,
+    "rate_limit_hits_last_hour": 0,
+    "vendor_500s_last_hour": 0
+  },
+  "active_users_last_hour": 0,
+  "recordings_in_progress": 0,
+  "buffer_note": "..."
+}
+```
+
+### Alert dispatcher (manual for now)
+
+```bash
+curl -X POST -H "Authorization: Bearer $INTERNAL_ADMIN_TOKEN" \
+  https://layers.mirrorfactory.ai/api/internal/alerts
+```
+
+`GET` against the same path is a dry-run that returns `triggers` without dispatching to Slack — useful for previewing thresholds.
+
+Set `ALERT_WEBHOOK_URL` to a Slack incoming webhook (`https://hooks.slack.com/services/...`). When unset, the dispatcher logs `alert.would_fire` to stderr (visible in Vercel runtime logs) instead of pinging a real channel — useful for the first day of alpha when you want to see what _would_ have fired without the noise.
+
+Add `ALERT_WEBHOOK_URL` to Vercel envs (Production + Preview) the same way other secrets are managed; see [`SPEND_CAPS.md`](./SPEND_CAPS.md) for the founder's standard env-rotation playbook.
+
+### Threshold table
+
+| Metric (last hour) | Threshold | Severity | Why |
+| --- | ---: | --- | --- |
+| Stripe webhook failures | > 5 | critical | Stripe retries; >5 means the secret rotated or a route regressed. Revenue-blocking. |
+| Recording failures (transcribe routes + `funnel.upload_failure`) | > 3 | critical | Core action; 3+ failures at 10 users means at least one is broken. |
+| Auth errors (5xx on `/api/auth/*` + `funnel.signin_struggle`) | > 50 | warning | Tolerates the 4xx tail of "wrong password"; 50 5xx is an outage. |
+| Rate-limit hits (`mcp.rate_limited`) | > 100 | warning | PROD-404 limits are 60/min/client; >100/hour = runaway loop. |
+| Vendor 5xx (`external.error`, `integration.fetch.failure`) | > 10 | warning | A few upstream blips are normal; 10+ means a vendor is degraded. |
+
+### Implementation note (read before paging on this)
+
+The metrics are sourced from an **in-memory ring buffer** (200 events) inside each Node process. Implications:
+
+- **Per-process:** Each Vercel Lambda has its own buffer, so the response only reflects what the responding instance handled. For 10 alpha users that's acceptable.
+- **Reset on deploy:** Right after a deploy the dashboard looks blank — that is normal, not a sign of recovery.
+- **Lossy:** If the Lambda spins down between requests, prior events are gone.
+
+Once the alpha graduates we should swap this for a real aggregation store (Langfuse, Datadog, or a Supabase table). Tracked as a follow-up to PROD-371; not in scope for the alpha.
+
+---
+
 ## Change log
 
 - 2026-05-01 — initial runbook covering 8 alpha-launch scenarios. Companion to `SPEND_CAPS.md`.
+- 2026-05-01 — added `Health endpoint + alerts` section for PROD-371 in-memory monitoring.
