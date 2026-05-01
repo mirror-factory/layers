@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.17] — 2026-05-01
+
+### Fixed
+- fix: disable million compiler for production (`539ff1c`)
+
+
 ## [0.1.16] — 2026-05-01
 
 ### Other
