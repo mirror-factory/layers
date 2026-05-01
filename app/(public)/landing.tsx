@@ -8,7 +8,6 @@ import {
   ChatGPTLogo,
   ClaudeLogo,
   GeminiLogo,
-  McpGlyph,
 } from "@/components/ai-tool-logos";
 
 /*
@@ -331,7 +330,7 @@ function HeroComposition() {
       aria-hidden
       style={{
         position: "relative",
-        minHeight: "clamp(380px, 44vw, 480px)",
+        minHeight: "clamp(360px, 40vw, 440px)",
         isolation: "isolate",
       }}
     >
@@ -476,15 +475,23 @@ function HeroComposition() {
 
       {/* Floating: AI memory · Always learning */}
       <FloatingChip
-        style={{ top: "2%", left: "-2%", zIndex: 3 }}
+        style={{ top: "0%", left: "-2%", zIndex: 3 }}
         accent="var(--layers-violet)"
         label="AI memory"
         sub="Always learning"
       />
 
+      {/* Floating: today's agenda — sets the upcoming-meeting context */}
+      <FloatingChip
+        style={{ top: "-3%", left: "32%", zIndex: 3 }}
+        accent="var(--layers-blue)"
+        label="Today"
+        sub="3 meetings · 1 live"
+      />
+
       {/* Floating: Decisions 2 Captured */}
       <FloatingStat
-        style={{ top: "4%", right: "-4%", zIndex: 3 }}
+        style={{ top: "2%", right: "-4%", zIndex: 3 }}
         value="2"
         label="Decisions"
         sub="Captured"
@@ -655,7 +662,7 @@ function HeroComposition() {
 
       {/* Floating: Actions 4 Assigned */}
       <FloatingStat
-        style={{ bottom: "10%", left: "10%", zIndex: 5 }}
+        style={{ bottom: "-2%", left: "8%", zIndex: 5 }}
         value="4"
         label="Actions"
         sub="Assigned"
@@ -664,7 +671,7 @@ function HeroComposition() {
 
       {/* Floating: Follow-ups 2 Planned */}
       <FloatingStat
-        style={{ bottom: "8%", right: "8%", zIndex: 5 }}
+        style={{ bottom: "-4%", right: "6%", zIndex: 5 }}
         value="2"
         label="Follow-ups"
         sub="Planned"
@@ -1398,12 +1405,6 @@ function ConnectMediaCard() {
       brand: "var(--layers-blue)",
       Icon: GeminiLogo,
     },
-    {
-      name: "Any MCP client",
-      sub: "Model Context Protocol",
-      brand: "var(--brand-accent-subtle, var(--layers-mint))",
-      Icon: McpGlyph,
-    },
   ];
 
   return (
@@ -1558,6 +1559,18 @@ function ConnectMediaCard() {
           → 18 meetings · 3 decisions · 4 action items
         </span>
       </div>
+
+      <p
+        style={{
+          margin: 0,
+          fontSize: "0.75rem",
+          color: "var(--fg-muted)",
+          textAlign: "center",
+          letterSpacing: "0.005em",
+        }}
+      >
+        Works with any Model Context Protocol client.
+      </p>
     </div>
   );
 }
