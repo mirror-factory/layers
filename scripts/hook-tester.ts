@@ -541,7 +541,13 @@ writeFileSync(
   'utf-8',
 );
 
-if (existsSync(resolve(cwd, '.ai-starter-kit.json'))) {
+// Manifest regeneration belongs to `pnpm sync`, not the hook-test runner.
+// PROD-385: this used to call syncStarterSystem({ cwd }) after every test
+// pass, but on repos with many `.ai-starter/runs/` entries (this one had
+// ~270) it took >120s to walk and made the pre-push gate timeout. The
+// gate's job is to test hooks; manifest regen is a separate concern.
+// Opt back in with `HOOK_TESTER_SYNC=1` if you need the legacy behavior.
+if (process.env.HOOK_TESTER_SYNC === '1' && existsSync(resolve(cwd, '.ai-starter-kit.json'))) {
   syncStarterSystem({ cwd });
 }
 
