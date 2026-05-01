@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.53] — 2026-05-01
+
+### Other
+- M2(PROD-405,404): structured errors + rate limits on MCP surface (`5f818c2`)
+
+
 ## [0.1.52] — 2026-05-01
 
 ### Other
