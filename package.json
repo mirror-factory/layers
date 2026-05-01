@@ -77,7 +77,8 @@
     "product:spec": "tsx scripts/product-spec.ts",
     "product:validate": "tsx scripts/product-validation.ts",
     "mfdr": "tsx scripts/mfdr.ts",
-    "usage:check": "tsx scripts/check-integration-usage.ts"
+    "usage:check": "tsx scripts/check-integration-usage.ts",
+    "branding:generate": "node scripts/branding-generate.mjs"
   },
   "dependencies": {
     "@ai-sdk/gateway": "^3.0.104",
