@@ -74,3 +74,7 @@ supabase/.temp/
 .ai-dev-kit/state/
 .claude/hooks/state.json
 .codex/hooks/state.json
+.codex/hooks/observer-state.json
+.claude/hooks/__pycache__/
+.codex/hooks/__pycache__/
+**/__pycache__/
