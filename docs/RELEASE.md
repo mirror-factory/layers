@@ -169,4 +169,5 @@ Then `pnpm dev:staging` boots the dev server pointed at staging-tier creds local
 - [ ] GitHub: enable branch protection rulesets on `main`, `staging`, `development`.
 - [ ] Update `AGENTS.md` to reference this doc and the "no direct push to main" rule.
 - [ ] Open a soak PR `development` → `staging` → `main` to prove the pipeline before retiring the direct-push habit.
+- [ ] Confirm spend caps still configured (see [SPEND_CAPS.md](./SPEND_CAPS.md))
 - [ ] Close [PROD-383](https://linear.app/mirror-factory/issue/PROD-383).
