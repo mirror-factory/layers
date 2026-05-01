@@ -40,6 +40,9 @@ export async function POST(req: NextRequest) {
   }
 
   if (decision !== "allow") {
+    // 303 See Other forces the OAuth callback to be hit as GET regardless
+    // of the original POST. Default 307 would preserve POST and trigger
+    // "Method Not Allowed" on the upstream client (e.g., claude.ai).
     return NextResponse.redirect(
       appendOAuthError(
         parsed.value.redirectUri,
@@ -47,6 +50,7 @@ export async function POST(req: NextRequest) {
         "access_denied",
         "The user denied Layers MCP access.",
       ),
+      303,
     );
   }
 
@@ -93,7 +97,12 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // 303 See Other — the consent page POSTs here, but the upstream OAuth
+  // callback (claude.ai/api/mcp/auth_callback, etc.) only accepts GET.
+  // The default 307 preserves the POST method and triggers "Method Not
+  // Allowed" on the client. 303 explicitly switches the redirect to GET.
   return NextResponse.redirect(
     appendOAuthCode(parsed.value.redirectUri, code, parsed.value.state),
+    303,
   );
 }
