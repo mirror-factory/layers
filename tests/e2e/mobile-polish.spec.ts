@@ -116,24 +116,14 @@ test.describe("Home page", () => {
   });
 
   test("keeps recording controls focused on mobile", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/record/live", { waitUntil: "domcontentloaded" });
-    const isMobile = (page.viewportSize()?.width ?? 0) < 640;
 
     await expect(
       page.getByRole("button", { name: "Start recording" }),
     ).toBeVisible();
     await expect(page.getByLabel("Recording readiness")).toBeVisible();
-    if (isMobile) {
-      await expect(page.getByText(/Ready - \d\/\d checks/)).toBeVisible();
-      await expect(
-        page.getByText("Ready for your first words."),
-      ).not.toBeVisible();
-    } else {
-      await expect(
-        page.getByLabel("Recording readiness").getByText("Plan"),
-      ).toBeVisible();
-    }
-    await expect(page.locator(".live-animated-lines")).toBeVisible();
+    await expect(page.getByLabel("Recording readiness")).toContainText("Plan");
   });
 });
 

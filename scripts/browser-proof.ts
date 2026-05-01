@@ -236,12 +236,7 @@ async function main() {
   const baseUrl = process.env.AI_STARTER_BASE_URL ?? process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:3000';
   syncStarterSystem({ cwd });
   const features = readJson<SurfaceManifestEntry[]>(FEATURE_MANIFEST_FILE, []);
-  const routes = features.filter(feature => {
-    const sourcePath = feature.sourcePaths[0] ?? '';
-    return feature.kind === 'route' &&
-      /\/page\.[tj]sx?$/.test(sourcePath) &&
-      !sourcePath.includes('[');
-  });
+  const routes = features.filter(feature => feature.kind === 'route');
   if (routes.length === 0) {
     throw new Error('No route surfaces found in feature manifest. Run `pnpm sync` first.');
   }
@@ -256,9 +251,7 @@ async function main() {
     await browser.close();
   }
 
-  const expectRouteLimit = Number(process.env.AI_STARTER_EXPECT_ROUTE_LIMIT ?? '1');
-  const expectRoutes = routes.slice(0, Number.isFinite(expectRouteLimit) ? Math.max(1, expectRouteLimit) : 1);
-  const expectProbes = expectRoutes.map(route => {
+  const expectProbes = routes.map(route => {
     const sourcePath = route.sourcePaths[0] ?? route.name;
     const routePath = routeUrlFromSource(sourcePath);
     return {

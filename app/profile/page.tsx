@@ -30,6 +30,10 @@ export default function ProfilePage() {
   const [apiKeyLoading, setApiKeyLoading] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showMcpInstructions, setShowMcpInstructions] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState("");
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   const fetchApiKey = useCallback(async () => {
     try {
@@ -86,6 +90,33 @@ export default function ProfilePage() {
     await supabase.auth.signOut();
     router.push("/");
     router.refresh();
+  };
+
+  const handleDeleteAccount = async () => {
+    setDeleteLoading(true);
+    setDeleteError(null);
+
+    try {
+      const res = await fetch("/api/account/delete", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ confirmation: deleteConfirmation }),
+      });
+
+      if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        throw new Error(body?.error ?? "Account deletion failed");
+      }
+
+      const supabase = getSupabaseBrowser();
+      await supabase?.auth.signOut();
+      router.push("/?account=deleted");
+      router.refresh();
+    } catch (err) {
+      setDeleteError(err instanceof Error ? err.message : "Account deletion failed");
+    } finally {
+      setDeleteLoading(false);
+    }
   };
 
   if (loading) {
@@ -298,6 +329,77 @@ export default function ProfilePage() {
             </button>
           )}
         </div>
+
+        {user && !user.isAnonymous && (
+          <div className="bg-[#171717] rounded-xl p-4 space-y-4 border border-[#ef4444]/20">
+            <div>
+              <h2 className="text-lg font-semibold text-[#fca5a5]">
+                Delete account
+              </h2>
+              <p className="mt-2 text-sm leading-6 text-[#a3a3a3]">
+                Permanently delete your Layers account, profile, meetings,
+                transcripts, summaries, calendar connections, API key, MCP
+                tokens, and webhook settings. Billing, tax, fraud-prevention,
+                security, and backup records may be retained where required.
+              </p>
+            </div>
+
+            {!showDeleteConfirm ? (
+              <button
+                type="button"
+                onClick={() => setShowDeleteConfirm(true)}
+                className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg bg-[#7f1d1d] px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#991b1b]"
+              >
+                <Trash2 size={16} />
+                Delete account
+              </button>
+            ) : (
+              <div className="space-y-3">
+                <label className="block text-sm text-[#d4d4d4]">
+                  Type DELETE to confirm
+                  <input
+                    value={deleteConfirmation}
+                    onChange={(event) => setDeleteConfirmation(event.target.value)}
+                    className="mt-2 w-full rounded-lg border border-[#404040] bg-[#0a0a0a] px-3 py-3 text-sm text-[#f5f5f5] outline-none focus:border-[#ef4444]"
+                    autoComplete="off"
+                  />
+                </label>
+
+                {deleteError && (
+                  <p className="text-sm text-[#fca5a5]">{deleteError}</p>
+                )}
+
+                <div className="grid gap-2 sm:grid-cols-2">
+                  <button
+                    type="button"
+                    onClick={handleDeleteAccount}
+                    disabled={deleteLoading || deleteConfirmation !== "DELETE"}
+                    className="flex min-h-[44px] items-center justify-center gap-2 rounded-lg bg-[#dc2626] px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#b91c1c] disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {deleteLoading ? (
+                      <Loader2 size={16} className="animate-spin" />
+                    ) : (
+                      <Trash2 size={16} />
+                    )}
+                    Permanently delete
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowDeleteConfirm(false);
+                      setDeleteConfirmation("");
+                      setDeleteError(null);
+                    }}
+                    disabled={deleteLoading}
+                    className="min-h-[44px] rounded-lg bg-[#262626] px-4 py-3 text-sm font-semibold text-[#d4d4d4] transition-colors hover:bg-[#404040] disabled:opacity-50"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </main>
     </div>
   );

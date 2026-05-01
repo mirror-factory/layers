@@ -15,22 +15,30 @@ test.describe("Feature checklist", () => {
     await page.goto("/", { waitUntil: "load" });
 
     await expect(
-      page.getByRole("heading", { name: "Meeting intake, instantly." }),
-    ).toBeVisible();
-    await expect(page.getByLabel("Live meeting capture preview")).toBeVisible();
-    await expect(
-      page.getByRole("heading", { name: "Built for real conversations" }),
+      page.getByRole("heading", {
+        name: "Turn meetings into structured team memory.",
+      }),
     ).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: "See it in action" }),
+      page.getByLabel("Meeting memory pipeline signal"),
     ).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: "Simple pricing" }),
+      page.getByRole("heading", {
+        name: "Connect once. Your meeting memory lives in every AI tool.",
+      }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Search across every meeting." }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", {
+        name: "Simple pricing. Start free, scale when you are ready.",
+      }),
     ).toBeVisible();
     await expect(
       page
         .locator('a[href="/sign-up"]')
-        .filter({ hasText: "Get started" })
+        .filter({ hasText: "Start free" })
         .first(),
     ).toBeVisible();
     await expect(

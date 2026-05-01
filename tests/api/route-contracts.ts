@@ -57,6 +57,9 @@ export const apiRouteContracts = [
   route("/api/auth/send-email", "app/api/auth/send-email/route.ts", ["POST"], "public", true, badRequestOrUnavailable, {
     POST: { body: { email: "person@example.com" }, expectStatuses: [200, 400, 429, 503] },
   }),
+  route("/api/account/delete", "app/api/account/delete/route.ts", ["POST"], "user", true, [200, 400, 401, 403, 503], {
+    POST: { body: { confirmation: "DELETE" }, expectStatuses: [200, 401, 403, 503], skipReason: "permanently deletes the caller account" },
+  }),
   route("/api/calendar/callback/[provider]", "app/api/calendar/callback/[provider]/route.ts", ["GET"], "oauth", false, [302, 307, 308], undefined, "/api/calendar/callback/google"),
   route("/api/calendar/connect/[provider]", "app/api/calendar/connect/[provider]/route.ts", ["GET"], "user", false, [302, 307, 308], undefined, "/api/calendar/connect/google"),
   route("/api/calendar/disconnect/[provider]", "app/api/calendar/disconnect/[provider]/route.ts", ["POST"], "user", true, [200, 400, 401, 403, 500, 503], {

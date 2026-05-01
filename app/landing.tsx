@@ -530,7 +530,9 @@ export function LandingPage() {
           </Link>
           <Link href="/pricing">Pricing</Link>
           <Link href="/docs">Docs</Link>
-          <Link href="/sign-in">Sign in</Link>
+          <Link href="/sign-in" className="memory-nav-signin">
+            Sign in
+          </Link>
           <Link href="/sign-up" className="memory-nav-cta">
             Start free
           </Link>

@@ -16,7 +16,7 @@ test.describe("Home page navigation", () => {
 
     const getStarted = page
       .locator('a[href="/sign-up"]')
-      .filter({ hasText: "Get started" });
+      .filter({ hasText: "Start free" });
     await expect(getStarted.first()).toBeVisible();
 
     const signIn = page
@@ -31,10 +31,10 @@ test.describe("Home page navigation", () => {
     test.setTimeout(10_000);
 
     const expectedHeadings = [
-      "Meeting intake, instantly.",
-      "Built for real conversations",
-      "See it in action",
-      "Simple pricing",
+      "Turn meetings into structured team memory.",
+      "Connect once. Your meeting memory lives in every AI tool.",
+      "Search across every meeting.",
+      "Simple pricing. Start free, scale when you are ready.",
     ];
 
     for (const heading of expectedHeadings) {

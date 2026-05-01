@@ -473,16 +473,11 @@ export default function ControlPlanePage() {
   );
 
   useEffect(() => {
-    const initialLoad = window.setTimeout(() => {
-      void refresh();
-    }, 0);
+    void refresh();
     const timer = window.setInterval(() => {
       void refresh();
     }, 5000);
-    return () => {
-      window.clearTimeout(initialLoad);
-      window.clearInterval(timer);
-    };
+    return () => window.clearInterval(timer);
   }, [refresh]);
 
   if (!data) {

@@ -394,7 +394,7 @@ function PlatformRecommendation() {
             ? `Recommended: ${channel.channel}`
             : `${channel.channel} status`}
         </span>
-        <h2>{channel.name}</h2>
+        <h2>Recommended path</h2>
         <p>{channel.recommendation}</p>
       </div>
       <div className="flex flex-col gap-2 sm:flex-row">

@@ -54,23 +54,23 @@ These files are the dynamic source of truth. Read them before planning or editin
 
 | registry | path | status | records | covers |
 |---|---|---:|---:|---|
-| setup | `.ai-starter/manifests/setup.json` | present | 17 | Setup interview, env requirements, design contract, enabled modules, selected runtimes. |
-| starter | `.ai-starter/manifests/starter.json` | present | 18 | Installed starter version, modules, generated artifacts, and command surface. |
-| docs | `.ai-starter/manifests/docs.json` | present | 154 | Docs registry with source URLs, freshness, tags, and trigger paths. |
-| hooks | `.ai-starter/manifests/hooks.json` | present | 24 | Claude/Codex lifecycle hooks, classifications, matchers, and block behavior. |
+| setup | `.ai-starter/manifests/setup.json` | present | 19 | Setup interview, env requirements, design contract, enabled modules, selected runtimes. |
+| starter | `.ai-starter/manifests/starter.json` | present | 31 | Installed starter version, modules, generated artifacts, and command surface. |
+| docs | `.ai-starter/manifests/docs.json` | present | 162 | Docs registry with source URLs, freshness, tags, and trigger paths. |
+| hooks | `.ai-starter/manifests/hooks.json` | present | 22 | Claude/Codex lifecycle hooks, classifications, matchers, and block behavior. |
 | runtimes | `.ai-starter/manifests/runtimes.json` | present | 2 | Codex and Claude runtime status, proof, configured hooks, and observed events. |
-| features | `.ai-starter/manifests/features.json` | present | 139 | Components, routes, APIs, tools, docs, tests, stories, visuals, and eval coverage. |
-| companions | `.ai-starter/manifests/companions.json` | present | 139 | Required companion obligations for new or changed surfaces. |
-| evidence | `.ai-starter/manifests/evidence.json` | present | 787 | Screenshots, videos, traces, logs, reports, scorecards, and exported proof. |
-| modules | `.ai-starter/manifests/modules.json` | present | 7 | Enabled/planned product modules and their verification commands. |
+| features | `.ai-starter/manifests/features.json` | present | 142 | Components, routes, APIs, tools, docs, tests, stories, visuals, and eval coverage. |
+| companions | `.ai-starter/manifests/companions.json` | present | 142 | Required companion obligations for new or changed surfaces. |
+| evidence | `.ai-starter/manifests/evidence.json` | present | 917 | Screenshots, videos, traces, logs, reports, scorecards, and exported proof. |
+| modules | `.ai-starter/manifests/modules.json` | present | 11 | Enabled/planned product modules and their verification commands. |
 | adapters | `.ai-starter/manifests/adapters.json` | present | 9 | Runtime, provider, browser, database, payments, and service adapters. |
 | integrations | `.ai-starter/manifests/integrations.json` | present | 6 | External APIs/services, env vars, docs, tests, cost tracking, and failure modes. |
 | design | `.ai-starter/manifests/design.json` | present | 6 | Design contract, tokens, dashboard editability, and drift policy. |
-| browser-proof | `.ai-starter/manifests/browser-proof.json` | present | 8 | Playwright/Expect requirements, flows, replays, screenshots, and browser proof. |
-| product-spec | `.ai-starter/manifests/product-spec.json` | missing | - | YC-style product spec: customer, painful problem, wedge, MVP, pricing, distribution, research basis, and open questions. |
-| product-validation | `.ai-starter/manifests/product-validation.json` | missing | - | Customer/problem/workaround validation, MVP scope, pricing/GTM assumptions, and technical feasibility. |
-| mfdr | `.ai-starter/manifests/mfdr.json` | missing | - | Technical decision/spec record: hypothesis, API/tool/UI choices, research basis, verification plan, risks, and open questions. |
-| alignment | `.ai-starter/manifests/alignment.json` | missing | - | Compressed alignment anchors linking product spec, validation, MFDR, DESIGN.md, AGENTS.md, active plan, and scorecard. |
+| browser-proof | `.ai-starter/manifests/browser-proof.json` | present | 17 | Playwright/Expect requirements, flows, replays, screenshots, and browser proof. |
+| product-spec | `.ai-starter/manifests/product-spec.json` | present | 26 | YC-style product spec: customer, painful problem, wedge, MVP, pricing, distribution, research basis, and open questions. |
+| product-validation | `.ai-starter/manifests/product-validation.json` | present | 18 | Customer/problem/workaround validation, MVP scope, pricing/GTM assumptions, and technical feasibility. |
+| mfdr | `.ai-starter/manifests/mfdr.json` | present | 18 | Technical decision/spec record: hypothesis, API/tool/UI choices, research basis, verification plan, risks, and open questions. |
+| alignment | `.ai-starter/manifests/alignment.json` | present | 7 | Compressed alignment anchors linking product spec, validation, MFDR, DESIGN.md, AGENTS.md, active plan, and scorecard. |
 | supervisor | `.ai-starter/manifests/supervisor.json` | present | 4 | Local tmux/process supervisor expectations and observed sessions. |
 
 ---
@@ -172,4 +172,4 @@ pnpm research:refresh   # Refresh research cache from live docs
 
 ---
 
-_Generated: 2026-04-30T16:43:20.170Z_
+_Generated: 2026-04-30T23:39:23.272Z_

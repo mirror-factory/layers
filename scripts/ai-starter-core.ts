@@ -649,25 +649,6 @@ export interface StarterContext {
 }
 
 const MARKDOWN_EXTENSIONS = new Set(['.md', '.mdx']);
-const SURFACE_CONTENT_EXTENSIONS = new Set([
-  '.cjs',
-  '.css',
-  '.html',
-  '.js',
-  '.json',
-  '.jsonl',
-  '.jsx',
-  '.md',
-  '.mdx',
-  '.mjs',
-  '.ts',
-  '.tsx',
-  '.txt',
-  '.yaml',
-  '.yml',
-]);
-const textReadCache = new Map<string, string>();
-const normalizedTextReadCache = new Map<string, string>();
 const DOCS_HOT_HINTS = [
   'START_HERE',
   'DESIGN',
@@ -872,16 +853,9 @@ function collectFiles(cwd: string, relDir: string, predicate?: (relPath: string)
 }
 
 function tryRead(cwd: string, relPath: string): string {
-  const full = resolve(cwd, relPath);
-  const cached = textReadCache.get(full);
-  if (cached !== undefined) return cached;
-
   try {
-    const value = readFileSync(full, 'utf-8');
-    textReadCache.set(full, value);
-    return value;
+    return readFileSync(resolve(cwd, relPath), 'utf-8');
   } catch {
-    textReadCache.set(full, '');
     return '';
   }
 }
@@ -2207,13 +2181,7 @@ function matchesSurfacePath(relPath: string, entryName: string, sourcePath: stri
 
 function matchesSurfaceDocument(cwd: string, relPath: string, entryName: string, sourcePath: string): boolean {
   if (matchesSurfacePath(relPath, entryName, sourcePath)) return true;
-  if (!SURFACE_CONTENT_EXTENSIONS.has(extname(relPath).toLowerCase())) return false;
-  const full = resolve(cwd, relPath);
-  let normalizedContent = normalizedTextReadCache.get(full);
-  if (normalizedContent === undefined) {
-    normalizedContent = normalizeKey(tryRead(cwd, relPath));
-    normalizedTextReadCache.set(full, normalizedContent);
-  }
+  const normalizedContent = normalizeKey(tryRead(cwd, relPath));
   return surfaceNeedles(entryName, sourcePath).some(needle => normalizedContent.includes(needle));
 }
 
@@ -3088,7 +3056,6 @@ interface ExpectReplayProbe {
 }
 
 function analyzeExpectReplays(cwd: string, replayPaths: string[]) {
-  const replayPathsForAnalysis = replayPaths.length > 0 ? [replayPaths.at(-1)!] : [];
   let expectProbeCount = 0;
   let expectCommandCount = 0;
   let expectFailedCommandCount = 0;
@@ -3097,7 +3064,7 @@ function analyzeExpectReplays(cwd: string, replayPaths: string[]) {
   let expectScreenshotCount = 0;
   let expectVideoCount = 0;
 
-  for (const replayPath of replayPathsForAnalysis) {
+  for (const replayPath of replayPaths) {
     const replay = readJson<{
       expectCli?: {
         commands?: ExpectReplayCommand[];
@@ -3150,10 +3117,7 @@ function analyzeExpectReplays(cwd: string, replayPaths: string[]) {
 }
 
 export function generateBrowserProofManifest(cwd: string, evidenceEntries: EvidenceRegistryEntry[]): BrowserProofManifest {
-  const replayPaths = evidenceEntries
-    .filter(entry => entry.kind === 'replay')
-    .sort((a, b) => (a.createdAt ?? '').localeCompare(b.createdAt ?? '') || a.path.localeCompare(b.path))
-    .map(entry => entry.path);
+  const replayPaths = evidenceEntries.filter(entry => entry.kind === 'replay').map(entry => entry.path);
   const screenshotPaths = evidenceEntries
     .filter(entry => entry.kind === 'image')
     .map(entry => entry.path)

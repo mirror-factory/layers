@@ -53,6 +53,7 @@ const checkoutRoute = await import("@/app/api/stripe/checkout/route");
 const checkoutUrls = await import("@/lib/stripe/checkout-urls");
 const webhooksRoute = await import("@/app/api/webhooks/route");
 const webhookDeliveriesRoute = await import("@/app/api/webhooks/deliveries/route");
+const accountDeleteRoute = await import("@/app/api/account/delete/route");
 
 function jsonRequest(path: string, method: string, body?: unknown): NextRequest {
   return new NextRequest(`http://localhost:3000${path}`, {
@@ -187,6 +188,59 @@ describe("high-risk API route behavior", () => {
 
     expect(res.status).toBe(401);
     await expect(res.json()).resolves.toMatchObject({ error: "Authentication required" });
+  });
+
+  it("POST /api/account/delete requires an authenticated user", async () => {
+    mocks.getCurrentUserId.mockResolvedValue(null);
+
+    const res = await accountDeleteRoute.POST(
+      jsonRequest("/api/account/delete", "POST", { confirmation: "DELETE" }),
+    );
+
+    expect(res.status).toBe(401);
+    await expect(res.json()).resolves.toMatchObject({ error: "Authentication required" });
+  });
+
+  it("POST /api/account/delete requires explicit confirmation", async () => {
+    mocks.getCurrentUserId.mockResolvedValue("user_a");
+
+    const res = await accountDeleteRoute.POST(
+      jsonRequest("/api/account/delete", "POST", { confirmation: "delete" }),
+    );
+
+    expect(res.status).toBe(400);
+    expect(mocks.getSupabaseServer).not.toHaveBeenCalled();
+    await expect(res.json()).resolves.toMatchObject({
+      error: "Type DELETE to confirm account deletion.",
+    });
+  });
+
+  it("POST /api/account/delete removes user-owned records and auth user", async () => {
+    mocks.getCurrentUserId.mockResolvedValue("user_a");
+    const eq = vi.fn().mockResolvedValue({ error: null });
+    const deleteFn = vi.fn(() => ({ eq }));
+    const from = vi.fn(() => ({ delete: deleteFn }));
+    const deleteUser = vi.fn().mockResolvedValue({ error: null });
+    mocks.getSupabaseServer.mockReturnValue({
+      from,
+      auth: { admin: { deleteUser } },
+    });
+
+    const res = await accountDeleteRoute.POST(
+      jsonRequest("/api/account/delete", "POST", { confirmation: "DELETE" }),
+    );
+    const body = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(from).toHaveBeenCalledWith("calendar_connections");
+    expect(from).toHaveBeenCalledWith("oauth_codes");
+    expect(from).toHaveBeenCalledWith("oauth_refresh_tokens");
+    expect(from).toHaveBeenCalledWith("webhooks");
+    expect(from).toHaveBeenCalledWith("meetings");
+    expect(from).toHaveBeenCalledWith("profiles");
+    expect(eq).toHaveBeenCalledWith("user_id", "user_a");
+    expect(deleteUser).toHaveBeenCalledWith("user_a");
+    expect(body).toMatchObject({ deleted: true, deletedUserId: "user_a" });
   });
 
   it("GET /api/settings returns persisted model settings", async () => {

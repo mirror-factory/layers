@@ -141,12 +141,12 @@ export default function AccountDeletionPage() {
             <div className="rounded-xl border border-amber-500/25 bg-amber-500/10 p-4 text-sm leading-6 text-[var(--text-secondary)]">
               <div className="flex items-center gap-2 font-semibold text-[var(--text-primary)]">
                 <ShieldCheck size={16} aria-hidden="true" />
-                Launch draft - self-serve deletion follow-up
+                Self-serve deletion is available from Profile
               </div>
               <p className="mt-2">
-                This build does not include a safe, reviewed, destructive
-                self-serve account deletion API. Until that flow is approved,
-                deletion requests are handled through verified support requests.
+                Signed-in users can delete their account from Profile after
+                typing a confirmation phrase. Support remains available if you
+                cannot access the account.
               </p>
             </div>
           </header>
@@ -204,8 +204,9 @@ export default function AccountDeletionPage() {
                 <strong className="font-semibold text-[var(--text-primary)]">
                   Authenticated path:
                 </strong>{" "}
-                Sign in to Layers, open Profile, and copy your account email and
-                user ID into the deletion email. This helps us verify ownership.
+                Sign in to Layers, open Profile, and use the Delete account
+                control. You will need to type DELETE before the app removes
+                your account.
               </li>
               <li>
                 <strong className="font-semibold text-[var(--text-primary)]">
@@ -260,12 +261,11 @@ export default function AccountDeletionPage() {
 
           <Section title="Self-serve deletion status">
             <p>
-              Full in-app self-serve deletion is not implemented in this build
-              because there is no existing reviewed auth/profile deletion API
-              pattern. The safe follow-up is to add an authenticated
-              confirmation flow that cancels or warns about subscriptions,
-              revokes tokens, deletes user-owned records through approved
-              service-role logic, and then removes the auth user.
+              The Profile deletion flow revokes user-owned Layers records and
+              then removes the Supabase authentication user. It does not delete
+              Stripe invoices, tax records, chargeback records, external app
+              store records, or provider logs we must retain for legal,
+              security, billing, or fraud-prevention reasons.
             </p>
           </Section>
 
@@ -340,8 +340,8 @@ export default function AccountDeletionPage() {
               Authenticated route
             </div>
             <p className="mt-3 text-sm leading-6 text-[var(--text-secondary)]">
-              Sign in first if you can. The request still works without app
-              access, but account details make verification faster.
+              Sign in first if you can. Open Profile to use the self-serve
+              deletion control, or use support if you cannot access the account.
             </p>
             <Link
               href="/sign-in"

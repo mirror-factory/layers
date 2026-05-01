@@ -7697,7 +7697,8 @@ body {
     width: min(100% - 1.5rem, 760px);
   }
 
-  .memory-nav-links a:not(.memory-nav-cta):not(.memory-nav-download),
+  .memory-nav-links
+    a:not(.memory-nav-cta):not(.memory-nav-download):not(.memory-nav-signin),
   .memory-nav-link {
     display: none;
   }
