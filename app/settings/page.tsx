@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Loader2, Check, ChevronDown, CalendarDays, ExternalLink, BellRing } from "lucide-react";
+import { Loader2, Check, ChevronDown, BellRing } from "lucide-react";
 import { TopBar } from "@/components/top-bar";
 import { RecordingReminderPanel } from "@/components/recording-reminder";
 import { IntegrationsSettingsPanel } from "@/components/integrations-settings-panel";
@@ -11,59 +11,11 @@ import {
   type ModelSettings,
 } from "@/lib/settings-shared";
 
-interface CalendarEventPreview {
-  id: string;
-  title: string;
-  startsAt: string;
-  endsAt: string | null;
-  location: string | null;
-}
-
-interface CalendarOverview {
-  connected: boolean;
-  provider: string | null;
-  accountEmail: string | null;
-  items: CalendarEventPreview[];
-  setupRequired?: boolean;
-  providerSetupRequired?: boolean;
-  reauthRequired?: boolean;
-  calendarFetchFailed?: boolean;
-}
-
 export default function SettingsPage() {
   const [settings, setSettings] = useState<ModelSettings>(DEFAULTS);
-  const [calendarOverview, setCalendarOverview] = useState<CalendarOverview>({
-    connected: false,
-    provider: null,
-    accountEmail: null,
-    items: [],
-  });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [calendarNotice] = useState<string | null>(() => {
-    if (typeof window === "undefined") return null;
-    const status = new URLSearchParams(window.location.search).get("calendar");
-    return status ? calendarNoticeFromStatus(status) : null;
-  });
-
-  const loadCalendarOverview = useCallback(() => {
-    fetch("/api/calendar/upcoming?limit=1")
-      .then((r) => r.json())
-      .then((data) =>
-        setCalendarOverview({
-          connected: Boolean(data.connected),
-          provider: data.provider ?? null,
-          accountEmail: data.accountEmail ?? null,
-          items: Array.isArray(data.items) ? data.items : [],
-          setupRequired: Boolean(data.setupRequired),
-          providerSetupRequired: Boolean(data.providerSetupRequired),
-          reauthRequired: Boolean(data.reauthRequired),
-          calendarFetchFailed: Boolean(data.calendarFetchFailed),
-        }),
-      )
-      .catch(() => {});
-  }, []);
 
   useEffect(() => {
     fetch("/api/settings")
@@ -71,10 +23,7 @@ export default function SettingsPage() {
       .then((data) => setSettings(data))
       .catch(() => {})
       .finally(() => setLoading(false));
-
-    loadCalendarOverview();
-
-  }, [loadCalendarOverview]);
+  }, []);
 
   const save = useCallback(
     async (patch: Partial<ModelSettings>) => {
@@ -153,13 +102,7 @@ export default function SettingsPage() {
           onChange={(v) => save({ streamingSpeechModel: v })}
         />
 
-        <CalendarSettingsPanel
-          overview={calendarOverview}
-          notice={calendarNotice}
-          onRefresh={loadCalendarOverview}
-        />
-
-        <ReminderSettingsPanel upcomingEvent={calendarOverview.items[0] ?? null} />
+        <ReminderSettingsPanel />
 
         <IntegrationsSettingsPanel />
       </main>
@@ -167,11 +110,7 @@ export default function SettingsPage() {
   );
 }
 
-function ReminderSettingsPanel({
-  upcomingEvent,
-}: {
-  upcomingEvent: CalendarEventPreview | null;
-}) {
+function ReminderSettingsPanel() {
   return (
     <section id="recording-reminders" className="glass-card rounded-xl p-4">
       <div className="flex items-start gap-3">
@@ -190,155 +129,9 @@ function ReminderSettingsPanel({
       </div>
 
       <div className="mt-4">
-        <RecordingReminderPanel upcomingEvent={upcomingEvent} />
+        <RecordingReminderPanel upcomingEvent={null} />
       </div>
     </section>
-  );
-}
-
-function CalendarSettingsPanel({
-  overview,
-  notice,
-  onRefresh,
-}: {
-  overview: CalendarOverview;
-  notice: string | null;
-  onRefresh: () => void;
-}) {
-  const [disconnecting, setDisconnecting] = useState<string | null>(null);
-  const status = overview.connected
-    ? overview.reauthRequired
-      ? "Reconnect required"
-      : overview.accountEmail ?? overview.provider ?? "Connected"
-    : overview.setupRequired
-      ? "Database setup needed"
-      : overview.providerSetupRequired
-        ? "Provider setup needed"
-        : "Not connected";
-  const activeProvider = overview.provider === "outlook" ? "outlook" : "google";
-  const needsSetup = overview.setupRequired || overview.providerSetupRequired;
-
-  const disconnect = async (provider: "google" | "outlook") => {
-    setDisconnecting(provider);
-    try {
-      await fetch(`/api/calendar/disconnect/${provider}`, { method: "POST" });
-      onRefresh();
-    } finally {
-      setDisconnecting(null);
-    }
-  };
-
-  return (
-    <section id="calendar" className="glass-card rounded-xl p-4">
-      <div className="flex items-start gap-3">
-        <span className="settings-calendar-icon" aria-hidden="true">
-          <CalendarDays size={17} />
-        </span>
-        <div className="min-w-0">
-          <h2 className="text-lg font-semibold text-[var(--text-primary)]">
-            Calendar
-          </h2>
-          <p className="mt-1 text-xs leading-5 text-[var(--text-muted)]">
-            Show upcoming meetings on the recording screen so the next capture
-            starts with the right context.
-          </p>
-        </div>
-      </div>
-
-      <div className="settings-selected-details mt-4 rounded-lg border border-[var(--border-card)] bg-[var(--surface-control)] px-3 py-2.5">
-        <div className="text-xs font-medium leading-5 text-[var(--text-secondary)]">
-          Status
-        </div>
-        <div className="mt-0.5 text-xs leading-5 text-[var(--text-muted)]">
-          {status}
-        </div>
-      </div>
-
-      {notice && (
-        <div className="calendar-setup-note mt-3 rounded-lg px-3 py-2.5">
-          {notice}
-        </div>
-      )}
-
-      {needsSetup && (
-        <div className="calendar-setup-note mt-3 rounded-lg px-3 py-2.5">
-          Add the calendar OAuth environment variables and run the calendar
-          migration before connecting a provider.
-        </div>
-      )}
-
-      <div className="mt-3 grid gap-2 sm:grid-cols-2">
-        <CalendarProviderOption
-          label="Google Calendar"
-          provider="google"
-          connected={overview.connected && activeProvider === "google"}
-          disconnecting={disconnecting === "google"}
-          onDisconnect={disconnect}
-        />
-        <CalendarProviderOption
-          label="Outlook Calendar"
-          provider="outlook"
-          connected={overview.connected && activeProvider === "outlook"}
-          disconnecting={disconnecting === "outlook"}
-          onDisconnect={disconnect}
-        />
-      </div>
-    </section>
-  );
-}
-
-function calendarNoticeFromStatus(status: string): string {
-  const notices: Record<string, string> = {
-    connected: "Calendar connected. Upcoming meetings will appear on the record screen.",
-    setup_required: "Calendar setup needs provider credentials before OAuth can start.",
-    database_error: "Calendar connection could not be saved. Check the Supabase migration.",
-    provider_error: "Calendar provider sign-in failed. Check the OAuth credentials and redirect URL.",
-    provider_denied: "Calendar connection was canceled at the provider.",
-    missing_scope: "Calendar access was not granted. Connect again and approve read-only calendar access.",
-    state_mismatch: "Calendar sign-in expired. Start the connection again.",
-    auth_required: "Sign in again before connecting a calendar.",
-  };
-
-  return notices[status] ?? "Calendar setup needs attention.";
-}
-
-function CalendarProviderOption({
-  label,
-  provider,
-  connected,
-  disconnecting,
-  onDisconnect,
-}: {
-  label: string;
-  provider: "google" | "outlook";
-  connected: boolean;
-  disconnecting: boolean;
-  onDisconnect: (provider: "google" | "outlook") => void;
-}) {
-  if (connected) {
-    return (
-      <button
-        type="button"
-        onClick={() => onDisconnect(provider)}
-        disabled={disconnecting}
-        className="calendar-provider-option is-connected min-h-[48px] rounded-lg px-3 text-left"
-      >
-        <span>{label}</span>
-        <span>{disconnecting ? "Disconnecting..." : "Disconnect"}</span>
-      </button>
-    );
-  }
-
-  return (
-    <a
-      href={`/api/calendar/connect/${provider}`}
-      className="calendar-provider-option min-h-[48px] rounded-lg px-3 text-left"
-    >
-      <span>{label}</span>
-      <span>
-        Connect <ExternalLink size={12} aria-hidden="true" />
-      </span>
-    </a>
   );
 }
 

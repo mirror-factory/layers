@@ -2050,6 +2050,13 @@ body {
   color: var(--paper-calm-ink);
 }
 
+.home-calendar-connect.is-disabled {
+  cursor: default;
+  border-color: color-mix(in oklch, var(--accent-mint) 24%, var(--border-card));
+  background: color-mix(in oklch, var(--accent-mint) 10%, var(--surface-control));
+  color: var(--text-secondary);
+}
+
 .home-calendar-footnote {
   margin-top: 1rem;
   border-top: 1px solid var(--border-subtle);
@@ -6648,6 +6655,10 @@ body {
 .session-calendar-pill.is-connected {
   background: rgba(209, 250, 229, 0.72);
   color: #3f5f57;
+}
+
+.session-calendar-pill.is-disabled {
+  cursor: default;
 }
 
 .session-stat-grid {

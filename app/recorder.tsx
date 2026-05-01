@@ -15,7 +15,6 @@ import {
   CalendarDays,
   Clock3,
   Loader2,
-  Link2,
   Search,
   SlidersHorizontal,
   Sparkles,
@@ -602,10 +601,10 @@ function LiveRecordingContextCard({
             {timeLine}
             {location ? ` - ${location}` : ""}
           </p>
-          <Link href="/settings#calendar" className="session-calendar-pill is-connected">
-            <Link2 size={13} aria-hidden="true" />
-            {meetingContext ? "Connected to calendar" : "Connect calendar"}
-          </Link>
+          <span className="session-calendar-pill is-connected is-disabled">
+            <CalendarDays size={13} aria-hidden="true" />
+            {meetingContext ? "Calendar context attached" : "Calendar sync coming soon"}
+          </span>
         </div>
       </div>
     </div>
@@ -697,14 +696,12 @@ function UpcomingMeetingsPanel({
     ? "Google Calendar is rate limited right now. You can still start recording manually."
     : overview.reauthRequired && overview.connected
     ? "Reconnect your calendar to keep upcoming meetings available before recording."
-    : overview.providerSetupRequired || overview.setupRequired
-      ? "Calendar setup is ready in Settings once provider credentials are configured."
-      : "Connect your calendar to show the next meeting here before you hit record.";
+    : "Calendar sync is coming soon. You can still start recording manually.";
   const footnote = overview.connected
     ? overview.calendarFetchFailed
       ? "Connected, but events could not be fetched."
       : overview.accountEmail ?? overview.provider ?? "Calendar connected"
-    : "Google Calendar and Outlook are available.";
+    : "Google Calendar and Outlook support is coming soon.";
 
   return (
     <aside
@@ -772,10 +769,10 @@ function UpcomingMeetingsPanel({
         <div className="home-calendar-empty">
           <p>{emptyCopy}</p>
           <CalendarConnectArt />
-          <Link href="/settings#calendar" className="home-calendar-connect">
-            <Link2 size={14} aria-hidden="true" />
-            <span>{overview.connected ? "Manage calendar" : "Connect calendar"}</span>
-          </Link>
+          <span className="home-calendar-connect is-disabled" aria-disabled="true">
+            <CalendarDays size={14} aria-hidden="true" />
+            <span>Calendar sync coming soon</span>
+          </span>
         </div>
       )}
 
