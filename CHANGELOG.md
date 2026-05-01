@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.37] — 2026-05-01
+
+### Other
+- PROD-386: native app icon pipeline (iOS / Android / macOS / Windows) (`85768e3`)
+
+
 ## [0.1.36] — 2026-05-01
 
 ### Other
