@@ -1,9 +1,44 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Bricolage_Grotesque } from "next/font/google";
 import AudioWaveRibbon from "@/components/audio-wave-ribbon";
 import { LayersLogoMark } from "@/components/layers-logo";
+
+/* ───────────────────────── Animation helpers ───────────────────────── */
+
+function useTypewriter(text: string, charsPerSecond = 28, startDelay = 200) {
+  const [out, setOut] = useState("");
+  useEffect(() => {
+    setOut("");
+    let i = 0;
+    let intervalId = 0 as number | undefined;
+    const startId = window.setTimeout(() => {
+      intervalId = window.setInterval(() => {
+        i += 1;
+        setOut(text.slice(0, i));
+        if (i >= text.length && intervalId !== undefined) {
+          window.clearInterval(intervalId);
+        }
+      }, 1000 / charsPerSecond);
+    }, startDelay);
+    return () => {
+      window.clearTimeout(startId);
+      if (intervalId !== undefined) window.clearInterval(intervalId);
+    };
+  }, [text, charsPerSecond, startDelay]);
+  return out;
+}
+
+const HERO_TRANSCRIPT_FEED: ReadonlyArray<readonly [string, string]> = [
+  ["00:11", "Commit to ship onboarding first."],
+  ["00:14", "Jamie owns first-run copy by Friday."],
+  ["00:18", "Owen reviews Monday before the demo."],
+  ["00:22", "Pricing tier unchanged for now — agreed."],
+  ["00:27", "Customer concern logged for next sync."],
+  ["00:31", "Decision: launch staging next week."],
+];
 import {
   ChatGPTLogo,
   ClaudeLogo,
@@ -74,7 +109,17 @@ const PRICING = [
   },
 ];
 
-const TRUST_LOGOS = ["Linear", "Vercel", "dribbble", "Notion", "Lattice", "Retool"];
+// Real underlying tech, not fake "customer logos". We're in invite-only alpha
+// — claiming "Trusted by Linear / Notion / Lattice" would be a lie. These are
+// the vendors Layers is actually built on.
+const BUILT_ON = [
+  "Vercel AI SDK",
+  "AssemblyAI",
+  "Supabase",
+  "Stripe",
+  "Inngest",
+  "Model Context Protocol",
+];
 
 
 export function LandingPage() {
@@ -84,7 +129,6 @@ export function LandingPage() {
       <TrustBar />
       <SectionMemory />
       <SectionSearch />
-      <SectionReuse />
       <SectionConnect />
       <SectionPricing />
       <FinalCta />
@@ -498,89 +542,9 @@ function HeroComposition() {
         accent="var(--layers-mint)"
       />
 
-      {/* Floating: Live transcript card */}
-      <div
-        style={{
-          position: "absolute",
-          left: "-4%",
-          top: "44%",
-          width: "62%",
-          background: "var(--bg-surface)",
-          border: "1px solid var(--border-default)",
-          borderRadius: "var(--radius-lg, 14px)",
-          padding: "12px 14px",
-          boxShadow:
-            "0 12px 28px -16px color-mix(in oklch, var(--fg-default) 22%, transparent)",
-          zIndex: 4,
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            marginBottom: 8,
-          }}
-        >
-          <span
-            style={{
-              width: 6,
-              height: 6,
-              borderRadius: 999,
-              background: "var(--layers-blue)",
-            }}
-          />
-          <span
-            style={{
-              fontSize: "0.7rem",
-              color: "var(--fg-default)",
-              fontWeight: 600,
-              letterSpacing: "0.02em",
-            }}
-          >
-            Live transcript
-          </span>
-          <span style={{ fontSize: "0.66rem", color: "var(--fg-muted)" }}>
-            · Captured live
-          </span>
-        </div>
-        <ul
-          style={{
-            listStyle: "none",
-            margin: 0,
-            padding: 0,
-            display: "grid",
-            gap: 6,
-            fontSize: "0.74rem",
-          }}
-        >
-          {[
-            ["00:11", "Commit to ship onboarding first."],
-            ["00:14", "Jamie owns first-run copy by Friday."],
-          ].map(([t, line]) => (
-            <li
-              key={t as string}
-              style={{
-                display: "grid",
-                gridTemplateColumns: "auto 1fr",
-                gap: 10,
-                alignItems: "baseline",
-                color: "var(--fg-default)",
-              }}
-            >
-              <span
-                style={{
-                  fontFamily: "var(--font-mono, ui-monospace)",
-                  color: "var(--fg-faint)",
-                }}
-              >
-                {t}
-              </span>
-              <span>{line}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
+      {/* Floating: Live transcript card — animated feed */}
+      <LiveTranscriptCard />
+
 
       {/* Floating: Meeting memory · Updating */}
       <div
@@ -682,6 +646,131 @@ function HeroComposition() {
         @keyframes homePulse {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.4; }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+function LiveTranscriptCard() {
+  // Show 3 lines at a time. Append a new line every ~3.4s; oldest scrolls off.
+  const VISIBLE = 3;
+  const [feed, setFeed] = useState<ReadonlyArray<readonly [string, string]>>(
+    () => HERO_TRANSCRIPT_FEED.slice(0, VISIBLE),
+  );
+  useEffect(() => {
+    let cursor = VISIBLE;
+    const id = window.setInterval(() => {
+      setFeed((prev) => {
+        const next = HERO_TRANSCRIPT_FEED[cursor % HERO_TRANSCRIPT_FEED.length];
+        cursor += 1;
+        return [...prev.slice(1), next];
+      });
+    }, 3400);
+    return () => window.clearInterval(id);
+  }, []);
+
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: "-4%",
+        top: "44%",
+        width: "62%",
+        background: "var(--bg-surface)",
+        border: "1px solid var(--border-default)",
+        borderRadius: "var(--radius-lg, 14px)",
+        padding: "12px 14px",
+        boxShadow:
+          "0 12px 28px -16px color-mix(in oklch, var(--fg-default) 22%, transparent)",
+        zIndex: 4,
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+          marginBottom: 8,
+        }}
+      >
+        <span
+          style={{
+            width: 6,
+            height: 6,
+            borderRadius: 999,
+            background: "var(--layers-blue)",
+            animation: "homePulse 1.6s ease-in-out infinite",
+          }}
+        />
+        <span
+          style={{
+            fontSize: "0.7rem",
+            color: "var(--fg-default)",
+            fontWeight: 600,
+            letterSpacing: "0.02em",
+          }}
+        >
+          Live transcript
+        </span>
+        <span style={{ fontSize: "0.66rem", color: "var(--fg-muted)" }}>
+          · Captured live
+        </span>
+      </div>
+      <ul
+        style={{
+          listStyle: "none",
+          margin: 0,
+          padding: 0,
+          display: "grid",
+          gap: 6,
+          fontSize: "0.74rem",
+          maxHeight: 78,
+          overflow: "hidden",
+        }}
+      >
+        {feed.map(([t, line]) => (
+          <li
+            key={`${t}-${line}`}
+            className="hero-transcript-line"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "auto 1fr",
+              gap: 10,
+              alignItems: "baseline",
+              color: "var(--fg-default)",
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "var(--font-mono, ui-monospace)",
+                color: "var(--fg-faint)",
+              }}
+            >
+              {t}
+            </span>
+            <span>{line}</span>
+          </li>
+        ))}
+      </ul>
+      <style jsx>{`
+        @keyframes heroTranscriptIn {
+          0% {
+            opacity: 0;
+            transform: translateY(8px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        :global(.hero-transcript-line:last-child) {
+          animation: heroTranscriptIn 480ms cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        @media (prefers-reduced-motion: reduce) {
+          :global(.hero-transcript-line:last-child) {
+            animation: none;
+          }
         }
       `}</style>
     </div>
@@ -819,7 +908,7 @@ function TrustBar() {
         textAlign: "center",
       }}
     >
-      <span className="home-eyebrow">Trusted by product & GTM teams</span>
+      <span className="home-eyebrow">Built on</span>
       <ul
         style={{
           listStyle: "none",
@@ -827,19 +916,18 @@ function TrustBar() {
           padding: 0,
           display: "flex",
           flexWrap: "wrap",
-          gap: "clamp(20px, 4vw, 56px)",
+          gap: "clamp(14px, 3vw, 40px)",
           alignItems: "center",
           justifyContent: "center",
         }}
       >
-        {TRUST_LOGOS.map((name) => (
+        {BUILT_ON.map((name) => (
           <li
             key={name}
             style={{
-              fontFamily: "var(--font-display-marketing), var(--font-brand-sans)",
-              fontSize: "clamp(1.05rem, 1vw + 0.7rem, 1.4rem)",
-              fontWeight: 600,
-              letterSpacing: "-0.018em",
+              fontSize: "clamp(0.85rem, 0.6vw + 0.7rem, 1.05rem)",
+              fontWeight: 500,
+              letterSpacing: "-0.005em",
               color: "var(--fg-muted)",
               opacity: 0.78,
             }}
@@ -927,7 +1015,7 @@ function MemoryMediaCard() {
         </span>
       </div>
 
-      <div style={{ display: "grid", gap: 10, marginBottom: 16 }}>
+      <div className="memory-rows" style={{ display: "grid", gap: 10, marginBottom: 16 }}>
         {[
           {
             tag: "What happened",
@@ -944,9 +1032,10 @@ function MemoryMediaCard() {
             color: "var(--layers-violet)",
             text: "Jamie · first-run copy by Friday. Owen reviews Monday.",
           },
-        ].map((row) => (
+        ].map((row, i) => (
           <div
             key={row.tag}
+            className="memory-row"
             style={{
               display: "grid",
               gridTemplateColumns: "auto 1fr",
@@ -957,6 +1046,10 @@ function MemoryMediaCard() {
               background:
                 "color-mix(in oklch, var(--bg-page) 60%, var(--bg-surface) 40%)",
               border: "1px solid var(--border-subtle)",
+              opacity: 0,
+              animation: `memoryRowIn 520ms cubic-bezier(0.22, 1, 0.36, 1) ${
+                400 + i * 520
+              }ms forwards`,
             }}
           >
             <span
@@ -976,6 +1069,24 @@ function MemoryMediaCard() {
             </span>
           </div>
         ))}
+        <style jsx>{`
+          @keyframes memoryRowIn {
+            0% {
+              opacity: 0;
+              transform: translateY(10px) scale(0.985);
+            }
+            100% {
+              opacity: 1;
+              transform: translateY(0) scale(1);
+            }
+          }
+          @media (prefers-reduced-motion: reduce) {
+            :global(.memory-row) {
+              opacity: 1 !important;
+              animation: none !important;
+            }
+          }
+        `}</style>
       </div>
 
       <div
@@ -1032,6 +1143,10 @@ function SectionSearch() {
 }
 
 function SearchMediaCard() {
+  const QUERY = "What did we decide about pricing?";
+  const typed = useTypewriter(QUERY, 26, 800);
+  const isDone = typed.length >= QUERY.length;
+
   return (
     <div
       aria-hidden
@@ -1062,9 +1177,14 @@ function SearchMediaCard() {
             padding: "8px 14px",
             borderRadius: "var(--radius-pill)",
             background: "var(--bg-page)",
-            border: "1px solid var(--border-subtle)",
+            border: `1px solid ${
+              isDone
+                ? "color-mix(in oklch, var(--layers-mint) 40%, var(--border-subtle))"
+                : "var(--border-subtle)"
+            }`,
             flex: 1,
             minWidth: 0,
+            transition: "border-color 240ms ease",
           }}
         >
           <span
@@ -1085,12 +1205,54 @@ function SearchMediaCard() {
               whiteSpace: "nowrap",
               overflow: "hidden",
               textOverflow: "ellipsis",
+              flex: 1,
+              minWidth: 0,
             }}
           >
-            What did we decide about pricing?
+            {typed}
+            <span
+              aria-hidden
+              style={{
+                display: "inline-block",
+                width: 1,
+                height: "0.95em",
+                marginLeft: 1,
+                background: "var(--fg-default)",
+                verticalAlign: "-2px",
+                animation: isDone
+                  ? "searchCaretBlink 1s steps(1) infinite"
+                  : "none",
+                opacity: isDone ? 1 : 0.6,
+              }}
+            />
+          </span>
+          <span
+            aria-hidden
+            style={{
+              fontSize: "0.62rem",
+              fontWeight: 600,
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+              color: isDone ? "var(--layers-mint)" : "var(--fg-faint)",
+              padding: "2px 7px",
+              borderRadius: 6,
+              background: isDone
+                ? "color-mix(in oklch, var(--layers-mint) 12%, transparent)"
+                : "color-mix(in oklch, var(--bg-surface) 100%, transparent)",
+              border: `1px solid ${
+                isDone
+                  ? "color-mix(in oklch, var(--layers-mint) 32%, transparent)"
+                  : "var(--border-subtle)"
+              }`,
+              flexShrink: 0,
+              transition: "all 240ms ease",
+            }}
+          >
+            ⌘ ↵
           </span>
         </div>
         <span
+          className="search-found-pill"
           style={{
             fontSize: "0.7rem",
             fontWeight: 600,
@@ -1101,6 +1263,9 @@ function SearchMediaCard() {
               "color-mix(in oklch, var(--layers-mint) 30%, var(--bg-surface) 70%)",
             border: "1px solid color-mix(in oklch, var(--layers-mint) 50%, transparent)",
             whiteSpace: "nowrap",
+            opacity: isDone ? 1 : 0,
+            transform: isDone ? "translateY(0)" : "translateY(-4px)",
+            transition: "opacity 320ms ease 200ms, transform 320ms ease 200ms",
           }}
         >
           Found in 18 meetings
@@ -1108,6 +1273,7 @@ function SearchMediaCard() {
       </div>
 
       <ul
+        className="search-results"
         style={{
           listStyle: "none",
           margin: 0,
@@ -1120,9 +1286,11 @@ function SearchMediaCard() {
           ["00:35", "Product planning", "“Tier at $20 hits the sweet spot — agreed.”"],
           ["12:08", "Customer feedback", "“They expected higher pricing for the pro tier.”"],
           ["27:42", "GTM sync", "“Free 25-meeting cap — anchor on usage, not seats.”"],
-        ].map(([time, ctx, quote]) => (
+          ["41:09", "Pricing review", "“Keep Pro at $30. Revisit after first 100 users.”"],
+        ].map(([time, ctx, quote], i) => (
           <li
             key={time as string}
+            className="search-result"
             style={{
               display: "grid",
               gridTemplateColumns: "auto 1fr",
@@ -1132,6 +1300,13 @@ function SearchMediaCard() {
               borderRadius: "var(--radius-md, 10px)",
               border: "1px solid var(--border-subtle)",
               background: "var(--bg-page)",
+              opacity: isDone ? 1 : 0,
+              transform: isDone ? "translateY(0)" : "translateY(8px)",
+              transition: `opacity 380ms cubic-bezier(0.22, 1, 0.36, 1) ${
+                300 + i * 120
+              }ms, transform 380ms cubic-bezier(0.22, 1, 0.36, 1) ${
+                300 + i * 120
+              }ms`,
             }}
           >
             <span
@@ -1161,11 +1336,31 @@ function SearchMediaCard() {
           </li>
         ))}
       </ul>
+      <style jsx>{`
+        @keyframes searchCaretBlink {
+          0%, 50% { opacity: 1; }
+          51%, 100% { opacity: 0; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          :global(.search-result) {
+            opacity: 1 !important;
+            transform: none !important;
+            transition: none !important;
+          }
+          :global(.search-found-pill) {
+            opacity: 1 !important;
+            transform: none !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }
 
-/* ─────────────── Section 03 — Reuse what matters ─────────────── */
+/* ─────────────── (Section 03 "Reuse what matters" was removed
+   on 2026-05-01 — Layers doesn't position as outputs/templates/
+   integrations. The dead component below is kept temporarily;
+   delete after one more product review.) ─────────────── */
 
 function SectionReuse() {
   return (
@@ -1364,7 +1559,7 @@ function SectionConnect() {
       className="section-shell"
     >
       <NumberedSection
-        index="04"
+        index="03"
         eyebrow="Connect to your AI tools"
         heading={
           <>
@@ -1466,7 +1661,7 @@ function ConnectMediaCard() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
+          gridTemplateColumns: "1fr",
           gap: 10,
         }}
       >
@@ -1475,10 +1670,10 @@ function ConnectMediaCard() {
             key={name}
             style={{
               display: "grid",
-              gridTemplateColumns: "auto 1fr",
-              gap: 12,
+              gridTemplateColumns: "auto 1fr auto",
+              gap: 14,
               alignItems: "center",
-              padding: "12px 14px",
+              padding: "14px 16px",
               borderRadius: "var(--radius-lg, 14px)",
               background:
                 "color-mix(in oklch, var(--bg-page) 78%, var(--bg-surface) 22%)",
@@ -1488,8 +1683,8 @@ function ConnectMediaCard() {
             <span
               aria-hidden
               style={{
-                width: 36,
-                height: 36,
+                width: 40,
+                height: 40,
                 borderRadius: 10,
                 background:
                   "color-mix(in oklch, " + brand + " 14%, var(--bg-surface) 86%)",
@@ -1503,12 +1698,12 @@ function ConnectMediaCard() {
                   " 28%, transparent)",
               }}
             >
-              <Icon size={20} />
+              <Icon size={22} />
             </span>
             <div style={{ display: "grid", gap: 2 }}>
               <span
                 style={{
-                  fontSize: "0.86rem",
+                  fontSize: "0.92rem",
                   fontWeight: 600,
                   color: "var(--fg-default)",
                   letterSpacing: "-0.005em",
@@ -1518,13 +1713,36 @@ function ConnectMediaCard() {
               </span>
               <span
                 style={{
-                  fontSize: "0.7rem",
+                  fontSize: "0.74rem",
                   color: "var(--fg-muted)",
                 }}
               >
                 {sub}
               </span>
             </div>
+            <span
+              aria-hidden
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                fontSize: "0.68rem",
+                fontWeight: 600,
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+                color: brand,
+              }}
+            >
+              <span
+                style={{
+                  width: 6,
+                  height: 6,
+                  borderRadius: 999,
+                  background: brand,
+                }}
+              />
+              MCP
+            </span>
           </div>
         ))}
       </div>
@@ -1731,12 +1949,21 @@ function SectionPricing() {
         className="pricing-row"
         style={{
           display: "grid",
-          gridTemplateColumns: "minmax(0, 0.8fr) minmax(0, 1.4fr)",
-          gap: "clamp(28px, 4vw, 64px)",
-          alignItems: "center",
+          gridTemplateColumns: "minmax(0, 1fr)",
+          gap: "clamp(40px, 6vw, 72px)",
+          alignItems: "start",
+          maxWidth: 1140,
+          marginInline: "auto",
         }}
       >
-        <div style={{ display: "grid", gap: 16 }}>
+        <div
+          style={{
+            display: "grid",
+            gap: 14,
+            justifyItems: "start",
+            textAlign: "left",
+          }}
+        >
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <span
               className="home-display"
@@ -1746,7 +1973,7 @@ function SectionPricing() {
                 fontWeight: 600,
               }}
             >
-              05
+              04
             </span>
             <span aria-hidden style={{ height: 1, width: 28, background: "var(--border-default)" }} />
             <span className="home-eyebrow">Built for teams at every stage</span>
@@ -1974,31 +2201,66 @@ function FinalCta() {
         className="cta-card"
         style={{
           position: "relative",
-          borderRadius: "var(--radius-2xl, 20px)",
+          borderRadius: "var(--radius-2xl, 24px)",
           background:
-            "linear-gradient(135deg, var(--bg-surface) 0%, color-mix(in oklch, var(--layers-mint-tint) 55%, var(--bg-surface) 45%) 100%)",
-          border: "1px solid var(--border-default)",
-          padding: "clamp(36px, 5vw, 72px) clamp(24px, 4vw, 64px)",
+            "linear-gradient(135deg, color-mix(in oklch, var(--layers-mint-tint) 35%, var(--bg-surface) 65%) 0%, color-mix(in oklch, var(--layers-violet-tint) 28%, var(--bg-surface) 72%) 60%, color-mix(in oklch, var(--layers-blue-tint) 20%, var(--bg-surface) 80%) 100%)",
+          backgroundSize: "200% 200%",
+          border: "1px solid color-mix(in oklch, var(--layers-mint) 24%, var(--border-default))",
+          padding: "clamp(40px, 5vw, 80px) clamp(28px, 4vw, 72px)",
           overflow: "hidden",
           display: "grid",
-          gap: 28,
+          gap: 32,
           alignItems: "center",
-          gridTemplateColumns: "minmax(0, 1.5fr) minmax(0, auto)",
+          gridTemplateColumns: "minmax(0, 1.4fr) minmax(0, auto)",
+          animation: "ctaShimmer 14s ease-in-out infinite",
         }}
       >
-        <div style={{ display: "grid", gap: 14, position: "relative" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <LayersLogoMark size={32} animated />
-            <span className="home-eyebrow">The next meeting starts soon</span>
+        <div style={{ display: "grid", gap: 16, position: "relative", zIndex: 2 }}>
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "5px 12px",
+              borderRadius: "var(--radius-pill)",
+              background:
+                "color-mix(in oklch, var(--bg-surface) 70%, transparent)",
+              border: "1px solid color-mix(in oklch, var(--layers-mint) 30%, transparent)",
+              width: "fit-content",
+            }}
+          >
+            <span
+              aria-hidden
+              style={{
+                width: 7,
+                height: 7,
+                borderRadius: 999,
+                background: "var(--layers-mint)",
+                boxShadow:
+                  "0 0 0 0 color-mix(in oklch, var(--layers-mint) 50%, transparent)",
+                animation: "ctaPulseDot 2.2s ease-out infinite",
+              }}
+            />
+            <span
+              style={{
+                fontSize: "0.72rem",
+                fontWeight: 600,
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: "var(--fg-default)",
+              }}
+            >
+              Live · invite-only alpha
+            </span>
           </div>
           <h2
             id="home-cta-heading"
             className="home-display"
             style={{
-              fontSize: "clamp(1.85rem, 3vw + 0.5rem, 3rem)",
-              lineHeight: 1.06,
+              fontSize: "clamp(2rem, 3.2vw + 0.5rem, 3.4rem)",
+              lineHeight: 1.04,
               margin: 0,
-              letterSpacing: "-0.025em",
+              letterSpacing: "-0.028em",
               maxWidth: "22ch",
             }}
           >
@@ -2006,7 +2268,7 @@ function FinalCta() {
             <span className="home-italic-serif">count?</span>
           </h2>
           <p className="home-prose" style={{ margin: 0, maxWidth: "44ch" }}>
-            Join teams that ship faster with better context.
+            Join teams that ship faster because the meeting actually went somewhere.
           </p>
         </div>
 
@@ -2018,39 +2280,120 @@ function FinalCta() {
             gap: 10,
             alignItems: "stretch",
             minWidth: 220,
+            position: "relative",
+            zIndex: 2,
           }}
         >
           <button
             type="button"
-            className="btn-primary"
+            className="btn-primary cta-pulse"
             disabled
             aria-disabled="true"
             title="Public sign-ups coming soon — invite-only alpha"
+            style={{ padding: "16px 26px", fontSize: "1rem" }}
           >
             Coming soon
           </button>
+          <a
+            href="mailto:support@mirrorfactory.ai?subject=Layers%20alpha%20access"
+            style={{
+              fontSize: "0.78rem",
+              color: "var(--fg-muted)",
+              textAlign: "center",
+              textDecoration: "none",
+              padding: "4px 0",
+            }}
+          >
+            Want in early?{" "}
+            <span style={{ color: "var(--fg-default)", fontWeight: 600 }}>
+              Email support →
+            </span>
+          </a>
         </div>
 
+        {/* Animated audio-wave ornament */}
+        <div
+          aria-hidden
+          className="cta-wave"
+          style={{
+            position: "absolute",
+            right: -40,
+            bottom: -30,
+            width: "55%",
+            opacity: 0.42,
+            pointerEvents: "none",
+            zIndex: 1,
+          }}
+        >
+          <AudioWaveRibbon
+            active
+            audioLevel={0.48}
+            height={96}
+            motion={0.8}
+            sensitivity={0.7}
+            texture="clean"
+          />
+        </div>
+
+        {/* Soft corner halo */}
         <div
           aria-hidden
           style={{
             position: "absolute",
-            right: -120,
-            bottom: -140,
-            width: 360,
-            height: 360,
+            right: -160,
+            top: -100,
+            width: 400,
+            height: 400,
             borderRadius: "50%",
             background:
               "radial-gradient(circle, color-mix(in oklch, var(--layers-mint) 22%, transparent) 0%, transparent 65%)",
             pointerEvents: "none",
+            zIndex: 0,
           }}
         />
       </div>
 
       <style jsx>{`
+        @keyframes ctaShimmer {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+        @keyframes ctaPulseDot {
+          0% {
+            box-shadow: 0 0 0 0 color-mix(in oklch, var(--layers-mint) 60%, transparent);
+          }
+          70% {
+            box-shadow: 0 0 0 10px color-mix(in oklch, var(--layers-mint) 0%, transparent);
+          }
+          100% {
+            box-shadow: 0 0 0 0 color-mix(in oklch, var(--layers-mint) 0%, transparent);
+          }
+        }
+        @keyframes ctaButtonPulse {
+          0%, 100% {
+            box-shadow: 0 1px 0 color-mix(in oklch, var(--layers-mint) 28%, transparent),
+                        0 0 0 0 color-mix(in oklch, var(--layers-mint) 35%, transparent);
+          }
+          50% {
+            box-shadow: 0 1px 0 color-mix(in oklch, var(--layers-mint) 28%, transparent),
+                        0 0 0 8px color-mix(in oklch, var(--layers-mint) 0%, transparent);
+          }
+        }
+        :global(.cta-pulse) {
+          animation: ctaButtonPulse 2.6s ease-in-out infinite;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          :global(.cta-pulse),
+          :global(.cta-card) {
+            animation: none !important;
+          }
+        }
         @media (max-width: 760px) {
           :global(.cta-card) {
             grid-template-columns: minmax(0, 1fr) !important;
+          }
+          :global(.cta-wave) {
+            display: none !important;
           }
         }
       `}</style>
