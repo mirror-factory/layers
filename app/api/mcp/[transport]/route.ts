@@ -14,6 +14,12 @@ import {
   LAYERS_MCP_DASHBOARD_RESOURCE_CONFIG,
   LAYERS_MCP_DASHBOARD_RESOURCE_URI,
 } from "@/lib/mcp/ui";
+import { respondWithError } from "@/lib/errors/respond";
+import { ERROR_CODES } from "@/lib/errors/codes";
+import {
+  applyRateLimit,
+  type RateLimitedTool,
+} from "@/lib/middleware/rate-limit";
 
 // ---------------------------------------------------------------------------
 // Query helpers (service role, scoped by user_id)
@@ -388,15 +394,17 @@ function createLayersMcpHandler(userId: string | null) {
 // Auth wrapper that allows initialize/notifications without auth
 // but requires auth for tools/list and tools/call
 async function handler(req: Request) {
-  // Clone request to peek at the body for method routing
+  // Clone request to peek at the body for method routing + tool detection
   const cloned = req.clone();
   let isProtocolHandshake = false;
+  let parsedBody: unknown = null;
 
   if (req.method === "POST") {
     try {
-      const body = await cloned.json();
-      const method = body?.method as string;
-      isProtocolHandshake = method === "initialize" || method?.startsWith("notifications/");
+      parsedBody = await cloned.json();
+      const method = (parsedBody as { method?: string } | null)?.method;
+      isProtocolHandshake =
+        method === "initialize" || (method?.startsWith("notifications/") ?? false);
     } catch {
       // not JSON — let mcp-handler deal with it
     }
@@ -407,7 +415,11 @@ async function handler(req: Request) {
     return createLayersMcpHandler(null)(req);
   }
 
-  // Everything else (tools/list, tools/call, GET for SSE) requires auth
+  // Everything else (tools/list, tools/call, GET for SSE) requires auth.
+  // The 401 responses below MUST follow RFC 6750 (`{error: "invalid_token"}`)
+  // so MCP clients (Claude / Cursor / Continue) recognize the bearer error
+  // and trigger the OAuth flow. The new structured-error shape is reserved
+  // for non-OAuth errors (rate-limit 429, validation 400, etc.).
   const auth = req.headers.get("authorization");
   if (!auth?.startsWith("Bearer ")) {
     const origin = new URL(req.url).origin;
@@ -436,7 +448,35 @@ async function handler(req: Request) {
     );
   }
 
+  // Rate-limit per-tool / per-user (PROD-404).
+  const rateLimitResult = await applyRateLimit({
+    userId: result.userId,
+    clientId: extractClientId(auth),
+    tool: detectToolFromBody(parsedBody),
+    req,
+  });
+  if (rateLimitResult) {
+    return rateLimitResult;
+  }
+
   return createLayersMcpHandler(result.userId)(req);
+}
+
+function extractClientId(authHeader: string): string {
+  // Best-effort: hash of the bearer suffices as a stable client identifier
+  // when the JWT itself doesn't include a `client_id` claim. The middleware
+  // re-hashes anyway, so this just has to be deterministic per token.
+  return authHeader.slice(7, 39);
+}
+
+function detectToolFromBody(body: unknown): RateLimitedTool | null {
+  if (!body || typeof body !== "object") return null;
+  const maybeMethod = (body as { method?: unknown }).method;
+  if (maybeMethod !== "tools/call") return null;
+  const params = (body as { params?: { name?: unknown } }).params;
+  const toolName = params?.name;
+  if (typeof toolName !== "string") return null;
+  return toolName as RateLimitedTool;
 }
 
 export { handler as GET, handler as POST, handler as DELETE };

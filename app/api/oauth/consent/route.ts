@@ -9,6 +9,8 @@ import {
   appendOAuthError,
   parseOAuthAuthorizeParams,
 } from "@/lib/oauth/mcp-oauth";
+import { respondWithError } from "@/lib/errors/respond";
+import { ERROR_CODES } from "@/lib/errors/codes";
 
 export async function POST(req: NextRequest) {
   const form = await req.formData().catch(() => null);
@@ -56,20 +58,27 @@ export async function POST(req: NextRequest) {
 
   const userSupabase = await getSupabaseUser();
   if (!userSupabase) {
-    return NextResponse.json({ error: "Auth not configured" }, { status: 503 });
+    return respondWithError(
+      req,
+      ERROR_CODES.VENDOR_UNAVAILABLE,
+      "Auth provider not configured",
+      { status: 503 },
+    );
   }
 
   const {
     data: { user },
   } = await userSupabase.auth.getUser();
   if (!user || user.is_anonymous) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    return respondWithError(req, ERROR_CODES.UNAUTHORIZED, "Not authenticated");
   }
 
   const serviceSupabase = getSupabaseServer();
   if (!serviceSupabase) {
-    return NextResponse.json(
-      { error: "server_error", error_description: "Database not configured" },
+    return respondWithError(
+      req,
+      ERROR_CODES.VENDOR_UNAVAILABLE,
+      "Database not configured",
       { status: 503 },
     );
   }
@@ -88,12 +97,10 @@ export async function POST(req: NextRequest) {
   });
 
   if (error) {
-    return NextResponse.json(
-      {
-        error: "server_error",
-        error_description: "Failed to create authorization code",
-      },
-      { status: 500 },
+    return respondWithError(
+      req,
+      ERROR_CODES.INTERNAL_ERROR,
+      "Failed to create authorization code",
     );
   }
 
