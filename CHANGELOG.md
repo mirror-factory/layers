@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.44] — 2026-05-01
+
+### Other
+- /record right column: split Calendar + MCP cards 50/50, never overflow (`83ae8aa`)
+
+
 ## [0.1.43] — 2026-05-01
 
 ### Other
