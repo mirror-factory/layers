@@ -312,12 +312,19 @@ function Hero() {
           >
             AI memory for your meetings.
             <br />
-            <span
-              className="home-italic-serif"
-              style={{ fontSize: "0.78em", display: "inline-block", marginTop: 6 }}
+            <em
+              style={{
+                fontSize: "0.78em",
+                display: "inline-block",
+                marginTop: 6,
+                fontStyle: "italic",
+                fontWeight: 500,
+                color: "var(--layers-mint)",
+                letterSpacing: "-0.012em",
+              }}
             >
               Decisions that move work forward.
-            </span>
+            </em>
           </h1>
 
           <p
