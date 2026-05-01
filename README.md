@@ -1,10 +1,23 @@
 # Layers
 
-**Audio intelligence for conversations that matter.**
+**AI memory for your meetings — decisions that move work forward.**
 
-Capture, transcribe, and extract structured data — budgets, timelines, decisions, action items — not just summaries. Ships as web, macOS desktop (Electron), and iOS (Capacitor) from a single Next.js codebase.
+Capture every conversation and turn it into structured, searchable memory: decisions, action items with owners and due dates, customer intake, follow-ups. Ships as web, macOS, Windows, iPhone/iPad, and Android from a single Next.js codebase, with an MCP server so any AI client (ChatGPT, Claude, Gemini, your own) can search and reason across that memory.
 
-A [Mirror Factory](https://mirrorfactory.ai) product.
+A [Mirror Factory](https://mirrorfactory.ai) product. Currently in invite-only alpha.
+
+---
+
+## 📖 Start here
+
+**Anyone joining this repo — human or agent — read [`docs/GETTING_STARTED.md`](./docs/GETTING_STARTED.md) first.** It maps every load-bearing document, names the four non-negotiables (especially: **never push directly to `main`** — see [`docs/RELEASE.md`](./docs/RELEASE.md)), and tells you what order to read things in.
+
+Other essentials:
+
+- 🚦 [`docs/RELEASE.md`](./docs/RELEASE.md) — feature → development → staging → main. Vercel setup, GitHub branch protection, OAuth/webhook allow-lists. **Read before pushing.**
+- 🎨 [`DESIGN.md`](./DESIGN.md) — Paper Calm v1 tokens. OKLCH only. 4pt grid. Source of truth for visual decisions.
+- 🤖 [`AGENTS.md`](./AGENTS.md) — agent contract. AI SDK v6 patterns. Skill registry.
+- 🧪 [`docs/V1_PLAN.md`](./docs/V1_PLAN.md) — sprints + milestones, mapped to [Linear M1–M6](https://linear.app/mirror-factory/project/layers-786bd350532f).
 
 ---
 

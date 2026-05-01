@@ -9,6 +9,8 @@ The agent failed to invoke skills 56% of the time. With AGENTS.md, there's no de
 
 Source: https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals
 
+> **First time here?** Read [`docs/GETTING_STARTED.md`](./docs/GETTING_STARTED.md) before anything else. It maps every load-bearing document and lists the four non-negotiables (release flow, design tokens, AI SDK v6 patterns, sacred wiring).
+
 ---
 
 ## Tech Stack

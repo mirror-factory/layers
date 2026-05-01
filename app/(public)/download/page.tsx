@@ -1,18 +1,25 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import type { ComponentType } from "react";
 import Link from "next/link";
-import type { LucideIcon } from "lucide-react";
 import {
-  Apple,
   ArrowUpRight,
   Cpu,
   Globe,
   LifeBuoy,
-  MonitorDown,
-  Smartphone,
-  Tablet,
 } from "lucide-react";
+import {
+  AppleLogo,
+  AndroidLogo,
+  WindowsLogo,
+} from "@/components/platform-logos";
+
+type PlatformIcon = ComponentType<{
+  size?: number;
+  className?: string;
+  "aria-hidden"?: boolean | "true" | "false";
+}>;
 
 // ──────────────────────────────────────────────────────────────────────────
 // Tokens we wished existed (proposed, not added):
@@ -52,7 +59,7 @@ type DownloadChannel = {
   channelLabel: string;
   /** Whether this channel is currently shipping */
   status: "live" | "beta" | "preflight";
-  icon: LucideIcon;
+  icon: PlatformIcon;
   /** What this device gets that's distinctive */
   whatYouGet: string;
   /** Install requirements — keep sentences short and verifiable */
@@ -128,7 +135,7 @@ const DOWNLOAD_CHANNELS: Record<DownloadPlatformKey, DownloadChannel> = {
       "Native capture with system audio routing, menu-bar capture controls, and a local meeting library.",
     channelLabel: "Stable alpha",
     status: "beta",
-    icon: Apple,
+    icon: AppleLogo,
     whatYouGet:
       "A menu-bar app that captures every meeting and turns it into searchable memory — decisions and action items, with owners and due dates, filed automatically.",
     requirements: [
@@ -154,7 +161,7 @@ const DOWNLOAD_CHANNELS: Record<DownloadPlatformKey, DownloadChannel> = {
       "Same capture, transcription, and library — built for Windows desktop and laptop workflows.",
     channelLabel: "Stable alpha",
     status: "beta",
-    icon: MonitorDown,
+    icon: WindowsLogo,
     whatYouGet:
       "A taskbar companion that records system + microphone audio and syncs transcripts to your account.",
     requirements: [
@@ -204,7 +211,7 @@ const DOWNLOAD_CHANNELS: Record<DownloadPlatformKey, DownloadChannel> = {
       "Capture in-person conversations and review your library on the move.",
     channelLabel: "Stable alpha",
     status: PUBLIC_DOWNLOAD_URLS.testFlight ? "beta" : "preflight",
-    icon: Smartphone,
+    icon: AppleLogo,
     whatYouGet:
       "On-device recording for hallway and field interviews, plus the full Layers library in your pocket.",
     requirements: [
@@ -231,7 +238,7 @@ const DOWNLOAD_CHANNELS: Record<DownloadPlatformKey, DownloadChannel> = {
       "Sideload the APK today, or join Play internal testing once it opens.",
     channelLabel: "Stable alpha",
     status: "beta",
-    icon: Tablet,
+    icon: AndroidLogo,
     whatYouGet:
       "Mobile recording and library access. Play Store distribution is coming after the public beta.",
     requirements: [
