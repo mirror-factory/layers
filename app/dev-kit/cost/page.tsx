@@ -18,6 +18,14 @@
 
 import { useEffect, useState } from "react";
 
+const COST_COLORS = {
+  mint: "var(--layers-mint)",
+  warning: "var(--signal-warning)",
+  live: "var(--signal-live)",
+  text: "var(--ink-200)",
+  muted: "var(--ink-400)",
+} as const;
+
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
@@ -35,9 +43,9 @@ interface CostData {
 // ---------------------------------------------------------------------------
 
 function utilizationColor(pct: number): string {
-  if (pct < 50) return "#3dffc0";
-  if (pct < 80) return "#eab308"; // yellow
-  return "#ef4444";
+  if (pct < 50) return COST_COLORS.mint;
+  if (pct < 80) return COST_COLORS.warning;
+  return COST_COLORS.live;
 }
 
 function utilizationLabel(pct: number): string {
@@ -89,7 +97,7 @@ function BudgetGauge({ spent, budget }: { spent: number; budget: number }) {
           x="90"
           y="82"
           textAnchor="middle"
-          fill="#f0f0f0"
+          fill={COST_COLORS.text}
           fontSize="24"
           fontWeight="600"
           fontFamily="monospace"
@@ -113,7 +121,7 @@ function BudgetGauge({ spent, budget }: { spent: number; budget: number }) {
         >
           {utilizationLabel(pct)}
         </p>
-        <p className="text-xs text-[#f0f0f0]/40 mt-0.5">
+        <p className="text-xs text-[var(--ink-400)] mt-0.5">
           Budget utilization
         </p>
       </div>
@@ -136,16 +144,16 @@ function ModelBarChart({
         return (
           <div key={entry.model}>
             <div className="flex items-center justify-between text-xs mb-1">
-              <span className="font-mono text-[#f0f0f0]/70 truncate max-w-[200px]">
+              <span className="font-mono text-[var(--ink-400)] truncate max-w-[200px]">
                 {entry.model}
               </span>
-              <span className="font-mono text-[#f0f0f0]/90">
+              <span className="font-mono text-[var(--ink-200)]">
                 ${entry.cost.toFixed(2)}
               </span>
             </div>
             <div className="h-3 rounded-full bg-white/[0.06] overflow-hidden">
               <div
-                className="h-full rounded-full bg-[#3dffc0] transition-all duration-500"
+                className="h-full rounded-full bg-layers-mint transition-all duration-500"
                 style={{ width: `${widthPct}%` }}
               />
             </div>
@@ -223,14 +231,14 @@ function CostLineChart({
         y1={budgetY}
         x2={chartW - padX}
         y2={budgetY}
-        stroke="#ef4444"
+        stroke={COST_COLORS.live}
         strokeWidth="1"
         strokeDasharray="6 4"
       />
       <text
         x={chartW - padX + 4}
         y={budgetY + 3}
-        fill="#ef4444"
+        fill={COST_COLORS.live}
         fontSize="9"
         fontFamily="monospace"
       >
@@ -241,7 +249,7 @@ function CostLineChart({
       <polyline
         points={polyline}
         fill="none"
-        stroke="#3dffc0"
+        stroke={COST_COLORS.mint}
         strokeWidth="2"
         strokeLinejoin="round"
       />
@@ -253,7 +261,7 @@ function CostLineChart({
           cx={p.x}
           cy={p.y}
           r="3"
-          fill="#3dffc0"
+          fill={COST_COLORS.mint}
         />
       ))}
 
@@ -294,7 +302,7 @@ export default function CostPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64 text-[#f0f0f0]/40">
+      <div className="flex items-center justify-center h-64 text-[var(--ink-400)]">
         Loading cost data...
       </div>
     );
@@ -303,8 +311,8 @@ export default function CostPage() {
   if (!data) return (
     <div className="p-8">
       <h1 className="text-2xl font-semibold mb-4">Cost</h1>
-      <div className="border border-[#3dffc0]/20 rounded p-6 text-center" style={{background:'rgba(61,255,192,.03)'}}>
-        <p className="text-[#f0f0f0]/60 text-sm">No cost data yet. Costs are tracked automatically with each AI call when TelemetryIntegration is active.</p>
+      <div className="rounded border border-layers-mint/20 p-6 text-center" style={{ background: "color-mix(in oklch, var(--layers-mint) 5%, transparent)" }}>
+        <p className="text-[var(--ink-400)] text-sm">No cost data yet. Costs are tracked automatically with each AI call when TelemetryIntegration is active.</p>
       </div>
     </div>
   );
@@ -320,7 +328,7 @@ export default function CostPage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-semibold">Cost</h1>
-        <p className="mt-1 text-sm text-[#f0f0f0]/50">
+        <p className="mt-1 text-sm text-[var(--ink-400)]">
           Spend tracking and budget monitoring for {data.period ?? 'current period'}.
         </p>
       </div>
@@ -334,7 +342,7 @@ export default function CostPage() {
 
         {/* Per-model breakdown */}
         <div className="rounded-lg border border-white/10 bg-white/[0.02] p-6">
-          <h2 className="text-sm font-medium text-[#f0f0f0]/60 mb-4">
+          <h2 className="text-sm font-medium text-[var(--ink-400)] mb-4">
             Cost by Model
           </h2>
           <ModelBarChart perModel={byModel} />
@@ -343,7 +351,7 @@ export default function CostPage() {
 
       {/* Cost over time */}
       <div className="rounded-lg border border-white/10 bg-white/[0.02] p-6">
-        <h2 className="text-sm font-medium text-[#f0f0f0]/60 mb-4">
+        <h2 className="text-sm font-medium text-[var(--ink-400)] mb-4">
           Cost Over Time
         </h2>
         <CostLineChart overTime={overTime} budget={budget} />
@@ -353,7 +361,7 @@ export default function CostPage() {
       <div className="rounded-lg border border-white/10 bg-white/[0.02] px-6 py-4 flex items-center justify-between">
         <div>
           <p className="text-sm font-medium">Budget Utilization</p>
-          <p className="text-xs text-[#f0f0f0]/50 mt-0.5">
+          <p className="text-xs text-[var(--ink-400)] mt-0.5">
             ${spent.toFixed(2)} of ${budget.toFixed(2)} ({utilizationPct.toFixed(1)}%)
           </p>
         </div>

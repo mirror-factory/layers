@@ -50,8 +50,8 @@ describe("estimateStreamingMeetingCost", () => {
 
   it("uses default model when none specified", () => {
     const result = estimateStreamingMeetingCost(3600);
-    expect(result.model).toBe("universal-streaming-multilingual");
-    expect(result.totalCostUsd).toBeCloseTo(0.15, 6);
+    expect(result.model).toBe("nova-3");
+    expect(result.totalCostUsd).toBeCloseTo(0.288, 6);
   });
 });
 

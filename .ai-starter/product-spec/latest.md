@@ -4,7 +4,7 @@ spec_id: product-spec
 project: audio-layer
 status: complete
 source: agent-generated
-updated_at: 2026-04-30T23:00:05.446Z
+updated_at: 2026-05-01T05:31:26.793Z
 anchors:
   product_validation: .ai-starter/product-validation/latest.md
   mfdr: .ai-starter/mfdr/latest.md
@@ -65,6 +65,7 @@ Download-first launch from the Layer One website with platform-aware Mac and Win
 - YC: launch quickly, talk to customers, and iterate from a real problem rather than a perfect plan.
 - YC: product-market fit is demand pulling product from the team, not internal confidence.
 - Starter docs: local docs registry, product validation memo, MFDR, DESIGN.md, and evidence manifests.
+- Reference system: Layers Design System v1.0 - Paper Calm
 
 ## Validation Plan
 - Run a landing-page/demo or concierge workflow for the named customer segment before broad build-out.

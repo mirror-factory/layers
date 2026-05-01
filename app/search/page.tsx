@@ -132,7 +132,7 @@ export default function SearchPage() {
             type="button"
             onClick={() => handleSearch()}
             disabled={loading || !query.trim()}
-            className="search-submit flex min-h-[44px] items-center justify-center rounded-md bg-[#14b8a6] px-5 text-sm font-semibold text-[#042f2e] transition-colors hover:bg-[#2dd4bf] disabled:cursor-not-allowed disabled:bg-[var(--surface-control)] disabled:text-[var(--text-muted)] disabled:opacity-100"
+            className="search-submit flex min-h-[44px] items-center justify-center rounded-md bg-layers-mint px-5 text-sm font-semibold text-layers-ink transition-colors hover:bg-layers-mint-soft disabled:cursor-not-allowed disabled:bg-[var(--surface-control)] disabled:text-[var(--text-muted)] disabled:opacity-100"
           >
             {loading ? (
               <Loader2 size={18} className="animate-spin" />
@@ -145,7 +145,7 @@ export default function SearchPage() {
         {/* Results */}
         {loading && (
           <div className="flex items-center justify-center py-12">
-            <Loader2 size={24} className="text-[#14b8a6] animate-spin" />
+            <Loader2 size={24} className="text-layers-mint animate-spin" />
           </div>
         )}
 
@@ -187,7 +187,7 @@ export default function SearchPage() {
                         </span>
                       </div>
                     </div>
-                    <span className="whitespace-nowrap text-xs font-medium text-[#14b8a6]">
+                    <span className="whitespace-nowrap text-xs font-medium text-layers-mint">
                       {similarityPercent(result.similarity)}
                     </span>
                   </div>
@@ -203,7 +203,7 @@ export default function SearchPage() {
         {!searched && (
           <div className="signal-panel rounded-lg px-5 py-8">
             <div className="flex items-start gap-3">
-              <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#14b8a6]/10 text-[#14b8a6]">
+              <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-layers-mint/10 text-layers-mint">
                 <Search size={17} />
               </div>
               <div className="min-w-0">
@@ -221,7 +221,7 @@ export default function SearchPage() {
                   key={suggestion}
                   type="button"
                   onClick={() => handleSearch(suggestion)}
-                  className="min-h-[36px] rounded-md border border-[var(--border-card)] px-3 text-xs text-[var(--text-secondary)] transition-colors hover:border-[#14b8a6]/35 hover:bg-[var(--bg-card-hover)] hover:text-[var(--text-primary)]"
+                  className="min-h-[36px] rounded-md border border-[var(--border-card)] px-3 text-xs text-[var(--text-secondary)] transition-colors hover:border-layers-mint/35 hover:bg-[var(--bg-card-hover)] hover:text-[var(--text-primary)]"
                 >
                   {suggestion}
                 </button>

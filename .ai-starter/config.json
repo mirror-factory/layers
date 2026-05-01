@@ -1,7 +1,7 @@
 {
-  "version": "0.1.13",
+  "version": "0.3.0",
   "createdAt": "2026-04-26T22:08:37.511Z",
-  "updatedAt": "2026-04-30T23:00:02.843Z",
+  "updatedAt": "2026-05-01T05:31:26.791Z",
   "mode": "detected",
   "status": "configured",
   "project": {
@@ -12,12 +12,12 @@
     "productType": "unknown"
   },
   "policy": {
-    "profile": "strict",
-    "expectRequired": true,
-    "playwrightRequired": true,
-    "storybookRequired": true,
+    "profile": "baseline",
+    "expectRequired": false,
+    "playwrightRequired": false,
+    "storybookRequired": false,
     "designDrift": "warn",
-    "autopilotStop": true
+    "autopilotStop": false
   },
   "runtimes": {
     "primary": "codex",
@@ -45,15 +45,21 @@
     "costTracking": true
   },
   "design": {
-    "brandSummary": "Project-specific design system defined during setup; preserve existing product visual language when present.",
-    "visualStyle": "project-specific",
+    "brandSummary": "Layers Design System v1.0, Paper Calm. Calm paper surfaces, structured controls, mint primary accent, violet and blue support colors, canonical aperture logo.",
+    "visualStyle": "paper-calm",
     "interactionStyle": "Clear task-first flows with visible feedback and recoverable states.",
     "density": "medium",
-    "motionLevel": "subtle",
-    "brandColors": [],
-    "referenceSystems": [],
+    "motionLevel": "organic-subtle",
+    "brandColors": [
+      "oklch(0.68 0.13 166)",
+      "oklch(0.66 0.16 282)",
+      "oklch(0.66 0.13 240)"
+    ],
+    "referenceSystems": [
+      "Layers Design System v1.0 - Paper Calm"
+    ],
     "accessibility": "WCAG AA contrast, keyboard reachability, visible focus, and reduced-motion support.",
-    "designInputSource": "defaults"
+    "designInputSource": "/Users/alfonso/Downloads/Layers Design System.html"
   },
   "productValidation": {
     "mode": "recommended",

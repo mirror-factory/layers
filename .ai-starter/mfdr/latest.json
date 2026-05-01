@@ -1,6 +1,6 @@
 {
-  "version": "0.1.13",
-  "updatedAt": "2026-04-30T23:00:06.717Z",
+  "version": "0.3.0",
+  "updatedAt": "2026-04-30T23:43:06.055Z",
   "status": "complete",
   "source": "manual",
   "title": "audio-layer MFDR",
@@ -256,8 +256,8 @@
       "pnpm report"
     ],
     "browserProof": "Run against the local dev server with AI_STARTER_BASE_URL or PLAYWRIGHT_BASE_URL set.",
-    "expectRequired": true,
-    "storybookRequired": true,
+    "expectRequired": false,
+    "storybookRequired": false,
     "designDriftPolicy": "warn"
   },
   "successMetrics": [

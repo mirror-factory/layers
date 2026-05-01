@@ -3,7 +3,7 @@ import { DEFAULTS, MODEL_OPTIONS } from "@/lib/settings-shared";
 
 describe("DEFAULTS", () => {
   it("has correct summaryModel", () => {
-    expect(DEFAULTS.summaryModel).toBe("anthropic/claude-haiku-4-5");
+    expect(DEFAULTS.summaryModel).toBe("openai/gpt-5.4-nano");
   });
 
   it("has correct batchSpeechModel", () => {
@@ -11,7 +11,7 @@ describe("DEFAULTS", () => {
   });
 
   it("has correct streamingSpeechModel", () => {
-    expect(DEFAULTS.streamingSpeechModel).toBe("universal-streaming-multilingual");
+    expect(DEFAULTS.streamingSpeechModel).toBe("nova-3");
   });
 });
 
@@ -78,5 +78,13 @@ describe("MODEL_OPTIONS", () => {
   it("default streamingSpeechModel exists in streaming speech options", () => {
     const values = MODEL_OPTIONS.streamingSpeech.map((o) => o.value);
     expect(values).toContain(DEFAULTS.streamingSpeechModel);
+  });
+
+  it("default streamingSpeechModel uses Deepgram", () => {
+    const defaultStreamingOption = MODEL_OPTIONS.streamingSpeech.find(
+      (option) => option.value === DEFAULTS.streamingSpeechModel,
+    );
+
+    expect(defaultStreamingOption?.provider).toBe("deepgram");
   });
 });

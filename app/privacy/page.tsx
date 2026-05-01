@@ -27,7 +27,7 @@ const DATA_GROUPS = [
     icon: KeyRound,
     items: [
       "Email address, authentication identifiers, user ID, and sign-in provider details.",
-      "API keys and OAuth tokens you create to connect Layers to MCP clients or integrations.",
+      "OAuth tokens you approve to connect Layers to MCP clients or integrations.",
       "Subscription tier, billing status, and Stripe customer identifiers. We do not store full payment card numbers.",
     ],
   },
@@ -129,7 +129,7 @@ function DataCard({ group }: { group: (typeof DATA_GROUPS)[number] }) {
   return (
     <article className="glass-card rounded-xl p-5">
       <div className="flex items-center gap-3">
-        <span className="grid size-9 place-items-center rounded-lg bg-[#14b8a6]/10 text-[#0f766e]">
+        <span className="grid size-9 place-items-center rounded-lg bg-layers-mint/10 text-[#0f766e]">
           <Icon size={18} aria-hidden="true" />
         </span>
         <h2 className="text-sm font-semibold text-[var(--text-primary)]">
@@ -139,7 +139,7 @@ function DataCard({ group }: { group: (typeof DATA_GROUPS)[number] }) {
       <ul className="mt-4 space-y-3 text-sm leading-6 text-[var(--text-secondary)]">
         {group.items.map((item) => (
           <li className="flex gap-2" key={item}>
-            <span className="mt-2 size-1.5 shrink-0 rounded-full bg-[#14b8a6]" />
+            <span className="mt-2 size-1.5 shrink-0 rounded-full bg-layers-mint" />
             <span>{item}</span>
           </li>
         ))}
@@ -202,7 +202,7 @@ export default function PrivacyPage() {
             <ul className="space-y-2">
               {USES.map((use) => (
                 <li className="flex gap-2" key={use}>
-                  <span className="mt-2 size-1.5 shrink-0 rounded-full bg-[#14b8a6]" />
+                  <span className="mt-2 size-1.5 shrink-0 rounded-full bg-layers-mint" />
                   <span>{use}</span>
                 </li>
               ))}
@@ -220,7 +220,7 @@ export default function PrivacyPage() {
             <ul className="space-y-2">
               {SUBPROCESSORS.map((provider) => (
                 <li className="flex gap-2" key={provider}>
-                  <span className="mt-2 size-1.5 shrink-0 rounded-full bg-[#14b8a6]" />
+                  <span className="mt-2 size-1.5 shrink-0 rounded-full bg-layers-mint" />
                   <span>{provider}</span>
                 </li>
               ))}
@@ -335,7 +335,7 @@ export default function PrivacyPage() {
             <div className="mt-4 grid gap-3 text-sm">
               <Link
                 href="/account-deletion"
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[#14b8a6] px-4 font-semibold text-white hover:bg-[#0d9488]"
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-layers-mint px-4 font-semibold text-white hover:bg-brand-accent-subtle"
               >
                 <Trash2 size={16} aria-hidden="true" />
                 Delete account

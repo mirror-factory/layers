@@ -5,6 +5,7 @@ import { Check, Copy, FileText, Loader2, Send } from "lucide-react";
 
 interface MeetingNotesPushPanelProps {
   meetingId: string;
+  variant?: "default" | "compact";
 }
 
 interface NotesPackageResponse {
@@ -17,6 +18,7 @@ interface NotesPackageResponse {
 
 export function MeetingNotesPushPanel({
   meetingId,
+  variant = "default",
 }: MeetingNotesPushPanelProps) {
   const [includeTranscript, setIncludeTranscript] = useState(false);
   const [markdown, setMarkdown] = useState("");
@@ -24,6 +26,7 @@ export function MeetingNotesPushPanel({
     "idle" | "loading" | "copied" | "manual" | "error"
   >("idle");
   const [message, setMessage] = useState("");
+  const isCompact = variant === "compact";
 
   async function preparePackage() {
     setStatus("loading");
@@ -70,13 +73,19 @@ export function MeetingNotesPushPanel({
   return (
     <section
       aria-label="Copy meeting notes package"
-      className="meeting-push-panel rounded-xl border border-[var(--border-card)] bg-[var(--surface-panel)] p-4"
+      className={`meeting-push-panel ${
+        isCompact ? "is-compact" : ""
+      } rounded-xl border border-[var(--border-card)] bg-[var(--surface-panel)] p-4`}
     >
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div
+        className={`flex flex-col gap-3 ${
+          isCompact ? "" : "sm:flex-row sm:items-center sm:justify-between"
+        }`}
+      >
         <div className="min-w-0">
           <p className="signal-eyebrow">Use these notes</p>
           <div className="mt-1 flex items-center gap-2">
-            <Send size={16} className="text-[#14b8a6]" aria-hidden="true" />
+            <Send size={16} className="text-layers-mint" aria-hidden="true" />
             <p className="text-sm font-semibold text-[var(--text-primary)]">
               Copy a clean package for your AI tools
             </p>
@@ -91,7 +100,9 @@ export function MeetingNotesPushPanel({
           type="button"
           onClick={preparePackage}
           disabled={status === "loading"}
-          className="inline-flex min-h-[42px] shrink-0 items-center justify-center gap-2 rounded-lg bg-[var(--paper-calm-ink)] px-4 text-sm font-semibold text-white transition-colors hover:opacity-90 disabled:opacity-60 dark:text-[#042f2e]"
+          className={`inline-flex min-h-[42px] shrink-0 items-center justify-center gap-2 rounded-lg bg-[var(--paper-calm-ink)] px-4 text-sm font-semibold text-white transition-colors hover:opacity-90 disabled:opacity-60 dark:text-layers-ink ${
+            isCompact ? "w-full" : ""
+          }`}
         >
           {status === "loading" ? (
             <Loader2 size={16} className="animate-spin" aria-hidden="true" />
@@ -109,7 +120,7 @@ export function MeetingNotesPushPanel({
           type="checkbox"
           checked={includeTranscript}
           onChange={(event) => setIncludeTranscript(event.target.checked)}
-          className="h-4 w-4 accent-[#14b8a6]"
+          className="h-4 w-4 accent-layers-mint"
         />
         Include transcript text
       </label>
@@ -117,7 +128,7 @@ export function MeetingNotesPushPanel({
       {message && (
         <p
           className={`mt-2 text-xs ${
-            status === "error" ? "text-[#ef4444]" : "text-[var(--text-muted)]"
+            status === "error" ? "text-signal-live" : "text-[var(--text-muted)]"
           }`}
           role="status"
         >

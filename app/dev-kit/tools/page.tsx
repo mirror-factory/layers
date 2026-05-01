@@ -42,18 +42,18 @@ interface Tool {
 // ---------------------------------------------------------------------------
 
 function tierBadge(tier: PermissionTier): string {
-  if (tier === "explorer") return "bg-[#3dffc0]/15 text-[#3dffc0]";
+  if (tier === "explorer") return "bg-layers-mint/15 text-layers-mint";
   return "bg-yellow-400/15 text-yellow-400";
 }
 
 function testStatusBadge(status: TestStatus): { className: string; label: string } {
   switch (status) {
     case "passing":
-      return { className: "bg-[#3dffc0]/15 text-[#3dffc0]", label: "passing" };
+      return { className: "bg-layers-mint/15 text-layers-mint", label: "passing" };
     case "failing":
-      return { className: "bg-[#ef4444]/15 text-[#ef4444]", label: "failing" };
+      return { className: "bg-signal-live/15 text-signal-live", label: "failing" };
     case "untested":
-      return { className: "bg-white/10 text-[#f0f0f0]/50", label: "untested" };
+      return { className: "bg-white/10 text-ink-200/50", label: "untested" };
   }
 }
 
@@ -79,7 +79,7 @@ export default function ToolsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64 text-[#f0f0f0]/40">
+      <div className="flex items-center justify-center h-64 text-ink-200/40">
         Loading tools...
       </div>
     );
@@ -88,8 +88,8 @@ export default function ToolsPage() {
   if (tools.length === 0) return (
     <div className="p-8">
       <h1 className="text-2xl font-semibold mb-4">Tool Registry</h1>
-      <div className="border border-[#3dffc0]/20 rounded p-6 text-center" style={{background:'rgba(61,255,192,.03)'}}>
-        <p className="text-[#f0f0f0]/60 text-sm">No tools registered. Run ai-dev-kit tool add &lt;name&gt; to create your first tool, or check that lib/ai/tools/_metadata.ts exists.</p>
+      <div className="border border-layers-mint/20 rounded p-6 text-center" style={{ background: "color-mix(in oklch, var(--layers-mint) 5%, transparent)" }}>
+        <p className="text-ink-200/60 text-sm">No tools registered. Run ai-dev-kit tool add &lt;name&gt; to create your first tool, or check that lib/ai/tools/_metadata.ts exists.</p>
       </div>
     </div>
   );
@@ -99,7 +99,7 @@ export default function ToolsPage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-semibold">Tool Registry</h1>
-        <p className="mt-1 text-sm text-[#f0f0f0]/50">
+        <p className="mt-1 text-sm text-ink-200/50">
           Browse all registered AI tools, their schemas, test status, and evaluation scores.
         </p>
       </div>
@@ -108,7 +108,7 @@ export default function ToolsPage() {
       <div className="overflow-x-auto rounded-lg border border-white/10">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-white/10 text-left text-xs uppercase tracking-wider text-[#f0f0f0]/50">
+            <tr className="border-b border-white/10 text-left text-xs uppercase tracking-wider text-ink-200/50">
               <th className="px-4 py-3">Name</th>
               <th className="px-4 py-3">Description</th>
               <th className="px-4 py-3">Category</th>
@@ -130,13 +130,13 @@ export default function ToolsPage() {
                       setExpandedTool(expandedTool === tool.id ? null : tool.id)
                     }
                   >
-                    <td className="px-4 py-3 font-mono text-[#3dffc0]">
+                    <td className="px-4 py-3 font-mono text-layers-mint">
                       {tool.name}
                     </td>
-                    <td className="px-4 py-3 text-[#f0f0f0]/70 max-w-xs">
+                    <td className="px-4 py-3 text-ink-200/70 max-w-xs">
                       {truncate(tool.description, 60)}
                     </td>
-                    <td className="px-4 py-3 text-[#f0f0f0]/60 text-xs">
+                    <td className="px-4 py-3 text-ink-200/60 text-xs">
                       {tool.category}
                     </td>
                     <td className="px-4 py-3">
@@ -158,7 +158,7 @@ export default function ToolsPage() {
                         ? `${tool.lastEvalScore}%`
                         : "--"}
                     </td>
-                    <td className="px-4 py-3 text-right font-mono text-xs text-[#f0f0f0]/60">
+                    <td className="px-4 py-3 text-right font-mono text-xs text-ink-200/60">
                       {tool.costEstimate}
                     </td>
                   </tr>
@@ -173,17 +173,17 @@ export default function ToolsPage() {
                         <div className="px-6 py-5 space-y-4">
                           {/* Full description */}
                           <div>
-                            <p className="text-xs uppercase tracking-wider text-[#f0f0f0]/50 mb-1">
+                            <p className="text-xs uppercase tracking-wider text-ink-200/50 mb-1">
                               Full Description
                             </p>
-                            <p className="text-sm text-[#f0f0f0]/80">
+                            <p className="text-sm text-ink-200/80">
                               {tool.description}
                             </p>
                           </div>
 
                           {/* Schema */}
                           <div>
-                            <p className="text-xs uppercase tracking-wider text-[#f0f0f0]/50 mb-1">
+                            <p className="text-xs uppercase tracking-wider text-ink-200/50 mb-1">
                               Schema
                             </p>
                             <pre className="text-xs bg-[#050505] border border-white/10 rounded p-3 whitespace-pre-wrap max-h-48 overflow-y-auto font-mono">
@@ -193,15 +193,15 @@ export default function ToolsPage() {
 
                           {/* Test file */}
                           <div className="text-xs">
-                            <span className="text-[#f0f0f0]/50">
+                            <span className="text-ink-200/50">
                               Test file:{" "}
                             </span>
                             {tool.testFilePath ? (
-                              <span className="font-mono text-[#3dffc0]">
+                              <span className="font-mono text-layers-mint">
                                 {tool.testFilePath}
                               </span>
                             ) : (
-                              <span className="text-[#f0f0f0]/30">
+                              <span className="text-ink-200/30">
                                 No test file
                               </span>
                             )}
@@ -210,7 +210,7 @@ export default function ToolsPage() {
                           {/* Eval history */}
                           {tool.evalHistory.length > 0 && (
                             <div>
-                              <p className="text-xs uppercase tracking-wider text-[#f0f0f0]/50 mb-1">
+                              <p className="text-xs uppercase tracking-wider text-ink-200/50 mb-1">
                                 Eval History
                               </p>
                               <div className="flex gap-4">
@@ -219,7 +219,7 @@ export default function ToolsPage() {
                                     key={entry.date}
                                     className="text-xs border border-white/10 rounded px-3 py-2"
                                   >
-                                    <p className="text-[#f0f0f0]/50">
+                                    <p className="text-ink-200/50">
                                       {entry.date}
                                     </p>
                                     <p className="font-mono text-sm">

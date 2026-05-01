@@ -5,7 +5,8 @@ import { useSearchParams } from "next/navigation";
 import { Loader2, Mail, Lock } from "lucide-react";
 import Link from "next/link";
 import { getSupabaseBrowser } from "@/lib/supabase/browser";
-import { GOOGLE_CALENDAR_AUTH_SCOPES } from "@/lib/auth/google-oauth";
+import { GOOGLE_SIGN_IN_AUTH_SCOPES } from "@/lib/auth/google-oauth";
+import { PublicSiteNav } from "@/components/public-site-nav";
 
 function GoogleIcon({ className }: { className?: string }) {
   return (
@@ -81,7 +82,7 @@ function SignInForm() {
       const { error: authError } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          scopes: GOOGLE_CALENDAR_AUTH_SCOPES,
+          scopes: GOOGLE_SIGN_IN_AUTH_SCOPES,
           redirectTo: isOAuthFlow
             ? `${window.location.origin}${getPostLoginRedirect()}`
             : `${window.location.origin}/auth/callback`,
@@ -96,7 +97,9 @@ function SignInForm() {
   };
 
   return (
-    <div className="min-h-screen-safe flex items-center justify-center bg-[var(--bg-primary)] px-4">
+    <main className="auth-public-page min-h-screen-safe">
+      <PublicSiteNav compact showBack />
+      <section className="auth-card-wrap">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-semibold text-[var(--text-primary)] tracking-tight">Layers</h1>
@@ -140,7 +143,7 @@ function SignInForm() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 required
-                className="w-full bg-[var(--bg-card-hover)] text-[var(--text-primary)] text-sm border border-[var(--border-card)] rounded-xl pl-10 pr-3 py-3 min-h-[44px] focus:border-[#14b8a6] focus:outline-none placeholder-[var(--text-muted)] transition-all"
+                className="w-full bg-[var(--bg-card-hover)] text-[var(--text-primary)] text-sm border border-[var(--border-card)] rounded-xl pl-10 pr-3 py-3 min-h-[44px] focus:border-layers-mint focus:outline-none placeholder-[var(--text-muted)] transition-all"
               />
             </div>
 
@@ -152,31 +155,32 @@ function SignInForm() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
                 required
-                className="w-full bg-[var(--bg-card-hover)] text-[var(--text-primary)] text-sm border border-[var(--border-card)] rounded-xl pl-10 pr-3 py-3 min-h-[44px] focus:border-[#14b8a6] focus:outline-none placeholder-[var(--text-muted)] transition-all"
+                className="w-full bg-[var(--bg-card-hover)] text-[var(--text-primary)] text-sm border border-[var(--border-card)] rounded-xl pl-10 pr-3 py-3 min-h-[44px] focus:border-layers-mint focus:outline-none placeholder-[var(--text-muted)] transition-all"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading || !email.trim() || !password}
-              className="w-full py-3 bg-[#14b8a6] hover:bg-[#0d9488] text-white font-medium rounded-xl min-h-[44px] disabled:opacity-50 transition-all"
+              className="w-full py-3 bg-layers-mint hover:bg-brand-accent-subtle text-white font-medium rounded-xl min-h-[44px] disabled:opacity-50 transition-all"
             >
               {loading ? <Loader2 size={18} className="animate-spin mx-auto" /> : "Sign in"}
             </button>
           </form>
 
           {error && (
-            <p className="text-sm text-red-400 text-center mt-3">{error}</p>
+            <p className="text-sm text-signal-live text-center mt-3">{error}</p>
           )}
 
           <p className="text-xs text-[var(--text-muted)] text-center mt-4">
             Don&apos;t have an account?{" "}
-            <Link href="/sign-up" className="text-[#14b8a6] hover:text-[#2dd4bf]">
+            <Link href="/sign-up" className="text-layers-mint hover:text-layers-mint-soft">
               Sign up
             </Link>
           </p>
         </div>
       </div>
-    </div>
+      </section>
+    </main>
   );
 }

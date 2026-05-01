@@ -1,6 +1,7 @@
 /**
- * MCP API key authentication.
- * Validates a Bearer token against the profiles.api_key column.
+ * MCP bearer authentication.
+ * OAuth access tokens are the primary path for remote MCP clients; legacy
+ * profile tokens are accepted only for older manual configurations.
  */
 
 import { getSupabaseServer } from "@/lib/supabase/server";
@@ -18,7 +19,7 @@ export interface McpAuthResult {
 }
 
 /**
- * Validate an API key from the Authorization header.
+ * Validate a legacy profile token from the Authorization header.
  * Returns the user_id if valid, null otherwise.
  */
 export async function validateApiKey(
@@ -65,9 +66,9 @@ async function validateOAuthAccessToken(
 /**
  * Validate an MCP Bearer token.
  *
- * Supports both profile API keys (`lo1_...`) and OAuth access tokens issued by
- * `/api/oauth/token`. This keeps manual MCP client config working while also
- * matching the OAuth discovery metadata used by modern MCP clients.
+ * Supports both OAuth access tokens issued by `/api/oauth/token` and legacy
+ * profile tokens (`lo1_...`). This keeps old manual MCP client config working
+ * while matching the OAuth discovery metadata used by modern MCP clients.
  */
 export async function validateMcpBearerToken(
   token: string,

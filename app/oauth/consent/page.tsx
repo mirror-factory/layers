@@ -47,7 +47,7 @@ function ConsentForm() {
   if (loading) {
     return (
       <main className="min-h-screen-safe flex items-center justify-center bg-[var(--bg-primary)]">
-        <Loader2 size={24} className="text-[#14b8a6] animate-spin" />
+        <Loader2 size={24} className="text-layers-mint animate-spin" />
       </main>
     );
   }
@@ -71,7 +71,7 @@ function ConsentForm() {
     <main className="min-h-screen-safe flex items-center justify-center bg-[var(--bg-primary)] px-4">
       <section className="w-full max-w-md rounded-xl border border-[var(--border-card)] bg-[var(--bg-card)] p-5">
         <div className="mb-5 flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#14b8a6]/10 text-[#14b8a6]">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-layers-mint/10 text-layers-mint">
             <ShieldCheck size={20} />
           </div>
           <div>
@@ -104,7 +104,7 @@ function ConsentForm() {
           <button
             name="decision"
             value="allow"
-            className="flex min-h-[44px] items-center justify-center gap-2 rounded-lg bg-[#14b8a6] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#0d9488]"
+            className="flex min-h-[44px] items-center justify-center gap-2 rounded-lg bg-layers-mint px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-accent-subtle"
             type="submit"
           >
             <Check size={16} />

@@ -48,7 +48,7 @@ export default async function MeetingsPage() {
             </div>
             <Link
               href="/record/live"
-              className="inline-flex min-h-[40px] shrink-0 items-center justify-center gap-2 rounded-md bg-[#14b8a6] px-4 text-sm font-semibold text-[#042f2e] transition-colors hover:bg-[#2dd4bf]"
+              className="inline-flex min-h-[40px] shrink-0 items-center justify-center gap-2 rounded-md bg-layers-mint px-4 text-sm font-semibold text-layers-ink transition-colors hover:bg-layers-mint-soft"
             >
               <Radio size={16} />
               New recording
@@ -66,7 +66,7 @@ export default async function MeetingsPage() {
 
         {meetings.length === 0 ? (
           <div className="flex min-h-[280px] flex-col items-center justify-center rounded-xl border border-dashed border-[var(--border-card)] bg-[var(--bg-card)] px-5 py-16 text-center">
-            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-[#14b8a6]/25 bg-[#14b8a6]/10 text-[#14b8a6]">
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-layers-mint/25 bg-layers-mint/10 text-layers-mint">
               <Radio size={18} />
             </div>
             <p className="text-sm font-medium text-[var(--text-secondary)]">
@@ -78,7 +78,7 @@ export default async function MeetingsPage() {
             </p>
             <Link
               href="/record/live"
-              className="mt-5 inline-flex min-h-[44px] items-center justify-center rounded-md bg-[#14b8a6] px-4 text-sm font-medium text-[#042f2e] transition-colors duration-200 hover:bg-[#2dd4bf]"
+              className="mt-5 inline-flex min-h-[44px] items-center justify-center rounded-md bg-layers-mint px-4 text-sm font-medium text-layers-ink transition-colors duration-200 hover:bg-layers-mint-soft"
             >
               Record your first meeting
             </Link>
@@ -102,7 +102,7 @@ export default async function MeetingsPage() {
                   href={`/meetings/${m.id}`}
                   className="meeting-row group grid grid-cols-[32px_minmax(0,1fr)] items-center gap-3 px-4 py-3 transition-all duration-200"
                 >
-                  <span className="flex h-8 w-8 items-center justify-center rounded-md border border-[var(--border-card)] bg-[var(--surface-control)] text-[var(--text-muted)] transition-colors group-hover:border-[#14b8a6]/30 group-hover:text-[#5eead4]">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-md border border-[var(--border-card)] bg-[var(--surface-control)] text-[var(--text-muted)] transition-colors group-hover:border-layers-mint/30 group-hover:text-layers-mint-soft">
                     <PlayCircle size={15} />
                   </span>
                   <div className="min-w-0 flex-1">

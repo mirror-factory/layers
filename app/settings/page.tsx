@@ -105,7 +105,7 @@ export default function SettingsPage() {
       <div className="paper-calm-page min-h-screen-safe flex flex-col bg-[var(--bg-primary)]">
         <TopBar title="Settings" showBack />
         <div className="flex-1 flex items-center justify-center">
-          <Loader2 size={24} className="text-[#14b8a6] animate-spin" />
+          <Loader2 size={24} className="text-layers-mint animate-spin" />
         </div>
       </div>
     );
@@ -121,9 +121,9 @@ export default function SettingsPage() {
             Model Preferences
           </h2>
           {saving && (
-            <Loader2 size={14} className="text-[#14b8a6] animate-spin" />
+            <Loader2 size={14} className="text-layers-mint animate-spin" />
           )}
-          {saved && <Check size={14} className="text-[#22c55e]" />}
+          {saved && <Check size={14} className="text-signal-success" />}
         </div>
 
         {/* Summary Model */}
@@ -207,10 +207,14 @@ function CalendarSettingsPanel({
 }) {
   const [disconnecting, setDisconnecting] = useState<string | null>(null);
   const status = overview.connected
-    ? overview.accountEmail ?? overview.provider ?? "Connected"
+    ? overview.reauthRequired
+      ? "Reconnect required"
+      : overview.accountEmail ?? overview.provider ?? "Connected"
     : overview.setupRequired
       ? "Database setup needed"
-      : "Not connected";
+      : overview.providerSetupRequired
+        ? "Provider setup needed"
+        : "Not connected";
   const activeProvider = overview.provider === "outlook" ? "outlook" : "google";
   const needsSetup = overview.setupRequired || overview.providerSetupRequired;
 
@@ -290,6 +294,7 @@ function calendarNoticeFromStatus(status: string): string {
     database_error: "Calendar connection could not be saved. Check the Supabase migration.",
     provider_error: "Calendar provider sign-in failed. Check the OAuth credentials and redirect URL.",
     provider_denied: "Calendar connection was canceled at the provider.",
+    missing_scope: "Calendar access was not granted. Connect again and approve read-only calendar access.",
     state_mismatch: "Calendar sign-in expired. Start the connection again.",
     auth_required: "Sign in again before connecting a calendar.",
   };

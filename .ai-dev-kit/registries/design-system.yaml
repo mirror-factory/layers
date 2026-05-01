@@ -36,17 +36,24 @@
 
 kind: design-system
 schema_version: 1
-last_synced_on: null
+last_synced_on: "2026-05-01"
+source: "Layers Design System v1.0 - Paper Calm"
+principles:
+  - "Calm: paper-first surfaces, restrained contrast, and clear hierarchy."
+  - "Organic: motion, waveforms, and the aperture mark make capture feel alive."
+  - "Structured: every app surface pulls from tokenized color, type, spacing, radius, and motion."
+  - "Confident: one primary action per screen; no decorative UI that fights the workflow."
+  - "Inevitable: if a value is not a Layers token, propose the token before shipping the UI."
 
 # ─── Primitives ────────────────────────────────────────────────────────
 primitives:
   Button:
-    purpose: "Trigger an action. Never for navigation (use Link instead)."
-    variants: [primary, secondary, ghost, destructive]
+    purpose: "Trigger an action. Use the Layers button recipe: dark recorder primary, mint affirmative, paper secondary, soft, and ghost."
+    variants: [primary, accent, secondary, soft, ghost, destructive]
     states: [default, hover, focus, active, disabled, loading]
     props:
-      variant: "'primary' | 'secondary' | 'ghost' | 'destructive'"
-      size: "'sm' | 'md' | 'lg'"
+      variant: "'primary' | 'accent' | 'secondary' | 'soft' | 'ghost' | 'destructive'"
+      size: "'sm' | 'md' | 'default' | 'lg' | 'icon'"
       disabled: "boolean"
       loading: "boolean"
       icon: "ReactNode (optional; left position)"
@@ -57,15 +64,15 @@ primitives:
       - "aria-busy when loading"
       - "Disabled state is not focusable"
     tokens:
-      bg: [brand.primary, surface.muted]
-      text: [text.onPrimary, text.primary]
-      radius: [radius.md]
-      shadow: [shadow.sm]
-      motion: [motion.fast]
+      bg: [layers.ink, layers.mint, bg.surface, layers.mint-tint]
+      text: [fg.default, fg.muted, layers.paper]
+      radius: [radius.md, radius.pill]
+      shadow: [shadow.xs, shadow.sm]
+      motion: [duration.fast, ease.out]
     composition: "May contain Icon, Text"
 
   Input:
-    purpose: "Single-line text entry."
+    purpose: "Single-line text entry. Borders stay subtle; mint focus glow is the only strong signal."
     variants: [default, filled]
     states: [default, hover, focus, disabled, error]
     props:
@@ -80,12 +87,12 @@ primitives:
       - "aria-invalid when error state"
       - "aria-describedby links to error message if present"
     tokens:
-      bg: [surface.default]
-      border: [border.default, border.focus, border.error]
+      bg: [bg.surface]
+      border: [border.default, layers.mint]
       radius: [radius.md]
 
   Text:
-    purpose: "Typographic primitive. All copy goes through this (no raw <p>/<span>)."
+    purpose: "Typographic primitive. Geist everywhere; display weight is reserved for hero headlines and the recorder clock."
     variants: [display, headline, title, body, caption, code]
     states: []
     props:
@@ -94,8 +101,8 @@ primitives:
       color: "'primary' | 'muted' | 'inverse' | 'success' | 'warn' | 'error'"
       children: "ReactNode"
     tokens:
-      font: [font.sans, font.mono]
-      size: [size.xs, size.sm, size.md, size.lg, size.xl, size.2xl]
+      font: [font.brand-sans, font.mono]
+      size: [text.xs, text.sm, text.base, text.md, text.lg, text.xl, text.2xl, text.display]
 
   Icon:
     purpose: "SVG icon wrapper with consistent sizing + aria semantics."
@@ -108,8 +115,17 @@ primitives:
 
   Badge:
     purpose: "Status / count indicator. Non-interactive."
-    variants: [neutral, info, success, warn, error]
+    variants: [neutral, live, info, success, warning]
     states: [default]
+
+  LayersLogo:
+    purpose: "Canonical Layers aperture mark and wordmark. Use across navigation, auth, download, and product chrome."
+    variants: [mark, lockup, animated]
+    states: [default]
+    tokens:
+      outer: [layers.blue]
+      middle: [layers.violet]
+      dot: [layers.mint]
 
 # ─── Molecules ─────────────────────────────────────────────────────────
 molecules:
@@ -129,7 +145,7 @@ molecules:
 # ─── Organisms ─────────────────────────────────────────────────────────
 organisms:
   Navbar:
-    purpose: "Top-level navigation. One per page."
+    purpose: "Top-level navigation. One per page; brand mark uses LayersLogo and actions use Button variants."
     composes: [Text, Button, Icon]
     responsive:
       mobile: "hamburger menu; links hidden until open"
@@ -146,6 +162,11 @@ organisms:
 
 # ─── Templates ─────────────────────────────────────────────────────────
 templates:
+  RecorderTemplate:
+    purpose: "Hero recorder surface: date/context, giant clock, waveform, status, and one primary capture action."
+    slots: [topbar, recorder-card, live-transcript?, secondary-rail?]
+    tokens: [layers.mint, layers.violet, layers.blue, bg.page, bg.surface, radius.2xl, shadow.lg]
+
   DashboardTemplate:
     purpose: "Sidebar + top bar + main content. Used by /dev-kit/* pages."
     slots: [sidebar, topbar, main, footer?]

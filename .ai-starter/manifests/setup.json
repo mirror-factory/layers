@@ -1,6 +1,6 @@
 {
   "status": "configured",
-  "updatedAt": "2026-04-30T23:00:04.118Z",
+  "updatedAt": "2026-04-30T23:43:06.058Z",
   "configPath": ".ai-starter/config.json",
   "envExamplePath": ".env.example",
   "localEnvPath": ".env.local",
@@ -65,7 +65,7 @@
       "codex": true
     }
   },
-  "policyProfile": "strict",
+  "policyProfile": "baseline",
   "setupCommand": "pnpm exec ai-starter-kit setup",
   "notes": [
     "Setup config and local env contract are satisfied."

@@ -106,7 +106,7 @@ export function MeetingChat({ meetingId, variant = "default" }: MeetingChatProps
         }
       >
         <div className="flex items-center gap-2">
-          <MessageSquare size={18} className="text-[#14b8a6]" aria-hidden />
+          <MessageSquare size={18} className="text-layers-mint" aria-hidden />
           <h3
             id="meeting-chat-heading"
             className="text-sm font-semibold text-[var(--text-primary)]"
@@ -136,7 +136,7 @@ export function MeetingChat({ meetingId, variant = "default" }: MeetingChatProps
                 className={
                   isWorkspace
                     ? "session-prompt-button"
-                    : "inline-flex min-h-9 items-center gap-2 rounded-lg border border-[var(--border-card)] bg-[var(--bg-secondary)] px-3 text-xs font-medium text-[var(--text-secondary)] transition-colors hover:border-[#14b8a6]/50 hover:text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[#14b8a6]/40 disabled:opacity-50"
+                    : "inline-flex min-h-9 items-center gap-2 rounded-lg border border-[var(--border-card)] bg-[var(--bg-secondary)] px-3 text-xs font-medium text-[var(--text-secondary)] transition-colors hover:border-layers-mint/50 hover:text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-layers-mint/40 disabled:opacity-50"
                 }
               >
                 {!isWorkspace && <Icon size={14} aria-hidden />}
@@ -158,11 +158,11 @@ export function MeetingChat({ meetingId, variant = "default" }: MeetingChatProps
       >
         {error && (
           <div
-            className="mb-4 rounded-lg border border-[#ef4444]/25 bg-[#ef4444]/10 p-3"
+            className="mb-4 rounded-lg border border-signal-live/25 bg-signal-live/10 p-3"
             role="status"
             aria-live="polite"
           >
-            <div className="text-xs font-medium text-[#ef4444]">
+            <div className="text-xs font-medium text-signal-live">
               The assistant could not answer.
             </div>
             <p className="mt-1 text-xs leading-5 text-[var(--text-secondary)]">
@@ -172,7 +172,7 @@ export function MeetingChat({ meetingId, variant = "default" }: MeetingChatProps
               type="button"
               onClick={retryLastMessage}
               disabled={isLoading || messages.length === 0}
-              className="mt-3 min-h-8 rounded-md border border-[#ef4444]/25 px-3 text-xs font-medium text-[#ef4444] transition-colors hover:bg-[#ef4444]/10 disabled:opacity-50"
+              className="mt-3 min-h-8 rounded-md border border-signal-live/25 px-3 text-xs font-medium text-signal-live transition-colors hover:bg-signal-live/10 disabled:opacity-50"
             >
               Retry
             </button>

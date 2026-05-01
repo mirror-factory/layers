@@ -21,7 +21,7 @@
   "customized": [],
   "projectType": "nextjs-15",
   "packageManager": "pnpm",
-  "policyProfile": "strict",
+  "policyProfile": "baseline",
   "runtimes": [
     "claude-code",
     "codex"

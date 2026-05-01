@@ -123,7 +123,7 @@ function DocStep({
 }) {
   return (
     <div className="flex gap-3">
-      <div className="shrink-0 w-7 h-7 rounded-full bg-[#134e4a] flex items-center justify-center text-xs font-semibold text-[#14b8a6]">
+      <div className="shrink-0 w-7 h-7 rounded-full bg-[#134e4a] flex items-center justify-center text-xs font-semibold text-layers-mint">
         {step}
       </div>
       <div>

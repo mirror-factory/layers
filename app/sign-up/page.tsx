@@ -4,7 +4,8 @@ import { useState } from "react";
 import { Loader2, Mail, Lock } from "lucide-react";
 import Link from "next/link";
 import { getSupabaseBrowser } from "@/lib/supabase/browser";
-import { GOOGLE_CALENDAR_AUTH_SCOPES } from "@/lib/auth/google-oauth";
+import { GOOGLE_SIGN_IN_AUTH_SCOPES } from "@/lib/auth/google-oauth";
+import { PublicSiteNav } from "@/components/public-site-nav";
 
 function GoogleIcon({ className }: { className?: string }) {
   return (
@@ -58,7 +59,9 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-screen-safe flex items-center justify-center bg-[var(--bg-primary)] px-4">
+    <main className="auth-public-page min-h-screen-safe">
+      <PublicSiteNav compact showBack />
+      <section className="auth-card-wrap">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-semibold text-[var(--text-primary)] tracking-tight">Layers</h1>
@@ -68,12 +71,12 @@ export default function SignUpPage() {
         <div className="rounded-2xl bg-[var(--bg-card)] border border-[var(--border-card)] p-6">
           {success ? (
             <div className="text-center space-y-4 py-4">
-              <div className="text-[#22c55e] text-4xl">✓</div>
+              <div className="text-signal-success text-4xl">✓</div>
               <h2 className="text-lg font-semibold text-[var(--text-primary)]">Check your email</h2>
               <p className="text-sm text-[var(--text-secondary)]">
                 We sent a confirmation link to <span className="text-[var(--text-primary)]">{email}</span>
               </p>
-              <Link href="/sign-in" className="text-sm text-[#14b8a6] hover:text-[#2dd4bf]">
+              <Link href="/sign-in" className="text-sm text-layers-mint hover:text-layers-mint-soft">
                 Go to sign in
               </Link>
             </div>
@@ -95,7 +98,7 @@ export default function SignUpPage() {
                     const { error: authError } = await supabase.auth.signInWithOAuth({
                       provider: "google",
                       options: {
-                        scopes: GOOGLE_CALENDAR_AUTH_SCOPES,
+                        scopes: GOOGLE_SIGN_IN_AUTH_SCOPES,
                         redirectTo: `${window.location.origin}/auth/callback`,
                       },
                     });
@@ -133,7 +136,7 @@ export default function SignUpPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
                     required
-                    className="w-full bg-[var(--bg-card-hover)] text-[var(--text-primary)] text-sm border border-[var(--border-card)] rounded-xl pl-10 pr-3 py-3 min-h-[44px] focus:border-[#14b8a6] focus:outline-none placeholder-[var(--text-muted)] transition-all"
+                    className="w-full bg-[var(--bg-card-hover)] text-[var(--text-primary)] text-sm border border-[var(--border-card)] rounded-xl pl-10 pr-3 py-3 min-h-[44px] focus:border-layers-mint focus:outline-none placeholder-[var(--text-muted)] transition-all"
                   />
                 </div>
 
@@ -146,31 +149,31 @@ export default function SignUpPage() {
                     placeholder="Password (min 6 characters)"
                     required
                     minLength={6}
-                    className="w-full bg-[var(--bg-card-hover)] text-[var(--text-primary)] text-sm border border-[var(--border-card)] rounded-xl pl-10 pr-3 py-3 min-h-[44px] focus:border-[#14b8a6] focus:outline-none placeholder-[var(--text-muted)] transition-all"
+                    className="w-full bg-[var(--bg-card-hover)] text-[var(--text-primary)] text-sm border border-[var(--border-card)] rounded-xl pl-10 pr-3 py-3 min-h-[44px] focus:border-layers-mint focus:outline-none placeholder-[var(--text-muted)] transition-all"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={loading || !canSubmit}
-                  className="w-full py-3 bg-[#14b8a6] hover:bg-[#0d9488] text-white font-medium rounded-xl min-h-[44px] disabled:opacity-50 transition-all"
+                  className="w-full py-3 bg-layers-mint hover:bg-brand-accent-subtle text-white font-medium rounded-xl min-h-[44px] disabled:opacity-50 transition-all"
                 >
                   {loading ? <Loader2 size={18} className="animate-spin mx-auto" /> : "Create account"}
                 </button>
               </form>
 
               {error && (
-                <p className="text-sm text-red-400 text-center mt-3">{error}</p>
+                <p className="text-sm text-signal-live text-center mt-3">{error}</p>
               )}
 
               <p className="text-[11px] leading-5 text-[var(--text-muted)] text-center mt-4">
                 By creating an account or continuing with Google, you agree to
                 the{" "}
-                <Link href="/terms" className="text-[#14b8a6] hover:text-[#2dd4bf]">
+                <Link href="/terms" className="text-layers-mint hover:text-layers-mint-soft">
                   Terms
                 </Link>{" "}
                 and acknowledge the{" "}
-                <Link href="/privacy" className="text-[#14b8a6] hover:text-[#2dd4bf]">
+                <Link href="/privacy" className="text-layers-mint hover:text-layers-mint-soft">
                   Privacy Policy
                 </Link>
                 .
@@ -178,7 +181,7 @@ export default function SignUpPage() {
 
               <p className="text-xs text-[var(--text-muted)] text-center mt-4">
                 Already have an account?{" "}
-                <Link href="/sign-in" className="text-[#14b8a6] hover:text-[#2dd4bf]">
+                <Link href="/sign-in" className="text-layers-mint hover:text-layers-mint-soft">
                   Sign in
                 </Link>
               </p>
@@ -186,6 +189,7 @@ export default function SignUpPage() {
           )}
         </div>
       </div>
-    </div>
+      </section>
+    </main>
   );
 }

@@ -23,12 +23,12 @@ const LAST_UPDATED = "April 30, 2026";
 const DELETION_MAILTO =
   `mailto:${SUPPORT_EMAIL}` +
   "?subject=Layers%20account%20deletion%20request" +
-  "&body=Please%20delete%20my%20Layers%20account.%0A%0AAccount%20email%3A%20%0AUser%20ID%20(if%20available)%3A%20%0AI%20understand%20this%20may%20delete%20my%20meetings%2C%20transcripts%2C%20summaries%2C%20search%20memory%2C%20API%20keys%2C%20and%20connected%20account%20data%20unless%20Layers%20must%20retain%20limited%20records%20for%20legal%2C%20security%2C%20payment%2C%20tax%2C%20or%20fraud-prevention%20reasons.";
+  "&body=Please%20delete%20my%20Layers%20account.%0A%0AAccount%20email%3A%20%0AUser%20ID%20(if%20available)%3A%20%0AI%20understand%20this%20may%20delete%20my%20meetings%2C%20transcripts%2C%20summaries%2C%20search%20memory%2C%20OAuth%20tokens%2C%20and%20connected%20account%20data%20unless%20Layers%20must%20retain%20limited%20records%20for%20legal%2C%20security%2C%20payment%2C%20tax%2C%20or%20fraud-prevention%20reasons.";
 
 const DELETED_DATA = [
   "Layers authentication account and profile data tied to the verified user.",
   "Meeting records, uploaded or recorded audio references, transcripts, summaries, decisions, action items, intake fields, and searchable meeting memory.",
-  "Calendar connections, OAuth refresh tokens stored by Layers, API keys, MCP access records, webhook settings, and user-owned integration configuration.",
+  "Calendar connections, OAuth refresh tokens stored by Layers, MCP access records, webhook settings, and user-owned integration configuration.",
   "User-scoped app settings where they are stored as account data.",
 ];
 
@@ -297,7 +297,7 @@ export default function AccountDeletionPage() {
             </p>
             <a
               href={DELETION_MAILTO}
-              className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-[#14b8a6] px-4 text-sm font-semibold text-white hover:bg-[#0d9488]"
+              className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-layers-mint px-4 text-sm font-semibold text-white hover:bg-brand-accent-subtle"
             >
               <Mail size={16} aria-hidden="true" />
               Email deletion request

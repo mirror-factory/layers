@@ -112,15 +112,15 @@ export function LiveTranscriptView({
     return (
       <div className="flex items-center justify-center py-8 gap-2">
         <span
-          className="w-1.5 h-1.5 rounded-full bg-[#14b8a6]/60 animate-pulse"
+          className="w-1.5 h-1.5 rounded-full bg-layers-mint/60 animate-pulse"
           style={{ animationDelay: "0ms" }}
         />
         <span
-          className="w-1.5 h-1.5 rounded-full bg-[#14b8a6]/60 animate-pulse"
+          className="w-1.5 h-1.5 rounded-full bg-layers-mint/60 animate-pulse"
           style={{ animationDelay: "300ms" }}
         />
         <span
-          className="w-1.5 h-1.5 rounded-full bg-[#14b8a6]/60 animate-pulse"
+          className="w-1.5 h-1.5 rounded-full bg-layers-mint/60 animate-pulse"
           style={{ animationDelay: "600ms" }}
         />
       </div>
@@ -136,14 +136,14 @@ export function LiveTranscriptView({
       {partial && (
         <article className="live-transcript-line is-current">
           <div className="live-transcript-line-meta">
-            <span className="h-2 w-2 animate-pulse rounded-full bg-[#14b8a6]" />
-            <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-[#14b8a6]">
+            <span className="h-2 w-2 animate-pulse rounded-full bg-layers-mint" />
+            <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-layers-mint">
               Live
             </span>
           </div>
           <p>
             <span>{partial}</span>
-            <span className="ml-0.5 inline-block h-3.5 w-1 animate-pulse rounded-full bg-[#14b8a6] align-middle" />
+            <span className="ml-0.5 inline-block h-3.5 w-1 animate-pulse rounded-full bg-layers-mint align-middle" />
           </p>
         </article>
       )}

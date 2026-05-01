@@ -1,13 +1,13 @@
 {
-  "id": "cpa-1777258247155",
-  "actionId": "",
-  "label": "",
+  "id": "cpa-1777590989929",
+  "actionId": "rm-rf-not-allowed",
+  "label": "rm-rf-not-allowed",
   "status": "missing",
   "command": "unknown",
-  "startedAt": "2026-04-27T02:50:47.155Z",
-  "finishedAt": "2026-04-27T02:50:47.155Z",
+  "startedAt": "2026-04-30T23:16:29.929Z",
+  "finishedAt": "2026-04-30T23:16:29.929Z",
   "durationMs": 0,
   "exitCode": null,
   "output": "",
-  "error": "Unknown control-plane action: "
+  "error": "Unknown control-plane action: rm-rf-not-allowed"
 }

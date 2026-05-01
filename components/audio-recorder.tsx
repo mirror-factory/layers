@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback, useEffect } from "react";
-import { Mic, Square } from "lucide-react";
+import { Loader2, Mic, Square } from "lucide-react";
 import {
   microphoneUnsupportedMessage,
   recordingStartErrorMessage,
@@ -11,13 +11,17 @@ interface AudioRecorderProps {
   onRecordingComplete: (blob: Blob) => void;
 }
 
+type RecordingMode = "idle" | "recording" | "stopping";
+
 export function AudioRecorder({ onRecordingComplete }: AudioRecorderProps) {
-  const [recording, setRecording] = useState(false);
+  const [mode, setMode] = useState<RecordingMode>("idle");
   const [duration, setDuration] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const recording = mode === "recording";
+  const stopping = mode === "stopping";
 
   const formatDuration = (seconds: number) => {
     const m = Math.floor(seconds / 60);
@@ -48,11 +52,13 @@ export function AudioRecorder({ onRecordingComplete }: AudioRecorderProps) {
         const blob = new Blob(chunksRef.current, { type: "audio/webm" });
         onRecordingComplete(blob);
         stream.getTracks().forEach((t) => t.stop());
+        mediaRecorderRef.current = null;
+        setMode("idle");
       };
 
       mediaRecorderRef.current = mediaRecorder;
       mediaRecorder.start(1000);
-      setRecording(true);
+      setMode("recording");
       setDuration(0);
 
       timerRef.current = setInterval(() => {
@@ -60,18 +66,19 @@ export function AudioRecorder({ onRecordingComplete }: AudioRecorderProps) {
       }, 1000);
     } catch (err) {
       setError(recordingStartErrorMessage(err));
+      setMode("idle");
     }
   }, [onRecordingComplete]);
 
   const stopRecording = useCallback(() => {
     if (mediaRecorderRef.current?.state === "recording") {
+      setMode("stopping");
       mediaRecorderRef.current.stop();
     }
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
     }
-    setRecording(false);
   }, []);
 
   useEffect(() => {
@@ -85,29 +92,49 @@ export function AudioRecorder({ onRecordingComplete }: AudioRecorderProps) {
       <div className="relative">
         <button
           onClick={recording ? stopRecording : startRecording}
+          disabled={stopping}
           className={`flex items-center justify-center w-20 h-20 rounded-full transition-all duration-200 ${
-            recording
-              ? "bg-[#ef4444] hover:bg-[#dc2626] text-white"
-              : "bg-[#14b8a6] hover:bg-[#0d9488] text-white"
+            recording || stopping
+              ? "bg-signal-live hover:bg-[#dc2626] text-white"
+              : "bg-layers-mint hover:bg-brand-accent-subtle text-white"
           }`}
-          aria-label={recording ? "Stop recording" : "Start recording"}
+          aria-label={
+            stopping
+              ? "Finishing recording"
+              : recording
+                ? "Stop recording"
+                : "Start recording"
+          }
+          aria-busy={stopping}
         >
-          {recording ? <Square size={28} /> : <Mic size={28} />}
+          {stopping ? (
+            <Loader2 size={28} className="recording-control-spinner" />
+          ) : recording ? (
+            <Square size={28} />
+          ) : (
+            <Mic size={28} />
+          )}
         </button>
 
         {recording && (
-          <span className="absolute inset-0 rounded-full border-2 border-[#14b8a6] animate-ping pointer-events-none" />
+          <span className="recording-record-ring absolute inset-0 rounded-full border-2 border-layers-mint pointer-events-none" />
         )}
       </div>
 
-      {recording && (
+      {(recording || stopping) && (
         <div className="text-2xl font-semibold text-[var(--text-primary)] tabular-nums">
           {formatDuration(duration)}
         </div>
       )}
 
+      {stopping && (
+        <div className="recording-transition-status" role="status">
+          Preparing upload
+        </div>
+      )}
+
       {error && (
-        <p className="text-sm text-[#ef4444] text-center max-w-xs">{error}</p>
+        <p className="text-sm text-signal-live text-center max-w-xs">{error}</p>
       )}
     </div>
   );

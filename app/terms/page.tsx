@@ -113,7 +113,7 @@ function TermCard({ term }: { term: (typeof TERMS)[number] }) {
   return (
     <article className="glass-card rounded-xl p-5">
       <div className="flex items-center gap-3">
-        <span className="grid size-9 place-items-center rounded-lg bg-[#14b8a6]/10 text-[#0f766e]">
+        <span className="grid size-9 place-items-center rounded-lg bg-layers-mint/10 text-[#0f766e]">
           <Icon size={18} aria-hidden="true" />
         </span>
         <h2 className="text-sm font-semibold text-[var(--text-primary)]">
@@ -123,7 +123,7 @@ function TermCard({ term }: { term: (typeof TERMS)[number] }) {
       <ul className="mt-4 space-y-3 text-sm leading-6 text-[var(--text-secondary)]">
         {term.body.map((item) => (
           <li className="flex gap-2" key={item}>
-            <span className="mt-2 size-1.5 shrink-0 rounded-full bg-[#14b8a6]" />
+            <span className="mt-2 size-1.5 shrink-0 rounded-full bg-layers-mint" />
             <span>{item}</span>
           </li>
         ))}
@@ -306,7 +306,7 @@ export default function TermsPage() {
             </p>
             <a
               href={`mailto:${SUPPORT_EMAIL}`}
-              className="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-[#14b8a6] px-4 text-sm font-semibold text-white hover:bg-[#0d9488]"
+              className="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-layers-mint px-4 text-sm font-semibold text-white hover:bg-brand-accent-subtle"
             >
               {SUPPORT_EMAIL}
             </a>

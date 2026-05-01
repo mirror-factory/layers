@@ -86,7 +86,7 @@ export function SlideMenu({ open, onClose }: SlideMenuProps) {
                     aria-current={isActive ? "page" : undefined}
                     className={`mx-2 flex items-center gap-3 rounded-md px-3 py-3 min-h-[44px] text-sm transition-all duration-200 ${
                       isActive
-                        ? "text-[#14b8a6] bg-[#14b8a6]/[0.08]"
+                        ? "text-layers-mint bg-layers-mint/[0.08]"
                         : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)]"
                     }`}
                   >

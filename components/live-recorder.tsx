@@ -167,12 +167,12 @@ function saveStatusLabel(
 
 function readinessClass(status: RecordingPreflightCheckStatus): string {
   if (status === "ready")
-    return "border-[#14b8a6]/20 bg-[#14b8a6]/[0.06] text-[#14b8a6]";
+    return "border-layers-mint/20 bg-layers-mint/[0.06] text-layers-mint";
   if (status === "blocked") {
     return "border-[var(--status-error-border)] bg-[var(--status-error-bg)] text-[var(--status-error)]";
   }
   if (status === "warning")
-    return "border-[#f59e0b]/25 bg-[#f59e0b]/10 text-[#f59e0b]";
+    return "border-signal-warning/25 bg-signal-warning/10 text-signal-warning";
   return "border-[var(--border-card)] bg-[var(--surface-control)] text-[var(--text-muted)]";
 }
 
@@ -1101,7 +1101,7 @@ function LiveRecorder(
     wordCount,
   ]);
 
-  if (presentation === "managed" && isActive) {
+  if (presentation === "managed") {
     return (
       <div className="sr-only" aria-live="polite">
         {formatDuration(duration)} {connectionStatusLabel(connectionStatus)}.{" "}
@@ -1127,7 +1127,7 @@ function LiveRecorder(
           className={`recorder-primary-control shrink-0 flex items-center justify-center rounded-full transition-all duration-700 ease-out disabled:opacity-50 ${
             isActive
               ? "h-12 w-12 border border-[var(--status-error-border)] bg-[var(--surface-control)] text-[var(--status-error)] hover:bg-[var(--status-error-bg)]"
-              : "h-16 w-16 border-2 border-[var(--recorder-button-border)] bg-[var(--recorder-button-bg)] text-[#14b8a6] shadow-[0_0_42px_rgba(20,184,166,0.12)] hover:border-[#14b8a6]/70 hover:text-[#5eead4] sm:h-20 sm:w-20"
+              : "h-16 w-16 border-2 border-[var(--recorder-button-border)] bg-[var(--recorder-button-bg)] text-layers-mint shadow-[0_0_42px_rgba(20,184,166,0.12)] hover:border-layers-mint/70 hover:text-layers-mint-soft sm:h-20 sm:w-20"
           }`}
           aria-label={isActive ? "Stop recording" : "Start recording"}
         >
@@ -1153,7 +1153,7 @@ function LiveRecorder(
               <span className="recorder-duration-value font-semibold text-3xl text-[var(--text-primary)] tabular-nums tracking-tight transition-all duration-700">
                 {formatDuration(duration)}
               </span>
-              <span className="animate-in fade-in text-xs uppercase tracking-wider text-[#5eead4] duration-500">
+              <span className="animate-in fade-in text-xs uppercase tracking-wider text-layers-mint-soft duration-500">
                 {connectionStatusLabel(connectionStatus)}
               </span>
             </div>

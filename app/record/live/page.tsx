@@ -2,6 +2,7 @@
 
 import { useMemo, useRef, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { Loader2, Mic, Square } from "lucide-react";
 import { TopBar } from "@/components/top-bar";
 import {
   LiveRecorder,
@@ -12,7 +13,6 @@ import { AudioWaveRibbon } from "@/components/audio-wave-ribbon";
 import {
   SessionCaptureCard,
   SessionIntelligenceCanvas,
-  SessionStopButton,
   formatWorkspaceTimestamp,
   type SessionActionRow,
   type SessionTranscriptRow,
@@ -157,9 +157,16 @@ export default function LiveRecordPage() {
   const displaySummary = isReferencePreview
     ? REFERENCE_SUMMARY
     : liveWorkspaceSummary(liveSignals);
+  const isArming = recState === "connecting";
   const durationLabel = isReferencePreview
     ? "00:13"
     : recorderSnapshot?.durationLabel ?? "00:00";
+  const statusLabel = isFinalizing
+    ? "Saving notes"
+    : isArming
+      ? "Starting notes"
+      : "Writing notes";
+  const badgeLabel = isFinalizing ? "SAVE" : isArming ? "START" : "LIVE";
   const displayDate = isReferencePreview ? REFERENCE_SESSION_DATE : new Date();
   const displayStats = isReferencePreview
     ? {
@@ -184,16 +191,22 @@ export default function LiveRecordPage() {
           <SessionCaptureCard
             date={displayDate}
             durationLabel={durationLabel}
-            statusLabel={isFinalizing ? "Saving notes" : "Writing notes"}
-            badgeLabel={isFinalizing ? "SAVE" : "LIVE"}
-            badgeTone="live"
+            statusLabel={isReferencePreview ? "Ready to record" : statusLabel}
+            badgeLabel={isReferencePreview ? "READY" : badgeLabel}
+            badgeTone={isReferencePreview ? "done" : "live"}
             title="Product planning session"
             subtitle="Layers roadmap"
             calendarConnected
             stats={displayStats}
+            showStats={false}
             waveSlot={
               <AudioWaveRibbon
-                active={recState === "recording" || isReferencePreview}
+                active={
+                  recState === "connecting" ||
+                  recState === "recording" ||
+                  recState === "finalizing" ||
+                  isReferencePreview
+                }
                 audioLevel={isReferencePreview ? 0.42 : audioLevel}
                 height={118}
                 sensitivity={1.16}
@@ -216,13 +229,25 @@ export default function LiveRecordPage() {
                   />
                 </div>
                 <div className="session-capture-control">
-                  <SessionStopButton
-                    label={isFinalizing ? "Saving notes" : "Stop recording"}
+                  <RecordingSessionControl
+                    mode={
+                      recState === "idle"
+                        ? "start"
+                        : isFinalizing
+                          ? "saving"
+                          : isArming
+                            ? "starting"
+                            : "stop"
+                    }
                     onClick={() => {
-                      if (recState === "idle") return;
+                      if (recState === "idle") {
+                        void recorderRef.current?.start();
+                        return;
+                      }
+                      if (isArming || isFinalizing) return;
                       void recorderRef.current?.stop();
                     }}
-                    disabled={isFinalizing}
+                    disabled={isArming || isFinalizing}
                   />
                 </div>
               </>
@@ -237,14 +262,75 @@ export default function LiveRecordPage() {
             keyPoints={displayKeyPoints}
             actions={displayActions}
             decisions={displayDecisions}
+            stats={displayStats}
             askTimestampLabel={isReferencePreview ? "10:24 AM" : "Now"}
             footerStatus={
-              isFinalizing ? "Saving notes" : "Live - new content arriving"
+              isFinalizing
+                ? "Saving notes"
+                : isArming
+                  ? "Starting recorder"
+                  : isReferencePreview
+                    ? "Ready to start"
+                  : "Live - new content arriving"
             }
           />
         </div>
       </main>
     </div>
+  );
+}
+
+function RecordingSessionControl({
+  mode,
+  disabled,
+  onClick,
+}: {
+  mode: "start" | "starting" | "stop" | "saving";
+  disabled?: boolean;
+  onClick?: () => void;
+}) {
+  const busy = mode === "starting" || mode === "saving";
+  const label =
+    mode === "start"
+      ? "Start recording"
+      : mode === "starting"
+        ? "Starting notes"
+        : mode === "saving"
+          ? "Saving notes"
+          : "Stop recording";
+
+  return (
+    <>
+      <button
+        type="button"
+        className={`session-stop-button recording-stop-control ${
+          mode === "start" ? "is-start" : ""
+        } ${busy ? "is-busy" : ""}`}
+        onClick={onClick}
+        disabled={disabled}
+        aria-busy={busy}
+      >
+        <span>
+          {busy ? (
+            <Loader2
+              size={16}
+              className="recording-control-spinner"
+              aria-hidden="true"
+            />
+          ) : mode === "start" ? (
+            <Mic size={17} aria-hidden="true" />
+          ) : (
+            <Square size={15} fill="currentColor" aria-hidden="true" />
+          )}
+        </span>
+        {label}
+      </button>
+      {busy && (
+        <div className="recording-transition-status" role="status">
+          {label}
+        </div>
+      )}
+    </>
   );
 }
 

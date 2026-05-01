@@ -38,7 +38,7 @@ interface Connector {
 function healthDot(health: ConnectorHealth): string {
   switch (health) {
     case "healthy":
-      return "bg-[#3dffc0]";
+      return "bg-layers-mint";
     case "degraded":
       return "bg-yellow-400";
     case "disconnected":
@@ -52,11 +52,11 @@ function healthText(health: ConnectorHealth): {
 } {
   switch (health) {
     case "healthy":
-      return { label: "Healthy", color: "text-[#3dffc0]" };
+      return { label: "Healthy", color: "text-layers-mint" };
     case "degraded":
       return { label: "Degraded", color: "text-yellow-400" };
     case "disconnected":
-      return { label: "Disconnected", color: "text-[#f0f0f0]/40" };
+      return { label: "Disconnected", color: "text-ink-200/40" };
   }
 }
 
@@ -87,7 +87,7 @@ export default function ConnectorsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64 text-[#f0f0f0]/40">
+      <div className="flex items-center justify-center h-64 text-ink-200/40">
         Loading connectors...
       </div>
     );
@@ -96,8 +96,8 @@ export default function ConnectorsPage() {
   if (connectors.length === 0) return (
     <div className="p-8">
       <h1 className="text-2xl font-semibold mb-4">Connectors</h1>
-      <div className="border border-[#3dffc0]/20 rounded p-6 text-center" style={{background:'rgba(61,255,192,.03)'}}>
-        <p className="text-[#f0f0f0]/60 text-sm">No connectors configured. Add API keys for Linear, Firecrawl, or Slack to see connector health here.</p>
+      <div className="border border-layers-mint/20 rounded p-6 text-center" style={{ background: "color-mix(in oklch, var(--layers-mint) 5%, transparent)" }}>
+        <p className="text-ink-200/60 text-sm">No connectors configured. Add API keys for Linear, Firecrawl, or Slack to see connector health here.</p>
       </div>
     </div>
   );
@@ -113,20 +113,20 @@ export default function ConnectorsPage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-semibold">Connectors</h1>
-        <p className="mt-1 text-sm text-[#f0f0f0]/50">
+        <p className="mt-1 text-sm text-ink-200/50">
           External integrations and their health status.
         </p>
       </div>
 
       {/* Summary */}
       <div className="flex flex-wrap gap-3 text-xs">
-        <span className="rounded border border-[#3dffc0]/20 px-3 py-1.5 text-[#3dffc0]">
+        <span className="rounded border border-layers-mint/20 px-3 py-1.5 text-layers-mint">
           Healthy: {healthyCt}
         </span>
         <span className="rounded border border-yellow-400/20 px-3 py-1.5 text-yellow-400">
           Degraded: {degradedCt}
         </span>
-        <span className="rounded border border-white/10 px-3 py-1.5 text-[#f0f0f0]/50">
+        <span className="rounded border border-white/10 px-3 py-1.5 text-ink-200/50">
           Disconnected: {disconnectedCt}
         </span>
       </div>
@@ -144,7 +144,7 @@ export default function ConnectorsPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="font-medium">{conn.name}</p>
-                  <p className="text-xs text-[#f0f0f0]/40">{conn.type}</p>
+                  <p className="text-xs text-ink-200/40">{conn.type}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <span
@@ -157,18 +157,18 @@ export default function ConnectorsPage() {
               </div>
 
               {/* Description */}
-              <p className="text-xs text-[#f0f0f0]/60 flex-1">
+              <p className="text-xs text-ink-200/60 flex-1">
                 {conn.description}
               </p>
 
               {/* Footer meta */}
-              <div className="flex items-center justify-between text-xs text-[#f0f0f0]/40 pt-3 border-t border-white/5">
+              <div className="flex items-center justify-between text-xs text-ink-200/40 pt-3 border-t border-white/5">
                 <span>Last sync: {formatDate(conn.lastSync)}</span>
                 <span
                   className={
                     conn.errorCount > 0
-                      ? "text-[#ef4444]"
-                      : "text-[#f0f0f0]/40"
+                      ? "text-signal-live"
+                      : "text-ink-200/40"
                   }
                 >
                   Errors: {conn.errorCount}

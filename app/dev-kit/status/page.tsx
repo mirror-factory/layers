@@ -9,6 +9,16 @@
 
 import { useEffect, useState } from 'react';
 
+const STATUS_COLORS = {
+  success: 'var(--signal-success)',
+  warning: 'var(--signal-warning)',
+  live: 'var(--signal-live)',
+  info: 'var(--fg-subtle)',
+} as const;
+
+const tint = (color: string, amount = 18) =>
+  `color-mix(in oklch, ${color} ${amount}%, transparent)`;
+
 interface SinkStatus { sink: string; configured: boolean; note?: string }
 interface RegistryStatus { vendor: string; validated_on: string; ageDays: number; modelCount: number; stale: boolean }
 interface CoverageStatus { withRoute: number; withRouteTotal: number; withExternalCall: number; withExternalCallTotal: number; withTelemetry: number; withTelemetryTotal: number }
@@ -24,8 +34,8 @@ interface StatusResponse {
 }
 
 function Badge({ kind, children }: { kind: 'ok' | 'warn' | 'error' | 'info'; children: React.ReactNode }) {
-  const color = kind === 'ok' ? '#22c55e' : kind === 'warn' ? '#f59e0b' : kind === 'error' ? '#ef4444' : '#888';
-  return <span style={{ background: color + '22', color, padding: '2px 8px', borderRadius: 3, fontFamily: 'monospace', fontSize: 11 }}>{children}</span>;
+  const color = kind === 'ok' ? STATUS_COLORS.success : kind === 'warn' ? STATUS_COLORS.warning : kind === 'error' ? STATUS_COLORS.live : STATUS_COLORS.info;
+  return <span style={{ background: tint(color), color, padding: '2px 8px', borderRadius: 3, fontFamily: 'monospace', fontSize: 11 }}>{children}</span>;
 }
 
 export default function StatusPage() {
@@ -63,7 +73,7 @@ export default function StatusPage() {
       </div>
 
       {data.warnings.length > 0 && (
-        <div style={{ background: '#f59e0b22', border: '1px solid #f59e0b', borderRadius: 4, padding: 14, marginBottom: 20 }}>
+        <div style={{ background: tint(STATUS_COLORS.warning), border: `1px solid ${STATUS_COLORS.warning}`, borderRadius: 4, padding: 14, marginBottom: 20 }}>
           <div style={{ fontWeight: 600, marginBottom: 6 }}>Open warnings ({data.warnings.length})</div>
           <ul style={{ margin: 0, paddingLeft: 20, fontSize: 13 }}>
             {data.warnings.map((w, i) => <li key={i}>{w}</li>)}

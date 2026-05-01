@@ -2,14 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import {
-  Check,
-  ExternalLink,
-  Loader2,
-  PlugZap,
-  Trash2,
-  Webhook,
-} from "lucide-react";
+import { Check, Link2, Loader2, PlugZap, Trash2, Webhook } from "lucide-react";
 
 type WebhookEvent = "meeting.completed" | "meeting.started" | "meeting.error";
 
@@ -189,23 +182,17 @@ export function IntegrationsSettingsPanel() {
                 Agent access
               </p>
               <p className="mt-1 text-xs leading-5 text-[var(--text-muted)]">
-                Use MCP or an API key to let trusted tools pull meeting context
-                on demand.
+                Add the MCP server URL to trusted AI tools. They will redirect
+                you to Layers sign-in and consent.
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
               <Link
                 href="/profile"
-                className="inline-flex min-h-[36px] items-center justify-center rounded-md border border-[var(--border-card)] bg-[var(--bg-card)] px-3 text-xs font-semibold text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface-control-hover)] hover:text-[var(--text-primary)]"
-              >
-                API key
-              </Link>
-              <Link
-                href="/docs"
                 className="inline-flex min-h-[36px] items-center gap-1.5 rounded-md border border-[var(--border-card)] bg-[var(--bg-card)] px-3 text-xs font-semibold text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface-control-hover)] hover:text-[var(--text-primary)]"
               >
-                Docs
-                <ExternalLink size={12} aria-hidden="true" />
+                <Link2 size={12} aria-hidden="true" />
+                MCP URL
               </Link>
             </div>
           </div>
@@ -213,12 +200,12 @@ export function IntegrationsSettingsPanel() {
 
         <div className="settings-integration-card rounded-lg border border-[var(--border-card)] bg-[var(--surface-control)] p-3">
           <div className="mb-3 flex items-center gap-2">
-            <Webhook size={15} className="text-[#14b8a6]" aria-hidden="true" />
+            <Webhook size={15} className="text-layers-mint" aria-hidden="true" />
             <p className="text-sm font-semibold text-[var(--text-primary)]">
               Webhooks
             </p>
             {loading && (
-              <Loader2 size={13} className="animate-spin text-[#14b8a6]" />
+              <Loader2 size={13} className="animate-spin text-layers-mint" />
             )}
           </div>
 
@@ -252,7 +239,7 @@ export function IntegrationsSettingsPanel() {
                     onClick={() => toggleEvent(option.value)}
                     className={`inline-flex min-h-[34px] items-center gap-1.5 rounded-md border px-2.5 text-xs font-semibold transition-colors ${
                       events.includes(option.value)
-                        ? "border-[#14b8a6]/40 bg-[#14b8a6]/10 text-[#14b8a6]"
+                        ? "border-layers-mint/40 bg-layers-mint/10 text-layers-mint"
                         : "border-[var(--border-card)] bg-[var(--bg-card)] text-[var(--text-secondary)]"
                     }`}
                   >
@@ -273,7 +260,7 @@ export function IntegrationsSettingsPanel() {
                 type="button"
                 onClick={createWebhook}
                 disabled={!canSave}
-                className="mt-3 inline-flex min-h-[40px] items-center justify-center gap-2 rounded-lg bg-[var(--paper-calm-ink)] px-4 text-sm font-semibold text-white transition-colors hover:opacity-90 disabled:opacity-50 dark:text-[#042f2e]"
+                className="mt-3 inline-flex min-h-[40px] items-center justify-center gap-2 rounded-lg bg-[var(--paper-calm-ink)] px-4 text-sm font-semibold text-white transition-colors hover:opacity-90 disabled:opacity-50 dark:text-layers-ink"
               >
                 {saving && <Loader2 size={14} className="animate-spin" />}
                 Add webhook
@@ -308,7 +295,7 @@ export function IntegrationsSettingsPanel() {
                     type="button"
                     onClick={() => deleteWebhook(hook.id)}
                     disabled={deletingId === hook.id}
-                    className="inline-flex min-h-[32px] min-w-[32px] items-center justify-center rounded-md text-[var(--text-muted)] transition-colors hover:bg-[var(--surface-control-hover)] hover:text-[#ef4444] disabled:opacity-60"
+                    className="inline-flex min-h-[32px] min-w-[32px] items-center justify-center rounded-md text-[var(--text-muted)] transition-colors hover:bg-[var(--surface-control-hover)] hover:text-signal-live disabled:opacity-60"
                     aria-label="Remove webhook"
                   >
                     {deletingId === hook.id ? (
@@ -352,8 +339,8 @@ export function IntegrationsSettingsPanel() {
                     <span
                       className={`shrink-0 rounded-full px-2 py-1 text-[11px] font-semibold ${
                         delivery.success
-                          ? "bg-[#14b8a6]/10 text-[#0f766e]"
-                          : "bg-[#ef4444]/10 text-[#dc2626]"
+                          ? "bg-layers-mint/10 text-[#0f766e]"
+                          : "bg-signal-live/10 text-[#dc2626]"
                       }`}
                     >
                       {delivery.success

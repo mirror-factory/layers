@@ -37,6 +37,18 @@
 
 import { useState, useEffect } from 'react';
 
+const DEBUG_COLORS = {
+  canvas: 'var(--layers-ink)',
+  canvasRaised: 'color-mix(in oklch, var(--layers-ink) 88%, var(--layers-mint) 12%)',
+  border: 'color-mix(in oklch, var(--layers-mint) 28%, transparent)',
+  mint: 'var(--layers-mint-soft)',
+  text: 'var(--ink-200)',
+  muted: 'var(--ink-400)',
+  faint: 'var(--ink-600)',
+  success: 'var(--signal-success)',
+  warning: 'var(--signal-warning)',
+} as const;
+
 // ── Types ─────────────────────────────────────────────────────────────
 
 interface AILogEntry {
@@ -117,13 +129,13 @@ export function AIDebugPanel() {
         onClick={() => setMinimized(false)}
         style={{
           position: 'fixed', bottom: 16, right: 16, zIndex: 99999,
-          background: '#0a0a0a', color: '#5eead4', border: '1px solid #1a3a35',
+          background: DEBUG_COLORS.canvas, color: DEBUG_COLORS.mint, border: `1px solid ${DEBUG_COLORS.border}`,
           borderRadius: 8, padding: '8px 14px', fontSize: 12, fontFamily: 'monospace',
           cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8,
           boxShadow: '0 4px 20px rgba(0,0,0,0.5)',
         }}
       >
-        <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#5eead4', animation: 'pulse 2s infinite' }} />
+        <span style={{ width: 8, height: 8, borderRadius: '50%', background: DEBUG_COLORS.mint, animation: 'pulse 2s infinite' }} />
         AI: {entries.length} calls | {formatCost(totalCost)}
       </button>
     );
@@ -133,35 +145,35 @@ export function AIDebugPanel() {
     <div style={{
       position: 'fixed', bottom: 16, right: 16, zIndex: 99999,
       width: 420, maxHeight: '60vh',
-      background: '#0a0a0a', color: '#e5e5e5', border: '1px solid #1a3a35',
+      background: DEBUG_COLORS.canvas, color: DEBUG_COLORS.text, border: `1px solid ${DEBUG_COLORS.border}`,
       borderRadius: 12, fontFamily: "'SF Mono', 'Fira Code', monospace", fontSize: 12,
       boxShadow: '0 8px 40px rgba(0,0,0,0.6)', overflow: 'hidden',
       display: 'flex', flexDirection: 'column',
     }}>
       {/* Header */}
       <div style={{
-        padding: '10px 14px', borderBottom: '1px solid #1a3a35',
+        padding: '10px 14px', borderBottom: `1px solid ${DEBUG_COLORS.border}`,
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        background: '#0d1412',
+        background: DEBUG_COLORS.canvasRaised,
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#5eead4' }} />
-          <span style={{ fontWeight: 700, color: '#5eead4', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>AI Debug</span>
+          <span style={{ width: 8, height: 8, borderRadius: '50%', background: DEBUG_COLORS.mint }} />
+          <span style={{ fontWeight: 700, color: DEBUG_COLORS.mint, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>AI Debug</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 11, color: '#6b7280' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 11, color: DEBUG_COLORS.muted }}>
           <span>{formatTokens(totalTokens)} tokens</span>
-          <span style={{ color: '#5eead4', fontWeight: 600 }}>{formatCost(totalCost)}</span>
-          <button onClick={() => setMinimized(true)} style={{ background: 'none', border: 'none', color: '#6b7280', cursor: 'pointer', fontSize: 14 }}>—</button>
-          <button onClick={() => setVisible(false)} style={{ background: 'none', border: 'none', color: '#6b7280', cursor: 'pointer', fontSize: 14 }}>✕</button>
+          <span style={{ color: DEBUG_COLORS.mint, fontWeight: 600 }}>{formatCost(totalCost)}</span>
+          <button onClick={() => setMinimized(true)} style={{ background: 'none', border: 'none', color: DEBUG_COLORS.muted, cursor: 'pointer', fontSize: 14 }}>—</button>
+          <button onClick={() => setVisible(false)} style={{ background: 'none', border: 'none', color: DEBUG_COLORS.muted, cursor: 'pointer', fontSize: 14 }}>✕</button>
         </div>
       </div>
 
       {/* Entries */}
       <div style={{ overflowY: 'auto', flex: 1 }}>
         {entries.length === 0 && (
-          <div style={{ padding: 20, textAlign: 'center', color: '#4b5563', fontSize: 11 }}>
+          <div style={{ padding: 20, textAlign: 'center', color: DEBUG_COLORS.faint, fontSize: 11 }}>
             No AI calls yet. Send a message to see requests here.
-            <div style={{ marginTop: 8, fontSize: 10, color: '#374151' }}>⌘⇧D to toggle</div>
+            <div style={{ marginTop: 8, fontSize: 10, color: DEBUG_COLORS.faint }}>⌘⇧D to toggle</div>
           </div>
         )}
         {entries.map(entry => (
@@ -169,42 +181,42 @@ export function AIDebugPanel() {
             key={entry.id}
             onClick={() => setExpanded(expanded === entry.id ? null : entry.id)}
             style={{
-              padding: '8px 14px', borderBottom: '1px solid #111',
+              padding: '8px 14px', borderBottom: `1px solid ${DEBUG_COLORS.border}`,
               cursor: 'pointer', transition: 'background 0.1s',
             }}
-            onMouseEnter={e => (e.currentTarget.style.background = '#111')}
+            onMouseEnter={e => (e.currentTarget.style.background = DEBUG_COLORS.canvasRaised)}
             onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
           >
             {/* Summary line */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ color: '#5eead4', fontWeight: 600 }}>{entry.label}</span>
-                <span style={{ color: '#4b5563', fontSize: 10 }}>{entry.steps}s</span>
+                <span style={{ color: DEBUG_COLORS.mint, fontWeight: 600 }}>{entry.label}</span>
+                <span style={{ color: DEBUG_COLORS.faint, fontSize: 10 }}>{entry.steps}s</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 11 }}>
-                <span style={{ color: '#6b7280' }}>{formatDuration(entry.duration)}</span>
-                <span style={{ color: '#9ca3af' }}>{formatTokens(entry.inputTokens + entry.outputTokens)}</span>
-                <span style={{ color: '#5eead4', fontWeight: 600 }}>{formatCost(entry.cost)}</span>
+                <span style={{ color: DEBUG_COLORS.muted }}>{formatDuration(entry.duration)}</span>
+                <span style={{ color: DEBUG_COLORS.muted }}>{formatTokens(entry.inputTokens + entry.outputTokens)}</span>
+                <span style={{ color: DEBUG_COLORS.mint, fontWeight: 600 }}>{formatCost(entry.cost)}</span>
               </div>
             </div>
 
             {/* Expanded details */}
             {expanded === entry.id && (
-              <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid #1a1a1a', fontSize: 11, color: '#9ca3af' }}>
+              <div style={{ marginTop: 8, paddingTop: 8, borderTop: `1px solid ${DEBUG_COLORS.border}`, fontSize: 11, color: DEBUG_COLORS.muted }}>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px 16px' }}>
-                  <span>Provider</span><span style={{ color: '#e5e5e5' }}>{entry.provider}</span>
-                  <span>Model</span><span style={{ color: '#e5e5e5' }}>{entry.modelId}</span>
-                  <span>Input tokens</span><span style={{ color: '#e5e5e5' }}>{entry.inputTokens.toLocaleString()}</span>
-                  <span>Output tokens</span><span style={{ color: '#e5e5e5' }}>{entry.outputTokens.toLocaleString()}</span>
-                  <span>Steps</span><span style={{ color: '#e5e5e5' }}>{entry.steps}</span>
+                  <span>Provider</span><span style={{ color: DEBUG_COLORS.text }}>{entry.provider}</span>
+                  <span>Model</span><span style={{ color: DEBUG_COLORS.text }}>{entry.modelId}</span>
+                  <span>Input tokens</span><span style={{ color: DEBUG_COLORS.text }}>{entry.inputTokens.toLocaleString()}</span>
+                  <span>Output tokens</span><span style={{ color: DEBUG_COLORS.text }}>{entry.outputTokens.toLocaleString()}</span>
+                  <span>Steps</span><span style={{ color: DEBUG_COLORS.text }}>{entry.steps}</span>
                   {entry.toolCalls.length > 0 && (
-                    <><span>Tools</span><span style={{ color: '#5eead4' }}>{[...new Set(entry.toolCalls)].join(', ')}</span></>
+                    <><span>Tools</span><span style={{ color: DEBUG_COLORS.mint }}>{[...new Set(entry.toolCalls)].join(', ')}</span></>
                   )}
                   {entry.cacheReadTokens > 0 && (
-                    <><span>Cache hit</span><span style={{ color: '#22c55e' }}>{entry.cacheReadTokens.toLocaleString()} tokens ({Math.round(entry.cacheReadTokens / entry.inputTokens * 100)}%)</span></>
+                    <><span>Cache hit</span><span style={{ color: DEBUG_COLORS.success }}>{entry.cacheReadTokens.toLocaleString()} tokens ({Math.round(entry.cacheReadTokens / entry.inputTokens * 100)}%)</span></>
                   )}
                   {entry.cacheWriteTokens > 0 && (
-                    <><span>Cache write</span><span style={{ color: '#eab308' }}>{entry.cacheWriteTokens.toLocaleString()} tokens</span></>
+                    <><span>Cache write</span><span style={{ color: DEBUG_COLORS.warning }}>{entry.cacheWriteTokens.toLocaleString()} tokens</span></>
                   )}
                 </div>
               </div>
@@ -215,8 +227,8 @@ export function AIDebugPanel() {
 
       {/* Footer */}
       <div style={{
-        padding: '6px 14px', borderTop: '1px solid #1a3a35', background: '#0d1412',
-        display: 'flex', justifyContent: 'space-between', fontSize: 10, color: '#4b5563',
+        padding: '6px 14px', borderTop: `1px solid ${DEBUG_COLORS.border}`, background: DEBUG_COLORS.canvasRaised,
+        display: 'flex', justifyContent: 'space-between', fontSize: 10, color: DEBUG_COLORS.faint,
       }}>
         <span>{entries.length} calls this session</span>
         <button

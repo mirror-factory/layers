@@ -120,7 +120,7 @@ export default function RecordPage() {
               onDragOver={(e) => e.preventDefault()}
               onDrop={handleFileDrop}
               onClick={() => fileInputRef.current?.click()}
-              className="flex flex-col items-center justify-center gap-3 p-8 border-2 border-dashed border-[#262626] rounded-xl cursor-pointer hover:border-[#14b8a6]/50 transition-colors duration-200"
+              className="flex flex-col items-center justify-center gap-3 p-8 border-2 border-dashed border-[#262626] rounded-xl cursor-pointer hover:border-layers-mint/50 transition-colors duration-200"
             >
               <Upload size={28} className="text-[#525252]" />
               <span className="text-sm text-[#a3a3a3]">
@@ -143,7 +143,7 @@ export default function RecordPage() {
         {/* Uploading / Processing state */}
         {(uploading || pollingId) && (
           <div className="flex flex-col items-center gap-4 py-12">
-            <Loader2 size={40} className="text-[#14b8a6] animate-spin" />
+            <Loader2 size={40} className="text-layers-mint animate-spin" />
             <div className="text-sm text-[#a3a3a3]">
               {pollingId ? "Processing transcript..." : "Uploading..."}
             </div>
@@ -154,7 +154,7 @@ export default function RecordPage() {
         )}
 
         {error && (
-          <p className="text-sm text-[#ef4444] text-center mt-4">{error}</p>
+          <p className="text-sm text-signal-live text-center mt-4">{error}</p>
         )}
       </main>
     </div>

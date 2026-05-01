@@ -67,22 +67,22 @@ function stepColor(type: StepType): string {
     case "agent":
       return "bg-[#f0f0f0]/70";
     case "tool":
-      return "bg-[#3dffc0]";
+      return "bg-layers-mint";
     case "error":
-      return "bg-[#ef4444]";
+      return "bg-signal-live";
   }
 }
 
 function stepColorLabel(type: StepType): string {
   switch (type) {
     case "user":
-      return "text-[#f0f0f0]";
+      return "text-ink-200";
     case "agent":
-      return "text-[#f0f0f0]";
+      return "text-ink-200";
     case "tool":
-      return "text-[#3dffc0]";
+      return "text-layers-mint";
     case "error":
-      return "text-[#ef4444]";
+      return "text-signal-live";
   }
 }
 
@@ -114,7 +114,7 @@ export default function TraceDetailPage() {
 
   if (loading || !trace) {
     return (
-      <div className="flex items-center justify-center h-64 text-[#f0f0f0]/40">
+      <div className="flex items-center justify-center h-64 text-ink-200/40">
         Loading trace...
       </div>
     );
@@ -130,12 +130,12 @@ export default function TraceDetailPage() {
       <div>
         <Link
           href="/dev-kit/sessions"
-          className="text-sm text-[#3dffc0] hover:underline"
+          className="text-sm text-layers-mint hover:underline"
         >
           &larr; Sessions
         </Link>
         <h1 className="mt-2 text-2xl font-semibold">{trace.sessionName}</h1>
-        <p className="mt-1 text-sm text-[#f0f0f0]/50">
+        <p className="mt-1 text-sm text-ink-200/50">
           {trace.model} &middot; {formatDuration(trace.totalDurationMs)} total
           &middot; Session {trace.sessionId}
         </p>
@@ -143,7 +143,7 @@ export default function TraceDetailPage() {
 
       {/* Timeline bar */}
       <div>
-        <h2 className="text-sm font-medium text-[#f0f0f0]/60 mb-2">
+        <h2 className="text-sm font-medium text-ink-200/60 mb-2">
           Timeline
         </h2>
         <div className="relative flex h-8 rounded overflow-hidden border border-white/10">
@@ -162,9 +162,9 @@ export default function TraceDetailPage() {
               >
                 {/* Hover tooltip */}
                 {hoveredStep === step.id && (
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-10 whitespace-nowrap rounded bg-[#050505] border border-white/20 px-3 py-1.5 text-xs text-[#f0f0f0] shadow-lg">
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-10 whitespace-nowrap rounded bg-[#050505] border border-white/20 px-3 py-1.5 text-xs text-ink-200 shadow-lg">
                     <p className="font-medium">{step.name}</p>
-                    <p className="text-[#f0f0f0]/60">
+                    <p className="text-ink-200/60">
                       {formatDuration(step.durationMs)}
                     </p>
                   </div>
@@ -174,17 +174,17 @@ export default function TraceDetailPage() {
           })}
         </div>
         {/* Legend */}
-        <div className="flex gap-4 mt-2 text-xs text-[#f0f0f0]/50">
+        <div className="flex gap-4 mt-2 text-xs text-ink-200/50">
           <span className="flex items-center gap-1.5">
             <span className="inline-block h-2 w-4 rounded bg-[#f0f0f0]" />
             User / Agent
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="inline-block h-2 w-4 rounded bg-[#3dffc0]" />
+            <span className="inline-block h-2 w-4 rounded bg-layers-mint" />
             Tool Call
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="inline-block h-2 w-4 rounded bg-[#ef4444]" />
+            <span className="inline-block h-2 w-4 rounded bg-signal-live" />
             Error
           </span>
         </div>
@@ -192,11 +192,11 @@ export default function TraceDetailPage() {
 
       {/* Step-by-step breakdown */}
       <div>
-        <h2 className="text-sm font-medium text-[#f0f0f0]/60 mb-2">Steps</h2>
+        <h2 className="text-sm font-medium text-ink-200/60 mb-2">Steps</h2>
         <div className="rounded-lg border border-white/10 overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-white/10 text-left text-xs uppercase tracking-wider text-[#f0f0f0]/50">
+              <tr className="border-b border-white/10 text-left text-xs uppercase tracking-wider text-ink-200/50">
                 <th className="px-4 py-3 w-8">#</th>
                 <th className="px-4 py-3">Type</th>
                 <th className="px-4 py-3">Content</th>
@@ -212,7 +212,7 @@ export default function TraceDetailPage() {
                     key={step.id}
                     className={`border-b border-white/5 cursor-pointer transition-colors ${
                       step.status === "error"
-                        ? "bg-[#ef4444]/5 hover:bg-[#ef4444]/10"
+                        ? "bg-signal-live/5 hover:bg-signal-live/10"
                         : "hover:bg-white/[0.03]"
                     }`}
                     onClick={() =>
@@ -221,7 +221,7 @@ export default function TraceDetailPage() {
                       )
                     }
                   >
-                    <td className="px-4 py-3 text-[#f0f0f0]/40 font-mono text-xs">
+                    <td className="px-4 py-3 text-ink-200/40 font-mono text-xs">
                       {idx + 1}
                     </td>
                     <td
@@ -229,7 +229,7 @@ export default function TraceDetailPage() {
                     >
                       {step.type === "tool" ? step.toolName : step.type}
                     </td>
-                    <td className="px-4 py-3 text-[#f0f0f0]/70 max-w-md truncate">
+                    <td className="px-4 py-3 text-ink-200/70 max-w-md truncate">
                       {step.contentPreview}
                     </td>
                     <td className="px-4 py-3 text-right font-mono text-xs">
@@ -240,9 +240,9 @@ export default function TraceDetailPage() {
                     </td>
                     <td className="px-4 py-3 text-center">
                       {step.status === "ok" ? (
-                        <span className="text-[#3dffc0] text-xs">OK</span>
+                        <span className="text-layers-mint text-xs">OK</span>
                       ) : (
-                        <span className="text-[#ef4444] text-xs">ERR</span>
+                        <span className="text-signal-live text-xs">ERR</span>
                       )}
                     </td>
                   </tr>
@@ -258,7 +258,7 @@ export default function TraceDetailPage() {
                           {/* Input / Output */}
                           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                             <div>
-                              <p className="text-xs uppercase tracking-wider text-[#f0f0f0]/50 mb-1">
+                              <p className="text-xs uppercase tracking-wider text-ink-200/50 mb-1">
                                 Input
                               </p>
                               <pre className="text-xs bg-[#050505] border border-white/10 rounded p-3 whitespace-pre-wrap max-h-40 overflow-y-auto">
@@ -266,7 +266,7 @@ export default function TraceDetailPage() {
                               </pre>
                             </div>
                             <div>
-                              <p className="text-xs uppercase tracking-wider text-[#f0f0f0]/50 mb-1">
+                              <p className="text-xs uppercase tracking-wider text-ink-200/50 mb-1">
                                 Output
                               </p>
                               <pre className="text-xs bg-[#050505] border border-white/10 rounded p-3 whitespace-pre-wrap max-h-40 overflow-y-auto">
@@ -278,7 +278,7 @@ export default function TraceDetailPage() {
                           {/* Metrics row */}
                           <div className="flex flex-wrap gap-6 text-xs">
                             <div>
-                              <span className="text-[#f0f0f0]/50">
+                              <span className="text-ink-200/50">
                                 Input tokens:{" "}
                               </span>
                               <span className="font-mono">
@@ -286,7 +286,7 @@ export default function TraceDetailPage() {
                               </span>
                             </div>
                             <div>
-                              <span className="text-[#f0f0f0]/50">
+                              <span className="text-ink-200/50">
                                 Output tokens:{" "}
                               </span>
                               <span className="font-mono">
@@ -294,13 +294,13 @@ export default function TraceDetailPage() {
                               </span>
                             </div>
                             <div>
-                              <span className="text-[#f0f0f0]/50">Cost: </span>
+                              <span className="text-ink-200/50">Cost: </span>
                               <span className="font-mono">
                                 ${step.cost.toFixed(4)}
                               </span>
                             </div>
                             <div>
-                              <span className="text-[#f0f0f0]/50">
+                              <span className="text-ink-200/50">
                                 Latency:{" "}
                               </span>
                               <span className="font-mono">
@@ -312,10 +312,10 @@ export default function TraceDetailPage() {
                           {/* Tool info */}
                           {step.toolName && (
                             <div className="text-xs">
-                              <span className="text-[#f0f0f0]/50">
+                              <span className="text-ink-200/50">
                                 Tool:{" "}
                               </span>
-                              <span className="text-[#3dffc0] font-mono">
+                              <span className="text-layers-mint font-mono">
                                 {step.toolName}
                               </span>
                               {step.toolArgs && (
@@ -329,17 +329,17 @@ export default function TraceDetailPage() {
                           {/* Error message */}
                           {step.errorMessage && (
                             <div className="text-xs">
-                              <span className="text-[#ef4444] font-medium">
+                              <span className="text-signal-live font-medium">
                                 Error:{" "}
                               </span>
-                              <span className="text-[#ef4444]/80">
+                              <span className="text-signal-live/80">
                                 {step.errorMessage}
                               </span>
                             </div>
                           )}
 
                           {/* Trace / Span IDs */}
-                          <div className="flex gap-6 text-xs text-[#f0f0f0]/40 font-mono">
+                          <div className="flex gap-6 text-xs text-ink-200/40 font-mono">
                             <span>trace: {step.traceId}</span>
                             <span>span: {step.spanId}</span>
                           </div>

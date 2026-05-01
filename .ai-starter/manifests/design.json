@@ -1,56 +1,86 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-04-26T22:08:40.099Z",
+  "updatedAt": "2026-05-01T00:00:00.000Z",
   "editableFromDashboard": false,
   "contract": {
-    "brandSummary": "Project-specific design system defined during setup; preserve existing product visual language when present.",
-    "visualStyle": "project-specific",
+    "brandSummary": "Layers Design System v1.0, Paper Calm. Calm paper surfaces, structured controls, mint primary accent, violet and blue support colors, canonical aperture logo.",
+    "visualStyle": "paper-calm",
     "interactionStyle": "Clear task-first flows with visible feedback and recoverable states.",
     "density": "medium",
-    "motionLevel": "subtle",
-    "brandColors": [],
-    "referenceSystems": [],
+    "motionLevel": "organic-subtle",
+    "brandColors": [
+      "oklch(0.68 0.13 166)",
+      "oklch(0.66 0.16 282)",
+      "oklch(0.66 0.13 240)"
+    ],
+    "referenceSystems": [
+      "Layers Design System v1.0 - Paper Calm"
+    ],
     "accessibility": "WCAG AA contrast, keyboard reachability, visible focus, and reduced-motion support.",
-    "designInputSource": "defaults",
+    "designInputSource": "/Users/alfonso/Downloads/Layers Design System.html",
     "driftPolicy": "warn"
   },
   "tokens": {
     "colors": {
-      "paper": "oklch(0.08 0.006 260)",
-      "panel": "oklch(0.12 0.006 260)",
-      "panelRaised": "oklch(0.16 0.006 260)",
-      "ink": "oklch(0.97 0.004 260)",
-      "muted": "oklch(0.72 0.006 260)",
-      "line": "oklch(0.82 0.006 260 / 0.28)",
-      "success": "oklch(0.86 0.02 145)",
-      "warning": "oklch(0.84 0.03 88)",
-      "danger": "oklch(0.78 0.04 25)"
+      "layersViolet": "oklch(0.66 0.16 282)",
+      "layersMint": "oklch(0.68 0.13 166)",
+      "layersBlue": "oklch(0.66 0.13 240)",
+      "layersVioletSoft": "oklch(0.78 0.13 282)",
+      "layersMintSoft": "oklch(0.82 0.10 168)",
+      "layersBlueSoft": "oklch(0.80 0.09 240)",
+      "layersVioletTint": "oklch(0.95 0.03 284)",
+      "layersMintTint": "oklch(0.95 0.04 168)",
+      "layersBlueTint": "oklch(0.94 0.03 240)",
+      "ink": "oklch(0.22 0.035 256)",
+      "paper": "oklch(0.982 0.012 168)",
+      "surface": "oklch(0.997 0.004 168)",
+      "muted": "oklch(0.46 0.025 256)",
+      "line": "oklch(0.84 0.024 168 / 0.74)",
+      "success": "oklch(0.68 0.13 166)",
+      "warning": "oklch(0.74 0.14 74)",
+      "danger": "oklch(0.64 0.20 26)"
     },
     "spacing": {
-      "pixel": "4px",
+      "grid": "4px",
       "compact": "8px",
       "field": "12px",
-      "panel": "16px",
-      "section": "32px",
-      "stage": "64px"
+      "panel": "24px",
+      "section": "48px",
+      "stage": "96px"
     },
     "radii": {
-      "none": "0",
-      "chip": "2px",
-      "panel": "4px"
+      "xs": "4px",
+      "sm": "6px",
+      "md": "10px",
+      "lg": "14px",
+      "xl": "20px",
+      "card": "24px",
+      "pill": "9999px"
     },
     "motion": {
-      "tick": "120ms steps(4, end)",
-      "scan": "420ms steps(8, end)",
-      "reveal": "680ms steps(10, end)"
+      "fast": "140ms cubic-bezier(0.22, 1, 0.36, 1)",
+      "standard": "220ms cubic-bezier(0.22, 1, 0.36, 1)",
+      "slow": "420ms cubic-bezier(0.22, 1, 0.36, 1)"
     }
   },
   "assets": [
+    {
+      "id": "layers-design-system-html",
+      "label": "Layers Design System HTML",
+      "path": "/Users/alfonso/Downloads/Layers Design System.html",
+      "usage": "Human design guide and source for the Paper Calm brand contract."
+    },
     {
       "id": "design-md",
       "label": "Design contract",
       "path": "DESIGN.md",
       "usage": "Human and agent-readable design intent that explains the runtime design registry."
+    },
+    {
+      "id": "layers-logo",
+      "label": "Layers logo primitive",
+      "path": "components/layers-logo.tsx",
+      "usage": "Canonical aperture mark and wordmark for app surfaces."
     }
   ]
 }

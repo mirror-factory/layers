@@ -11,13 +11,15 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  Bot,
+  BriefcaseBusiness,
   CalendarDays,
   Clock3,
+  Loader2,
   Link2,
   Search,
   SlidersHorizontal,
   Sparkles,
+  Square,
   Trash2,
   UsersRound,
 } from "lucide-react";
@@ -30,7 +32,6 @@ import {
 } from "@/components/live-recorder";
 import {
   SessionIntelligenceCanvas,
-  SessionStopButton,
   formatWorkspaceTimestamp,
   type SessionActionRow,
   type SessionTranscriptRow,
@@ -43,6 +44,7 @@ import {
   deriveLiveMeetingSignals,
   type LiveMeetingSignals,
 } from "@/lib/recording/live-signals";
+import { ProductLogo, type ProductLogoId } from "@/components/product-logos";
 
 interface Turn {
   speaker: string | null;
@@ -82,7 +84,7 @@ interface CalendarOverview {
   calendarRateLimited?: boolean;
 }
 
-type CaptureState = "idle" | "recording" | "saving" | "done";
+type CaptureState = "idle" | "arming" | "recording" | "saving" | "done";
 
 const EMPTY_CALENDAR_OVERVIEW: CalendarOverview = {
   connected: false,
@@ -91,11 +93,16 @@ const EMPTY_CALENDAR_OVERVIEW: CalendarOverview = {
   items: [],
 };
 const EMPTY_RECORDING_SECONDS_THRESHOLD = 30;
-const MCP_PROVIDER_MARKS = [
-  { name: "ChatGPT", mark: "GPT", tone: "mint" },
-  { name: "Claude", mark: "Cl", tone: "amber" },
-  { name: "Gemini", mark: "G", tone: "blue" },
-  { name: "Grok", mark: "xAI", tone: "slate" },
+const MCP_PROVIDER_MARKS: Array<{
+  name: string;
+  mark?: string;
+  productId?: ProductLogoId;
+  tone: "mint" | "amber" | "blue" | "slate";
+}> = [
+  { name: "ChatGPT", productId: "chatgpt", tone: "mint" },
+  { name: "Claude", productId: "claude", tone: "amber" },
+  { name: "Gemini", productId: "gemini", tone: "blue" },
+  { name: "xAI", mark: "xAI", tone: "slate" },
 ];
 
 export function RecorderHome() {
@@ -173,9 +180,11 @@ export function RecorderHome() {
   const handleStateChange = useCallback(
     (recState: "idle" | "connecting" | "recording" | "finalizing") => {
       if (recState === "connecting") {
+        setCaptureState("arming");
         setMeetingsFading(true);
       } else if (recState === "recording") {
         setCaptureState("recording");
+        setMeetingsFading(false);
       } else if (recState === "finalizing") {
         setCaptureState("saving");
       } else {
@@ -231,6 +240,12 @@ export function RecorderHome() {
   );
   const workspaceKeyPoints = liveSignals.keyPoints.map((item) => item.text);
   const workspaceDecisions = liveSignals.decisions.map((item) => item.text);
+  const workspaceStats = {
+    segments: turns.length,
+    words: liveSignals.words,
+    points: workspaceKeyPoints.length,
+    actions: workspaceActions.length,
+  };
   const workspaceTitle =
     meetingContext?.meetingTitle ?? "Product planning session";
   const workspaceSubtitle =
@@ -241,7 +256,20 @@ export function RecorderHome() {
     ? new Date(meetingContext.startsAt)
     : new Date();
   const durationLabel = recorderSnapshot?.durationLabel ?? "00:00";
-  const isFinalizing = recorderSnapshot?.state === "finalizing";
+  const isArming =
+    captureState === "arming" || recorderSnapshot?.state === "connecting";
+  const isFinalizing =
+    captureState === "saving" || recorderSnapshot?.state === "finalizing";
+  const captureStatusLabel = isFinalizing
+    ? "Saving notes"
+    : isArming
+      ? "Starting notes"
+      : "Writing notes";
+  const captureBadgeLabel = isFinalizing ? "SAVE" : isArming ? "START" : "LIVE";
+  const waveActive =
+    captureState === "arming" ||
+    captureState === "recording" ||
+    captureState === "saving";
   const handleDeleteRecentMeeting = useCallback((meetingId: string) => {
     setRecentMeetings((items) => items.filter((item) => item.id !== meetingId));
   }, []);
@@ -305,12 +333,10 @@ export function RecorderHome() {
                   <div className="session-capture-timer">
                     <strong>{durationLabel}</strong>
                     <div className="session-capture-state">
-                      <span>
-                        {isFinalizing ? "Saving notes" : "Writing notes"}
-                      </span>
+                      <span>{captureStatusLabel}</span>
                       <em className="session-live-badge is-live">
                         <span aria-hidden="true" />
-                        {isFinalizing ? "SAVE" : "LIVE"}
+                        {captureBadgeLabel}
                       </em>
                     </div>
                   </div>
@@ -340,7 +366,7 @@ export function RecorderHome() {
                 </div>
                 <div className="home-animated-lines" aria-hidden="true">
                   <AudioWaveRibbon
-                    active={captureState === "recording"}
+                    active={waveActive}
                     audioLevel={audioLevel}
                     height={118}
                     sensitivity={1.16}
@@ -364,8 +390,6 @@ export function RecorderHome() {
               {isLiveWorkspace && (
                 <LiveRecordingContextCard
                   meetingContext={meetingContext}
-                  signals={liveSignals}
-                  turns={turns}
                   title={workspaceTitle}
                   subtitle={workspaceSubtitle}
                   date={workspaceDate}
@@ -373,10 +397,11 @@ export function RecorderHome() {
               )}
 
               {isLiveWorkspace && (
-                <SessionStopButton
-                  label={isFinalizing ? "Saving notes" : "Stop recording"}
+                <RecordingStopControl
+                  label={captureStatusLabel}
+                  busy={isArming || isFinalizing}
                   onClick={() => void recorderRef.current?.stop()}
-                  disabled={isFinalizing}
+                  disabled={isArming || isFinalizing}
                 />
               )}
             </section>
@@ -392,6 +417,7 @@ export function RecorderHome() {
               keyPoints={workspaceKeyPoints}
               actions={workspaceActions}
               decisions={workspaceDecisions}
+              stats={workspaceStats}
               footerStatus={
                 isFinalizing
                   ? "Saving notes"
@@ -434,6 +460,50 @@ export function RecorderHome() {
           </div>
         )}
       </main>
+    </div>
+  );
+}
+
+function RecordingStopControl({
+  label,
+  busy = false,
+  disabled = false,
+  onClick,
+}: {
+  label: string;
+  busy?: boolean;
+  disabled?: boolean;
+  onClick?: () => void;
+}) {
+  return (
+    <div className="session-capture-control">
+      <button
+        type="button"
+        className={`session-stop-button recording-stop-control ${
+          busy ? "is-busy" : ""
+        }`}
+        onClick={onClick}
+        disabled={disabled}
+        aria-busy={busy}
+      >
+        <span>
+          {busy ? (
+            <Loader2
+              size={16}
+              className="recording-control-spinner"
+              aria-hidden="true"
+            />
+          ) : (
+            <Square size={15} fill="currentColor" aria-hidden="true" />
+          )}
+        </span>
+        {busy ? label : "Stop recording"}
+      </button>
+      {busy && (
+        <div className="recording-transition-status" role="status">
+          {label}
+        </div>
+      )}
     </div>
   );
 }
@@ -492,15 +562,11 @@ function HomeGreeting() {
 
 function LiveRecordingContextCard({
   meetingContext,
-  signals,
-  turns,
   title,
   subtitle,
   date,
 }: {
   meetingContext: RecordingMeetingContext | null;
-  signals: LiveMeetingSignals;
-  turns: Turn[];
   title: string;
   subtitle: string;
   date: Date;
@@ -541,25 +607,6 @@ function LiveRecordingContextCard({
             {meetingContext ? "Connected to calendar" : "Connect calendar"}
           </Link>
         </div>
-      </div>
-
-      <div className="session-stat-grid" aria-label="Live recording progress">
-        <span>
-          <strong>{turns.length}</strong>
-          <small>Segments</small>
-        </span>
-        <span>
-          <strong>{signals.words}</strong>
-          <small>Words</small>
-        </span>
-        <span>
-          <strong>{signals.keyPoints.length}</strong>
-          <small>Points</small>
-        </span>
-        <span>
-          <strong>{signals.actions.length}</strong>
-          <small>Actions</small>
-        </span>
       </div>
     </div>
   );
@@ -740,16 +787,24 @@ function UpcomingMeetingsPanel({
 function HomeInsightTip() {
   return (
     <aside className="home-insight-tip home-mcp-tip" aria-label="MCP connection">
-      <span className="home-mcp-art" aria-hidden="true">
+      <span className="home-mcp-art home-mcp-orbit" aria-hidden="true">
         <span className="home-mcp-hub">
-          <Bot size={18} />
+          <BriefcaseBusiness size={28} />
         </span>
         {MCP_PROVIDER_MARKS.map((provider, index) => (
           <span
             className={`home-mcp-node home-mcp-node-${index + 1} is-${provider.tone}`}
             key={provider.name}
           >
-            {provider.mark}
+            {provider.productId ? (
+              <ProductLogo
+                id={provider.productId}
+                showName={false}
+                className="home-mcp-node-logo"
+              />
+            ) : (
+              <span className="home-mcp-xai-mark">{provider.mark}</span>
+            )}
           </span>
         ))}
         <span className="home-mcp-flow-line home-mcp-flow-line-one" />
@@ -763,10 +818,16 @@ function HomeInsightTip() {
           meeting memory when you ask.
         </p>
         <div className="home-mcp-provider-grid" aria-label="Supported MCP clients">
-          {MCP_PROVIDER_MARKS.slice(0, 3).map((provider) => (
+          {MCP_PROVIDER_MARKS.map((provider) => (
             <span className={`home-mcp-provider is-${provider.tone}`} key={provider.name}>
-              <span>{provider.mark}</span>
-              {provider.name}
+              {provider.productId ? (
+                <ProductLogo id={provider.productId} />
+              ) : (
+                <>
+                  <span className="home-mcp-xai-mark">{provider.mark}</span>
+                  {provider.name}
+                </>
+              )}
             </span>
           ))}
         </div>
@@ -886,7 +947,7 @@ function RecentMeetings({
         </div>
         <Link
           href="/meetings"
-          className="text-xs font-medium text-[#5eead4] transition-colors hover:text-[#99f6e4]"
+          className="text-xs font-medium text-layers-mint-soft transition-colors hover:text-[#99f6e4]"
         >
           View all
         </Link>
@@ -922,7 +983,7 @@ function RecentMeetings({
           </p>
           <Link
             href="/record/live"
-            className="mt-4 inline-flex min-h-[44px] items-center justify-center rounded-md bg-[#14b8a6] px-4 text-sm font-medium text-[#042f2e] transition-colors hover:bg-[#2dd4bf]"
+            className="mt-4 inline-flex min-h-[44px] items-center justify-center rounded-md bg-layers-mint px-4 text-sm font-medium text-layers-ink transition-colors hover:bg-layers-mint-soft"
           >
             Start live recording
           </Link>

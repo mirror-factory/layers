@@ -182,7 +182,7 @@ export function RecordingReminderPanel({
     >
       <div className="flex items-center justify-between gap-3">
         <div className="flex min-w-0 items-center gap-2">
-          <span className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#14b8a6]/20 bg-[#14b8a6]/10 text-[#5eead4] sm:flex">
+          <span className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-layers-mint/20 bg-layers-mint/10 text-layers-mint-soft sm:flex">
             {isReady ? <Check size={15} /> : <Bell size={15} />}
           </span>
           <div className="min-w-0">

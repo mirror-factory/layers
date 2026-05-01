@@ -61,7 +61,7 @@ export function ChatInput({
         <button
           onClick={handleSubmit}
           disabled={!value.trim() || disabled}
-          className="flex h-[44px] w-[44px] items-center justify-center rounded-md bg-[#14b8a6] text-[#042f2e] transition-colors duration-200 hover:bg-[#2dd4bf] disabled:opacity-30 disabled:hover:bg-[#14b8a6]"
+          className="flex h-[44px] w-[44px] items-center justify-center rounded-md bg-layers-mint text-layers-ink transition-colors duration-200 hover:bg-layers-mint-soft disabled:opacity-30 disabled:hover:bg-layers-mint"
           aria-label="Send message"
         >
           <Send size={18} />

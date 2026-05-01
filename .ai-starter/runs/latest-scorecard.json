@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-30T23:00:06.726Z",
+  "generatedAt": "2026-04-30T23:33:21.034Z",
   "planId": "2026-04-30T15-26-11-478Z-create-launch-checklist-and-agen",
   "score": 100,
   "blockers": [],
@@ -39,18 +39,18 @@
     },
     "browserProof": {
       "expectFlows": 56,
-      "replays": 19,
+      "replays": 20,
       "screenshots": 170,
       "expectCommands": 6,
       "expectFailures": 0,
       "expectProofOk": true
     },
     "evidence": {
-      "total": 910,
+      "total": 917,
       "screenshots": 199,
       "videos": 253,
       "traces": 0,
-      "reports": 70
+      "reports": 71
     },
     "companions": {
       "total": 142,
@@ -59,7 +59,7 @@
     },
     "hooks": {
       "registered": 22,
-      "observed": 6013,
+      "observed": 6120,
       "blocked": 46
     }
   }

@@ -12,10 +12,10 @@ export function ThemeToggle() {
     const stored = localStorage.getItem("theme") as "dark" | "light" | null;
     const designVersion = localStorage.getItem("theme-design-version");
     const initial =
-      designVersion === "paper-calm-v1" && stored ? stored : "light";
-    if (designVersion !== "paper-calm-v1") {
+      designVersion === "layers-paper-calm-v1" && stored ? stored : "light";
+    if (designVersion !== "layers-paper-calm-v1") {
       localStorage.setItem("theme", initial);
-      localStorage.setItem("theme-design-version", "paper-calm-v1");
+      localStorage.setItem("theme-design-version", "layers-paper-calm-v1");
     }
     setTheme(initial);
     document.documentElement.classList.remove("dark", "light");
@@ -34,11 +34,14 @@ export function ThemeToggle() {
 
   return (
     <button
+      type="button"
       onClick={toggle}
-      className="theme-toggle flex items-center justify-center w-[44px] h-[44px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-200 rounded-full hover:bg-white/[0.05]"
+      className="theme-toggle"
       aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
     >
-      {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+      <span className="theme-toggle-icon" aria-hidden="true">
+        {theme === "dark" ? <Sun size={17} /> : <Moon size={17} />}
+      </span>
     </button>
   );
 }

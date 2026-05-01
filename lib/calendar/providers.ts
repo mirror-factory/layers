@@ -1,3 +1,5 @@
+import { GOOGLE_CALENDAR_AUTH_SCOPES } from "@/lib/auth/google-oauth";
+
 export const CALENDAR_PROVIDERS = ["google", "outlook"] as const;
 
 export type CalendarProvider = (typeof CALENDAR_PROVIDERS)[number];
@@ -55,11 +57,7 @@ const PROVIDER_DEFINITIONS: Record<CalendarProvider, ProviderDefinition> = {
     envPrefix: "GOOGLE_CALENDAR",
     authorizeUrl: "https://accounts.google.com/o/oauth2/v2/auth",
     tokenUrl: "https://oauth2.googleapis.com/token",
-    scopes: [
-      "openid",
-      "email",
-      "https://www.googleapis.com/auth/calendar.readonly",
-    ],
+    scopes: GOOGLE_CALENDAR_AUTH_SCOPES.split(/\s+/),
   },
   outlook: {
     id: "outlook",
@@ -116,6 +114,23 @@ export function calendarProviderSetupEnv(provider: CalendarProvider): string[] {
     `${definition.envPrefix}_CLIENT_SECRET`,
     "CALENDAR_TOKEN_ENCRYPTION_KEY",
   ];
+}
+
+export function calendarScopesFromToken(scope: string | null): string[] {
+  return scope?.split(/\s+/).filter(Boolean) ?? [];
+}
+
+export function hasRequiredCalendarScope(
+  provider: CalendarProvider,
+  scope: string | null,
+): boolean {
+  const grantedScopes = new Set(calendarScopesFromToken(scope));
+  const requiredScope =
+    provider === "google"
+      ? "https://www.googleapis.com/auth/calendar.readonly"
+      : "Calendars.Read";
+
+  return grantedScopes.has(requiredScope);
 }
 
 export function buildCalendarAuthorizeUrl(

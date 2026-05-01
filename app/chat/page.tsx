@@ -30,7 +30,7 @@ export default function ChatPage() {
         >
           {messages.length === 0 ? (
             <div className="flex h-full min-h-[360px] flex-col items-center justify-center text-center">
-              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg border border-[#14b8a6]/25 bg-[#14b8a6]/10 text-[#5eead4]">
+              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg border border-layers-mint/25 bg-layers-mint/10 text-layers-mint-soft">
                 <MessageSquare size={18} />
               </div>
               <p className="text-sm font-medium text-[var(--text-secondary)]">

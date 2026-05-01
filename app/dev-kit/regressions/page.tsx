@@ -45,12 +45,12 @@ function statusBadge(status: RegressionStatus): {
   switch (status) {
     case "passing":
       return {
-        className: "bg-[#3dffc0]/15 text-[#3dffc0]",
+        className: "bg-layers-mint/15 text-layers-mint",
         label: "passing",
       };
     case "failing":
       return {
-        className: "bg-[#ef4444]/15 text-[#ef4444]",
+        className: "bg-signal-live/15 text-signal-live",
         label: "failing",
       };
     case "generated":
@@ -60,7 +60,7 @@ function statusBadge(status: RegressionStatus): {
       };
     case "pending":
       return {
-        className: "bg-white/10 text-[#f0f0f0]/50",
+        className: "bg-white/10 text-ink-200/50",
         label: "pending",
       };
   }
@@ -93,7 +93,7 @@ export default function RegressionsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64 text-[#f0f0f0]/40">
+      <div className="flex items-center justify-center h-64 text-ink-200/40">
         Loading regressions...
       </div>
     );
@@ -102,8 +102,8 @@ export default function RegressionsPage() {
   if (tests.length === 0) return (
     <div className="p-8">
       <h1 className="text-2xl font-semibold mb-4">Regressions</h1>
-      <div className="border border-[#3dffc0]/20 rounded p-6 text-center" style={{background:'rgba(61,255,192,.03)'}}>
-        <p className="text-[#f0f0f0]/60 text-sm">No regression tests yet. Regression tests are auto-generated when the system detects repeated production failures.</p>
+      <div className="border border-layers-mint/20 rounded p-6 text-center" style={{ background: "color-mix(in oklch, var(--layers-mint) 5%, transparent)" }}>
+        <p className="text-ink-200/60 text-sm">No regression tests yet. Regression tests are auto-generated when the system detects repeated production failures.</p>
       </div>
     </div>
   );
@@ -120,7 +120,7 @@ export default function RegressionsPage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-semibold">Regressions</h1>
-        <p className="mt-1 text-sm text-[#f0f0f0]/50">
+        <p className="mt-1 text-sm text-ink-200/50">
           Auto-generated regression tests from production error traces.
         </p>
       </div>
@@ -130,16 +130,16 @@ export default function RegressionsPage() {
         <span className="rounded border border-white/10 px-3 py-1.5">
           Total: {tests.length}
         </span>
-        <span className="rounded border border-[#3dffc0]/20 px-3 py-1.5 text-[#3dffc0]">
+        <span className="rounded border border-layers-mint/20 px-3 py-1.5 text-layers-mint">
           Passing: {counts.passing}
         </span>
-        <span className="rounded border border-[#ef4444]/20 px-3 py-1.5 text-[#ef4444]">
+        <span className="rounded border border-signal-live/20 px-3 py-1.5 text-signal-live">
           Failing: {counts.failing}
         </span>
         <span className="rounded border border-blue-400/20 px-3 py-1.5 text-blue-400">
           Generated: {counts.generated}
         </span>
-        <span className="rounded border border-white/10 px-3 py-1.5 text-[#f0f0f0]/50">
+        <span className="rounded border border-white/10 px-3 py-1.5 text-ink-200/50">
           Pending: {counts.pending}
         </span>
       </div>
@@ -148,7 +148,7 @@ export default function RegressionsPage() {
       <div className="overflow-x-auto rounded-lg border border-white/10">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-white/10 text-left text-xs uppercase tracking-wider text-[#f0f0f0]/50">
+            <tr className="border-b border-white/10 text-left text-xs uppercase tracking-wider text-ink-200/50">
               <th className="px-4 py-3">Source Trace</th>
               <th className="px-4 py-3">Tool</th>
               <th className="px-4 py-3">Error Pattern</th>
@@ -165,34 +165,34 @@ export default function RegressionsPage() {
                   key={reg.id}
                   className={`border-b border-white/5 transition-colors ${
                     reg.status === "failing"
-                      ? "bg-[#ef4444]/[0.03] hover:bg-[#ef4444]/[0.06]"
+                      ? "bg-signal-live/[0.03] hover:bg-signal-live/[0.06]"
                       : "hover:bg-white/[0.03]"
                   }`}
                 >
                   <td className="px-4 py-3">
                     <Link
                       href={`/dev-kit/sessions/${reg.sourceTraceId}`}
-                      className="text-[#3dffc0] hover:underline font-mono text-xs"
+                      className="text-layers-mint hover:underline font-mono text-xs"
                     >
                       {reg.sourceTraceId}
                     </Link>
-                    <p className="text-xs text-[#f0f0f0]/40 mt-0.5">
+                    <p className="text-xs text-ink-200/40 mt-0.5">
                       {reg.sourceSessionName}
                     </p>
                   </td>
-                  <td className="px-4 py-3 font-mono text-xs text-[#f0f0f0]/70">
+                  <td className="px-4 py-3 font-mono text-xs text-ink-200/70">
                     {reg.toolName}
                   </td>
-                  <td className="px-4 py-3 text-[#f0f0f0]/60 text-xs max-w-xs truncate">
+                  <td className="px-4 py-3 text-ink-200/60 text-xs max-w-xs truncate">
                     {reg.errorPattern}
                   </td>
                   <td className="px-4 py-3 text-xs">
                     {reg.testFilePath ? (
-                      <span className="font-mono text-[#f0f0f0]/60">
+                      <span className="font-mono text-ink-200/60">
                         {reg.testFilePath}
                       </span>
                     ) : (
-                      <span className="text-[#f0f0f0]/30">
+                      <span className="text-ink-200/30">
                         Not yet generated
                       </span>
                     )}
@@ -204,7 +204,7 @@ export default function RegressionsPage() {
                       {badge.label}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-right text-[#f0f0f0]/50 text-xs">
+                  <td className="px-4 py-3 text-right text-ink-200/50 text-xs">
                     {formatDate(reg.createdAt)}
                   </td>
                 </tr>

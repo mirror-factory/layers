@@ -48,15 +48,15 @@ function trendArrow(trend: number): string {
 }
 
 function trendColor(trend: number): string {
-  if (trend > 0) return "text-[#3dffc0]";
-  if (trend < 0) return "text-[#ef4444]";
-  return "text-[#f0f0f0]/40";
+  if (trend > 0) return "text-layers-mint";
+  if (trend < 0) return "text-signal-live";
+  return "text-ink-200/40";
 }
 
 function passRateColor(rate: number): string {
-  if (rate >= 90) return "text-[#3dffc0]";
+  if (rate >= 90) return "text-layers-mint";
   if (rate >= 70) return "text-yellow-400";
-  return "text-[#ef4444]";
+  return "text-signal-live";
 }
 
 // ---------------------------------------------------------------------------
@@ -77,7 +77,7 @@ export default function EvalsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64 text-[#f0f0f0]/40">
+      <div className="flex items-center justify-center h-64 text-ink-200/40">
         Loading evaluations...
       </div>
     );
@@ -86,8 +86,8 @@ export default function EvalsPage() {
   if (suites.length === 0) return (
     <div className="p-8">
       <h1 className="text-2xl font-semibold mb-4">Evaluations</h1>
-      <div className="border border-[#3dffc0]/20 rounded p-6 text-center" style={{background:'rgba(61,255,192,.03)'}}>
-        <p className="text-[#f0f0f0]/60 text-sm">No evaluations run yet. Run npx promptfoo eval to execute your first evaluation suite.</p>
+      <div className="border border-layers-mint/20 rounded p-6 text-center" style={{ background: "color-mix(in oklch, var(--layers-mint) 5%, transparent)" }}>
+        <p className="text-ink-200/60 text-sm">No evaluations run yet. Run npx promptfoo eval to execute your first evaluation suite.</p>
       </div>
     </div>
   );
@@ -97,7 +97,7 @@ export default function EvalsPage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-semibold">Evaluations</h1>
-        <p className="mt-1 text-sm text-[#f0f0f0]/50">
+        <p className="mt-1 text-sm text-ink-200/50">
           Evaluation suites, pass rates, and trending over time.
         </p>
       </div>
@@ -121,7 +121,7 @@ export default function EvalsPage() {
               <div className="flex items-center gap-6 flex-1 min-w-0">
                 <div className="min-w-0 flex-1">
                   <p className="font-medium truncate">{suite.name}</p>
-                  <p className="text-xs text-[#f0f0f0]/40 mt-0.5">
+                  <p className="text-xs text-ink-200/40 mt-0.5">
                     Last run: {suite.lastRunDate}
                   </p>
                 </div>
@@ -141,18 +141,18 @@ export default function EvalsPage() {
                 {/* Total cases */}
                 <div className="text-right w-16">
                   <p className="font-mono">{suite.totalCases}</p>
-                  <p className="text-xs text-[#f0f0f0]/40">cases</p>
+                  <p className="text-xs text-ink-200/40">cases</p>
                 </div>
 
                 {/* Provider */}
                 <div className="text-right w-40">
-                  <p className="font-mono text-xs text-[#f0f0f0]/60 truncate">
+                  <p className="font-mono text-xs text-ink-200/60 truncate">
                     {suite.provider}
                   </p>
                 </div>
 
                 {/* Expand indicator */}
-                <span className="text-[#f0f0f0]/40 text-xs w-4">
+                <span className="text-ink-200/40 text-xs w-4">
                   {expandedSuite === suite.id ? "[-]" : "[+]"}
                 </span>
               </div>
@@ -163,7 +163,7 @@ export default function EvalsPage() {
               <div className="border-t border-white/10">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="text-left text-xs uppercase tracking-wider text-[#f0f0f0]/40">
+                    <tr className="text-left text-xs uppercase tracking-wider text-ink-200/40">
                       <th className="px-5 py-2">Case</th>
                       <th className="px-5 py-2 text-center">Result</th>
                       <th className="px-5 py-2 text-right">Score</th>
@@ -175,19 +175,19 @@ export default function EvalsPage() {
                       <tr
                         key={c.name}
                         className={`border-t border-white/5 ${
-                          !c.passed ? "bg-[#ef4444]/5" : ""
+                          !c.passed ? "bg-signal-live/5" : ""
                         }`}
                       >
-                        <td className="px-5 py-2 text-[#f0f0f0]/80">
+                        <td className="px-5 py-2 text-ink-200/80">
                           {c.name}
                         </td>
                         <td className="px-5 py-2 text-center">
                           {c.passed ? (
-                            <span className="text-[#3dffc0] text-xs font-medium">
+                            <span className="text-layers-mint text-xs font-medium">
                               PASS
                             </span>
                           ) : (
-                            <span className="text-[#ef4444] text-xs font-medium">
+                            <span className="text-signal-live text-xs font-medium">
                               FAIL
                             </span>
                           )}
@@ -195,7 +195,7 @@ export default function EvalsPage() {
                         <td className="px-5 py-2 text-right font-mono text-xs">
                           {c.score}%
                         </td>
-                        <td className="px-5 py-2 text-right font-mono text-xs text-[#f0f0f0]/60">
+                        <td className="px-5 py-2 text-right font-mono text-xs text-ink-200/60">
                           {c.durationMs < 1000
                             ? `${c.durationMs}ms`
                             : `${(c.durationMs / 1000).toFixed(1)}s`}

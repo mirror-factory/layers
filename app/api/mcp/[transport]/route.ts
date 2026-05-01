@@ -382,7 +382,7 @@ function createLayersMcpHandler(userId: string | null) {
 }
 
 // ---------------------------------------------------------------------------
-// Auth wrapper — validates API key, sets userId for tool queries
+// Auth wrapper - validates OAuth bearer tokens, sets userId for tool queries
 // ---------------------------------------------------------------------------
 
 // Auth wrapper that allows initialize/notifications without auth
@@ -412,7 +412,11 @@ async function handler(req: Request) {
   if (!auth?.startsWith("Bearer ")) {
     const origin = new URL(req.url).origin;
     return new Response(
-      JSON.stringify({ error: "invalid_token", error_description: "Bearer token required. Get your API key from the Layers profile page." }),
+      JSON.stringify({
+        error: "invalid_token",
+        error_description:
+          "Bearer token required. Add the MCP server URL to your client so it can discover Layers OAuth and redirect you to sign in.",
+      }),
       {
         status: 401,
         headers: {

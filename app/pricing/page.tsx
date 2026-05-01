@@ -1,52 +1,70 @@
 "use client";
 
 import { useState } from "react";
-import { Check, Loader2 } from "lucide-react";
-import { TopBar } from "@/components/top-bar";
+import Link from "next/link";
+import { ArrowRight, Check, Loader2, ShieldCheck } from "lucide-react";
+import { ProductLogo } from "@/components/product-logos";
+import { PublicSiteNav } from "@/components/public-site-nav";
 
 const TIERS = [
   {
     name: "Free",
     price: "$0",
     period: "forever",
-    features: [
-      "25 meetings lifetime",
-      "Batch + live transcription",
-      "AI summary & intake extraction",
-      "Cost transparency",
-    ],
-    cta: null,
+    summary: "Try the full meeting-memory workflow with a real launch account.",
+    included: "25 meetings lifetime",
+    cta: "Start free",
+    href: "/sign-up",
     tier: null,
     highlight: false,
+    features: [
+      "Live and uploaded recordings",
+      "Transcript, summary, actions, and decisions",
+      "Search across your meeting library",
+      "Transparent usage view",
+    ],
   },
   {
     name: "Core",
     price: "$20",
-    period: "/month",
-    features: [
-      "Unlimited meetings",
-      "600 transcription minutes included",
-      "Enhanced speech-to-text",
-      "AI summaries, decisions, and actions",
-    ],
-    cta: "Subscribe",
+    period: "per user / month",
+    summary: "For founders and operators who use Layers every week.",
+    included: "Unlimited meetings",
+    cta: "Subscribe to Core",
     tier: "core" as const,
     highlight: true,
+    features: [
+      "600 transcription minutes included",
+      "Enhanced speech-to-text",
+      "AI summaries, decisions, actions, and intake",
+      "Calendar context",
+      "AI tool-ready meeting memory",
+    ],
   },
   {
     name: "Pro",
     price: "$30",
-    period: "/month",
-    features: [
-      "1,500 transcription minutes included",
-      "Everything in Core",
-      "Advanced model routing",
-      "Priority support",
-    ],
-    cta: "Subscribe",
+    period: "per user / month",
+    summary: "For teams that want richer context and stronger controls.",
+    included: "1,500 transcription minutes included",
+    cta: "Subscribe to Pro",
     tier: "pro" as const,
     highlight: false,
+    features: [
+      "Everything in Core",
+      "Advanced model routing",
+      "Team library and sharing",
+      "Admin controls",
+      "Priority support",
+    ],
   },
+];
+
+const COMPARISON = [
+  ["Meeting memory", "25 meetings", "Unlimited", "Unlimited"],
+  ["Transcription minutes", "Included trial pool", "600 included", "1,500 included"],
+  ["AI outputs", "Summary, actions, decisions", "Enhanced outputs", "Enhanced outputs"],
+  ["Team controls", "Personal workspace", "Personal workspace", "Team-ready controls"],
 ];
 
 export default function PricingPage() {
@@ -80,84 +98,113 @@ export default function PricingPage() {
   };
 
   return (
-    <div className="paper-calm-page min-h-screen-safe flex flex-col bg-[var(--bg-primary)]">
-      <TopBar title="Pricing" showBack />
+    <main className="pricing-public-page min-h-screen-safe">
+      <PublicSiteNav active="pricing" />
 
-      <main className="flex-1 px-4 pb-safe py-8 max-w-4xl mx-auto w-full">
-        <div className="text-center mb-10">
-          <h2 className="text-2xl font-semibold text-[var(--text-primary)] mb-2">
-            Simple, transparent pricing
-          </h2>
-          <p className="text-sm text-[var(--text-secondary)]">
-            Start free. Upgrade when you need more.
+      <section className="pricing-hero">
+        <span className="pricing-kicker">Pricing</span>
+        <h1>Simple plans for private meeting memory.</h1>
+        <p>
+          Start with 25 free meetings. Upgrade when Layers becomes the place
+          your team goes for decisions, actions, and AI-ready meeting context.
+        </p>
+        <div className="pricing-hero-tools" aria-label="AI tool support">
+          <ProductLogo id="chatgpt" />
+          <ProductLogo id="claude" />
+          <ProductLogo id="gemini" />
+        </div>
+      </section>
+
+      <section className="pricing-tier-grid" aria-label="Pricing plans">
+        {TIERS.map((tier) => (
+          <article className={`pricing-tier-card ${tier.highlight ? "is-featured" : ""}`} key={tier.name}>
+            <div>
+              <span className="pricing-tier-name">
+                {tier.name}
+                {tier.highlight ? <small>Most teams start here</small> : null}
+              </span>
+              <div className="pricing-tier-price">
+                <strong>{tier.price}</strong>
+                <span>{tier.period}</span>
+              </div>
+              <p>{tier.summary}</p>
+            </div>
+
+            <div className="pricing-tier-included">
+              <ShieldCheck size={16} aria-hidden="true" />
+              {tier.included}
+            </div>
+
+            <ul>
+              {tier.features.map((feature) => (
+                <li key={feature}>
+                  <Check size={15} aria-hidden="true" />
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+
+            {tier.tier ? (
+              <button
+                type="button"
+                onClick={() => handleCheckout(tier.tier)}
+                disabled={loadingTier !== null}
+                className="pricing-tier-action"
+              >
+                {loadingTier === tier.tier ? (
+                  <Loader2 size={17} className="animate-spin" />
+                ) : (
+                  <>
+                    {tier.cta}
+                    <ArrowRight size={15} aria-hidden="true" />
+                  </>
+                )}
+              </button>
+            ) : (
+              <Link href={tier.href} className="pricing-tier-action">
+                {tier.cta}
+                <ArrowRight size={15} aria-hidden="true" />
+              </Link>
+            )}
+          </article>
+        ))}
+      </section>
+
+      {error ? <p className="pricing-error">{error}</p> : null}
+
+      <section className="pricing-usage-panel">
+        <div>
+          <span className="pricing-kicker">Usage stays visible</span>
+          <h2>Pricing is tied to actual meeting and model usage.</h2>
+          <p>
+            Layers keeps the cost surface visible so teams can understand
+            transcription minutes, model usage, and plan fit before a surprise
+            invoice appears.
           </p>
         </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {TIERS.map((tier) => (
-            <div
-              key={tier.name}
-              className={`glass-card rounded-2xl p-6 flex flex-col transition-all duration-300 ${
-                tier.highlight
-                  ? "border-[#14b8a6] ring-1 ring-[#14b8a6]/20 shadow-lg shadow-[#14b8a6]/5"
-                  : ""
-              }`}
-            >
-              <div className="mb-5">
-                <h3 className="text-sm font-medium text-[var(--text-secondary)] uppercase tracking-wider">
-                  {tier.name}
-                </h3>
-                <div className="flex items-baseline gap-1 mt-2">
-                  <span className="text-4xl font-semibold text-[var(--text-primary)]">
-                    {tier.price}
-                  </span>
-                  <span className="text-xs text-[var(--text-muted)]">{tier.period}</span>
-                </div>
-              </div>
-
-              <ul className="space-y-3 mb-6 flex-1">
-                {tier.features.map((f, i) => (
-                  <li key={i} className="flex items-start gap-2.5 text-sm">
-                    <Check
-                      size={14}
-                      className="text-[#14b8a6] shrink-0 mt-0.5"
-                    />
-                    <span className="text-[var(--text-secondary)]">{f}</span>
-                  </li>
-                ))}
-              </ul>
-
-              {tier.cta && tier.tier && (
-                <button
-                  onClick={() => handleCheckout(tier.tier!)}
-                  disabled={loadingTier !== null}
-                  className={`w-full py-3 rounded-xl text-sm font-medium min-h-[44px] transition-all duration-200 ${
-                    tier.highlight
-                      ? "bg-[#14b8a6] hover:bg-[#0d9488] text-white shadow-lg shadow-[#14b8a6]/20"
-                      : "bg-white/[0.05] hover:bg-white/[0.08] text-[var(--text-primary)] border border-white/[0.08]"
-                  } disabled:opacity-50`}
-                >
-                  {loadingTier === tier.tier ? (
-                    <Loader2 size={16} className="animate-spin mx-auto" />
-                  ) : (
-                    tier.cta
-                  )}
-                </button>
-              )}
-
-              {!tier.cta && (
-                <div className="text-center text-xs text-[var(--text-muted)] py-3">
-                  Current plan
-                </div>
-              )}
-            </div>
-          ))}
+        <div className="pricing-meter" aria-hidden="true">
+          <span style={{ width: "38%" }} />
+          <span style={{ width: "64%" }} />
+          <span style={{ width: "82%" }} />
         </div>
+      </section>
 
-        {error && (
-          <p className="text-sm text-[#ef4444] text-center mt-4">{error}</p>
-        )}
-      </main>
-    </div>
+      <section className="pricing-comparison" aria-label="Plan comparison">
+        <div className="pricing-comparison-row is-head">
+          <span>Feature</span>
+          <span>Free</span>
+          <span>Core</span>
+          <span>Pro</span>
+        </div>
+        {COMPARISON.map(([feature, free, core, pro]) => (
+          <div className="pricing-comparison-row" key={feature}>
+            <span>{feature}</span>
+            <span>{free}</span>
+            <span>{core}</span>
+            <span>{pro}</span>
+          </div>
+        ))}
+      </section>
+    </main>
   );
 }

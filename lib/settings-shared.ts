@@ -11,14 +11,14 @@ export interface ModelSettings {
   summaryModel: string;
   /** AssemblyAI batch (pre-recorded) speech model. */
   batchSpeechModel: string;
-  /** AssemblyAI streaming (real-time) speech model. */
+  /** Streaming (real-time) speech model. */
   streamingSpeechModel: string;
 }
 
 export const DEFAULTS: ModelSettings = {
-  summaryModel: "anthropic/claude-haiku-4-5",
+  summaryModel: "openai/gpt-5.4-nano",
   batchSpeechModel: "universal-2",
-  streamingSpeechModel: "universal-streaming-multilingual",
+  streamingSpeechModel: "nova-3",
 };
 
 export interface ModelOption {

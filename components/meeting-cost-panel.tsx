@@ -29,7 +29,7 @@ export function MeetingCostPanel({ costBreakdown }: MeetingCostPanelProps) {
           <h3 className="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider">
             Cost
           </h3>
-          <span className="text-xs text-[#14b8a6] tabular-nums font-medium">
+          <span className="text-xs text-layers-mint tabular-nums font-medium">
             {formatUsd(costBreakdown.totalCostUsd)}
           </span>
         </div>
@@ -48,7 +48,7 @@ export function MeetingCostPanel({ costBreakdown }: MeetingCostPanelProps) {
               <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">
                 STT
               </div>
-              <div className="text-sm font-semibold text-[#14b8a6] tabular-nums">
+              <div className="text-sm font-semibold text-layers-mint tabular-nums">
                 {formatUsd(costBreakdown.stt.totalCostUsd)}
               </div>
               <div className="text-[10px] text-[var(--text-muted)] mt-0.5 truncate">
@@ -60,7 +60,7 @@ export function MeetingCostPanel({ costBreakdown }: MeetingCostPanelProps) {
               <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">
                 LLM
               </div>
-              <div className="text-sm font-semibold text-[#14b8a6] tabular-nums">
+              <div className="text-sm font-semibold text-layers-mint tabular-nums">
                 {formatUsd(costBreakdown.llm.totalCostUsd)}
               </div>
               <div className="text-[10px] text-[var(--text-muted)] mt-0.5">
@@ -73,7 +73,7 @@ export function MeetingCostPanel({ costBreakdown }: MeetingCostPanelProps) {
                 <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">
                   Embed
                 </div>
-                <div className="text-sm font-semibold text-[#14b8a6] tabular-nums">
+                <div className="text-sm font-semibold text-layers-mint tabular-nums">
                   {formatUsd(costBreakdown.embedding.totalCostUsd)}
                 </div>
                 <div className="text-[10px] text-[var(--text-muted)] mt-0.5 truncate">
@@ -108,7 +108,7 @@ export function MeetingCostPanel({ costBreakdown }: MeetingCostPanelProps) {
                       <td className="py-1.5 pr-3 text-right text-[var(--text-muted)] tabular-nums">
                         {call.outputTokens.toLocaleString()}
                       </td>
-                      <td className="py-1.5 text-right text-[#14b8a6] tabular-nums">
+                      <td className="py-1.5 text-right text-layers-mint tabular-nums">
                         {formatUsd(call.costUsd)}
                       </td>
                     </tr>

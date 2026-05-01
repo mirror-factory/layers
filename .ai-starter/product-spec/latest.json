@@ -1,6 +1,6 @@
 {
-  "version": "0.1.13",
-  "updatedAt": "2026-04-30T23:00:05.446Z",
+  "version": "0.3.0",
+  "updatedAt": "2026-05-01T05:31:26.793Z",
   "status": "complete",
   "source": "agent-generated",
   "project": {
@@ -42,7 +42,8 @@
   "researchBasis": [
     "YC: launch quickly, talk to customers, and iterate from a real problem rather than a perfect plan.",
     "YC: product-market fit is demand pulling product from the team, not internal confidence.",
-    "Starter docs: local docs registry, product validation memo, MFDR, DESIGN.md, and evidence manifests."
+    "Starter docs: local docs registry, product validation memo, MFDR, DESIGN.md, and evidence manifests.",
+    "Reference system: Layers Design System v1.0 - Paper Calm"
   ],
   "validationPlan": [
     "Run a landing-page/demo or concierge workflow for the named customer segment before broad build-out.",

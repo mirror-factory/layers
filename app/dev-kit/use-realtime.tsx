@@ -164,16 +164,19 @@ export function useRealtimeData(config?: RealtimeConfig): RealtimeState & {
 // ── Realtime indicator component ──────────────────────────────────────
 
 export function RealtimeIndicator({ connected }: { connected: boolean }) {
+  const liveColor = 'var(--layers-mint)';
+  const offlineColor = 'var(--fg-faint)';
+
   return (
     <div className="flex items-center gap-2 text-xs" style={{ fontFamily: 'var(--mono, monospace)' }}>
       <div
         className="w-2 h-2 rounded-full"
         style={{
-          background: connected ? '#3dffc0' : '#555',
-          boxShadow: connected ? '0 0 6px rgba(61,255,192,.5)' : 'none',
+          background: connected ? liveColor : offlineColor,
+          boxShadow: connected ? '0 0 6px color-mix(in oklch, var(--layers-mint) 50%, transparent)' : 'none',
         }}
       />
-      <span style={{ color: connected ? '#3dffc0' : '#555' }}>
+      <span style={{ color: connected ? liveColor : offlineColor }}>
         {connected ? 'Live' : 'Offline'}
       </span>
     </div>

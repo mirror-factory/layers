@@ -42,11 +42,11 @@ function statusBadge(status: SessionStatus) {
   const base = "inline-block px-2 py-0.5 rounded text-xs font-medium";
   switch (status) {
     case "running":
-      return `${base} bg-[#3dffc0]/15 text-[#3dffc0]`;
+      return `${base} bg-layers-mint/15 text-layers-mint`;
     case "complete":
-      return `${base} bg-white/10 text-[#f0f0f0]`;
+      return `${base} bg-white/10 text-ink-200`;
     case "error":
-      return `${base} bg-[#ef4444]/15 text-[#ef4444]`;
+      return `${base} bg-signal-live/15 text-signal-live`;
   }
 }
 
@@ -110,7 +110,7 @@ export default function SessionsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64 text-[#f0f0f0]/40">
+      <div className="flex items-center justify-center h-64 text-ink-200/40">
         Loading sessions...
       </div>
     );
@@ -119,8 +119,8 @@ export default function SessionsPage() {
   if (sessions.length === 0) return (
     <div className="p-8">
       <h1 className="text-2xl font-semibold mb-4">Sessions</h1>
-      <div className="border border-[#3dffc0]/20 rounded p-6 text-center" style={{background:'rgba(61,255,192,.03)'}}>
-        <p className="text-[#f0f0f0]/60 text-sm">No sessions recorded yet. Sessions appear automatically when your app makes AI SDK calls with the Langfuse instrumentation active.</p>
+      <div className="border border-layers-mint/20 rounded p-6 text-center" style={{ background: "color-mix(in oklch, var(--layers-mint) 5%, transparent)" }}>
+        <p className="text-ink-200/60 text-sm">No sessions recorded yet. Sessions appear automatically when your app makes AI SDK calls with the Langfuse instrumentation active.</p>
       </div>
     </div>
   );
@@ -130,7 +130,7 @@ export default function SessionsPage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-semibold">Sessions</h1>
-        <p className="mt-1 text-sm text-[#f0f0f0]/50">
+        <p className="mt-1 text-sm text-ink-200/50">
           Recorded AI sessions with trace-level detail.
         </p>
       </div>
@@ -141,7 +141,7 @@ export default function SessionsPage() {
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
           className="rounded-md border border-white/10 bg-white/[0.04] px-3 py-1.5 text-sm
-                     text-[#f0f0f0] focus:outline-none focus:ring-1 focus:ring-[#3dffc0]"
+                     text-ink-200 focus:outline-none focus:ring-1 focus:ring-layers-mint"
         >
           <option value="all">All Statuses</option>
           <option value="running">Running</option>
@@ -153,7 +153,7 @@ export default function SessionsPage() {
           value={modelFilter}
           onChange={(e) => setModelFilter(e.target.value)}
           className="rounded-md border border-white/10 bg-white/[0.04] px-3 py-1.5 text-sm
-                     text-[#f0f0f0] focus:outline-none focus:ring-1 focus:ring-[#3dffc0]"
+                     text-ink-200 focus:outline-none focus:ring-1 focus:ring-layers-mint"
         >
           <option value="all">All Models</option>
           {models.map((m) => (
@@ -168,7 +168,7 @@ export default function SessionsPage() {
       <div className="overflow-x-auto rounded-lg border border-white/10">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-white/10 text-left text-xs uppercase tracking-wider text-[#f0f0f0]/50">
+            <tr className="border-b border-white/10 text-left text-xs uppercase tracking-wider text-ink-200/50">
               <th className="px-4 py-3">Session</th>
               <th className="px-4 py-3">Status</th>
               <th className="px-4 py-3">Model</th>
@@ -183,7 +183,7 @@ export default function SessionsPage() {
               <tr>
                 <td
                   colSpan={7}
-                  className="px-4 py-8 text-center text-[#f0f0f0]/40"
+                  className="px-4 py-8 text-center text-ink-200/40"
                 >
                   No sessions match the current filters.
                 </td>
@@ -197,7 +197,7 @@ export default function SessionsPage() {
                 <td className="px-4 py-3">
                   <Link
                     href={`/dev-kit/sessions/${s.id}`}
-                    className="text-[#3dffc0] hover:underline"
+                    className="text-layers-mint hover:underline"
                   >
                     {s.name}
                   </Link>
@@ -215,7 +215,7 @@ export default function SessionsPage() {
                 <td className="px-4 py-3 text-right font-mono">
                   {formatDuration(s.durationMs)}
                 </td>
-                <td className="px-4 py-3 text-right text-[#f0f0f0]/60">
+                <td className="px-4 py-3 text-right text-ink-200/60">
                   {formatDate(s.timestamp)}
                 </td>
               </tr>

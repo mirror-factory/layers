@@ -47,6 +47,56 @@ function missingProviderResponse(provider: "assemblyai" | "deepgram") {
   );
 }
 
+function isDeepgramPermissionError(error: unknown): boolean {
+  if (typeof error !== "object" || error === null) return false;
+  const record = error as {
+    statusCode?: unknown;
+    body?: { err_code?: unknown; err_msg?: unknown };
+    message?: unknown;
+  };
+
+  const statusCode = Number(record.statusCode);
+  const errCode =
+    typeof record.body?.err_code === "string" ? record.body.err_code : "";
+  const errMsg =
+    typeof record.body?.err_msg === "string" ? record.body.err_msg : "";
+  const message = typeof record.message === "string" ? record.message : "";
+
+  return (
+    statusCode === 403 ||
+    errCode.toLowerCase() === "forbidden" ||
+    /insufficient permissions/i.test(errMsg) ||
+    /insufficient permissions/i.test(message)
+  );
+}
+
+function streamingTokenFailureResponse(
+  provider: "assemblyai" | "deepgram",
+  error: unknown,
+) {
+  if (provider === "deepgram" && isDeepgramPermissionError(error)) {
+    return NextResponse.json(
+      {
+        error:
+          "Deepgram API key cannot create temporary streaming tokens. Use a Deepgram key with Member or higher authorization, or switch the streaming model back to AssemblyAI in Settings.",
+        code: "stt_token_permission_denied",
+        provider,
+        envVar: "DEEPGRAM_API_KEY",
+      },
+      { status: 502 },
+    );
+  }
+
+  return NextResponse.json(
+    {
+      error: "Unable to create streaming token",
+      code: "stt_token_create_failed",
+      provider,
+    },
+    { status: 502 },
+  );
+}
+
 function buildAssemblyAiListenUrl(opts: {
   token: string;
   sampleRate: number;
@@ -144,15 +194,12 @@ export const POST = withRoute(async (req, ctx) => {
             expires_in_seconds: STREAMING_TOKEN_TTL_SECONDS,
           }),
       );
-    } catch {
+    } catch (error) {
       await store.update(meetingId, {
         status: "error",
         error: "Unable to create streaming token",
       }).catch(() => null);
-      return NextResponse.json(
-        { error: "Unable to create streaming token" },
-        { status: 502 },
-      );
+      return streamingTokenFailureResponse(provider, error);
     }
 
     return NextResponse.json({
@@ -176,15 +223,12 @@ export const POST = withRoute(async (req, ctx) => {
       },
       () => createDeepgramStreamingToken(STREAMING_TOKEN_TTL_SECONDS),
     );
-  } catch {
+  } catch (error) {
     await store.update(meetingId, {
       status: "error",
       error: "Unable to create streaming token",
     }).catch(() => null);
-    return NextResponse.json(
-      { error: "Unable to create streaming token" },
-      { status: 502 },
-    );
+    return streamingTokenFailureResponse(provider, error);
   }
 
   return NextResponse.json({
@@ -196,6 +240,6 @@ export const POST = withRoute(async (req, ctx) => {
     speechModel,
     listenVersion: deepgramConfig!.listenVersion,
     wsUrl: buildDeepgramListenUrl(deepgramConfig!),
-    protocols: ["token", deepgramToken.token],
+    protocols: ["bearer", deepgramToken.token],
   });
 });

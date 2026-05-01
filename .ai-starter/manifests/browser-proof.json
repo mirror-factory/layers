@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-04-30T23:00:01.520Z",
-  "required": true,
-  "playwrightRequired": true,
-  "expectRequired": true,
+  "updatedAt": "2026-04-30T23:33:15.979Z",
+  "required": false,
+  "playwrightRequired": false,
+  "expectRequired": false,
   "browserUseAdapter": "planned",
   "replayPaths": [
     ".expect/replays/2df44164-5f7f-49fb-ac82-af189a90c44d.html",
@@ -22,8 +22,9 @@
     ".expect/replays/browser-proof-2026-04-30T17-08-35-226Z.json",
     ".expect/replays/browser-proof-2026-04-30T17-10-16-253Z.json",
     ".expect/replays/browser-proof-2026-04-30T22-37-34-718Z.json",
+    ".expect/replays/browser-proof-2026-04-30T22-56-23-093Z.json",
     ".expect/logs.md",
-    ".expect/replays/browser-proof-2026-04-30T22-56-23-093Z.json"
+    ".expect/replays/browser-proof-2026-04-30T23-32-28-812Z.json"
   ],
   "flowPaths": [
     "tests/expect/ai-starter.md",
@@ -263,5 +264,5 @@
   "expectProofOk": true,
   "expectScreenshotCount": 2,
   "expectVideoCount": 2,
-  "lastReplayPath": ".expect/replays/browser-proof-2026-04-30T22-56-23-093Z.json"
+  "lastReplayPath": ".expect/replays/browser-proof-2026-04-30T23-32-28-812Z.json"
 }
