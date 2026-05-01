@@ -126,7 +126,10 @@ export function LandingPage() {
   return (
     <div className={`${display.variable} layers-home`}>
       <Hero />
-      <TrustBar />
+      {/* "Built on" trust bar removed 2026-05-01: in invite-only
+          alpha we don't have customer logos to show, and the vendor
+          list felt like padding. Kept the function below in case we
+          re-introduce. */}
       <SectionMemory />
       <SectionSearch />
       <SectionConnect />
@@ -624,23 +627,9 @@ function HeroComposition() {
         </div>
       </div>
 
-      {/* Floating: Actions 4 Assigned */}
-      <FloatingStat
-        style={{ bottom: "-2%", left: "8%", zIndex: 5 }}
-        value="4"
-        label="Actions"
-        sub="Assigned"
-        accent="var(--layers-blue)"
-      />
-
-      {/* Floating: Follow-ups 2 Planned */}
-      <FloatingStat
-        style={{ bottom: "-4%", right: "6%", zIndex: 5 }}
-        value="2"
-        label="Follow-ups"
-        sub="Planned"
-        accent="var(--layers-violet)"
-      />
+      {/* Actions / Follow-ups stat cards removed 2026-05-01: they
+          duplicated the bottom stat row inside the recording panel
+          and read as orphaned chips no matter where we placed them. */}
 
       <style jsx>{`
         @keyframes homePulse {
@@ -1574,7 +1563,7 @@ function SectionConnect() {
           "Connect once — every meeting becomes context for your AI",
         ]}
         media={<ConnectMediaCard />}
-        mediaSide="left"
+        mediaSide="right"
       />
     </section>
   );
@@ -1960,8 +1949,8 @@ function SectionPricing() {
           style={{
             display: "grid",
             gap: 14,
-            justifyItems: "start",
-            textAlign: "left",
+            justifyItems: "center",
+            textAlign: "center",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
