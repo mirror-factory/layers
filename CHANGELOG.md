@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.67] — 2026-05-07
+
+### Other
+- PROD-364: switch iOS Capacitor bundle ID to com.mirrorfactory.layers + add OAuth scheme (`3090f25`)
+
+
 ## [0.1.66] — 2026-05-07
 
 ### Other
