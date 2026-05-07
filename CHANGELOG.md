@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.64] — 2026-05-07
+
+### Other
+- chore: refresh dependency audit (73 packages, 0 vulns) (`54bb206`)
+
+
 ## [0.1.63] — 2026-05-07
 
 ### Testing
