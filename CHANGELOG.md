@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.65] — 2026-05-07
+
+### Other
+- PROD-367: fix download page repo name (audio-layer → layers) (`c9ee05a`)
+
+
 ## [0.1.64] — 2026-05-07
 
 ### Other
