@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.66] — 2026-05-07
+
+### Other
+- PROD-380: fix Mac DMG icon path + enable notarization (`a4116b3`)
+
+
 ## [0.1.65] — 2026-05-07
 
 ### Other
