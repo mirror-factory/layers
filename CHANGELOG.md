@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.68] — 2026-05-07
+
+### Other
+- PROD-366: tag-based release pipeline + iOS TestFlight automation (`10e564f`)
+
+
+## [0.1.67] — 2026-05-07
+
+### Other
+- PROD-364: switch iOS Capacitor bundle ID to com.mirrorfactory.layers + add OAuth scheme (`3090f25`)
+
+
+## [0.1.66] — 2026-05-07
+
+### Other
+- PROD-380: fix Mac DMG icon path + enable notarization (`a4116b3`)
+
+
+## [0.1.65] — 2026-05-07
+
+### Other
+- PROD-367: fix download page repo name (audio-layer → layers) (`c9ee05a`)
+
+
 ## [0.1.64] — 2026-05-07
 
 ### Other

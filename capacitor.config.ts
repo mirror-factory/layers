@@ -2,9 +2,8 @@
 import type { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
-  appId: "com.mirrorfactory.audiolayer",
+  appId: "com.mirrorfactory.layers",
   appName: "Layers",
-  webDir: "public",
   backgroundColor: "#0a0a0a",
   server: {
     url:
@@ -18,6 +17,7 @@ const config: CapacitorConfig = {
     backgroundColor: "#0a0a0a",
     scrollEnabled: false,
     preferredContentMode: "mobile",
+    scheme: "com.mirrorfactory.layers",
   },
   android: {
     allowMixedContent: process.env.NODE_ENV !== "production",
