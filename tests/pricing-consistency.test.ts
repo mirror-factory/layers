@@ -9,7 +9,7 @@ const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const PRICING_COPY_FILES = [
   "app/(public)/pricing/page.tsx",
   "app/(public)/landing.tsx",
-  "app/docs/page.tsx",
+  "app/docs-internal/page.tsx",
   "docs/PRICING_AND_BILLING.md",
   "docs/BUILD_SPEC.md",
 ] as const;
@@ -37,7 +37,7 @@ describe("launch pricing consistency", () => {
 
   it("keeps landing and docs billing copy on the launch prices", () => {
     const landingPage = source("app/(public)/landing.tsx");
-    const docsPage = source("app/docs/page.tsx");
+    const docsPage = source("app/docs-internal/page.tsx");
 
     expect(landingPage).toMatch(/name: "Free"[\s\S]*?price: "\$0"/);
     expect(landingPage).toMatch(/name: "Core"[\s\S]*?price: "\$20"/);
