@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.62] — 2026-05-07
+
+### Other
+- chore: bump to 0.1.61 (`7a0b04e`)
+
+
 ## [0.1.61] — 2026-05-07
 
 ### Testing
