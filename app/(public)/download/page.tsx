@@ -79,7 +79,7 @@ type NavigatorWithUAData = Navigator & {
 
 // PROD-367 (Linear) tracks wiring real outbound URLs. Preserve placeholders.
 const GITHUB_RELEASE_DOWNLOAD_BASE =
-  "https://github.com/mirror-factory/audio-layer/releases/latest/download";
+  "https://github.com/mirror-factory/layers/releases/latest/download";
 
 const RELEASE_DOWNLOAD_URLS = {
   macArm64Dmg: `${GITHUB_RELEASE_DOWNLOAD_BASE}/Layers-mac-arm64.dmg`,
