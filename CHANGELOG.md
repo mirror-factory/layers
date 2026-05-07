@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.70] — 2026-05-07
+
+### Fixed
+- fix: restore webDir in capacitor.config.ts so cap sync android works (`c36ba0f`)
+
+
 ## [0.1.69] — 2026-05-07
 
 ### Documentation
