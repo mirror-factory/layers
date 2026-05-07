@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.60] — 2026-05-07
+
+### Fixed
+- fix: rename app/docs → app/docs-internal to resolve parallel route conflict (`18517cd`)
+
+
 ## [0.1.59] — 2026-05-01
 
 ### Other
