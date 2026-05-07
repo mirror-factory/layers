@@ -1,5 +1,12 @@
 name: Build & Release
 
+# PROD-366: Tag-based release pipeline.
+#
+# - Push to `main`: runs `web` only (typecheck/test/build as a deploy guard).
+# - Push tag `vX.Y.Z`: runs the full artifact matrix (Mac, Win, Android, iOS),
+#   uploads each to GitHub Releases, and ships the iOS IPA to TestFlight.
+# - workflow_dispatch (manual): same matrix, with a toggle to skip Apple builds
+#   when signing secrets aren't ready yet.
 on:
   push:
     branches:
@@ -11,7 +18,12 @@ on:
       include_apple_builds:
         description: 'Run macOS Electron and iOS Capacitor builds'
         type: boolean
-        default: false
+        default: true
+
+# A tagged push triggers all artifact jobs; a plain branch push runs only `web`.
+# Both manual triggers (workflow_dispatch) and tag pushes count as a "release run."
+env:
+  IS_RELEASE: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref_type == 'tag') }}
 
 jobs:
   web:
@@ -31,7 +43,9 @@ jobs:
 
   electron-mac:
     name: Electron (macOS)
-    if: github.event_name == 'workflow_dispatch' && inputs.include_apple_builds == true
+    if: |
+      (github.event_name == 'push' && github.ref_type == 'tag') ||
+      (github.event_name == 'workflow_dispatch' && inputs.include_apple_builds == true)
     runs-on: macos-latest
     env:
       # PROD-380: signing+notarization wired through env. When CSC_LINK is empty
@@ -83,15 +97,12 @@ jobs:
 
       - name: Build (signed + notarized)
         if: steps.signing.outputs.signing_enabled == 'true'
-        env:
-          # electron-builder reads NOTARIZE-aware config via this override.
-          # We rewrite the yml in-place so `notarize: true` is honored only
-          # when secrets are populated. (electron-builder yml does not support
-          # ${{ }} interpolation natively.)
-          NOTARIZE: 'true'
         run: |
-          # Flip notarize flag on for this run.
-          sed -i.bak 's/^  notarize: false$/  notarize: true/' electron-builder.yml
+          # PROD-380: electron-builder.yml now ships with `notarize: true` so
+          # no in-place edit is needed. notarization happens automatically
+          # when the standard env vars (APPLE_ID + APPLE_APP_SPECIFIC_PASSWORD
+          # + APPLE_TEAM_ID) or (APPLE_API_KEY + APPLE_API_KEY_ID +
+          # APPLE_API_ISSUER) are present.
           npx electron-builder --config electron-builder.yml --mac --publish never
 
       - name: Build (unsigned fallback)
@@ -101,8 +112,9 @@ jobs:
           # pinned `identity` and fail on a missing keychain entry.
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
         run: |
-          # Strip the pinned identity for this unsigned run.
+          # Strip the pinned identity AND notarize flag for this unsigned run.
           sed -i.bak '/^  identity: /d' electron-builder.yml
+          sed -i.bak 's/^  notarize: true$/  notarize: false/' electron-builder.yml
           npx electron-builder --config electron-builder.yml --mac --publish never
           echo "::warning title=Unsigned DMG::Built without code signing. Users will see a Gatekeeper warning. See docs/SIGNING.md."
 
@@ -115,6 +127,9 @@ jobs:
 
   electron-windows:
     name: Electron (Windows)
+    if: |
+      (github.event_name == 'push' && github.ref_type == 'tag') ||
+      github.event_name == 'workflow_dispatch'
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -134,6 +149,9 @@ jobs:
 
   capacitor-android:
     name: Capacitor (Android APK)
+    if: |
+      (github.event_name == 'push' && github.ref_type == 'tag') ||
+      github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -158,9 +176,17 @@ jobs:
           path: android/app/build/outputs/apk/debug/*.apk
 
   capacitor-ios:
-    name: Capacitor (iOS)
-    if: github.event_name == 'workflow_dispatch' && inputs.include_apple_builds == true
+    name: Capacitor (iOS) → TestFlight
+    if: |
+      (github.event_name == 'push' && github.ref_type == 'tag') ||
+      (github.event_name == 'workflow_dispatch' && inputs.include_apple_builds == true)
     runs-on: macos-latest
+    env:
+      APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+      APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      APPLE_ID: ${{ secrets.APPLE_ID }}
+      APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -168,8 +194,172 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
+
       - run: pnpm install --frozen-lockfile
-      - run: rm -rf ios
-      - run: npx cap add ios
-      - run: npx cap sync ios
-      - run: xcodebuild -project ios/App/App.xcodeproj -scheme App -destination 'generic/platform=iOS Simulator' -configuration Debug build
+
+      - name: Add and sync iOS platform
+        run: |
+          rm -rf ios
+          npx cap add ios
+          npx cap sync ios
+
+      - name: Set build number from run
+        # PROD-364: monotonically-increasing build number per CI run, kept
+        # high enough to never collide with the timestamp-based local one.
+        run: |
+          BUILD_NUM="${GITHUB_RUN_NUMBER}$(date +%H%M)"
+          echo "Setting CURRENT_PROJECT_VERSION = $BUILD_NUM"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUM" \
+            ios/App/App/Info.plist || true
+          # Also patch pbxproj so xcodebuild picks it up
+          sed -i.bak "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = $BUILD_NUM/g" \
+            ios/App/App.xcodeproj/project.pbxproj
+
+      - name: Detect TestFlight readiness
+        id: tf
+        run: |
+          if [ -n "${APPLE_API_KEY_ID:-}" ] && [ -n "${APPLE_API_ISSUER:-}" ]; then
+            echo "method=api_key" >> "$GITHUB_OUTPUT"
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          elif [ -n "${APPLE_ID:-}" ] && [ -n "${APPLE_APP_SPECIFIC_PASSWORD:-}" ]; then
+            echo "method=apple_id" >> "$GITHUB_OUTPUT"
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "::warning title=TestFlight upload skipped::No App Store Connect credentials (APPLE_API_KEY_ID/ISSUER or APPLE_ID/APPLE_APP_SPECIFIC_PASSWORD). Building IPA but not uploading."
+          fi
+
+      - name: Decode App Store Connect API key (.p8)
+        if: steps.tf.outputs.method == 'api_key'
+        env:
+          APPLE_API_KEY_BASE64: ${{ secrets.APPLE_API_KEY }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/private_keys"
+          KEY_PATH="$RUNNER_TEMP/private_keys/AuthKey_${APPLE_API_KEY_ID}.p8"
+          echo "$APPLE_API_KEY_BASE64" | base64 --decode > "$KEY_PATH"
+          chmod 600 "$KEY_PATH"
+          echo "APPLE_API_KEY_PATH=$KEY_PATH" >> "$GITHUB_ENV"
+
+      - name: Archive iOS app
+        run: |
+          cd ios/App
+          xcodebuild archive \
+            -scheme App \
+            -configuration Release \
+            -archivePath "$RUNNER_TEMP/Layers.xcarchive" \
+            -destination "generic/platform=iOS" \
+            -allowProvisioningUpdates \
+            -quiet
+
+      - name: Export IPA (App Store)
+        if: steps.tf.outputs.ready == 'true'
+        run: |
+          cat > "$RUNNER_TEMP/ExportOptions.plist" <<EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>method</key>
+              <string>app-store-connect</string>
+              <key>teamID</key>
+              <string>${APPLE_TEAM_ID}</string>
+              <key>uploadBitcode</key>
+              <false/>
+              <key>uploadSymbols</key>
+              <true/>
+              <key>destination</key>
+              <string>export</string>
+          </dict>
+          </plist>
+          EOF
+          xcodebuild -exportArchive \
+            -archivePath "$RUNNER_TEMP/Layers.xcarchive" \
+            -exportPath "$RUNNER_TEMP/LayersExport" \
+            -exportOptionsPlist "$RUNNER_TEMP/ExportOptions.plist" \
+            -allowProvisioningUpdates
+
+      - name: Upload to TestFlight (API key)
+        if: steps.tf.outputs.method == 'api_key'
+        run: |
+          xcrun altool --upload-app \
+            -f "$RUNNER_TEMP/LayersExport/App.ipa" \
+            -t ios \
+            --apiKey "$APPLE_API_KEY_ID" \
+            --apiIssuer "$APPLE_API_ISSUER"
+
+      - name: Upload to TestFlight (Apple ID + app-specific password)
+        if: steps.tf.outputs.method == 'apple_id'
+        run: |
+          xcrun altool --upload-app \
+            -f "$RUNNER_TEMP/LayersExport/App.ipa" \
+            -t ios \
+            -u "$APPLE_ID" \
+            -p "$APPLE_APP_SPECIFIC_PASSWORD"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ios-ipa
+          path: |
+            ${{ runner.temp }}/LayersExport/*.ipa
+            ${{ runner.temp }}/Layers.xcarchive
+
+  release:
+    name: Attach artifacts to GitHub Release
+    needs: [electron-mac, electron-windows, capacitor-android]
+    if: github.event_name == 'push' && github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: electron-mac
+          path: artifacts/mac
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: electron-windows
+          path: artifacts/windows
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: android-apk
+          path: artifacts/android
+
+      - name: Rename artifacts to canonical names
+        # /download page expects these stable filenames at /releases/latest/download/
+        run: |
+          mkdir -p release-assets
+          # Mac arm64 + x64
+          for f in artifacts/mac/*.dmg; do
+            case "$f" in
+              *arm64*) cp "$f" "release-assets/Layers-mac-arm64.dmg" ;;
+              *)       cp "$f" "release-assets/Layers-mac-x64.dmg"   ;;
+            esac
+          done
+          # Windows
+          for f in artifacts/windows/*.exe; do
+            cp "$f" "release-assets/Layers-windows.exe"
+            break
+          done
+          # Android
+          for f in artifacts/android/*.apk; do
+            cp "$f" "release-assets/Layers-android.apk"
+            break
+          done
+          ls -la release-assets/
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          gh release create "$TAG" \
+            release-assets/* \
+            --title "Layers $TAG" \
+            --generate-notes \
+            --latest \
+          || gh release upload "$TAG" release-assets/* --clobber
