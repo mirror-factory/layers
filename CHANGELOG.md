@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.63] — 2026-05-07
+
+### Testing
+- test: stabilize home page visual test (`0d9b777`)
+
+
 ## [0.1.62] — 2026-05-07
 
 ### Other
