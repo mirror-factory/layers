@@ -7,6 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.64] — 2026-05-07
+
+### Other
+- chore: refresh dependency audit (73 packages, 0 vulns) (`54bb206`)
+
+
+## [0.1.63] — 2026-05-07
+
+### Testing
+- test: stabilize home page visual test (`0d9b777`)
+
+
+## [0.1.62] — 2026-05-07
+
+### Other
+- chore: bump to 0.1.61 (`7a0b04e`)
+
+
+## [0.1.61] — 2026-05-07
+
+### Testing
+- test: refresh visual baselines (`faff8a1`)
+
+
+## [0.1.60] — 2026-05-07
+
+### Fixed
+- fix: rename app/docs → app/docs-internal to resolve parallel route conflict (`18517cd`)
+
+
 ## [0.1.59] — 2026-05-01
 
 ### Other
