@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Bricolage_Grotesque } from "next/font/google";
 import AudioWaveRibbon from "@/components/audio-wave-ribbon";
 import { LayersLogoMark } from "@/components/layers-logo";
+import { ProductExplainerVideo } from "@/components/product-explainer-video";
 
 /* ───────────────────────── Animation helpers ───────────────────────── */
 
@@ -126,6 +127,7 @@ export function LandingPage() {
   return (
     <div className={`${display.variable} layers-home`}>
       <Hero />
+      <ProductExplainerVideo />
       {/* "Built on" trust bar removed 2026-05-01: in invite-only
           alpha we don't have customer logos to show, and the vendor
           list felt like padding. Kept the function below in case we
@@ -358,7 +360,7 @@ function Hero() {
             >
               Coming soon
             </button>
-            <Link href="/download" className="btn-ghost">
+            <Link href="#product-explainer" className="btn-ghost">
               See how it works
             </Link>
           </div>

@@ -14,6 +14,7 @@ import {
   AndroidLogo,
   WindowsLogo,
 } from "@/components/platform-logos";
+import { ProductExplainerVideo } from "@/components/product-explainer-video";
 import pkg from "@/package.json";
 
 const APP_VERSION: string = pkg.version;
@@ -810,6 +811,8 @@ export default function DownloadPage() {
             </Link>
           </aside>
         </header>
+
+        <ProductExplainerVideo eyebrow="Product walkthrough" compact />
 
         {/* Primary install — detected platform anchor */}
         <PrimaryInstall />
