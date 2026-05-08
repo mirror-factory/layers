@@ -1,3 +1,10 @@
 # Expect flow: app/observability/page.tsx
 
-Open the route represented by app/observability/page.tsx. Exercise the primary user-visible workflow, resize to mobile, check for console errors, and verify the page completes the feature described in the active plan.
+Open `/observability`.
+
+Verify:
+
+- The page renders the AI Observability header and tabs for calls, errors, sessions, charts, and http.
+- The burn-rate dashboard is not embedded in this tab surface; it is available at `/observability/burn`.
+- Resize to mobile width and confirm tabs and panels stay readable without horizontal overflow.
+- Check for console errors.

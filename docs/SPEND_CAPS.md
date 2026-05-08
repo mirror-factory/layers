@@ -20,10 +20,13 @@ The caps below are **opinionated starting values for a 10-user alpha**. Tweak af
 ## TL;DR — Cap matrix
 
 | Vendor | Cap (USD/mo) | Alert | Kill-switch (where) |
-| --- | --: | --- | --- |
-| Vercel (hosting) | $20 | 50/80/100% via web+email | Pause all projects (auto, opt-in) |
-| Vercel AI Gateway | $200 | manual balance check + Langfuse | Disable auto top-up; rotate `AI_GATEWAY_API_KEY` |
-| Supabase | $25 | Cost Control + email | Spend Cap auto-disables overage usage |
+| --- | ---: | --- | --- |
+| Vercel (hosting) | $20 | 50/75/100% via web+email | Pause all projects (auto, opt-in) |
+| Vercel AI Gateway prepaid balance | $200 | `/observability/burn` + Langfuse/support alerts | Disable auto top-up; rotate `AI_GATEWAY_API_KEY` |
+| AI Gateway provider budgets | $120 Anthropic / $40 OpenAI / $40 Google (inside $200) | daily provider burn at 50/80/100% monthly run-rate | Route provider off in model router |
+| Supabase org cap | $25 | Cost Control + email | Spend Cap auto-disables overage usage |
+| Supabase storage sub-limit | $10 (inside Supabase cap) | storage usage alert at 50/80/100% | Disable uploads; shorten signed URLs |
+| Supabase egress sub-limit | $15 (inside Supabase cap) | egress usage alert at 50/80/100% | Block downloads; revoke public URLs |
 | Anthropic direct | $50 | 50/80/100% email | Rotate `ANTHROPIC_API_KEY` |
 | OpenAI direct | $50 | 50/80/100% email | Rotate `OPENAI_API_KEY` (if used) |
 | Google AI / Vertex | $50 | Cloud Billing budget + pubsub | Disable billing on project; rotate keys |
@@ -33,7 +36,7 @@ The caps below are **opinionated starting values for a 10-user alpha**. Tweak af
 | Inngest | $0 (free tier) | tier-cap | Pause functions in dashboard |
 | Resend | $0 (free 3k/mo) | tier-cap | Disable API key |
 
-**Total worst-case external monthly burn cap (alpha): ~$425/mo.** This is the budget the founder commits to absorb if every cap simultaneously trips.
+**Total worst-case external monthly burn cap (alpha): ~$425/mo.** Supabase storage/egress and AI Gateway provider rows are sub-budgets inside the parent caps, so they do not add additional exposure.
 
 ---
 
@@ -55,24 +58,30 @@ Each vendor below uses the same five-field structure: cap value, alerts, owner, 
   6. Optional: configure a webhook URL for Slack/PagerDuty notifications.
 - **Kill-switch:** Spend Management auto-pauses production deployments when the cap trips. To restart cleanly: Settings → Projects → resume each project individually after raising the cap or the billing cycle resets. To stop the bleeding faster, manually pause projects via Project → Settings → "Pause Project" — visitors will see `503 DEPLOYMENT_PAUSED`.
 
-### 2. Supabase (Postgres, auth, storage)
+### 2. Supabase (Postgres, auth, storage, egress)
 
-- **Cap value:** $25/mo overage above Pro plan's included allocation.
-- **Alert thresholds:** Email at threshold; configure a Cost Control alert in dashboard. There is no native 50/80/100% staircase — set a single threshold notification at 80% and rely on the hard Spend Cap at 100%.
+- **Cap value:** $25/mo overage above Pro plan's included allocation. Internal sub-limits: storage `$10/mo`, egress `$15/mo`.
+- **Alert thresholds:** Email at threshold; configure a Cost Control alert in dashboard. There is no native 50/80/100% staircase for every resource, so the release checklist requires separate storage and egress checks at 50/80/100% of their sub-limits and an explicit 80% cutoff playbook.
 - **Owner:** founder.
 - **Configuration steps** (verified against `supabase.com/docs/guides/platform/spend-cap`, last fetched 2026-05-01):
   1. Supabase dashboard → **Organization** → **Billing** (`/dashboard/org/<org>/billing`).
   2. Find **Cost Control** section → **Spend Cap** → toggle **Enabled**.
   3. Confirm what is capped (Disk, Egress, Edge Function invocations, MAU, Realtime, Storage transformations & size). Compute, Custom Domain, IPv4, Log Drains, PITR, advanced MFA are **NOT capped** — these are billed regardless.
   4. Enable email notifications under **Notifications** for billing events.
+  5. Storage sub-limit: Billing → Usage → Storage. Record current month storage usage; if a native alert exists in the dashboard, set thresholds at `$5`, `$8`, and `$10`. If the dashboard only supports one threshold, set `$8` and use `/observability/burn` for the 50/100% release check.
+  6. Egress sub-limit: Billing → Usage → Egress. Record current month egress usage; if a native alert exists, set `$7.50`, `$12`, and `$15`. If the dashboard only supports one threshold, set `$12` and use `/observability/burn` for the 50/100% release check.
 - **Kill-switch:** When Spend Cap engages, additional usage of capped items is blocked until the next billing cycle. **This means the project goes read-only / fails on the capped resource — treat as P1 outage.** To force-stop sooner: pause the project via Settings → General → **Pause project**. To revive a paused project: same path → **Restore**.
-- **Egress watch:** Supabase egress is the most common surprise. Add a separate alert below the cap (e.g. $15) so we know before it hard-stops.
+- **Storage kill-switch:** Disable upload routes, rotate signed URL secrets if exposed, shorten signed URL TTLs, and delete orphaned audio after incident review.
+- **Egress kill-switch:** Disable audio downloads, revoke public/signed URLs, rotate the anon key if abuse is key-driven, and add a route-level rate limit before re-enabling.
 
 ### 3. Vercel AI Gateway (primary LLM path — Anthropic/OpenAI/Google)
 
 - **Cap value:** $200/mo via prepaid credits. AI Gateway has no native "hard cap" — instead, **disable auto top-up** and only buy credits in increments of $200/mo. When credits hit zero, requests fail.
+- **Provider sub-budgets:** Anthropic `$120/mo`, OpenAI `$40/mo`, Google `$40/mo`, all inside the `$200` prepaid parent budget.
 - **Alert thresholds:** Manual — there is no native 50/80/100% alert. Instead:
-  - Auto-monitor balance via the Gateway API endpoint and alert in Langfuse / Slack at $100 (50%) and $40 (80%).
+  - `/observability/burn` reads today's AI call costs from the shared AI log store, splits them into Anthropic/OpenAI/Google provider rows, computes 30-day run-rate, and sorts rows by `% of cap`.
+  - Alert via Langfuse/support when total Gateway balance/run-rate crosses `$100` (50%), `$160` (80%), and `$200` (100%).
+  - Alert via Langfuse/support when provider run-rate crosses 50/80/100% of its provider sub-budget.
   - Budget review every Monday: read balance from `vercel.com/<team>/~/ai-gateway`.
 - **Owner:** founder.
 - **Configuration steps** (verified against `vercel.com/docs/ai-gateway/pricing`, last fetched 2026-05-01):
@@ -80,11 +89,13 @@ Each vendor below uses the same five-field structure: cap value, alerts, owner, 
   2. Top-right corner → click balance → **Top up** with $200.
   3. Click **Change** next to **Auto top-up** → **disable** (default is disabled — confirm).
   4. Implement balance polling: cron `GET /v1/balance` (see `/docs/ai-gateway/capabilities/usage`), threshold alert into `support@mirrorfactory.ai`.
-  5. Per-provider budgets: **not natively supported** as of 2026-05-01. Track per-provider spend in Langfuse cost dashboard; if a provider misbehaves, switch the model in `lib/ai/models.ts`.
+  5. Provider budgets are operational budgets, not native Gateway hard caps as of 2026-05-01. Track them in Langfuse and `/observability/burn` using rows from `lib/ops/spend-caps.ts`.
+  6. If a provider misbehaves, switch the model in `lib/ai/model-router.ts` / `lib/model-router.ts` away from that provider and redeploy.
 - **Kill-switch (in this order):**
   1. Set `AI_GATEWAY_API_KEY` to invalid value in Vercel → Project Settings → Environment Variables → Production. Redeploy.
   2. Or revoke the key entirely: Vercel team → AI Gateway → **API Keys** → delete.
   3. Or simply do nothing once balance hits zero — requests fail cleanly with 402.
+  4. Provider-only cutoff: reroute Anthropic/OpenAI/Google models off in the model router; leave Gateway active only for the remaining providers.
 - **Linear remediation ticket:** _follow-up TBD_ — file when AI Gateway ships per-provider sub-budgets.
 
 ### 4. Anthropic direct API
@@ -96,7 +107,7 @@ Each vendor below uses the same five-field structure: cap value, alerts, owner, 
   1. Anthropic Console → **Settings** → **Plans & Billing** → **Usage Limits**.
   2. Set monthly limit = `$50`.
   3. Set monthly soft alerts at 50/80%; hard cap at 100%.
-- **Kill-switch:** Console → **API Keys** → revoke `ANTHROPIC_API_KEY`. Update Vercel env var to a placeholder; redeploy. Code path: `lib/ai/providers.ts` falls back to gateway-only.
+- **Kill-switch:** Console → **API Keys** → revoke `ANTHROPIC_API_KEY`. Update Vercel env var to a placeholder; redeploy. Code paths: `lib/ai/model-router.ts` and `lib/model-router.ts` should stay gateway-first.
 
 ### 5. OpenAI direct API (only if used outside the gateway)
 
@@ -183,18 +194,32 @@ Each vendor below uses the same five-field structure: cap value, alerts, owner, 
 
 ## Burn-rate dashboard
 
-Single source of truth for "how much are we spending right now":
+Internal dashboard path: `/observability/burn`.
 
-| Layer | Where | Refresh |
-| --- | --- | --- |
-| LLM tokens (per-call cost, per-user, per-tool) | **Langfuse** (`https://cloud.langfuse.com`) — already wired via `LANGFUSE_*` env vars | real-time |
-| AI Gateway balance | Vercel → AI Gateway tab | manual; consider polling |
-| STT minutes | AssemblyAI dashboard usage tab | hourly |
-| Supabase metered usage | Supabase Org → Billing → Usage | hourly |
-| Vercel metered usage | Vercel team → Settings → Usage | hourly |
-| Stripe MRR / churn | Stripe Sigma or Dashboard home | real-time |
+The Burn page is the internal source of truth for the daily vendor burn table. It reads the shared registry in `lib/ops/spend-caps.ts`, uses the same AI telemetry backend as `/api/ai-logs` for live AI Gateway and per-provider AI spend, projects the vendor rows that do not expose an API yet, computes `daily burn x 30 / monthly cap`, and sorts rows by `% of cap` descending.
 
-**Weekly ritual:** Monday morning, founder copies running totals into a single spreadsheet (`docs/ops/burn-tracker.xlsx` once created — currently lives in operator's head). Cross-check against caps; adjust if any vendor is consistently <30% of cap.
+| Row | Daily burn source | Alpha projected daily burn | Monthly cap | Alert channel | Kill-switch |
+| --- | --- | --: | --: | --- | --- |
+| AssemblyAI | Vendor dashboard projection until spend API is wired | $0.40 | $50 | dashboard email at 50/80/100% | rotate `ASSEMBLYAI_API_KEY` |
+| AI Gateway - Anthropic | live `/api/ai-logs` split by provider | $0.35 | $120 | Langfuse/support at 50/80/100% | route Claude off |
+| Vercel AI Gateway total | live `/api/ai-logs` total cost | $0.47 | $200 | Langfuse/support at 50/80/100% | revoke `AI_GATEWAY_API_KEY` |
+| AI Gateway - OpenAI | live `/api/ai-logs` split by provider | $0.06 | $40 | Langfuse/support at 50/80/100% | route OpenAI off |
+| AI Gateway - Google | live `/api/ai-logs` split by provider | $0.06 | $40 | Langfuse/support at 50/80/100% | route Gemini off |
+| Supabase storage | Supabase Billing → Usage snapshot | $0.006 | $10 | storage alert at 50/80/100% | disable uploads |
+| Supabase egress | Supabase Billing → Usage snapshot | $0.006 | $15 | egress alert at 50/80/100% | block downloads |
+| Vercel hosting | Vercel Usage snapshot | $0.00 | $20 | Vercel email/web at 50/75/100% | pause projects |
+| Supabase database/auth | Supabase Billing → Usage snapshot | $0.00 | $25 | Cost Control alert at 80% | pause project |
+| Anthropic direct | Console usage limits | $0.00 | $50 | email at 50/80/100% | revoke key |
+| OpenAI direct | Platform usage limits | $0.00 | $50 | email at 50/80/100% | revoke key |
+| Google AI / Vertex | Cloud Billing budget | $0.00 | $50 | email + Pub/Sub at 50/80/100% | disable billing |
+| Deepgram | Console spend limit | $0.00 | $30 | email at 50/80/100% | rotate key |
+| Inngest | Free-tier dashboard | $0.00 | $0 | free-tier exhaustion email | pause functions |
+| Resend | Free-tier dashboard | $0.00 | $0 | free-tier exhaustion email | rotate key |
+| Stripe | Radar/dashboard | $0.00 | n/a | dispute/fraud/webhook email | pause new subscriptions |
+
+**Daily ritual during alpha:** check `/observability/burn` before inviting more testers. If any row is at or above 80%, execute that row's kill-switch, add an incident note to Linear, and do not invite additional testers until the row returns below 50%.
+
+**Weekly ritual:** Monday morning, founder screenshots `/observability/burn` and the vendor dashboard rows that are still manual into `.ai-starter/evidence/spend-caps/<YYYY-MM-DD>/`. Cross-check against caps; adjust if any vendor is consistently above 50% or below 5% of cap.
 
 ### Internal alert webhook (PROD-371)
 
@@ -239,14 +264,15 @@ Assumptions for the **Core $20 tier** with 20 meetings/month per user, average 3
 
 This checklist runs before any promotion to `main` (i.e. before any user-facing release). Cross-referenced from `docs/RELEASE.md`.
 
-1. [ ] All 11 vendors above have a configured cap, verified by visiting the dashboard and screenshotting the cap value into `.ai-starter/evidence/spend-caps/<YYYY-MM-DD>/`.
+1. [ ] All vendor rows above have a configured cap or explicit 80% alert, verified by visiting the dashboard and screenshotting the cap value into `.ai-starter/evidence/spend-caps/<YYYY-MM-DD>/`.
 2. [ ] No alert email has fired in the last 24 hrs (search `support@mirrorfactory.ai` for `[Spend]`, `[Budget]`, `[Usage]`).
-3. [ ] AI Gateway balance > $80 (40% of cap). Top up if lower.
-4. [ ] Supabase Spend Cap toggle is **on**. Egress trend over last 7 days is < $5/day.
-5. [ ] AssemblyAI usage trend over last 7 days extrapolates to < $50 for the month.
-6. [ ] Stripe Radar rules are active; no disputed charges in the last 7 days.
-7. [ ] Langfuse cost dashboard for the last 24 hrs shows no anomalous user (>10x median spend).
-8. [ ] Confirm `INCIDENT_RUNBOOK.md` is reachable from `docs/` and on-call (founder) has it bookmarked.
+3. [ ] `/observability/burn` is sorted by `% of cap`; every row is below 80%.
+4. [ ] AI Gateway balance > $80 (40% of cap). Top up if lower. Anthropic/OpenAI/Google provider run-rates are each below 80%.
+5. [ ] Supabase Spend Cap toggle is **on**. Storage run-rate is < `$10/mo`; egress run-rate is < `$15/mo`.
+6. [ ] AssemblyAI usage trend over last 7 days extrapolates to < $50 for the month.
+7. [ ] Stripe Radar rules are active; no disputed charges in the last 7 days.
+8. [ ] Langfuse cost dashboard for the last 24 hrs shows no anomalous user (>10x median spend).
+9. [ ] Confirm `INCIDENT_RUNBOOK.md` is reachable from `docs/` and on-call (founder) has it bookmarked.
 
 If any item fails, **block the release** and resolve before continuing.
 
@@ -254,4 +280,5 @@ If any item fails, **block the release** and resolve before continuing.
 
 ## Change log
 
+- 2026-05-08 — added `/observability/burn` dashboard registry, AI Gateway provider sub-budgets, and separate Supabase storage/egress sub-limit procedures for PROD-396.
 - 2026-05-01 — initial doc, alpha launch caps. Verified Vercel + Supabase paths via vendor docs; AssemblyAI/Deepgram/Resend/Inngest dashboard paths marked "verify in dashboard" because docs were unreachable at write-time.
