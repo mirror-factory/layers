@@ -13,6 +13,19 @@ export class DeepgramConfigurationError extends Error {
   }
 }
 
+export class DeepgramScopeError extends Error {
+  code = "deepgram_api_key_scope_insufficient";
+
+  constructor() {
+    super("DEEPGRAM_API_KEY scope insufficient");
+    this.name = "DeepgramScopeError";
+  }
+}
+
+let streamingTokenScopeCheck:
+  | { apiKey: string; promise: Promise<void> }
+  | null = null;
+
 export function getDeepgramApiKey(
   env: Env = process.env as Env,
 ): string | null {
@@ -37,6 +50,30 @@ export function requireDeepgramClient(): DeepgramClient {
   return client;
 }
 
+export function isDeepgramPermissionError(error: unknown): boolean {
+  if (error instanceof DeepgramScopeError) return true;
+  if (typeof error !== "object" || error === null) return false;
+  const record = error as {
+    statusCode?: unknown;
+    body?: { err_code?: unknown; err_msg?: unknown };
+    message?: unknown;
+  };
+
+  const statusCode = Number(record.statusCode);
+  const errCode =
+    typeof record.body?.err_code === "string" ? record.body.err_code : "";
+  const errMsg =
+    typeof record.body?.err_msg === "string" ? record.body.err_msg : "";
+  const message = typeof record.message === "string" ? record.message : "";
+
+  return (
+    statusCode === 403 ||
+    errCode.toLowerCase() === "forbidden" ||
+    /insufficient permissions/i.test(errMsg) ||
+    /insufficient permissions/i.test(message)
+  );
+}
+
 export async function createDeepgramStreamingToken(
   ttlSeconds = 600,
 ): Promise<{ token: string; expiresAt: number }> {
@@ -53,4 +90,25 @@ export async function createDeepgramStreamingToken(
     token,
     expiresAt: Date.now() + (response.expires_in ?? ttlSeconds) * 1000,
   };
+}
+
+export async function assertDeepgramStreamingTokenScope(): Promise<void> {
+  const apiKey = getDeepgramApiKey();
+  if (!apiKey) throw new DeepgramConfigurationError();
+
+  if (streamingTokenScopeCheck?.apiKey === apiKey) {
+    return streamingTokenScopeCheck.promise;
+  }
+
+  const promise = createDeepgramStreamingToken(1)
+    .then(() => undefined)
+    .catch((error: unknown) => {
+      if (isDeepgramPermissionError(error)) {
+        throw new DeepgramScopeError();
+      }
+      throw error;
+    });
+
+  streamingTokenScopeCheck = { apiKey, promise };
+  return promise;
 }

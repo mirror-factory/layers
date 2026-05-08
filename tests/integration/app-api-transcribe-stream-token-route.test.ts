@@ -22,6 +22,7 @@ const mocks = vi.hoisted(() => ({
   checkQuota: vi.fn(),
   getAssemblyAI: vi.fn(),
   getDeepgramClient: vi.fn(),
+  assertDeepgramStreamingTokenScope: vi.fn(),
   createDeepgramStreamingToken: vi.fn(),
   getSettings: vi.fn(),
   getMeetingsStore: vi.fn(),
@@ -39,7 +40,22 @@ vi.mock("@/lib/assemblyai/client", () => ({
 
 vi.mock("@/lib/deepgram/client", () => ({
   getDeepgramClient: mocks.getDeepgramClient,
+  assertDeepgramStreamingTokenScope: mocks.assertDeepgramStreamingTokenScope,
   createDeepgramStreamingToken: mocks.createDeepgramStreamingToken,
+  isDeepgramPermissionError: (error: unknown) => {
+    if (typeof error !== "object" || error === null) return false;
+    const record = error as {
+      statusCode?: unknown;
+      body?: { err_code?: unknown; err_msg?: unknown };
+      message?: unknown;
+    };
+    return (
+      Number(record.statusCode) === 403 ||
+      record.body?.err_code === "FORBIDDEN" ||
+      /insufficient permissions/i.test(String(record.body?.err_msg ?? "")) ||
+      /scope insufficient/i.test(String(record.message ?? ""))
+    );
+  },
 }));
 
 vi.mock("@/lib/settings", () => ({
@@ -101,6 +117,7 @@ describe("PROD-321 -- /api/transcribe/stream/token behavior", () => {
       delete: vi.fn(),
     });
     mocks.withExternalCall.mockImplementation(async (_meta, fn) => fn());
+    mocks.assertDeepgramStreamingTokenScope.mockResolvedValue(undefined);
   });
 
   it("returns 200 + token + ws metadata for the AssemblyAI happy path", async () => {

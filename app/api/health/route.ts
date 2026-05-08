@@ -16,6 +16,11 @@
 import { NextResponse } from 'next/server';
 import { withRoute } from '@/lib/with-route';
 import { trackedFetch } from '@/lib/integration-usage';
+import {
+  assertDeepgramStreamingTokenScope,
+  getDeepgramApiKey,
+  isDeepgramPermissionError,
+} from '@/lib/deepgram/client';
 
 type DepStatus = 'ok' | 'degraded' | 'down' | 'not-configured';
 
@@ -110,14 +115,31 @@ async function checkAssemblyAI(): Promise<DepResult> {
   }
 }
 
+async function checkDeepgram(): Promise<DepResult> {
+  if (!getDeepgramApiKey()) return { status: 'not-configured' };
+  const started = Date.now();
+  try {
+    await assertDeepgramStreamingTokenScope();
+    return { status: 'ok', latencyMs: Date.now() - started };
+  } catch (err) {
+    const detail = err instanceof Error ? err.message : String(err);
+    return {
+      status: isDeepgramPermissionError(err) ? 'down' : 'degraded',
+      detail,
+      latencyMs: Date.now() - started,
+    };
+  }
+}
+
 export const GET = withRoute(async () => {
-  const [supabase, langfuse, assemblyai] = await Promise.all([
+  const [supabase, langfuse, assemblyai, deepgram] = await Promise.all([
     checkSupabase(),
     checkLangfuse(),
     checkAssemblyAI(),
+    checkDeepgram(),
   ]);
 
-  const dependencies = { supabase, langfuse, assemblyai };
+  const dependencies = { supabase, langfuse, assemblyai, deepgram };
   const overall: DepStatus = Object.values(dependencies).some(d => d.status === 'down')
     ? 'down'
     : Object.values(dependencies).some(d => d.status === 'degraded')

@@ -5,6 +5,7 @@ const mocks = vi.hoisted(() => ({
   checkQuota: vi.fn(),
   getAssemblyAI: vi.fn(),
   getDeepgramClient: vi.fn(),
+  assertDeepgramStreamingTokenScope: vi.fn(),
   createDeepgramStreamingToken: vi.fn(),
   getSettings: vi.fn(),
   getMeetingsStore: vi.fn(),
@@ -21,7 +22,22 @@ vi.mock("@/lib/assemblyai/client", () => ({
 
 vi.mock("@/lib/deepgram/client", () => ({
   getDeepgramClient: mocks.getDeepgramClient,
+  assertDeepgramStreamingTokenScope: mocks.assertDeepgramStreamingTokenScope,
   createDeepgramStreamingToken: mocks.createDeepgramStreamingToken,
+  isDeepgramPermissionError: (error: unknown) => {
+    if (typeof error !== "object" || error === null) return false;
+    const record = error as {
+      statusCode?: unknown;
+      body?: { err_code?: unknown; err_msg?: unknown };
+      message?: unknown;
+    };
+    return (
+      Number(record.statusCode) === 403 ||
+      record.body?.err_code === "FORBIDDEN" ||
+      /insufficient permissions/i.test(String(record.body?.err_msg ?? "")) ||
+      /scope insufficient/i.test(String(record.message ?? ""))
+    );
+  },
 }));
 
 vi.mock("@/lib/settings", () => ({
@@ -72,6 +88,7 @@ describe("Deepgram stream token route", () => {
       delete: vi.fn(),
     });
     mocks.withExternalCall.mockImplementation(async (_meta, fn) => fn());
+    mocks.assertDeepgramStreamingTokenScope.mockResolvedValue(undefined);
   });
 
   it("returns a clear missing DEEPGRAM_API_KEY error for Deepgram models", async () => {
@@ -124,6 +141,32 @@ describe("Deepgram stream token route", () => {
     expect(wsUrl.searchParams.get("model")).toBe("nova-3");
     expect(wsUrl.searchParams.get("language")).toBe("multi");
     expect(mocks.createDeepgramStreamingToken).toHaveBeenCalledWith(600);
+    expect(mocks.assertDeepgramStreamingTokenScope).toHaveBeenCalledTimes(1);
+  });
+
+  it("returns an actionable error before creating a meeting when the Deepgram key scope is insufficient", async () => {
+    mocks.getSettings.mockResolvedValue({
+      summaryModel: "openai/gpt-5.4-nano",
+      batchSpeechModel: "universal-2",
+      streamingSpeechModel: "nova-3",
+    });
+    mocks.getDeepgramClient.mockReturnValue({});
+    mocks.assertDeepgramStreamingTokenScope.mockRejectedValue(
+      new Error("DEEPGRAM_API_KEY scope insufficient"),
+    );
+
+    const res = await tokenRoute.POST(request({ meetingTitle: "Launch sync" }));
+    const body = await res.json();
+
+    expect(res.status).toBe(502);
+    expect(body).toMatchObject({
+      code: "stt_token_permission_denied",
+      provider: "deepgram",
+      envVar: "DEEPGRAM_API_KEY",
+    });
+    expect(body.error).toContain("Member or higher");
+    expect(mocks.getMeetingsStore).not.toHaveBeenCalled();
+    expect(mocks.createDeepgramStreamingToken).not.toHaveBeenCalled();
   });
 
   it("returns an actionable error when the Deepgram key cannot mint temporary tokens", async () => {

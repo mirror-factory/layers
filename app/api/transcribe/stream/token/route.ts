@@ -11,8 +11,10 @@ import {
   getDeepgramStreamingConfig,
 } from "@/lib/deepgram/options";
 import {
+  assertDeepgramStreamingTokenScope,
   createDeepgramStreamingToken,
   getDeepgramClient,
+  isDeepgramPermissionError,
 } from "@/lib/deepgram/client";
 import { getMeetingsStore } from "@/lib/meetings/store";
 import { cleanRecordingTitle } from "@/lib/recording/meeting-context";
@@ -44,29 +46,6 @@ function missingProviderResponse(provider: "assemblyai" | "deepgram") {
       envVar,
     },
     { status: 502 },
-  );
-}
-
-function isDeepgramPermissionError(error: unknown): boolean {
-  if (typeof error !== "object" || error === null) return false;
-  const record = error as {
-    statusCode?: unknown;
-    body?: { err_code?: unknown; err_msg?: unknown };
-    message?: unknown;
-  };
-
-  const statusCode = Number(record.statusCode);
-  const errCode =
-    typeof record.body?.err_code === "string" ? record.body.err_code : "";
-  const errMsg =
-    typeof record.body?.err_msg === "string" ? record.body.err_msg : "";
-  const message = typeof record.message === "string" ? record.message : "";
-
-  return (
-    statusCode === 403 ||
-    errCode.toLowerCase() === "forbidden" ||
-    /insufficient permissions/i.test(errMsg) ||
-    /insufficient permissions/i.test(message)
   );
 }
 
@@ -161,6 +140,21 @@ export const POST = withRoute(async (req, ctx) => {
       },
       { status: 400 },
     );
+  }
+
+  if (provider === "deepgram") {
+    try {
+      await withExternalCall(
+        {
+          vendor: "deepgram",
+          operation: "auth.tokens.scopeCheck",
+          requestId: ctx.requestId,
+        },
+        () => assertDeepgramStreamingTokenScope(),
+      );
+    } catch (error) {
+      return streamingTokenFailureResponse(provider, error);
+    }
   }
 
   // Create the meeting row before minting a paid vendor token. If persistence
