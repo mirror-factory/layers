@@ -167,6 +167,59 @@ Play Console tasks for Alfonso:
 - Create an internal testing release, upload `app-release.aab`, add release notes, review, and roll out.
 - Share the Play internal testing opt-in link with testers after the release is available.
 
+## Download URL Pattern
+
+The public `/download` page uses stable GitHub Releases URLs for desktop and Android artifacts. In this repository, the current implementation builds each public link from the `mirror-factory/layers` release asset base:
+
+```text
+https://github.com/mirror-factory/layers/releases/latest/download
+```
+
+Older notes may refer to the legacy `mirror-factory/audio-layer` slug; the live `/download` fallback constant and release assets should stay aligned to `mirror-factory/layers` unless the repository moves again.
+
+The stable URLs require these canonical asset names:
+
+| Platform | Required release asset name | Public URL |
+| --- | --- | --- |
+| macOS Apple Silicon | `Layers-mac-arm64.dmg` | `https://github.com/mirror-factory/layers/releases/latest/download/Layers-mac-arm64.dmg` |
+| macOS Intel | `Layers-mac-x64.dmg` | `https://github.com/mirror-factory/layers/releases/latest/download/Layers-mac-x64.dmg` |
+| Windows | `Layers-windows.exe` | `https://github.com/mirror-factory/layers/releases/latest/download/Layers-windows.exe` |
+| Android | `Layers-android.apk` | `https://github.com/mirror-factory/layers/releases/latest/download/Layers-android.apk` |
+
+The `/releases/latest/download/<asset>` path is a GitHub redirect. It resolves to the asset with that exact filename on whichever GitHub Release is currently marked as the latest published release. It does not resolve to the newest GitHub Actions run, and it does not update from workflow artifacts unless those artifacts are promoted into a GitHub Release.
+
+As of the 2026-05-01 PROD-382 clarification, the latest published release behind the stable URLs was `v0.1.21`. Check the repository's Releases page before publishing so the new tag moves `latest` forward from the current published release, not merely from the latest CI workflow run.
+
+The current tag-push workflow in `.github/workflows/build-release.yml` has a `release` job that downloads workflow artifacts, renames them to these canonical filenames, and runs `gh release create ... --latest`, so no separate follow-up is needed for automatic release promotion on tag pushes. A manual `workflow_dispatch` build is different: it uploads run-specific workflow artifacts for inspection, but it does not publish a GitHub Release and therefore does not update the public `/releases/latest/download/...` links. A workflow artifact URL is tied to one run; a `/releases/latest/download/...` URL is tied to the latest published GitHub Release.
+
+If the tag-push release job is unavailable, or if you need to publish from local build outputs, use the manual fallback:
+
+1. Build or download the release artifacts from a trusted CI run.
+2. Rename the artifacts exactly to the canonical names above.
+3. Create a tag and GitHub Release, then upload the assets:
+
+```bash
+mkdir -p release-assets
+cp path/to/mac-arm64-build.dmg release-assets/Layers-mac-arm64.dmg
+cp path/to/mac-x64-build.dmg release-assets/Layers-mac-x64.dmg
+cp path/to/windows-installer.exe release-assets/Layers-windows.exe
+cp path/to/android-build.apk release-assets/Layers-android.apk
+
+gh release create vX.Y.Z \
+  --repo mirror-factory/layers \
+  release-assets/Layers-mac-arm64.dmg \
+  release-assets/Layers-mac-x64.dmg \
+  release-assets/Layers-windows.exe \
+  release-assets/Layers-android.apk \
+  --title "Layers vX.Y.Z" \
+  --generate-notes \
+  --latest
+```
+
+GitHub dashboard alternative: open the repository's Releases page, draft a new release for the tag, attach the four files with the exact names above, publish the release, and confirm GitHub marks it as the latest release. After publication, test each `/releases/latest/download/...` URL before announcing the build.
+
+[PROD-367](https://linear.app/mirror-factory/issue/PROD-367/wire-final-app-store-play-store-mac-windows-urls-into-download) wires the `/download` UI to these stable URLs. If the owner/repository slug changes, update the `/download` constant and this section together.
+
 ## Android Permissions And Recording Blocker
 
 Current `AndroidManifest.xml` permissions:

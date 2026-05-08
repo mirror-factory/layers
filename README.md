@@ -97,7 +97,8 @@ docs/             BUILD_SPEC, PRICING, SCHEMAS, roadmap, brand/style guides
 | Document | Purpose |
 |----------|---------|
 | [EMBEDDINGS_AND_SEARCH.md](docs/EMBEDDINGS_AND_SEARCH.md) | Vector embeddings, hybrid search, MCP server, cost analysis |
-|----------|---------|
+| [NATIVE_RELEASE_READINESS.md](docs/NATIVE_RELEASE_READINESS.md#download-url-pattern) | Native release prep and `/download` GitHub Releases artifact URL pattern |
+| [RELEASE_PIPELINE.md](docs/RELEASE_PIPELINE.md) | Tag-based native build, artifact naming, and release publishing flow |
 | [BUILD_SPEC.md](docs/BUILD_SPEC.md) | Complete blueprint — every route, schema, config |
 | [PRICING_AND_BILLING.md](docs/PRICING_AND_BILLING.md) | Stripe setup, vendor pricing, margin analysis |
 | [SCHEMAS_AND_REGISTRIES.md](docs/SCHEMAS_AND_REGISTRIES.md) | Zod schemas, TypeScript interfaces, SQL |
