@@ -5,7 +5,9 @@ const mocks = vi.hoisted(() => ({
   checkQuota: vi.fn(),
   getAssemblyAI: vi.fn(),
   getDeepgramClient: vi.fn(),
+  assertDeepgramStreamingTokenScope: vi.fn(),
   createDeepgramStreamingToken: vi.fn(),
+  isDeepgramPermissionError: vi.fn(),
   getSettings: vi.fn(),
   getMeetingsStore: vi.fn(),
   withExternalCall: vi.fn(),
@@ -21,7 +23,9 @@ vi.mock("@/lib/assemblyai/client", () => ({
 
 vi.mock("@/lib/deepgram/client", () => ({
   getDeepgramClient: mocks.getDeepgramClient,
+  assertDeepgramStreamingTokenScope: mocks.assertDeepgramStreamingTokenScope,
   createDeepgramStreamingToken: mocks.createDeepgramStreamingToken,
+  isDeepgramPermissionError: mocks.isDeepgramPermissionError,
 }));
 
 vi.mock("@/lib/settings", () => ({
@@ -64,6 +68,20 @@ describe("Deepgram stream token route", () => {
     }
 
     mocks.checkQuota.mockResolvedValue(allowedQuota());
+    mocks.assertDeepgramStreamingTokenScope.mockResolvedValue(undefined);
+    mocks.isDeepgramPermissionError.mockImplementation((error) => {
+      if (typeof error !== "object" || error === null) return false;
+      const record = error as {
+        statusCode?: unknown;
+        body?: { err_msg?: unknown };
+        message?: unknown;
+      };
+      return (
+        Number(record.statusCode) === 403 ||
+        /insufficient permissions/i.test(String(record.body?.err_msg ?? "")) ||
+        /insufficient permissions/i.test(String(record.message ?? ""))
+      );
+    });
     mocks.getMeetingsStore.mockResolvedValue({
       insert: vi.fn().mockResolvedValue({}),
       update: vi.fn().mockResolvedValue({}),
@@ -102,6 +120,14 @@ describe("Deepgram stream token route", () => {
       streamingSpeechModel: "nova-3-multilingual",
     });
     mocks.getDeepgramClient.mockReturnValue({});
+    const insert = vi.fn().mockResolvedValue({});
+    mocks.getMeetingsStore.mockResolvedValue({
+      insert,
+      update: vi.fn().mockResolvedValue({}),
+      get: vi.fn(),
+      list: vi.fn(),
+      delete: vi.fn(),
+    });
     mocks.createDeepgramStreamingToken.mockResolvedValue({
       token: "dg_access",
       expiresAt: 1_800_000,
@@ -123,10 +149,44 @@ describe("Deepgram stream token route", () => {
     expect(wsUrl.pathname).toBe("/v1/listen");
     expect(wsUrl.searchParams.get("model")).toBe("nova-3");
     expect(wsUrl.searchParams.get("language")).toBe("multi");
+    expect(mocks.assertDeepgramStreamingTokenScope).toHaveBeenCalledOnce();
+    expect(insert).toHaveBeenCalledOnce();
+    expect(mocks.assertDeepgramStreamingTokenScope.mock.invocationCallOrder[0])
+      .toBeLessThan(insert.mock.invocationCallOrder[0]);
     expect(mocks.createDeepgramStreamingToken).toHaveBeenCalledWith(600);
   });
 
-  it("returns an actionable error when the Deepgram key cannot mint temporary tokens", async () => {
+  it("fails loudly before creating a meeting when the Deepgram key scope check fails", async () => {
+    mocks.getSettings.mockResolvedValue({
+      summaryModel: "openai/gpt-5.4-nano",
+      batchSpeechModel: "universal-2",
+      streamingSpeechModel: "nova-3",
+    });
+    mocks.getDeepgramClient.mockReturnValue({});
+    mocks.assertDeepgramStreamingTokenScope.mockRejectedValue({
+      statusCode: 403,
+      body: {
+        err_code: "FORBIDDEN",
+        err_msg: "Insufficient permissions.",
+      },
+      message: "Status code: 403",
+    });
+
+    const res = await tokenRoute.POST(request({ meetingTitle: "Launch sync" }));
+    const body = await res.json();
+
+    expect(res.status).toBe(502);
+    expect(body).toMatchObject({
+      code: "stt_token_permission_denied",
+      provider: "deepgram",
+      envVar: "DEEPGRAM_API_KEY",
+    });
+    expect(body.error).toContain("Member or higher");
+    expect(mocks.getMeetingsStore).not.toHaveBeenCalled();
+    expect(mocks.createDeepgramStreamingToken).not.toHaveBeenCalled();
+  });
+
+  it("returns an actionable error when the Deepgram token mint fails permission checks", async () => {
     mocks.getSettings.mockResolvedValue({
       summaryModel: "openai/gpt-5.4-nano",
       batchSpeechModel: "universal-2",

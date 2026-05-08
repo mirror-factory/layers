@@ -22,7 +22,9 @@ const mocks = vi.hoisted(() => ({
   checkQuota: vi.fn(),
   getAssemblyAI: vi.fn(),
   getDeepgramClient: vi.fn(),
+  assertDeepgramStreamingTokenScope: vi.fn(),
   createDeepgramStreamingToken: vi.fn(),
+  isDeepgramPermissionError: vi.fn(),
   getSettings: vi.fn(),
   getMeetingsStore: vi.fn(),
   getCurrentUserId: vi.fn(),
@@ -39,7 +41,9 @@ vi.mock("@/lib/assemblyai/client", () => ({
 
 vi.mock("@/lib/deepgram/client", () => ({
   getDeepgramClient: mocks.getDeepgramClient,
+  assertDeepgramStreamingTokenScope: mocks.assertDeepgramStreamingTokenScope,
   createDeepgramStreamingToken: mocks.createDeepgramStreamingToken,
+  isDeepgramPermissionError: mocks.isDeepgramPermissionError,
 }));
 
 vi.mock("@/lib/settings", () => ({
@@ -88,6 +92,20 @@ describe("PROD-321 -- /api/transcribe/stream/token behavior", () => {
 
     mocks.checkQuota.mockResolvedValue(allowedQuota());
     mocks.getCurrentUserId.mockResolvedValue("user_a");
+    mocks.assertDeepgramStreamingTokenScope.mockResolvedValue(undefined);
+    mocks.isDeepgramPermissionError.mockImplementation((error) => {
+      if (typeof error !== "object" || error === null) return false;
+      const record = error as {
+        statusCode?: unknown;
+        body?: { err_msg?: unknown };
+        message?: unknown;
+      };
+      return (
+        Number(record.statusCode) === 403 ||
+        /insufficient permissions/i.test(String(record.body?.err_msg ?? "")) ||
+        /insufficient permissions/i.test(String(record.message ?? ""))
+      );
+    });
     mocks.getSettings.mockResolvedValue({
       summaryModel: "openai/gpt-5.4-nano",
       batchSpeechModel: "universal-2",
