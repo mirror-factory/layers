@@ -29,6 +29,7 @@
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
+import { getVendorBurnRows } from '@/lib/ops/spend-caps';
 
 // ── Shared Types ──────────────────────────────────────────────────────
 
@@ -122,7 +123,7 @@ const S = {
 
 // ── Component ─────────────────────────────────────────────────────────
 
-type Tab = 'calls' | 'errors' | 'sessions' | 'charts' | 'http';
+type Tab = 'calls' | 'errors' | 'sessions' | 'charts' | 'burn' | 'http';
 
 export default function AIObservabilityPage() {
   const [tab, setTab] = useState<Tab>('calls');
@@ -168,6 +169,15 @@ export default function AIObservabilityPage() {
   const uniqueModels = useMemo(() => [...new Set(logs.map(l => l.modelId))], [logs]);
   const uniqueUsers = useMemo(() => [...new Set(logs.map(l => l.userId))], [logs]);
   const uniqueLabels = useMemo(() => [...new Set(logs.map(l => l.label))], [logs]);
+  const latestAiDailyCost = useMemo(() => {
+    if (!stats) return 0;
+    const latestDay = Object.keys(stats.costByDay).sort().at(-1);
+    return latestDay ? stats.costByDay[latestDay] ?? 0 : 0;
+  }, [stats]);
+  const burnRows = useMemo(
+    () => getVendorBurnRows({ 'ai-gateway': latestAiDailyCost }),
+    [latestAiDailyCost],
+  );
 
   // ── Render ────────────────────────────────────────────────────────
 
@@ -216,7 +226,7 @@ export default function AIObservabilityPage() {
 
       {/* Tabs */}
       <div style={S.tabs}>
-        {(['calls', 'errors', 'sessions', 'charts', 'http'] as Tab[]).map(t => (
+        {(['calls', 'errors', 'sessions', 'charts', 'burn', 'http'] as Tab[]).map(t => (
           <div key={t} style={S.tab(tab === t)} onClick={() => setTab(t)}>
             {t}{t === 'errors' && stats && stats.totalErrors > 0 ? ` (${stats.totalErrors})` : ''}
           </div>
@@ -436,6 +446,63 @@ export default function AIObservabilityPage() {
                 );
               })}
             </div>
+          </div>
+        )}
+
+        {/* ─── Spend Burn Tab ────────────────────────────────────── */}
+        {!loading && tab === 'burn' && (
+          <div style={{ padding: 'clamp(12px, 4vw, 24px)' }}>
+            <div style={{ ...S.card, marginBottom: 12 }}>
+              <div style={S.statLabel}>Daily Burn / Cap</div>
+              <div style={{ fontSize: 12, color: OBS_COLORS.muted, marginTop: 8, lineHeight: 1.6 }}>
+                Rows are sorted by projected monthly burn as a percent of each vendor cap. AI Gateway uses today's logged AI cost; vendor dashboards remain the source of truth for non-AI usage until API polling is wired.
+              </div>
+            </div>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead><tr style={{ borderBottom: `1px solid ${OBS_COLORS.border}` }}>
+                {['Vendor', 'Daily Burn', 'Projected Month', '% Cap', 'Alert', 'Source', 'Kill-switch'].map(h =>
+                  <th key={h} style={S.tableHead}>{h}</th>
+                )}
+              </tr></thead>
+              <tbody>
+                {burnRows.map(row => {
+                  const stateColor =
+                    row.alertState === 'urgent' ? OBS_COLORS.live :
+                    row.alertState === 'watch' ? OBS_COLORS.warning :
+                    row.alertState === 'capped' ? OBS_COLORS.blue :
+                    row.alertState === 'uncapped' ? OBS_COLORS.violet :
+                    OBS_COLORS.success;
+                  return (
+                    <tr key={row.id} style={{ borderBottom: `1px solid ${OBS_COLORS.border}` }}>
+                      <td style={S.td}>
+                        <div style={{ color: OBS_COLORS.text, fontWeight: 700 }}>{row.vendor}</div>
+                        <div style={{ color: OBS_COLORS.faint, fontSize: 10 }}>{row.usedFor}</div>
+                      </td>
+                      <td style={{ ...S.td, color: OBS_COLORS.warning, fontWeight: 600 }}>{fmt.cost(row.dailyBurnUsd)}</td>
+                      <td style={{ ...S.td, color: OBS_COLORS.muted }}>{fmt.cost(row.projectedMonthlyBurnUsd)}</td>
+                      <td style={S.td}>
+                        {row.percentOfCap === null ? (
+                          <span style={{ color: OBS_COLORS.faint }}>n/a</span>
+                        ) : (
+                          <div style={{ minWidth: 110 }}>
+                            <div style={{ ...S.barBg, height: 12 }}>
+                              <div style={S.barFill(row.percentOfCap, stateColor)} />
+                            </div>
+                            <div style={{ color: stateColor, fontSize: 10, marginTop: 3 }}>{fmt.pct(row.percentOfCap)}</div>
+                          </div>
+                        )}
+                      </td>
+                      <td style={S.td}>
+                        <span style={S.badge(stateColor)}>{row.alertState}</span>
+                        <div style={{ color: OBS_COLORS.faint, fontSize: 10, marginTop: 4 }}>{row.alertChannel}</div>
+                      </td>
+                      <td style={{ ...S.td, color: OBS_COLORS.muted, maxWidth: 180 }}>{row.burnSource}</td>
+                      <td style={{ ...S.td, color: OBS_COLORS.muted, maxWidth: 280 }}>{row.killSwitch}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         )}
 

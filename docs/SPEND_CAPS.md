@@ -23,7 +23,7 @@ The caps below are **opinionated starting values for a 10-user alpha**. Tweak af
 | --- | --: | --- | --- |
 | Vercel (hosting) | $20 | 50/80/100% via web+email | Pause all projects (auto, opt-in) |
 | Vercel AI Gateway | $200 | manual balance check + Langfuse | Disable auto top-up; rotate `AI_GATEWAY_API_KEY` |
-| Supabase | $25 | Cost Control + email | Spend Cap auto-disables overage usage |
+| Supabase | $25 | Cost Control + email | Spend Cap auto-disables overage usage; storage + egress checked separately |
 | Anthropic direct | $50 | 50/80/100% email | Rotate `ANTHROPIC_API_KEY` |
 | OpenAI direct | $50 | 50/80/100% email | Rotate `OPENAI_API_KEY` (if used) |
 | Google AI / Vertex | $50 | Cloud Billing budget + pubsub | Disable billing on project; rotate keys |
@@ -58,15 +58,20 @@ Each vendor below uses the same five-field structure: cap value, alerts, owner, 
 ### 2. Supabase (Postgres, auth, storage)
 
 - **Cap value:** $25/mo overage above Pro plan's included allocation.
+- **Storage hard limit:** Spend Cap must list Storage size / transformations as capped items. Confirm the Storage usage line is below the included Pro allowance before invite batches.
+- **Egress hard limit:** Spend Cap must list Egress as a capped item. Treat egress separately from storage because runaway audio downloads can spike egress while stored GB stays flat.
 - **Alert thresholds:** Email at threshold; configure a Cost Control alert in dashboard. There is no native 50/80/100% staircase — set a single threshold notification at 80% and rely on the hard Spend Cap at 100%.
 - **Owner:** founder.
 - **Configuration steps** (verified against `supabase.com/docs/guides/platform/spend-cap`, last fetched 2026-05-01):
   1. Supabase dashboard → **Organization** → **Billing** (`/dashboard/org/<org>/billing`).
   2. Find **Cost Control** section → **Spend Cap** → toggle **Enabled**.
   3. Confirm what is capped (Disk, Egress, Edge Function invocations, MAU, Realtime, Storage transformations & size). Compute, Custom Domain, IPv4, Log Drains, PITR, advanced MFA are **NOT capped** — these are billed regardless.
-  4. Enable email notifications under **Notifications** for billing events.
+  4. Open **Usage** and screenshot the **Storage** line into `.ai-starter/evidence/spend-caps/<YYYY-MM-DD>/supabase-storage.png`.
+  5. Open **Usage** and screenshot the **Egress** line into `.ai-starter/evidence/spend-caps/<YYYY-MM-DD>/supabase-egress.png`.
+  6. Enable email notifications under **Notifications** for billing events.
 - **Kill-switch:** When Spend Cap engages, additional usage of capped items is blocked until the next billing cycle. **This means the project goes read-only / fails on the capped resource — treat as P1 outage.** To force-stop sooner: pause the project via Settings → General → **Pause project**. To revive a paused project: same path → **Restore**.
-- **Egress watch:** Supabase egress is the most common surprise. Add a separate alert below the cap (e.g. $15) so we know before it hard-stops.
+- **Storage kill-switch:** If storage growth is the driver, disable upload routes, shorten signed URL TTLs, and archive old audio before raising the cap.
+- **Egress kill-switch:** If egress is the driver, disable audio download/playback URLs, reduce signed URL TTLs to 5 minutes, and block mobile clients from re-pulling audio until cache behavior is fixed.
 
 ### 3. Vercel AI Gateway (primary LLM path — Anthropic/OpenAI/Google)
 
@@ -188,6 +193,7 @@ Single source of truth for "how much are we spending right now":
 | Layer | Where | Refresh |
 | --- | --- | --- |
 | LLM tokens (per-call cost, per-user, per-tool) | **Langfuse** (`https://cloud.langfuse.com`) — already wired via `LANGFUSE_*` env vars | real-time |
+| Daily vendor burn vs cap | **`/observability` → Burn tab** — sorted by projected monthly spend as `% of cap` | 5 seconds for AI Gateway; manual dashboard values for other vendors until polling lands |
 | AI Gateway balance | Vercel → AI Gateway tab | manual; consider polling |
 | STT minutes | AssemblyAI dashboard usage tab | hourly |
 | Supabase metered usage | Supabase Org → Billing → Usage | hourly |
@@ -242,7 +248,7 @@ This checklist runs before any promotion to `main` (i.e. before any user-facing 
 1. [ ] All 11 vendors above have a configured cap, verified by visiting the dashboard and screenshotting the cap value into `.ai-starter/evidence/spend-caps/<YYYY-MM-DD>/`.
 2. [ ] No alert email has fired in the last 24 hrs (search `support@mirrorfactory.ai` for `[Spend]`, `[Budget]`, `[Usage]`).
 3. [ ] AI Gateway balance > $80 (40% of cap). Top up if lower.
-4. [ ] Supabase Spend Cap toggle is **on**. Egress trend over last 7 days is < $5/day.
+4. [ ] Supabase Spend Cap toggle is **on**. Storage trend over last 7 days is explainable and egress trend over last 7 days is < $5/day.
 5. [ ] AssemblyAI usage trend over last 7 days extrapolates to < $50 for the month.
 6. [ ] Stripe Radar rules are active; no disputed charges in the last 7 days.
 7. [ ] Langfuse cost dashboard for the last 24 hrs shows no anomalous user (>10x median spend).
@@ -255,3 +261,4 @@ If any item fails, **block the release** and resolve before continuing.
 ## Change log
 
 - 2026-05-01 — initial doc, alpha launch caps. Verified Vercel + Supabase paths via vendor docs; AssemblyAI/Deepgram/Resend/Inngest dashboard paths marked "verify in dashboard" because docs were unreachable at write-time.
+- 2026-05-08 — added `/observability` Burn tab source, explicit Supabase storage/egress checks, and registry-backed cap coverage tests.
