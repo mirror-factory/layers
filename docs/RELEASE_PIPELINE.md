@@ -2,7 +2,7 @@
 
 How the Layers app reaches users on every platform — what triggers builds, where artifacts land, who pays for the compute, and how to ship a new version.
 
-> **TL;DR.** Push a tag (`git tag vX.Y.Z && git push --tags`) → GitHub Actions builds Mac/Windows/Android/iOS in parallel → Mac/Win/Android attach to a new GitHub Release → iOS auto-uploads to TestFlight. The `/download` page picks up the new artifacts automatically. Public repo, so all CI is free.
+> **TL;DR.** The `/download` page uses stable GitHub Releases URLs documented in [`docs/NATIVE_RELEASE_READINESS.md`](./NATIVE_RELEASE_READINESS.md#download-url-pattern). GitHub Actions workflow artifacts are run-specific and do not refresh those public links by themselves. To ship new public desktop or Android downloads today, create or update a GitHub Release and upload the canonical assets.
 
 ---
 
@@ -16,25 +16,26 @@ How the Layers app reaches users on every platform — what triggers builds, whe
 | Android | Capacitor + Gradle | debug APK | GitHub Releases → linked from `/download` |
 | iOS | Capacitor + Xcode | signed IPA | TestFlight (auto) → App Store (manual promotion) |
 
-Web is **continuous** — every push to `main` deploys via Vercel's own GitHub integration. The other four are **release-gated**: they only build when you push a `vX.Y.Z` tag.
+Web is **continuous** — every push to `main` deploys via Vercel's own GitHub integration. Native artifacts are **release-gated** for public distribution: CI may build run-specific artifacts, but `/download` only changes when the latest GitHub Release changes.
 
 ---
 
 ## Trigger model
 
-There are three ways CI runs:
+There are three ways CI can run:
 
 ```
 push: branches: main      → web only (typecheck/test/build as a deploy guard)
-push: tags: 'v*'          → full matrix + GitHub Release publish + TestFlight upload
-workflow_dispatch         → full matrix, no GH Release publish (dry-run mode)
+push: tags: 'v*'          → native build workflow artifacts
+workflow_dispatch         → native build workflow artifacts for a selected ref
 ```
 
 This means:
 
 - Routine commits to `main` are cheap (one Linux job, no artifacts, no notarization).
-- A tagged push is the *only* way a new DMG / EXE / APK / IPA reaches users.
-- Tags can point at **any** commit on **any** branch — the workflow checks out the tagged commit and builds it. Convention: tag from `main` after the version-bump commit hits.
+- A CI run alone does not refresh public `/download` links.
+- Publishing a GitHub Release with the canonical asset names is what refreshes the public DMG / EXE / APK links.
+- Tags can point at **any** commit on **any** branch. Convention: tag from `main` after the version-bump commit hits.
 
 > **There is no `dev` or `staging` auto-publish.** The legacy `AGENTS.md` mentions `feature → development → staging → main`, but the `development` and `staging` branches don't exist yet (PROD-383 is Backlog). Until they're set up, the only path is `feature → main → tag`.
 
@@ -55,7 +56,7 @@ git tag v0.1.70
 git push --tags
 ```
 
-That's it. The rest is automatic.
+This creates the version anchor. It does not, by itself, guarantee the public `/download` assets are refreshed.
 
 ### 3. CI fans out across five jobs
 
@@ -75,16 +76,16 @@ The workflow is `.github/workflows/build-release.yml`. On a tag push it kicks of
         +-----------+--+               |          xcrun altool   →  Vercel
                     |                  |               |
                     v                  v               v
-              actions/download-artifact each          App Store Connect
+              GitHub Actions workflow artifacts       App Store Connect
                     |                                 (TestFlight)
                     v
-               release job: rename to canonical filenames,
-               gh release create v0.1.70 --generate-notes --latest
+              manual release publish required for
+              /releases/latest/download URLs
 ```
 
 ### 4. Filenames and where they land
 
-The `release` job renames raw build outputs into stable filenames the `/download` page knows how to fetch:
+Before uploading assets to a GitHub Release, rename raw build outputs into the stable filenames the `/download` page knows how to fetch:
 
 | Built file | Renamed to | Final URL |
 | --- | --- | --- |
@@ -93,7 +94,7 @@ The `release` job renames raw build outputs into stable filenames the `/download
 | `Layers Setup 0.1.70.exe` | `Layers-windows.exe` | `…/Layers-windows.exe` |
 | `app-debug.apk` | `Layers-android.apk` | `…/Layers-android.apk` |
 
-`/releases/latest/download/<filename>` always 302-redirects to the most recent release tagged `--latest`, so the `/download` page never needs version awareness.
+`/releases/latest/download/<filename>` always 302-redirects to the asset with that exact name on the latest published GitHub Release, so the `/download` page never needs version awareness. See [`Download URL Pattern`](./NATIVE_RELEASE_READINESS.md#download-url-pattern) for the canonical publishing workflow.
 
 ### 5. iOS goes elsewhere
 
@@ -190,7 +191,7 @@ The `/download` page is a Next.js route in this repo. Vercel deploys main automa
 3. Vercel promotes the build to `layers.mirrorfactory.ai`
 4. The page is live with the latest URL constants
 
-Note: the `/download` page links don't change between releases — they always point at `/releases/latest/download/<filename>`. The actual artifacts behind those URLs change when a new release is tagged.
+Note: the `/download` page links don't change between releases — they always point at `/releases/latest/download/<filename>`. The actual artifacts behind those URLs change when a new GitHub Release is published as latest with matching asset names.
 
 ---
 
@@ -230,7 +231,7 @@ It's already in the website. The `/download` page reads from a constant (`GITHUB
 https://github.com/mirror-factory/layers/releases/latest/download/Layers-windows.exe
 ```
 
-You don't need to update any URL by hand. The `latest` segment auto-tracks whichever release is marked `--latest` (which the workflow does automatically via `gh release create … --latest`).
+You don't need to update any URL by hand. The `latest` segment auto-tracks whichever release is marked `--latest`; today that requires explicitly publishing a GitHub Release with `gh release create ... --latest` or through the GitHub dashboard.
 
 If you ever want to override it (Vercel edge cache, custom CDN, beta channel), the page also reads `NEXT_PUBLIC_WINDOWS_EXE_URL` from Vercel env first and falls back to the GitHub URL.
 
@@ -239,17 +240,21 @@ If you ever want to override it (Vercel edge cache, custom CDN, beta channel), t
 ## Cheat sheet
 
 ```bash
-# Ship a new release end-to-end
+# Build and publish a new release
 git checkout main
 git pull
-git tag v0.1.70           # convention: SemVer; chore commits already bumped package.json
-git push --tags
+git tag v0.1.70           # convention: SemVer
+git push origin v0.1.70
 
 # Watch CI
 gh run watch --repo mirror-factory/layers
 
-# Verify the GitHub Release was created
-gh release view v0.1.70 --repo mirror-factory/layers
+# After collecting and renaming build outputs, publish the release
+gh release create v0.1.70 --repo mirror-factory/layers --generate-notes --latest \
+  Layers-mac-arm64.dmg Layers-mac-x64.dmg Layers-windows.exe Layers-android.apk
+
+# Verify the GitHub Release and latest/download links
+gh release view v0.1.70 --repo mirror-factory/layers --web
 
 # Check TestFlight (after Apple processes it, ~5-15 min)
 open "https://appstoreconnect.apple.com/apps/6767010089/distribution/ios/builds"

@@ -15,6 +15,7 @@ A [Mirror Factory](https://mirrorfactory.ai) product. Currently in invite-only a
 Other essentials:
 
 - 🚦 [`docs/RELEASE.md`](./docs/RELEASE.md) — feature → development → staging → main. Vercel setup, GitHub branch protection, OAuth/webhook allow-lists. **Read before pushing.**
+- 📦 [`docs/NATIVE_RELEASE_READINESS.md`](./docs/NATIVE_RELEASE_READINESS.md#download-url-pattern) — `/download` GitHub Releases URL pattern, required asset names, and manual release publishing steps.
 - 🎨 [`DESIGN.md`](./DESIGN.md) — Paper Calm v1 tokens. OKLCH only. 4pt grid. Source of truth for visual decisions.
 - 🤖 [`AGENTS.md`](./AGENTS.md) — agent contract. AI SDK v6 patterns. Skill registry.
 - 🧪 [`docs/V1_PLAN.md`](./docs/V1_PLAN.md) — sprints + milestones, mapped to [Linear M1–M6](https://linear.app/mirror-factory/project/layers-786bd350532f).
@@ -99,6 +100,7 @@ docs/             BUILD_SPEC, PRICING, SCHEMAS, roadmap, brand/style guides
 | [EMBEDDINGS_AND_SEARCH.md](docs/EMBEDDINGS_AND_SEARCH.md) | Vector embeddings, hybrid search, MCP server, cost analysis |
 |----------|---------|
 | [BUILD_SPEC.md](docs/BUILD_SPEC.md) | Complete blueprint — every route, schema, config |
+| [NATIVE_RELEASE_READINESS.md](docs/NATIVE_RELEASE_READINESS.md#download-url-pattern) | Native release prerequisites and `/download` GitHub Release artifact naming |
 | [PRICING_AND_BILLING.md](docs/PRICING_AND_BILLING.md) | Stripe setup, vendor pricing, margin analysis |
 | [SCHEMAS_AND_REGISTRIES.md](docs/SCHEMAS_AND_REGISTRIES.md) | Zod schemas, TypeScript interfaces, SQL |
 | [roadmap.md](docs/roadmap.md) | Product roadmap |

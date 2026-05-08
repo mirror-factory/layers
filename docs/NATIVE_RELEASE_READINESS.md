@@ -6,6 +6,78 @@ Scope: iOS TestFlight and Google Play internal testing prep without Apple or Goo
 
 Repository note: the root `.gitignore` ignores `/ios/` and `/android/`. Native changes in those directories exist on disk but will not appear in normal `git status`; commit them with an explicit force-add or update the ignore policy when native artifacts are meant to be tracked.
 
+## Download URL Pattern
+
+The public `/download` page uses stable GitHub Releases asset URLs for desktop and Android artifacts:
+
+```text
+https://github.com/mirror-factory/layers/releases/latest/download/Layers-mac-arm64.dmg
+https://github.com/mirror-factory/layers/releases/latest/download/Layers-mac-x64.dmg
+https://github.com/mirror-factory/layers/releases/latest/download/Layers-windows.exe
+https://github.com/mirror-factory/layers/releases/latest/download/Layers-android.apk
+```
+
+The `/releases/latest/download/<asset-name>` path is a GitHub Releases redirect. It resolves to the asset with that exact name on whichever GitHub Release is currently marked as the latest published release. The website does not need to know the version number, and a Vercel redeploy is not required when the release asset behind one of these URLs changes.
+
+This is different from GitHub Actions workflow artifacts. Workflow artifacts are attached to a specific CI run, expire according to Actions retention settings, and do not update these public `latest/download` URLs. A successful CI build only creates run-specific artifacts unless someone also creates or updates a GitHub Release and uploads the files with the canonical names below.
+
+Required release asset names:
+
+| Platform | Required asset filename | Public URL suffix |
+| --- | --- | --- |
+| macOS Apple Silicon | `Layers-mac-arm64.dmg` | `/releases/latest/download/Layers-mac-arm64.dmg` |
+| macOS Intel | `Layers-mac-x64.dmg` | `/releases/latest/download/Layers-mac-x64.dmg` |
+| Windows | `Layers-windows.exe` | `/releases/latest/download/Layers-windows.exe` |
+| Android | `Layers-android.apk` | `/releases/latest/download/Layers-android.apk` |
+
+If any uploaded asset uses a different filename, the matching `/download` button will keep pointing at the old latest asset or return a GitHub 404 for that filename.
+
+### Publishing a New GitHub Release
+
+Current release builds upload artifacts to GitHub Actions runs. To refresh the public `/download` links, publish a GitHub Release and attach the artifacts with the exact filenames above.
+
+CLI workflow:
+
+```bash
+# 1. Choose the commit to release and create a SemVer tag.
+git checkout main
+git pull
+git tag v0.1.72
+git push origin v0.1.72
+
+# 2. Download or collect the build outputs from the workflow run.
+# Rename them to the canonical public asset names:
+# - Layers-mac-arm64.dmg
+# - Layers-mac-x64.dmg
+# - Layers-windows.exe
+# - Layers-android.apk
+
+# 3. Create the release and upload the assets.
+gh release create v0.1.72 \
+  --repo mirror-factory/layers \
+  --title "v0.1.72" \
+  --generate-notes \
+  --latest \
+  Layers-mac-arm64.dmg \
+  Layers-mac-x64.dmg \
+  Layers-windows.exe \
+  Layers-android.apk
+
+# 4. Verify the public links resolve.
+gh release view v0.1.72 --repo mirror-factory/layers --web
+curl -I https://github.com/mirror-factory/layers/releases/latest/download/Layers-windows.exe
+```
+
+Dashboard workflow:
+
+1. Open GitHub Releases for `mirror-factory/layers`.
+2. Draft a new release from the tag, or create the tag during release drafting.
+3. Upload the four assets using the required filenames exactly.
+4. Publish the release and make sure it is marked as the latest release.
+5. Open `/download` and test each public button or run `curl -I` against each `latest/download` URL.
+
+Future automation can promote a tagged workflow build into a GitHub Release by downloading the workflow artifacts, renaming them to the canonical filenames, and running `gh release create ... --latest`. That automation is intentionally out of scope for PROD-382; file a follow-up before changing `.github/workflows/`.
+
 ## Current Metadata
 
 ### iOS
