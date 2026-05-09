@@ -62,6 +62,17 @@
       "additionalProperties": true
     },
     "proofPolicy": { "type": "object", "additionalProperties": true },
+    "nativePolicy": {
+      "type": "object",
+      "properties": {
+        "mobileAppId": { "type": "string" },
+        "deepLinkScheme": { "type": "string" },
+        "oauthCallbackPath": { "type": "string" },
+        "electronAppId": { "type": "string" },
+        "artifactRoots": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
     "reviewPolicy": { "type": "object", "additionalProperties": true },
     "dashboard": { "type": "object", "additionalProperties": true },
     "symphony": { "type": "object", "additionalProperties": true }

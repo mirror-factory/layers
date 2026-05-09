@@ -177,8 +177,10 @@ pnpm verify:tier 5
 
 Runs:
 
-- app build
-- Electron build
+- native configuration proof (`pnpm test:native:config`)
+- optional Maestro simulator/emulator smoke (`pnpm test:native:smoke`)
+- optional native build command wrapper (`pnpm build:native`)
+- release artifact proof (`pnpm build:release`)
 - download route smoke proof
 
 Used by:
@@ -191,6 +193,22 @@ Blocks:
 
 - public release announcement
 - production promotion
+
+Tier 5 is intentionally explicit about optional versus blocking native proof.
+Local agents can run it without a macOS/iOS/Android toolchain and still get a
+machine-readable skip reason. Release jobs make the same commands blocking with
+environment flags:
+
+```bash
+NATIVE_REQUIRED=1 MAESTRO_RUN=1 pnpm test:native:smoke
+NATIVE_BUILD_RUN=1 NATIVE_REQUIRED=1 pnpm build:native
+RELEASE_ARTIFACTS_REQUIRED=1 pnpm build:release
+```
+
+The current native OAuth callback scheme is
+`com.mirrorfactory.layers://auth/callback`. Native Google sign-in uses the
+Capacitor Browser plugin plus the `appUrlOpen` bridge; it must not rely on a
+Google login page inside the embedded WebView.
 
 ## Evidence
 

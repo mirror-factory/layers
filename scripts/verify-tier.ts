@@ -105,9 +105,11 @@ const tiers: Record<TierId, TierSpec> = {
     label: 'Release and native artifact proof',
     description: 'Release-tag proof for web, native shells, and public assets.',
     commands: [
-      { name: 'build', command: 'pnpm build' },
-      { name: 'electron build', command: 'pnpm electron:build' },
-      { name: 'download smoke', command: 'PLAYWRIGHT_DISABLE_VIDEO=1 pnpm test:e2e tests/e2e/app-download-page.smoke.spec.ts -- --project=desktop-light' },
+      { name: 'native config', command: 'pnpm test:native:config', when: () => has('scripts/check-native-config.ts') },
+      { name: 'native smoke', command: 'pnpm test:native:smoke', when: () => has('scripts/run-native-smoke.ts') },
+      { name: 'native build', command: 'pnpm build:native', when: () => has('scripts/run-native-build.ts') },
+      { name: 'release artifacts', command: 'pnpm build:release', when: () => has('scripts/check-release-artifacts.ts') },
+      { name: 'download smoke', command: 'PLAYWRIGHT_DISABLE_VIDEO=1 pnpm exec playwright test tests/e2e/app-download-page.smoke.spec.ts --project=desktop-light' },
     ],
   },
 };

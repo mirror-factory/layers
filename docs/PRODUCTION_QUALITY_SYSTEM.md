@@ -131,6 +131,7 @@ flowchart LR
 | Dependency vulnerabilities | dependency audit registry | Tier 4 |
 | Cost drift | budget and cost-drift jobs | Tier 4 |
 | Native artifact failure | Electron/Capacitor build workflows | Tier 5 |
+| Native OAuth/deep-link drift | native config proof and Maestro flow | Tier 5 |
 
 ## Platform Testing Strategy
 
@@ -196,10 +197,12 @@ Manual:
 - Sign in, recording, microphone permission, background/foreground, and deep
   link flows on device.
 
-Known production-class issue: Google OAuth must not run inside the WebView. The
-correct mobile flow is external browser session plus app-scheme/deep-link return
-handled by Capacitor. This is required for reliable Google sign-in on iOS and
-Android.
+Native Google OAuth must not run inside the WebView. Layers routes native Google
+sign-in through Capacitor Browser and returns through
+`com.mirrorfactory.layers://auth/callback`, where the client-side native auth
+bridge exchanges the Supabase PKCE code. Tier 5 checks the native scheme,
+Android intent filter, iOS URL scheme, and release workflow bundle id before
+native proof can be considered complete.
 
 ### Capacitor Android
 

@@ -125,6 +125,18 @@
     "maxRepeatedFailures": 2,
     "maxAgentTurns": 5
   },
+  "nativePolicy": {
+    "mobileAppId": "com.mirrorfactory.layers",
+    "deepLinkScheme": "com.mirrorfactory.layers",
+    "oauthCallbackPath": "/callback",
+    "electronAppId": "com.mirrorfactory.audiolayer",
+    "artifactRoots": [
+      "dist-electron",
+      "release-assets",
+      "android/app/build/outputs",
+      "ios/App/build"
+    ]
+  },
   "reviewPolicy": {
     "humanApprovalRequired": true,
     "aiReviewRequired": true,

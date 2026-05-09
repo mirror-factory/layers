@@ -2,6 +2,7 @@
 
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { Capacitor } from "@capacitor/core";
 import { getSupabaseBrowser } from "@/lib/supabase/browser";
 import { GOOGLE_SIGN_IN_AUTH_SCOPES } from "@/lib/auth/google-oauth";
 import {
@@ -74,6 +75,7 @@ function SignInForm() {
     try {
       const supabase = getSupabaseBrowser();
       if (!supabase) throw new Error("Auth not configured");
+      const isNative = Capacitor.isNativePlatform();
 
       // For Google OAuth (PKCE flow), Supabase redirects back to redirectTo
       // with `?code=...`. Our /auth/callback route exchanges the code, then
@@ -85,17 +87,32 @@ function SignInForm() {
       );
       callbackUrl.searchParams.set("next", getPostLoginRedirect());
 
-      const { error: authError } = await supabase.auth.signInWithOAuth({
+      const nativeCallbackUrl = new URL("com.mirrorfactory.layers://auth/callback");
+      nativeCallbackUrl.searchParams.set("next", getPostLoginRedirect());
+
+      const { data, error: authError } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
           scopes: GOOGLE_SIGN_IN_AUTH_SCOPES,
-          redirectTo: isOAuthFlow
-            ? `${window.location.origin}${getPostLoginRedirect()}`
-            : callbackUrl.toString(),
+          redirectTo: isNative
+            ? nativeCallbackUrl.toString()
+            : isOAuthFlow
+              ? `${window.location.origin}${getPostLoginRedirect()}`
+              : callbackUrl.toString(),
+          skipBrowserRedirect: isNative,
         },
       });
 
       if (authError) throw authError;
+      if (isNative) {
+        if (!data.url) throw new Error("Google auth URL missing");
+        const { Browser } = await import("@capacitor/browser");
+        await Browser.open({
+          url: data.url,
+          presentationStyle: "popover",
+          toolbarColor: "#0a0a0a",
+        });
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Google sign in failed");
       setGoogleLoading(false);

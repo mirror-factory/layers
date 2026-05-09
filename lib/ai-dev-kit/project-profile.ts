@@ -45,6 +45,13 @@ export interface ProjectProfile {
     aiRules?: string[];
   };
   proofPolicy: Record<string, unknown>;
+  nativePolicy?: {
+    mobileAppId?: string;
+    deepLinkScheme?: string;
+    oauthCallbackPath?: string;
+    electronAppId?: string;
+    artifactRoots?: string[];
+  };
   reviewPolicy: Record<string, unknown>;
   dashboard: Record<string, unknown>;
   symphony?: Record<string, unknown>;
@@ -228,6 +235,9 @@ export function evaluateProjectHarness(cwd = process.cwd()): ProjectHarnessRepor
   add(checks, "platform.capacitor", "Capacitor mobile", (!profile.platforms.ios?.enabled && !profile.platforms.android?.enabled) || (hasPackage(pkg, "@capacitor/core") && hasPackage(pkg, "@capacitor/ios") && hasPackage(pkg, "@capacitor/android")), "Capacitor mobile dependencies present.", "Mobile enabled but Capacitor dependencies are incomplete.", "package.json");
   add(checks, "platform.electron", "Electron desktop", (!profile.platforms.macos?.enabled && !profile.platforms.windows?.enabled) || hasPackage(pkg, "electron"), "Electron dependency present.", "Desktop enabled but electron is missing.", "package.json");
   add(checks, "platform.maestro", "Native flow harness", !profile.tools.maestro?.required || hasAnyFile(cwd, ["maestro.yaml", ".maestro"]), "Native flow harness present or not required yet.", "Maestro is required but no maestro.yaml/.maestro was found.", ".maestro", !profile.tools.maestro?.required);
+  add(checks, "platform.native-config", "Native config proof", hasScript(pkg, "test:native:config") && existsSync(join(cwd, "scripts/check-native-config.ts")), "Native config proof command present.", "Missing test:native:config or native config checker.", "scripts/check-native-config.ts");
+  add(checks, "platform.native-smoke", "Native smoke proof", hasScript(pkg, "test:native:smoke") && existsSync(join(cwd, "scripts/run-native-smoke.ts")), "Native smoke proof command present.", "Missing test:native:smoke or native smoke runner.", "scripts/run-native-smoke.ts");
+  add(checks, "platform.release-artifacts", "Release artifact proof", hasScript(pkg, "build:release") && existsSync(join(cwd, "scripts/check-release-artifacts.ts")), "Release artifact proof command present.", "Missing build:release or release artifact checker.", "scripts/check-release-artifacts.ts");
 
   add(checks, "dashboard.dev-kit", "Dev-kit dashboard", existsSync(join(cwd, "app/dev-kit/page.tsx")) && existsSync(join(cwd, "app/api/dev-kit/status/route.ts")), "Dev-kit dashboard routes present.", "Missing /dev-kit dashboard routes.", "app/dev-kit");
   add(checks, "dashboard.project", "Project control panel", existsSync(join(cwd, "app/dev-kit/project/page.tsx")), "Project control panel present.", "Project control panel not installed yet.", "app/dev-kit/project/page.tsx", !existsSync(join(cwd, "app/dev-kit/project/page.tsx")));
