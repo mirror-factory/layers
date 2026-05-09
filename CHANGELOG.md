@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.76] — 2026-05-09
+
+### Other
+- ci: run dev-kit gates on staging (`6514072`)
+
+
 ## [0.1.75] — 2026-05-09
 
 ### Added
