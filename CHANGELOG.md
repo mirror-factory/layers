@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.79] — 2026-05-09
+
+### Fixed
+- fix: allow tier 3 media proof video (`9af5439`)
+
+
 ## [0.1.78] — 2026-05-09
 
 ### Other
