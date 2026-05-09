@@ -1,11 +1,17 @@
 {
   "version": 1,
-  "generatedAt": "2026-05-09T06:26:19.265Z",
+  "generatedAt": "2026-05-09T20:01:01.387Z",
   "docs": [
     {
       "id": "ai-harness-tiers",
       "localPath": "docs/AI_HARNESS_TIERS.md",
-      "contentHash": "0266f69510765824230c1e4034be629ff2db5a99c20428c53ef5eed697330c3c",
+      "contentHash": "2e8211957f4165431261c7ef6d49fb119cf2ec26fdc982c801031259707d4030",
+      "priority": "cold"
+    },
+    {
+      "id": "ai-operating-system-implementation-plan",
+      "localPath": "docs/AI_OPERATING_SYSTEM_IMPLEMENTATION_PLAN.md",
+      "contentHash": "4ca5c1f2dc2a5ed4cbafefcdc8b80a2c5c1ac398879e0731d17343dc7c822acd",
       "priority": "cold"
     },
     {
@@ -923,7 +929,7 @@
     {
       "id": "production-quality-system",
       "localPath": "docs/PRODUCTION_QUALITY_SYSTEM.md",
-      "contentHash": "529a82385735c60d5cf8071e638f5d73cc391e8fed1486bd6be2fe2e6c22b221",
+      "contentHash": "cb536f782f9cd229c06b939b475871ec130048bd181b2b2fcc3dda2e6f94f9d9",
       "priority": "cold"
     },
     {

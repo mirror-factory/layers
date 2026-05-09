@@ -20,6 +20,7 @@ pnpm verify:tier 0
 
 Runs:
 
+- project profile validation
 - `pnpm typecheck`
 - registry string validation
 - vendor deprecation validation
@@ -51,6 +52,7 @@ Runs:
 - `pnpm test:fast`
 - manifest drift check
 - compliance check
+- Expect route coverage check
 - budget check
 
 Used by:
@@ -112,13 +114,18 @@ pnpm verify:tier 3
 
 Runs:
 
-- mobile visual matrix
+- targeted mobile visual specs (portable Chromium mobile emulation locally)
 - desktop visual matrix
-- mobile flows
+- focused mobile flows
+- Expect AI browser proof when `EXPECT_RUN=1`
 - design drift
 
 Expect is not part of the default inner loop. Use it for focused usability
 proof on changed routes or manually requested audits.
+
+Local Tier 3 forces Chromium mobile emulation so agents can run it without
+root-level WebKit dependencies. WebKit/iOS-specific proof belongs in CI or the
+native release lane where host dependencies and simulators are available.
 
 Used by:
 

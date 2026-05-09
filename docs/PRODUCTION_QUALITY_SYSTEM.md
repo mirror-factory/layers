@@ -20,6 +20,11 @@ The production system therefore has two separate but connected ladders:
 1. Branch promotion: `development` -> `staging` -> `main`.
 2. Verification tiers: Tier 0 through Tier 5.
 
+Every project also declares a project operating profile at
+`.ai-dev-kit/project-profile.json`. That file is the bridge between the
+reusable AI Dev Kit harness and the project-specific facts: platforms, services,
+design tokens, branch model, dashboard obligations, and proof policy.
+
 `development` is where feature work integrates. `staging` is where release
 candidate artifacts are built and sent to GitHub Actions/TestFlight for QA.
 `main` is production: Vercel deploys the web app, and version tags from `main`
@@ -86,6 +91,7 @@ flowchart LR
   starter --> evidence[Evidence packets]
   starter --> dashboard[/dev-kit dashboard]
   starter --> hooks[Agent hooks]
+  starter --> profile[Project profile]
 
   registries --> pages[Pages]
   registries --> components[Components]
@@ -105,6 +111,9 @@ flowchart LR
   evidence --> symphony[Symphony]
   evidence --> pr[GitHub PR]
   evidence --> linear[Linear ticket]
+  profile --> designTokens[Design tokens]
+  profile --> services[Default services]
+  profile --> platforms[Enabled platforms]
 ```
 
 ## Traditional Development Coverage

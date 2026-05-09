@@ -49,6 +49,7 @@ const tiers: Record<TierId, TierSpec> = {
     label: 'Local syntax and structure',
     description: 'Cheap checks for immediate feedback before a commit.',
     commands: [
+      { name: 'project profile', command: 'npx tsx scripts/validate-project-profile.ts', when: () => has('scripts/validate-project-profile.ts') },
       { name: 'typecheck', command: 'pnpm typecheck' },
       { name: 'registry strings', command: 'npx tsx scripts/check-registry-strings.ts', when: () => has('scripts/check-registry-strings.ts') },
       { name: 'deprecations', command: 'npx tsx scripts/check-deprecations.ts', when: () => has('scripts/check-deprecations.ts') },
@@ -62,6 +63,7 @@ const tiers: Record<TierId, TierSpec> = {
       { name: 'fast tests', command: 'pnpm test:fast' },
       { name: 'manifest drift', command: 'npx tsx scripts/check-manifest-drift.ts', when: () => has('scripts/check-manifest-drift.ts') },
       { name: 'compliance', command: 'npx tsx scripts/check-compliance.ts', when: () => has('scripts/check-compliance.ts') },
+      { name: 'expect coverage', command: 'npx tsx scripts/check-expect-coverage.ts', when: () => has('scripts/check-expect-coverage.ts') },
       { name: 'budget', command: 'npx tsx scripts/check-budget.ts', when: () => has('scripts/check-budget.ts') && has('.ai-dev-kit/budget.yaml') },
     ],
   },
@@ -78,9 +80,10 @@ const tiers: Record<TierId, TierSpec> = {
     label: 'Visual, mobile, usability, and staging',
     description: 'Browser-heavy checks for UI confidence and staging validation.',
     commands: [
-      { name: 'mobile visual matrix', command: 'PLAYWRIGHT_DISABLE_VIDEO=1 pnpm test:visual:mobile' },
+      { name: 'mobile visual matrix', command: 'PLAYWRIGHT_FORCE_CHROMIUM=1 PLAYWRIGHT_DISABLE_VIDEO=1 pnpm test:visual:mobile' },
       { name: 'desktop visual matrix', command: 'PLAYWRIGHT_DISABLE_VIDEO=1 pnpm test:visual:desktop' },
-      { name: 'mobile flows', command: 'PLAYWRIGHT_DISABLE_VIDEO=1 pnpm test:mobile' },
+      { name: 'mobile flows', command: 'PLAYWRIGHT_FORCE_CHROMIUM=1 PLAYWRIGHT_DISABLE_VIDEO=1 pnpm exec playwright test tests/e2e/mobile.spec.ts --project=mobile-light' },
+      { name: 'expect AI browser proof', command: 'pnpm test:expect', when: () => has('scripts/run-expect-proof.ts') },
       { name: 'design drift', command: 'npx tsx scripts/check-design-drift.ts', when: () => has('scripts/check-design-drift.ts') },
     ],
   },
@@ -90,6 +93,7 @@ const tiers: Record<TierId, TierSpec> = {
     description: 'Nightly dependency, eval, docs, and live-integration checks.',
     commands: [
       { name: 'dependencies', command: 'npx tsx scripts/check-dependencies.ts', when: () => has('scripts/check-dependencies.ts') },
+      { name: 'million optimization check', command: 'npx tsx scripts/check-million.ts', when: () => has('scripts/check-million.ts') },
       { name: 'evals', command: 'pnpm test:eval' },
       { name: 'live integrations', command: 'pnpm test:live', required: false },
       { name: 'doctor strict', command: 'pnpm dev-kit:doctor:strict', required: false },

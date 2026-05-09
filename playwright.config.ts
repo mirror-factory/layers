@@ -26,6 +26,9 @@ import { join } from 'node:path';
 
 const baseURL = process.env.TEST_BASE_URL || process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3101';
 const devServerPort = new URL(baseURL).port || '3101';
+const portableChromiumFallback = process.env.PLAYWRIGHT_FORCE_CHROMIUM === '1'
+  ? { browserName: 'chromium' as const, defaultBrowserType: 'chromium' as const }
+  : {};
 const systemChromeFallback = process.env.PLAYWRIGHT_USE_SYSTEM_CHROME === '1'
   ? { browserName: 'chromium' as const, channel: 'chrome' as const }
   : {};
@@ -71,6 +74,7 @@ function projectUse(device: typeof devices[keyof typeof devices], mode: 'light' 
   return {
     ...device,
     ...theme(mode),
+    ...portableChromiumFallback,
     ...systemChromeFallback,
   };
 }

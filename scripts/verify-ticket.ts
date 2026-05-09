@@ -27,6 +27,12 @@ const dryRun = process.argv.includes('--dry-run');
 const evidenceDir = join(cwd, '.evidence');
 let browserReady = false;
 
+function canInstallSystemDeps(): boolean {
+  if (typeof process.getuid === 'function' && process.getuid() === 0) return true;
+  const result = spawnSync('sudo', ['-n', 'true'], { cwd, stdio: 'ignore' });
+  return result.status === 0;
+}
+
 function runGit(args: string[]): string[] {
   const result = spawnSync('git', args, { cwd, encoding: 'utf-8' });
   if (result.status !== 0) return [];
@@ -103,7 +109,7 @@ function commandSetFor(files: string[]): CommandSpec[] {
   for (const spec of visualSpecs) {
     commands.push({
       name: `component visual proof: ${spec}`,
-      command: `PLAYWRIGHT_DISABLE_VIDEO=1 npx playwright test ${spec} --project=desktop-light --project=mobile-light`,
+      command: `PLAYWRIGHT_FORCE_CHROMIUM=1 PLAYWRIGHT_DISABLE_VIDEO=1 npx playwright test ${spec} --project=desktop-light --project=mobile-light`,
       needsBrowser: true,
     });
   }
@@ -111,7 +117,7 @@ function commandSetFor(files: string[]): CommandSpec[] {
   if (touchesUi && has('tests/e2e/smoke.spec.ts')) {
     commands.push({
       name: 'route smoke proof',
-      command: 'PLAYWRIGHT_DISABLE_VIDEO=1 pnpm test:smoke -- --project=desktop-light --project=mobile-light',
+      command: 'PLAYWRIGHT_FORCE_CHROMIUM=1 PLAYWRIGHT_DISABLE_VIDEO=1 pnpm exec playwright test tests/e2e/smoke.spec.ts --project=desktop-light --project=mobile-light',
       needsBrowser: true,
     });
   }
@@ -119,7 +125,7 @@ function commandSetFor(files: string[]): CommandSpec[] {
   if (touchesMobile && has('tests/e2e/mobile.spec.ts')) {
     commands.push({
       name: 'mobile proof',
-      command: 'PLAYWRIGHT_DISABLE_VIDEO=1 pnpm test:mobile -- --project=mobile-light',
+      command: 'PLAYWRIGHT_FORCE_CHROMIUM=1 PLAYWRIGHT_DISABLE_VIDEO=1 pnpm exec playwright test tests/e2e/mobile.spec.ts --project=mobile-light',
       needsBrowser: true,
     });
   }
@@ -140,10 +146,11 @@ function uniqueCommands(commands: CommandSpec[]): CommandSpec[] {
 
 function ensureBrowser(): CommandResult | null {
   if (browserReady || dryRun) return null;
+  const withDeps = canInstallSystemDeps();
 
   const install: CommandSpec = {
     name: 'Playwright Chromium install',
-    command: 'npx playwright install --with-deps chromium',
+    command: withDeps ? 'npx playwright install --with-deps chromium' : 'npx playwright install chromium',
   };
   const result = runCommand(install);
   if (result.pass) browserReady = true;

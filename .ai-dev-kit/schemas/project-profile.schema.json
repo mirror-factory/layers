@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mirrorfactory.dev/schemas/ai-dev-kit/project-profile.schema.json",
+  "title": "AI Dev Kit Project Profile",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "kitProfile",
+    "project",
+    "sourceOfTruth",
+    "branchModel",
+    "platforms",
+    "services",
+    "tools",
+    "designSystem",
+    "proofPolicy",
+    "reviewPolicy",
+    "dashboard"
+  ],
+  "properties": {
+    "schemaVersion": { "type": "integer", "minimum": 1 },
+    "kitProfile": { "type": "string", "minLength": 1 },
+    "project": {
+      "type": "object",
+      "required": ["id", "name", "repo"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "repo": { "type": "string", "minLength": 1 },
+        "primaryDashboardUrl": { "type": "string" },
+        "linearProjectSlug": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "sourceOfTruth": { "type": "object", "additionalProperties": { "type": "string" } },
+    "branchModel": {
+      "type": "object",
+      "required": ["integration", "releaseCandidate", "production", "requiredPrTarget"],
+      "properties": {
+        "integration": { "type": "string" },
+        "releaseCandidate": { "type": "string" },
+        "production": { "type": "string" },
+        "agentBranchPrefix": { "type": "string" },
+        "requiredPrTarget": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "platforms": { "type": "object", "additionalProperties": { "$ref": "#/$defs/platform" } },
+    "services": { "type": "object", "additionalProperties": { "$ref": "#/$defs/service" } },
+    "tools": { "type": "object", "additionalProperties": { "$ref": "#/$defs/tool" } },
+    "designSystem": {
+      "type": "object",
+      "required": ["mode", "tokensPath", "systemPath", "componentsRegistryPath"],
+      "properties": {
+        "mode": { "enum": ["no-inference", "guided", "freeform"] },
+        "tokensPath": { "type": "string" },
+        "systemPath": { "type": "string" },
+        "componentsRegistryPath": { "type": "string" },
+        "referenceSurfaces": { "type": "array", "items": { "type": "string" } },
+        "aiRules": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "proofPolicy": { "type": "object", "additionalProperties": true },
+    "reviewPolicy": { "type": "object", "additionalProperties": true },
+    "dashboard": { "type": "object", "additionalProperties": true },
+    "symphony": { "type": "object", "additionalProperties": true }
+  },
+  "$defs": {
+    "platform": {
+      "type": "object",
+      "required": ["enabled"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "reviewChannel": { "type": "string" },
+        "requiredTiers": { "type": "array", "items": { "type": "integer", "minimum": 0, "maximum": 5 } },
+        "nativeHarness": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "service": {
+      "type": "object",
+      "required": ["enabled"],
+      "properties": {
+        "default": { "type": "boolean" },
+        "enabled": { "type": "boolean" },
+        "requiredEnv": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "tool": {
+      "type": "object",
+      "required": ["required"],
+      "properties": {
+        "required": { "type": "boolean" },
+        "tier": { "type": "integer", "minimum": 0, "maximum": 5 },
+        "reason": { "type": "string" },
+        "requiredBeforeNativeAutomerge": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}
