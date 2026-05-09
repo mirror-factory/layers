@@ -135,6 +135,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: electron-mac
+          include-hidden-files: true
           path: |
             dist-electron/*.dmg
             dist-electron/*.zip
@@ -164,6 +165,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: electron-windows
+          include-hidden-files: true
           path: |
             dist-electron/*.exe
             dist-electron/*.msi
@@ -202,6 +204,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: android-apk
+          include-hidden-files: true
           path: |
             android/app/build/outputs/apk/debug/*.apk
             .evidence/
@@ -354,6 +357,7 @@ jobs:
         if: always()
         with:
           name: ios-ipa
+          include-hidden-files: true
           path: |
             ${{ runner.temp }}/LayersExport/*.ipa
             ${{ runner.temp }}/Layers.xcarchive

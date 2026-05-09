@@ -5,6 +5,7 @@ on:
     branches: [main, staging, development]
   pull_request:
     branches: [main, staging, development]
+    types: [opened, synchronize, reopened, labeled, unlabeled]
   workflow_dispatch:
 
 env:
@@ -52,6 +53,7 @@ jobs:
         if: always()
         with:
           name: tier-0-1-evidence
+          include-hidden-files: true
           path: |
             .evidence/
             test-results/
@@ -94,6 +96,7 @@ jobs:
         if: always()
         with:
           name: tier-2-proof
+          include-hidden-files: true
           path: |
             .evidence/
             playwright-report/
@@ -104,7 +107,7 @@ jobs:
     name: Tier 3 Broad Browser Matrix
     runs-on: ubuntu-latest
     needs: fast-gates
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref_name == 'staging')
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref_name == 'staging') || (github.event_name == 'pull_request' && (contains(github.event.pull_request.labels.*.name, 'tier3:run') || contains(github.event.pull_request.labels.*.name, 'proof:required')))
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -130,13 +133,14 @@ jobs:
         run: pnpm verify:tier 3
         env:
           CI: true
-          PLAYWRIGHT_VIDEO: retain-on-failure
+          PLAYWRIGHT_VIDEO: on
 
       - name: Upload tier 3 artifacts
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: tier-3-artifacts
+          include-hidden-files: true
           path: |
             .evidence/
             playwright-report/
