@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generatedAt": "2026-05-09T20:58:08.126Z",
+  "generatedAt": "2026-05-09T22:16:08.497Z",
   "docs": [
     {
       "id": "ai-harness-tiers",
       "localPath": "docs/AI_HARNESS_TIERS.md",
-      "contentHash": "7f242bfb6c7297c3f3dda556f49a18161453f5a1dcf874511220e8c3214f6c63",
+      "contentHash": "3f67203639dd750b2c7d79df905414f3bc95663ec317a2118d7b0a87c7238825",
       "priority": "cold"
     },
     {
