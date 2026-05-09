@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.74] — 2026-05-09
+
+### Other
+- chore: sync docs manifest (`1ba6cd9`)
+
+
 ## [0.1.73] — 2026-05-09
 
 ### Other
