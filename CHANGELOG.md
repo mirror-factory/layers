@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.77] — 2026-05-09
+
+### Added
+- feat: wire native proof and OAuth bridge (`1a462aa`)
+
+
 ## [0.1.76] — 2026-05-09
 
 ### Other
