@@ -126,6 +126,13 @@ brand_guide:
 # right-hand key gets a fresh timestamp.
 
 verification_commands:
+  'pnpm verify:tier 0': typecheck
+  'pnpm verify:tier 1': test
+  'pnpm verify:tier 2': e2e-video
+  'pnpm verify:tier 3': visual-regression
+  'pnpm test:fast': test
+  'pnpm test:ticket': e2e-video
+  'pnpm test:proof': evidence
   'pnpm test': test
   'pnpm typecheck': typecheck
   'npx tsc': typecheck

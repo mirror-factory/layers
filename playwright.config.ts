@@ -7,8 +7,9 @@
  * Total projects: 6  (mobile-light, mobile-dark, tablet-light, tablet-dark,
  *                     desktop-light, desktop-dark)
  *
- * Every component in components.yaml and every page in pages.yaml must pass
- * on all 6 projects. Video always records. Traces retained on failure.
+ * Every component in components.yaml and every page in pages.yaml should have
+ * a targeted proof path. Video is off locally by default; CI retains failure
+ * video/traces. Set PLAYWRIGHT_VIDEO=on when recording a deliberate proof.
  * Visual baselines live in tests/visual/__screenshots__/.
  *
  * Run:
@@ -28,7 +29,23 @@ const devServerPort = new URL(baseURL).port || '3101';
 const systemChromeFallback = process.env.PLAYWRIGHT_USE_SYSTEM_CHROME === '1'
   ? { browserName: 'chromium' as const, channel: 'chrome' as const }
   : {};
-const videoMode = process.env.PLAYWRIGHT_DISABLE_VIDEO === '1' ? 'off' : 'on';
+type VideoMode = 'off' | 'on' | 'retain-on-failure' | 'on-first-retry';
+
+function resolveVideoMode(): VideoMode {
+  if (process.env.PLAYWRIGHT_DISABLE_VIDEO === '1') return 'off';
+  const requested = process.env.PLAYWRIGHT_VIDEO;
+  if (
+    requested === 'off' ||
+    requested === 'on' ||
+    requested === 'retain-on-failure' ||
+    requested === 'on-first-retry'
+  ) {
+    return requested;
+  }
+  return process.env.CI ? 'retain-on-failure' : 'off';
+}
+
+const videoMode = resolveVideoMode();
 
 // Inherit run_id so test-results JSON can be joined with the dashboard's
 // /dev-kit/runs/[run_id] aggregate. Order: explicit env > state file > none.

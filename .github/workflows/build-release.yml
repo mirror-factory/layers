@@ -1,18 +1,26 @@
 name: Build & Release
 
-# PROD-366: Tag-based release pipeline.
+# PROD-366: Branch-tiered release pipeline.
 #
-# - Push to `main`: runs `web` only (typecheck/test/build as a deploy guard).
-# - Push tag `vX.Y.Z`: runs the full artifact matrix (Mac, Win, Android, iOS),
-#   uploads each to GitHub Releases, and ships the iOS IPA to TestFlight.
+# - Push to `development`: no native artifact build here.
+# - Push to `staging`: runs native release-candidate builds, uploads artifacts
+#   to GitHub Actions, and uploads iOS to TestFlight for internal QA.
+# - Push to `main`: runs `web` only as a production deploy guard.
+# - Push tag `vX.Y.Z`: runs the full artifact matrix, uploads artifacts to
+#   GitHub Releases, and ships iOS to TestFlight.
 # - workflow_dispatch (manual): same matrix, with a toggle to skip Apple builds
 #   when signing secrets aren't ready yet.
 on:
   push:
     branches:
       - main
+      - staging
     tags:
       - 'v*'
+  pull_request:
+    branches:
+      - main
+      - staging
   workflow_dispatch:
     inputs:
       include_apple_builds:
@@ -20,10 +28,10 @@ on:
         type: boolean
         default: true
 
-# A tagged push triggers all artifact jobs; a plain branch push runs only `web`.
-# Both manual triggers (workflow_dispatch) and tag pushes count as a "release run."
+# A staging push or tagged push triggers native artifact jobs. Only a tag
+# publishes the GitHub Release that the public website downloads from.
 env:
-  IS_RELEASE: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref_type == 'tag') }}
+  IS_RELEASE: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref_type == 'tag') || (github.event_name == 'push' && github.ref_name == 'staging') }}
 
 jobs:
   web:
@@ -37,13 +45,13 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm typecheck
-      - run: pnpm test
+      - run: pnpm verify:tier 0 1
       - run: pnpm build
 
   electron-mac:
     name: Electron (macOS)
     if: |
+      (github.event_name == 'push' && github.ref_name == 'staging') ||
       (github.event_name == 'push' && github.ref_type == 'tag') ||
       (github.event_name == 'workflow_dispatch' && inputs.include_apple_builds == true)
     runs-on: macos-latest
@@ -128,6 +136,7 @@ jobs:
   electron-windows:
     name: Electron (Windows)
     if: |
+      (github.event_name == 'push' && github.ref_name == 'staging') ||
       (github.event_name == 'push' && github.ref_type == 'tag') ||
       github.event_name == 'workflow_dispatch'
     runs-on: windows-latest
@@ -150,6 +159,7 @@ jobs:
   capacitor-android:
     name: Capacitor (Android APK)
     if: |
+      (github.event_name == 'push' && github.ref_name == 'staging') ||
       (github.event_name == 'push' && github.ref_type == 'tag') ||
       github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
@@ -178,6 +188,7 @@ jobs:
   capacitor-ios:
     name: Capacitor (iOS) → TestFlight
     if: |
+      (github.event_name == 'push' && github.ref_name == 'staging') ||
       (github.event_name == 'push' && github.ref_type == 'tag') ||
       (github.event_name == 'workflow_dispatch' && inputs.include_apple_builds == true)
     runs-on: macos-latest
