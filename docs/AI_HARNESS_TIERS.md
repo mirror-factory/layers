@@ -126,7 +126,9 @@ proof on changed routes or manually requested audits.
 Video is opt-in for deliberate media proof. Local Tier 3 keeps video off unless
 you set `PLAYWRIGHT_VIDEO=on`; CI keeps failure video by default, and the PR
 workflow sets `PLAYWRIGHT_VIDEO=on` when the PR has `tier3:run` or
-`proof:required`.
+`proof:required`. Tier 3 writes each Playwright lane into its own
+`test-results/tier-3/*` directory so video artifacts from one lane do not get
+deleted by the next lane.
 
 Local Tier 3 forces Chromium mobile emulation so agents can run it without
 root-level WebKit dependencies. WebKit/iOS-specific proof belongs in CI or the

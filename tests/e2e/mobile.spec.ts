@@ -31,11 +31,21 @@ const test = base.extend<{
   deviceName: string;
 }>({
   deviceName: ['iPhone 12', { option: true }],
-  mobileContext: async ({ browser, deviceName }, use) => {
+  mobileContext: async ({ browser, deviceName }, use, testInfo) => {
     const descriptor = devices[deviceName];
     if (!descriptor) throw new Error(`Unknown device: ${deviceName}`);
     const { defaultBrowserType: _drop, ...contextOptions } = descriptor as typeof descriptor & { defaultBrowserType?: string };
-    const ctx = await (browser as Browser).newContext(contextOptions);
+    const videoDir = testInfo.outputPath('custom-context-video');
+    const shouldRecordVideo =
+      process.env.PLAYWRIGHT_DISABLE_VIDEO !== '1' &&
+      process.env.PLAYWRIGHT_VIDEO === 'on';
+
+    if (shouldRecordVideo) fs.mkdirSync(videoDir, { recursive: true });
+
+    const ctx = await (browser as Browser).newContext({
+      ...contextOptions,
+      ...(shouldRecordVideo ? { recordVideo: { dir: videoDir } } : {}),
+    });
     await use(ctx);
     await ctx.close();
   },
