@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.78] — 2026-05-09
+
+### Other
+- ci: preserve proof evidence artifacts (`98ad6da`)
+
+
 ## [0.1.77] — 2026-05-09
 
 ### Added
