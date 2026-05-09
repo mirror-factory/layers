@@ -123,6 +123,11 @@ Runs:
 Expect is not part of the default inner loop. Use it for focused usability
 proof on changed routes or manually requested audits.
 
+Video is opt-in for deliberate media proof. Local Tier 3 keeps video off unless
+you set `PLAYWRIGHT_VIDEO=on`; CI keeps failure video by default, and the PR
+workflow sets `PLAYWRIGHT_VIDEO=on` when the PR has `tier3:run` or
+`proof:required`.
+
 Local Tier 3 forces Chromium mobile emulation so agents can run it without
 root-level WebKit dependencies. WebKit/iOS-specific proof belongs in CI or the
 native release lane where host dependencies and simulators are available.

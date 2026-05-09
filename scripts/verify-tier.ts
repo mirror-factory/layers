@@ -80,9 +80,9 @@ const tiers: Record<TierId, TierSpec> = {
     label: 'Visual, mobile, usability, and staging',
     description: 'Browser-heavy checks for UI confidence and staging validation.',
     commands: [
-      { name: 'mobile visual matrix', command: 'PLAYWRIGHT_FORCE_CHROMIUM=1 PLAYWRIGHT_DISABLE_VIDEO=1 pnpm test:visual:mobile' },
-      { name: 'desktop visual matrix', command: 'PLAYWRIGHT_DISABLE_VIDEO=1 pnpm test:visual:desktop' },
-      { name: 'mobile flows', command: 'PLAYWRIGHT_FORCE_CHROMIUM=1 PLAYWRIGHT_DISABLE_VIDEO=1 pnpm exec playwright test tests/e2e/mobile.spec.ts --project=mobile-light' },
+      { name: 'mobile visual matrix', command: 'PLAYWRIGHT_FORCE_CHROMIUM=1 pnpm test:visual:mobile' },
+      { name: 'desktop visual matrix', command: 'pnpm test:visual:desktop' },
+      { name: 'mobile flows', command: 'PLAYWRIGHT_FORCE_CHROMIUM=1 pnpm exec playwright test tests/e2e/mobile.spec.ts --project=mobile-light' },
       { name: 'expect AI browser proof', command: 'pnpm test:expect', when: () => has('scripts/run-expect-proof.ts') },
       { name: 'design drift', command: 'npx tsx scripts/check-design-drift.ts', when: () => has('scripts/check-design-drift.ts') },
     ],
