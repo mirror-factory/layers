@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.73] — 2026-05-09
+
+### Other
+- chore: lazily install playwright for ticket proof (`bdb9f95`)
+
+
 ## [0.1.72] — 2026-05-09
 
 ### Other
