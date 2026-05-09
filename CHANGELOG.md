@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.81] — 2026-05-09
+
+### Fixed
+- fix: preserve tier 3 video artifacts (`8718c48`)
+
+
 ## [0.1.80] — 2026-05-09
 
 ### Documentation
