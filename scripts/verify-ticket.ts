@@ -13,6 +13,7 @@ import { basename, join } from 'node:path';
 interface CommandSpec {
   name: string;
   command: string;
+  needsBrowser?: boolean;
 }
 
 interface CommandResult extends CommandSpec {
@@ -24,6 +25,7 @@ interface CommandResult extends CommandSpec {
 const cwd = process.cwd();
 const dryRun = process.argv.includes('--dry-run');
 const evidenceDir = join(cwd, '.evidence');
+let browserReady = false;
 
 function runGit(args: string[]): string[] {
   const result = spawnSync('git', args, { cwd, encoding: 'utf-8' });
@@ -102,6 +104,7 @@ function commandSetFor(files: string[]): CommandSpec[] {
     commands.push({
       name: `component visual proof: ${spec}`,
       command: `PLAYWRIGHT_DISABLE_VIDEO=1 npx playwright test ${spec} --project=desktop-light --project=mobile-light`,
+      needsBrowser: true,
     });
   }
 
@@ -109,6 +112,7 @@ function commandSetFor(files: string[]): CommandSpec[] {
     commands.push({
       name: 'route smoke proof',
       command: 'PLAYWRIGHT_DISABLE_VIDEO=1 pnpm test:smoke -- --project=desktop-light --project=mobile-light',
+      needsBrowser: true,
     });
   }
 
@@ -116,6 +120,7 @@ function commandSetFor(files: string[]): CommandSpec[] {
     commands.push({
       name: 'mobile proof',
       command: 'PLAYWRIGHT_DISABLE_VIDEO=1 pnpm test:mobile -- --project=mobile-light',
+      needsBrowser: true,
     });
   }
 
@@ -131,6 +136,18 @@ function uniqueCommands(commands: CommandSpec[]): CommandSpec[] {
     out.push(command);
   }
   return out;
+}
+
+function ensureBrowser(): CommandResult | null {
+  if (browserReady || dryRun) return null;
+
+  const install: CommandSpec = {
+    name: 'Playwright Chromium install',
+    command: 'npx playwright install --with-deps chromium',
+  };
+  const result = runCommand(install);
+  if (result.pass) browserReady = true;
+  return result;
 }
 
 function runCommand(spec: CommandSpec): CommandResult {
@@ -167,6 +184,13 @@ function main() {
   if (files.length > 40) console.log(`  - ...${files.length - 40} more`);
 
   for (const command of commands) {
+    if (command.needsBrowser) {
+      const installResult = ensureBrowser();
+      if (installResult) {
+        results.push(installResult);
+        if (!installResult.pass) break;
+      }
+    }
     const result = runCommand(command);
     results.push(result);
     if (!result.pass) break;
