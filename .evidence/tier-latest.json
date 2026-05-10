@@ -1,18 +1,45 @@
 {
-  "tier": "2",
-  "label": "Focused ticket proof",
-  "description": "Touched-file mapped proof before PR review or Symphony handoff.",
-  "runAt": "2026-05-10T12:38:25.159Z",
+  "tier": "0",
+  "label": "Local syntax and structure",
+  "description": "Cheap checks for immediate feedback before a commit.",
+  "runAt": "2026-05-10T12:53:48.331Z",
   "pass": true,
   "results": [
     {
-      "name": "ticket proof",
-      "command": "npx tsx scripts/verify-ticket.ts",
+      "name": "project profile",
+      "command": "npx tsx scripts/validate-project-profile.ts",
       "required": true,
       "skipped": false,
       "pass": true,
       "exitCode": 0,
-      "durationMs": 117271
+      "durationMs": 1193
+    },
+    {
+      "name": "typecheck",
+      "command": "pnpm typecheck",
+      "required": true,
+      "skipped": false,
+      "pass": true,
+      "exitCode": 0,
+      "durationMs": 56008
+    },
+    {
+      "name": "registry strings",
+      "command": "npx tsx scripts/check-registry-strings.ts",
+      "required": true,
+      "skipped": false,
+      "pass": true,
+      "exitCode": 0,
+      "durationMs": 2150
+    },
+    {
+      "name": "deprecations",
+      "command": "npx tsx scripts/check-deprecations.ts",
+      "required": true,
+      "skipped": false,
+      "pass": true,
+      "exitCode": 0,
+      "durationMs": 1214
     }
   ]
 }
