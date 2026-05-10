@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.89] — 2026-05-10
+
+### Added
+- feat: harden devkit proof harness (`f24a4eb`)
+
+
 ## [0.1.88] — 2026-05-10
 
 ### Fixed
