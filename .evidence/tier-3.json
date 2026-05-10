@@ -1,0 +1,63 @@
+{
+  "tier": "3",
+  "label": "Visual, mobile, usability, and staging",
+  "description": "Browser-heavy checks for UI confidence and staging validation.",
+  "runAt": "2026-05-10T13:56:44.892Z",
+  "pass": true,
+  "results": [
+    {
+      "name": "mobile visual matrix",
+      "command": "PLAYWRIGHT_FORCE_CHROMIUM=1 pnpm exec playwright test tests/e2e/*.visual.spec.ts tests/e2e/*.visual.test.ts tests/e2e/visual-regression.spec.ts --project=mobile-light --project=mobile-dark --output=test-results/tier-3/mobile-visual",
+      "required": true,
+      "skipped": false,
+      "pass": true,
+      "exitCode": 0,
+      "durationMs": 46025
+    },
+    {
+      "name": "desktop visual matrix",
+      "command": "pnpm exec playwright test tests/e2e/*.visual.spec.ts tests/e2e/*.visual.test.ts tests/e2e/visual-regression.spec.ts --project=desktop-light --project=desktop-dark --output=test-results/tier-3/desktop-visual",
+      "required": true,
+      "skipped": false,
+      "pass": true,
+      "exitCode": 0,
+      "durationMs": 23238
+    },
+    {
+      "name": "mobile flows",
+      "command": "PLAYWRIGHT_FORCE_CHROMIUM=1 pnpm exec playwright test tests/e2e/mobile.spec.ts --project=mobile-light --output=test-results/tier-3/mobile-flows",
+      "required": true,
+      "skipped": false,
+      "pass": true,
+      "exitCode": 0,
+      "durationMs": 35397
+    },
+    {
+      "name": "expect AI browser proof",
+      "command": "pnpm test:expect",
+      "required": true,
+      "skipped": false,
+      "pass": true,
+      "exitCode": 0,
+      "durationMs": 1325
+    },
+    {
+      "name": "feature proof artifacts",
+      "command": "pnpm test:feature-proof -- --enforce-artifacts --enforce-lanes=visual-video,expect",
+      "required": true,
+      "skipped": false,
+      "pass": true,
+      "exitCode": 0,
+      "durationMs": 846
+    },
+    {
+      "name": "design drift",
+      "command": "npx tsx scripts/check-design-drift.ts",
+      "required": true,
+      "skipped": false,
+      "pass": true,
+      "exitCode": 0,
+      "durationMs": 895
+    }
+  ]
+}

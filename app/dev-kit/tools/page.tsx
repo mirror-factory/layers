@@ -69,6 +69,7 @@ export default function ToolsPage() {
   const [tools, setTools] = useState<Tool[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedTool, setExpandedTool] = useState<string | null>(null);
+  const purposeCopy = "Tools show audited automation surfaces available to operators.";
 
   useEffect(() => {
     fetch('/api/dev-kit/tools')
@@ -88,6 +89,7 @@ export default function ToolsPage() {
   if (tools.length === 0) return (
     <div className="p-8">
       <h1 className="text-2xl font-semibold mb-4">Tool Registry</h1>
+      <p className="mb-4 text-sm text-ink-200/50">{purposeCopy}</p>
       <div className="border border-layers-mint/20 rounded p-6 text-center" style={{ background: "color-mix(in oklch, var(--layers-mint) 5%, transparent)" }}>
         <p className="text-ink-200/60 text-sm">No tools registered. Run ai-dev-kit tool add &lt;name&gt; to create your first tool, or check that lib/ai/tools/_metadata.ts exists.</p>
       </div>
@@ -100,7 +102,7 @@ export default function ToolsPage() {
       <div>
         <h1 className="text-2xl font-semibold">Tool Registry</h1>
         <p className="mt-1 text-sm text-ink-200/50">
-          Browse all registered AI tools, their schemas, test status, and evaluation scores.
+          {purposeCopy}
         </p>
       </div>
 

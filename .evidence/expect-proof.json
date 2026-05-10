@@ -1,0 +1,87 @@
+{
+  "runAt": "2026-05-10T13:58:02.720Z",
+  "pass": true,
+  "skipped": false,
+  "required": true,
+  "agent": "codex",
+  "target": "changes",
+  "url": "http://127.0.0.1:3999/dev-kit/tools",
+  "durationMs": 61803,
+  "exitCode": 1,
+  "mode": "expect-cli-fallback",
+  "stdout": "[13:57:02.751] INFO (#25): Initializing AcpClient\n  adapter: /var/symphony/workspaces/PROD-443/node_modules/.pnpm/@zed-industries+codex-acp@0.10.0/node_modules/@zed-industries/codex-acp/bin/codex-acp.js\n[13:57:02.912] INFO (#25): ACP connection initialized\n  {\n    capabilities: {\n      loadSession: true,\n      promptCapabilities: { image: true, audio: false, embeddedContext: true },\n      mcpCapabilities: { http: true, sse: false },\n      sessionCapabilities: { list: {}, close: {} }\n    }\n  }\n  adapter: /var/symphony/workspaces/PROD-443/node_modules/.pnpm/@zed-industries+codex-acp@0.10.0/node_modules/@zed-industries/codex-acp/bin/codex-acp.js\n  pid: 425696\n[13:57:03.975] INFO (#95): Execution started {\n  instructionLength: 107,\n  changesFor: 'Changes',\n  isHeadless: true,\n  cookieBrowserCount: 0\n}\n[13:57:04.004] WARN (#95): Git failed to get changed files {\n  error: 'Git error during \"getting changed files\"',\n  diffRange: 'main..HEAD'\n}\n[13:57:04.010] WARN (#95): Git failed to get diff preview {\n  error: 'Git error during \"getting diff preview\"',\n  diffRange: 'main..HEAD'\n}\n[13:57:04.016] WARN (#95): Git failed to get recent commits {\n  error: 'Git error during \"getting recent commits\"',\n  range: 'main..HEAD'\n}\n[13:57:04.020] INFO (#95): Agent stream starting {\n  planId: '1566da4c-53ef-48a8-8333-ec52121f37d8',\n  promptLength: 718,\n  mcpEnvCount: 2\n}\n[13:57:04.634] INFO (#95): ACP session created { sessionId: '019e122d-5fb6-7f93-920d-1bbc6c8de226' }\n",
+  "stderr": "",
+  "tui": {
+    "pass": false,
+    "exitCode": 1,
+    "report": null,
+    "timedOutWithoutSteps": false,
+    "processTimedOut": true,
+    "processTimeoutMs": 30000
+  },
+  "fallback": {
+    "pass": true,
+    "reason": "AI TUI proof failed before useful steps; deterministic Expect CLI fallback executed.",
+    "url": "http://127.0.0.1:3999/dev-kit/tools",
+    "candidates": [
+      "http://127.0.0.1:3999/dev-kit/tools",
+      "http://127.0.0.1:3999",
+      "http://127.0.0.1:3101",
+      "http://127.0.0.1:3000",
+      "http://127.0.0.1:3002",
+      "http://127.0.0.1:4000"
+    ],
+    "commands": [
+      {
+        "command": "pnpm exec expect open --browser chromium --wait-until load http://127.0.0.1:3999/dev-kit/tools",
+        "pass": true,
+        "exitCode": 0,
+        "durationMs": 5893,
+        "stdout": "Opened http://127.0.0.1:3999/dev-kit/tools\n",
+        "stderr": "",
+        "outputFailed": false,
+        "timedOut": false
+      },
+      {
+        "command": "pnpm exec expect playwright const bodyText = await page.locator('body').innerText(); const copy = 'Tools show audited automation surfaces available to operators.'; return { url: page.url(), title: await page.title(), bodyPreview: bodyText.trim().slice(0, 800), pass: bodyText.includes(copy), foundCopy: bodyText.includes(copy) }; --snapshot-after --description expect-proof-fallback",
+        "pass": true,
+        "exitCode": 0,
+        "durationMs": 3784,
+        "stdout": "{\n  \"result\": {\n    \"url\": \"http://127.0.0.1:3999/dev-kit/tools\",\n    \"title\": \"Layers\",\n    \"bodyPreview\": \"ai-dev-kit\\nOverview\\nProject\\nProof\\nRuns\\nSessions\\nRegistries\\nDesign system\\nConfig\\nStatus\\nTools\\nEvaluations\\nCost\\nDeployments\\nRegressions\\nConnectors\\nCoverage\\n@mirror-factory/ai-dev-kit\\nTool Registry\\n\\nTools show audited automation surfaces available to operators.\\n\\nNAME\\tDESCRIPTION\\tCATEGORY\\tPERMISSION\\tTEST STATUS\\tEVAL SCORE\\tCOST EST.\\n_metadata\\tSearch meeting transcripts, summaries, and intake forms with...\\tai-tool\\texplorer\\tuntested\\t100%\\t$0.000/call\\n_registry\\tnull\\tai-tool\\texplorer\\tuntested\\t100%\\t$0.000/call\\n_types\\tnull\\tai-tool\\texplorer\\tuntested\\t100%\\t$0.000/call\\ncodeReview\\tAnalyze source code for quality issues, security vulnerabili...\\tai-tool\\texplorer\\tuntested\\t100%\\t$0.000/call\",\n    \"pass\": true,\n    \"foundCopy\": true\n  },\n  \"resultFile\": \"/tmp/expect-artifacts/playwright-results/result-f5ae3f0a.json\",\n  \"snapshot\": {\n    \"tree\": \"- complementary:\\n  - text: ai-dev-kit\\n  - navigation:\\n    - link \\\"Overview\\\": [ref=e1]\\n      - /url: /dev-kit\\n    - link \\\"Project\\\": [ref=e2]\\n      - /url: /dev-kit/project\\n    - link \\\"Proof\\\": [ref=e3]\\n      - /url: /dev-kit/proof\\n    - link \\\"Runs\\\": [ref=e4]\\n      - /url: /dev-kit/runs\\n    - link \\\"Sessions\\\": [ref=e5]\\n      - /url: /dev-kit/sessions\\n    - link \\\"Registries\\\": [ref=e6]\\n      - /url: /dev-kit/registries\\n    - link \\\"Design system\\\": [ref=e7]\\n      - /url: /dev-kit/design-system\\n    - link \\\"Config\\\": [ref=e8]\\n      - /url: /dev-kit/config\\n    - link \\\"Status\\\": [ref=e9]\\n      - /url: /dev-kit/status\\n    - link \\\"Tools\\\": [ref=e10]\\n      - /url: /dev-kit/tools\\n    - link \\\"Evaluations\\\": [ref=e11]\\n      - /url: /dev-kit/evals\\n    - link \\\"Cost\\\": [ref=e12]\\n      - /url: /dev-kit/cost\\n    - link \\\"Deployments\\\": [ref=e13]\\n      - /url: /dev-kit/deployments\\n    - link \\\"Regressions\\\": [ref=e14]\\n      - /url: /dev-kit/regressions\\n    - link \\\"Connectors\\\": [ref=e15]\\n      - /url: /dev-kit/connectors\\n    - note \\\"1 items hidden below\\\"\\n  - text: \\\"@mirror-factory/ai-dev-kit\\\"\\n- main:\\n  - heading \\\"Tool Registry\\\" [level=1] [ref=e16]\\n  - paragraph: Tools show audited automation surfaces available to operators.\\n  - table:\\n    - rowgroup:\\n      - row \\\"Name Description Category Permission Test Status Eval Score Cost Est.\\\":\\n        - columnheader \\\"Name\\\" [ref=e17]\\n        - columnheader \\\"Description\\\" [ref=e18]\\n        - columnheader \\\"Category\\\" [ref=e19]\\n        - columnheader \\\"Permission\\\" [ref=e20]\\n        - columnheader \\\"Test Status\\\" [ref=e21]\\n        - columnheader \\\"Eval Score\\\" [ref=e22]\\n        - columnheader \\\"Cost Est.\\\" [ref=e23]\\n    - rowgroup:\\n      - row \\\"_metadata Search meeting transcripts, summaries, and intake forms with... ai-tool explorer untested 100% $0.000/call\\\":\\n        - cell \\\"_metadata\\\" [ref=e24]\\n        - cell \\\"Search meeting transcripts, summaries, and intake forms with...\\\" [ref=e25]\\n        - cell \\\"ai-tool\\\" [ref=e26]\\n        - cell \\\"explorer\\\" [ref=e27]\\n        - cell \\\"untested\\\" [ref=e28]\\n        - cell \\\"100%\\\" [ref=e29]\\n        - cell \\\"$0.000/call\\\" [ref=e30]\\n      - row \\\"_registry null ai-tool explorer untested 100% $0.000/call\\\":\\n        - cell \\\"_registry\\\" [ref=e31]\\n        - cell \\\"null\\\" [ref=e32]\\n        - cell \\\"ai-tool\\\" [ref=e33]\\n        - cell \\\"explorer\\\" [ref=e34]\\n        - cell \\\"untested\\\" [ref=e35]\\n        - cell \\\"100%\\\" [ref=e36]\\n        - cell \\\"$0.000/call\\\" [ref=e37]\\n      - row \\\"_types null ai-tool explorer untested 100% $0.000/call\\\":\\n        - cell \\\"_types\\\" [ref=e38]\\n        - cell \\\"null\\\" [ref=e39]\\n        - cell \\\"ai-tool\\\" [ref=e40]\\n        - cell \\\"explorer\\\" [ref=e41]\\n        - cell \\\"untested\\\" [ref=e42]\\n        - cell \\\"100%\\\" [ref=e43]\\n        - cell \\\"$0.000/call\\\" [ref=e44]\\n      - row \\\"codeReview Analyze source code for quality issues, security vulnerabili... ai-tool explorer untested 100% $0.000/call\\\":\\n        - cell \\\"codeReview\\\" [ref=e45]\\n        - cell \\\"Analyze source code for quality issues, security vulnerabili...\\\" [ref=e46]\\n        - cell \\\"ai-tool\\\" [ref=e47]\\n        - cell \\\"explorer\\\" [ref=e48]\\n        - cell \\\"untested\\\" [ref=e49]\\n        - cell \\\"100%\\\" [ref=e50]\\n        - cell \\\"$0.000/call\\\" [ref=e51]\\n- alert\\n- img\",\n    \"refs\": {\n      \"e1\": {\n        \"role\": \"link\",\n        \"name\": \"Overview\"\n      },\n      \"e2\": {\n        \"role\": \"link\",\n        \"name\": \"Project\"\n      },\n      \"e3\": {\n        \"role\": \"link\",\n        \"name\": \"Proof\"\n      },\n      \"e4\": {\n        \"role\": \"link\",\n        \"name\": \"Runs\"\n      },\n      \"e5\": {\n        \"role\": \"link\",\n        \"name\": \"Sessions\"\n      },\n      \"e6\": {\n        \"role\": \"link\",\n        \"name\": \"Registries\"\n      },\n      \"e7\": {\n        \"role\": \"link\",\n        \"name\": \"Design system\"\n      },\n      \"e8\": {\n        \"role\": \"link\",\n        \"name\": \"Config\"\n      },\n      \"e9\": {\n        \"role\": \"link\",\n        \"name\": \"Status\"\n      },\n      \"e10\": {\n        \"role\": \"link\",\n        \"name\": \"Tools\"\n      },\n      \"e11\": {\n        \"role\": \"link\",\n        \"name\": \"Evaluations\"\n      },\n      \"e12\": {\n        \"role\": \"link\",\n        \"name\": \"Cost\"\n      },\n      \"e13\": {\n        \"role\": \"link\",\n        \"name\": \"Deployments\"\n      },\n      \"e14\": {\n        \"role\": \"link\",\n        \"name\": \"Regressions\"\n      },\n      \"e15\": {\n        \"role\": \"link\",\n        \"name\": \"Connectors\"\n      },\n      \"e16\": {\n        \"role\": \"heading\",\n        \"name\": \"Tool Registry\"\n      },\n      \"e17\": {\n        \"role\": \"columnheader\",\n        \"name\": \"Name\"\n      },\n      \"e18\": {\n        \"role\": \"columnheader\",\n        \"name\": \"Description\"\n      },\n      \"e19\": {\n        \"role\": \"columnheader\",\n        \"name\": \"Category\"\n      },\n      \"e20\": {\n        \"role\": \"columnheader\",\n        \"name\": \"Permission\"\n      },\n      \"e21\": {\n        \"role\": \"columnheader\",\n        \"name\": \"Test Status\"\n      },\n      \"e22\": {\n        \"role\": \"columnheader\",\n        \"name\": \"Eval Score\"\n      },\n      \"e23\": {\n        \"role\": \"columnheader\",\n        \"name\": \"Cost Est.\"\n      },\n      \"e24\": {\n        \"role\": \"cell\",\n        \"name\": \"_metadata\"\n      },\n      \"e25\": {\n        \"role\": \"cell\",\n        \"name\": \"Search meeting transcripts, summaries, and intake forms with...\"\n      },\n      \"e26\": {\n        \"role\": \"cell\",\n        \"name\": \"ai-tool\",\n        \"nth\": 0\n      },\n      \"e27\": {\n        \"role\": \"cell\",\n        \"name\": \"explorer\",\n        \"nth\": 0\n      },\n      \"e28\": {\n        \"role\": \"cell\",\n        \"name\": \"untested\",\n        \"nth\": 0\n      },\n      \"e29\": {\n        \"role\": \"cell\",\n        \"name\": \"100%\",\n        \"nth\": 0\n      },\n      \"e30\": {\n        \"role\": \"cell\",\n        \"name\": \"$0.000/call\",\n        \"nth\": 0\n      },\n      \"e31\": {\n        \"role\": \"cell\",\n        \"name\": \"_registry\"\n      },\n      \"e32\": {\n        \"role\": \"cell\",\n        \"name\": \"null\",\n        \"nth\": 0\n      },\n      \"e33\": {\n        \"role\": \"cell\",\n        \"name\": \"ai-tool\",\n        \"nth\": 1\n      },\n      \"e34\": {\n        \"role\": \"cell\",\n        \"name\": \"explorer\",\n        \"nth\": 1\n      },\n      \"e35\": {\n        \"role\": \"cell\",\n        \"name\": \"untested\",\n        \"nth\": 1\n      },\n      \"e36\": {\n        \"role\": \"cell\",\n        \"name\": \"100%\",\n        \"nth\": 1\n      },\n      \"e37\": {\n        \"role\": \"cell\",\n        \"name\": \"$0.000/call\",\n        \"nth\": 1\n      },\n      \"e38\": {\n        \"role\": \"cell\",\n        \"name\": \"_types\"\n      },\n      \"e39\": {\n        \"role\": \"cell\",\n        \"name\": \"null\",\n        \"nth\": 1\n      },\n      \"e40\": {\n        \"role\": \"cell\",\n        \"name\": \"ai-tool\",\n        \"nth\": 2\n      },\n      \"e41\": {\n        \"role\": \"cell\",\n        \"name\": \"explorer\",\n        \"nth\": 2\n      },\n      \"e42\": {\n        \"role\": \"cell\",\n        \"name\": \"untested\",\n        \"nth\": 2\n      },\n      \"e43\": {\n        \"role\": \"cell\",\n        \"name\": \"100%\",\n        \"nth\": 2\n      },\n      \"e44\": {\n        \"role\": \"cell\",\n        \"name\": \"$0.000/call\",\n        \"nth\": 2\n      },\n      \"e45\": {\n        \"role\": \"cell\",\n        \"name\": \"codeReview\"\n      },\n      \"e46\": {\n        \"role\": \"cell\",\n        \"name\": \"Analyze source code for quality issues, security vulnerabili...\"\n      },\n      \"e47\": {\n        \"role\": \"cell\",\n        \"name\": \"ai-tool\",\n        \"nth\": 3\n      },\n      \"e48\": {\n        \"role\": \"cell\",\n        \"name\": \"explorer\",\n        \"nth\": 3\n      },\n      \"e49\": {\n        \"role\": \"cell\",\n        \"name\": \"untested\",\n        \"nth\": 3\n      },\n      \"e50\": {\n        \"role\": \"cell\",\n        \"name\": \"100%\",\n        \"nth\": 3\n      },\n      \"e51\": {\n        \"role\": \"cell\",\n        \"name\": \"$0.000/call\",\n        \"nth\": 3\n      }\n    },\n    \"stats\": {\n      \"lines\": 83,\n      \"characters\": 3178,\n      \"estimatedTokens\": 795,\n      \"totalRefs\": 51,\n      \"interactiveRefs\": 15,\n      \"totalNodes\": 84,\n      \"visibleNodes\": 83\n    }\n  }\n}\n",
+        "stderr": "",
+        "outputFailed": false,
+        "timedOut": false
+      },
+      {
+        "command": "pnpm exec expect console_logs --type error",
+        "pass": true,
+        "exitCode": 0,
+        "durationMs": 4172,
+        "stdout": "No console messages captured.\n",
+        "stderr": "",
+        "outputFailed": false,
+        "timedOut": false
+      },
+      {
+        "command": "pnpm exec expect network_requests",
+        "pass": true,
+        "exitCode": 0,
+        "durationMs": 3649,
+        "stdout": "{\n  \"requests\": [\n    {\n      \"url\": \"http://127.0.0.1:3999/api/dev-kit/tools\",\n      \"method\": \"GET\",\n      \"status\": 200,\n      \"resourceType\": \"fetch\",\n      \"timestamp\": 1778421457243\n    },\n    {\n      \"url\": \"http://127.0.0.1:3999/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_c8c997ce._.js\",\n      \"method\": \"GET\",\n      \"status\": 200,\n      \"resourceType\": \"script\",\n      \"timestamp\": 1778421457243\n    },\n    {\n      \"url\": \"http://127.0.0.1:3999/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_8b5653b5._.js\",\n      \"method\": \"GET\",\n      \"status\": 200,\n      \"resourceType\": \"script\",\n      \"timestamp\": 1778421457243\n    }\n  ]\n}\n",
+        "stderr": "",
+        "outputFailed": false,
+        "timedOut": false
+      },
+      {
+        "command": "pnpm exec expect close",
+        "pass": true,
+        "exitCode": 0,
+        "durationMs": 13680,
+        "stdout": "Browser closed.\nPlaywright video: /tmp/expect-artifacts/session-1778421472664.webm\n",
+        "stderr": "",
+        "outputFailed": false,
+        "timedOut": false
+      }
+    ]
+  }
+}
