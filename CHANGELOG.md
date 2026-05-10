@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.97] — 2026-05-10
+
+### Other
+- Refresh PROD-448 feature proof plan (`cc08757`)
+
+
 ## [0.1.96] — 2026-05-10
 
 ### Other
