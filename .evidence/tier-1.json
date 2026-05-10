@@ -2,7 +2,7 @@
   "tier": "1",
   "label": "Fast deterministic tests",
   "description": "Agent and pre-push oracle: no browser, no live AI browser proof.",
-  "runAt": "2026-05-10T13:54:57.165Z",
+  "runAt": "2026-05-10T14:01:22.458Z",
   "pass": true,
   "results": [
     {
@@ -12,7 +12,7 @@
       "skipped": false,
       "pass": true,
       "exitCode": 0,
-      "durationMs": 14302
+      "durationMs": 17509
     },
     {
       "name": "feature proof plan",
@@ -21,7 +21,7 @@
       "skipped": false,
       "pass": true,
       "exitCode": 0,
-      "durationMs": 707
+      "durationMs": 803
     },
     {
       "name": "manifest drift",
@@ -30,7 +30,7 @@
       "skipped": false,
       "pass": true,
       "exitCode": 0,
-      "durationMs": 793
+      "durationMs": 861
     },
     {
       "name": "compliance",
@@ -39,7 +39,7 @@
       "skipped": false,
       "pass": true,
       "exitCode": 0,
-      "durationMs": 820
+      "durationMs": 832
     },
     {
       "name": "expect coverage",
@@ -48,7 +48,7 @@
       "skipped": false,
       "pass": true,
       "exitCode": 0,
-      "durationMs": 786
+      "durationMs": 887
     },
     {
       "name": "budget",
@@ -57,7 +57,7 @@
       "skipped": false,
       "pass": true,
       "exitCode": 0,
-      "durationMs": 829
+      "durationMs": 872
     }
   ]
 }

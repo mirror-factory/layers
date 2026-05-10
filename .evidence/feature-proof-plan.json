@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-10T13:56:43.980Z",
+  "generatedAt": "2026-05-10T14:01:18.991Z",
   "registryPath": ".ai-dev-kit/registries/feature-proof.json",
   "policy": {
     "requireRegistryForUserFacingChanges": true,
@@ -15,6 +15,17 @@
     ]
   },
   "changedFiles": [
+    ".evidence/design-drift/latest.json",
+    ".evidence/design-drift/latest.md",
+    ".evidence/expect-proof.json",
+    ".evidence/feature-proof-plan.json",
+    ".evidence/project-harness.json",
+    ".evidence/proof-packet.json",
+    ".evidence/ticket-proof.json",
+    ".evidence/tier-0.json",
+    ".evidence/tier-1.json",
+    ".evidence/tier-2.json",
+    ".evidence/tier-3.json",
     "app/dev-kit/tools/page.tsx",
     "playwright-report/index.html",
     "test-results/playwright-no-run.json"
@@ -75,7 +86,6 @@
         ".expect/replays"
       ],
       "description": "Instruction-driven AI browser proof for user-facing feature behavior.",
-      "satisfied": true,
       "missingEvidence": []
     },
     {
@@ -87,7 +97,6 @@
         "test-results/unit.json"
       ],
       "description": "Unit, contract, and non-browser regression checks.",
-      "satisfied": true,
       "missingEvidence": []
     },
     {
@@ -99,7 +108,6 @@
         "playwright-report/index.html"
       ],
       "description": "Focused route, visual, and mobile browser proof for touched surfaces.",
-      "satisfied": true,
       "missingEvidence": []
     }
   ],
@@ -108,10 +116,7 @@
     "pnpm test:fast",
     "pnpm verify:tier 2"
   ],
-  "enforcedArtifactLanes": [
-    "expect",
-    "visual-video"
-  ],
+  "enforcedArtifactLanes": [],
   "pass": true,
   "blocked": {
     "unregisteredUserFacingChange": false,
