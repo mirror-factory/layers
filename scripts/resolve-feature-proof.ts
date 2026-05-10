@@ -10,6 +10,7 @@
 import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
+import { pathToFileURL } from "node:url";
 
 interface ProofLane {
   label: string;
@@ -57,57 +58,56 @@ interface ResolvedFeature extends FeatureEntry {
   matchedPaths: string[];
 }
 
-const cwd = process.cwd();
-const registryPath = join(cwd, ".ai-dev-kit", "registries", "feature-proof.json");
-const outPath = join(cwd, ".evidence", "feature-proof-plan.json");
-const args = new Set(process.argv.slice(2));
-const enforceArtifacts = args.has("--enforce-artifacts");
-const enforceLaneArg = process.argv.slice(2).find(arg => arg.startsWith("--enforce-lanes="));
-const enforceLaneIds = enforceLaneArg
-  ? new Set(enforceLaneArg.replace("--enforce-lanes=", "").split(",").map(id => id.trim()).filter(Boolean))
-  : null;
-const noWrite = args.has("--no-write");
-const jsonOnly = args.has("--json");
+type FeatureProofPayload = ReturnType<typeof resolveFeatureProof>;
 
-function gitLines(args: string[]): string[] {
-  const result = spawnSync("git", args, { cwd, encoding: "utf-8" });
+interface ResolveOptions {
+  root?: string;
+  files?: string[];
+  enforceArtifacts?: boolean;
+  enforceLaneIds?: Set<string> | null;
+  write?: boolean;
+}
+
+function gitLines(args: string[], root: string): string[] {
+  const result = spawnSync("git", args, { cwd: root, encoding: "utf-8" });
   if (result.status !== 0) return [];
   return result.stdout.split("\n").map(line => line.trim()).filter(Boolean);
 }
 
-function gitOk(args: string[]): boolean {
-  return spawnSync("git", args, { cwd, encoding: "utf-8" }).status === 0;
+function gitOk(args: string[], root: string): boolean {
+  return spawnSync("git", args, { cwd: root, encoding: "utf-8" }).status === 0;
 }
 
 function unique(values: string[]): string[] {
   return [...new Set(values)].sort((a, b) => a.localeCompare(b));
 }
 
-function changedFiles(): string[] {
+function changedFiles(root: string): string[] {
   const explicit = process.env.FEATURE_PROOF_FILES ?? process.env.TICKET_FILES;
   if (explicit) {
     return unique(explicit.split(/[\n, ]+/).map(file => file.trim()).filter(Boolean));
   }
 
   const workingTreeFiles = [
-    ...gitLines(["diff", "--name-only"]),
-    ...gitLines(["diff", "--name-only", "--cached"]),
-    ...gitLines(["ls-files", "--others", "--exclude-standard"]),
+    ...gitLines(["diff", "--name-only"], root),
+    ...gitLines(["diff", "--name-only", "--cached"], root),
+    ...gitLines(["ls-files", "--others", "--exclude-standard"], root),
   ];
-  const upstream = gitLines(["rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{upstream}"])[0];
+  const upstream = gitLines(["rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{upstream}"], root)[0];
   const branchBases = unique([
     upstream,
-    gitOk(["rev-parse", "--verify", "origin/development"]) ? "origin/development" : "",
+    gitOk(["rev-parse", "--verify", "origin/development"], root) ? "origin/development" : "",
   ].filter(Boolean));
 
   const branchFiles = branchBases.length > 0
-    ? branchBases.flatMap(ref => gitLines(["diff", "--name-only", `${ref}...HEAD`]))
-    : gitLines(["diff", "--name-only", "origin/main...HEAD"]);
+    ? branchBases.flatMap(ref => gitLines(["diff", "--name-only", `${ref}...HEAD`], root))
+    : gitLines(["diff", "--name-only", "origin/main...HEAD"], root);
 
   return unique([...workingTreeFiles, ...branchFiles]);
 }
 
-function readRegistry(): FeatureProofRegistry {
+function readRegistry(root: string): FeatureProofRegistry {
+  const registryPath = join(root, ".ai-dev-kit", "registries", "feature-proof.json");
   if (!existsSync(registryPath)) {
     throw new Error(`Missing feature proof registry: ${registryPath}`);
   }
@@ -160,7 +160,7 @@ function looksUserFacing(file: string): boolean {
   return false;
 }
 
-function evidenceState(lane: ProofLane): { satisfied: boolean | null; missingEvidence: string[] } {
+function evidenceState(lane: ProofLane, root: string): { satisfied: boolean | null; missingEvidence: string[] } {
   const evidence = lane.evidence ?? [];
   if (evidence.length === 0) return { satisfied: true, missingEvidence: [] };
 
@@ -169,7 +169,7 @@ function evidenceState(lane: ProofLane): { satisfied: boolean | null; missingEvi
   let anyPresent = false;
 
   for (const rel of evidence) {
-    const full = join(cwd, rel);
+    const full = join(root, rel);
     if (!existsSync(full)) {
       missing.push(rel);
       continue;
@@ -193,9 +193,10 @@ function evidenceState(lane: ProofLane): { satisfied: boolean | null; missingEvi
   return { satisfied: null, missingEvidence: missing };
 }
 
-function main() {
-  const registry = readRegistry();
-  const files = changedFiles().filter(file => !ignored(file, registry));
+export function resolveFeatureProof(options: ResolveOptions = {}) {
+  const root = options.root ?? process.cwd();
+  const registry = readRegistry(root);
+  const files = (options.files ?? changedFiles(root)).filter(file => !ignored(file, registry));
   const matchedFeatures: ResolvedFeature[] = [];
   const matchedFileSet = new Set<string>();
 
@@ -214,7 +215,7 @@ function main() {
       command: `No command registered for proof lane ${id}`,
       evidence: [],
     };
-    const artifactState = evidenceState(lane);
+    const artifactState = evidenceState(lane, root);
     return {
       id,
       ...lane,
@@ -227,8 +228,8 @@ function main() {
     unmatchedUserFacingFiles.length > 0 &&
     process.env.FEATURE_PROOF_ALLOW_UNREGISTERED !== "1";
 
-  const missingArtifactLanes = enforceArtifacts
-    ? requiredLanes.filter(lane => (enforceLaneIds === null || enforceLaneIds.has(lane.id)) && lane.satisfied !== true)
+  const missingArtifactLanes = options.enforceArtifacts
+    ? requiredLanes.filter(lane => (options.enforceLaneIds === null || options.enforceLaneIds === undefined || options.enforceLaneIds.has(lane.id)) && lane.satisfied !== true)
     : [];
 
   const payload = {
@@ -240,7 +241,7 @@ function main() {
     unmatchedUserFacingFiles,
     requiredLanes,
     commands: requiredLanes.map(lane => lane.command),
-    enforcedArtifactLanes: enforceArtifacts ? (enforceLaneIds ? [...enforceLaneIds].sort() : "all") : [],
+    enforcedArtifactLanes: options.enforceArtifacts ? (options.enforceLaneIds ? [...options.enforceLaneIds].sort() : "all") : [],
     pass: !unregisteredBlocked && missingArtifactLanes.length === 0,
     blocked: {
       unregisteredUserFacingChange: unregisteredBlocked,
@@ -248,32 +249,61 @@ function main() {
     },
   };
 
-  if (!noWrite) {
+  if (options.write !== false) {
+    const outPath = join(root, ".evidence", "feature-proof-plan.json");
     mkdirSync(dirname(outPath), { recursive: true });
     writeFileSync(outPath, `${JSON.stringify(payload, null, 2)}\n`);
   }
 
+  return payload;
+}
+
+function printPayload(payload: FeatureProofPayload, root: string, jsonOnly: boolean, noWrite: boolean) {
+  const outPath = join(root, ".evidence", "feature-proof-plan.json");
+
   if (jsonOnly) {
     console.log(JSON.stringify(payload, null, 2));
   } else {
-    console.log(`[feature-proof] matched ${matchedFeatures.length} feature(s), required ${requiredLanes.length} proof lane(s)`);
-    for (const feature of matchedFeatures) {
+    console.log(`[feature-proof] matched ${payload.matchedFeatures.length} feature(s), required ${payload.requiredLanes.length} proof lane(s)`);
+    for (const feature of payload.matchedFeatures) {
       console.log(`  - ${feature.id}: ${feature.proof.join(", ")} (${feature.matchedPaths.length} file(s))`);
     }
-    if (unmatchedUserFacingFiles.length > 0) {
+    if (payload.unmatchedUserFacingFiles.length > 0) {
       console.log("[feature-proof] unregistered user-facing files:");
-      for (const file of unmatchedUserFacingFiles) console.log(`  - ${file}`);
+      for (const file of payload.unmatchedUserFacingFiles) console.log(`  - ${file}`);
     }
     if (!noWrite) console.log(`[feature-proof] wrote ${outPath}`);
-    if (missingArtifactLanes.length > 0) {
+    if (payload.blocked.missingArtifactLanes.length > 0) {
       console.log("[feature-proof] missing proof artifacts:");
-      for (const lane of missingArtifactLanes) {
+      for (const lane of payload.requiredLanes.filter(item => payload.blocked.missingArtifactLanes.includes(item.id))) {
         console.log(`  - ${lane.id}: ${(lane.missingEvidence ?? []).join(", ") || "no evidence"}`);
       }
     }
   }
+}
+
+function main() {
+  const rawArgs = process.argv.slice(2);
+  const args = new Set(rawArgs);
+  const rootArg = rawArgs.find(arg => arg.startsWith("--root="));
+  const root = rootArg ? rootArg.replace("--root=", "") : process.cwd();
+  const enforceLaneArg = rawArgs.find(arg => arg.startsWith("--enforce-lanes="));
+  const enforceLaneIds = enforceLaneArg
+    ? new Set(enforceLaneArg.replace("--enforce-lanes=", "").split(",").map(id => id.trim()).filter(Boolean))
+    : null;
+  const noWrite = args.has("--no-write");
+  const payload = resolveFeatureProof({
+    root,
+    enforceArtifacts: args.has("--enforce-artifacts"),
+    enforceLaneIds,
+    write: !noWrite,
+  });
+
+  printPayload(payload, root, args.has("--json"), noWrite);
 
   if (!payload.pass) process.exit(1);
 }
 
-main();
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main();
+}

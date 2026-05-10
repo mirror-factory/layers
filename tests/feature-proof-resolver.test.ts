@@ -1,11 +1,9 @@
-import { spawnSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
-const resolverPath = join(process.cwd(), "scripts/resolve-feature-proof.ts");
-const tsxBin = join(process.cwd(), "node_modules/.bin/tsx");
+import { resolveFeatureProof } from "../scripts/resolve-feature-proof";
 
 function writeFixtureProject(dir: string) {
   mkdirSync(join(dir, ".ai-dev-kit/registries"), { recursive: true });
@@ -42,19 +40,13 @@ function writeFixtureProject(dir: string) {
   }));
 }
 
-function runResolver(dir: string, args: string[] = []) {
-  return spawnSync(tsxBin, [resolverPath, "--json", "--no-write", ...args], {
-    cwd: dir,
-    encoding: "utf-8",
-    env: { ...process.env, FEATURE_PROOF_FILES: "app/dev-kit/proof/page.tsx" },
+function runResolver(dir: string, enforceArtifacts = false) {
+  return resolveFeatureProof({
+    root: dir,
+    files: ["app/dev-kit/proof/page.tsx"],
+    enforceArtifacts,
+    write: false,
   });
-}
-
-function parseOutput(result: ReturnType<typeof runResolver>) {
-  expect(result.stdout).not.toEqual("");
-  return JSON.parse(result.stdout) as {
-    requiredLanes: Array<{ id: string; satisfied: boolean | null; missingEvidence: string[] }>;
-  };
 }
 
 describe("feature proof resolver", () => {
@@ -63,18 +55,16 @@ describe("feature proof resolver", () => {
     try {
       writeFixtureProject(dir);
 
-      let result = runResolver(dir);
-      expect(result.status).toBe(0);
-      let output = parseOutput(result);
+      let output = runResolver(dir);
+      expect(output.pass).toBe(true);
       expect(output.requiredLanes.find(lane => lane.id === "fast")?.satisfied).toBeNull();
 
       mkdirSync(join(dir, ".evidence"), { recursive: true });
       writeFileSync(join(dir, ".evidence/tier-1.json"), JSON.stringify({ pass: true }));
       writeFileSync(join(dir, ".evidence/expect-proof.json"), JSON.stringify({ pass: false }));
 
-      result = runResolver(dir);
-      expect(result.status).toBe(0);
-      output = parseOutput(result);
+      output = runResolver(dir);
+      expect(output.pass).toBe(true);
       expect(output.requiredLanes.find(lane => lane.id === "fast")?.satisfied).toBe(true);
       expect(output.requiredLanes.find(lane => lane.id === "expect")?.satisfied).toBe(false);
     } finally {
@@ -87,9 +77,8 @@ describe("feature proof resolver", () => {
     try {
       writeFixtureProject(dir);
 
-      const result = runResolver(dir, ["--enforce-artifacts"]);
-      expect(result.status).toBe(1);
-      const output = parseOutput(result);
+      const output = runResolver(dir, true);
+      expect(output.pass).toBe(false);
       expect(output.requiredLanes.find(lane => lane.id === "fast")?.satisfied).toBeNull();
     } finally {
       rmSync(dir, { recursive: true, force: true });
