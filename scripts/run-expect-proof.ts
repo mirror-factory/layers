@@ -30,6 +30,8 @@ const message = process.env.EXPECT_MESSAGE ?? "Test the changed user-facing flow
 const url = process.env.EXPECT_BASE_URL ?? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "");
 const timeoutMs = process.env.EXPECT_TIMEOUT_MS?.trim();
 const timeoutArg = timeoutMs && /^\d+$/.test(timeoutMs) ? timeoutMs : "";
+const tuiTimeoutMs = process.env.EXPECT_TUI_TIMEOUT_MS?.trim();
+const tuiTimeoutArg = tuiTimeoutMs && /^\d+$/.test(tuiTimeoutMs) ? Number(tuiTimeoutMs) : 180_000;
 const fallbackEnabled = process.env.EXPECT_FALLBACK !== "0";
 const command = `pnpm exec expect tui --ci${agent ? ` --agent ${agent}` : ""} --target ${target} --output json --message ${JSON.stringify(message)} --yes${url ? ` --url ${url}` : ""}${timeoutArg ? ` --timeout ${timeoutArg}` : ""}`;
 
@@ -230,11 +232,13 @@ const result = spawnSync("pnpm", args, {
   cwd,
   encoding: "utf-8",
   env: process.env,
+  timeout: tuiTimeoutArg,
 });
 
 const exitCode = typeof result.status === "number" ? result.status : 1;
 const tuiReport = extractExpectTuiReport(result.stdout ?? "");
-const fallback = exitCode !== 0 && fallbackEnabled && shouldRunExpectFallback(tuiReport, result.stdout ?? "", result.stderr ?? "")
+const tuiTimedOut = Boolean(result.error && "code" in result.error && result.error.code === "ETIMEDOUT");
+const fallback = exitCode !== 0 && fallbackEnabled && (tuiTimedOut || shouldRunExpectFallback(tuiReport, result.stdout ?? "", result.stderr ?? ""))
   ? runFallbackProof()
   : null;
 const pass = exitCode === 0 || Boolean(fallback?.pass);
@@ -256,6 +260,8 @@ const payload = {
     exitCode,
     report: tuiReport,
     timedOutWithoutSteps: isZeroStepTuiTimeout(tuiReport),
+    processTimedOut: tuiTimedOut,
+    processTimeoutMs: tuiTimeoutArg,
   },
   fallback,
 };
