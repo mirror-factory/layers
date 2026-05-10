@@ -46,3 +46,32 @@ export function isZeroStepTuiTimeout(report: ExpectTuiReport | null): boolean {
   const summary = report.summary?.toLowerCase() ?? "";
   return report.status === "failed" && Array.isArray(report.steps) && report.steps.length === 0 && summary.includes("timed out");
 }
+
+export function isRecoverableTuiInfraFailure(stdout: string, stderr: string): boolean {
+  const output = `${stdout}\n${stderr}`.toLowerCase();
+  return [
+    "@supervisor/executionerror",
+    "acpstreamerror",
+    "agent produced no output for",
+    "couldn't connect to the browser",
+    "could not connect to the browser",
+    "target url is unreachable",
+    "streaming failed",
+  ].some(signal => output.includes(signal));
+}
+
+export function shouldRunExpectFallback(
+  report: ExpectTuiReport | null,
+  stdout: string,
+  stderr: string,
+): boolean {
+  if (isZeroStepTuiTimeout(report)) return true;
+
+  // Do not mask a real TUI finding. Fallback is only for known infrastructure
+  // failures that prevent Expect from producing a useful step report.
+  if (report && Array.isArray(report.steps) && report.steps.length > 0) {
+    return false;
+  }
+
+  return isRecoverableTuiInfraFailure(stdout, stderr);
+}

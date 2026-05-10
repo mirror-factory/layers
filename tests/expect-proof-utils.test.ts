@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { extractExpectTuiReport, isZeroStepTuiTimeout } from "@/scripts/lib/expect-proof-utils";
+import { extractExpectTuiReport, isZeroStepTuiTimeout, shouldRunExpectFallback } from "@/scripts/lib/expect-proof-utils";
 
 describe("expect proof utils", () => {
   it("extracts the trailing Expect TUI JSON report from log output", () => {
@@ -35,5 +35,25 @@ describe("expect proof utils", () => {
       steps: [{ title: "found a bug" }],
       summary: "Timed out after 3m",
     })).toBe(false);
+  });
+
+  it("treats ACP browser streaming failures as fallback-eligible", () => {
+    expect(shouldRunExpectFallback(
+      null,
+      "",
+      "BB [@supervisor/ExecutionError]: Streaming failed: Agent produced no output for 180s. reason: KT [AcpStreamError]: couldn't connect to the browser or the target URL is unreachable.",
+    )).toBe(true);
+  });
+
+  it("does not fallback over a real TUI finding with steps", () => {
+    expect(shouldRunExpectFallback(
+      {
+        status: "failed",
+        steps: [{ title: "Button did not respond" }],
+        summary: "Found an interaction regression",
+      },
+      "",
+      "Streaming failed after the report",
+    )).toBe(false);
   });
 });
