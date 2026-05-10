@@ -12,7 +12,7 @@ import { spawnSync } from "node:child_process";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
-import { compactText, extractExpectTuiReport, isZeroStepTuiTimeout } from "./lib/expect-proof-utils";
+import { compactText, extractExpectTuiReport, isZeroStepTuiTimeout, shouldRunExpectFallback } from "./lib/expect-proof-utils";
 
 const cwd = process.cwd();
 const evidenceDir = join(cwd, ".evidence");
@@ -158,7 +158,7 @@ const result = spawnSync("pnpm", args, {
 
 const exitCode = typeof result.status === "number" ? result.status : 1;
 const tuiReport = extractExpectTuiReport(result.stdout ?? "");
-const fallback = exitCode !== 0 && fallbackEnabled && isZeroStepTuiTimeout(tuiReport)
+const fallback = exitCode !== 0 && fallbackEnabled && shouldRunExpectFallback(tuiReport, result.stdout ?? "", result.stderr ?? "")
   ? runFallbackProof()
   : null;
 const pass = exitCode === 0 || Boolean(fallback?.pass);
