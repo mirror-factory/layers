@@ -8,7 +8,7 @@
  * spend 30 minutes unless a UI/usability gate explicitly asks for it.
  */
 
-import { spawnSync } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
@@ -33,6 +33,7 @@ const timeoutArg = timeoutMs && /^\d+$/.test(timeoutMs) ? timeoutMs : "";
 const tuiTimeoutMs = process.env.EXPECT_TUI_TIMEOUT_MS?.trim();
 const tuiTimeoutArg = tuiTimeoutMs && /^\d+$/.test(tuiTimeoutMs) ? Number(tuiTimeoutMs) : 180_000;
 const fallbackEnabled = process.env.EXPECT_FALLBACK !== "0";
+const autoStartServer = process.env.EXPECT_AUTO_START_SERVER !== "0";
 const command = `pnpm exec expect tui --ci${agent ? ` --agent ${agent}` : ""} --target ${target} --output json --message ${JSON.stringify(message)} --yes${url ? ` --url ${url}` : ""}${timeoutArg ? ` --timeout ${timeoutArg}` : ""}`;
 
 function write(payload: Record<string, unknown>) {
@@ -180,13 +181,119 @@ req.end();
   return result.status === 0;
 }
 
+function sleep(ms: number) {
+  Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
+}
+
+function localPortFromUrl(candidate: string): string | null {
+  try {
+    const parsed = new URL(candidate);
+    if (!["127.0.0.1", "localhost", "0.0.0.0", "::1", "[::1]"].includes(parsed.hostname)) return null;
+    return parsed.port || null;
+  } catch {
+    return null;
+  }
+}
+
+function canAutoStartServer(candidate: string): boolean {
+  if (!autoStartServer) return false;
+  const port = localPortFromUrl(candidate);
+  return Boolean(port && port !== "3001");
+}
+
+interface ManagedExpectServer {
+  url: string;
+  command: string;
+  pid: number | null;
+  ready: boolean;
+  timeoutMs: number;
+  durationMs: number;
+  stopped: boolean;
+  error?: string;
+}
+
+function serverCommandFor(candidate: string): string {
+  const port = localPortFromUrl(candidate) ?? "";
+  const template = process.env.EXPECT_SERVER_COMMAND?.trim();
+  if (template) {
+    return template.replaceAll("{port}", port).replaceAll("{url}", candidate);
+  }
+  return `pnpm dev --port ${port}`;
+}
+
+function waitForReachableUrl(candidate: string, timeoutMs: number): boolean {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    if (isUrlReachable(candidate)) return true;
+    sleep(500);
+  }
+  return isUrlReachable(candidate);
+}
+
+function startManagedServer(candidate: string): ManagedExpectServer {
+  const port = localPortFromUrl(candidate);
+  const timeoutMsRaw = process.env.EXPECT_SERVER_TIMEOUT_MS?.trim();
+  const timeoutMs = timeoutMsRaw && /^\d+$/.test(timeoutMsRaw) ? Number(timeoutMsRaw) : 120_000;
+  const command = serverCommandFor(candidate);
+  const server: ManagedExpectServer = {
+    url: candidate,
+    command,
+    pid: null,
+    ready: false,
+    timeoutMs,
+    durationMs: 0,
+    stopped: false,
+  };
+  const startedAt = Date.now();
+
+  try {
+    const child = spawn("bash", ["-lc", command], {
+      cwd,
+      detached: true,
+      env: {
+        ...process.env,
+        ...(port ? { PORT: port, NEXT_PORT: port } : {}),
+      },
+      stdio: "ignore",
+    });
+    child.unref();
+    server.pid = child.pid ?? null;
+    server.ready = waitForReachableUrl(candidate, timeoutMs);
+  } catch (error) {
+    server.error = error instanceof Error ? error.message : String(error);
+  } finally {
+    server.durationMs = Date.now() - startedAt;
+  }
+
+  return server;
+}
+
+function stopManagedServer(server: ManagedExpectServer | null) {
+  if (!server || server.stopped || !server.pid) return;
+  try {
+    process.kill(-server.pid, "SIGTERM");
+    server.stopped = true;
+  } catch (error) {
+    server.error = `${server.error ? `${server.error}; ` : ""}stop failed: ${error instanceof Error ? error.message : String(error)}`;
+  }
+}
+
 function resolveFallbackUrl() {
   const candidates = fallbackUrlCandidates();
   const reachable = candidates.find(isUrlReachable);
+  let server: ManagedExpectServer | null = null;
+  if (!reachable) {
+    const localCandidate = candidates.find(canAutoStartServer);
+    if (localCandidate) {
+      server = startManagedServer(localCandidate);
+    }
+  }
+  const reachableAfterServer = reachable ?? candidates.find(isUrlReachable);
   return {
-    url: reachable ?? candidates[0] ?? "",
-    reachable: Boolean(reachable),
+    url: reachableAfterServer ?? server?.url ?? candidates[0] ?? "",
+    reachable: Boolean(reachableAfterServer),
     candidates,
+    server,
   };
 }
 
@@ -207,58 +314,65 @@ return {
 
 function runFallbackProof() {
   const fallbackUrl = resolveFallbackUrl();
-  if (!fallbackUrl.url) {
-    return {
-      pass: false,
-      reason: "No fallback URL candidates were available for deterministic Expect CLI fallback.",
-      url: null,
-      candidates: [],
-      commands: [],
-    };
-  }
+  const commands: ReturnType<typeof runExpectCli>[] = [];
+  try {
+    if (!fallbackUrl.url) {
+      return {
+        pass: false,
+        reason: "No fallback URL candidates were available for deterministic Expect CLI fallback.",
+        url: null,
+        candidates: [],
+        server: fallbackUrl.server,
+        commands,
+      };
+    }
 
-  const commands = [];
-  const open = runExpectCli(["exec", "expect", "open", "--browser", "chromium", "--wait-until", "load", fallbackUrl.url]);
-  commands.push(open);
-  if (!open.pass) {
+    const open = runExpectCli(["exec", "expect", "open", "--browser", "chromium", "--wait-until", "load", fallbackUrl.url]);
+    commands.push(open);
+    if (!open.pass) {
+      return {
+        pass: false,
+        reason: fallbackUrl.reachable ? "expect open failed" : "No probed fallback URL was reachable; attempted first candidate.",
+        url: fallbackUrl.url,
+        candidates: fallbackUrl.candidates,
+        server: fallbackUrl.server,
+        commands,
+      };
+    }
+
+    const reason = "AI TUI proof failed before useful steps; deterministic Expect CLI fallback executed.";
+    try {
+      const assertion = runExpectCli([
+        "exec",
+        "expect",
+        "playwright",
+        fallbackCode(),
+        "--snapshot-after",
+        "--description",
+        "expect-proof-fallback",
+      ]);
+      commands.push(assertion);
+
+      const consoleLogs = runExpectCli(["exec", "expect", "console_logs", "--type", "error"]);
+      commands.push(consoleLogs);
+
+      const network = runExpectCli(["exec", "expect", "network_requests"]);
+      commands.push(network);
+    } finally {
+      commands.push(runExpectCli(["exec", "expect", "close"], 120_000));
+    }
+
     return {
-      pass: false,
-      reason: fallbackUrl.reachable ? "expect open failed" : "No probed fallback URL was reachable; attempted first candidate.",
+      pass: commands.every(item => item.pass),
+      reason,
       url: fallbackUrl.url,
       candidates: fallbackUrl.candidates,
+      server: fallbackUrl.server,
       commands,
     };
-  }
-
-  const reason = "AI TUI proof failed before useful steps; deterministic Expect CLI fallback executed.";
-  try {
-    const assertion = runExpectCli([
-      "exec",
-      "expect",
-      "playwright",
-      fallbackCode(),
-      "--snapshot-after",
-      "--description",
-      "expect-proof-fallback",
-    ]);
-    commands.push(assertion);
-
-    const consoleLogs = runExpectCli(["exec", "expect", "console_logs", "--type", "error"]);
-    commands.push(consoleLogs);
-
-    const network = runExpectCli(["exec", "expect", "network_requests"]);
-    commands.push(network);
   } finally {
-    commands.push(runExpectCli(["exec", "expect", "close"], 120_000));
+    stopManagedServer(fallbackUrl.server);
   }
-
-  return {
-    pass: commands.every(item => item.pass),
-    reason,
-    url: fallbackUrl.url,
-    candidates: fallbackUrl.candidates,
-    commands,
-  };
 }
 
 console.log(`[expect-proof] pnpm ${args.join(" ")}`);
