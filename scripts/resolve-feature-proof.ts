@@ -49,7 +49,7 @@ interface FeatureProofRegistry {
 
 interface ResolvedLane extends ProofLane {
   id: string;
-  satisfied?: boolean;
+  satisfied?: boolean | null;
   missingEvidence?: string[];
 }
 
@@ -160,7 +160,7 @@ function looksUserFacing(file: string): boolean {
   return false;
 }
 
-function evidenceSatisfied(lane: ProofLane): { satisfied: boolean; missingEvidence: string[] } {
+function evidenceState(lane: ProofLane): { satisfied: boolean | null; missingEvidence: string[] } {
   const evidence = lane.evidence ?? [];
   if (evidence.length === 0) return { satisfied: true, missingEvidence: [] };
 
@@ -187,10 +187,10 @@ function evidenceSatisfied(lane: ProofLane): { satisfied: boolean; missingEviden
     }
   }
 
-  return {
-    satisfied: anyPresent && invalid.length === 0,
-    missingEvidence: anyPresent ? invalid : missing,
-  };
+  if (invalid.length > 0) return { satisfied: false, missingEvidence: invalid };
+  if (anyPresent) return { satisfied: true, missingEvidence: [] };
+
+  return { satisfied: null, missingEvidence: missing };
 }
 
 function main() {
@@ -214,7 +214,7 @@ function main() {
       command: `No command registered for proof lane ${id}`,
       evidence: [],
     };
-    const artifactState = enforceArtifacts ? evidenceSatisfied(lane) : { satisfied: undefined, missingEvidence: [] };
+    const artifactState = evidenceState(lane);
     return {
       id,
       ...lane,
@@ -228,7 +228,7 @@ function main() {
     process.env.FEATURE_PROOF_ALLOW_UNREGISTERED !== "1";
 
   const missingArtifactLanes = enforceArtifacts
-    ? requiredLanes.filter(lane => (enforceLaneIds === null || enforceLaneIds.has(lane.id)) && lane.satisfied === false)
+    ? requiredLanes.filter(lane => (enforceLaneIds === null || enforceLaneIds.has(lane.id)) && lane.satisfied !== true)
     : [];
 
   const payload = {
