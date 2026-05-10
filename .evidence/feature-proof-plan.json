@@ -1,0 +1,28 @@
+{
+  "generatedAt": "2026-05-10T09:31:14.480Z",
+  "registryPath": ".ai-dev-kit/registries/feature-proof.json",
+  "policy": {
+    "requireRegistryForUserFacingChanges": true,
+    "expectPolicy": "Expect is required for every ticket that touches a registered user-facing Layers feature.",
+    "defaultUserFacingProof": [
+      "fast",
+      "playwright",
+      "expect"
+    ],
+    "defaultNativeProof": [
+      "native-config",
+      "native-device"
+    ]
+  },
+  "changedFiles": [],
+  "matchedFeatures": [],
+  "unmatchedUserFacingFiles": [],
+  "requiredLanes": [],
+  "commands": [],
+  "enforcedArtifactLanes": [],
+  "pass": true,
+  "blocked": {
+    "unregisteredUserFacingChange": false,
+    "missingArtifactLanes": []
+  }
+}

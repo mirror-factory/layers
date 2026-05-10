@@ -238,6 +238,10 @@ pnpm evidence:export
 into `.evidence/proof-packet.json`. Symphony and `/dev-kit` should link this
 packet from each ticket and PR.
 
+Reviewers should confirm each proof packet includes the feature proof plan, the
+required lane outcomes, Expect proof when that lane is required, and any
+native-runner blocker notes when native proof could not run.
+
 ## Symphony Contract
 
 Symphony should use the same commands humans use:
