@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-10T14:13:21.885Z",
+  "generatedAt": "2026-05-10T14:15:42.914Z",
   "profilePath": ".ai-dev-kit/project-profile.json",
   "project": {
     "id": "layers",
@@ -210,7 +210,7 @@
       "id": "proof.latest-evidence",
       "label": "Latest local evidence",
       "status": "pass",
-      "detail": "Latest evidence updated 2026-05-10T14:12:34.103Z.",
+      "detail": "Latest evidence updated 2026-05-10T14:13:47.192Z.",
       "path": ".evidence"
     }
   ],
