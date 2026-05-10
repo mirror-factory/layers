@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-10T15:12:16.949Z",
+  "generatedAt": "2026-05-10T15:29:17.121Z",
   "registryPath": ".ai-dev-kit/registries/feature-proof.json",
   "policy": {
     "requireRegistryForUserFacingChanges": true,
@@ -15,6 +15,25 @@
     ]
   },
   "changedFiles": [
+    ".evidence/expect-proof.json",
+    ".evidence/feature-proof-plan.json",
+    ".evidence/mobile/ipad-pro-app-layout.png",
+    ".evidence/mobile/ipad-pro-button-tap.png",
+    ".evidence/mobile/ipad-pro-landing.png",
+    ".evidence/mobile/iphone-15-pro-app-layout.png",
+    ".evidence/mobile/iphone-15-pro-button-tap.png",
+    ".evidence/mobile/iphone-15-pro-landing.png",
+    ".evidence/mobile/pixel-8-pro-app-layout.png",
+    ".evidence/mobile/pixel-8-pro-button-tap.png",
+    ".evidence/mobile/pixel-8-pro-landing.png",
+    ".evidence/project-harness.json",
+    ".evidence/proof-packet.json",
+    ".evidence/ticket-proof.json",
+    ".evidence/tier-1.json",
+    ".evidence/tier-2.json",
+    ".evidence/tier-latest.json",
+    ".expect/.gitignore",
+    ".expect/logs.md",
     "app/dev-kit/tools/page.tsx",
     "playwright-report/index.html",
     "test-results/playwright-no-run.json"
