@@ -104,8 +104,8 @@ Do not use the anon key or service-role key for this step. They can call REST en
 After the migration is applied and the app is running:
 
 ```bash
-curl -sS http://localhost:3001/.well-known/oauth-authorization-server | jq .
-curl -sS http://localhost:3001/.well-known/oauth-protected-resource | jq .
+curl -sS http://localhost:3002/.well-known/oauth-authorization-server | jq .
+curl -sS http://localhost:3002/.well-known/oauth-protected-resource | jq .
 ```
 
 Both should return JSON metadata.

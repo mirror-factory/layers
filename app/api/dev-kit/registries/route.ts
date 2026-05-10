@@ -27,9 +27,14 @@ export const GET = withRoute(async () => {
     if (!file.endsWith('.json') || file === 'registry.schema.json') continue;
     try {
       const reg = JSON.parse(readFileSync(join(dir, file), 'utf-8')) as Record<string, unknown>;
-      const validatedOn = String(reg.validated_on ?? '');
+      const vendor = typeof reg.vendor === 'string' && reg.vendor.trim().length > 0
+        ? reg.vendor.trim()
+        : null;
+      if (!vendor) continue;
+
+      const validatedOn = typeof reg.validated_on === 'string' ? reg.validated_on : '';
       const ts = Date.parse(validatedOn);
-      const ageDays = Number.isFinite(ts) ? Math.floor((now - ts) / 86_400_000) : Infinity;
+      const ageDays = Number.isFinite(ts) ? Math.floor((now - ts) / 86_400_000) : null;
 
       // Collect slots (every key ending in _models).
       const slots: Record<string, unknown[]> = {};
@@ -38,13 +43,13 @@ export const GET = withRoute(async () => {
       }
 
       registries.push({
-        vendor: reg.vendor,
+        vendor,
         label: reg.label,
         docs_root: reg.docs_root,
         console_url: reg.console_url,
         validated_on: validatedOn,
         ageDays,
-        stale: ageDays > 90,
+        stale: ageDays == null || ageDays > 90,
         required_env: reg.required_env ?? [],
         deprecations: reg.deprecations ?? [],
         slots,

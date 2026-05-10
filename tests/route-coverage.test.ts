@@ -121,7 +121,6 @@ describe("API route coverage", () => {
     "app/api/dev-kit/index/route.ts",
     "app/api/dev-kit/logs/unified/route.ts",
     "app/api/dev-kit/overview/route.ts",
-    "app/api/dev-kit/registries/route.ts",
     "app/api/dev-kit/regressions/route.ts",
     "app/api/dev-kit/runs/[run_id]/route.ts",
     "app/api/dev-kit/runs/route.ts",

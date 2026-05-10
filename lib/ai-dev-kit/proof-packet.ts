@@ -9,6 +9,55 @@ export interface ProofArtifact {
   modifiedAt: string;
 }
 
+export interface ProofStatusSummary {
+  path: string;
+  pass?: boolean;
+  status?: string;
+  mode?: string;
+  skipped?: boolean;
+  required?: boolean;
+  runAt?: string;
+  durationMs?: number;
+  exitCode?: number;
+  tuiTimedOutWithoutSteps?: boolean;
+  fallbackPass?: boolean;
+  fallbackCommandCount?: number;
+  fallbackFailedCommandCount?: number;
+  booleanFields?: Record<string, boolean>;
+}
+
+export interface ProofTierSummary extends ProofStatusSummary {
+  tier?: number;
+  gateCount?: number;
+  passedGates?: number;
+  failedGates?: number;
+  skippedGates?: number;
+  totalDurationMs?: number;
+}
+
+export interface ProofNativeConfigSummary extends ProofStatusSummary {
+  enabledNativePlatforms?: string[];
+  artifactCount?: number;
+  checkCount?: number;
+  failedChecks?: number;
+  warningChecks?: number;
+}
+
+export interface ProofRunnerCapabilitySummary extends ProofStatusSummary {
+  platform?: string;
+  arch?: string;
+  githubActions?: boolean;
+  readiness?: Record<string, boolean>;
+  checks?: Record<string, boolean>;
+}
+
+export interface ProofSummary {
+  expectProof?: ProofStatusSummary;
+  tiers?: ProofTierSummary[];
+  nativeConfig?: ProofNativeConfigSummary;
+  runnerCapability?: ProofRunnerCapabilitySummary;
+}
+
 export interface ProofPacket {
   generatedAt: string;
   projectHarness?: ProjectHarnessReport;
@@ -18,6 +67,7 @@ export interface ProofPacket {
     status?: string | null;
     changedFiles?: string[];
   };
+  summary?: ProofSummary;
   featureProof?: {
     generatedAt?: string;
     changedFiles?: string[];

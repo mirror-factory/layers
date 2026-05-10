@@ -38,7 +38,7 @@ interface Registry {
   docs_root?: string;
   console_url?: string;
   validated_on: string;
-  ageDays: number;
+  ageDays: number | null;
   stale: boolean;
   required_env?: string[];
   deprecations?: Array<{ pattern: string; deprecated_on: string; replacement: string; notes?: string }>;
@@ -53,6 +53,11 @@ function priceCell(m: ModelEntry): string {
   }
   if (m.price_per_million_chars_usd != null) return `$${m.price_per_million_chars_usd.toFixed(2)} per 1M chars`;
   return '—';
+}
+
+function freshnessLabel(reg: Registry): string {
+  if (reg.ageDays == null) return reg.stale ? 'stale (unvalidated)' : 'fresh (unvalidated)';
+  return reg.stale ? `stale (${reg.ageDays}d)` : `fresh (${reg.ageDays}d)`;
 }
 
 export default function RegistriesPage() {
@@ -100,12 +105,12 @@ export default function RegistriesPage() {
               padding: '2px 8px', borderRadius: 3,
               background: reg.stale ? tint(REGISTRY_COLORS.warning) : tint(REGISTRY_COLORS.success),
               color: reg.stale ? REGISTRY_COLORS.warning : REGISTRY_COLORS.success,
-            }}>{reg.stale ? `stale (${reg.ageDays}d)` : `fresh (${reg.ageDays}d)`}</span>
+            }}>{freshnessLabel(reg)}</span>
           </div>
           <div style={{ fontSize: 13, color: '#666', marginBottom: 14 }}>
             {reg.docs_root && <>docs: <a href={reg.docs_root} target="_blank" rel="noreferrer">{reg.docs_root}</a> · </>}
             {reg.console_url && <>console: <a href={reg.console_url} target="_blank" rel="noreferrer">{reg.console_url}</a> · </>}
-            validated {reg.validated_on}
+            validated {reg.validated_on || 'not recorded'}
           </div>
           {reg.required_env && reg.required_env.length > 0 && (
             <div style={{ fontSize: 12, marginBottom: 14 }}>

@@ -14,7 +14,7 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -122,9 +122,8 @@ export default function ToolsPage() {
             {tools.map((tool) => {
               const tsb = testStatusBadge(tool.testStatus);
               return (
-                <>
+                <Fragment key={tool.id}>
                   <tr
-                    key={tool.id}
                     className="border-b border-white/5 hover:bg-white/[0.03] transition-colors cursor-pointer"
                     onClick={() =>
                       setExpandedTool(expandedTool === tool.id ? null : tool.id)
@@ -165,7 +164,7 @@ export default function ToolsPage() {
 
                   {/* Expanded detail panel */}
                   {expandedTool === tool.id && (
-                    <tr key={`${tool.id}-detail`}>
+                    <tr>
                       <td
                         colSpan={7}
                         className="bg-white/[0.02] border-b border-white/10"
@@ -234,7 +233,7 @@ export default function ToolsPage() {
                       </td>
                     </tr>
                   )}
-                </>
+                </Fragment>
               );
             })}
           </tbody>

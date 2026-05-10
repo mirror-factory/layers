@@ -66,6 +66,153 @@ function readJson<T>(path: string): T | null {
   }
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function stringField(source: Record<string, unknown>, key: string): string | undefined {
+  const value = source[key];
+  return typeof value === 'string' ? value : undefined;
+}
+
+function numberField(source: Record<string, unknown>, key: string): number | undefined {
+  const value = source[key];
+  return typeof value === 'number' ? value : undefined;
+}
+
+function booleanField(source: Record<string, unknown>, key: string): boolean | undefined {
+  const value = source[key];
+  return typeof value === 'boolean' ? value : undefined;
+}
+
+function booleanFields(source: Record<string, unknown>): Record<string, boolean> | undefined {
+  const fields = Object.fromEntries(
+    Object.entries(source).filter((entry): entry is [string, boolean] => typeof entry[1] === 'boolean'),
+  );
+  return Object.keys(fields).length > 0 ? fields : undefined;
+}
+
+function booleanMap(value: unknown): Record<string, boolean> | undefined {
+  if (!isRecord(value)) return undefined;
+  return booleanFields(value);
+}
+
+function stringArrayField(source: Record<string, unknown>, key: string): string[] | undefined {
+  const value = source[key];
+  return Array.isArray(value) && value.every(item => typeof item === 'string') ? value : undefined;
+}
+
+function statusSummary(path: string, source: Record<string, unknown>) {
+  const summary = {
+    path,
+    pass: booleanField(source, 'pass'),
+    status: stringField(source, 'status'),
+    mode: stringField(source, 'mode'),
+    skipped: booleanField(source, 'skipped'),
+    required: booleanField(source, 'required'),
+    runAt: stringField(source, 'runAt'),
+    durationMs: numberField(source, 'durationMs'),
+    exitCode: numberField(source, 'exitCode'),
+    booleanFields: booleanFields(source),
+  };
+
+  return Object.fromEntries(
+    Object.entries(summary).filter(([, value]) => value !== undefined),
+  );
+}
+
+function summarizeExpectProof(path: string, source: Record<string, unknown>) {
+  const tui = source.tui;
+  const fallback = source.fallback;
+  const fallbackCommands = isRecord(fallback) && Array.isArray(fallback.commands) ? fallback.commands : undefined;
+  const fallbackFailedCommands = fallbackCommands?.filter(command => isRecord(command) && command.pass === false).length;
+
+  return {
+    ...statusSummary(path, source),
+    tuiTimedOutWithoutSteps: isRecord(tui) ? booleanField(tui, 'timedOutWithoutSteps') : undefined,
+    fallbackPass: isRecord(fallback) ? booleanField(fallback, 'pass') : undefined,
+    fallbackCommandCount: fallbackCommands?.length,
+    fallbackFailedCommandCount: fallbackFailedCommands,
+  };
+}
+
+function countByStatus(items: unknown, status: string): number | undefined {
+  if (!Array.isArray(items)) return undefined;
+  return items.filter(item => isRecord(item) && item.status === status).length;
+}
+
+function summarizeTier(path: string, source: Record<string, unknown>) {
+  const gates = source.gates;
+  return {
+    ...statusSummary(path, source),
+    pass: booleanField(source, 'pass') ?? (source.status === 'pass' ? true : source.status === 'fail' ? false : undefined),
+    tier: numberField(source, 'tier'),
+    gateCount: Array.isArray(gates) ? gates.length : undefined,
+    passedGates: countByStatus(gates, 'pass'),
+    failedGates: countByStatus(gates, 'fail'),
+    skippedGates: countByStatus(gates, 'skipped'),
+    totalDurationMs: numberField(source, 'totalDurationMs'),
+  };
+}
+
+function summarizeNativeConfig(path: string, source: Record<string, unknown>) {
+  const checks = source.checks;
+  return {
+    ...statusSummary(path, source),
+    enabledNativePlatforms: stringArrayField(source, 'enabledNativePlatforms'),
+    artifactCount: numberField(source, 'artifactCount'),
+    checkCount: Array.isArray(checks) ? checks.length : undefined,
+    failedChecks: countByStatus(checks, 'fail'),
+    warningChecks: countByStatus(checks, 'warn'),
+  };
+}
+
+function summarizeRunnerCapability(path: string, source: Record<string, unknown>) {
+  const githubActions = source.githubActions;
+  return {
+    ...statusSummary(path, source),
+    platform: stringField(source, 'platform'),
+    arch: stringField(source, 'arch'),
+    githubActions: isRecord(githubActions) ? booleanField(githubActions, 'isActions') : undefined,
+    readiness: booleanMap(source.readiness),
+    checks: booleanMap(source.checks),
+  };
+}
+
+function summarizeProofEvidence(evidenceDir: string) {
+  const summary: Record<string, unknown> = {};
+
+  const expectProof = readJson<Record<string, unknown>>(join(evidenceDir, 'expect-proof.json'));
+  if (isRecord(expectProof)) {
+    summary.expectProof = summarizeExpectProof('.evidence/expect-proof.json', expectProof);
+  }
+
+  if (existsSync(evidenceDir)) {
+    const tiers = readdirSync(evidenceDir)
+      .filter(name => /^tier-.*\.json$/.test(name))
+      .sort((a, b) => a.localeCompare(b))
+      .map(name => {
+        const path = join(evidenceDir, name);
+        const payload = readJson<Record<string, unknown>>(path);
+        return isRecord(payload) ? summarizeTier(relative(cwd, path), payload) : null;
+      })
+      .filter(item => item !== null);
+    if (tiers.length > 0) summary.tiers = tiers;
+  }
+
+  const nativeConfig = readJson<Record<string, unknown>>(join(evidenceDir, 'native-config.json'));
+  if (isRecord(nativeConfig)) {
+    summary.nativeConfig = summarizeNativeConfig('.evidence/native-config.json', nativeConfig);
+  }
+
+  const runnerCapability = readJson<Record<string, unknown>>(join(evidenceDir, 'runner-capability.json'));
+  if (isRecord(runnerCapability)) {
+    summary.runnerCapability = summarizeRunnerCapability('.evidence/runner-capability.json', runnerCapability);
+  }
+
+  return Object.keys(summary).length > 0 ? summary : undefined;
+}
+
 function main() {
   mkdirSync(evidenceDir, { recursive: true });
   const packet = {
@@ -77,6 +224,7 @@ function main() {
       status: git(['status', '--short']),
       changedFiles: changedFiles(),
     },
+    summary: summarizeProofEvidence(evidenceDir),
     evidence: listFiles(evidenceDir),
     featureProof: readJson(join(evidenceDir, 'feature-proof-plan.json')),
     testResults: listFiles(testResultsDir),
