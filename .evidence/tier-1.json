@@ -1,0 +1,63 @@
+{
+  "tier": "1",
+  "label": "Fast deterministic tests",
+  "description": "Agent and pre-push oracle: no browser, no live AI browser proof.",
+  "runAt": "2026-05-10T14:50:17.726Z",
+  "pass": true,
+  "results": [
+    {
+      "name": "fast tests",
+      "command": "pnpm test:fast",
+      "required": true,
+      "skipped": false,
+      "pass": true,
+      "exitCode": 0,
+      "durationMs": 14119
+    },
+    {
+      "name": "feature proof plan",
+      "command": "pnpm test:feature-proof",
+      "required": true,
+      "skipped": false,
+      "pass": true,
+      "exitCode": 0,
+      "durationMs": 656
+    },
+    {
+      "name": "manifest drift",
+      "command": "npx tsx scripts/check-manifest-drift.ts",
+      "required": true,
+      "skipped": false,
+      "pass": true,
+      "exitCode": 0,
+      "durationMs": 664
+    },
+    {
+      "name": "compliance",
+      "command": "npx tsx scripts/check-compliance.ts",
+      "required": true,
+      "skipped": false,
+      "pass": true,
+      "exitCode": 0,
+      "durationMs": 710
+    },
+    {
+      "name": "expect coverage",
+      "command": "npx tsx scripts/check-expect-coverage.ts",
+      "required": true,
+      "skipped": false,
+      "pass": true,
+      "exitCode": 0,
+      "durationMs": 721
+    },
+    {
+      "name": "budget",
+      "command": "npx tsx scripts/check-budget.ts",
+      "required": true,
+      "skipped": false,
+      "pass": true,
+      "exitCode": 0,
+      "durationMs": 734
+    }
+  ]
+}
