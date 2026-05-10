@@ -112,6 +112,7 @@ export default function ProofPage() {
           <p style={{ marginTop: theme.space(2), color: theme.colors.textMuted, maxWidth: 760 }}>
             The latest local evidence packet for review: harness status, git scope,
             tier outputs, browser proof, native build artifacts, and test reports.
+            This proof center shows artifact lane truth for operator review.
           </p>
         </div>
         <StatusPill pass={latest.present && !latest.error ? true : null} theme={theme} />
