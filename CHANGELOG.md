@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.84] — 2026-05-10
+
+### Other
+- chore: refresh docs manifest (`bd91863`)
+
+
 ## [0.1.83] — 2026-05-10
 
 ### Fixed
