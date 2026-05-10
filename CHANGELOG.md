@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.91] — 2026-05-10
+
+### Other
+- Fix Expect fallback URL resolution (`0a808bc`)
+
+
 ## [0.1.90] — 2026-05-10
 
 ### Fixed

@@ -28,7 +28,6 @@ const agent = process.env.EXPECT_AGENT?.trim() ?? "";
 const target = process.env.EXPECT_TARGET ?? "changes";
 const message = process.env.EXPECT_MESSAGE ?? "Test the changed user-facing flow and report usability, accessibility, visual, and interaction regressions.";
 const url = process.env.EXPECT_BASE_URL ?? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "");
-const fallbackUrl = process.env.EXPECT_FALLBACK_URL ?? url;
 const timeoutMs = process.env.EXPECT_TIMEOUT_MS?.trim();
 const timeoutArg = timeoutMs && /^\d+$/.test(timeoutMs) ? timeoutMs : "";
 const fallbackEnabled = process.env.EXPECT_FALLBACK !== "0";
@@ -88,6 +87,72 @@ function runExpectCli(args: string[], timeout = 90_000) {
   };
 }
 
+function normalizeUrl(value: string | undefined): string {
+  const candidate = value?.trim();
+  if (!candidate) return "";
+  if (/^https?:\/\//i.test(candidate)) return candidate;
+  if (/^\d+$/.test(candidate)) return `http://127.0.0.1:${candidate}`;
+  return `https://${candidate}`;
+}
+
+function unique(values: string[]): string[] {
+  return Array.from(new Set(values.filter(Boolean)));
+}
+
+function fallbackUrlCandidates(): string[] {
+  const explicit = [
+    process.env.EXPECT_FALLBACK_URL,
+    url,
+    process.env.PLAYWRIGHT_BASE_URL,
+    process.env.BASE_URL,
+    process.env.NEXT_PUBLIC_APP_URL,
+    process.env.NEXT_PUBLIC_SITE_URL,
+  ].map(normalizeUrl);
+
+  const localPorts = unique([
+    process.env.PORT,
+    process.env.NEXT_PORT,
+    "3000",
+    "3002",
+    "4000",
+  ].filter((value): value is string => Boolean(value?.trim())));
+
+  return unique([
+    ...explicit,
+    ...localPorts.map(port => `http://127.0.0.1:${port}`),
+  ]);
+}
+
+function isUrlReachable(candidate: string): boolean {
+  const probe = `
+const target = process.argv[1];
+const mod = target.startsWith("https:") ? require("node:https") : require("node:http");
+const req = mod.request(target, { method: "GET", timeout: 1500 }, res => {
+  res.resume();
+  process.exit(res.statusCode && res.statusCode < 500 ? 0 : 2);
+});
+req.on("timeout", () => req.destroy(new Error("timeout")));
+req.on("error", () => process.exit(1));
+req.end();
+`;
+  const result = spawnSync(process.execPath, ["-e", probe, candidate], {
+    cwd,
+    encoding: "utf-8",
+    timeout: 3_000,
+  });
+  return result.status === 0;
+}
+
+function resolveFallbackUrl() {
+  const candidates = fallbackUrlCandidates();
+  const reachable = candidates.find(isUrlReachable);
+  return {
+    url: reachable ?? candidates[0] ?? "",
+    reachable: Boolean(reachable),
+    candidates,
+  };
+}
+
 function fallbackCode() {
   return process.env.EXPECT_FALLBACK_CODE ?? `
 const bodyText = await page.locator('body').innerText();
@@ -104,22 +169,31 @@ return {
 }
 
 function runFallbackProof() {
-  if (!fallbackUrl) {
+  const fallbackUrl = resolveFallbackUrl();
+  if (!fallbackUrl.url) {
     return {
       pass: false,
-      reason: "EXPECT_FALLBACK_URL, EXPECT_BASE_URL, or VERCEL_URL is required for deterministic Expect CLI fallback.",
+      reason: "No fallback URL candidates were available for deterministic Expect CLI fallback.",
+      url: null,
+      candidates: [],
       commands: [],
     };
   }
 
   const commands = [];
-  const open = runExpectCli(["exec", "expect", "open", "--browser", "chromium", "--wait-until", "load", fallbackUrl]);
+  const open = runExpectCli(["exec", "expect", "open", "--browser", "chromium", "--wait-until", "load", fallbackUrl.url]);
   commands.push(open);
   if (!open.pass) {
-    return { pass: false, reason: "expect open failed", commands };
+    return {
+      pass: false,
+      reason: fallbackUrl.reachable ? "expect open failed" : "No probed fallback URL was reachable; attempted first candidate.",
+      url: fallbackUrl.url,
+      candidates: fallbackUrl.candidates,
+      commands,
+    };
   }
 
-  const reason = "AI TUI proof timed out without steps; deterministic Expect CLI fallback executed.";
+  const reason = "AI TUI proof failed before useful steps; deterministic Expect CLI fallback executed.";
   try {
     const assertion = runExpectCli([
       "exec",
@@ -144,6 +218,8 @@ function runFallbackProof() {
   return {
     pass: commands.every(item => item.pass),
     reason,
+    url: fallbackUrl.url,
+    candidates: fallbackUrl.candidates,
     commands,
   };
 }
