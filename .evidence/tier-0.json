@@ -2,7 +2,7 @@
   "tier": "0",
   "label": "Local syntax and structure",
   "description": "Cheap checks for immediate feedback before a commit.",
-  "runAt": "2026-05-10T13:54:38.928Z",
+  "runAt": "2026-05-10T13:59:30.321Z",
   "pass": true,
   "results": [
     {
@@ -12,7 +12,7 @@
       "skipped": false,
       "pass": true,
       "exitCode": 0,
-      "durationMs": 602
+      "durationMs": 790
     },
     {
       "name": "typecheck",
@@ -21,7 +21,7 @@
       "skipped": false,
       "pass": true,
       "exitCode": 0,
-      "durationMs": 21461
+      "durationMs": 8804
     },
     {
       "name": "registry strings",
@@ -30,7 +30,7 @@
       "skipped": false,
       "pass": true,
       "exitCode": 0,
-      "durationMs": 695
+      "durationMs": 623
     },
     {
       "name": "deprecations",
@@ -39,7 +39,7 @@
       "skipped": false,
       "pass": true,
       "exitCode": 0,
-      "durationMs": 754
+      "durationMs": 615
     }
   ]
 }
