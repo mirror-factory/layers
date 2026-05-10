@@ -1,0 +1,13 @@
+{
+  "runAt": "2026-05-10T09:49:36.494Z",
+  "pass": false,
+  "skipped": false,
+  "required": true,
+  "agent": "codex",
+  "target": "changes",
+  "url": null,
+  "durationMs": 123065,
+  "exitCode": 1,
+  "stdout": "[09:47:36.517] INFO (#25): Initializing AcpClient\n  adapter: /var/symphony/workspaces/PROD-433/node_modules/.pnpm/@zed-industries+codex-acp@0.10.0/node_modules/@zed-industries/codex-acp/bin/codex-acp.js\n[09:47:36.777] INFO (#25): ACP connection initialized\n  {\n    capabilities: {\n      loadSession: true,\n      promptCapabilities: { image: true, audio: false, embeddedContext: true },\n      mcpCapabilities: { http: true, sse: false },\n      sessionCapabilities: { list: {}, close: {} }\n    }\n  }\n  adapter: /var/symphony/workspaces/PROD-433/node_modules/.pnpm/@zed-industries+codex-acp@0.10.0/node_modules/@zed-industries/codex-acp/bin/codex-acp.js\n  pid: 382675\n[09:47:37.775] INFO (#95): Execution started {\n  instructionLength: 107,\n  changesFor: 'Changes',\n  isHeadless: true,\n  cookieBrowserCount: 0\n}\n[09:47:37.854] WARN (#95): Git failed to get changed files {\n  error: 'Git error during \"getting changed files\"',\n  diffRange: 'main..HEAD'\n}\n[09:47:37.884] WARN (#95): Git failed to get diff preview {\n  error: 'Git error during \"getting diff preview\"',\n  diffRange: 'main..HEAD'\n}\n[09:47:37.899] WARN (#95): Git failed to get recent commits {\n  error: 'Git error during \"getting recent commits\"',\n  range: 'main..HEAD'\n}\n[09:47:37.907] INFO (#95): Agent stream starting {\n  planId: '0763cc2a-5f44-4c7b-abd8-8d0647f405c4',\n  promptLength: 672,\n  mcpEnvCount: 1\n}\n[09:47:39.201] INFO (#95): ACP session created { sessionId: '019e1149-03d6-7e72-8ff3-421712b2aa26' }\n",
+  "stderr": ""
+}
