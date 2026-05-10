@@ -1,0 +1,132 @@
+{
+  "generatedAt": "2026-05-10T14:15:54.876Z",
+  "registryPath": ".ai-dev-kit/registries/feature-proof.json",
+  "policy": {
+    "requireRegistryForUserFacingChanges": true,
+    "expectPolicy": "Expect is required for every ticket that touches a registered user-facing Layers feature.",
+    "defaultUserFacingProof": [
+      "fast",
+      "playwright",
+      "expect"
+    ],
+    "defaultNativeProof": [
+      "native-config",
+      "native-device"
+    ]
+  },
+  "changedFiles": [
+    ".evidence/expect-proof.json",
+    ".evidence/feature-proof-plan.json",
+    ".evidence/mobile/ipad-pro-app-layout.png",
+    ".evidence/mobile/ipad-pro-button-tap.png",
+    ".evidence/mobile/ipad-pro-landing.png",
+    ".evidence/mobile/iphone-15-pro-app-layout.png",
+    ".evidence/mobile/iphone-15-pro-button-tap.png",
+    ".evidence/mobile/iphone-15-pro-landing.png",
+    ".evidence/mobile/pixel-8-pro-app-layout.png",
+    ".evidence/mobile/pixel-8-pro-button-tap.png",
+    ".evidence/mobile/pixel-8-pro-landing.png",
+    ".evidence/project-harness.json",
+    ".evidence/proof-packet.json",
+    ".evidence/ticket-proof.json",
+    ".evidence/tier-0.json",
+    ".evidence/tier-2.json",
+    ".evidence/tier-latest.json",
+    ".expect/logs.md",
+    "app/dev-kit/proof/page.tsx",
+    "playwright-report/index.html",
+    "test-results/playwright-no-run.json"
+  ],
+  "matchedFeatures": [
+    {
+      "id": "dashboard.devkit",
+      "name": "DevKit dashboard and proof center",
+      "description": "Project-local operator dashboard, registries, proof packet views, and run surfaces.",
+      "category": "operator-dashboard",
+      "status": "active",
+      "userFacing": true,
+      "surfaces": [
+        "web"
+      ],
+      "routes": [
+        "/dev-kit",
+        "/dev-kit/proof",
+        "/dev-kit/project"
+      ],
+      "paths": [
+        "app/dev-kit/**",
+        "app/api/dev-kit/**",
+        "components/ai-debug-panel.tsx",
+        "lib/ai-dev-kit/**",
+        "lib/starter-control-plane.ts",
+        "lib/dashboard-data.ts",
+        ".ai-dev-kit/registries/**"
+      ],
+      "proof": [
+        "fast",
+        "playwright",
+        "expect"
+      ],
+      "tests": {
+        "playwright": [
+          "tests/e2e/app-dev-kit-page.smoke.spec.ts",
+          "tests/e2e/app-dev-kit-runs-page.smoke.spec.ts"
+        ],
+        "expect": [
+          "tests/expect/app-dev-kit-page.md",
+          "tests/expect/app-dev-kit-runs-page.md"
+        ]
+      },
+      "matchedPaths": [
+        "app/dev-kit/proof/page.tsx"
+      ]
+    }
+  ],
+  "unmatchedUserFacingFiles": [],
+  "requiredLanes": [
+    {
+      "id": "expect",
+      "label": "Expect AI user-flow proof",
+      "command": "EXPECT_RUN=1 EXPECT_REQUIRED=1 EXPECT_AGENT=codex pnpm test:expect",
+      "evidence": [
+        ".evidence/expect-proof.json",
+        ".expect/replays"
+      ],
+      "description": "Instruction-driven AI browser proof for user-facing feature behavior.",
+      "missingEvidence": []
+    },
+    {
+      "id": "fast",
+      "label": "Fast deterministic tests",
+      "command": "pnpm test:fast",
+      "evidence": [
+        ".evidence/tier-1.json",
+        "test-results/unit.json"
+      ],
+      "description": "Unit, contract, and non-browser regression checks.",
+      "missingEvidence": []
+    },
+    {
+      "id": "playwright",
+      "label": "Playwright browser proof",
+      "command": "pnpm verify:tier 2",
+      "evidence": [
+        ".evidence/ticket-proof.json",
+        "playwright-report/index.html"
+      ],
+      "description": "Focused route, visual, and mobile browser proof for touched surfaces.",
+      "missingEvidence": []
+    }
+  ],
+  "commands": [
+    "EXPECT_RUN=1 EXPECT_REQUIRED=1 EXPECT_AGENT=codex pnpm test:expect",
+    "pnpm test:fast",
+    "pnpm verify:tier 2"
+  ],
+  "enforcedArtifactLanes": [],
+  "pass": true,
+  "blocked": {
+    "unregisteredUserFacingChange": false,
+    "missingArtifactLanes": []
+  }
+}
