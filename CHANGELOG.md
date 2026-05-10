@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.90] — 2026-05-10
+
+### Fixed
+- fix: fallback on expect tui infra failures (`bfc6200`)
+
+
 ## [0.1.89] — 2026-05-10
 
 ### Added
