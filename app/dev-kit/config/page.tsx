@@ -10,26 +10,15 @@
  * /dev-kit/* path via DEV_KIT_DASHBOARD_SECRET. This page does not re-check.
  */
 import { getDevKitTheme, type DevKitTheme } from '@/lib/dev-kit-theme';
+import { EDITABLE_CONFIGS } from '@/app/api/dev-kit/config/files';
 import { ConfigEditor } from './config-editor';
-
-// Keep in sync with /api/dev-kit/config (GET) + /api/dev-kit/config/[name]
-// (POST). Duplicated on purpose so the server render can populate the tab
-// list before any client fetch resolves.
-const EDITABLE_SLUGS: ReadonlyArray<{ slug: string; path: string; label: string }> = [
-  { slug: 'design-tokens', path: '.ai-dev-kit/registries/design-tokens.yaml', label: 'Design tokens' },
-  { slug: 'design-system', path: '.ai-dev-kit/registries/design-system.yaml', label: 'Design system' },
-  { slug: 'budget',        path: '.ai-dev-kit/budget.yaml',                   label: 'Budget' },
-  { slug: 'notify',        path: '.ai-dev-kit/notify.yaml',                   label: 'Notify' },
-  { slug: 'observability', path: '.ai-dev-kit/observability-requirements.yaml', label: 'Observability' },
-  { slug: 'requirements',  path: '.ai-dev-kit/requirements.yaml',             label: 'Requirements' },
-];
 
 export default function ConfigPage() {
   const theme = getDevKitTheme();
   return (
     <ConfigEditor
       theme={serializeTheme(theme)}
-      slugs={EDITABLE_SLUGS.map(s => ({ ...s }))}
+      slugs={EDITABLE_CONFIGS.map(s => ({ ...s }))}
     />
   );
 }

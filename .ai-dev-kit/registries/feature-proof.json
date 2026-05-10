@@ -64,6 +64,23 @@
   },
   "features": [
     {
+      "id": "platform.smoke",
+      "name": "Global route smoke harness",
+      "description": "Cross-route Playwright smoke proof used by ticket verification.",
+      "category": "quality",
+      "status": "active",
+      "userFacing": false,
+      "surfaces": ["web"],
+      "paths": ["tests/e2e/smoke.spec.ts"],
+      "proof": ["fast", "playwright"],
+      "tests": {
+        "playwright": ["tests/e2e/smoke.spec.ts"]
+      },
+      "notes": [
+        "A ticket that edits the smoke harness must run the smoke harness before review."
+      ]
+    },
+    {
       "id": "home.banner",
       "name": "Public homepage banner",
       "description": "Landing-page hero, brand signal, CTA area, and audio ribbon.",

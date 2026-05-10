@@ -69,6 +69,7 @@ export const apiRouteContracts = [
   route("/api/chat", "app/api/chat/route.ts", ["POST"], "user", true, badRequestOrUnavailable, {
     POST: { body: { messages: [] }, expectStatuses: [200, 400, 401, 503] },
   }),
+  route("/api/dev-kit/config", "app/api/dev-kit/config/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
   route("/api/dev-kit/config/[name]", "app/api/dev-kit/config/[name]/route.ts", ["POST"], "dev-kit", false, badRequestOrUnavailable, {
     POST: { body: { yaml: "colors: {}\n" }, expectStatuses: [200, 400, 401, 403, 404] },
   }, "/api/dev-kit/config/design-tokens"),

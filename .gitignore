@@ -50,6 +50,8 @@ storybook-static/
 coverage/
 !app/api/dev-kit/coverage/
 !app/api/dev-kit/coverage/route.ts
+!app/dev-kit/coverage/
+!app/dev-kit/coverage/page.tsx
 .ai-logs/
 .evidence/
 .artifacts/

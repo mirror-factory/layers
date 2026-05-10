@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.88] — 2026-05-10
+
+### Fixed
+- fix: complete devkit dashboard proof harness (`f512ecc`)
+
+
+## [0.1.87] — 2026-05-10
+
+### Other
+- chore: refresh docs manifest (`726eab2`)
+
+
+## [0.1.86] — 2026-05-10
+
+### Other
+- chore: route smoke harness proof selection (`0873455`)
+
+
 ## [0.1.85] — 2026-05-10
 
 ### Fixed
