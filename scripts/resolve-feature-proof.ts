@@ -75,6 +75,10 @@ function gitLines(args: string[]): string[] {
   return result.stdout.split("\n").map(line => line.trim()).filter(Boolean);
 }
 
+function gitOk(args: string[]): boolean {
+  return spawnSync("git", args, { cwd, encoding: "utf-8" }).status === 0;
+}
+
 function unique(values: string[]): string[] {
   return [...new Set(values)].sort((a, b) => a.localeCompare(b));
 }
@@ -85,13 +89,22 @@ function changedFiles(): string[] {
     return unique(explicit.split(/[\n, ]+/).map(file => file.trim()).filter(Boolean));
   }
 
-  return unique([
+  const workingTreeFiles = [
     ...gitLines(["diff", "--name-only"]),
     ...gitLines(["diff", "--name-only", "--cached"]),
-    ...gitLines(["diff", "--name-only", "origin/development...HEAD"]),
-    ...gitLines(["diff", "--name-only", "origin/main...HEAD"]),
     ...gitLines(["ls-files", "--others", "--exclude-standard"]),
-  ]);
+  ];
+  const upstream = gitLines(["rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{upstream}"])[0];
+  const branchBases = unique([
+    upstream,
+    gitOk(["rev-parse", "--verify", "origin/development"]) ? "origin/development" : "",
+  ].filter(Boolean));
+
+  const branchFiles = branchBases.length > 0
+    ? branchBases.flatMap(ref => gitLines(["diff", "--name-only", `${ref}...HEAD`]))
+    : gitLines(["diff", "--name-only", "origin/main...HEAD"]);
+
+  return unique([...workingTreeFiles, ...branchFiles]);
 }
 
 function readRegistry(): FeatureProofRegistry {

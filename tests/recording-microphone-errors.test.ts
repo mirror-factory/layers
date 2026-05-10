@@ -11,7 +11,7 @@ describe("recordingStartErrorMessage", () => {
     );
 
     expect(message).toContain("Microphone access is blocked");
-    expect(message).toContain("localhost:3001");
+    expect(message).toContain("localhost:3002");
     expect(message).toContain("Codex in-app browser");
   });
 

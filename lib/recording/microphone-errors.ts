@@ -1,5 +1,5 @@
 const MIC_BLOCKED_MESSAGE =
-  "Microphone access is blocked. Allow microphone access for localhost:3001 in the browser, then try again. If no permission prompt appears in the Codex in-app browser, open this page in Chrome or Safari because the embedded browser may not expose microphone capture.";
+  "Microphone access is blocked. Allow microphone access for localhost:3002 in the browser, then try again. If no permission prompt appears in the Codex in-app browser, open this page in Chrome or Safari because the embedded browser may not expose microphone capture.";
 
 function hasErrorShape(err: unknown): err is { name?: string; message?: string } {
   return typeof err === "object" && err !== null;

@@ -43,8 +43,8 @@ MICROSOFT_CALENDAR_CLIENT_SECRET=...
 OAuth redirect URLs:
 
 ```text
-http://localhost:3001/api/calendar/callback/google
-http://localhost:3001/api/calendar/callback/outlook
+http://localhost:3002/api/calendar/callback/google
+http://localhost:3002/api/calendar/callback/outlook
 https://your-production-domain.com/api/calendar/callback/google
 https://your-production-domain.com/api/calendar/callback/outlook
 ```

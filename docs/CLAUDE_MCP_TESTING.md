@@ -9,7 +9,7 @@ Layers exposes a remote MCP endpoint at:
 For local development, that is:
 
 ```text
-http://localhost:3001/api/mcp/mcp
+http://localhost:3002/api/mcp/mcp
 ```
 
 For Claude web, mobile, Cowork, or Claude Desktop remote connectors, use a
@@ -21,7 +21,7 @@ https://YOUR_DOMAIN/api/mcp/mcp
 
 Anthropic's remote connector traffic comes from Anthropic's servers, so Claude
 cannot reach your machine's private `localhost`. Use a deployed Vercel URL or a
-tunnel such as `ngrok http 3001` when testing from Claude's remote connector UI.
+tunnel such as `ngrok http 3002` when testing from Claude's remote connector UI.
 
 ## What Is Implemented
 
@@ -54,7 +54,7 @@ should use a real production secret, not the development fallback.
 
 Use this path for Claude web and Claude Desktop remote connector testing.
 
-1. Deploy the app or start a tunnel to `localhost:3001`.
+1. Deploy the app or start a tunnel to `localhost:3002`.
 2. Confirm these URLs return JSON:
 
    ```bash
@@ -103,7 +103,7 @@ Use the Layers MCP server to list my recent meetings.
 For local API-key testing with Claude Code, you can use a bearer header:
 
 ```bash
-claude mcp add --transport http layers-local http://localhost:3001/api/mcp/mcp \
+claude mcp add --transport http layers-local http://localhost:3002/api/mcp/mcp \
   --header "Authorization: Bearer lo1_YOUR_PROFILE_API_KEY"
 ```
 
@@ -114,7 +114,7 @@ Use this only for local/dev. Prefer OAuth for real Claude connector testing.
 Unauthenticated data-bearing calls should fail:
 
 ```bash
-curl -i http://localhost:3001/api/mcp/mcp \
+curl -i http://localhost:3002/api/mcp/mcp \
   -H 'content-type: application/json' \
   -H 'accept: application/json, text/event-stream' \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}'
@@ -124,13 +124,13 @@ Expected:
 
 ```text
 HTTP/1.1 401 Unauthorized
-www-authenticate: Bearer resource_metadata="http://localhost:3001/.well-known/oauth-protected-resource"
+www-authenticate: Bearer resource_metadata="http://localhost:3002/.well-known/oauth-protected-resource"
 ```
 
 Authenticated tool listing:
 
 ```bash
-curl -sS http://localhost:3001/api/mcp/mcp \
+curl -sS http://localhost:3002/api/mcp/mcp \
   -H 'content-type: application/json' \
   -H 'accept: application/json, text/event-stream' \
   -H 'authorization: Bearer lo1_YOUR_PROFILE_API_KEY' \
@@ -155,7 +155,7 @@ pnpm exec playwright screenshot --viewport-size=760,620 "$PREVIEW_URL" output/pl
 ```bash
 pnpm test:mcp
 pnpm test:contracts
-TEST_BASE_URL=http://localhost:3001 PLAYWRIGHT_DISABLE_VIDEO=1 pnpm exec playwright test tests/e2e/api-control-plane.contract.test.ts tests/e2e/ai-debug-panel.visual.test.ts --project=desktop-light
+TEST_BASE_URL=http://localhost:3002 PLAYWRIGHT_DISABLE_VIDEO=1 pnpm exec playwright test tests/e2e/api-control-plane.contract.test.ts tests/e2e/ai-debug-panel.visual.test.ts --project=desktop-light
 ```
 
 ## References

@@ -42,6 +42,10 @@ function runGit(args: string[]): string[] {
     .filter(Boolean);
 }
 
+function gitOk(args: string[]): boolean {
+  return spawnSync('git', args, { cwd, encoding: 'utf-8' }).status === 0;
+}
+
 function unique(items: string[]): string[] {
   return [...new Set(items)].sort();
 }
@@ -51,12 +55,20 @@ function changedFiles(): string[] {
     return unique(process.env.TICKET_FILES.split(/[\n, ]+/).map(file => file.trim()).filter(Boolean));
   }
 
-  return unique([
+  const workingTreeFiles = [
     ...runGit(['diff', '--name-only']),
     ...runGit(['diff', '--name-only', '--cached']),
-    ...runGit(['diff', '--name-only', 'origin/development...HEAD']),
-    ...runGit(['diff', '--name-only', 'origin/main...HEAD']),
-  ]);
+  ];
+  const upstream = runGit(['rev-parse', '--abbrev-ref', '--symbolic-full-name', '@{upstream}'])[0];
+  const branchBases = unique([
+    upstream,
+    gitOk(['rev-parse', '--verify', 'origin/development']) ? 'origin/development' : '',
+  ].filter(Boolean));
+  const branchFiles = branchBases.length > 0
+    ? branchBases.flatMap(ref => runGit(['diff', '--name-only', `${ref}...HEAD`]))
+    : runGit(['diff', '--name-only', 'origin/main...HEAD']);
+
+  return unique([...workingTreeFiles, ...branchFiles]);
 }
 
 function has(path: string): boolean {

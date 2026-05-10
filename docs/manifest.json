@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-05-10T05:52:50.054Z",
+  "generatedAt": "2026-05-10T11:04:53.317Z",
   "docs": [
     {
       "id": "ai-harness-tiers",
@@ -461,13 +461,13 @@
     {
       "id": "calendar-integration",
       "localPath": "docs/CALENDAR_INTEGRATION.md",
-      "contentHash": "0a327c6a01a7af87fd2bafe7fdeae8524aa07a9dcbbe56b302bf89c3359bc164",
+      "contentHash": "04a2a52a4be0790680ff88a6dabe712369ae9bbf01d55198593ad9b497d9f26f",
       "priority": "cold"
     },
     {
       "id": "claude-mcp-testing",
       "localPath": "docs/CLAUDE_MCP_TESTING.md",
-      "contentHash": "309b4cc78310b8bf91849589b94a06a61ad173b0227749fd5cf5f0ee95b1b760",
+      "contentHash": "5624437f38c1a18f7cd4d189fe384affde2bad48db2bab0f962b4a362659a5a5",
       "priority": "cold"
     },
     {
@@ -1007,7 +1007,7 @@
     {
       "id": "supabase-mcp-oauth-setup",
       "localPath": "docs/SUPABASE_MCP_OAUTH_SETUP.md",
-      "contentHash": "de678b46607f8afb832c2224789d675f419a17cb6e8ca80e47a4810837a55595",
+      "contentHash": "083c57e283da4af6a9d458851c48a9bf884d442c29b7718e7a9d0d6587ce8f0a",
       "priority": "cold"
     },
     {

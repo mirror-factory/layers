@@ -4,7 +4,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const baseUrl = (process.env.SCREENSHOT_BASE_URL ?? "http://localhost:3001").replace(/\/$/, "");
+const baseUrl = (process.env.SCREENSHOT_BASE_URL ?? "http://localhost:3002").replace(/\/$/, "");
 const stamp =
   process.env.SCREENSHOT_RUN_ID ??
   new Date().toISOString().slice(0, 10);
