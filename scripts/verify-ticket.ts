@@ -119,7 +119,7 @@ function commandSetFor(files: string[]): CommandSpec[] {
   if (touchesUi && has('tests/e2e/smoke.spec.ts')) {
     commands.push({
       name: 'route smoke proof',
-      command: 'PLAYWRIGHT_FORCE_CHROMIUM=1 PLAYWRIGHT_DISABLE_VIDEO=1 pnpm exec playwright test tests/e2e/smoke.spec.ts --project=desktop-light --project=mobile-light',
+      command: 'PLAYWRIGHT_FORCE_CHROMIUM=1 PLAYWRIGHT_DISABLE_VIDEO=1 pnpm exec playwright test tests/e2e/smoke.spec.ts --project=desktop-light --project=mobile-light --workers=1',
       needsBrowser: true,
     });
   }
@@ -127,7 +127,7 @@ function commandSetFor(files: string[]): CommandSpec[] {
   if (touchesMobile && has('tests/e2e/mobile.spec.ts')) {
     commands.push({
       name: 'mobile proof',
-      command: 'PLAYWRIGHT_FORCE_CHROMIUM=1 PLAYWRIGHT_DISABLE_VIDEO=1 pnpm exec playwright test tests/e2e/mobile.spec.ts --project=mobile-light',
+      command: 'PLAYWRIGHT_FORCE_CHROMIUM=1 PLAYWRIGHT_DISABLE_VIDEO=1 pnpm exec playwright test tests/e2e/mobile.spec.ts --project=mobile-light --workers=1',
       needsBrowser: true,
     });
   }
