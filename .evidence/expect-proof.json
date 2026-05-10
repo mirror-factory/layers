@@ -1,0 +1,95 @@
+{
+  "runAt": "2026-05-10T14:42:22.877Z",
+  "pass": true,
+  "skipped": false,
+  "required": true,
+  "agent": "codex",
+  "target": "changes",
+  "url": null,
+  "durationMs": 233786,
+  "exitCode": 1,
+  "mode": "expect-cli-fallback",
+  "stdout": "[14:38:31.454] INFO (#25): Initializing AcpClient\n  adapter: /var/symphony/workspaces/PROD-446/node_modules/.pnpm/@zed-industries+codex-acp@0.10.0/node_modules/@zed-industries/codex-acp/bin/codex-acp.js\n[14:38:31.623] INFO (#25): ACP connection initialized\n  {\n    capabilities: {\n      loadSession: true,\n      promptCapabilities: { image: true, audio: false, embeddedContext: true },\n      mcpCapabilities: { http: true, sse: false },\n      sessionCapabilities: { list: {}, close: {} }\n    }\n  }\n  adapter: /var/symphony/workspaces/PROD-446/node_modules/.pnpm/@zed-industries+codex-acp@0.10.0/node_modules/@zed-industries/codex-acp/bin/codex-acp.js\n  pid: 445459\n[14:38:32.654] INFO (#95): Execution started {\n  instructionLength: 107,\n  changesFor: 'Changes',\n  isHeadless: true,\n  cookieBrowserCount: 0\n}\n[14:38:32.686] WARN (#95): Git failed to get changed files {\n  error: 'Git error during \"getting changed files\"',\n  diffRange: 'main..HEAD'\n}\n[14:38:32.690] WARN (#95): Git failed to get diff preview {\n  error: 'Git error during \"getting diff preview\"',\n  diffRange: 'main..HEAD'\n}\n[14:38:32.693] WARN (#95): Git failed to get recent commits {\n  error: 'Git error during \"getting recent commits\"',\n  range: 'main..HEAD'\n}\n[14:38:32.695] INFO (#95): Agent stream starting {\n  planId: '8a0b40d2-9780-4f06-a989-4009e6c42f2b',\n  promptLength: 672,\n  mcpEnvCount: 1\n}\n[14:38:33.881] INFO (#95): ACP session created { sessionId: '019e1253-5b75-7893-a4f8-2a0bafca05f4' }\n",
+  "stderr": "",
+  "tui": {
+    "pass": false,
+    "exitCode": 1,
+    "report": null,
+    "timedOutWithoutSteps": false,
+    "processTimedOut": true,
+    "processTimeoutMs": 180000
+  },
+  "fallback": {
+    "pass": true,
+    "reason": "AI TUI proof failed before useful steps; deterministic Expect CLI fallback executed.",
+    "url": "http://127.0.0.1:3999",
+    "candidates": [
+      "http://127.0.0.1:3999",
+      "http://127.0.0.1:3101",
+      "http://127.0.0.1:3000",
+      "http://127.0.0.1:3002",
+      "http://127.0.0.1:4000"
+    ],
+    "server": {
+      "url": "http://127.0.0.1:3999",
+      "command": "pnpm dev --port 3999",
+      "pid": 445962,
+      "ready": true,
+      "timeoutMs": 120000,
+      "durationMs": 19955,
+      "stopped": true
+    },
+    "commands": [
+      {
+        "command": "pnpm exec expect open --browser chromium --wait-until load http://127.0.0.1:3999",
+        "pass": true,
+        "exitCode": 0,
+        "durationMs": 4945,
+        "stdout": "Opened http://127.0.0.1:3999\n",
+        "stderr": "",
+        "outputFailed": false,
+        "timedOut": false
+      },
+      {
+        "command": "pnpm exec expect playwright \nconst bodyText = await page.locator('body').innerText();\nconst h1 = await page.locator('h1').first().textContent().catch(() => null);\nreturn {\n  url: page.url(),\n  title: await page.title(),\n  h1,\n  bodyCharacters: bodyText.trim().length,\n  bodyPreview: bodyText.trim().slice(0, 800),\n  pass: bodyText.trim().length > 0,\n};\n --snapshot-after --description expect-proof-fallback",
+        "pass": true,
+        "exitCode": 0,
+        "durationMs": 4809,
+        "stdout": "{\n  \"result\": {\n    \"url\": \"http://127.0.0.1:3999/\",\n    \"title\": \"Layers\",\n    \"h1\": \"AI memory for your meetings.Decisions that move work forward.\",\n    \"bodyCharacters\": 3766,\n    \"bodyPreview\": \"WE'RE IN INVITE-ONLY ALPHA — PUBLIC SIGN-UPS COMING SOON\\nLayers\\nDownload\\nPricing\\nSign in\\nComing soon\\nAI memory for your meetings.\\nDecisions that move work forward.\\n\\nLayers remembers what matters from every conversation so your team can make better decisions and ship faster.\\n\\nComing soon\\nSee how it works\\nRecording workspace\\n00:13 LIVE\\n2\\nDecisions\\n3\\nActions\\n3\\nIntake\\n2\\nFollow-up\\nAI memory\\n· Always learning\\nToday\\n· 3 meetings · 1 live\\n2\\nDecisions\\nCaptured\\nLive transcript\\n· Captured live\\n00:14\\nJamie owns first-run copy by Friday.\\n00:18\\nOwen reviews Monday before the demo.\\n00:22\\nPricing tier unchanged for now — agreed.\\nMeeting memory\\nUpdating…\\nDecisions\\n2\\nActions\\n3\\nIntake\\n3\\nFollow-up\\n2\\n01\\nAI MEMORY THAT WORKS FOR YOU\\nYour AI copilots learn from every meeting.\\n\\nLayers builds a structured record o\",\n    \"pass\": true\n  },\n  \"resultFile\": \"/tmp/expect-artifacts/playwright-results/result-d9dd213a.json\",\n  \"snapshot\": {\n    \"tree\": \"- status \\\"Site status notice\\\": We're in invite-only alpha — public sign-ups coming soon\\n- banner:\\n  - navigation \\\"Primary navigation\\\": [ref=e1]\\n    - link \\\"Layers home\\\": [ref=e2]\\n      - /url: /\\n      - text: Layers\\n    - link \\\"Download\\\": [ref=e3]\\n      - /url: /download\\n    - link \\\"Pricing\\\": [ref=e4]\\n      - /url: /pricing\\n    - link \\\"Sign in\\\": [ref=e5]\\n      - /url: /sign-in\\n    - button \\\"Switch to dark mode\\\" [ref=e6]\\n    - button \\\"Coming soon\\\" [disabled] [ref=e7]\\n- main:\\n  - region \\\"AI memory for your meetings. Decisions that move work forward.\\\": [ref=e8]\\n    - heading \\\"AI memory for your meetings. Decisions that move work forward.\\\" [level=1]: [ref=e9]\\n      - text: AI memory for your meetings.\\n      - emphasis: Decisions that move work forward.\\n    - paragraph: Layers remembers what matters from every conversation so your team can make better decisions and ship faster.\\n    - button \\\"Coming soon\\\" [disabled] [ref=e10]\\n    - link \\\"See how it works\\\": [ref=e11]\\n      - /url: /download\\n  - region:\\n    - text: 01 AI memory that works for you\\n    - heading \\\"Your AI copilots learn from every meeting.\\\" [level=2] [ref=e12]\\n    - paragraph: Layers builds a structured record of what your team decided, owns, and said — and keeps it in one searchable memory you can act on.\\n    - list:\\n      - listitem: Decisions, actions, and intake captured automatically\\n      - listitem: Refreshed as the meeting unfolds — every transcript turn\\n      - listitem: Cross-meeting memory your team can search and reuse\\n  - region:\\n    - text: 02 Search that finds answers\\n    - heading \\\"Find the decision without reopening every transcript.\\\" [level=2] [ref=e13]\\n    - paragraph: Ask in your own words. Layers jumps to the moment — across every meeting your team has had.\\n    - list:\\n      - listitem: Natural-language queries jump to the exact timestamp\\n      - listitem: Cross-meeting search finds patterns across every call\\n      - listitem: Filter by speaker, decision type, or customer\\n  - region:\\n    - text: 03 Connect to your AI tools\\n    - heading \\\"Bring meeting memory into the AI you already use.\\\" [level=2] [ref=e14]\\n    - paragraph: Layers ships an MCP server. Any Model Context Protocol client — ChatGPT, Claude, Gemini, or your own — can search and reason across your meetings without copying transcripts around.\\n    - list:\\n      - listitem: Authenticated MCP server scoped per workspace\\n      - listitem: Tools for search, decisions, actions, and meeting detail\\n      - listitem: Connect once — every meeting becomes context for your AI\\n  - region \\\"Simple pricing. Serious value.\\\": [ref=e15]\\n    - text: 04 Built for teams at every stage\\n    - heading \\\"Simple pricing. Serious value.\\\" [level=2] [ref=e16]\\n    - paragraph: Start free with 25 meetings. Upgrade when memory becomes a habit your team can't work without.\\n    - article:\\n      - text: Free $0 forever\\n      - paragraph: 25 meetings/mo. Try the memory before you commit.\\n      - list:\\n        - listitem: 25 meetings per month\\n        - listitem: Searchable transcript & decisions\\n        - listitem: 1 export integration\\n      - button \\\"Coming soon\\\" [disabled] [ref=e17]\\n    - article:\\n      - text: Most popular Core $20 per user · per month\\n      - paragraph: Unlimited meetings, AI memory, search, exports.\\n      - list:\\n        - listitem: Unlimited meetings\\n        - listitem: Cross-meeting AI memory\\n        - listitem: All exports & integrations\\n      - link \\\"See Core\\\": [ref=e18]\\n        - /url: /pricing\\n    - article:\\n      - text: Pro $30 per user · per month\\n      - paragraph: Team memory, advanced privacy, priority support.\\n      - list:\\n        - listitem: Shared team memory\\n        - listitem: Advanced privacy & SSO\\n        - listitem: Priority support\\n      - link \\\"See Pro\\\": [ref=e19]\\n        - /url: /pricing\\n  - region \\\"Ready to make every meeting count?\\\": [ref=e20]\\n    - text: Live · invite-only alpha\\n    - heading \\\"Ready to make every meeting count?\\\" [level=2] [ref=e21]\\n    - paragraph: Join teams that ship faster because the meeting actually went somewhere.\\n    - button \\\"Coming soon\\\" [disabled] [ref=e22]\\n    - link \\\"Want in early? Email support →\\\": [ref=e23]\\n      - /url: mailto:support@mirrorfactory.ai?subject=Layers%20alpha%20access\\n- contentinfo \\\"Site footer\\\":\\n  - heading \\\"Site footer\\\" [level=2] [ref=e24]\\n  - link \\\"Layers home\\\": [ref=e25]\\n    - /url: /\\n    - text: Layers\\n  - navigation \\\"Footer navigation\\\": [ref=e26]\\n    - link \\\"Pricing\\\": [ref=e27]\\n      - /url: /pricing\\n    - link \\\"Download\\\": [ref=e28]\\n      - /url: /download\\n    - link \\\"Changelog\\\": [ref=e29]\\n      - /url: /changelog\\n    - link \\\"Privacy\\\": [ref=e30]\\n      - /url: /privacy\\n    - link \\\"Terms\\\": [ref=e31]\\n      - /url: /terms\\n    - link \\\"Account deletion\\\": [ref=e32]\\n      - /url: /account-deletion\\n  - link \\\"Email support\\\": [ref=e33]\\n    - /url: mailto:support@mirrorfactory.ai\\n    - text: Contact\\n  - link \\\"Layers on GitHub\\\": [ref=e34]\\n    - /url: https://github.com/mirror-factory\\n  - link \\\"Layers on X\\\": [ref=e35]\\n    - /url: https://x.com/mirrorfactory\\n  - paragraph: © 2026 Mirror Factory. All rights reserved.\\n  - paragraph: Capture conversations passively. Decide faster.\\n- alert\\n- img\",\n    \"refs\": {\n      \"e1\": {\n        \"role\": \"navigation\",\n        \"name\": \"Primary navigation\"\n      },\n      \"e2\": {\n        \"role\": \"link\",\n        \"name\": \"Layers home\",\n        \"nth\": 0\n      },\n      \"e3\": {\n        \"role\": \"link\",\n        \"name\": \"Download\",\n        \"nth\": 0\n      },\n      \"e4\": {\n        \"role\": \"link\",\n        \"name\": \"Pricing\",\n        \"nth\": 0\n      },\n      \"e5\": {\n        \"role\": \"link\",\n        \"name\": \"Sign in\"\n      },\n      \"e6\": {\n        \"role\": \"button\",\n        \"name\": \"Switch to dark mode\"\n      },\n      \"e7\": {\n        \"role\": \"button\",\n        \"name\": \"Coming soon\",\n        \"nth\": 0\n      },\n      \"e8\": {\n        \"role\": \"region\",\n        \"name\": \"AI memory for your meetings. Decisions that move work forward.\"\n      },\n      \"e9\": {\n        \"role\": \"heading\",\n        \"name\": \"AI memory for your meetings. Decisions that move work forward.\"\n      },\n      \"e10\": {\n        \"role\": \"button\",\n        \"name\": \"Coming soon\",\n        \"nth\": 1\n      },\n      \"e11\": {\n        \"role\": \"link\",\n        \"name\": \"See how it works\"\n      },\n      \"e12\": {\n        \"role\": \"heading\",\n        \"name\": \"Your AI copilots learn from every meeting.\"\n      },\n      \"e13\": {\n        \"role\": \"heading\",\n        \"name\": \"Find the decision without reopening every transcript.\"\n      },\n      \"e14\": {\n        \"role\": \"heading\",\n        \"name\": \"Bring meeting memory into the AI you already use.\"\n      },\n      \"e15\": {\n        \"role\": \"region\",\n        \"name\": \"Simple pricing. Serious value.\"\n      },\n      \"e16\": {\n        \"role\": \"heading\",\n        \"name\": \"Simple pricing. Serious value.\"\n      },\n      \"e17\": {\n        \"role\": \"button\",\n        \"name\": \"Coming soon\",\n        \"nth\": 2\n      },\n      \"e18\": {\n        \"role\": \"link\",\n        \"name\": \"See Core\"\n      },\n      \"e19\": {\n        \"role\": \"link\",\n        \"name\": \"See Pro\"\n      },\n      \"e20\": {\n        \"role\": \"region\",\n        \"name\": \"Ready to make every meeting count?\"\n      },\n      \"e21\": {\n        \"role\": \"heading\",\n        \"name\": \"Ready to make every meeting count?\"\n      },\n      \"e22\": {\n        \"role\": \"button\",\n        \"name\": \"Coming soon\",\n        \"nth\": 3\n      },\n      \"e23\": {\n        \"role\": \"link\",\n        \"name\": \"Want in early? Email support →\"\n      },\n      \"e24\": {\n        \"role\": \"heading\",\n        \"name\": \"Site footer\"\n      },\n      \"e25\": {\n        \"role\": \"link\",\n        \"name\": \"Layers home\",\n        \"nth\": 1\n      },\n      \"e26\": {\n        \"role\": \"navigation\",\n        \"name\": \"Footer navigation\"\n      },\n      \"e27\": {\n        \"role\": \"link\",\n        \"name\": \"Pricing\",\n        \"nth\": 1\n      },\n      \"e28\": {\n        \"role\": \"link\",\n        \"name\": \"Download\",\n        \"nth\": 1\n      },\n      \"e29\": {\n        \"role\": \"link\",\n        \"name\": \"Changelog\"\n      },\n      \"e30\": {\n        \"role\": \"link\",\n        \"name\": \"Privacy\"\n      },\n      \"e31\": {\n        \"role\": \"link\",\n        \"name\": \"Terms\"\n      },\n      \"e32\": {\n        \"role\": \"link\",\n        \"name\": \"Account deletion\"\n      },\n      \"e33\": {\n        \"role\": \"link\",\n        \"name\": \"Email support\"\n      },\n      \"e34\": {\n        \"role\": \"link\",\n        \"name\": \"Layers on GitHub\"\n      },\n      \"e35\": {\n        \"role\": \"link\",\n        \"name\": \"Layers on X\"\n      }\n    },\n    \"stats\": {\n      \"lines\": 113,\n      \"characters\": 5172,\n      \"estimatedTokens\": 1293,\n      \"totalRefs\": 35,\n      \"interactiveRefs\": 23\n    }\n  }\n}\n",
+        "stderr": "",
+        "outputFailed": false,
+        "timedOut": false
+      },
+      {
+        "command": "pnpm exec expect console_logs --type error",
+        "pass": true,
+        "exitCode": 0,
+        "durationMs": 4543,
+        "stdout": "No console messages captured.\n",
+        "stderr": "",
+        "outputFailed": false,
+        "timedOut": false
+      },
+      {
+        "command": "pnpm exec expect network_requests",
+        "pass": true,
+        "exitCode": 0,
+        "durationMs": 4162,
+        "stdout": "{\n  \"requests\": [\n    {\n      \"url\": \"http://127.0.0.1:3999/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_c8c997ce._.js\",\n      \"method\": \"GET\",\n      \"status\": 200,\n      \"resourceType\": \"script\",\n      \"timestamp\": 1778424114936\n    },\n    {\n      \"url\": \"http://127.0.0.1:3999/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_8b5653b5._.js\",\n      \"method\": \"GET\",\n      \"status\": 200,\n      \"resourceType\": \"script\",\n      \"timestamp\": 1778424114945\n    }\n  ]\n}\n",
+        "stderr": "",
+        "outputFailed": false,
+        "timedOut": false
+      },
+      {
+        "command": "pnpm exec expect close",
+        "pass": true,
+        "exitCode": 0,
+        "durationMs": 14357,
+        "stdout": "Browser closed.\nPlaywright video: /tmp/expect-artifacts/session-1778424132776.webm\n",
+        "stderr": "",
+        "outputFailed": false,
+        "timedOut": false
+      }
+    ]
+  }
+}

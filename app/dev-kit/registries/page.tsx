@@ -92,6 +92,8 @@ export default function RegistriesPage() {
     <div style={{ padding: 24, fontFamily: 'system-ui', maxWidth: 1100 }}>
       <h1 style={{ fontSize: 22, marginBottom: 16 }}>Vendor Registries</h1>
       <p style={{ color: '#666', fontSize: 14, marginBottom: 24 }}>
+        Registries expose the source of truth for tokens, features, and proof.
+        {' '}
         Source of truth for valid model IDs, pricing, and deprecation patterns.
         Pre-commit blocks hardcoded strings not in a registry.
       </p>
