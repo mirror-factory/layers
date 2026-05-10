@@ -131,6 +131,9 @@ workflow sets `PLAYWRIGHT_VIDEO=on` when the PR has `tier3:run` or
 `proof:required`. Tier 3 writes each Playwright lane into its own
 `test-results/tier-3/*` directory so video artifacts from one lane do not get
 deleted by the next lane.
+The final feature-proof artifact check is scoped to Tier 3 lanes
+(`visual-video`, `expect`) because Tier 0/1 and Tier 2 artifacts are produced
+by separate CI jobs.
 
 Local Tier 3 forces Chromium mobile emulation so agents can run it without
 root-level WebKit dependencies. WebKit/iOS-specific proof belongs in CI or the

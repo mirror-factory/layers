@@ -85,7 +85,7 @@ const tiers: Record<TierId, TierSpec> = {
       { name: 'desktop visual matrix', command: 'pnpm exec playwright test tests/e2e/*.visual.spec.ts tests/e2e/*.visual.test.ts tests/e2e/visual-regression.spec.ts --project=desktop-light --project=desktop-dark --output=test-results/tier-3/desktop-visual' },
       { name: 'mobile flows', command: 'PLAYWRIGHT_FORCE_CHROMIUM=1 pnpm exec playwright test tests/e2e/mobile.spec.ts --project=mobile-light --output=test-results/tier-3/mobile-flows' },
       { name: 'expect AI browser proof', command: 'pnpm test:expect', when: () => has('scripts/run-expect-proof.ts') },
-      { name: 'feature proof artifacts', command: 'pnpm test:feature-proof -- --enforce-artifacts', when: () => has('scripts/resolve-feature-proof.ts') },
+      { name: 'feature proof artifacts', command: 'pnpm test:feature-proof -- --enforce-artifacts --enforce-lanes=visual-video,expect', when: () => has('scripts/resolve-feature-proof.ts') },
       { name: 'design drift', command: 'npx tsx scripts/check-design-drift.ts', when: () => has('scripts/check-design-drift.ts') },
     ],
   },

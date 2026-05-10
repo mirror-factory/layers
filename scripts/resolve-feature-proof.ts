@@ -62,6 +62,10 @@ const registryPath = join(cwd, ".ai-dev-kit", "registries", "feature-proof.json"
 const outPath = join(cwd, ".evidence", "feature-proof-plan.json");
 const args = new Set(process.argv.slice(2));
 const enforceArtifacts = args.has("--enforce-artifacts");
+const enforceLaneArg = process.argv.slice(2).find(arg => arg.startsWith("--enforce-lanes="));
+const enforceLaneIds = enforceLaneArg
+  ? new Set(enforceLaneArg.replace("--enforce-lanes=", "").split(",").map(id => id.trim()).filter(Boolean))
+  : null;
 const noWrite = args.has("--no-write");
 const jsonOnly = args.has("--json");
 
@@ -148,6 +152,7 @@ function evidenceSatisfied(lane: ProofLane): { satisfied: boolean; missingEviden
   if (evidence.length === 0) return { satisfied: true, missingEvidence: [] };
 
   const missing: string[] = [];
+  const invalid: string[] = [];
   let anyPresent = false;
 
   for (const rel of evidence) {
@@ -162,16 +167,16 @@ function evidenceSatisfied(lane: ProofLane): { satisfied: boolean; missingEviden
       const stat = statSync(full);
       if (stat.isFile() && rel.endsWith(".json")) {
         const parsed = JSON.parse(readFileSync(full, "utf-8")) as { pass?: boolean };
-        if (parsed.pass === false) missing.push(`${rel} (failed)`);
+        if (parsed.pass === false) invalid.push(`${rel} (failed)`);
       }
     } catch {
-      missing.push(`${rel} (unreadable)`);
+      invalid.push(`${rel} (unreadable)`);
     }
   }
 
   return {
-    satisfied: anyPresent && missing.length === 0,
-    missingEvidence: missing,
+    satisfied: anyPresent && invalid.length === 0,
+    missingEvidence: anyPresent ? invalid : missing,
   };
 }
 
@@ -210,7 +215,7 @@ function main() {
     process.env.FEATURE_PROOF_ALLOW_UNREGISTERED !== "1";
 
   const missingArtifactLanes = enforceArtifacts
-    ? requiredLanes.filter(lane => lane.satisfied === false)
+    ? requiredLanes.filter(lane => (enforceLaneIds === null || enforceLaneIds.has(lane.id)) && lane.satisfied === false)
     : [];
 
   const payload = {
@@ -222,6 +227,7 @@ function main() {
     unmatchedUserFacingFiles,
     requiredLanes,
     commands: requiredLanes.map(lane => lane.command),
+    enforcedArtifactLanes: enforceArtifacts ? (enforceLaneIds ? [...enforceLaneIds].sort() : "all") : [],
     pass: !unregisteredBlocked && missingArtifactLanes.length === 0,
     blocked: {
       unregisteredUserFacingChange: unregisteredBlocked,
@@ -246,6 +252,12 @@ function main() {
       for (const file of unmatchedUserFacingFiles) console.log(`  - ${file}`);
     }
     if (!noWrite) console.log(`[feature-proof] wrote ${outPath}`);
+    if (missingArtifactLanes.length > 0) {
+      console.log("[feature-proof] missing proof artifacts:");
+      for (const lane of missingArtifactLanes) {
+        console.log(`  - ${lane.id}: ${(lane.missingEvidence ?? []).join(", ") || "no evidence"}`);
+      }
+    }
   }
 
   if (!payload.pass) process.exit(1);
