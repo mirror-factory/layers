@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-05-10T15:30:46.093Z",
+  "generatedAt": "2026-05-10T15:32:03.526Z",
   "projectHarness": {
-    "generatedAt": "2026-05-10T15:30:46.096Z",
+    "generatedAt": "2026-05-10T15:32:03.536Z",
     "profilePath": ".ai-dev-kit/project-profile.json",
     "project": {
       "id": "layers",
@@ -212,7 +212,7 @@
         "id": "proof.latest-evidence",
         "label": "Latest local evidence",
         "status": "pass",
-        "detail": "Latest evidence updated 2026-05-10T15:30:44.836Z.",
+        "detail": "Latest evidence updated 2026-05-10T15:30:46.153Z.",
         "path": ".evidence"
       }
     ],
@@ -241,7 +241,7 @@
   },
   "git": {
     "branch": "agent/PROD-448-1778425274",
-    "head": "2ddc41a",
+    "head": "3aa9772",
     "status": "",
     "changedFiles": []
   },
@@ -460,8 +460,8 @@
     },
     {
       "path": ".evidence/proof-packet.json",
-      "bytes": 14796,
-      "modifiedAt": "2026-05-10T15:29:11.495Z"
+      "bytes": 18853,
+      "modifiedAt": "2026-05-10T15:30:46.154Z"
     },
     {
       "path": ".evidence/release-artifacts.json",
