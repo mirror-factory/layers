@@ -78,7 +78,7 @@ export function RunsList({ theme }: { theme: SerializedTheme }) {
   return (
     <main style={main}>
       <h1 style={{ margin: 0 }}>Runs</h1>
-      <p style={muted}>Every feature build this project has recorded, newest first.</p>
+      <p style={muted}>Every feature build this project has recorded, newest first. Runs preserve proof history for repeated operator checks.</p>
       {loading ? <p style={muted}>Loading...</p> : runs.length === 0 ? (
         <p style={muted}>
           No runs yet. Start a Claude Code session or run{' '}
