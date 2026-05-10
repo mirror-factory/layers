@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.94] — 2026-05-10
+
+### Other
+- PROD-443 add DevKit tools operator copy (`f164c4d`)
+
+
 ## [0.1.93] — 2026-05-10
 
 ### Other
