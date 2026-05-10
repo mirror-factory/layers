@@ -11,7 +11,7 @@ This repo uses the AI Starter Kit as a strict-by-default repo operating system.
 - Planning: create or update a plan before feature-sized code changes.
 - Context: inspect registries, manifests, docs, and existing repo patterns before writing.
 - Research: use the Active Research Cache before dependency, framework, provider, or fast-moving API work.
-- Verification: run typecheck, tests, gates, browser proof, and evidence-generating checks before handoff.
+- Verification: run `pnpm verify:tier 0`, `pnpm verify:tier 1`, and `pnpm verify:tier 2` before review; use Tier 3 for UI/mobile/staging-sensitive work and evidence-generating checks before handoff.
 - Models: use stronger Sonnet/Opus-class models for implementation and review; use Haiku-class models for bounded rubric/eval checks when appropriate.
 
 ## AI SDK v6 Patterns (CRITICAL)
@@ -54,9 +54,9 @@ Research freshness is tracked under `.ai-starter/research`. Refresh stale entrie
 ## Required Commands
 
 ```bash
-pnpm typecheck
-pnpm test
-pnpm gates
+pnpm verify:tier 0
+pnpm verify:tier 1
+pnpm verify:tier 2
 pnpm sync
 pnpm score
 pnpm report

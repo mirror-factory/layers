@@ -85,6 +85,8 @@ export const apiRouteContracts = [
   route("/api/dev-kit/index", "app/api/dev-kit/index/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
   route("/api/dev-kit/logs/unified", "app/api/dev-kit/logs/unified/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
   route("/api/dev-kit/overview", "app/api/dev-kit/overview/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
+  route("/api/dev-kit/project-profile", "app/api/dev-kit/project-profile/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
+  route("/api/dev-kit/proof", "app/api/dev-kit/proof/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
   route("/api/dev-kit/registries", "app/api/dev-kit/registries/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
   route("/api/dev-kit/regressions", "app/api/dev-kit/regressions/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
   route("/api/dev-kit/runs/[run_id]", "app/api/dev-kit/runs/[run_id]/route.ts", ["GET"], "dev-kit", false, [200, 403, 404], undefined, "/api/dev-kit/runs/sample"),

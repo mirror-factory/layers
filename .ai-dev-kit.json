@@ -1,5 +1,5 @@
 {
-  "version": "0.2.13",
+  "version": "0.2.22",
   "installedAt": "2026-04-21T02:48:39.851Z",
   "modules": [
     "core",
@@ -12,7 +12,8 @@
   ],
   "agentMode": "autonomous",
   "ideHooks": [
-    "claude-code"
+    "claude-code",
+    "codex"
   ],
   "projectType": "nextjs-15",
   "packageManager": "pnpm",

@@ -31,10 +31,14 @@ import {
   Palette,
   Gauge,
   Settings,
+  FolderKanban,
+  ClipboardCheck,
 } from "lucide-react";
 
 const navItems = [
   { label: "Overview", href: "/dev-kit", icon: LayoutDashboard },
+  { label: "Project", href: "/dev-kit/project", icon: FolderKanban },
+  { label: "Proof", href: "/dev-kit/proof", icon: ClipboardCheck },
   { label: "Runs", href: "/dev-kit/runs", icon: Play },
   { label: "Sessions", href: "/dev-kit/sessions", icon: Activity },
   { label: "Registries", href: "/dev-kit/registries", icon: Library },

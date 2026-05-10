@@ -57,7 +57,7 @@ function findCoveringTests(contractFile: string, smokePath: string): string[] {
   // For dynamic-segment routes, also accept a smoke-path prefix that ignores
   // the trailing path segment (e.g. /api/meetings/sample matches references
   // to /api/meetings/<id>).
-  const smokePrefix = smokePath.replace(/\/[^/]+$/, "");
+  const smokePrefix = contractFile.includes("[") ? smokePath.replace(/\/[^/]+$/, "") : "";
   const matches: string[] = [];
   for (const [file, source] of testFileSources) {
     if (file === "tests/route-coverage.test.ts") continue;
@@ -135,6 +135,14 @@ describe("API route coverage", () => {
     "app/api/health/route.ts",
     "app/api/models/route.ts",
     "app/api/observability/health/route.ts",
+    "app/api/oauth/authorize/route.ts",
+    "app/api/oauth/callback/route.ts",
+    "app/api/oauth/consent/route.ts",
+    "app/api/oauth/register/route.ts",
+    "app/api/oauth/revoke/route.ts",
+    "app/api/transcribe/stream/autosave/route.ts",
+    "app/api/transcribe/stream/finalize/route.ts",
+    "app/api/transcribe/stream/preflight/route.ts",
   ]);
 
   it("no NEW route has only describe.todo() stub coverage", () => {

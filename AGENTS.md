@@ -106,7 +106,7 @@ Available runtime skills. Claude Code skills live in `.claude/skills/`; Codex sh
 - **Context**: read `.ai-starter/manifests/*`, existing source patterns, and local docs before generating or editing
 - **Runtime state**: Codex uses `.codex/config.toml` + `.codex/hooks.json`; Claude Code uses `.claude/settings.json`; both share `.ai-starter/*`
 - **Research**: check `.ai-starter/research/` for cached library docs before dependency, framework, provider, or browser automation work
-- **Verification**: run `pnpm sync`, `pnpm score`, typecheck/tests, and browser proof before handoff
+- **Verification**: run `pnpm verify:tier 0`, `pnpm verify:tier 1`, and `pnpm verify:tier 2` before review; use Tier 3 for UI/mobile/staging-sensitive work
 - **Errors**: Check server logs for `CHAT ROUTE ERROR:` stack traces first
 
 ---
@@ -128,7 +128,7 @@ feature/* → development → staging → main
 | `development` | `dev.layers.mirrorfactory.ai`     | Preview (pinned) | Test      |
 | feature/\*    | per-PR Vercel preview             | Preview          | Test      |
 
-Full setup, env-var checklist, GitHub branch protection, Vercel domain pinning, and the OAuth/webhook allow-lists live in [`docs/RELEASE.md`](./docs/RELEASE.md). When `staging` and `development` aren't wired up yet, follow [PROD-383](https://linear.app/mirror-factory/issue/PROD-383).
+Full setup, env-var checklist, GitHub branch protection, Vercel domain pinning, OAuth/webhook allow-lists, and native release behavior live in [`docs/RELEASE.md`](./docs/RELEASE.md), [`docs/RELEASE_PIPELINE.md`](./docs/RELEASE_PIPELINE.md), and [`docs/PRODUCTION_QUALITY_SYSTEM.md`](./docs/PRODUCTION_QUALITY_SYSTEM.md).
 
 ---
 
@@ -179,15 +179,17 @@ Fast unit test runner compatible with Jest API. Use vi.hoisted() for mock vars i
 ## Development Commands
 
 ```bash
-pnpm typecheck          # TypeScript check (MUST PASS before commit)
-pnpm test               # Unit tests
-pnpm test:e2e           # Playwright E2E
+pnpm verify:tier 0      # Fast syntax/structure gate (pre-commit)
+pnpm verify:tier 1      # Fast deterministic test gate (pre-push/CI)
+pnpm verify:tier 2      # Focused ticket proof before review
+pnpm verify:tier 3      # Visual/mobile/usability/staging proof
+pnpm test:e2e           # Full Playwright E2E when explicitly needed
 pnpm product:spec       # Update the YC-style product spec and alignment anchors
 pnpm product:validate   # Update product validation and technical feasibility
 pnpm sync               # Regenerate .ai-starter manifests
 pnpm mfdr               # Update technical decision/spec record
 pnpm score              # Generate readiness scorecard
-pnpm gates              # Run required/recommended starter gates
+pnpm gates              # Run full starter gates when explicitly needed
 pnpm test:codex-runtime # Prove Codex runtime wiring and optional live codex exec
 pnpm research:agents-md # Regenerate this file
 pnpm research:refresh   # Refresh research cache from live docs

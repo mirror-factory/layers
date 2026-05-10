@@ -1,0 +1,96 @@
+name: Server Proof
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_android:
+        description: "Run Android build/smoke proof on self-hosted runner"
+        type: boolean
+        default: false
+      run_expect:
+        description: "Run Expect AI browser proof"
+        type: boolean
+        default: true
+  pull_request:
+    types: [labeled, synchronize]
+    branches: [development, staging, main]
+
+env:
+  NODE_VERSION: "22"
+
+jobs:
+  server-web-proof:
+    name: Self-hosted Web Proof
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.pull_request.labels.*.name, 'server:run')
+    runs-on: [self-hosted, linux, x64, layers-web]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile --prefer-offline
+      - run: pnpm runner:doctor
+      - run: pnpm test:feature-proof
+      - run: pnpm verify:tier 0 1 2
+      - name: Expect proof
+        if: github.event_name == 'workflow_dispatch' && inputs.run_expect == true || contains(github.event.pull_request.labels.*.name, 'expect:run') || contains(github.event.pull_request.labels.*.name, 'proof:required')
+        run: EXPECT_RUN=1 EXPECT_REQUIRED=1 EXPECT_AGENT="${EXPECT_AGENT:-codex}" pnpm test:expect
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      - run: pnpm test:proof
+        if: always()
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: server-web-proof
+          include-hidden-files: true
+          path: |
+            .evidence/
+            playwright-report/
+            test-results/
+            .expect/
+          retention-days: 30
+
+  android-native-proof:
+    name: Android Native Proof
+    if: github.event_name == 'workflow_dispatch' && inputs.run_android == true || contains(github.event.pull_request.labels.*.name, 'android:run') || contains(github.event.pull_request.labels.*.name, 'native:run')
+    runs-on: [self-hosted, linux, x64, layers-android]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - run: pnpm install --frozen-lockfile --prefer-offline
+      - run: ANDROID_EMULATOR_REQUIRED=1 pnpm runner:doctor
+      - run: pnpm test:native:config
+      - name: Android debug build
+        run: |
+          NATIVE_BUILD_RUN=1 NATIVE_REQUIRED=1 \
+          WEB_BUILD_COMMAND="pnpm build" \
+          ANDROID_BUILD_COMMAND="npx cap sync android && cd android && ./gradlew assembleDebug" \
+          pnpm build:native
+      - name: Maestro native smoke
+        run: NATIVE_REQUIRED=1 MAESTRO_RUN=1 pnpm test:native:smoke
+      - run: pnpm test:proof
+        if: always()
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: android-native-proof
+          include-hidden-files: true
+          path: |
+            .evidence/
+            android/app/build/outputs/
+          retention-days: 30

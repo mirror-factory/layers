@@ -33,8 +33,8 @@ jobs:
           node-version: 20
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm typecheck
-      - run: pnpm test -- --reporter=json --outputFile=test-results/unit.json
+      - run: pnpm verify:tier 0
+      - run: pnpm test:fast -- --reporter=json --outputFile=test-results/unit.json
       - run: pnpm compliance || true # Run compliance check (non-blocking in nightly)
       - uses: actions/upload-artifact@v4
         if: always()

@@ -7,6 +7,90 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.85] — 2026-05-10
+
+### Fixed
+- fix: scope feature proof artifact enforcement (`d35153c`)
+
+
+## [0.1.84] — 2026-05-10
+
+### Other
+- chore: refresh docs manifest (`bd91863`)
+
+
+## [0.1.83] — 2026-05-10
+
+### Fixed
+- fix: gate expect proof on explicit runner (`e3bc819`)
+
+
+## [0.1.82] — 2026-05-10
+
+### Added
+- feat: add registry-driven feature proof (`ae01416`)
+
+
+## [0.1.81] — 2026-05-09
+
+### Fixed
+- fix: preserve tier 3 video artifacts (`8718c48`)
+
+
+## [0.1.80] — 2026-05-09
+
+### Documentation
+- docs: refresh docs manifest (`e746896`)
+
+
+## [0.1.79] — 2026-05-09
+
+### Fixed
+- fix: allow tier 3 media proof video (`9af5439`)
+
+
+## [0.1.78] — 2026-05-09
+
+### Other
+- ci: preserve proof evidence artifacts (`98ad6da`)
+
+
+## [0.1.77] — 2026-05-09
+
+### Added
+- feat: wire native proof and OAuth bridge (`1a462aa`)
+
+
+## [0.1.76] — 2026-05-09
+
+### Other
+- ci: run dev-kit gates on staging (`6514072`)
+
+
+## [0.1.75] — 2026-05-09
+
+### Added
+- feat: add project quality operating system (`0790630`)
+
+
+## [0.1.74] — 2026-05-09
+
+### Other
+- chore: sync docs manifest (`1ba6cd9`)
+
+
+## [0.1.73] — 2026-05-09
+
+### Other
+- chore: lazily install playwright for ticket proof (`bdb9f95`)
+
+
+## [0.1.72] — 2026-05-09
+
+### Other
+- chore: tier production quality gates (`e48e785`)
+
+
 ## [0.1.71] — 2026-05-07
 
 ### Other

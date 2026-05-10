@@ -142,7 +142,7 @@ export function AIDebugPanel() {
   }
 
   return (
-    <div style={{
+    <div data-testid="ai-debug-panel" style={{
       position: 'fixed', bottom: 16, right: 16, zIndex: 99999,
       width: 420, maxHeight: '60vh',
       background: DEBUG_COLORS.canvas, color: DEBUG_COLORS.text, border: `1px solid ${DEBUG_COLORS.border}`,

@@ -11,10 +11,10 @@ def hasLayersReleaseSigning = layersReleaseSigningEnv.every { _, value ->
 }
 
 android {
-    namespace = "com.mirrorfactory.audiolayer"
+    namespace = "com.mirrorfactory.layers"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.mirrorfactory.audiolayer"
+        applicationId "com.mirrorfactory.layers"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
