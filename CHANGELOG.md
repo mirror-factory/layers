@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.93] — 2026-05-10
+
+### Other
+- Improve Expect fallback URL discovery (`1703cfc`)
+
+
 ## [0.1.92] — 2026-05-10
 
 ### Other
