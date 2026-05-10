@@ -9,7 +9,7 @@
  */
 
 import { spawnSync } from "node:child_process";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { compactText, extractExpectTuiReport, isZeroStepTuiTimeout, shouldRunExpectFallback } from "./lib/expect-proof-utils";
@@ -101,11 +101,43 @@ function unique(values: string[]): string[] {
   return Array.from(new Set(values.filter(Boolean)));
 }
 
+function playwrightConfigPorts(): string[] {
+  const ports: string[] = [];
+  for (const file of ["playwright.config.ts", "playwright.config.js", "playwright.config.mjs", "playwright.config.cjs"]) {
+    const fullPath = join(cwd, file);
+    if (!existsSync(fullPath)) continue;
+    const source = readFileSync(fullPath, "utf-8");
+    for (const match of source.matchAll(/(?:localhost|127\.0\.0\.1):(\d+)/g)) {
+      ports.push(match[1]);
+    }
+  }
+  return ports;
+}
+
+function nextDevProcessPorts(): string[] {
+  const result = spawnSync("ps", ["-eo", "args="], {
+    cwd,
+    encoding: "utf-8",
+    timeout: 3_000,
+  });
+  if (result.status !== 0) return [];
+
+  const ports: string[] = [];
+  for (const line of (result.stdout ?? "").split("\n")) {
+    if (!/\bnext\b.*\bdev\b/.test(line)) continue;
+    const match = line.match(/(?:^|\s)(?:-p|--port)\s+(\d+)(?:\s|$)/);
+    if (match) ports.push(match[1]);
+  }
+  return ports;
+}
+
 function fallbackUrlCandidates(): string[] {
   const explicit = [
     process.env.EXPECT_FALLBACK_URL,
     url,
+    process.env.TEST_BASE_URL,
     process.env.PLAYWRIGHT_BASE_URL,
+    process.env.AI_STARTER_BASE_URL,
     process.env.BASE_URL,
     process.env.NEXT_PUBLIC_APP_URL,
     process.env.NEXT_PUBLIC_SITE_URL,
@@ -114,7 +146,10 @@ function fallbackUrlCandidates(): string[] {
   const localPorts = unique([
     process.env.PORT,
     process.env.NEXT_PORT,
+    ...playwrightConfigPorts(),
+    ...nextDevProcessPorts(),
     "3000",
+    "3101",
     "3002",
     "4000",
   ].filter((value): value is string => Boolean(value?.trim())));
