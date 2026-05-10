@@ -100,7 +100,7 @@ export default function ToolsPage() {
       <div>
         <h1 className="text-2xl font-semibold">Tool Registry</h1>
         <p className="mt-1 text-sm text-ink-200/50">
-          Browse all registered AI tools, their schemas, test status, and evaluation scores.
+          Tools show audited automation surfaces available to operators, including schemas, test status, and evaluation scores.
         </p>
       </div>
 
