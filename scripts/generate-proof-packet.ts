@@ -7,7 +7,7 @@
  */
 
 import { spawnSync } from 'node:child_process';
-import { existsSync, mkdirSync, readdirSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { evaluateProjectHarness } from '../lib/ai-dev-kit/project-profile';
 
@@ -57,6 +57,15 @@ function listFiles(dir: string): Array<{ path: string; bytes: number; modifiedAt
   return files.sort((a, b) => a.path.localeCompare(b.path));
 }
 
+function readJson<T>(path: string): T | null {
+  if (!existsSync(path)) return null;
+  try {
+    return JSON.parse(readFileSync(path, 'utf-8')) as T;
+  } catch {
+    return null;
+  }
+}
+
 function main() {
   mkdirSync(evidenceDir, { recursive: true });
   const packet = {
@@ -69,6 +78,7 @@ function main() {
       changedFiles: changedFiles(),
     },
     evidence: listFiles(evidenceDir),
+    featureProof: readJson(join(evidenceDir, 'feature-proof-plan.json')),
     testResults: listFiles(testResultsDir),
     browserArtifacts: listFiles(join(cwd, 'playwright-report')),
     nativeArtifacts: [

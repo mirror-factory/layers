@@ -18,6 +18,32 @@ export interface ProofPacket {
     status?: string | null;
     changedFiles?: string[];
   };
+  featureProof?: {
+    generatedAt?: string;
+    changedFiles?: string[];
+    matchedFeatures?: Array<{
+      id: string;
+      name: string;
+      userFacing?: boolean;
+      surfaces?: string[];
+      proof?: string[];
+      matchedPaths?: string[];
+    }>;
+    unmatchedUserFacingFiles?: string[];
+    requiredLanes?: Array<{
+      id: string;
+      label: string;
+      command: string;
+      evidence?: string[];
+      satisfied?: boolean;
+      missingEvidence?: string[];
+    }>;
+    pass?: boolean;
+    blocked?: {
+      unregisteredUserFacingChange?: boolean;
+      missingArtifactLanes?: string[];
+    };
+  } | null;
   evidence?: ProofArtifact[];
   testResults?: ProofArtifact[];
   browserArtifacts?: ProofArtifact[];
@@ -69,4 +95,3 @@ export function loadLatestProofPacket(cwd: string = process.cwd()): LatestProofP
     };
   }
 }
-

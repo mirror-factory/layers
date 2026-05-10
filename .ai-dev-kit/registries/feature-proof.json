@@ -1,0 +1,253 @@
+{
+  "$schema": "../schemas/feature-proof.schema.json",
+  "kind": "feature-proof-registry",
+  "schema_version": 1,
+  "policy": {
+    "requireRegistryForUserFacingChanges": true,
+    "expectPolicy": "Expect is required for every ticket that touches a registered user-facing Layers feature.",
+    "defaultUserFacingProof": ["fast", "playwright", "expect"],
+    "defaultNativeProof": ["native-config", "native-device"]
+  },
+  "ignoredPaths": [
+    "docs/**",
+    "README.md",
+    "CHANGELOG.md",
+    ".ai-dev-kit/**",
+    ".ai-starter/**",
+    ".github/**",
+    "package.json",
+    "pnpm-lock.yaml"
+  ],
+  "proofLanes": {
+    "fast": {
+      "label": "Fast deterministic tests",
+      "command": "pnpm test:fast",
+      "evidence": [".evidence/tier-1.json", "test-results/unit.json"],
+      "description": "Unit, contract, and non-browser regression checks."
+    },
+    "playwright": {
+      "label": "Playwright browser proof",
+      "command": "pnpm verify:tier 2",
+      "evidence": [".evidence/ticket-proof.json", "playwright-report/index.html"],
+      "description": "Focused route, visual, and mobile browser proof for touched surfaces."
+    },
+    "visual-video": {
+      "label": "Tier 3 video proof",
+      "command": "PLAYWRIGHT_VIDEO=on pnpm verify:tier 3",
+      "evidence": ["test-results/tier-3", "playwright-report/index.html"],
+      "description": "Broad responsive visual matrix with retained video artifacts."
+    },
+    "expect": {
+      "label": "Expect AI user-flow proof",
+      "command": "EXPECT_RUN=1 EXPECT_REQUIRED=1 pnpm test:expect",
+      "evidence": [".evidence/expect-proof.json", ".expect/replays"],
+      "description": "Instruction-driven AI browser proof for user-facing feature behavior."
+    },
+    "native-config": {
+      "label": "Native shell config proof",
+      "command": "pnpm test:native:config",
+      "evidence": [".evidence/native-config.json"],
+      "description": "Capacitor, Android, iOS, Electron, callback scheme, and workflow config checks."
+    },
+    "native-device": {
+      "label": "Native device or emulator proof",
+      "command": "MAESTRO_RUN=1 pnpm test:native:smoke",
+      "evidence": [".evidence/runner-capability.json", ".evidence/native-smoke.json"],
+      "description": "Maestro/Appium/device-cloud proof for native flows. iOS waits for Mac or cloud runner."
+    },
+    "release": {
+      "label": "Release artifact proof",
+      "command": "pnpm build:release",
+      "evidence": [".evidence/release-artifacts.json"],
+      "description": "Desktop/mobile release artifact validation."
+    }
+  },
+  "features": [
+    {
+      "id": "home.banner",
+      "name": "Public homepage banner",
+      "description": "Landing-page hero, brand signal, CTA area, and audio ribbon.",
+      "category": "marketing",
+      "status": "active",
+      "userFacing": true,
+      "surfaces": ["web"],
+      "routes": ["/"],
+      "paths": [
+        "app/(public)/page.tsx",
+        "app/(public)/landing.tsx",
+        "components/audio-wave-ribbon.tsx",
+        "components/layers-logo.tsx",
+        "components/public-site-nav.tsx"
+      ],
+      "proof": ["fast", "playwright", "visual-video", "expect"],
+      "tests": {
+        "unit": ["components/audio-wave-ribbon.test.tsx"],
+        "playwright": ["tests/e2e/app-page.smoke.spec.ts", "tests/e2e/visual-regression.spec.ts"],
+        "expect": ["tests/expect/page.tsx.expect.ts", "tests/expect/page-tsx.md"]
+      }
+    },
+    {
+      "id": "auth.google-native",
+      "name": "Google sign-in and native OAuth return",
+      "description": "Supabase Google OAuth, native browser launch, deep-link return, and post-login redirect.",
+      "category": "auth",
+      "status": "active",
+      "userFacing": true,
+      "surfaces": ["web", "ios", "android"],
+      "routes": ["/sign-in", "/sign-up", "/auth/callback"],
+      "paths": [
+        "app/(public)/sign-in/page.tsx",
+        "app/(public)/sign-up/page.tsx",
+        "app/auth/**",
+        "components/auth-card.tsx",
+        "components/native-auth-bridge.tsx",
+        "lib/auth/**",
+        "lib/supabase/**",
+        "capacitor.config.ts",
+        "android/**",
+        "ios/**",
+        ".maestro/**"
+      ],
+      "proof": ["fast", "playwright", "expect", "native-config", "native-device"],
+      "tests": {
+        "playwright": ["tests/e2e/app-sign-in-page.smoke.spec.ts", "tests/e2e/app-sign-up-page.smoke.spec.ts"],
+        "expect": ["tests/expect/sign-in.expect.ts", "tests/expect/sign-up.expect.ts"],
+        "native": [".maestro/smoke.yaml"]
+      },
+      "notes": [
+        "Google OAuth must use a system auth surface plus deep-link return, not an embedded WebView.",
+        "Real iOS simulator/device proof is blocked until a Mac runner or device cloud is connected."
+      ]
+    },
+    {
+      "id": "recording.capture",
+      "name": "Recording capture and live transcript",
+      "description": "Record, live record, upload, audio recorder, and transcript-facing surfaces.",
+      "category": "core-product",
+      "status": "active",
+      "userFacing": true,
+      "surfaces": ["web", "ios", "android", "macos", "windows"],
+      "routes": ["/record", "/record/live", "/record/upload"],
+      "paths": [
+        "app/record/**",
+        "components/audio-lines.tsx",
+        "components/audio-recorder.tsx",
+        "components/live-recorder.tsx",
+        "components/live-transcript-view.tsx",
+        "components/transcript-view.tsx",
+        "lib/recording/**"
+      ],
+      "proof": ["fast", "playwright", "visual-video", "expect", "native-config"],
+      "tests": {
+        "unit": ["components/audio-recorder.test.tsx", "components/live-recorder.test.tsx"],
+        "playwright": ["tests/e2e/app-record-page.smoke.spec.ts", "tests/e2e/app-record-live-page.smoke.spec.ts", "tests/e2e/mobile.spec.ts"],
+        "expect": ["tests/expect/record.expect.ts", "tests/expect/record-live.expect.ts"]
+      }
+    },
+    {
+      "id": "meetings.workspace",
+      "name": "Meetings workspace",
+      "description": "Meetings list, detail, search, notes, cost, and intelligence panels.",
+      "category": "core-product",
+      "status": "active",
+      "userFacing": true,
+      "surfaces": ["web"],
+      "routes": ["/meetings", "/meetings/[id]", "/search"],
+      "paths": [
+        "app/meetings/**",
+        "app/search/**",
+        "components/meeting-*.tsx",
+        "lib/meetings/**"
+      ],
+      "proof": ["fast", "playwright", "visual-video", "expect"],
+      "tests": {
+        "unit": [
+          "components/meeting-chat.test.tsx",
+          "components/meeting-cost-panel.test.tsx",
+          "components/meeting-detail-poller.test.tsx",
+          "components/meeting-intelligence-panel.test.tsx",
+          "components/meeting-notes-push-panel.test.tsx"
+        ],
+        "playwright": ["tests/e2e/meetings.spec.ts", "tests/e2e/app-meetings-page.smoke.spec.ts", "tests/e2e/app-meetings-id-page.smoke.spec.ts"],
+        "expect": ["tests/expect/meetings.expect.ts", "tests/expect/meetings-id.expect.ts", "tests/expect/search.expect.ts"]
+      }
+    },
+    {
+      "id": "dashboard.devkit",
+      "name": "DevKit dashboard and proof center",
+      "description": "Project-local operator dashboard, registries, proof packet views, and run surfaces.",
+      "category": "operator-dashboard",
+      "status": "active",
+      "userFacing": true,
+      "surfaces": ["web"],
+      "routes": ["/dev-kit", "/dev-kit/proof", "/dev-kit/project"],
+      "paths": [
+        "app/dev-kit/**",
+        "app/api/dev-kit/**",
+        "components/ai-debug-panel.tsx",
+        "lib/ai-dev-kit/**",
+        "lib/starter-control-plane.ts",
+        "lib/dashboard-data.ts",
+        ".ai-dev-kit/registries/**"
+      ],
+      "proof": ["fast", "playwright", "expect"],
+      "tests": {
+        "playwright": ["tests/e2e/app-dev-kit-page.smoke.spec.ts", "tests/e2e/app-dev-kit-runs-page.smoke.spec.ts"],
+        "expect": ["tests/expect/app-dev-kit-page.md", "tests/expect/app-dev-kit-runs-page.md"]
+      }
+    },
+    {
+      "id": "mobile.safe-area",
+      "name": "Mobile safe area and primary navigation",
+      "description": "Responsive mobile layout, safe-area spacing, mobile nav, and platform shell polish.",
+      "category": "mobile",
+      "status": "active",
+      "userFacing": true,
+      "surfaces": ["web", "ios", "android"],
+      "routes": ["/", "/record", "/meetings", "/settings"],
+      "paths": [
+        "app/layout.tsx",
+        "app/globals.css",
+        "components/mobile-primary-nav.tsx",
+        "tests/e2e/mobile*.spec.ts",
+        "capacitor.config.ts",
+        "android/**",
+        "ios/**"
+      ],
+      "proof": ["fast", "playwright", "visual-video", "expect", "native-config", "native-device"],
+      "tests": {
+        "unit": ["components/mobile-primary-nav.test.tsx"],
+        "playwright": ["tests/e2e/mobile.spec.ts", "tests/e2e/mobile-polish.spec.ts", "tests/e2e/mobile-primary-nav.visual.spec.ts"],
+        "expect": ["tests/expect/page.tsx.expect.ts", "tests/expect/record.expect.ts", "tests/expect/meetings.expect.ts"],
+        "native": [".maestro/smoke.yaml"]
+      }
+    },
+    {
+      "id": "release.artifacts",
+      "name": "Release artifacts and native packaging",
+      "description": "GitHub release, Electron, Android, iOS/TestFlight, and artifact proof pipeline.",
+      "category": "release",
+      "status": "active",
+      "userFacing": false,
+      "surfaces": ["ios", "android", "macos", "windows"],
+      "routes": ["/download"],
+      "paths": [
+        ".github/workflows/build-release.yml",
+        "electron/**",
+        "electron-builder.yml",
+        "release-assets/**",
+        "scripts/run-native-build.ts",
+        "scripts/check-release-artifacts.ts",
+        "scripts/patch-capacitor-deeplinks.ts"
+      ],
+      "proof": ["fast", "native-config", "release"],
+      "tests": {
+        "playwright": ["tests/e2e/app-download-page.smoke.spec.ts"]
+      },
+      "notes": [
+        "iOS and macOS build proof requires a macOS runner or device cloud.",
+        "Android proof can move to this server if emulator/KVM or a Proxmox VM is available."
+      ]
+    }
+  ]
+}

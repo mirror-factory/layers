@@ -61,6 +61,7 @@ const tiers: Record<TierId, TierSpec> = {
     description: 'Agent and pre-push oracle: no browser, no live AI browser proof.',
     commands: [
       { name: 'fast tests', command: 'pnpm test:fast' },
+      { name: 'feature proof plan', command: 'pnpm test:feature-proof', when: () => has('scripts/resolve-feature-proof.ts') },
       { name: 'manifest drift', command: 'npx tsx scripts/check-manifest-drift.ts', when: () => has('scripts/check-manifest-drift.ts') },
       { name: 'compliance', command: 'npx tsx scripts/check-compliance.ts', when: () => has('scripts/check-compliance.ts') },
       { name: 'expect coverage', command: 'npx tsx scripts/check-expect-coverage.ts', when: () => has('scripts/check-expect-coverage.ts') },
@@ -83,7 +84,8 @@ const tiers: Record<TierId, TierSpec> = {
       { name: 'mobile visual matrix', command: 'PLAYWRIGHT_FORCE_CHROMIUM=1 pnpm exec playwright test tests/e2e/*.visual.spec.ts tests/e2e/*.visual.test.ts tests/e2e/visual-regression.spec.ts --project=mobile-light --project=mobile-dark --output=test-results/tier-3/mobile-visual' },
       { name: 'desktop visual matrix', command: 'pnpm exec playwright test tests/e2e/*.visual.spec.ts tests/e2e/*.visual.test.ts tests/e2e/visual-regression.spec.ts --project=desktop-light --project=desktop-dark --output=test-results/tier-3/desktop-visual' },
       { name: 'mobile flows', command: 'PLAYWRIGHT_FORCE_CHROMIUM=1 pnpm exec playwright test tests/e2e/mobile.spec.ts --project=mobile-light --output=test-results/tier-3/mobile-flows' },
-      { name: 'expect AI browser proof', command: 'pnpm test:expect', when: () => has('scripts/run-expect-proof.ts') },
+      { name: 'expect AI browser proof', command: 'EXPECT_RUN=1 EXPECT_REQUIRED=1 pnpm test:expect', when: () => has('scripts/run-expect-proof.ts') },
+      { name: 'feature proof artifacts', command: 'pnpm test:feature-proof -- --enforce-artifacts', when: () => has('scripts/resolve-feature-proof.ts') },
       { name: 'design drift', command: 'npx tsx scripts/check-design-drift.ts', when: () => has('scripts/check-design-drift.ts') },
     ],
   },
@@ -105,6 +107,7 @@ const tiers: Record<TierId, TierSpec> = {
     label: 'Release and native artifact proof',
     description: 'Release-tag proof for web, native shells, and public assets.',
     commands: [
+      { name: 'runner capability', command: 'pnpm runner:doctor', when: () => has('scripts/check-runner-capability.ts') },
       { name: 'native config', command: 'pnpm test:native:config', when: () => has('scripts/check-native-config.ts') },
       { name: 'native smoke', command: 'pnpm test:native:smoke', when: () => has('scripts/run-native-smoke.ts') },
       { name: 'native build', command: 'pnpm build:native', when: () => has('scripts/run-native-build.ts') },

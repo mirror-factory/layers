@@ -99,6 +99,10 @@ export default function ProofPage() {
   const tests = packet?.testResults ?? [];
   const browser = packet?.browserArtifacts ?? [];
   const native = packet?.nativeArtifacts ?? [];
+  const featureProof = packet?.featureProof ?? null;
+  const matchedFeatures = featureProof?.matchedFeatures ?? [];
+  const requiredLanes = featureProof?.requiredLanes ?? [];
+  const unmatchedUserFacingFiles = featureProof?.unmatchedUserFacingFiles ?? [];
 
   return (
     <main style={{ maxWidth: 1180 }}>
@@ -134,10 +138,78 @@ export default function ProofPage() {
           <section style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: theme.space(3), marginBottom: theme.space(6) }}>
             <Metric label="Harness" value={<StatusPill pass={harnessPass} theme={theme} />} theme={theme} />
             <Metric label="Changed files" value={changedFiles.length} theme={theme} />
+            <Metric label="Matched features" value={matchedFeatures.length} theme={theme} />
+            <Metric label="Required proof" value={requiredLanes.length} theme={theme} />
             <Metric label="Evidence files" value={evidence.length} theme={theme} />
             <Metric label="Browser artifacts" value={browser.length} theme={theme} />
             <Metric label="Native artifacts" value={native.length} theme={theme} />
           </section>
+
+          <Card theme={theme}>
+            <div style={{ display: "flex", justifyContent: "space-between", gap: theme.space(3), alignItems: "baseline" }}>
+              <h2 style={{ color: theme.colors.text, margin: 0, fontSize: 17 }}>Feature proof requirements</h2>
+              <StatusPill pass={typeof featureProof?.pass === "boolean" ? featureProof.pass : null} theme={theme} />
+            </div>
+            <p style={{ color: theme.colors.textMuted, marginTop: theme.space(2) }}>
+              Registry-driven proof for this ticket. User-facing feature changes require Expect proof plus the lanes declared by the matched feature.
+            </p>
+            {matchedFeatures.length === 0 ? (
+              <p style={{ color: theme.colors.textMuted, marginBottom: 0 }}>No registered feature matched the latest changed-file scope.</p>
+            ) : (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: theme.space(3) }}>
+                {matchedFeatures.map(feature => (
+                  <div key={feature.id} style={{
+                    border: `1px solid ${theme.colors.border}`,
+                    borderRadius: theme.radius("sm"),
+                    padding: theme.space(3),
+                    background: theme.colors.bg,
+                  }}>
+                    <strong style={{ color: theme.colors.text }}>{feature.name}</strong>
+                    <div style={{ color: theme.colors.textMuted, fontFamily: theme.font.mono, fontSize: 12, marginTop: 4 }}>{feature.id}</div>
+                    <div style={{ color: theme.colors.textMuted, fontSize: 12, marginTop: 8 }}>
+                      {(feature.proof ?? []).join(" · ")}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            {requiredLanes.length > 0 && (
+              <div style={{ overflowX: "auto", marginTop: theme.space(4) }}>
+                <table style={{ width: "100%", minWidth: 680, borderCollapse: "collapse", fontSize: 12 }}>
+                  <thead>
+                    <tr style={{ color: theme.colors.textMuted, textAlign: "left", borderBottom: `1px solid ${theme.colors.border}` }}>
+                      <th style={{ padding: "8px 6px" }}>Lane</th>
+                      <th style={{ padding: "8px 6px" }}>Artifact</th>
+                      <th style={{ padding: "8px 6px" }}>Command</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {requiredLanes.map(lane => (
+                      <tr key={lane.id} style={{ borderBottom: `1px solid ${theme.colors.border}` }}>
+                        <td style={{ padding: "8px 6px", color: theme.colors.text }}>{lane.label}</td>
+                        <td style={{ padding: "8px 6px" }}>
+                          <StatusPill pass={typeof lane.satisfied === "boolean" ? lane.satisfied : null} theme={theme} />
+                        </td>
+                        <td style={{ padding: "8px 6px", color: theme.colors.textMuted, fontFamily: theme.font.mono }}>{lane.command}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+            {unmatchedUserFacingFiles.length > 0 && (
+              <pre style={{
+                marginTop: theme.space(3),
+                padding: theme.space(3),
+                borderRadius: theme.radius("sm"),
+                border: `1px solid ${theme.colors.border}`,
+                color: theme.colors.error,
+                background: theme.colors.bg,
+                overflow: "auto",
+                fontSize: 12,
+              }}>{unmatchedUserFacingFiles.join("\n")}</pre>
+            )}
+          </Card>
 
           <Card theme={theme}>
             <h2 style={{ color: theme.colors.text, marginTop: 0, fontSize: 17 }}>Review scope</h2>

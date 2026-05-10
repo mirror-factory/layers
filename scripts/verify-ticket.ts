@@ -72,6 +72,7 @@ function componentVisualSpec(file: string): string | null {
 
 function commandSetFor(files: string[]): CommandSpec[] {
   const commands: CommandSpec[] = [
+    { name: 'feature proof plan', command: 'pnpm test:feature-proof' },
     { name: 'fast deterministic tests', command: 'pnpm test:fast' },
   ];
 
