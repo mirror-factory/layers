@@ -87,6 +87,7 @@ The ticket verifier looks at changed files and selects focused proof:
 | AI/tool files | eval stubs |
 | `components/**` | matching component visual spec when present |
 | app pages/layout/nav | smoke proof and mobile proof |
+| `tests/e2e/smoke.spec.ts` | smoke proof |
 
 Playwright Chromium is installed lazily only when the selected proof needs a
 browser. Docs, CI, registry, and config-only changes should not pay that cost.

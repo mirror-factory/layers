@@ -82,6 +82,7 @@ function commandSetFor(files: string[]): CommandSpec[] {
     file.startsWith('app/') ||
     file.startsWith('components/') ||
     file.startsWith('styles/') ||
+    file === 'tests/e2e/smoke.spec.ts' ||
     file === 'DESIGN.md'
   );
   const touchesMobile = files.some(file =>
