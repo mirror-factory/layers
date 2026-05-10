@@ -1,0 +1,511 @@
+{
+  "generatedAt": "2026-05-10T12:51:51.371Z",
+  "projectHarness": {
+    "generatedAt": "2026-05-10T12:51:51.379Z",
+    "profilePath": ".ai-dev-kit/project-profile.json",
+    "project": {
+      "id": "layers",
+      "name": "Layers",
+      "repo": "mirror-factory/layers",
+      "primaryDashboardUrl": "https://work.hustletogether.com/projects/layers",
+      "linearProjectSlug": "layers-786bd350532f"
+    },
+    "branchModel": {
+      "integration": "development",
+      "releaseCandidate": "staging",
+      "production": "main",
+      "agentBranchPrefix": "agent/",
+      "requiredPrTarget": "development"
+    },
+    "pass": true,
+    "checks": [
+      {
+        "id": "project-profile.valid-json",
+        "label": "Project profile JSON",
+        "status": "pass",
+        "detail": "Profile parsed.",
+        "path": ".ai-dev-kit/project-profile.json"
+      },
+      {
+        "id": "project.id",
+        "label": "Project identity",
+        "status": "pass",
+        "detail": "Layers (mirror-factory/layers)",
+        "path": ".ai-dev-kit/project-profile.json"
+      },
+      {
+        "id": "branch.integration",
+        "label": "Integration branch",
+        "status": "pass",
+        "detail": "Agents target development.",
+        "path": ".ai-dev-kit/project-profile.json"
+      },
+      {
+        "id": "branch.production",
+        "label": "Production branch",
+        "status": "pass",
+        "detail": "Production is main.",
+        "path": ".ai-dev-kit/project-profile.json"
+      },
+      {
+        "id": "tool.typescript",
+        "label": "TypeScript",
+        "status": "pass",
+        "detail": "typecheck script present.",
+        "path": "package.json"
+      },
+      {
+        "id": "tool.vitest",
+        "label": "Vitest",
+        "status": "pass",
+        "detail": "Vitest and test:fast present.",
+        "path": "package.json"
+      },
+      {
+        "id": "tool.playwright",
+        "label": "Playwright",
+        "status": "pass",
+        "detail": "Playwright config and e2e tests present.",
+        "path": "playwright.config.ts"
+      },
+      {
+        "id": "tool.expect",
+        "label": "Expect",
+        "status": "pass",
+        "detail": "Expect dependency and flows present.",
+        "path": "tests/expect"
+      },
+      {
+        "id": "tool.api-tests",
+        "label": "API tests",
+        "status": "pass",
+        "detail": "API contract tests present.",
+        "path": "tests"
+      },
+      {
+        "id": "tool.proof",
+        "label": "Proof packet generator",
+        "status": "pass",
+        "detail": "Proof packet command present.",
+        "path": "scripts/generate-proof-packet.ts"
+      },
+      {
+        "id": "design.tokens",
+        "label": "Design tokens",
+        "status": "pass",
+        "detail": "Design tokens declared.",
+        "path": ".ai-dev-kit/registries/design-tokens.yaml"
+      },
+      {
+        "id": "design.system",
+        "label": "Design system registry",
+        "status": "pass",
+        "detail": "Design-system registry declared.",
+        "path": ".ai-dev-kit/registries/design-system.yaml"
+      },
+      {
+        "id": "design.no-inference",
+        "label": "No-inference design mode",
+        "status": "pass",
+        "detail": "AI design inference is disabled.",
+        "path": ".ai-dev-kit/project-profile.json"
+      },
+      {
+        "id": "service.ai-gateway",
+        "label": "Vercel AI Gateway",
+        "status": "pass",
+        "detail": "AI Gateway dependency present or service disabled.",
+        "path": "package.json"
+      },
+      {
+        "id": "service.supabase",
+        "label": "Supabase",
+        "status": "pass",
+        "detail": "Supabase dependency present or service disabled.",
+        "path": "package.json"
+      },
+      {
+        "id": "service.resend",
+        "label": "Resend",
+        "status": "pass",
+        "detail": "Resend dependency present or service disabled.",
+        "path": "package.json"
+      },
+      {
+        "id": "service.stripe",
+        "label": "Stripe",
+        "status": "pass",
+        "detail": "Stripe dependency present or service disabled.",
+        "path": "package.json"
+      },
+      {
+        "id": "service.transcription",
+        "label": "Transcription vendors",
+        "status": "pass",
+        "detail": "Transcription dependencies present or services disabled.",
+        "path": "package.json"
+      },
+      {
+        "id": "platform.capacitor",
+        "label": "Capacitor mobile",
+        "status": "pass",
+        "detail": "Capacitor mobile dependencies present.",
+        "path": "package.json"
+      },
+      {
+        "id": "platform.electron",
+        "label": "Electron desktop",
+        "status": "pass",
+        "detail": "Electron dependency present.",
+        "path": "package.json"
+      },
+      {
+        "id": "platform.maestro",
+        "label": "Native flow harness",
+        "status": "pass",
+        "detail": "Native flow harness present or not required yet.",
+        "path": ".maestro"
+      },
+      {
+        "id": "platform.native-config",
+        "label": "Native config proof",
+        "status": "pass",
+        "detail": "Native config proof command present.",
+        "path": "scripts/check-native-config.ts"
+      },
+      {
+        "id": "platform.native-smoke",
+        "label": "Native smoke proof",
+        "status": "pass",
+        "detail": "Native smoke proof command present.",
+        "path": "scripts/run-native-smoke.ts"
+      },
+      {
+        "id": "platform.release-artifacts",
+        "label": "Release artifact proof",
+        "status": "pass",
+        "detail": "Release artifact proof command present.",
+        "path": "scripts/check-release-artifacts.ts"
+      },
+      {
+        "id": "dashboard.dev-kit",
+        "label": "Dev-kit dashboard",
+        "status": "pass",
+        "detail": "Dev-kit dashboard routes present.",
+        "path": "app/dev-kit"
+      },
+      {
+        "id": "dashboard.project",
+        "label": "Project control panel",
+        "status": "pass",
+        "detail": "Project control panel present.",
+        "path": "app/dev-kit/project/page.tsx"
+      },
+      {
+        "id": "dashboard.proof",
+        "label": "Proof center",
+        "status": "pass",
+        "detail": "Proof center routes present.",
+        "path": "app/dev-kit/proof/page.tsx"
+      },
+      {
+        "id": "proof.latest-evidence",
+        "label": "Latest local evidence",
+        "status": "pass",
+        "detail": "Latest evidence updated 2026-05-10T12:51:48.738Z.",
+        "path": ".evidence"
+      }
+    ],
+    "enabledPlatforms": [
+      "web",
+      "ios",
+      "android",
+      "macos",
+      "windows"
+    ],
+    "enabledServices": [
+      "supabase",
+      "vercelAiGateway",
+      "resend",
+      "stripe",
+      "assemblyai",
+      "deepgram",
+      "langfuse"
+    ],
+    "requiredTools": [
+      "typescript",
+      "vitest",
+      "playwright",
+      "expect"
+    ]
+  },
+  "git": {
+    "branch": "agent/PROD-439-1778416395",
+    "head": "2a85762",
+    "status": "M app/dev-kit/proof/page.tsx\n M playwright-report/index.html\n M test-results/playwright-no-run.json",
+    "changedFiles": [
+      "app/dev-kit/proof/page.tsx",
+      "playwright-report/index.html",
+      "test-results/playwright-no-run.json"
+    ]
+  },
+  "summary": {
+    "expectProof": {
+      "path": ".evidence/expect-proof.json",
+      "pass": true,
+      "mode": "expect-cli-fallback",
+      "skipped": false,
+      "required": true,
+      "runAt": "2026-05-10T12:51:33.396Z",
+      "durationMs": 161982,
+      "exitCode": 1,
+      "booleanFields": {
+        "pass": true,
+        "skipped": false,
+        "required": true
+      },
+      "tuiTimedOutWithoutSteps": true,
+      "fallbackPass": true,
+      "fallbackCommandCount": 5,
+      "fallbackFailedCommandCount": 0
+    },
+    "tiers": [
+      {
+        "path": ".evidence/tier-2.json",
+        "pass": true,
+        "runAt": "2026-05-10T12:38:25.159Z",
+        "booleanFields": {
+          "pass": true
+        }
+      },
+      {
+        "path": ".evidence/tier-latest.json",
+        "pass": true,
+        "runAt": "2026-05-10T12:38:25.159Z",
+        "booleanFields": {
+          "pass": true
+        }
+      }
+    ]
+  },
+  "evidence": [
+    {
+      "path": ".evidence/expect-proof.json",
+      "bytes": 24356,
+      "modifiedAt": "2026-05-10T12:51:33.396Z"
+    },
+    {
+      "path": ".evidence/feature-proof-plan.json",
+      "bytes": 3155,
+      "modifiedAt": "2026-05-10T12:51:48.739Z"
+    },
+    {
+      "path": ".evidence/mobile/ipad-pro-app-layout.png",
+      "bytes": 380549,
+      "modifiedAt": "2026-05-10T12:38:19.119Z"
+    },
+    {
+      "path": ".evidence/mobile/ipad-pro-button-tap.png",
+      "bytes": 376915,
+      "modifiedAt": "2026-05-10T12:38:24.377Z"
+    },
+    {
+      "path": ".evidence/mobile/ipad-pro-landing.png",
+      "bytes": 370724,
+      "modifiedAt": "2026-05-10T12:38:15.596Z"
+    },
+    {
+      "path": ".evidence/mobile/iphone-15-pro-app-layout.png",
+      "bytes": 200273,
+      "modifiedAt": "2026-05-10T12:38:00.966Z"
+    },
+    {
+      "path": ".evidence/mobile/iphone-15-pro-button-tap.png",
+      "bytes": 200192,
+      "modifiedAt": "2026-05-10T12:38:04.775Z"
+    },
+    {
+      "path": ".evidence/mobile/iphone-15-pro-landing.png",
+      "bytes": 193130,
+      "modifiedAt": "2026-05-10T12:37:58.030Z"
+    },
+    {
+      "path": ".evidence/mobile/pixel-8-pro-app-layout.png",
+      "bytes": 304894,
+      "modifiedAt": "2026-05-10T12:38:09.730Z"
+    },
+    {
+      "path": ".evidence/mobile/pixel-8-pro-button-tap.png",
+      "bytes": 302777,
+      "modifiedAt": "2026-05-10T12:38:13.661Z"
+    },
+    {
+      "path": ".evidence/mobile/pixel-8-pro-landing.png",
+      "bytes": 297350,
+      "modifiedAt": "2026-05-10T12:38:06.562Z"
+    },
+    {
+      "path": ".evidence/project-harness.json",
+      "bytes": 6391,
+      "modifiedAt": "2026-05-10T12:36:33.350Z"
+    },
+    {
+      "path": ".evidence/proof-packet.json",
+      "bytes": 13638,
+      "modifiedAt": "2026-05-10T12:40:16.940Z"
+    },
+    {
+      "path": ".evidence/ticket-proof.json",
+      "bytes": 1330,
+      "modifiedAt": "2026-05-10T12:38:25.119Z"
+    },
+    {
+      "path": ".evidence/tier-2.json",
+      "bytes": 423,
+      "modifiedAt": "2026-05-10T12:38:25.160Z"
+    },
+    {
+      "path": ".evidence/tier-latest.json",
+      "bytes": 423,
+      "modifiedAt": "2026-05-10T12:38:25.160Z"
+    }
+  ],
+  "featureProof": {
+    "generatedAt": "2026-05-10T12:51:48.738Z",
+    "registryPath": ".ai-dev-kit/registries/feature-proof.json",
+    "policy": {
+      "requireRegistryForUserFacingChanges": true,
+      "expectPolicy": "Expect is required for every ticket that touches a registered user-facing Layers feature.",
+      "defaultUserFacingProof": [
+        "fast",
+        "playwright",
+        "expect"
+      ],
+      "defaultNativeProof": [
+        "native-config",
+        "native-device"
+      ]
+    },
+    "changedFiles": [
+      "app/dev-kit/proof/page.tsx",
+      "playwright-report/index.html",
+      "test-results/playwright-no-run.json"
+    ],
+    "matchedFeatures": [
+      {
+        "id": "dashboard.devkit",
+        "name": "DevKit dashboard and proof center",
+        "description": "Project-local operator dashboard, registries, proof packet views, and run surfaces.",
+        "category": "operator-dashboard",
+        "status": "active",
+        "userFacing": true,
+        "surfaces": [
+          "web"
+        ],
+        "routes": [
+          "/dev-kit",
+          "/dev-kit/proof",
+          "/dev-kit/project"
+        ],
+        "paths": [
+          "app/dev-kit/**",
+          "app/api/dev-kit/**",
+          "components/ai-debug-panel.tsx",
+          "lib/ai-dev-kit/**",
+          "lib/starter-control-plane.ts",
+          "lib/dashboard-data.ts",
+          ".ai-dev-kit/registries/**"
+        ],
+        "proof": [
+          "fast",
+          "playwright",
+          "expect"
+        ],
+        "tests": {
+          "playwright": [
+            "tests/e2e/app-dev-kit-page.smoke.spec.ts",
+            "tests/e2e/app-dev-kit-runs-page.smoke.spec.ts"
+          ],
+          "expect": [
+            "tests/expect/app-dev-kit-page.md",
+            "tests/expect/app-dev-kit-runs-page.md"
+          ]
+        },
+        "matchedPaths": [
+          "app/dev-kit/proof/page.tsx"
+        ]
+      }
+    ],
+    "unmatchedUserFacingFiles": [],
+    "requiredLanes": [
+      {
+        "id": "expect",
+        "label": "Expect AI user-flow proof",
+        "command": "EXPECT_RUN=1 EXPECT_REQUIRED=1 EXPECT_AGENT=codex pnpm test:expect",
+        "evidence": [
+          ".evidence/expect-proof.json",
+          ".expect/replays"
+        ],
+        "description": "Instruction-driven AI browser proof for user-facing feature behavior.",
+        "missingEvidence": []
+      },
+      {
+        "id": "fast",
+        "label": "Fast deterministic tests",
+        "command": "pnpm test:fast",
+        "evidence": [
+          ".evidence/tier-1.json",
+          "test-results/unit.json"
+        ],
+        "description": "Unit, contract, and non-browser regression checks.",
+        "missingEvidence": []
+      },
+      {
+        "id": "playwright",
+        "label": "Playwright browser proof",
+        "command": "pnpm verify:tier 2",
+        "evidence": [
+          ".evidence/ticket-proof.json",
+          "playwright-report/index.html"
+        ],
+        "description": "Focused route, visual, and mobile browser proof for touched surfaces.",
+        "missingEvidence": []
+      }
+    ],
+    "commands": [
+      "EXPECT_RUN=1 EXPECT_REQUIRED=1 EXPECT_AGENT=codex pnpm test:expect",
+      "pnpm test:fast",
+      "pnpm verify:tier 2"
+    ],
+    "enforcedArtifactLanes": [],
+    "pass": true,
+    "blocked": {
+      "unregisteredUserFacingChange": false,
+      "missingArtifactLanes": []
+    }
+  },
+  "testResults": [
+    {
+      "path": "test-results/.last-run.json",
+      "bytes": 45,
+      "modifiedAt": "2026-05-10T12:38:25.100Z"
+    },
+    {
+      "path": "test-results/playwright-no-run.json",
+      "bytes": 15658,
+      "modifiedAt": "2026-05-10T12:38:25.099Z"
+    }
+  ],
+  "browserArtifacts": [
+    {
+      "path": "playwright-report/index.html",
+      "bytes": 529112,
+      "modifiedAt": "2026-05-10T12:38:25.098Z"
+    }
+  ],
+  "nativeArtifacts": [],
+  "starter": {
+    "scorecard": ".ai-starter/runs/latest-scorecard.json",
+    "browserProof": ".ai-starter/manifests/browser-proof.json"
+  }
+}

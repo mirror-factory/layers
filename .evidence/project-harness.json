@@ -1,0 +1,239 @@
+{
+  "generatedAt": "2026-05-10T12:36:33.351Z",
+  "profilePath": ".ai-dev-kit/project-profile.json",
+  "project": {
+    "id": "layers",
+    "name": "Layers",
+    "repo": "mirror-factory/layers",
+    "primaryDashboardUrl": "https://work.hustletogether.com/projects/layers",
+    "linearProjectSlug": "layers-786bd350532f"
+  },
+  "branchModel": {
+    "integration": "development",
+    "releaseCandidate": "staging",
+    "production": "main",
+    "agentBranchPrefix": "agent/",
+    "requiredPrTarget": "development"
+  },
+  "pass": true,
+  "checks": [
+    {
+      "id": "project-profile.valid-json",
+      "label": "Project profile JSON",
+      "status": "pass",
+      "detail": "Profile parsed.",
+      "path": ".ai-dev-kit/project-profile.json"
+    },
+    {
+      "id": "project.id",
+      "label": "Project identity",
+      "status": "pass",
+      "detail": "Layers (mirror-factory/layers)",
+      "path": ".ai-dev-kit/project-profile.json"
+    },
+    {
+      "id": "branch.integration",
+      "label": "Integration branch",
+      "status": "pass",
+      "detail": "Agents target development.",
+      "path": ".ai-dev-kit/project-profile.json"
+    },
+    {
+      "id": "branch.production",
+      "label": "Production branch",
+      "status": "pass",
+      "detail": "Production is main.",
+      "path": ".ai-dev-kit/project-profile.json"
+    },
+    {
+      "id": "tool.typescript",
+      "label": "TypeScript",
+      "status": "pass",
+      "detail": "typecheck script present.",
+      "path": "package.json"
+    },
+    {
+      "id": "tool.vitest",
+      "label": "Vitest",
+      "status": "pass",
+      "detail": "Vitest and test:fast present.",
+      "path": "package.json"
+    },
+    {
+      "id": "tool.playwright",
+      "label": "Playwright",
+      "status": "pass",
+      "detail": "Playwright config and e2e tests present.",
+      "path": "playwright.config.ts"
+    },
+    {
+      "id": "tool.expect",
+      "label": "Expect",
+      "status": "pass",
+      "detail": "Expect dependency and flows present.",
+      "path": "tests/expect"
+    },
+    {
+      "id": "tool.api-tests",
+      "label": "API tests",
+      "status": "pass",
+      "detail": "API contract tests present.",
+      "path": "tests"
+    },
+    {
+      "id": "tool.proof",
+      "label": "Proof packet generator",
+      "status": "pass",
+      "detail": "Proof packet command present.",
+      "path": "scripts/generate-proof-packet.ts"
+    },
+    {
+      "id": "design.tokens",
+      "label": "Design tokens",
+      "status": "pass",
+      "detail": "Design tokens declared.",
+      "path": ".ai-dev-kit/registries/design-tokens.yaml"
+    },
+    {
+      "id": "design.system",
+      "label": "Design system registry",
+      "status": "pass",
+      "detail": "Design-system registry declared.",
+      "path": ".ai-dev-kit/registries/design-system.yaml"
+    },
+    {
+      "id": "design.no-inference",
+      "label": "No-inference design mode",
+      "status": "pass",
+      "detail": "AI design inference is disabled.",
+      "path": ".ai-dev-kit/project-profile.json"
+    },
+    {
+      "id": "service.ai-gateway",
+      "label": "Vercel AI Gateway",
+      "status": "pass",
+      "detail": "AI Gateway dependency present or service disabled.",
+      "path": "package.json"
+    },
+    {
+      "id": "service.supabase",
+      "label": "Supabase",
+      "status": "pass",
+      "detail": "Supabase dependency present or service disabled.",
+      "path": "package.json"
+    },
+    {
+      "id": "service.resend",
+      "label": "Resend",
+      "status": "pass",
+      "detail": "Resend dependency present or service disabled.",
+      "path": "package.json"
+    },
+    {
+      "id": "service.stripe",
+      "label": "Stripe",
+      "status": "pass",
+      "detail": "Stripe dependency present or service disabled.",
+      "path": "package.json"
+    },
+    {
+      "id": "service.transcription",
+      "label": "Transcription vendors",
+      "status": "pass",
+      "detail": "Transcription dependencies present or services disabled.",
+      "path": "package.json"
+    },
+    {
+      "id": "platform.capacitor",
+      "label": "Capacitor mobile",
+      "status": "pass",
+      "detail": "Capacitor mobile dependencies present.",
+      "path": "package.json"
+    },
+    {
+      "id": "platform.electron",
+      "label": "Electron desktop",
+      "status": "pass",
+      "detail": "Electron dependency present.",
+      "path": "package.json"
+    },
+    {
+      "id": "platform.maestro",
+      "label": "Native flow harness",
+      "status": "pass",
+      "detail": "Native flow harness present or not required yet.",
+      "path": ".maestro"
+    },
+    {
+      "id": "platform.native-config",
+      "label": "Native config proof",
+      "status": "pass",
+      "detail": "Native config proof command present.",
+      "path": "scripts/check-native-config.ts"
+    },
+    {
+      "id": "platform.native-smoke",
+      "label": "Native smoke proof",
+      "status": "pass",
+      "detail": "Native smoke proof command present.",
+      "path": "scripts/run-native-smoke.ts"
+    },
+    {
+      "id": "platform.release-artifacts",
+      "label": "Release artifact proof",
+      "status": "pass",
+      "detail": "Release artifact proof command present.",
+      "path": "scripts/check-release-artifacts.ts"
+    },
+    {
+      "id": "dashboard.dev-kit",
+      "label": "Dev-kit dashboard",
+      "status": "pass",
+      "detail": "Dev-kit dashboard routes present.",
+      "path": "app/dev-kit"
+    },
+    {
+      "id": "dashboard.project",
+      "label": "Project control panel",
+      "status": "pass",
+      "detail": "Project control panel present.",
+      "path": "app/dev-kit/project/page.tsx"
+    },
+    {
+      "id": "dashboard.proof",
+      "label": "Proof center",
+      "status": "pass",
+      "detail": "Proof center routes present.",
+      "path": "app/dev-kit/proof/page.tsx"
+    },
+    {
+      "id": "proof.latest-evidence",
+      "label": "Latest local evidence",
+      "status": "pass",
+      "detail": "Latest evidence updated 2026-05-10T12:36:29.216Z.",
+      "path": ".evidence"
+    }
+  ],
+  "enabledPlatforms": [
+    "web",
+    "ios",
+    "android",
+    "macos",
+    "windows"
+  ],
+  "enabledServices": [
+    "supabase",
+    "vercelAiGateway",
+    "resend",
+    "stripe",
+    "assemblyai",
+    "deepgram",
+    "langfuse"
+  ],
+  "requiredTools": [
+    "typescript",
+    "vitest",
+    "playwright",
+    "expect"
+  ]
+}
