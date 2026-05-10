@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-10T13:34:57.806Z",
+  "generatedAt": "2026-05-10T13:39:21.430Z",
   "registryPath": ".ai-dev-kit/registries/feature-proof.json",
   "policy": {
     "requireRegistryForUserFacingChanges": true,
@@ -18,7 +18,10 @@
     ".evidence/expect-proof.json",
     ".evidence/feature-proof-plan.json",
     ".evidence/proof-packet.json",
-    "app/dev-kit/runs/runs-list.tsx"
+    ".evidence/ticket-proof.json",
+    ".evidence/tier-2.json",
+    "app/dev-kit/runs/runs-list.tsx",
+    "playwright-report/index.html"
   ],
   "matchedFeatures": [
     {
