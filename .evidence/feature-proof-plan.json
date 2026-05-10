@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-10T13:07:21.042Z",
+  "generatedAt": "2026-05-10T13:34:57.806Z",
   "registryPath": ".ai-dev-kit/registries/feature-proof.json",
   "policy": {
     "requireRegistryForUserFacingChanges": true,
@@ -15,6 +15,9 @@
     ]
   },
   "changedFiles": [
+    ".evidence/expect-proof.json",
+    ".evidence/feature-proof-plan.json",
+    ".evidence/proof-packet.json",
     "app/dev-kit/runs/runs-list.tsx"
   ],
   "matchedFeatures": [

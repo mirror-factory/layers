@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-05-10T13:23:48.778Z",
+  "generatedAt": "2026-05-10T13:38:01.515Z",
   "projectHarness": {
-    "generatedAt": "2026-05-10T13:23:48.780Z",
+    "generatedAt": "2026-05-10T13:38:01.519Z",
     "profilePath": ".ai-dev-kit/project-profile.json",
     "project": {
       "id": "layers",
@@ -212,7 +212,7 @@
         "id": "proof.latest-evidence",
         "label": "Latest local evidence",
         "status": "pass",
-        "detail": "Latest evidence updated 2026-05-10T13:23:31.015Z.",
+        "detail": "Latest evidence updated 2026-05-10T13:37:50.586Z.",
         "path": ".evidence"
       }
     ],
@@ -241,52 +241,151 @@
   },
   "git": {
     "branch": "agent/PROD-442-1778418280",
-    "head": "48e008f",
-    "status": "M app/dev-kit/runs/runs-list.tsx",
+    "head": "77f7d1d",
+    "status": "M .evidence/expect-proof.json\n M .evidence/feature-proof-plan.json\n M playwright-report/index.html\n M test-results/playwright-no-run.json",
     "changedFiles": [
-      "app/dev-kit/runs/runs-list.tsx"
+      ".evidence/expect-proof.json",
+      ".evidence/feature-proof-plan.json",
+      "playwright-report/index.html",
+      "test-results/playwright-no-run.json"
     ]
   },
   "summary": {
     "expectProof": {
       "path": ".evidence/expect-proof.json",
-      "pass": false,
-      "mode": "expect-tui",
+      "pass": true,
+      "mode": "expect-cli-fallback",
       "skipped": false,
       "required": true,
-      "runAt": "2026-05-10T13:23:31.016Z",
-      "durationMs": 308868,
+      "runAt": "2026-05-10T13:34:13.502Z",
+      "durationMs": 341915,
       "exitCode": 1,
       "booleanFields": {
-        "pass": false,
+        "pass": true,
         "skipped": false,
         "required": true
       },
       "tuiTimedOutWithoutSteps": true,
-      "fallbackPass": false,
-      "fallbackCommandCount": 1,
-      "fallbackFailedCommandCount": 1
-    }
+      "fallbackPass": true,
+      "fallbackCommandCount": 5,
+      "fallbackFailedCommandCount": 0
+    },
+    "tiers": [
+      {
+        "path": ".evidence/tier-0.json",
+        "pass": true,
+        "runAt": "2026-05-10T13:24:46.020Z",
+        "booleanFields": {
+          "pass": true
+        }
+      },
+      {
+        "path": ".evidence/tier-2.json",
+        "pass": true,
+        "runAt": "2026-05-10T13:37:50.588Z",
+        "booleanFields": {
+          "pass": true
+        }
+      },
+      {
+        "path": ".evidence/tier-latest.json",
+        "pass": true,
+        "runAt": "2026-05-10T13:37:50.588Z",
+        "booleanFields": {
+          "pass": true
+        }
+      }
+    ]
   },
   "evidence": [
     {
       "path": ".evidence/expect-proof.json",
-      "bytes": 23126,
-      "modifiedAt": "2026-05-10T13:23:31.015Z"
+      "bytes": 16109,
+      "modifiedAt": "2026-05-10T13:34:13.502Z"
     },
     {
       "path": ".evidence/feature-proof-plan.json",
-      "bytes": 3084,
-      "modifiedAt": "2026-05-10T13:07:21.041Z"
+      "bytes": 3195,
+      "modifiedAt": "2026-05-10T13:34:57.807Z"
+    },
+    {
+      "path": ".evidence/mobile/ipad-pro-app-layout.png",
+      "bytes": 380658,
+      "modifiedAt": "2026-05-10T13:37:45.047Z"
+    },
+    {
+      "path": ".evidence/mobile/ipad-pro-button-tap.png",
+      "bytes": 377354,
+      "modifiedAt": "2026-05-10T13:37:49.874Z"
+    },
+    {
+      "path": ".evidence/mobile/ipad-pro-landing.png",
+      "bytes": 370151,
+      "modifiedAt": "2026-05-10T13:37:41.729Z"
+    },
+    {
+      "path": ".evidence/mobile/iphone-15-pro-app-layout.png",
+      "bytes": 200280,
+      "modifiedAt": "2026-05-10T13:37:25.514Z"
+    },
+    {
+      "path": ".evidence/mobile/iphone-15-pro-button-tap.png",
+      "bytes": 200316,
+      "modifiedAt": "2026-05-10T13:37:29.765Z"
+    },
+    {
+      "path": ".evidence/mobile/iphone-15-pro-landing.png",
+      "bytes": 200253,
+      "modifiedAt": "2026-05-10T13:37:22.293Z"
+    },
+    {
+      "path": ".evidence/mobile/pixel-8-pro-app-layout.png",
+      "bytes": 303854,
+      "modifiedAt": "2026-05-10T13:37:35.429Z"
+    },
+    {
+      "path": ".evidence/mobile/pixel-8-pro-button-tap.png",
+      "bytes": 303450,
+      "modifiedAt": "2026-05-10T13:37:39.677Z"
+    },
+    {
+      "path": ".evidence/mobile/pixel-8-pro-landing.png",
+      "bytes": 296441,
+      "modifiedAt": "2026-05-10T13:37:31.883Z"
     },
     {
       "path": ".evidence/project-harness.json",
-      "bytes": 6375,
-      "modifiedAt": "2026-05-10T13:05:00.456Z"
+      "bytes": 6391,
+      "modifiedAt": "2026-05-10T13:35:04.207Z"
+    },
+    {
+      "path": ".evidence/proof-packet.json",
+      "bytes": 12003,
+      "modifiedAt": "2026-05-10T13:23:48.834Z"
+    },
+    {
+      "path": ".evidence/ticket-proof.json",
+      "bytes": 1366,
+      "modifiedAt": "2026-05-10T13:37:50.472Z"
+    },
+    {
+      "path": ".evidence/tier-0.json",
+      "bytes": 1055,
+      "modifiedAt": "2026-05-10T13:24:46.019Z"
+    },
+    {
+      "path": ".evidence/tier-2.json",
+      "bytes": 423,
+      "modifiedAt": "2026-05-10T13:37:50.587Z"
+    },
+    {
+      "path": ".evidence/tier-latest.json",
+      "bytes": 423,
+      "modifiedAt": "2026-05-10T13:37:50.587Z"
     }
   ],
   "featureProof": {
-    "generatedAt": "2026-05-10T13:07:21.042Z",
+    "generatedAt": "2026-05-10T13:34:57.806Z",
     "registryPath": ".ai-dev-kit/registries/feature-proof.json",
     "policy": {
       "requireRegistryForUserFacingChanges": true,
@@ -302,6 +401,9 @@
       ]
     },
     "changedFiles": [
+      ".evidence/expect-proof.json",
+      ".evidence/feature-proof-plan.json",
+      ".evidence/proof-packet.json",
       "app/dev-kit/runs/runs-list.tsx"
     ],
     "matchedFeatures": [
@@ -401,19 +503,19 @@
     {
       "path": "test-results/.last-run.json",
       "bytes": 45,
-      "modifiedAt": "2026-05-10T13:04:40.029Z"
+      "modifiedAt": "2026-05-10T13:37:50.453Z"
     },
     {
       "path": "test-results/playwright-no-run.json",
-      "bytes": 144761,
-      "modifiedAt": "2026-05-10T13:04:40.029Z"
+      "bytes": 15658,
+      "modifiedAt": "2026-05-10T13:37:50.451Z"
     }
   ],
   "browserArtifacts": [
     {
       "path": "playwright-report/index.html",
-      "bytes": 561044,
-      "modifiedAt": "2026-05-10T13:04:40.017Z"
+      "bytes": 529156,
+      "modifiedAt": "2026-05-10T13:37:50.449Z"
     }
   ],
   "nativeArtifacts": [],

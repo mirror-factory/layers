@@ -1,0 +1,49 @@
+{
+  "runAt": "2026-05-10T13:37:50.473Z",
+  "pass": true,
+  "changedFiles": [
+    ".evidence/expect-proof.json",
+    ".evidence/feature-proof-plan.json",
+    ".evidence/proof-packet.json",
+    "app/dev-kit/runs/runs-list.tsx"
+  ],
+  "results": [
+    {
+      "name": "feature proof plan",
+      "command": "pnpm test:feature-proof",
+      "pass": true,
+      "exitCode": 0,
+      "durationMs": 909
+    },
+    {
+      "name": "fast deterministic tests",
+      "command": "pnpm test:fast",
+      "pass": true,
+      "exitCode": 0,
+      "durationMs": 23183
+    },
+    {
+      "name": "Playwright Chromium install",
+      "command": "npx playwright install chromium",
+      "pass": true,
+      "exitCode": 0,
+      "durationMs": 878
+    },
+    {
+      "name": "route smoke proof",
+      "command": "PLAYWRIGHT_FORCE_CHROMIUM=1 PLAYWRIGHT_DISABLE_VIDEO=1 pnpm exec playwright test tests/e2e/smoke.spec.ts --project=desktop-light --project=mobile-light --workers=1",
+      "needsBrowser": true,
+      "pass": true,
+      "exitCode": 0,
+      "durationMs": 93215
+    },
+    {
+      "name": "mobile proof",
+      "command": "PLAYWRIGHT_FORCE_CHROMIUM=1 PLAYWRIGHT_DISABLE_VIDEO=1 pnpm exec playwright test tests/e2e/mobile.spec.ts --project=mobile-light --workers=1",
+      "needsBrowser": true,
+      "pass": true,
+      "exitCode": 0,
+      "durationMs": 55326
+    }
+  ]
+}
