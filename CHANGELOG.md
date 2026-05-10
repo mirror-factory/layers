@@ -7,12 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.1.91] — 2026-05-10
-
-### Other
-- PROD-439 add proof center operator copy (`4fdf371`)
-
-
 ## [0.1.90] — 2026-05-10
 
 ### Fixed
