@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-05-10T15:12:18.399Z",
+  "generatedAt": "2026-05-10T15:30:46.093Z",
   "projectHarness": {
-    "generatedAt": "2026-05-10T15:12:18.402Z",
+    "generatedAt": "2026-05-10T15:30:46.096Z",
     "profilePath": ".ai-dev-kit/project-profile.json",
     "project": {
       "id": "layers",
@@ -212,7 +212,7 @@
         "id": "proof.latest-evidence",
         "label": "Latest local evidence",
         "status": "pass",
-        "detail": "Latest evidence updated 2026-05-10T15:12:16.948Z.",
+        "detail": "Latest evidence updated 2026-05-10T15:30:44.836Z.",
         "path": ".evidence"
       }
     ],
@@ -241,13 +241,9 @@
   },
   "git": {
     "branch": "agent/PROD-448-1778425274",
-    "head": "1c975f1",
-    "status": "M app/dev-kit/tools/page.tsx\n M playwright-report/index.html\n M test-results/playwright-no-run.json",
-    "changedFiles": [
-      "app/dev-kit/tools/page.tsx",
-      "playwright-report/index.html",
-      "test-results/playwright-no-run.json"
-    ]
+    "head": "2ddc41a",
+    "status": "",
+    "changedFiles": []
   },
   "summary": {
     "expectProof": {
@@ -271,6 +267,14 @@
     },
     "tiers": [
       {
+        "path": ".evidence/tier-0.json",
+        "pass": true,
+        "runAt": "2026-05-10T15:29:42.360Z",
+        "booleanFields": {
+          "pass": true
+        }
+      },
+      {
         "path": ".evidence/tier-1.json",
         "pass": true,
         "runAt": "2026-05-10T15:04:17.132Z",
@@ -287,104 +291,236 @@
         }
       },
       {
+        "path": ".evidence/tier-3.json",
+        "pass": true,
+        "runAt": "2026-05-09T22:25:01.696Z",
+        "booleanFields": {
+          "pass": true
+        }
+      },
+      {
+        "path": ".evidence/tier-4.json",
+        "pass": true,
+        "runAt": "2026-05-09T20:01:40.875Z",
+        "booleanFields": {
+          "pass": true
+        }
+      },
+      {
+        "path": ".evidence/tier-5.json",
+        "pass": true,
+        "runAt": "2026-05-09T20:57:04.431Z",
+        "booleanFields": {
+          "pass": true
+        }
+      },
+      {
         "path": ".evidence/tier-latest.json",
         "pass": true,
-        "runAt": "2026-05-10T15:10:21.338Z",
+        "runAt": "2026-05-10T15:13:45.451Z",
         "booleanFields": {
           "pass": true
         }
       }
-    ]
+    ],
+    "nativeConfig": {
+      "path": ".evidence/native-config.json",
+      "pass": true,
+      "required": false,
+      "runAt": "2026-05-10T11:04:29.866Z",
+      "booleanFields": {
+        "required": false,
+        "pass": true
+      },
+      "artifactCount": 0,
+      "checkCount": 11,
+      "failedChecks": 0,
+      "warningChecks": 1
+    },
+    "runnerCapability": {
+      "path": ".evidence/runner-capability.json",
+      "pass": true,
+      "runAt": "2026-05-10T11:04:27.563Z",
+      "booleanFields": {
+        "pass": true
+      },
+      "platform": "linux",
+      "arch": "x64",
+      "githubActions": false,
+      "readiness": {
+        "linuxWebRunnerReady": true,
+        "androidEmulatorReady": false,
+        "iosRunnerReady": false
+      },
+      "checks": {
+        "linux": true,
+        "macos": false,
+        "kvmDevice": false,
+        "androidSdkTools": false,
+        "maestro": false,
+        "xcode": false
+      }
+    }
   },
   "evidence": [
     {
+      "path": ".evidence/design-drift/latest.json",
+      "bytes": 919605,
+      "modifiedAt": "2026-05-09T19:56:03.612Z"
+    },
+    {
+      "path": ".evidence/design-drift/latest.md",
+      "bytes": 6724,
+      "modifiedAt": "2026-05-09T19:56:03.613Z"
+    },
+    {
+      "path": ".evidence/devkit-tabs.json",
+      "bytes": 4457,
+      "modifiedAt": "2026-05-10T11:28:58.869Z"
+    },
+    {
       "path": ".evidence/expect-proof.json",
       "bytes": 15848,
-      "modifiedAt": "2026-05-10T15:08:00.808Z"
+      "modifiedAt": "2026-05-10T15:29:11.486Z"
     },
     {
       "path": ".evidence/feature-proof-plan.json",
-      "bytes": 3233,
-      "modifiedAt": "2026-05-10T15:12:16.948Z"
+      "bytes": 4005,
+      "modifiedAt": "2026-05-10T15:29:17.122Z"
     },
     {
       "path": ".evidence/mobile/ipad-pro-app-layout.png",
       "bytes": 381877,
-      "modifiedAt": "2026-05-10T15:10:16.268Z"
+      "modifiedAt": "2026-05-10T15:29:11.487Z"
     },
     {
       "path": ".evidence/mobile/ipad-pro-button-tap.png",
       "bytes": 380766,
-      "modifiedAt": "2026-05-10T15:10:20.752Z"
+      "modifiedAt": "2026-05-10T15:29:11.488Z"
     },
     {
       "path": ".evidence/mobile/ipad-pro-landing.png",
       "bytes": 370069,
-      "modifiedAt": "2026-05-10T15:10:12.266Z"
+      "modifiedAt": "2026-05-10T15:29:11.490Z"
     },
     {
       "path": ".evidence/mobile/iphone-15-pro-app-layout.png",
       "bytes": 200314,
-      "modifiedAt": "2026-05-10T15:09:57.618Z"
+      "modifiedAt": "2026-05-10T15:29:11.490Z"
     },
     {
       "path": ".evidence/mobile/iphone-15-pro-button-tap.png",
       "bytes": 200200,
-      "modifiedAt": "2026-05-10T15:10:01.331Z"
+      "modifiedAt": "2026-05-10T15:29:11.491Z"
     },
     {
       "path": ".evidence/mobile/iphone-15-pro-landing.png",
       "bytes": 193134,
-      "modifiedAt": "2026-05-10T15:09:54.678Z"
+      "modifiedAt": "2026-05-10T15:29:11.492Z"
     },
     {
       "path": ".evidence/mobile/pixel-8-pro-app-layout.png",
       "bytes": 304993,
-      "modifiedAt": "2026-05-10T15:10:06.190Z"
+      "modifiedAt": "2026-05-10T15:29:11.493Z"
     },
     {
       "path": ".evidence/mobile/pixel-8-pro-button-tap.png",
       "bytes": 303181,
-      "modifiedAt": "2026-05-10T15:10:10.181Z"
+      "modifiedAt": "2026-05-10T15:29:11.494Z"
     },
     {
       "path": ".evidence/mobile/pixel-8-pro-landing.png",
       "bytes": 297300,
-      "modifiedAt": "2026-05-10T15:10:03.032Z"
+      "modifiedAt": "2026-05-10T15:29:11.495Z"
+    },
+    {
+      "path": ".evidence/native-build.json",
+      "bytes": 222,
+      "modifiedAt": "2026-05-09T20:56:51.512Z"
+    },
+    {
+      "path": ".evidence/native-config.json",
+      "bytes": 2927,
+      "modifiedAt": "2026-05-10T11:04:29.866Z"
+    },
+    {
+      "path": ".evidence/native-deeplink-patch.json",
+      "bytes": 825,
+      "modifiedAt": "2026-05-09T20:55:13.628Z"
+    },
+    {
+      "path": ".evidence/native-smoke.json",
+      "bytes": 217,
+      "modifiedAt": "2026-05-09T20:56:50.656Z"
     },
     {
       "path": ".evidence/project-harness.json",
       "bytes": 6391,
-      "modifiedAt": "2026-05-10T15:08:26.832Z"
+      "modifiedAt": "2026-05-10T15:30:44.836Z"
     },
     {
       "path": ".evidence/proof-packet.json",
-      "bytes": 14670,
-      "modifiedAt": "2026-05-10T15:10:30.795Z"
+      "bytes": 14796,
+      "modifiedAt": "2026-05-10T15:29:11.495Z"
+    },
+    {
+      "path": ".evidence/release-artifacts.json",
+      "bytes": 234,
+      "modifiedAt": "2026-05-09T20:56:52.362Z"
+    },
+    {
+      "path": ".evidence/runner-capability.json",
+      "bytes": 1175,
+      "modifiedAt": "2026-05-10T11:04:27.562Z"
+    },
+    {
+      "path": ".evidence/screenshots/ai-debug-panel.png",
+      "bytes": 348023,
+      "modifiedAt": "2026-05-09T22:23:58.855Z"
     },
     {
       "path": ".evidence/ticket-proof.json",
       "bytes": 1401,
-      "modifiedAt": "2026-05-10T15:10:21.313Z"
+      "modifiedAt": "2026-05-10T15:29:11.496Z"
+    },
+    {
+      "path": ".evidence/tier-0.json",
+      "bytes": 1054,
+      "modifiedAt": "2026-05-10T15:29:42.359Z"
     },
     {
       "path": ".evidence/tier-1.json",
       "bytes": 1463,
-      "modifiedAt": "2026-05-10T15:04:17.131Z"
+      "modifiedAt": "2026-05-10T15:29:11.496Z"
     },
     {
       "path": ".evidence/tier-2.json",
       "bytes": 423,
-      "modifiedAt": "2026-05-10T15:10:21.339Z"
+      "modifiedAt": "2026-05-10T15:29:11.496Z"
+    },
+    {
+      "path": ".evidence/tier-3.json",
+      "bytes": 1774,
+      "modifiedAt": "2026-05-09T22:25:01.697Z"
+    },
+    {
+      "path": ".evidence/tier-4.json",
+      "bytes": 1475,
+      "modifiedAt": "2026-05-09T20:01:40.875Z"
+    },
+    {
+      "path": ".evidence/tier-5.json",
+      "bytes": 1314,
+      "modifiedAt": "2026-05-09T20:57:04.430Z"
     },
     {
       "path": ".evidence/tier-latest.json",
-      "bytes": 423,
-      "modifiedAt": "2026-05-10T15:10:21.339Z"
+      "bytes": 1055,
+      "modifiedAt": "2026-05-10T15:30:44.837Z"
     }
   ],
   "featureProof": {
-    "generatedAt": "2026-05-10T15:12:16.949Z",
+    "generatedAt": "2026-05-10T15:29:17.121Z",
     "registryPath": ".ai-dev-kit/registries/feature-proof.json",
     "policy": {
       "requireRegistryForUserFacingChanges": true,
@@ -400,6 +536,25 @@
       ]
     },
     "changedFiles": [
+      ".evidence/expect-proof.json",
+      ".evidence/feature-proof-plan.json",
+      ".evidence/mobile/ipad-pro-app-layout.png",
+      ".evidence/mobile/ipad-pro-button-tap.png",
+      ".evidence/mobile/ipad-pro-landing.png",
+      ".evidence/mobile/iphone-15-pro-app-layout.png",
+      ".evidence/mobile/iphone-15-pro-button-tap.png",
+      ".evidence/mobile/iphone-15-pro-landing.png",
+      ".evidence/mobile/pixel-8-pro-app-layout.png",
+      ".evidence/mobile/pixel-8-pro-button-tap.png",
+      ".evidence/mobile/pixel-8-pro-landing.png",
+      ".evidence/project-harness.json",
+      ".evidence/proof-packet.json",
+      ".evidence/ticket-proof.json",
+      ".evidence/tier-1.json",
+      ".evidence/tier-2.json",
+      ".evidence/tier-latest.json",
+      ".expect/.gitignore",
+      ".expect/logs.md",
       "app/dev-kit/tools/page.tsx",
       "playwright-report/index.html",
       "test-results/playwright-no-run.json"
@@ -504,19 +659,19 @@
     {
       "path": "test-results/.last-run.json",
       "bytes": 45,
-      "modifiedAt": "2026-05-10T15:12:05.561Z"
+      "modifiedAt": "2026-05-10T13:20:33.230Z"
     },
     {
       "path": "test-results/playwright-no-run.json",
       "bytes": 6605,
-      "modifiedAt": "2026-05-10T15:12:05.560Z"
+      "modifiedAt": "2026-05-10T15:29:11.498Z"
     }
   ],
   "browserArtifacts": [
     {
       "path": "playwright-report/index.html",
       "bytes": 525344,
-      "modifiedAt": "2026-05-10T15:12:05.558Z"
+      "modifiedAt": "2026-05-10T15:29:11.498Z"
     }
   ],
   "nativeArtifacts": [],
