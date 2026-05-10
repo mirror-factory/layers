@@ -35,7 +35,7 @@ export default function FeaturesPage() {
   return (
     <main style={{ padding: 24, fontFamily: 'ui-sans-serif, system-ui', minHeight: '100vh', background: '#0a0a0a', color: '#fafafa' }}>
       <h1>Features</h1>
-      <p style={{ color: '#94a3b8' }}>Feature contracts come from the proof registry that maps changed files to required lanes.</p>
+      <p style={{ color: '#94a3b8' }}>Feature entries map changed files to proof lanes for operator review.</p>
       {loading ? <p>Loading...</p> : features.length === 0 ? (
         <div style={{ padding: 24, border: '1px dashed #333', marginTop: 20 }}>
           <p>No registered features yet.</p>
