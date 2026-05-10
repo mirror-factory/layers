@@ -197,8 +197,9 @@
       "status": "active",
       "userFacing": true,
       "surfaces": ["web"],
-      "routes": ["/dev-kit", "/dev-kit/proof", "/dev-kit/project"],
+      "routes": ["/dev-kit", "/dev-kit/proof", "/dev-kit/project", "/control-plane"],
       "paths": [
+        "app/control-plane/**",
         "app/dev-kit/**",
         "app/api/dev-kit/**",
         "components/ai-debug-panel.tsx",
@@ -209,8 +210,13 @@
       ],
       "proof": ["fast", "playwright", "expect"],
       "tests": {
-        "playwright": ["tests/e2e/app-dev-kit-page.smoke.spec.ts", "tests/e2e/app-dev-kit-runs-page.smoke.spec.ts"],
-        "expect": ["tests/expect/app-dev-kit-page.md", "tests/expect/app-dev-kit-runs-page.md"]
+        "playwright": [
+          "tests/e2e/app-dev-kit-page.smoke.spec.ts",
+          "tests/e2e/app-dev-kit-runs-page.smoke.spec.ts",
+          "tests/e2e/app-control-plane-tabs.smoke.spec.ts",
+          "tests/e2e/ai-debug-panel.visual.test.ts"
+        ],
+        "expect": ["tests/expect/app-dev-kit-page.md", "tests/expect/app-dev-kit-runs-page.md", "tests/expect/control-plane.expect.ts"]
       }
     },
     {

@@ -7,7 +7,7 @@ test("app/page.tsx route smoke proof", async ({ page }) => {
   await expect(page.locator("body")).not.toBeEmpty();
 
   const signedOutHeading = page.getByRole("heading", {
-    name: "Turn meetings into structured team memory.",
+    name: /AI memory for your meetings/i,
   });
   const signedInRecorder = page.getByRole("button", {
     name: /start recording|stop recording/i,
@@ -16,4 +16,10 @@ test("app/page.tsx route smoke proof", async ({ page }) => {
   await expect(signedOutHeading.or(signedInRecorder).first()).toBeVisible({
     timeout: 10_000,
   });
+
+  if (await signedOutHeading.isVisible().catch(() => false)) {
+    await expect(page.getByTestId("home-memory-trail")).toContainText(
+      "From live call to durable team memory.",
+    );
+  }
 });

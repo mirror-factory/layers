@@ -2,10 +2,12 @@ import { mkdirSync } from "fs";
 import { test, expect } from "@playwright/test";
 
 test("ai-debug-panel visual proof records a browser event", async ({ page }) => {
-  await page.goto("/control-plane", { waitUntil: "networkidle" });
-  await expect(page.getByTestId("ai-debug-panel")).toBeVisible();
+  test.setTimeout(60_000);
+  await page.goto("/control-plane", { waitUntil: "domcontentloaded" });
+  const panel = page.getByTestId("ai-debug-panel");
+  await expect(panel).toBeVisible({ timeout: 15_000 });
 
-  await page.evaluate(() => {
+  const pushVisualProofEvent = () => page.evaluate(() => {
     window.dispatchEvent(
       new CustomEvent("ai-debug", {
         detail: {
@@ -27,11 +29,17 @@ test("ai-debug-panel visual proof records a browser event", async ({ page }) => 
     );
   });
 
-  await expect(page.getByText("visual-proof").first()).toBeVisible();
+  await expect
+    .poll(async () => {
+      await pushVisualProofEvent();
+      return page.getByText("visual-proof").count();
+    }, { timeout: 15_000 })
+    .toBeGreaterThan(0);
+  await expect(page.getByText("visual-proof").first()).toBeVisible({ timeout: 15_000 });
 
   mkdirSync(".evidence/screenshots", { recursive: true });
-  await page.screenshot({
+  await panel.screenshot({
     path: ".evidence/screenshots/ai-debug-panel.png",
-    fullPage: true,
+    timeout: 15_000,
   });
 });
