@@ -120,8 +120,10 @@ Runs:
 - Expect AI browser proof when `EXPECT_RUN=1`
 - design drift
 
-Expect is not part of the default inner loop. Use it for focused usability
-proof on changed routes or manually requested audits.
+Expect is not part of the default inner loop. Tier 3 records a skipped Expect
+evidence file unless `EXPECT_RUN=1` is set. Use it for focused usability proof
+on changed routes or manually requested audits, and set `EXPECT_AGENT=codex`
+or another installed/authenticated provider when running from CI.
 
 Video is opt-in for deliberate media proof. Local Tier 3 keeps video off unless
 you set `PLAYWRIGHT_VIDEO=on`; CI keeps failure video by default, and the PR

@@ -14,11 +14,19 @@ import { join } from "node:path";
 
 const cwd = process.cwd();
 const evidenceDir = join(cwd, ".evidence");
-const shouldRun = process.env.EXPECT_RUN === "1";
-const required = process.env.EXPECT_REQUIRED === "1";
+
+function envFlag(name: string): boolean {
+  const value = process.env[name]?.toLowerCase();
+  return value === "1" || value === "true" || value === "yes";
+}
+
+const shouldRun = envFlag("EXPECT_RUN");
+const required = envFlag("EXPECT_REQUIRED");
+const agent = process.env.EXPECT_AGENT?.trim() ?? "";
 const target = process.env.EXPECT_TARGET ?? "changes";
 const message = process.env.EXPECT_MESSAGE ?? "Test the changed user-facing flow and report usability, accessibility, visual, and interaction regressions.";
 const url = process.env.EXPECT_BASE_URL ?? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "");
+const command = `pnpm exec expect tui --ci${agent ? ` --agent ${agent}` : ""} --target ${target} --output json --message ${JSON.stringify(message)} --yes${url ? ` --url ${url}` : ""}`;
 
 function write(payload: Record<string, unknown>) {
   mkdirSync(evidenceDir, { recursive: true });
@@ -34,7 +42,8 @@ if (!shouldRun) {
     skipped: true,
     required,
     reason: "EXPECT_RUN is not set to 1.",
-    command: "pnpm exec expect tui --ci --output json",
+    agent: agent || null,
+    command,
   });
   if (required) {
     console.error("[expect-proof] EXPECT_REQUIRED=1 but EXPECT_RUN is not set.");
@@ -45,6 +54,7 @@ if (!shouldRun) {
 }
 
 const args = ["exec", "expect", "tui", "--ci", "--target", target, "--output", "json", "--message", message, "--yes"];
+if (agent) args.push("--agent", agent);
 if (url) args.push("--url", url);
 
 console.log(`[expect-proof] pnpm ${args.join(" ")}`);
@@ -61,6 +71,7 @@ const payload = {
   pass: exitCode === 0,
   skipped: false,
   required,
+  agent: agent || null,
   target,
   url: url || null,
   durationMs: Date.now() - start,

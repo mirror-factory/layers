@@ -38,7 +38,7 @@ jobs:
       - run: pnpm verify:tier 0 1 2
       - name: Expect proof
         if: github.event_name == 'workflow_dispatch' && inputs.run_expect == true || contains(github.event.pull_request.labels.*.name, 'expect:run') || contains(github.event.pull_request.labels.*.name, 'proof:required')
-        run: EXPECT_RUN=1 EXPECT_REQUIRED=1 pnpm test:expect
+        run: EXPECT_RUN=1 EXPECT_REQUIRED=1 EXPECT_AGENT="${EXPECT_AGENT:-codex}" pnpm test:expect
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       - run: pnpm test:proof

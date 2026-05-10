@@ -39,7 +39,7 @@
     },
     "expect": {
       "label": "Expect AI user-flow proof",
-      "command": "EXPECT_RUN=1 EXPECT_REQUIRED=1 pnpm test:expect",
+      "command": "EXPECT_RUN=1 EXPECT_REQUIRED=1 EXPECT_AGENT=codex pnpm test:expect",
       "evidence": [".evidence/expect-proof.json", ".expect/replays"],
       "description": "Instruction-driven AI browser proof for user-facing feature behavior."
     },
