@@ -58,6 +58,10 @@ const base = baseBranch();
 const proofPacketPath = join(evidenceDir, "proof-packet.json");
 const proofPacket = readJson(proofPacketPath);
 const latestTier = readJson(join(evidenceDir, "tier-latest.json"));
+const tier0 = readJson(join(evidenceDir, "tier-0.json"));
+const tier1 = readJson(join(evidenceDir, "tier-1.json"));
+const tier2 = readJson(join(evidenceDir, "tier-2.json"));
+const tier3 = readJson(join(evidenceDir, "tier-3.json"));
 const expectProof = readJson(join(evidenceDir, "expect-proof.json"));
 const featureProof = readJson(join(evidenceDir, "feature-proof-plan.json"));
 const headMessage = git(["log", "-1", "--pretty=%B"]);
@@ -69,13 +73,23 @@ const files = changedFiles(base);
 const skipCi = hasSkipCi(headMessage);
 const packetPass = Boolean(proofPacket && typeof proofPacket === "object");
 const latestTierPass = latestTier?.pass === true || latestTier?.status === "pass";
+const tierPass = (tier: Record<string, unknown> | null) => tier?.pass === true || tier?.status === "pass";
 const expectPass = !expectProof || expectProof.pass === true || expectProof.skipped === true;
 const doneProof = readJson(join(evidenceDir, "done-proof.json"));
 const doneProofPass = doneProof?.pass === true;
+const requiredLaneIds = Array.isArray(featureProof?.requiredLanes)
+  ? featureProof.requiredLanes
+      .map((lane) => lane && typeof lane === "object" && "id" in lane ? String((lane as { id?: unknown }).id ?? "") : "")
+      .filter(Boolean)
+  : [];
+const requiresTier3 = requiredLaneIds.some((id) => id === "visual-video" || id === "expect");
 
 const warnings: string[] = [];
 if (!packetPass) warnings.push("missing .evidence/proof-packet.json; run pnpm test:proof");
 if (!latestTierPass) warnings.push("latest tier evidence is not green; run the required pnpm verify:tier commands");
+if (!tierPass(tier0)) warnings.push("Tier 0 evidence is missing or not green; run pnpm verify:tier 0");
+if (!tierPass(tier1)) warnings.push("Tier 1 evidence is missing or not green; run pnpm verify:tier 1");
+if (requiresTier3 && !tierPass(tier3)) warnings.push("Tier 3 evidence is required by mapped UI lanes and is missing or not green; run pnpm verify:tier 3");
 if (!expectPass) warnings.push(".evidence/expect-proof.json is present but not green/skipped");
 if (!doneProofPass) warnings.push("all mapped proof lanes are not confirmed green; run pnpm test:done after required tiers");
 if (workflows.length > 0 && !skipCi) warnings.push("HEAD commit does not include [skip ci]; pushing this branch can trigger GitHub-hosted Actions");
@@ -92,6 +106,10 @@ const manifest = {
   localProof: {
     proofPacket: existsSync(proofPacketPath) ? ".evidence/proof-packet.json" : null,
     tierLatest: existsSync(join(evidenceDir, "tier-latest.json")) ? ".evidence/tier-latest.json" : null,
+    tier0: existsSync(join(evidenceDir, "tier-0.json")) ? ".evidence/tier-0.json" : null,
+    tier1: existsSync(join(evidenceDir, "tier-1.json")) ? ".evidence/tier-1.json" : null,
+    tier2: existsSync(join(evidenceDir, "tier-2.json")) ? ".evidence/tier-2.json" : null,
+    tier3: existsSync(join(evidenceDir, "tier-3.json")) ? ".evidence/tier-3.json" : null,
     featureProof: existsSync(join(evidenceDir, "feature-proof-plan.json")) ? ".evidence/feature-proof-plan.json" : null,
     expectProof: existsSync(join(evidenceDir, "expect-proof.json")) ? ".evidence/expect-proof.json" : null,
     criticalCoverage: existsSync(join(evidenceDir, "critical-coverage.json")) ? ".evidence/critical-coverage.json" : null,
