@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.72] — 2026-05-11
+
+### Other
+- chore(public): remove GitHub footer link + sign-up CTA from nav (`1703eba`)
+
+
 ## [0.1.71] — 2026-05-07
 
 ### Other
