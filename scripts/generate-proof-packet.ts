@@ -126,6 +126,9 @@ function summarizeExpectProof(path: string, source: Record<string, unknown>) {
   const fallback = source.fallback;
   const fallbackCommands = isRecord(fallback) && Array.isArray(fallback.commands) ? fallback.commands : undefined;
   const fallbackFailedCommands = fallbackCommands?.filter(command => isRecord(command) && command.pass === false).length;
+  const replay = isRecord(fallback) && isRecord(fallback.replay) ? fallback.replay : undefined;
+  const replayFiles = isRecord(replay) && Array.isArray(replay.files) ? replay.files : undefined;
+  const replayVideos = isRecord(replay) && Array.isArray(replay.videoFiles) ? replay.videoFiles : undefined;
 
   return {
     ...statusSummary(path, source),
@@ -133,6 +136,10 @@ function summarizeExpectProof(path: string, source: Record<string, unknown>) {
     fallbackPass: isRecord(fallback) ? booleanField(fallback, 'pass') : undefined,
     fallbackCommandCount: fallbackCommands?.length,
     fallbackFailedCommandCount: fallbackFailedCommands,
+    fallbackReplayPass: isRecord(replay) ? booleanField(replay, 'pass') : undefined,
+    fallbackReplayDir: isRecord(replay) ? stringField(replay, 'dir') : undefined,
+    fallbackReplayArtifactCount: replayFiles?.length,
+    fallbackReplayVideoCount: replayVideos?.length,
   };
 }
 

@@ -76,12 +76,24 @@ function loadFlagged(): Set<string> {
 
 function changedFiles(): string[] {
   try {
-    // Diff vs upstream or origin/main as fallback
+    // Diff vs upstream, then the project development branch, then main.
     let base: string;
     try {
-      base = execSync('git rev-parse --abbrev-ref @{upstream}', { cwd: CWD, encoding: 'utf-8' }).trim();
+      base = execSync('git rev-parse --abbrev-ref @{upstream}', {
+        cwd: CWD,
+        encoding: 'utf-8',
+        stdio: ['ignore', 'pipe', 'ignore'],
+      }).trim();
     } catch {
-      base = 'origin/main';
+      const candidates = ['origin/development', 'origin/dev', 'origin/main'];
+      base = candidates.find(candidate => {
+        try {
+          execSync(`git rev-parse --verify ${candidate}`, { cwd: CWD, stdio: 'ignore' });
+          return true;
+        } catch {
+          return false;
+        }
+      }) ?? 'origin/main';
     }
     const out = execSync(`git diff --name-only ${base}...HEAD`, { cwd: CWD, encoding: 'utf-8' });
     return out.split('\n').filter(f =>

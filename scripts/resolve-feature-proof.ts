@@ -208,7 +208,10 @@ export function resolveFeatureProof(options: ResolveOptions = {}) {
   }
 
   const unmatchedUserFacingFiles = files.filter(file => !matchedFileSet.has(file) && looksUserFacing(file));
-  const requiredLaneIds = unique(matchedFeatures.flatMap(feature => feature.proof));
+  const requiredLaneIds = unique(matchedFeatures.flatMap(feature => {
+    const defaults = feature.userFacing ? (registry.policy.defaultUserFacingProof ?? []) : [];
+    return [...defaults, ...feature.proof];
+  }));
   const requiredLanes: ResolvedLane[] = requiredLaneIds.map(id => {
     const lane = registry.proofLanes[id] ?? {
       label: id,

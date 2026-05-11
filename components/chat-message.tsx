@@ -77,6 +77,13 @@ interface MarkdownTextProps {
   onCitationClick?: (segmentNumber: number) => void;
 }
 
+function getReasoningText(part: Record<string, unknown>): string {
+  const candidates = [part.text, part.reasoning, part.content];
+  const text = candidates.find((value): value is string => typeof value === "string");
+
+  return text ?? "Reasoning is available for this response.";
+}
+
 function MarkdownText({ text, onCitationClick }: MarkdownTextProps) {
   return (
     <ReactMarkdown
@@ -200,6 +207,9 @@ export function ChatMessage({ message, onCitationClick }: ChatMessageProps) {
         }`}
       >
         {message.parts?.map((part, i) => {
+          const partAny = part as Record<string, unknown>;
+          const partType = String(partAny.type ?? "");
+
           if (part.type === "text") {
             if (isUser) {
               return (
@@ -218,9 +228,23 @@ export function ChatMessage({ message, onCitationClick }: ChatMessageProps) {
             );
           }
 
+          if (partType === "reasoning") {
+            return (
+              <details
+                key={i}
+                className="my-2 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-secondary)]/50 px-3 py-2 text-xs text-[var(--text-secondary)]"
+              >
+                <summary className="cursor-pointer select-none font-medium text-[var(--text-primary)]">
+                  Reasoning
+                </summary>
+                <p className="mt-2 whitespace-pre-wrap leading-relaxed">
+                  {getReasoningText(partAny)}
+                </p>
+              </details>
+            );
+          }
+
           // Tool parts in v6 have type starting with "tool-" or "dynamic-tool"
-          const partAny = part as Record<string, unknown>;
-          const partType = partAny.type as string;
           if (partType.startsWith("tool-") || partType === "dynamic-tool") {
             const toolName =
               typeof partAny.toolName === "string"

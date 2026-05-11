@@ -5,6 +5,7 @@ import { codeReview } from "@/lib/ai/tools/code-review";
 import { searchMeetings } from "@/lib/embeddings/search";
 import { getMeetingsStore } from "@/lib/meetings/store";
 import { getCurrentUserId } from "@/lib/supabase/user";
+import { mockToolInputs, mockToolOutputs } from "./mock-tool-data";
 
 vi.mock("@/lib/embeddings/search", () => ({
   searchMeetings: vi.fn(),
@@ -46,6 +47,8 @@ describe("AI tool registry", () => {
       expect(tool.permissionTier, `${tool.name} missing permission tier`).toBeDefined();
       expect(tool.costEstimate, `${tool.name} missing cost estimate`).toBeDefined();
       expect(tool.testStatus, `${tool.name} is not marked tested`).toBe("passing");
+      expect(tool.name in mockToolInputs, `${tool.name} missing mock input`).toBe(true);
+      expect(tool.name in mockToolOutputs, `${tool.name} missing mock output`).toBe(true);
     }
   });
 });
@@ -64,6 +67,7 @@ describe("AI tool contracts", () => {
     >(allTools.searchMeetings);
 
     expect(tool.inputSchema.safeParse({ query: "pricing", limit: 5 }).success).toBe(true);
+    expect(tool.inputSchema.safeParse(mockToolInputs.searchMeetings).success).toBe(true);
     expect(tool.inputSchema.safeParse({ query: "pricing", limit: 99 }).success).toBe(false);
 
     vi.mocked(getCurrentUserId).mockResolvedValue("user_a");
@@ -78,10 +82,10 @@ describe("AI tool contracts", () => {
       },
     ]);
 
-    const result = await tool.execute({ query: "pricing", limit: 3 }, toolOptions);
+    const result = await tool.execute(mockToolInputs.searchMeetings, toolOptions);
 
     expect(searchMeetings).toHaveBeenCalledWith("pricing", "user_a", 3);
-    expect(result.results?.[0]).toMatchObject({ meetingId: "meeting_1", relevance: 91 });
+    expect(result.results?.[0]).toMatchObject(mockToolOutputs.searchMeetings.results[0]);
   });
 
   it("searchMeetings returns an auth error when no user is available", async () => {
@@ -100,7 +104,7 @@ describe("AI tool contracts", () => {
       { id?: string; title?: string; transcript?: string; keyPoints?: string[]; error?: string }
     >(allTools.getMeetingDetails);
 
-    expect(tool.inputSchema.safeParse({ meetingId: "meeting_1" }).success).toBe(true);
+    expect(tool.inputSchema.safeParse(mockToolInputs.getMeetingDetails).success).toBe(true);
     expect(tool.inputSchema.safeParse({}).success).toBe(false);
 
     vi.mocked(getMeetingsStore).mockResolvedValue({
@@ -131,14 +135,9 @@ describe("AI tool contracts", () => {
       delete: vi.fn(),
     });
 
-    const result = await tool.execute({ meetingId: "meeting_1" }, toolOptions);
+    const result = await tool.execute(mockToolInputs.getMeetingDetails, toolOptions);
 
-    expect(result).toMatchObject({
-      id: "meeting_1",
-      title: "Demo call",
-      transcript: "Hello there",
-      keyPoints: ["Budget"],
-    });
+    expect(result).toMatchObject(mockToolOutputs.getMeetingDetails);
   });
 
   it("listRecentMeetings validates limits and normalizes meeting rows", async () => {
@@ -148,6 +147,7 @@ describe("AI tool contracts", () => {
     >(allTools.listRecentMeetings);
 
     expect(tool.inputSchema.safeParse({ limit: 5 }).success).toBe(true);
+    expect(tool.inputSchema.safeParse(mockToolInputs.listRecentMeetings).success).toBe(true);
     expect(tool.inputSchema.safeParse({ limit: 99 }).success).toBe(false);
 
     const list = vi.fn().mockResolvedValue([
@@ -167,11 +167,11 @@ describe("AI tool contracts", () => {
       delete: vi.fn(),
     });
 
-    const result = await tool.execute({ limit: 1 }, toolOptions);
+    const result = await tool.execute(mockToolInputs.listRecentMeetings, toolOptions);
 
     expect(list).toHaveBeenCalledWith(1);
     expect(result.meetings).toEqual([
-      expect.objectContaining({ id: "meeting_1", title: "Untitled", status: "completed" }),
+      expect.objectContaining(mockToolOutputs.listRecentMeetings.meetings[0]),
     ]);
   });
 
@@ -182,11 +182,12 @@ describe("AI tool contracts", () => {
     >(codeReview);
 
     expect(tool.inputSchema.safeParse({ code: "const x = 1;" }).success).toBe(true);
+    expect(tool.inputSchema.safeParse(mockToolInputs.codeReview).success).toBe(true);
     expect(tool.inputSchema.safeParse({ language: "typescript" }).success).toBe(false);
 
-    const result = await tool.execute({ code: "const value = eval(input);", language: "typescript" }, toolOptions);
+    const result = await tool.execute(mockToolInputs.codeReview, toolOptions);
 
-    expect(result.critical).toBeGreaterThan(0);
-    expect(result.totalIssues).toBeGreaterThan(0);
+    expect(result.critical).toBeGreaterThanOrEqual(mockToolOutputs.codeReview.critical);
+    expect(result.totalIssues).toBeGreaterThanOrEqual(mockToolOutputs.codeReview.totalIssues);
   });
 });

@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generatedAt": "2026-05-10T11:04:53.317Z",
+  "generatedAt": "2026-05-11T05:10:13.667Z",
   "docs": [
     {
       "id": "ai-harness-tiers",
       "localPath": "docs/AI_HARNESS_TIERS.md",
-      "contentHash": "c88f0503f4fda22d96adcc24fbc9be4c8fa0bc48423496837ddbeac1ce33f983",
+      "contentHash": "858f2251277e8723a847e17e90d429812a32d265aec6ea9a88c474deab70a316",
       "priority": "cold"
     },
     {
@@ -1026,6 +1026,12 @@
       "id": "v1-plan",
       "localPath": "docs/V1_PLAN.md",
       "contentHash": "88fb4914837aa7df0e9bc13f5d74b90574ef0df03f1f6264d33d4390c2ad5c85",
+      "priority": "cold"
+    },
+    {
+      "id": "zero-actions-pr-flow",
+      "localPath": "docs/ZERO_ACTIONS_PR_FLOW.md",
+      "contentHash": "870f7ee0e725bc7226afe8d17bca7105872f7d072a0a7064c5353f739e143739",
       "priority": "cold"
     }
   ]

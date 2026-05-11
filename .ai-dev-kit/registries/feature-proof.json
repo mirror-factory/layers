@@ -5,7 +5,7 @@
   "policy": {
     "requireRegistryForUserFacingChanges": true,
     "expectPolicy": "Expect is required for every ticket that touches a registered user-facing Layers feature.",
-    "defaultUserFacingProof": ["fast", "playwright", "expect"],
+    "defaultUserFacingProof": ["fast", "playwright", "visual-video", "expect"],
     "defaultNativeProof": ["native-config", "native-device"]
   },
   "ignoredPaths": [
@@ -35,13 +35,25 @@
       "label": "Tier 3 video proof",
       "command": "PLAYWRIGHT_VIDEO=on pnpm verify:tier 3",
       "evidence": ["test-results/tier-3", "playwright-report/index.html"],
-      "description": "Broad responsive visual matrix with retained video artifacts."
+      "description": "Broad desktop light/dark, mobile light/dark, screenshot, and retained video artifacts for every user-facing UI change."
     },
     "expect": {
       "label": "Expect AI user-flow proof",
       "command": "EXPECT_RUN=1 EXPECT_REQUIRED=1 EXPECT_AGENT=codex pnpm test:expect",
       "evidence": [".evidence/expect-proof.json", ".expect/replays"],
       "description": "Instruction-driven AI browser proof for user-facing feature behavior."
+    },
+    "critical-coverage": {
+      "label": "Critical API/tool/chat coverage",
+      "command": "pnpm test:critical",
+      "evidence": [".evidence/critical-coverage.json"],
+      "description": "Fail-closed sentry for active chat, AI tool, MCP, API contract, and DevKit tab coverage."
+    },
+    "ai-evals": {
+      "label": "AI tool and MCP eval coverage",
+      "command": "pnpm test:eval",
+      "evidence": [".test-results/eval-results.json"],
+      "description": "Deterministic eval coverage for tool routing, user scoping, and adversarial data-access cases."
     },
     "native-config": {
       "label": "Native shell config proof",
@@ -102,6 +114,82 @@
         "playwright": ["tests/e2e/app-page.smoke.spec.ts", "tests/e2e/visual-regression.spec.ts"],
         "expect": ["tests/expect/page.tsx.expect.ts", "tests/expect/page-tsx.md"]
       }
+    },
+    {
+      "id": "llm.api-chat-tools",
+      "name": "LLM API, chat, tool, model-routing, and MCP surfaces",
+      "description": "Vercel AI SDK calls, model routing, chat API, MCP transport, AI tools, and eval surfaces.",
+      "category": "ai-platform",
+      "status": "active",
+      "userFacing": false,
+      "surfaces": ["web", "api", "mcp"],
+      "routes": ["/api/chat", "/api/mcp/[transport]", "/api/models", "/api/dev-kit/evals", "/api/dev-kit/tools"],
+      "paths": [
+        "app/api/chat/**",
+        "app/api/mcp/**",
+        "app/api/models/**",
+        "app/api/dev-kit/evals/**",
+        "app/api/dev-kit/tools/**",
+        "lib/ai/**",
+        "lib/mcp/**",
+        "lib/model-router.ts",
+        "lib/ai-call.ts",
+        "lib/meeting-chat-fallback.ts",
+        "tests/evals/**",
+        "tests/tools/**",
+        "tests/mcp/**"
+      ],
+      "proof": ["fast", "critical-coverage", "ai-evals"],
+      "tests": {
+        "unit": ["tests/api-route-behavior.test.ts", "tests/tools/ai-tools.test.ts"],
+        "contracts": [
+          "tests/contracts/app-api-chat-route.contract.test.ts",
+          "tests/contracts/app-api-mcp-transport-route.contract.test.ts",
+          "tests/contracts/app-api-dev-kit-tools-route.contract.test.ts"
+        ],
+        "mcp": ["tests/mcp/protocol.test.ts", "tests/mcp/auth.test.ts", "tests/mcp/tools.test.ts"],
+        "eval": ["tests/evals/tools.eval.ts"]
+      },
+      "notes": [
+        "Tier 1 also forces docs lookup coverage when changed files import flagged SDK/vendor libraries.",
+        "Default tests must use mocked/deterministic providers; real model provider calls stay label-gated or scheduled."
+      ]
+    },
+    {
+      "id": "chat.message-ui",
+      "name": "Chat message renderer and chat transcript UI",
+      "description": "Assistant/user transcript bubbles, reasoning part display, citation buttons, tool cards, chat route shell, and meeting chat rendering.",
+      "category": "core-product",
+      "status": "active",
+      "userFacing": true,
+      "surfaces": ["web"],
+      "routes": ["/chat", "/meetings/[id]", "/dev-kit/design-system"],
+      "paths": [
+        "app/chat/**",
+        "components/chat-message.tsx",
+        "components/chat-input.tsx",
+        "components/meeting-chat.tsx",
+        "tests/unit/chat-message-reasoning.test.ts",
+        "tests/e2e/app-chat-page.smoke.spec.ts",
+        "tests/e2e/app-dev-kit-design-system-page.smoke.spec.ts",
+        "tests/e2e/chat-message.visual.spec.ts",
+        "tests/expect/chat.expect.ts",
+        "tests/expect/app-chat-page.md"
+      ],
+      "proof": ["fast", "playwright", "visual-video", "expect"],
+      "tests": {
+        "unit": ["tests/unit/chat-message-reasoning.test.ts"],
+        "playwright": [
+          "tests/e2e/app-chat-page.smoke.spec.ts",
+          "tests/e2e/app-dev-kit-design-system-page.smoke.spec.ts",
+          "tests/e2e/chat-message.visual.spec.ts"
+        ],
+        "expect": ["tests/expect/chat.expect.ts", "tests/expect/app-chat-page.md"]
+      },
+      "notes": [
+        "Reasoning parts must be user-visible enough for auditability without crowding the final assistant answer.",
+        "Visual proof is captured through the DevKit design-system chat-message proof state."
+      ]
     },
     {
       "id": "auth.google-native",
@@ -208,7 +296,7 @@
         "lib/dashboard-data.ts",
         ".ai-dev-kit/registries/**"
       ],
-      "proof": ["fast", "playwright", "expect"],
+      "proof": ["fast", "playwright", "visual-video", "expect"],
       "tests": {
         "playwright": [
           "tests/e2e/app-dev-kit-page.smoke.spec.ts",
