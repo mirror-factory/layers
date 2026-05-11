@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.74] — 2026-05-11
+
+### Other
+- test(e2e): reconcile navigation.spec.ts with invite-only landing reality (`14ccf3e`)
+
+
 ## [0.1.73] — 2026-05-11
 
 ### Other
