@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.72] — 2026-05-11
+
+### Other
+- chore: snapshot in-flight work (src/ ui layer, Tauri scaffold, iOS bundle rename) (`611ec49`)
+
+
 ## [0.1.71] — 2026-05-07
 
 ### Other
