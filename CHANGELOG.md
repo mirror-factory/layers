@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.98] — 2026-05-11
+
+### Other
+- Harden local proof harness and dashboard evidence [skip ci] (`1adaeff`)
+
+
 ## [0.1.97] — 2026-05-10
 
 ### Other
