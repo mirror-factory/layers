@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.99] — 2026-05-11
+
+### Other
+- chore: bump to 0.1.98 [skip ci] (`988adc8`)
+
+
 ## [0.1.98] — 2026-05-11
 
 ### Other
