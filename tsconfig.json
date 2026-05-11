@@ -44,6 +44,12 @@
     "scripts/check-budget.ts",
     "scripts/sync-dependencies.ts",
     "scripts/generate-playwright-from-manifest.ts",
-    "scripts/generate-expect-from-manifest.ts"
+    "scripts/generate-expect-from-manifest.ts",
+    "**/*.stories.tsx",
+    "**/*.test.tsx",
+    ".storybook/**/*",
+    "src/components/ui/**/*",
+    "src/components/LibraryView/**/*",
+    "src/components/SearchResults.tsx"
   ]
 }

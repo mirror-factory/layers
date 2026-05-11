@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024" role="img" aria-label="Layers">
+  <title>Layers App Icon</title>
+  <!-- Background -->
+  <rect width="1024" height="1024" rx="180" fill="oklch(0.982 0.012 168)"/>
+
+  <!-- Outer arc — blue -->
+  <path
+    d="M512 128 a384 384 0 1 1 0 768"
+    fill="none"
+    stroke="oklch(0.66 0.13 240)"
+    stroke-linecap="round"
+    stroke-width="84"
+  />
+
+  <!-- Middle arc — violet -->
+  <path
+    d="M512 272 a240 240 0 1 1 0 480"
+    fill="none"
+    stroke="oklch(0.66 0.16 282)"
+    stroke-linecap="round"
+    stroke-width="84"
+  />
+
+  <!-- Halo + dot — mint -->
+  <circle cx="512" cy="512" r="128" fill="oklch(0.68 0.13 166)" opacity="0.22"/>
+  <circle cx="512" cy="512" r="64" fill="oklch(0.68 0.13 166)"/>
+</svg>

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- Background with subtle gradient -->
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%">
+      <stop offset="0%" style="stop-color:#87d4c5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0d4d44;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+
+  <!-- iOS app icon background -->
+  <rect width="1024" height="1024" rx="230" fill="url(#bg)"/>
+
+  <!-- Layers symbol - concentric arcs representing layers -->
+  <!-- Outer layer -->
+  <circle cx="512" cy="512" r="380" fill="none" stroke="#ffffff" stroke-width="40" opacity="0.8"/>
+
+  <!-- Middle layer -->
+  <circle cx="512" cy="512" r="280" fill="none" stroke="#ffffff" stroke-width="35" opacity="0.9"/>
+
+  <!-- Inner layer -->
+  <circle cx="512" cy="512" r="180" fill="none" stroke="#ffffff" stroke-width="30" opacity="1"/>
+
+  <!-- Center dot -->
+  <circle cx="512" cy="512" r="80" fill="#ffffff"/>
+
+  <!-- Small accent dots to represent "layers" concept -->
+  <circle cx="512" cy="200" r="12" fill="#ffffff" opacity="0.7"/>
+  <circle cx="512" cy="824" r="12" fill="#ffffff" opacity="0.7"/>
+  <circle cx="200" cy="512" r="12" fill="#ffffff" opacity="0.7"/>
+  <circle cx="824" cy="512" r="12" fill="#ffffff" opacity="0.7"/>
+</svg>
