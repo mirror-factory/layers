@@ -60,6 +60,18 @@ export const apiRouteContracts = [
   route("/api/account/delete", "app/api/account/delete/route.ts", ["POST"], "user", true, [200, 400, 401, 403, 503], {
     POST: { body: { confirmation: "DELETE" }, expectStatuses: [200, 401, 403, 503], skipReason: "permanently deletes the caller account" },
   }),
+  // PROD-403: OAuth client + API key lifecycle.
+  route("/api/account/oauth-clients", "app/api/account/oauth-clients/route.ts", ["GET"], "user", true, [200, 401, 403, 503]),
+  route("/api/account/oauth-clients/[id]", "app/api/account/oauth-clients/[id]/route.ts", ["DELETE"], "user", true, [200, 400, 401, 403, 404, 503], {
+    DELETE: { expectStatuses: [200, 400, 401, 403, 404, 503], skipReason: "revokes a caller-owned OAuth client" },
+  }, "/api/account/oauth-clients/sample"),
+  route("/api/account/api-keys", "app/api/account/api-keys/route.ts", ["GET", "POST"], "user", true, [200, 400, 401, 403, 500, 503], {
+    GET: { expectStatuses: [200, 401, 403, 503] },
+    POST: { body: { name: "test" }, expectStatuses: [200, 401, 403, 503], skipReason: "mints a caller-owned API key" },
+  }),
+  route("/api/account/api-keys/[id]", "app/api/account/api-keys/[id]/route.ts", ["DELETE"], "user", true, [200, 400, 401, 403, 404, 503], {
+    DELETE: { expectStatuses: [200, 400, 401, 403, 404, 503], skipReason: "revokes a caller-owned API key" },
+  }, "/api/account/api-keys/sample"),
   route("/api/calendar/callback/[provider]", "app/api/calendar/callback/[provider]/route.ts", ["GET"], "oauth", false, [302, 307, 308], undefined, "/api/calendar/callback/google"),
   route("/api/calendar/connect/[provider]", "app/api/calendar/connect/[provider]/route.ts", ["GET"], "user", false, [302, 307, 308], undefined, "/api/calendar/connect/google"),
   route("/api/calendar/disconnect/[provider]", "app/api/calendar/disconnect/[provider]/route.ts", ["POST"], "user", true, [200, 400, 401, 403, 500, 503], {

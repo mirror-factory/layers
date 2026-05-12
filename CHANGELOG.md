@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.80] — 2026-05-12
+
+### Other
+- chore: merge main to PR #44 (`bd9a7d5`)
+
+
 ## [0.1.79] — 2026-05-12
 
 ### Other

@@ -12,6 +12,7 @@ import {
   MCP_REFRESH_TOKEN_TTL_SECONDS,
   verifyPkceChallenge,
 } from "@/lib/oauth/mcp-oauth";
+import { getOauthClientByClientId, touchOauthClient } from "@/lib/oauth/clients";
 
 type TokenBody = Record<string, string | null>;
 
@@ -87,7 +88,21 @@ async function issueTokens(
   clientId: string | null,
   scope: string,
 ) {
-  const accessToken = await createMcpAccessToken(userId, scope);
+  // PROD-403: refuse to issue tokens for a revoked client. The DELETE
+  // endpoint flips `revoked_at`, and that revocation must propagate to
+  // every refresh-token redeem.
+  if (clientId) {
+    const client = await getOauthClientByClientId(supabase, clientId);
+    if (client?.revoked_at) {
+      return tokenError(
+        "client_revoked",
+        "This client has been revoked by the user. Re-register and ask the user to approve again.",
+        401,
+      );
+    }
+  }
+
+  const accessToken = await createMcpAccessToken(userId, scope, clientId);
   const refreshToken = await storeRefreshToken(supabase, userId, clientId, scope);
 
   if (!refreshToken) {
@@ -96,6 +111,12 @@ async function issueTokens(
       "Failed to create refresh token",
       500,
     );
+  }
+
+  // Bump last_used_at on the persisted oauth_clients row so the
+  // /settings/integrations UI shows a fresh "last used" timestamp.
+  if (clientId) {
+    await touchOauthClient(supabase, { userId, clientId });
   }
 
   return tokenResponse({

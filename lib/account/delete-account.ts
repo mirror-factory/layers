@@ -20,6 +20,10 @@ const USER_OWNED_TABLES: DeleteStep[] = [
   { table: "calendar_connections", column: "user_id" },
   { table: "oauth_codes", column: "user_id" },
   { table: "oauth_refresh_tokens", column: "user_id" },
+  // PROD-403: persisted OAuth client registrations + personal-access tokens
+  // are user-owned and must be erased on account deletion.
+  { table: "oauth_clients", column: "user_id" },
+  { table: "api_keys", column: "user_id" },
   { table: "webhooks", column: "user_id" },
   { table: "meetings", column: "user_id" },
   { table: "profiles", column: "user_id" },
