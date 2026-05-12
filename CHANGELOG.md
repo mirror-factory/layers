@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.73] — 2026-05-12
+
+### Other
+- Merge PR #41: PROD-389 onboarding walkthrough (`a1285f1`)
+
+
 ## [0.1.72] — 2026-05-12
 
 ### Other
