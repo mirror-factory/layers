@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-05-11T05:10:13.667Z",
+  "generatedAt": "2026-05-12T09:59:45.432Z",
   "docs": [
     {
       "id": "ai-harness-tiers",
@@ -929,7 +929,7 @@
     {
       "id": "production-quality-system",
       "localPath": "docs/PRODUCTION_QUALITY_SYSTEM.md",
-      "contentHash": "fcee48c4e9d464866f68d71beee6eb371431079c53e4ee62f682b658638101fd",
+      "contentHash": "1756ff70dc0cb68ac2056b7267855d318aae241eeac9a9d56a9ff10ff9d946d4",
       "priority": "cold"
     },
     {

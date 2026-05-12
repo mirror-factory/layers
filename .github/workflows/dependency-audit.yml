@@ -2,11 +2,12 @@ name: dependency audit
 
 on:
   schedule:
-    - cron: '0 11 * * 1'  # Mondays 11:00 UTC
+    - cron: "0 11 * * 1" # Mondays 11:00 UTC
   workflow_dispatch: {}
 
 jobs:
   audit:
+    if: ${{ vars.HOSTED_ACTIONS_ENABLED == 'true' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write

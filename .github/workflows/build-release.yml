@@ -16,7 +16,7 @@ on:
       - main
       - staging
     tags:
-      - 'v*'
+      - "v*"
   pull_request:
     branches:
       - main
@@ -24,7 +24,7 @@ on:
   workflow_dispatch:
     inputs:
       include_apple_builds:
-        description: 'Run macOS Electron and iOS Capacitor builds'
+        description: "Run macOS Electron and iOS Capacitor builds"
         type: boolean
         default: true
 
@@ -36,6 +36,13 @@ env:
 jobs:
   web:
     name: Web (Vercel)
+    if: >-
+      ${{
+        vars.HOSTED_ACTIONS_ENABLED == 'true' ||
+        github.event_name == 'workflow_dispatch' ||
+        (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'hosted-actions:run')) ||
+        (github.event_name == 'push' && contains(github.event.head_commit.message, '[hosted-actions]'))
+      }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -50,10 +57,19 @@ jobs:
 
   electron-mac:
     name: Electron (macOS)
-    if: |
-      (github.event_name == 'push' && github.ref_name == 'staging') ||
-      (github.event_name == 'push' && github.ref_type == 'tag') ||
-      (github.event_name == 'workflow_dispatch' && inputs.include_apple_builds == true)
+    if: >-
+      ${{
+        (
+          vars.HOSTED_ACTIONS_ENABLED == 'true' ||
+          github.event_name == 'workflow_dispatch' ||
+          (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'hosted-actions:run')) ||
+          (github.event_name == 'push' && contains(github.event.head_commit.message, '[hosted-actions]'))
+        ) && (
+          (github.event_name == 'push' && github.ref_name == 'staging') ||
+          (github.event_name == 'push' && github.ref_type == 'tag') ||
+          (github.event_name == 'workflow_dispatch' && inputs.include_apple_builds == true)
+        )
+      }}
     runs-on: macos-latest
     env:
       # PROD-380: signing+notarization wired through env. When CSC_LINK is empty
@@ -118,7 +134,7 @@ jobs:
         env:
           # Force-disable signing so electron-builder doesn't try to use the
           # pinned `identity` and fail on a missing keychain entry.
-          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+          CSC_IDENTITY_AUTO_DISCOVERY: "false"
         run: |
           # Strip the pinned identity AND notarize flag for this unsigned run.
           sed -i.bak '/^  identity: /d' electron-builder.yml
@@ -143,10 +159,19 @@ jobs:
 
   electron-windows:
     name: Electron (Windows)
-    if: |
-      (github.event_name == 'push' && github.ref_name == 'staging') ||
-      (github.event_name == 'push' && github.ref_type == 'tag') ||
-      github.event_name == 'workflow_dispatch'
+    if: >-
+      ${{
+        (
+          vars.HOSTED_ACTIONS_ENABLED == 'true' ||
+          github.event_name == 'workflow_dispatch' ||
+          (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'hosted-actions:run')) ||
+          (github.event_name == 'push' && contains(github.event.head_commit.message, '[hosted-actions]'))
+        ) && (
+          (github.event_name == 'push' && github.ref_name == 'staging') ||
+          (github.event_name == 'push' && github.ref_type == 'tag') ||
+          github.event_name == 'workflow_dispatch'
+        )
+      }}
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -173,10 +198,19 @@ jobs:
 
   capacitor-android:
     name: Capacitor (Android APK)
-    if: |
-      (github.event_name == 'push' && github.ref_name == 'staging') ||
-      (github.event_name == 'push' && github.ref_type == 'tag') ||
-      github.event_name == 'workflow_dispatch'
+    if: >-
+      ${{
+        (
+          vars.HOSTED_ACTIONS_ENABLED == 'true' ||
+          github.event_name == 'workflow_dispatch' ||
+          (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'hosted-actions:run')) ||
+          (github.event_name == 'push' && contains(github.event.head_commit.message, '[hosted-actions]'))
+        ) && (
+          (github.event_name == 'push' && github.ref_name == 'staging') ||
+          (github.event_name == 'push' && github.ref_type == 'tag') ||
+          github.event_name == 'workflow_dispatch'
+        )
+      }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -211,10 +245,19 @@ jobs:
 
   capacitor-ios:
     name: Capacitor (iOS) → TestFlight
-    if: |
-      (github.event_name == 'push' && github.ref_name == 'staging') ||
-      (github.event_name == 'push' && github.ref_type == 'tag') ||
-      (github.event_name == 'workflow_dispatch' && inputs.include_apple_builds == true)
+    if: >-
+      ${{
+        (
+          vars.HOSTED_ACTIONS_ENABLED == 'true' ||
+          github.event_name == 'workflow_dispatch' ||
+          (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'hosted-actions:run')) ||
+          (github.event_name == 'push' && contains(github.event.head_commit.message, '[hosted-actions]'))
+        ) && (
+          (github.event_name == 'push' && github.ref_name == 'staging') ||
+          (github.event_name == 'push' && github.ref_type == 'tag') ||
+          (github.event_name == 'workflow_dispatch' && inputs.include_apple_builds == true)
+        )
+      }}
     runs-on: macos-latest
     env:
       APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
@@ -366,7 +409,16 @@ jobs:
   release:
     name: Attach artifacts to GitHub Release
     needs: [electron-mac, electron-windows, capacitor-android]
-    if: github.event_name == 'push' && github.ref_type == 'tag'
+    if: >-
+      ${{
+        (
+          vars.HOSTED_ACTIONS_ENABLED == 'true' ||
+          github.event_name == 'workflow_dispatch' ||
+          (github.event_name == 'push' && contains(github.event.head_commit.message, '[hosted-actions]'))
+        ) &&
+        github.event_name == 'push' &&
+        github.ref_type == 'tag'
+      }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
