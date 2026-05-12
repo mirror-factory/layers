@@ -16,10 +16,10 @@ export const ApertureLogo: React.FC<{
   strokeWidth?: number;
 }> = ({ size = 220, progress = 1, strokeWidth = 2.2 }) => {
   const p = Math.max(0, Math.min(1, progress));
-  // Path lengths for stroke-dash draw-in. Computed from the arc geometry below
-  // so the dash math works without runtime measurement.
-  const outerLen = 175;
-  const middleLen = 110;
+  // Circumferences for stroke-dash draw-in. 2*PI*r for each arc.
+  // Outer: r=24 → ~150.8; Middle: r=17 → ~106.8.
+  const outerLen = 2 * Math.PI * 24;
+  const middleLen = 2 * Math.PI * 17;
 
   return (
     <svg
@@ -45,9 +45,12 @@ export const ApertureLogo: React.FC<{
         filter="url(#aperture-soft-glow)"
       />
 
-      {/* Outer arc — ink, restrained */}
-      <path
-        d="M32 8 a24 24 0 1 1 0 48"
+      {/* Outer ring — ink, restrained. Stroke-dash draws it in around the full
+       *  circumference; transform rotates so the draw-in starts at the top. */}
+      <circle
+        cx={32}
+        cy={32}
+        r={24}
         fill="none"
         stroke={TOKENS.ink}
         strokeOpacity={0.45}
@@ -55,11 +58,14 @@ export const ApertureLogo: React.FC<{
         strokeWidth={strokeWidth}
         strokeDasharray={outerLen}
         strokeDashoffset={outerLen * (1 - p)}
+        transform="rotate(-90 32 32)"
       />
 
-      {/* Middle arc — also ink, slightly darker */}
-      <path
-        d="M32 15 a17 17 0 1 1 0 34"
+      {/* Middle ring — also ink, slightly darker */}
+      <circle
+        cx={32}
+        cy={32}
+        r={17}
         fill="none"
         stroke={TOKENS.ink}
         strokeOpacity={0.62}
@@ -67,6 +73,7 @@ export const ApertureLogo: React.FC<{
         strokeWidth={strokeWidth}
         strokeDasharray={middleLen}
         strokeDashoffset={middleLen * (1 - Math.max(0, (p - 0.15) / 0.85))}
+        transform="rotate(-90 32 32)"
       />
 
       {/* Mint center — the only chroma on the frame */}
