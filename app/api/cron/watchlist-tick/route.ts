@@ -60,11 +60,7 @@ const ConditionResultSchema = z.object({
   sampleSize: z.number().optional(),
 });
 
-/**
- * Public response shape for the cron route. Exported so the dashboard and
- * other consumers can import the type for type-safe fetches.
- */
-export const WatchlistTickResponseSchema = z.object({
+const WatchlistTickResponseSchema = z.object({
   ts: z.string(),
   dry_run: z.boolean(),
   webhook_configured: z.boolean(),
@@ -83,7 +79,7 @@ export const WatchlistTickResponseSchema = z.object({
   ),
 });
 
-export type WatchlistTickResponse = z.infer<typeof WatchlistTickResponseSchema>;
+type WatchlistTickResponse = z.infer<typeof WatchlistTickResponseSchema>;
 
 // ── Auth ──────────────────────────────────────────────────────────────
 
