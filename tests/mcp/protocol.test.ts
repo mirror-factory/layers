@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => {
   const validateMcpBearerToken = vi.fn();
+  const validateMcpBearerOutcome = vi.fn();
   const registeredTools: string[] = [];
   const registeredResources: Array<{ name: string; uri: string }> = [];
   const createMcpHandler = vi.fn((configure: (server: {
@@ -31,6 +32,7 @@ const mocks = vi.hoisted(() => {
     registeredResources,
     registeredTools,
     validateMcpBearerToken,
+    validateMcpBearerOutcome,
   };
 });
 
@@ -40,6 +42,7 @@ vi.mock("mcp-handler", () => ({
 
 vi.mock("@/lib/mcp/auth", () => ({
   validateMcpBearerToken: mocks.validateMcpBearerToken,
+  validateMcpBearerOutcome: mocks.validateMcpBearerOutcome,
 }));
 
 vi.mock("@/lib/supabase/server", () => ({
@@ -69,6 +72,7 @@ describe("MCP route protocol auth", () => {
     mocks.registeredTools.length = 0;
     mocks.registeredResources.length = 0;
     mocks.validateMcpBearerToken.mockReset();
+    mocks.validateMcpBearerOutcome.mockReset();
   });
 
   it("allows initialize without bearer auth", async () => {
@@ -76,7 +80,7 @@ describe("MCP route protocol auth", () => {
 
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({ forwarded: true });
-    expect(mocks.validateMcpBearerToken).not.toHaveBeenCalled();
+    expect(mocks.validateMcpBearerOutcome).not.toHaveBeenCalled();
   });
 
   it("registers every public MCP tool on the route", async () => {
@@ -109,14 +113,14 @@ describe("MCP route protocol auth", () => {
     const res = await POST(jsonRequest("POST", { jsonrpc: "2.0", method: "notifications/initialized" }));
 
     expect(res.status).toBe(200);
-    expect(mocks.validateMcpBearerToken).not.toHaveBeenCalled();
+    expect(mocks.validateMcpBearerOutcome).not.toHaveBeenCalled();
   });
 
   it("allows DELETE protocol cleanup without bearer auth", async () => {
     const res = await DELETE(jsonRequest("DELETE"));
 
     expect(res.status).toBe(200);
-    expect(mocks.validateMcpBearerToken).not.toHaveBeenCalled();
+    expect(mocks.validateMcpBearerOutcome).not.toHaveBeenCalled();
   });
 
   it("requires bearer auth for tools/list", async () => {
@@ -129,19 +133,43 @@ describe("MCP route protocol auth", () => {
   });
 
   it("rejects invalid bearer auth", async () => {
-    mocks.validateMcpBearerToken.mockResolvedValue(null);
+    mocks.validateMcpBearerOutcome.mockResolvedValue({ kind: "invalid" });
 
     const res = await POST(
       jsonRequest("POST", { jsonrpc: "2.0", id: 3, method: "tools/list" }, "Bearer bad_key_123456789"),
     );
 
     expect(res.status).toBe(401);
-    expect(mocks.validateMcpBearerToken).toHaveBeenCalledWith("bad_key_123456789");
+    expect(mocks.validateMcpBearerOutcome).toHaveBeenCalledWith("bad_key_123456789");
     expect(await res.json()).toMatchObject({ error: "invalid_token" });
   });
 
+  it("rejects revoked client with a distinguishable client_revoked error", async () => {
+    // PROD-403: a user-revoked OAuth client must surface as `client_revoked`
+    // so MCP clients (Claude / Cursor) can show "you revoked this app" to
+    // the user instead of an opaque "invalid token" reauth loop.
+    mocks.validateMcpBearerOutcome.mockResolvedValue({ kind: "revoked" });
+
+    const res = await POST(
+      jsonRequest(
+        "POST",
+        { jsonrpc: "2.0", id: 5, method: "tools/list" },
+        "Bearer revoked_token_aaaaaaaaaaa",
+      ),
+    );
+
+    expect(res.status).toBe(401);
+    const body = (await res.json()) as { error: string; error_description: string };
+    expect(body.error).toBe("client_revoked");
+    expect(body.error_description).toMatch(/revoked/i);
+  });
+
   it("forwards valid bearer requests to a fresh MCP handler", async () => {
-    mocks.validateMcpBearerToken.mockResolvedValue({ userId: "user_a" });
+    mocks.validateMcpBearerOutcome.mockResolvedValue({
+      kind: "ok",
+      userId: "user_a",
+      clientId: null,
+    });
 
     const res = await POST(
       jsonRequest("POST", { jsonrpc: "2.0", id: 4, method: "tools/list" }, "Bearer valid_key_123456789"),

@@ -9,6 +9,7 @@ import {
   appendOAuthError,
   parseOAuthAuthorizeParams,
 } from "@/lib/oauth/mcp-oauth";
+import { upsertOauthClient } from "@/lib/oauth/clients";
 import { respondWithError } from "@/lib/errors/respond";
 import { ERROR_CODES } from "@/lib/errors/codes";
 
@@ -104,6 +105,20 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // PROD-403: persist the OAuth client on FIRST successful authorization.
+  // We deliberately do not write on register POST -- thousands of MCP clients
+  // register and abandon the flow. Reaching consent + decision="allow" is
+  // the strongest signal that this user actually wants this client.
+  if (parsed.value.clientId) {
+    const clientName = readClientName(form);
+    await upsertOauthClient(serviceSupabase, {
+      userId: user.id,
+      clientId: parsed.value.clientId,
+      clientName,
+      redirectUris: [parsed.value.redirectUri],
+    });
+  }
+
   // 303 See Other — the consent page POSTs here, but the upstream OAuth
   // callback (claude.ai/api/mcp/auth_callback, etc.) only accepts GET.
   // The default 307 preserves the POST method and triggers "Method Not
@@ -112,4 +127,14 @@ export async function POST(req: NextRequest) {
     appendOAuthCode(parsed.value.redirectUri, code, parsed.value.state),
     303,
   );
+}
+
+function readClientName(form: FormData): string | null {
+  // The consent screen passes through the `client_name` we got from the
+  // register call so the persisted row shows the human label the user
+  // saw on the approval screen (e.g. "Claude Desktop", "Cursor").
+  const raw = form.get("client_name");
+  if (typeof raw !== "string") return null;
+  const trimmed = raw.trim();
+  return trimmed.length > 0 ? trimmed : null;
 }
