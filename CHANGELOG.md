@@ -9,8 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.82] — 2026-05-12
 
-### Other
-- feat(chat): floating Ask pill + Cmd+K global hotkey (PROD-461) (`4442be3`)
+### Documentation
+- docs: KEY_ROTATION runbook + RECORDING_MANUAL_QA checklist (PROD-407, PROD-477) (`8fbef4c`)
 
 
 ## [0.1.81] — 2026-05-12
