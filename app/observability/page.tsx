@@ -105,8 +105,10 @@ const tint = (color: string, amount = 18) =>
 // ── Styles (inline object, no external CSS) ───────────────────────────
 
 const S = {
-  root: { minHeight: '100vh', maxWidth: '100vw', overflowX: 'hidden' as const, background: OBS_COLORS.canvas, color: OBS_COLORS.text, fontFamily: "'SF Mono', 'Fira Code', ui-monospace, monospace", fontSize: 13 } as const,
-  header: { padding: '12px clamp(12px, 4vw, 24px)', borderBottom: `1px solid ${OBS_COLORS.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' as const, gap: 8 } as const,
+  root: { minHeight: '100dvh', maxWidth: '100vw', overflowX: 'hidden' as const, background: OBS_COLORS.canvas, color: OBS_COLORS.text, fontFamily: "'SF Mono', 'Fira Code', ui-monospace, monospace", fontSize: 13, paddingLeft: 'var(--safe-left)', paddingRight: 'var(--safe-right)', paddingBottom: 'var(--safe-bottom)' } as const,
+  // Top inset is applied to the header so the dynamic island / camera cutout
+  // does not overlap the heading + controls on native builds.
+  header: { padding: 'calc(12px + var(--safe-top)) clamp(12px, 4vw, 24px) 12px', borderBottom: `1px solid ${OBS_COLORS.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' as const, gap: 8 } as const,
   tabs: { display: 'flex', gap: 0, borderBottom: `1px solid ${OBS_COLORS.border}`, overflowX: 'auto' as const, maxWidth: '100vw' } as const,
   tab: (active: boolean) => ({ padding: '10px 20px', cursor: 'pointer', fontSize: 11, fontWeight: 600, textTransform: 'uppercase' as const, letterSpacing: '0.05em', background: active ? OBS_COLORS.surface : 'transparent', color: active ? OBS_COLORS.mint : OBS_COLORS.muted, borderBottom: active ? `2px solid ${OBS_COLORS.mint}` : '2px solid transparent' }),
   card: { background: OBS_COLORS.surface, border: `1px solid ${OBS_COLORS.border}`, borderRadius: 8, padding: '12px 16px' } as const,
