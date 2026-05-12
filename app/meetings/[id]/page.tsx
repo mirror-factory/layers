@@ -3,6 +3,9 @@ import { TopBar } from "@/components/top-bar";
 import { MeetingCostPanel } from "@/components/meeting-cost-panel";
 import { MeetingChat } from "@/components/meeting-chat";
 import { MeetingNotesPushPanel } from "@/components/meeting-notes-push-panel";
+import { OnboardingProvider } from "@/components/onboarding/onboarding-provider";
+import { FirstMeetingToast } from "@/components/onboarding/first-meeting-toast";
+import { ONBOARDING_ANCHOR_ATTR } from "@/lib/onboarding/copy";
 import { MeetingDetailPollerWrapper } from "./poller-wrapper";
 import { getMeetingsStore } from "@/lib/meetings/store";
 import { AudioWaveRibbon } from "@/components/audio-wave-ribbon";
@@ -34,6 +37,7 @@ export default async function MeetingDetailPage({
   const isCompleted = meeting.status === "completed";
 
   return (
+    <OnboardingProvider>
     <div className="paper-calm-page recorder-page session-workspace-page min-h-screen-safe flex flex-col">
       <TopBar
         title={meeting.title ?? "Meeting Detail"}
@@ -41,6 +45,11 @@ export default async function MeetingDetailPage({
       />
 
       <main className="meeting-detail-main session-detail-main flex-1 px-4 pb-safe py-6 mx-auto w-full space-y-6">
+        {isCompleted && (
+          <div className="mx-auto w-full max-w-5xl">
+            <FirstMeetingToast />
+          </div>
+        )}
         {!isCompleted && meeting.status !== "error" && (
           <div className="mx-auto max-w-5xl space-y-6">
             <div className="meeting-detail-header flex items-center justify-between rounded-xl border border-[var(--border-card)] bg-[var(--surface-panel)] p-4">
@@ -97,6 +106,7 @@ export default async function MeetingDetailPage({
         )}
       </main>
     </div>
+    </OnboardingProvider>
   );
 }
 
@@ -168,6 +178,7 @@ function CompletedMeetingWorkspace({ meeting }: { meeting: CompletedMeeting }) {
           }
         />
 
+        <div {...{ [ONBOARDING_ANCHOR_ATTR]: "summary" }}>
         <SessionIntelligenceCanvas
           mode="summary"
           summaryText={summaryText}
@@ -186,6 +197,7 @@ function CompletedMeetingWorkspace({ meeting }: { meeting: CompletedMeeting }) {
           }
           footerStatus="Summary - transcript ready"
         />
+        </div>
       </div>
 
       <div className="session-detail-utilities">

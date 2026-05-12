@@ -44,6 +44,9 @@ import {
   type LiveMeetingSignals,
 } from "@/lib/recording/live-signals";
 import { ProductLogo, type ProductLogoId } from "@/components/product-logos";
+import { OnboardingProvider } from "@/components/onboarding/onboarding-provider";
+import { OnboardingWalkthrough } from "@/components/onboarding/onboarding-walkthrough";
+import { ONBOARDING_ANCHOR_ATTR, ONBOARDING_ANCHORS } from "@/lib/onboarding/copy";
 
 interface Turn {
   speaker: string | null;
@@ -292,8 +295,10 @@ export function RecorderHome() {
   }, [captureState, meetingContext]);
 
   return (
+    <OnboardingProvider>
     <div className="paper-calm-page recorder-page session-workspace-page min-h-screen-safe flex flex-col">
       <TopBar title="Layers" />
+      <OnboardingWalkthrough />
 
       <main className="home-app-shell mx-auto flex w-full flex-col px-4 pb-4 pt-3 sm:pt-5">
         <div
@@ -351,6 +356,7 @@ export function RecorderHome() {
                   className={`home-recorder-control-slot ${
                     isLiveWorkspace ? "is-managed" : ""
                   }`}
+                  {...{ [ONBOARDING_ANCHOR_ATTR]: ONBOARDING_ANCHORS.record }}
                 >
                   <LiveRecorder
                     ref={recorderRef}
@@ -460,6 +466,7 @@ export function RecorderHome() {
         )}
       </main>
     </div>
+    </OnboardingProvider>
   );
 }
 
@@ -711,6 +718,7 @@ function UpcomingMeetingsPanel({
           : "translate-y-0 opacity-100"
       }`}
       aria-label="Upcoming meetings"
+      {...{ [ONBOARDING_ANCHOR_ATTR]: ONBOARDING_ANCHORS.calendar }}
     >
       <div className="home-calendar-heading">
         <div className="flex items-center gap-2 flex-wrap">
@@ -792,6 +800,7 @@ function HomeInsightTip() {
     <aside
       className="home-insight-tip home-mcp-tip home-mcp-tip-clean"
       aria-label="MCP connection"
+      {...{ [ONBOARDING_ANCHOR_ATTR]: ONBOARDING_ANCHORS.mcp }}
     >
       <div className="home-mcp-clean-stack">
         <p className="home-mcp-clean-kicker">
