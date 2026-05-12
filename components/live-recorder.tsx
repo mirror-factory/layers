@@ -21,6 +21,7 @@ import {
   Square,
 } from "lucide-react";
 import { isElectron } from "@/lib/electron/bridge";
+import { parseAssemblyAiLiveMessage } from "@/lib/assemblyai/live-results";
 import { parseDeepgramLiveResultEvent } from "@/lib/deepgram/live-results";
 import {
   clearLocalRecordingDraft,
@@ -87,6 +88,34 @@ interface LiveRecorderProps {
 }
 
 type RecorderState = "idle" | "connecting" | "recording" | "finalizing";
+
+/**
+ * Recorder session state machine. `RecorderState` is the coarse-grained
+ * UI state (drives the record button); `RecorderConnectionStatus` is the
+ * finer-grained provider-connection state surfaced in the status pill.
+ *
+ * Happy path (AssemblyAI Universal Streaming, PROD-474):
+ *
+ *   idle
+ *    -> checking-mic         (getUserMedia)
+ *    -> creating-session     (POST /api/transcribe/stream/token)
+ *    -> connecting-provider  (AudioWorklet attach + new WebSocket)
+ *    -> listening            (ws.onopen)
+ *    -> transcribing         (first Turn message)
+ *    -> listening            (silence between turns)
+ *    -> finalizing           (user taps stop OR auto-finalize)
+ *    -> idle                 (POST /finalize succeeds)
+ *
+ * Failure branches:
+ *   - Provider WS closes mid-session with non-1000 code -> reconnecting
+ *     (up to MAX_RECONNECT_ATTEMPTS); on success returns to listening.
+ *   - Reconnect health check times out (no message within 5s) -> auto-
+ *     finalize with whatever transcript we have.
+ *   - getUserMedia / token-mint failures -> idle + error surfaced in UI.
+ *
+ * Local-draft mirror runs alongside every final turn so a browser refresh
+ * preserves in-flight transcript. See `lib/recording/local-draft.ts`.
+ */
 type RecorderConnectionStatus =
   | "idle"
   | "checking-mic"
@@ -228,20 +257,6 @@ function readinessIcon(id: string): LucideIcon {
   }
 }
 
-function asRecord(value: unknown): Record<string, unknown> | null {
-  return typeof value === "object" && value !== null
-    ? (value as Record<string, unknown>)
-    : null;
-}
-
-function asString(value: unknown): string | null {
-  return typeof value === "string" ? value : null;
-}
-
-function asNumber(value: unknown): number | null {
-  return typeof value === "number" && Number.isFinite(value) ? value : null;
-}
-
 function buildLegacyAssemblyAiWsUrl(token: StreamToken): string {
   const url = new URL("wss://streaming.assemblyai.com/v3/ws");
   url.searchParams.set("sample_rate", String(token.sampleRate));
@@ -257,37 +272,6 @@ function createStreamingWebSocket(token: StreamToken): WebSocket {
   return token.protocols?.length
     ? new WebSocket(wsUrl, token.protocols)
     : new WebSocket(wsUrl);
-}
-
-function parseAssemblyAiLiveMessage(message: unknown): ParsedProviderMessage {
-  const msg = asRecord(message);
-  if (!msg || msg.type !== "Turn") return { kind: "ignore" };
-
-  const transcript =
-    asString(msg.transcript) ?? asString(msg.utterance) ?? "";
-  if (!transcript.trim()) return { kind: "ignore" };
-
-  if (msg.end_of_turn === true) {
-    const words = Array.isArray(msg.words)
-      ? msg.words.map(asRecord).filter(Boolean)
-      : [];
-    const firstWord = words[0] ?? null;
-    const lastWord = words.at(-1) ?? null;
-
-    return {
-      kind: "final",
-      turn: {
-        speaker: asString(msg.speaker),
-        text: transcript,
-        start: asNumber(firstWord?.start) ?? 0,
-        end: asNumber(lastWord?.end) ?? 0,
-        confidence: asNumber(firstWord?.confidence) ?? 0,
-        final: true,
-      },
-    };
-  }
-
-  return { kind: "partial", text: transcript };
 }
 
 function parseProviderLiveMessage(
