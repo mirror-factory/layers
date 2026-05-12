@@ -149,6 +149,14 @@ export const apiRouteContracts = [
   route("/api/settings", "app/api/settings/route.ts", ["GET", "PUT"], "public", true, badRequestOrUnavailable),
   route("/api/stripe/checkout", "app/api/stripe/checkout/route.ts", ["POST"], "user", true, badRequestOrUnavailable),
   route("/api/stripe/webhook", "app/api/stripe/webhook/route.ts", ["POST"], "webhook", true, [200, 400, 503]),
+  route("/api/account/recipes/[id]", "app/api/account/recipes/[id]/route.ts", ["PATCH", "DELETE"], "user", true, [200, 400, 401, 404, 502, 503], {
+    PATCH: { body: { name: "Updated" }, expectStatuses: [200, 401, 404, 503], skipReason: "mutates caller's recipe" },
+    DELETE: { expectStatuses: [200, 401, 404, 503], skipReason: "deletes caller's recipe" },
+  }, "/api/account/recipes/sample"),
+  route("/api/account/recipes", "app/api/account/recipes/route.ts", ["GET", "POST"], "user", true, [200, 201, 400, 401, 502, 503], {
+    GET: { expectStatuses: [200, 401, 503] },
+    POST: { body: { name: "Test recipe", prompt: "Summarize this meeting" }, expectStatuses: [201, 401, 503], skipReason: "creates a recipe in caller's account" },
+  }),
   route("/api/recordings/sign-upload", "app/api/recordings/sign-upload/route.ts", ["POST"], "user", true, [200, 400, 401, 502, 503], {
     POST: { body: { contentType: "audio/webm", sizeBytes: 1024 }, expectStatuses: [200, 401, 503] },
   }),
