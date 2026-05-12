@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.74] — 2026-05-12
+
+### Other
+- Merge PR #45: PROD-460 safe-area dynamic island/notch (`6890b58`)
+
+
 ## [0.1.73] — 2026-05-12
 
 ### Other
