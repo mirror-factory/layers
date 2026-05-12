@@ -7,10 +7,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.1.72] — 2026-05-12
+## [0.1.77] — 2026-05-12
 
 ### Other
-- test(evals): per-tool eval cases — happy/malformed/adversarial (PROD-328) (`6a521cb`)
+- chore: merge main to PR #38 (`79187c7`)
+
+
+## [0.1.76] — 2026-05-12
+
+### Other
+- chore: merge main to PR #37 (`c3dc459`)
+
+
+## [0.1.75] — 2026-05-12
+
+### Other
+- chore: merge latest main to resolve auto-bump conflict (PR #36) (`07ae808`)
+
+
+## [0.1.74] — 2026-05-11
+
+### Other
+- test(e2e): reconcile navigation.spec.ts with invite-only landing reality (`14ccf3e`)
+
+
+## [0.1.73] — 2026-05-11
+
+### Other
+- chore(research): refresh vitest entry to clear stale gate warning (`905a1ee`)
+
+
+## [0.1.72] — 2026-05-11
+
+### Other
+- chore(public): remove GitHub footer link + sign-up CTA from nav (`1703eba`)
 
 
 ## [0.1.71] — 2026-05-07

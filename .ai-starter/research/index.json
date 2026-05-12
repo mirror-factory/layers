@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdated": "2026-04-26T22:15:31.822Z",
+  "lastUpdated": "2026-05-11T22:58:46.268Z",
   "entries": [
     {
       "id": "vercel-ai-sdk",
@@ -102,14 +102,14 @@
       "id": "vitest",
       "library": "Vitest",
       "version": "latest",
-      "lastFetched": "2026-04-26T22:15:31.822Z",
+      "lastFetched": "2026-05-11T22:58:46.268Z",
       "summary": "Fast unit test runner compatible with Jest API. Use vi.hoisted() for mock vars in vi.mock() factories.",
       "docsUrl": "https://vitest.dev/guide/",
       "context7LibraryId": "/vitest-dev/vitest",
       "type": "library",
       "path": ".ai-starter/research/libraries/vitest.md",
-      "validUntil": "2026-05-03T22:15:31.822Z",
-      "contentHash": "sha256:5c151d0ec840cc3d3325a03b816372038c74ede181841799b5da1b87cc15a287",
+      "validUntil": "2026-05-18T22:58:46.268Z",
+      "contentHash": "sha256:ba8449f0c543cf483bbcd02989c358757fa5ffd8be184c488386252fb01fafd8",
       "sources": [
         {
           "url": "https://vitest.dev/guide/",
@@ -124,5 +124,5 @@
       ]
     }
   ],
-  "generated": "2026-04-26T22:15:31.822Z"
+  "generated": "2026-05-11T22:58:46.268Z"
 }
