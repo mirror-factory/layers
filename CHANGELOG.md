@@ -7,16 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.1.97] — 2026-05-12
-
-### Other
-- fix(remotion): aperture renders as full concentric rings + add thumbnail (`b3fe6ed`)
-
-
 ## [0.1.96] — 2026-05-12
 
 ### Other
-- feat(remotion): Mirror Factory intro video — "context wherever you are" (PROD-480) (`921219e`)
+- feat(monitoring): watchlist + cron-driven alert tick (PROD-371) (`d2b2d61`)
 
 
 ## [0.1.95] — 2026-05-12

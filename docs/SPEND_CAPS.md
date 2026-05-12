@@ -200,10 +200,13 @@ Single source of truth for "how much are we spending right now":
 
 Set `ALERT_WEBHOOK_URL` to a Slack incoming webhook (`https://hooks.slack.com/services/...`) in Vercel envs (Production + Preview). The synthetic alert dispatcher at `POST /api/internal/alerts` posts a Slack-Block-Kit payload when any threshold breaches; full table in [`INCIDENT_RUNBOOK.md`](./INCIDENT_RUNBOOK.md#health-endpoint--alerts). When the env is unset, the dispatcher emits an `alert.would_fire` log line instead — useful for previewing thresholds before wiring a real channel.
 
+The **watchlist** layer (PROD-371) runs `GET /api/cron/watchlist-tick` every 5 minutes via Vercel Cron (see `vercel.json`). It evaluates spend %, error rate, p95 latency on key routes, and transcript failure rate; cooldowns (15 min per condition) prevent re-paging on the same incident. See [`POST_LAUNCH_MONITORING.md` → "Automated Watchlist Tick"](./POST_LAUNCH_MONITORING.md#automated-watchlist-tick-prod-371) for the full table.
+
 | Env var | Required for | Notes |
 | --- | --- | --- |
 | `INTERNAL_ADMIN_TOKEN` | `/api/internal/health` + `/api/internal/alerts` in production | Random 32-char string; rotate alongside other secrets. Optional in dev. |
 | `ALERT_WEBHOOK_URL` | Real Slack delivery | Slack-compatible incoming webhook. Falls back to log-only when unset. |
+| `CRON_SECRET` | `/api/cron/watchlist-tick` in production | Random 32-char string. Vercel Cron sends this as `Authorization: Bearer <value>`; set the same value in env. |
 
 ---
 

@@ -39,6 +39,10 @@ export const apiRouteContracts = [
   route("/api/ai-logs", "app/api/ai-logs/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
   route("/api/ai-logs/stats", "app/api/ai-logs/stats/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
   route("/api/control-plane/evidence-export", "app/api/control-plane/evidence-export/route.ts", ["GET"], "dev-kit", false, [200, 403, 404, 503], undefined, "/api/control-plane/evidence-export", false, "Successful response is a gzip evidence archive."),
+  route("/api/cron/watchlist-tick", "app/api/cron/watchlist-tick/route.ts", ["GET", "POST"], "service", true, [200, 400, 401], {
+    GET: { expectStatuses: [200, 401] },
+    POST: { expectStatuses: [200, 401] },
+  }, "/api/cron/watchlist-tick", true, "Vercel-Cron-friendly tick: bearer matches CRON_SECRET or INTERNAL_ADMIN_TOKEN; runs every 5 min in prod."),
   route("/api/control-plane", "app/api/control-plane/route.ts", ["GET", "POST"], "dev-kit", false, [200, 403, 404, 503], {
     GET: { expectStatuses: okOrUnavailable },
     POST: { body: {}, expectStatuses: [200, 400, 403, 404, 503] },
@@ -148,6 +152,7 @@ export const apiRouteContracts = [
   }),
   route("/api/oauth/token", "app/api/oauth/token/route.ts", ["POST"], "oauth", false, badRequestOrUnavailable),
   route("/api/observability/health", "app/api/observability/health/route.ts", ["GET"], "public", true, [200]),
+  route("/api/observability/watchlist", "app/api/observability/watchlist/route.ts", ["GET"], "public", true, [200]),
   route("/api/search", "app/api/search/route.ts", ["POST"], "user", true, badRequestOrUnavailable, {
     POST: { body: { query: "", limit: 5 }, expectStatuses: [400, 401, 503] },
   }),
