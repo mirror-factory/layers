@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.72] — 2026-05-12
+
+### Other
+- fix(native): respect iOS dynamic island + Android display cutouts on every page (PROD-460) (`a22c737`)
+
+
 ## [0.1.71] — 2026-05-07
 
 ### Other
