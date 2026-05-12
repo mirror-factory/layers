@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.103] — 2026-05-12
+
+### Other
+- fix(public-nav): opaque sticky header on mobile to stop content bleed-through (`97eb609`)
+
+
 ## [0.1.102] — 2026-05-12
 
 ### Other
