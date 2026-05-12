@@ -3,6 +3,8 @@ export const dynamic = "force-dynamic";
 
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
+import { sendWelcomeEmailOnce } from "@/lib/email/onboarding";
+import { log } from "@/lib/logger";
 
 /**
  * Web OAuth + magic-link callback.
@@ -72,6 +74,32 @@ export async function GET(request: NextRequest) {
     if (error) {
       return NextResponse.redirect(`${origin}/sign-in?error=verify_failed`);
     }
+  }
+
+  // Fire welcome email on first sign-in. Idempotent — guarded by
+  // `profiles.welcome_email_sent_at` (PROD-390). Best-effort: never block
+  // the redirect on a Resend / Supabase hiccup.
+  try {
+    const { data: userResult } = await supabase.auth.getUser();
+    const user = userResult?.user;
+    if (user?.id && user.email) {
+      // Fire-and-forget — Next.js will hold the route open until the
+      // promise resolves (no `waitUntil` available in this runtime) but
+      // any failure is swallowed so the redirect always wins.
+      await sendWelcomeEmailOnce({
+        userId: user.id,
+        email: user.email,
+      }).catch((err) => {
+        log.warn("auth.callback.welcome-email-failed", {
+          userId: user.id,
+          err: { message: err instanceof Error ? err.message : String(err) },
+        });
+      });
+    }
+  } catch (err) {
+    log.warn("auth.callback.welcome-email-error", {
+      err: { message: err instanceof Error ? err.message : String(err) },
+    });
   }
 
   return response;
