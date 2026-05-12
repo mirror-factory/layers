@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.101] — 2026-05-12
+
+### Documentation
+- docs: session log wave 3 — iOS+Android sim walkthrough + deploy-blocker fix (`8685903`)
+
+
 ## [0.1.100] — 2026-05-12
 
 ### Other
