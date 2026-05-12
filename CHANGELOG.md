@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.95] — 2026-05-12
+
+### Testing
+- test: integration anchors for PROD-473 + PROD-463 routes + fix transcribe-batch error-message assertion (`ce9a6c6`)
+
+
 ## [0.1.94] — 2026-05-12
 
 ### Other
