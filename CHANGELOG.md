@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.104] — 2026-05-12
+
+### Other
+- fix(sign-in): use canonical support@mirrorfactory.ai instead of orphan layers.app (`62edd83`)
+
+
 ## [0.1.103] — 2026-05-12
 
 ### Other
