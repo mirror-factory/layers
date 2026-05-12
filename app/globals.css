@@ -1324,9 +1324,44 @@ body {
   }
 }
 
-/* Bottom safe area for scrollable page content */
+/* Safe-area helpers.
+ *
+ * These utilities apply iOS dynamic island / Android display cutout insets on
+ * native Capacitor builds. They resolve to 0 on the web (where
+ * env(safe-area-inset-*) is unsupported), so they're safe everywhere.
+ *
+ * Required setup (already wired):
+ *   - <meta name="viewport" content="...,viewport-fit=cover"> in app/layout.tsx
+ *   - StatusBar.overlaysWebView: true in capacitor.config.ts (iOS)
+ *   - AndroidManifest theme sets windowLayoutInDisplayCutoutMode=shortEdges
+ */
+.pt-safe {
+  padding-top: var(--safe-top);
+}
+
 .pb-safe {
   padding-bottom: var(--safe-bottom);
+}
+
+.pl-safe {
+  padding-left: var(--safe-left);
+}
+
+.pr-safe {
+  padding-right: var(--safe-right);
+}
+
+.px-safe {
+  padding-left: var(--safe-left);
+  padding-right: var(--safe-right);
+}
+
+/* Combined top+horizontal inset for fixed/sticky page headers that must
+ * clear the dynamic island and rounded screen corners. */
+.inset-safe-top {
+  padding-top: var(--safe-top);
+  padding-left: var(--safe-left);
+  padding-right: var(--safe-right);
 }
 
 /* Animated crosshatch grid background for transcript panels */

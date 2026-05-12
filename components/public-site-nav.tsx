@@ -19,7 +19,16 @@ export function PublicSiteNav() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-[var(--border-subtle,oklch(0.84_0.024_168/0.5))] bg-[var(--bg-page,oklch(0.982_0.012_168))]/85 backdrop-blur-md">
+    <header
+      className="sticky top-0 z-40 border-b border-[var(--border-subtle,oklch(0.84_0.024_168/0.5))] bg-[var(--bg-page,oklch(0.982_0.012_168))]/85 backdrop-blur-md"
+      style={{
+        // Clear iPhone dynamic island / Android display cutouts on native
+        // builds while remaining 0 on regular web.
+        paddingTop: "var(--safe-top)",
+        paddingLeft: "var(--safe-left)",
+        paddingRight: "var(--safe-right)",
+      }}
+    >
       <nav
         aria-label="Primary navigation"
         className="mx-auto flex max-w-[1180px] items-center justify-between px-6 py-4 md:px-10"

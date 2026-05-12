@@ -679,7 +679,17 @@ export default function ControlPlanePage() {
 
   return (
     <>
-      <main className="starter-pixel min-h-dvh bg-neutral-950 bg-[linear-gradient(rgba(245,245,245,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(245,245,245,0.045)_1px,transparent_1px)] bg-[size:24px_24px] px-4 py-6 text-neutral-100 sm:px-6 sm:py-8">
+      <main
+        className="starter-pixel min-h-dvh bg-neutral-950 bg-[linear-gradient(rgba(245,245,245,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(245,245,245,0.045)_1px,transparent_1px)] bg-[size:24px_24px] px-4 py-6 text-neutral-100 sm:px-6 sm:py-8"
+        style={{
+          // Stack the iOS dynamic island / Android cutout inset on top of the
+          // page's existing py-6 / sm:py-8 spacing instead of replacing it.
+          paddingTop: "calc(1.5rem + var(--safe-top))",
+          paddingBottom: "calc(1.5rem + var(--safe-bottom))",
+          paddingLeft: "max(1rem, var(--safe-left))",
+          paddingRight: "max(1rem, var(--safe-right))",
+        }}
+      >
         <PixelStyles />
         <div className="mx-auto flex max-w-7xl flex-col gap-8">
         <header className="relative overflow-hidden border-2 border-neutral-100 bg-neutral-950 p-5 shadow-[10px_10px_0_0_rgba(245,245,245,0.18)]">

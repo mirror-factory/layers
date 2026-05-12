@@ -26,6 +26,12 @@ export function SiteFooter() {
     <footer
       aria-labelledby="site-footer-heading"
       className="border-t border-[var(--border-subtle,oklch(0.84_0.024_168/0.6))] bg-[var(--bg-page,oklch(0.982_0.012_168))]"
+      style={{
+        // Respect Android navigation gesture bar / iOS home indicator inset.
+        paddingBottom: "var(--safe-bottom)",
+        paddingLeft: "var(--safe-left)",
+        paddingRight: "var(--safe-right)",
+      }}
     >
       <h2 id="site-footer-heading" className="sr-only">
         Site footer

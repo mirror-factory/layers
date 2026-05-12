@@ -61,7 +61,7 @@ export default function ChatPage() {
         </div>
       </main>
 
-      <div className="mx-auto w-full max-w-3xl px-4">
+      <div className="mx-auto w-full max-w-3xl px-4 pb-safe">
         <div className="mx-auto max-w-3xl">
           <ChatInput
             onSend={(text) => {

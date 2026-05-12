@@ -7,28 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.1.75] — 2026-05-12
+## [0.1.73] — 2026-05-12
 
 ### Other
-- Merge PR #35: PROD-457+458 footer/nav cleanup (`546cc9c`)
+- fix(tests): split Pixel device cases to separate spec per Playwright constraint (PROD-460) (`34a676e`)
 
 
-## [0.1.74] — 2026-05-11
-
-### Other
-- test(e2e): reconcile navigation.spec.ts with invite-only landing reality (`14ccf3e`)
-
-
-## [0.1.73] — 2026-05-11
+## [0.1.72] — 2026-05-12
 
 ### Other
-- chore(research): refresh vitest entry to clear stale gate warning (`905a1ee`)
-
-
-## [0.1.72] — 2026-05-11
-
-### Other
-- chore(public): remove GitHub footer link + sign-up CTA from nav (`1703eba`)
+- fix(native): respect iOS dynamic island + Android display cutouts on every page (PROD-460) (`a22c737`)
 
 
 ## [0.1.71] — 2026-05-07
