@@ -2,8 +2,8 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "crons": [
     {
-      "path": "/api/cron/onboarding-emails",
-      "schedule": "0 17 * * *"
+      "path": "/api/cron/watchlist-tick",
+      "schedule": "*/5 * * * *"
     }
   ]
 }
