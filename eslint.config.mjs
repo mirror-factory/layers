@@ -29,11 +29,18 @@ const eslintConfig = defineConfig([
       "components/live-transcript-view.tsx",
       "components/theme-toggle.tsx",
       "components/ui/liquid-glass-button.tsx",
+      // PROD-389 onboarding: the tour popover measures its anchor in a
+      // layout effect to position itself; the toast derives visibility
+      // from onboarding state but keeps a local dismissed flag. Both are
+      // legitimate exceptions to the React Compiler's stricter rules.
+      "components/onboarding/first-meeting-toast.tsx",
+      "components/onboarding/tour-popover.tsx",
     ],
     rules: {
       "react-hooks/immutability": "off",
       "react-hooks/refs": "off",
       "react-hooks/set-state-in-effect": "off",
+      "react-hooks/preserve-manual-memoization": "off",
     },
   },
   {
