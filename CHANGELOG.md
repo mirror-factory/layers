@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.75] — 2026-05-12
+
+### Other
+- Merge PR #43: PROD-408 Google OAuth in-app iOS+Android (`d607eb7`)
+
+
 ## [0.1.74] — 2026-05-12
 
 ### Other
