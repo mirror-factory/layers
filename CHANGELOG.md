@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.92] — 2026-05-12
+
+### Other
+- feat(meetings): raw ↔ enhanced notes toggle (PROD-465) (`4667a63`)
+
+
+## [0.1.91] — 2026-05-12
+
+### Other
+- feat(meetings): raw ↔ enhanced notes toggle (PROD-465) (`419f0bc`)
+
+
 ## [0.1.90] — 2026-05-12
 
 ### Other
