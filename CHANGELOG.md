@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.108] — 2026-05-12
+
+### Other
+- fix(public-nav): auth-aware nav + redirect signed-in users away from /sign-in /sign-up (PROD-485, PROD-486) (`06fe39a`)
+
+
 ## [0.1.107] — 2026-05-12
 
 ### Other
