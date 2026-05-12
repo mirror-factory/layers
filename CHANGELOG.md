@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.107] — 2026-05-12
+
+### Other
+- docs(qa): authed walkthrough — 4 missing prod migrations caught + applied (`1169617`)
+
+
 ## [0.1.106] — 2026-05-12
 
 ### Other
