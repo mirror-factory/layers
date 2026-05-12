@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.106] — 2026-05-12
+
+### Other
+- docs(qa): cross-platform QA checklist (iOS / Android / macOS / Windows / Web) (`2c41101`)
+
+
 ## [0.1.105] — 2026-05-12
 
 ### Other
