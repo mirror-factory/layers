@@ -387,6 +387,11 @@ function HeroComposition() {
         position: "relative",
         minHeight: "clamp(360px, 40vw, 440px)",
         isolation: "isolate",
+        // Decorative halos and offset cards inside this composition use
+        // negative insets and percentage offsets that can extend past the
+        // mobile viewport. Clip overflow at the composition boundary so the
+        // landing page never produces a horizontal scrollbar.
+        overflow: "hidden",
       }}
     >
       {/* Soft mint halo behind composition */}
@@ -1156,6 +1161,12 @@ function SearchMediaCard() {
           "0 28px 60px -32px color-mix(in oklch, var(--layers-blue) 22%, transparent)",
         display: "grid",
         gap: 14,
+        // Card itself must participate in column shrinking when the parent
+        // section collapses to a single mobile column.
+        minWidth: 0,
+        // Guard against any inner long-text descendant blowing past the
+        // mobile viewport before its own min-width: 0 propagates.
+        overflow: "hidden",
       }}
     >
       <div
@@ -1290,7 +1301,10 @@ function SearchMediaCard() {
             className="search-result"
             style={{
               display: "grid",
-              gridTemplateColumns: "auto 1fr",
+              // minmax(0, 1fr) lets the right column shrink below its content
+              // width so long quotes wrap instead of pushing the row past the
+              // viewport on mobile.
+              gridTemplateColumns: "auto minmax(0, 1fr)",
               columnGap: 14,
               rowGap: 2,
               padding: "10px 12px",
@@ -1323,11 +1337,20 @@ function SearchMediaCard() {
                 fontSize: "0.78rem",
                 color: "var(--fg-default)",
                 fontWeight: 600,
+                minWidth: 0,
+                overflowWrap: "anywhere",
               }}
             >
               {ctx}
             </span>
-            <span style={{ fontSize: "0.78rem", color: "var(--fg-muted)" }}>
+            <span
+              style={{
+                fontSize: "0.78rem",
+                color: "var(--fg-muted)",
+                minWidth: 0,
+                overflowWrap: "anywhere",
+              }}
+            >
               {quote}
             </span>
           </li>
@@ -1637,6 +1660,12 @@ function ConnectMediaCard() {
           "0 28px 60px -32px color-mix(in oklch, var(--layers-violet) 22%, transparent)",
         display: "grid",
         gap: 16,
+        // Card itself must participate in column shrinking when the parent
+        // numbered-row collapses to a single mobile column.
+        minWidth: 0,
+        // Clip any inner descendant that hasn't propagated its min-width: 0
+        // so the landing page never produces a horizontal scrollbar.
+        overflow: "hidden",
       }}
     >
       <div
@@ -1696,7 +1725,9 @@ function ConnectMediaCard() {
               className={`mcp-row ${isActive ? "is-active" : ""}`}
               style={{
                 display: "grid",
-                gridTemplateColumns: "auto 1fr auto",
+                // minmax(0, 1fr) lets the middle column shrink so the row
+                // never extends past the parent card on mobile viewports.
+                gridTemplateColumns: "auto minmax(0, 1fr) auto",
                 gap: 14,
                 alignItems: "center",
                 padding: "14px 16px",
@@ -1736,13 +1767,16 @@ function ConnectMediaCard() {
               >
                 <Icon size={22} />
               </span>
-              <div style={{ display: "grid", gap: 2 }}>
+              <div style={{ display: "grid", gap: 2, minWidth: 0 }}>
                 <span
                   style={{
                     fontSize: "0.92rem",
                     fontWeight: 600,
                     color: "var(--fg-default)",
                     letterSpacing: "-0.005em",
+                    minWidth: 0,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
                   }}
                 >
                   {name}
@@ -1751,6 +1785,9 @@ function ConnectMediaCard() {
                   style={{
                     fontSize: "0.74rem",
                     color: "var(--fg-muted)",
+                    minWidth: 0,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
                   }}
                 >
                   {sub}

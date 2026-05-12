@@ -112,6 +112,15 @@ test.describe("Home page", () => {
     await expect(heading).toBeVisible({ timeout: 5000 });
   });
 
+  // The /record/live screen was redesigned around SessionCaptureCard +
+  // a managed-presentation LiveRecorder (see app/record/live/page.tsx and
+  // the `presentation === "managed"` branch in components/live-recorder.tsx).
+  // The legacy "Recording readiness" panel with per-check tiles ("Plan",
+  // "Microphone", etc.) is no longer rendered — managed mode only emits an
+  // sr-only status region for screen readers, and readiness state is now
+  // surfaced through the start-button label and SessionCaptureCard chrome.
+  // The "focused on mobile" intent is preserved: a single primary recording
+  // control plus the workspace header are reachable above the fold.
   test("keeps recording controls focused on mobile", async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/record/live", { waitUntil: "domcontentloaded" });
@@ -119,8 +128,15 @@ test.describe("Home page", () => {
     await expect(
       page.getByRole("button", { name: "Start recording" }),
     ).toBeVisible();
-    await expect(page.getByLabel("Recording readiness")).toBeVisible();
-    await expect(page.getByLabel("Recording readiness")).toContainText("Plan");
+    // The session capture card surfaces the active workspace title. This
+    // replaces the old readiness-checklist assertions and proves the
+    // recording shell still composes correctly at mobile widths.
+    await expect(
+      page.getByRole("heading", { name: "Product planning session" }),
+    ).toBeVisible();
+    // The audio wave ribbon is the visual anchor of the mobile recording
+    // shell; if it disappears, the page has regressed.
+    await expect(page.locator(".session-capture-card")).toBeVisible();
   });
 });
 
