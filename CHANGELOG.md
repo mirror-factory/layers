@@ -7,28 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.1.75] — 2026-05-12
-
-### Other
-- Merge PR #43: PROD-408 Google OAuth in-app iOS+Android (`d607eb7`)
-
-
-## [0.1.74] — 2026-05-12
-
-### Other
-- Merge PR #45: PROD-460 safe-area dynamic island/notch (`6890b58`)
-
-
-## [0.1.73] — 2026-05-12
-
-### Other
-- fix(tests): split Pixel device cases to separate spec per Playwright constraint (PROD-460) (`34a676e`)
-
-
 ## [0.1.72] — 2026-05-12
 
 ### Other
-- fix(native): respect iOS dynamic island + Android display cutouts on every page (PROD-460) (`a22c737`)
+- feat(account): OAuth client + API key lifecycle UI and routes (PROD-403) (`90573cb`)
 
 
 ## [0.1.71] — 2026-05-07

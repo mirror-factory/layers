@@ -7,7 +7,10 @@ import {
 import { z } from "zod";
 import { getSupabaseServer } from "@/lib/supabase/server";
 import { searchMeetings } from "@/lib/embeddings/search";
-import { validateMcpBearerToken } from "@/lib/mcp/auth";
+import {
+  validateMcpBearerOutcome,
+  validateMcpBearerToken,
+} from "@/lib/mcp/auth";
 import {
   buildMeetingDashboardPayload,
   getLayersMeetingDashboardHtml,
@@ -440,8 +443,23 @@ async function handler(req: Request) {
   }
 
   const key = auth.slice(7);
-  const result = await validateMcpBearerToken(key);
-  if (!result) {
+  // PROD-403: use the richer `outcome` so we can distinguish a revoked
+  // client from a generally-invalid token and surface that to the client.
+  // Claude / Cursor surface `client_revoked` to the user as "you revoked
+  // this app -- reconnect to continue", which is a much better UX than the
+  // generic "invalid token, please re-auth" loop.
+  const outcome = await validateMcpBearerOutcome(key);
+  if (outcome.kind === "revoked") {
+    return new Response(
+      JSON.stringify({
+        error: "client_revoked",
+        error_description:
+          "This MCP client has been revoked. The user must re-approve it from Layers /settings/integrations.",
+      }),
+      { status: 401, headers: { "Content-Type": "application/json" } },
+    );
+  }
+  if (outcome.kind !== "ok") {
     return new Response(
       JSON.stringify({ error: "invalid_token", error_description: "Invalid bearer token" }),
       { status: 401, headers: { "Content-Type": "application/json" } },
@@ -450,8 +468,8 @@ async function handler(req: Request) {
 
   // Rate-limit per-tool / per-user (PROD-404).
   const rateLimitResult = await applyRateLimit({
-    userId: result.userId,
-    clientId: extractClientId(auth),
+    userId: outcome.userId,
+    clientId: outcome.clientId ?? extractClientId(auth),
     tool: detectToolFromBody(parsedBody),
     req,
   });
@@ -459,7 +477,7 @@ async function handler(req: Request) {
     return rateLimitResult;
   }
 
-  return createLayersMcpHandler(result.userId)(req);
+  return createLayersMcpHandler(outcome.userId)(req);
 }
 
 function extractClientId(authHeader: string): string {

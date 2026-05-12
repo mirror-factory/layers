@@ -59,6 +59,16 @@ function createSupabaseMock(options: {
 
           return { data: null, error: { message: "unexpected table" } };
         },
+        async maybeSingle() {
+          // PROD-403: the token route now also queries `oauth_clients` via
+          // getOauthClientByClientId before issuing tokens. The existing
+          // fake doesn't seed that table so return null -- which the route
+          // treats as "no persisted row yet, proceed normally".
+          if (table === "oauth_clients") {
+            return { data: null, error: null };
+          }
+          return { data: null, error: null };
+        },
         delete() {
           return {
             async eq(_column: string, value: string) {
@@ -72,12 +82,26 @@ function createSupabaseMock(options: {
           return { error: null };
         },
         update(row: Record<string, unknown>) {
-          return {
-            async eq(_column: string, value: string) {
-              calls.revokedRefresh = { ...row, token_hash: value };
-              return { error: null };
+          // The existing oauth_refresh_tokens update chain is .update().eq()
+          // ending in a single eq(token_hash, ...). PROD-403 adds a second
+          // path on `oauth_clients` that chains .eq().eq() (user_id, client_id).
+          // To keep this fake usable for both, the .eq() chain is itself
+          // awaitable AND returns a builder with another .eq().
+          const chain: {
+            eq(column: string, value: string): typeof chain;
+            then(onFulfilled: (v: { error: null }) => unknown): Promise<unknown>;
+          } = {
+            eq(_column: string, value: string) {
+              if (table === "oauth_refresh_tokens") {
+                calls.revokedRefresh = { ...row, token_hash: value };
+              }
+              return chain;
+            },
+            then(onFulfilled: (v: { error: null }) => unknown) {
+              return Promise.resolve({ error: null }).then(onFulfilled);
             },
           };
+          return chain;
         },
       };
     },

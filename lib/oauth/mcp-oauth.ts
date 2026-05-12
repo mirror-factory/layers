@@ -15,6 +15,7 @@ const JWT_SECRET = new TextEncoder().encode(
 
 export interface OAuthAuthorizeParams {
   clientId: string | null;
+  clientName: string | null;
   codeChallenge: string;
   codeChallengeMethod: "S256";
   redirectUri: string;
@@ -86,10 +87,21 @@ export function parseOAuthAuthorizeParams(
     return oauthParamError("invalid_request", "PKCE S256 code_challenge is required");
   }
 
+  // `client_name` is optional metadata propagated from
+  // `/api/oauth/register`'s response so the consent screen can display
+  // and the persisted `oauth_clients` row can store a human-readable name
+  // (PROD-403). We cap length to keep adversarial values bounded.
+  const rawClientName = searchParams.get("client_name");
+  const clientName =
+    typeof rawClientName === "string" && rawClientName.trim()
+      ? rawClientName.trim().slice(0, 200)
+      : null;
+
   return {
     ok: true,
     value: {
       clientId: searchParams.get("client_id"),
+      clientName,
       codeChallenge,
       codeChallengeMethod: "S256",
       redirectUri,
@@ -166,8 +178,14 @@ export function hashOAuthToken(token: string): string {
 export async function createMcpAccessToken(
   userId: string,
   scope = MCP_OAUTH_SCOPE,
+  clientId: string | null = null,
 ): Promise<string> {
-  return new SignJWT({ scope })
+  // `client_id` is embedded as a custom claim so the MCP route can detect
+  // revoked clients (PROD-403) without round-tripping the bearer through
+  // a separate cache. The claim is optional -- legacy tokens issued before
+  // PROD-403 shipped don't carry it, and validation treats their absence
+  // as "no revocation check possible" (fall back to user-level checks).
+  return new SignJWT({ scope, ...(clientId ? { client_id: clientId } : {}) })
     .setProtectedHeader({ alg: "HS256" })
     .setSubject(userId)
     .setAudience(MCP_OAUTH_AUDIENCE)
