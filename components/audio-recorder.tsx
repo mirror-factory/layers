@@ -6,6 +6,7 @@ import {
   microphoneUnsupportedMessage,
   recordingStartErrorMessage,
 } from "@/lib/recording/microphone-errors";
+import { detectCurrentRecordingPlatform } from "@/lib/recording/platform";
 
 interface AudioRecorderProps {
   onRecordingComplete: (blob: Blob) => void;
@@ -65,7 +66,7 @@ export function AudioRecorder({ onRecordingComplete }: AudioRecorderProps) {
         setDuration((d) => d + 1);
       }, 1000);
     } catch (err) {
-      setError(recordingStartErrorMessage(err));
+      setError(recordingStartErrorMessage(err, detectCurrentRecordingPlatform()));
       setMode("idle");
     }
   }, [onRecordingComplete]);

@@ -82,6 +82,37 @@ The Codex in-app browser can render and test the UI, but microphone capture may
 not always be exposed by the embedded browser. Use Chrome, Safari, or the native
 Capacitor shell for actual microphone capture verification.
 
+## Microphone Permissions (PROD-476)
+
+The microphone permission flow differs per platform. We centralize re-enable
+copy in `lib/recording/microphone-errors.ts` and detect the runtime platform
+in `lib/recording/platform.ts`:
+
+- **iOS (Capacitor):** `NSMicrophoneUsageDescription` is injected into
+  `ios/App/App/Info.plist` by `scripts/patch-native-oauth.mjs` after every
+  `npx cap sync` (since `ios/` is gitignored). The first time the user taps
+  Start the OS shows the system prompt with that copy. If denied, the
+  recorder surfaces a re-enable hint pointing at
+  `Settings → Layers → Microphone`.
+- **Android (Capacitor):** `<uses-permission android:name="android.permission.RECORD_AUDIO" />`
+  is asserted in `android/app/src/main/AndroidManifest.xml` by the same
+  patcher. The Capacitor WebView triggers the runtime prompt when the page
+  calls `getUserMedia` for the first time. Denial copy points at
+  `Settings → Apps → Layers → Permissions → Microphone`.
+- **Electron macOS:** `electron-builder.yml` sets
+  `mac.extendInfo.NSMicrophoneUsageDescription` so the bundled `Info.plist`
+  triggers the macOS TCC prompt on first capture.
+  `electron/entitlements.mac.plist` already includes
+  `com.apple.security.device.audio-input`. Denial copy directs the user to
+  `System Settings → Privacy & Security → Microphone`.
+- **Web fallback:** when `navigator.mediaDevices.getUserMedia` is denied we
+  detect the browser via user-agent and link the user at the browser-specific
+  re-enable path (`chrome://settings/content/microphone`, Safari Websites
+  pane, Firefox lock icon, Edge content settings).
+
+Coverage lives in `tests/recording-microphone-errors.test.ts`. Manual
+device QA is tracked in [`docs/RECORDING_MANUAL_QA.md`](./RECORDING_MANUAL_QA.md).
+
 ## Tests
 
 Relevant coverage:
