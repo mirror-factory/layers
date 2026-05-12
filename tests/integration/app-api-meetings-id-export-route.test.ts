@@ -60,6 +60,7 @@ const completedMeeting: Meeting = {
     nextSteps: ["Prototype the search flow"],
   },
   costBreakdown: null,
+  userNotes: null,
   error: null,
   createdAt: "2026-04-28T10:00:00.000Z",
   updatedAt: "2026-04-28T10:30:00.000Z",

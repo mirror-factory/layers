@@ -22,6 +22,7 @@ const minimalMeeting: Meeting = {
   summary: null,
   intakeForm: null,
   costBreakdown: null,
+  userNotes: null,
   error: null,
   createdAt: "2026-04-28T12:00:00.000Z",
   updatedAt: "2026-04-28T12:01:00.000Z",

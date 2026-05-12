@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { TopBar } from "@/components/top-bar";
 import { MeetingCostPanel } from "@/components/meeting-cost-panel";
 import { MeetingChat } from "@/components/meeting-chat";
+import { MeetingNotesEditor } from "@/components/meeting-notes-editor";
 import { MeetingNotesPushPanel } from "@/components/meeting-notes-push-panel";
 import { OnboardingProvider } from "@/components/onboarding/onboarding-provider";
 import { FirstMeetingToast } from "@/components/onboarding/first-meeting-toast";
@@ -200,6 +201,12 @@ function CompletedMeetingWorkspace({ meeting }: { meeting: CompletedMeeting }) {
               onCitationClick={onCitationClick}
             />
           )}
+          notesPanel={
+            <MeetingNotesEditor
+              meetingId={meeting.id}
+              initialValue={meeting.userNotes}
+            />
+          }
           footerStatus="Summary - transcript ready"
         />
         </div>

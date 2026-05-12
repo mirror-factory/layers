@@ -27,6 +27,7 @@ interface SupabaseRow {
   summary: unknown;
   intake_form: unknown;
   cost_breakdown: unknown;
+  user_notes: string | null;
   error: string | null;
   created_at: string;
   updated_at: string;
@@ -44,6 +45,7 @@ function rowToMeeting(row: SupabaseRow): Meeting {
     intakeForm: (row.intake_form as Meeting["intakeForm"]) ?? null,
     costBreakdown:
       (row.cost_breakdown as Meeting["costBreakdown"]) ?? null,
+    userNotes: row.user_notes,
     error: row.error,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
@@ -64,6 +66,7 @@ function updateToSnake(
   if (patch.intakeForm !== undefined) out.intake_form = patch.intakeForm;
   if (patch.costBreakdown !== undefined)
     out.cost_breakdown = patch.costBreakdown;
+  if (patch.userNotes !== undefined) out.user_notes = patch.userNotes;
   if (patch.error !== undefined) out.error = patch.error;
   return out;
 }

@@ -7347,6 +7347,90 @@ body.dark:has(.paper-calm-page) {
   overflow-wrap: anywhere;
 }
 
+/* PROD-465: raw notes panel — your-notes-as-author surface in the
+ * Notes tab. Sits next to .session-summary-panel and intentionally uses
+ * the same outer rhythm so flipping tabs feels like flipping between
+ * two views of the same artifact. */
+.session-notes-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: clamp(18px, 1.6vw, 26px);
+}
+
+.session-notes-panel header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+}
+
+.session-notes-panel header > div {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--text-primary, #1d2333);
+}
+
+.session-notes-panel header h3 {
+  font-size: 0.95rem;
+  font-weight: 620;
+  margin: 0;
+}
+
+.session-notes-editor {
+  width: 100%;
+  min-height: 240px;
+  resize: vertical;
+  padding: 0.85rem 1rem;
+  background: var(--bg-page, #fbfaf7);
+  border: 1px solid var(--border-subtle, oklch(0.84 0.024 168 / 0.5));
+  border-radius: 10px;
+  color: var(--text-primary, #1d2333);
+  font-size: 0.92rem;
+  line-height: 1.7;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.session-notes-editor:focus {
+  border-color: var(--layers-mint, oklch(0.74 0.13 168));
+  box-shadow: 0 0 0 3px oklch(0.74 0.13 168 / 0.18);
+}
+
+.session-notes-save-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  color: var(--text-muted, #6c768a);
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+  background: var(--bg-surface, oklch(0.997 0.004 168));
+}
+
+.session-notes-save-pill.is-saving {
+  color: var(--text-secondary, #303b53);
+}
+
+.session-notes-save-pill.is-saving svg {
+  animation: notes-pill-spin 900ms linear infinite;
+}
+
+.session-notes-save-pill.is-saved {
+  color: var(--layers-mint, oklch(0.55 0.13 168));
+}
+
+.session-notes-save-pill.is-error {
+  color: oklch(0.55 0.15 25);
+}
+
+@keyframes notes-pill-spin {
+  to { transform: rotate(360deg); }
+}
+
 .session-transcript-panel {
   flex: 1;
   min-height: 0;
