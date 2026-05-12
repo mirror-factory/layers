@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.93] — 2026-05-12
+
+### Documentation
+- docs: final session log update — PRs #55-59 + process learnings (`a520c1a`)
+
+
 ## [0.1.92] — 2026-05-12
 
 ### Other
