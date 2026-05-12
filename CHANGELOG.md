@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.72] — 2026-05-12
+
+### Other
+- feat(onboarding): first-run walkthrough + first-meeting helper (PROD-389) (`e641a4d`)
+
+
 ## [0.1.71] — 2026-05-07
 
 ### Other
