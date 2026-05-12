@@ -7,16 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.1.73] — 2026-05-12
-
-### Other
-- Merge PR #39: PROD-328 AI tool eval cases (`9fa4e48`)
-
-
 ## [0.1.72] — 2026-05-12
 
 ### Other
-- test(evals): per-tool eval cases — happy/malformed/adversarial (PROD-328) (`6a521cb`)
+- feat(transcription): OpenAI adapter for whisper-1 + gpt-4o-(mini-)transcribe (PROD-363) (`0552fb0`)
 
 
 ## [0.1.71] — 2026-05-07
