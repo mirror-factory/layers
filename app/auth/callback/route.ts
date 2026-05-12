@@ -4,6 +4,16 @@ export const dynamic = "force-dynamic";
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 
+/**
+ * Web OAuth + magic-link callback.
+ *
+ * Native (Capacitor) Google OAuth does NOT come through this route. On
+ * iOS/Android the Supabase `redirectTo` is the custom URL scheme
+ * `com.mirrorfactory.layers://auth/callback`, which Safari hands back to
+ * the app via `App.addListener('appUrlOpen', ...)`. The PKCE code is
+ * exchanged inside the WebView by `lib/auth/native-oauth.ts`, so this
+ * server route only sees web traffic. See PROD-408.
+ */
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
