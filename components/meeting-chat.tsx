@@ -1,56 +1,54 @@
 "use client";
 
 import { useMemo } from "react";
-import { ArrowDown, FileText, ListChecks, Mail, MessageSquare, Target, Users } from "lucide-react";
+import {
+  AlertTriangle,
+  ArrowDown,
+  CheckCircle2,
+  Mail,
+  MessageSquare,
+  Users,
+  type LucideIcon,
+} from "lucide-react";
 import { DefaultChatTransport } from "ai";
 import { useChat } from "@ai-sdk/react";
 import { ChatInput } from "@/components/chat-input";
 import { ChatMessage } from "@/components/chat-message";
 import { useStickToBottom } from "@/lib/hooks/use-stick-to-bottom";
+import {
+  MEETING_PROMPTS,
+  interpolateParticipant,
+} from "@/lib/chat/contextual-prompts";
 
 interface MeetingChatProps {
   meetingId: string;
   variant?: "default" | "workspace";
   onCitationClick?: (segmentNumber: number) => void;
+  /**
+   * Name of the primary non-self participant. When provided, the
+   * "Draft a follow-up to {participant}" chip interpolates this value.
+   */
+  participantName?: string | null;
 }
 
-const templates = [
-  {
-    label: "Sales",
-    icon: FileText,
-    prompt:
-      "Use this meeting to create a sales discovery brief with pain points, budget signals, decision makers, objections, next steps, risks, and transcript segment citations.",
-  },
-  {
-    label: "Interview",
-    icon: Users,
-    prompt:
-      "Use this meeting to create an interview debrief with candidate strengths, concerns, evidence, follow-ups, and a hiring recommendation.",
-  },
-  {
-    label: "Standup",
-    icon: ListChecks,
-    prompt:
-      "Use this meeting to create a standup summary with progress, blockers, decisions, owners, and action items.",
-  },
-  {
-    label: "Follow-up",
-    icon: Mail,
-    prompt:
-      "Draft a concise follow-up email from this meeting. Include decisions, commitments, owners, deadlines, and cite transcript segments in a notes section.",
-  },
-  {
-    label: "Intake",
-    icon: Target,
-    prompt:
-      "Turn this meeting into an intake record with intent, budget, timeline, decision makers, requirements, pain points, risks, next steps, and segment citations.",
-  },
+/**
+ * Icon paired with each meeting-scoped prompt. Kept in MEETING_PROMPTS order
+ * so the icon-chip rendering pattern continues to read left-to-right
+ * meaningfully. PROD-462: the prior 5 generic templates (Sales / Interview /
+ * Standup / Follow-up / Intake) are migrated to Recipes in PROD-463.
+ */
+const MEETING_PROMPT_ICONS: readonly LucideIcon[] = [
+  CheckCircle2, // "What did we decide?"
+  Users, // "Owner and deadlines"
+  Mail, // "Draft a follow-up to {participant}"
+  AlertTriangle, // "Risks I should flag"
 ] as const;
 
 export function MeetingChat({
   meetingId,
   variant = "default",
   onCitationClick,
+  participantName,
 }: MeetingChatProps) {
   const transport = useMemo(
     () =>
@@ -78,7 +76,16 @@ export function MeetingChat({
   const { scrollRef, hasNewContent, isAtBottom, scrollToBottom, onScroll } =
     useStickToBottom(messages.length);
 
-  function sendTemplate(prompt: string) {
+  const promptChips = useMemo(
+    () =>
+      MEETING_PROMPTS.map((prompt, index) => ({
+        prompt: interpolateParticipant(prompt, participantName),
+        icon: MEETING_PROMPT_ICONS[index] ?? MessageSquare,
+      })),
+    [participantName],
+  );
+
+  function sendPrompt(prompt: string) {
     if (isLoading) return;
     clearError();
     void sendMessage({ text: prompt });
@@ -126,27 +133,24 @@ export function MeetingChat({
               ? "session-prompt-chips"
               : "mt-3 flex flex-wrap gap-2"
           }
-          aria-label="Meeting templates"
+          aria-label="Suggested prompts"
         >
-          {templates.map((template) => {
-            const Icon = template.icon;
-            return (
-              <button
-                key={template.label}
-                type="button"
-                onClick={() => sendTemplate(template.prompt)}
-                disabled={isLoading}
-                className={
-                  isWorkspace
-                    ? "session-prompt-button"
-                    : "inline-flex min-h-9 items-center gap-2 rounded-lg border border-[var(--border-card)] bg-[var(--bg-secondary)] px-3 text-xs font-medium text-[var(--text-secondary)] transition-colors hover:border-layers-mint/50 hover:text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-layers-mint/40 disabled:opacity-50"
-                }
-              >
-                {!isWorkspace && <Icon size={14} aria-hidden />}
-                {template.label}
-              </button>
-            );
-          })}
+          {promptChips.map(({ prompt, icon: Icon }) => (
+            <button
+              key={prompt}
+              type="button"
+              onClick={() => sendPrompt(prompt)}
+              disabled={isLoading}
+              className={
+                isWorkspace
+                  ? "session-prompt-button"
+                  : "inline-flex min-h-9 items-center gap-2 rounded-lg border border-[var(--border-card)] bg-[var(--bg-secondary)] px-3 text-xs font-medium text-[var(--text-secondary)] transition-colors hover:border-layers-mint/50 hover:text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-layers-mint/40 disabled:opacity-50"
+              }
+            >
+              {!isWorkspace && <Icon size={14} aria-hidden />}
+              {prompt}
+            </button>
+          ))}
         </div>
       </div>
 
