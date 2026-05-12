@@ -7,10 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.1.82] — 2026-05-12
+## [0.1.83] — 2026-05-12
 
 ### Other
-- test+fix(recording): verify AssemblyAI realtime streaming path end-to-end (PROD-474) (`e04c4d1`)
+- chore: merge main into PR #49 to resolve auto-bump cascade (`2cfbd52`)
+
+
+## [0.1.82] — 2026-05-12
+
+### Documentation
+- docs: KEY_ROTATION runbook + RECORDING_MANUAL_QA checklist (PROD-407, PROD-477) (`8fbef4c`)
 
 
 ## [0.1.81] — 2026-05-12
