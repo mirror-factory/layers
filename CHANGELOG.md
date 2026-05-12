@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.83] — 2026-05-12
+
+### Other
+- feat(recording): per-platform microphone permission handling (PROD-476) (`3d1b5a9`)
+
+
 ## [0.1.82] — 2026-05-12
 
 ### Documentation
