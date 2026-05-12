@@ -104,26 +104,109 @@ export function otpEmail(otp: string): {
   };
 }
 
+// ---------------------------------------------------------------------------
+// Onboarding sequence (PROD-390)
+//
+// Three transactional emails. Voice: Paper Calm. Direct, restrained,
+// granola-not-mailchimp. No "Hi there!", no emojis, no exclamation marks,
+// no marketing pile-on. One idea per email, one CTA, one quiet sign-off.
+// ---------------------------------------------------------------------------
+
+const SIGN_OFF = `<p style="font-size:13px;line-height:1.6;color:${EMAIL_COLORS.textMuted};margin:24px 0 0;">— The Layers team</p>`;
+
+function unsubscribeFooter(appUrl: string): string {
+  return `<p style="font-size:11px;line-height:1.5;color:${EMAIL_COLORS.textFaint};margin:24px 0 0;text-align:center;">
+    You're getting this because you signed up for Layers.
+    <a href="${appUrl}/settings/notifications" style="color:${EMAIL_COLORS.textFaint};text-decoration:underline;">Turn off onboarding emails</a>.
+  </p>`;
+}
+
+/**
+ * Welcome — sent on first sign-in.
+ * One sentence of welcome, one CTA to /record, no feature list.
+ */
 export function welcomeEmail(appUrl: string): {
   subject: string;
   html: string;
 } {
+  const recordUrl = `${appUrl}/record`;
   return {
-    subject: "Welcome to Layers",
+    subject: "Welcome to Layers — here's what to do next",
     html: layout(`
-      <p style="font-size:14px;line-height:1.6;color:${EMAIL_COLORS.text};margin:0 0 8px;">
-        Welcome! You're all set to start capturing and analyzing conversations.
+      <p style="font-size:15px;line-height:1.6;color:${EMAIL_COLORS.text};margin:0 0 12px;">
+        Welcome to Layers.
       </p>
-      <p style="font-size:14px;line-height:1.6;color:${EMAIL_COLORS.text};margin:0 0 16px;">
-        Here's what you can do:
+      <p style="font-size:14px;line-height:1.7;color:${EMAIL_COLORS.text};margin:0 0 8px;">
+        The fastest way to feel what Layers does is to record one short conversation —
+        a standup, a customer call, a working session. We'll transcribe it, surface the
+        decisions and action items, and remember it for next time.
       </p>
-      <ul style="font-size:14px;line-height:1.8;color:${EMAIL_COLORS.text};padding-left:20px;margin:0 0 16px;">
-        <li>Upload audio recordings for batch transcription</li>
-        <li>Record live with real-time speaker diarization</li>
-        <li>Get AI-powered summaries, action items, and intake forms</li>
-        <li>Track costs transparently per meeting</li>
-      </ul>
-      ${ctaButton("Get Started", appUrl)}
+      ${ctaButton("Start a recording", recordUrl)}
+      <p style="font-size:13px;line-height:1.6;color:${EMAIL_COLORS.textMuted};margin:16px 0 0;">
+        Two minutes is enough.
+      </p>
+      ${SIGN_OFF}
+      ${unsubscribeFooter(appUrl)}
+    `),
+  };
+}
+
+/**
+ * First-meeting nudge — sent 24h after sign-in when zero meetings exist.
+ * Lower-stakes ask. No guilt, no streak language.
+ */
+export function firstMeetingNudgeEmail(appUrl: string): {
+  subject: string;
+  html: string;
+} {
+  const recordUrl = `${appUrl}/record`;
+  return {
+    subject: "Try a short recording to see what Layers remembers",
+    html: layout(`
+      <p style="font-size:15px;line-height:1.6;color:${EMAIL_COLORS.text};margin:0 0 12px;">
+        You signed up yesterday and haven't recorded anything yet.
+      </p>
+      <p style="font-size:14px;line-height:1.7;color:${EMAIL_COLORS.text};margin:0 0 8px;">
+        That's fine — but the value of Layers shows up after the first meeting,
+        not before. A two-minute test recording will give you the full picture:
+        transcript, summary, action items, and the start of a searchable memory
+        across future conversations.
+      </p>
+      ${ctaButton("Record two minutes", recordUrl)}
+      <p style="font-size:13px;line-height:1.6;color:${EMAIL_COLORS.textMuted};margin:16px 0 0;">
+        Or upload an existing audio file — same flow.
+      </p>
+      ${SIGN_OFF}
+      ${unsubscribeFooter(appUrl)}
+    `),
+  };
+}
+
+/**
+ * Week-1 follow-up — sent 7 days after sign-in.
+ * Soft feedback ask. Plain reply, no form.
+ */
+export function weekOneFollowupEmail(appUrl: string): {
+  subject: string;
+  html: string;
+} {
+  return {
+    subject: "What's worked? What hasn't?",
+    html: layout(`
+      <p style="font-size:15px;line-height:1.6;color:${EMAIL_COLORS.text};margin:0 0 12px;">
+        You've been on Layers for a week.
+      </p>
+      <p style="font-size:14px;line-height:1.7;color:${EMAIL_COLORS.text};margin:0 0 8px;">
+        We read every reply. If something's slow, broken, or missing — or if
+        a particular meeting flow saved you time — we want to hear it. One
+        sentence is plenty.
+      </p>
+      <p style="font-size:14px;line-height:1.7;color:${EMAIL_COLORS.text};margin:16px 0 0;">
+        Reply to this email, or write to
+        <a href="mailto:support@mirrorfactory.ai" style="color:${EMAIL_COLORS.mint};text-decoration:underline;">support@mirrorfactory.ai</a>.
+      </p>
+      ${SIGN_OFF}
+      ${unsubscribeFooter(appUrl)}
     `),
   };
 }
