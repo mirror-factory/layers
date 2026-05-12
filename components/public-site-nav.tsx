@@ -8,15 +8,23 @@ import { LayersLogo } from "@/components/layers-logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 
-const NAV_LINKS = [
+const ANON_NAV_LINKS = [
   { href: "/download", label: "Download" },
   { href: "/pricing", label: "Pricing" },
   { href: "/sign-in", label: "Sign in" },
 ] as const;
 
-export function PublicSiteNav() {
+const AUTHED_NAV_LINKS = [
+  { href: "/meetings", label: "Meetings" },
+  { href: "/chat", label: "Chat" },
+  { href: "/settings", label: "Settings" },
+  { href: "/profile", label: "Profile" },
+] as const;
+
+export function PublicSiteNav({ isAuthed = false }: { isAuthed?: boolean }) {
   const pathname = usePathname() ?? "/";
   const [open, setOpen] = useState(false);
+  const NAV_LINKS = isAuthed ? AUTHED_NAV_LINKS : ANON_NAV_LINKS;
 
   return (
     <header className="sticky top-0 z-40 border-b border-[var(--border-subtle,oklch(0.84_0.024_168/0.5))] bg-[var(--bg-page,oklch(0.982_0.012_168))] supports-[backdrop-filter]:md:bg-[var(--bg-page,oklch(0.982_0.012_168))]/85 supports-[backdrop-filter]:md:backdrop-blur-md">
