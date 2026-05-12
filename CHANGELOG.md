@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.72] — 2026-05-12
+
+### Other
+- test(evals): per-tool eval cases — happy/malformed/adversarial (PROD-328) (`6a521cb`)
+
+
 ## [0.1.71] — 2026-05-07
 
 ### Other
