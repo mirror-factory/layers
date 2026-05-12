@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.82] — 2026-05-12
+
+### Other
+- test+fix(recording): verify AssemblyAI realtime streaming path end-to-end (PROD-474) (`e04c4d1`)
+
+
 ## [0.1.81] — 2026-05-12
 
 ### Other
