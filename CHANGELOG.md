@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.99] — 2026-05-12
+
+### Other
+- fix(native): respect iOS dynamic island in TestingBanner (PROD-460 follow-up) (`973ff0d`)
+
+
 ## [0.1.98] — 2026-05-12
 
 ### Documentation
