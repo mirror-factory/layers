@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.75] — 2026-05-12
 
 ### Other
-- chore: merge latest main to resolve auto-bump conflict (PR #37) (`8259d63`)
+- chore: merge latest main to resolve auto-bump conflict (PR #36) (`07ae808`)
 
 
 ## [0.1.74] — 2026-05-11
