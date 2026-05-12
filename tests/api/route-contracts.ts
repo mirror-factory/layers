@@ -125,7 +125,8 @@ export const apiRouteContracts = [
   route("/api/meetings/[id]/notes-package", "app/api/meetings/[id]/notes-package/route.ts", ["POST"], "user", true, badRequestOrUnavailable, {
     POST: { body: { destination: "agent_clipboard", trigger: "manual_push", include_transcript: false }, expectStatuses: [200, 400, 401, 404, 503] },
   }, "/api/meetings/sample/notes-package"),
-  route("/api/meetings/[id]", "app/api/meetings/[id]/route.ts", ["GET", "DELETE"], "user", true, [200, 401, 404, 503], {
+  route("/api/meetings/[id]", "app/api/meetings/[id]/route.ts", ["GET", "PATCH", "DELETE"], "user", true, [200, 400, 401, 404, 503], {
+    PATCH: { body: { userNotes: "Meeting notes" }, expectStatuses: [200, 400, 401, 404, 503], skipReason: "mutates caller's meeting notes" },
     DELETE: { expectStatuses: [200, 400, 401, 404, 409, 503], skipReason: "deletes empty local draft recordings" },
   }, "/api/meetings/sample"),
   route("/api/meetings", "app/api/meetings/route.ts", ["GET"], "user", true, okOrUnavailable),

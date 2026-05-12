@@ -79,3 +79,5 @@ supabase/.temp/
 .codex/hooks/__pycache__/
 **/__pycache__/
 tmp/
+src-tauri/target/
+src-tauri/Cargo.lock

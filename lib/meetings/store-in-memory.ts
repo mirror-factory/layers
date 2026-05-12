@@ -23,6 +23,7 @@ export class InMemoryMeetingsStore implements MeetingsStore {
       summary: null,
       intakeForm: null,
       costBreakdown: null,
+      userNotes: null,
       error: null,
       createdAt: now,
       updatedAt: now,

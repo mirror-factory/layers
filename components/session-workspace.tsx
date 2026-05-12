@@ -17,6 +17,7 @@ import {
   Link2,
   ListChecks,
   MessageCircle,
+  NotebookPen,
   SendHorizontal,
   Sparkles,
   Square,
@@ -87,9 +88,22 @@ interface SessionIntelligenceCanvasProps {
   askPanel?: ReactNode | ((props: SessionAskPanelRenderProps) => ReactNode);
   askTimestampLabel?: string;
   footerStatus?: string;
+  /**
+   * Notes panel (PROD-465 raw ↔ enhanced toggle). Renders inside the Notes
+   * tab on the summary view. If omitted, the Notes tab still mounts but
+   * shows an empty placeholder. Typical consumer passes a
+   * `<MeetingNotesEditor />` here that auto-saves to /api/meetings/[id].
+   */
+  notesPanel?: ReactNode;
 }
 
-type SessionTab = "summary" | "transcript" | "key-points" | "ask" | "actions";
+type SessionTab =
+  | "summary"
+  | "notes"
+  | "transcript"
+  | "key-points"
+  | "ask"
+  | "actions";
 
 const LIVE_SESSION_TABS: Array<{
   id: SessionTab;
@@ -108,6 +122,7 @@ const SUMMARY_SESSION_TABS: Array<{
   icon: typeof AudioLines;
 }> = [
   { id: "summary", label: "Summary", icon: Sparkles },
+  { id: "notes", label: "Notes", icon: NotebookPen },
   { id: "transcript", label: "Transcript", icon: AudioLines },
   { id: "ask", label: "Ask", icon: MessageCircle },
   { id: "actions", label: "Actions", icon: ListChecks },
@@ -237,6 +252,7 @@ export function SessionIntelligenceCanvas({
   askPanel,
   askTimestampLabel = "Now",
   footerStatus,
+  notesPanel,
 }: SessionIntelligenceCanvasProps) {
   const [activeTab, setActiveTab] = useState<SessionTab>(
     mode === "summary" ? "summary" : "transcript",
@@ -446,6 +462,26 @@ export function SessionIntelligenceCanvas({
               timestampLabel={askTimestampLabel}
             />
           ))}
+
+        {activeTab === "notes" && (
+          notesPanel ?? (
+            <article
+              className="session-panel session-notes-panel"
+              aria-label="Your notes — empty placeholder"
+            >
+              <header>
+                <div>
+                  <NotebookPen size={18} aria-hidden="true" />
+                  <h3>Your notes</h3>
+                </div>
+              </header>
+              <p className="session-summary-empty">
+                Notes will appear here. Open this meeting's detail page to
+                start writing.
+              </p>
+            </article>
+          )
+        )}
 
         {activeTab === "actions" && <ActionListCard actions={actions} />}
       </div>
