@@ -138,12 +138,12 @@ Wherever any of these breaks: file `platform:<x>` ticket with pre-fix screenshot
 
 ## E. Authenticated app — meetings & recording
 
-(Requires test account. Flag `platform:web` first to validate baseline before opening Capacitor + Electron tickets.)
+Test user `qa-walkthrough-2026-05-12@mirrorfactory.ai` (`d0b8989a-…`) was minted via Supabase MCP on 2026-05-12 — created directly in `auth.users` (the gotrue `Scan error on column "confirmation_token": converting NULL to string is unsupported` gotcha required `COALESCE(... , '')` on all token columns). Cookie name: `sb-psatqzrakxauktmzahfc-auth-token`; build from `/auth/v1/token?grant_type=password` response with `base64-` prefix.
 
 | # | Surface | ios | and | mac | win | web |
 |---|---------|-----|-----|-----|-----|-----|
-| E1 | `/meetings` list paginates; status badges (processing/completed/error) render; search filters | ❓ | ❓ | ❓ | ❓ | ❓ |
-| E2 | `/meetings/[id]` shows transcript, AI summary, action items, cost panel | ❓ | ❓ | ❓ | ❓ | ❓ |
+| E1 | `/meetings` list — page returns 200 with cookie auth; UI not visually walked | ❓ | ❓ | ❓ | ❓ | 🟢 200 |
+| E2 | `/meetings/[id]` — not walked (test user has no meetings yet) | ❓ | ❓ | ❓ | ❓ | ❓ |
 | E3 | Meeting notes editor auto-saves (1 s debounce) | ❓ | ❓ | ❓ | ❓ | ❓ |
 | E4 | Meeting chat (per-meeting AI) streams responses | ❓ | ❓ | ❓ | ❓ | ❓ |
 | E5 | Push notes to external tool (Linear / Notion / Slack) | ❓ | ❓ | ❓ | ❓ | ❓ |
@@ -169,11 +169,11 @@ Wherever any of these breaks: file `platform:<x>` ticket with pre-fix screenshot
 
 | # | Surface | ios | and | mac | win | web |
 |---|---------|-----|-----|-----|-----|-----|
-| G1 | `/chat` — empty state shows suggested prompts; streaming completes | ❓ | ❓ | ❓ | ❓ | ❓ |
+| G1 | `/chat` — page returns 200; streaming not walked | ❓ | ❓ | ❓ | ❓ | 🟢 200 |
 | G2 | `/ask` — "ask" mode returns RAG-grounded answer with sources | ❓ | ❓ | ❓ | ❓ | ❓ |
 | G3 | `/ask` — "find" mode returns raw chunks with similarity scores + chunk-type filter | ❓ | ❓ | ❓ | ❓ | ❓ |
 | G4 | Floating Ask pill (Cmd+K) opens sheet from anywhere; submits without losing scroll | ❓ | ❓ | ❓ | ❓ | ❓ |
-| G5 | `/search` — direct meeting search; suggested queries render | ❓ | ❓ | ❓ | ❓ | ❓ |
+| G5 | `/search` — page returns 200; suggested queries not walked | ❓ | ❓ | ❓ | ❓ | 🟢 200 |
 | G6 | `/agent-builder` — UI loads; tool selection persists | ❓ | ❓ | ❓ | ❓ | ❓ |
 | G7 | MCP server: `/api/mcp/mcp` responds 200 to `initialize` request with `Authorization: Bearer <PAT>` | ✓ | ✓ | ✓ | ✓ | ✓ |
 
@@ -181,12 +181,12 @@ Wherever any of these breaks: file `platform:<x>` ticket with pre-fix screenshot
 
 | # | Surface | ios | and | mac | win | web |
 |---|---------|-----|-----|-----|-----|-----|
-| H1 | `/settings` — model dropdowns persist; reload restores selection | ❓ | ❓ | ❓ | ❓ | ❓ |
-| H2 | `/settings/integrations` — list OAuth clients; revoke prompts confirm | ❓ | ❓ | ❓ | ❓ | ❓ |
-| H3 | `/settings/integrations` — mint new PAT shows full key once; partial mask after | ❓ | ❓ | ❓ | ❓ | ❓ |
-| H4 | `/settings/recipes` — CRUD; recipe rules persist | ❓ | ❓ | ❓ | ❓ | ❓ |
+| H1 | `/settings` — page returns 200; dropdown persistence not walked | ❓ | ❓ | ❓ | ❓ | 🟢 200 |
+| H2 | `/settings/integrations` — list OAuth clients; revoke prompts confirm | ❓ | ❓ | ❓ | ❓ | 🟢 `/api/account/oauth-clients` 200 (empty for new user) |
+| H3 | `/settings/integrations` — mint new PAT shows full key once; partial mask after | ❓ | ❓ | ❓ | ❓ | 🟢 `/api/account/api-keys` 200 (empty for new user) |
+| H4 | `/settings/recipes` — CRUD; recipe rules persist | ❓ | ❓ | ❓ | ❓ | 🟢 `/api/account/recipes` 200 with 5 seeded starters (post-PROD-483) |
 | H5 | Recording reminder schedule fires local notification | ❓ | ❓ | ❓ | ❓ | ⏭ |
-| H6 | `/profile` — email, plan, sign out, account deletion | ❓ | ❓ | ❓ | ❓ | ❓ |
+| H6 | `/profile` — email, plan, sign out, account deletion | ❓ | ❓ | ❓ | ❓ | 🟢 200 |
 | H7 | `/admin/pricing` (admin only) — pricing config + activate version | ⏭ | ⏭ | ⏭ | ⏭ | ❓ |
 | H8 | Stripe checkout: hosted page loads; test card succeeds; webhook updates plan | ⏭ | ⏭ | ⏭ | ⏭ | ❓ |
 
@@ -205,11 +205,13 @@ Wherever any of these breaks: file `platform:<x>` ticket with pre-fix screenshot
 
 | # | Surface | ios | and | mac | win | web |
 |---|---------|-----|-----|-----|-----|-----|
-| J1 | `/observability` — AI Calls log table loads | ⏭ | ⏭ | ❓ | ❓ | ❓ |
+| J1 | `/observability` — AI Calls log table loads | ⏭ | ⏭ | ❓ | ❓ | 🟢 200 |
 | J2 | `/observability` — Errors panel surfaces stack traces | ⏭ | ⏭ | ❓ | ❓ | ❓ |
 | J3 | `/observability` — Charts (cost/day, TTFT histogram) render | ⏭ | ⏭ | ❓ | ❓ | ❓ |
-| J4 | `/usage` — total meetings, minutes, STT spend, LLM spend tiles populate | ❓ | ❓ | ❓ | ❓ | ❓ |
+| J4 | `/usage` — page returns 200; tile values not verified | ❓ | ❓ | ❓ | ❓ | 🟢 200 |
 | J5 | `/dev-kit` dashboards (status, overview, regressions, etc.) load without 5xx | ⏭ | ⏭ | ❓ | ❓ | ❓ |
+| J6 | `/api/observability/health` returns sink status | — | — | — | — | 🟢 200 (stdout + langfuse configured) |
+| J7 | `/api/observability/watchlist` returns alert-condition evaluation | — | — | — | — | 🟢 200 (4 conditions passing) |
 
 ## K. Native platform behaviors
 
@@ -232,6 +234,7 @@ Wherever any of these breaks: file `platform:<x>` ticket with pre-fix screenshot
 | L1 | `/api/cron/onboarding-emails` returns 200 with `Authorization: Bearer $CRON_SECRET` | server-only | server-only | server-only | server-only | server-only |
 | L2 | `/api/cron/watchlist-tick` returns 200; no schema-export error on `pnpm build` | server-only PR#70 | — | — | — | — |
 | L3 | `pnpm build` exits 0 on every push (deploy-blocker tripwire) | — | — | — | — | ✓ PR#70 |
+| L4 | Numbered migrations under `supabase/migrations/` are actually applied to prod (caught 4 missing this run) | — | — | — | — | 🔴 PROD-483 |
 
 ## M. Errors & edge cases
 
