@@ -7,10 +7,52 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.1.72] — 2026-05-12
+## [0.1.79] — 2026-05-12
 
 ### Other
-- feat(account): OAuth client + API key lifecycle UI and routes (PROD-403) (`90573cb`)
+- chore: merge main to PR #40 (`2c5d6ca`)
+
+
+## [0.1.78] — 2026-05-12
+
+### Other
+- chore: merge main to PR #39 (`0268e67`)
+
+
+## [0.1.77] — 2026-05-12
+
+### Other
+- chore: merge main to PR #38 (`79187c7`)
+
+
+## [0.1.76] — 2026-05-12
+
+### Other
+- chore: merge main to PR #37 (`c3dc459`)
+
+
+## [0.1.75] — 2026-05-12
+
+### Other
+- chore: merge latest main to resolve auto-bump conflict (PR #36) (`07ae808`)
+
+
+## [0.1.74] — 2026-05-11
+
+### Other
+- test(e2e): reconcile navigation.spec.ts with invite-only landing reality (`14ccf3e`)
+
+
+## [0.1.73] — 2026-05-11
+
+### Other
+- chore(research): refresh vitest entry to clear stale gate warning (`905a1ee`)
+
+
+## [0.1.72] — 2026-05-11
+
+### Other
+- chore(public): remove GitHub footer link + sign-up CTA from nav (`1703eba`)
 
 
 ## [0.1.71] — 2026-05-07
