@@ -1,6 +1,6 @@
 {
   "name": "audio-layer",
-  "version": "0.1.83",
+  "version": "0.1.85",
   "private": true,
   "main": "electron/main.js",
   "scripts": {
@@ -81,7 +81,9 @@
     "usage:check": "tsx scripts/check-integration-usage.ts",
     "branding:generate": "node scripts/branding-generate.mjs",
     "cap:patch-oauth": "node scripts/patch-native-oauth.mjs",
-    "cap:sync": "npx cap sync && node scripts/patch-native-oauth.mjs"
+    "cap:sync": "npx cap sync && node scripts/patch-native-oauth.mjs",
+    "video:dev": "remotion studio remotion/index.ts",
+    "video:render": "remotion render remotion/index.ts Composition out/layers-explainer.mp4"
   },
   "dependencies": {
     "@ai-sdk/gateway": "^3.0.104",
@@ -133,6 +135,10 @@
     "@capacitor/cli": "^8.3.1",
     "@mirror-factory/ai-dev-kit": "^0.2.22",
     "@playwright/test": "^1.59.1",
+    "@remotion/bundler": "^4.0.459",
+    "@remotion/cli": "^4.0.459",
+    "@remotion/google-fonts": "^4.0.459",
+    "@remotion/renderer": "^4.0.459",
     "@storybook/addon-a11y": "^10.3.5",
     "@storybook/addon-vitest": "^10.3.5",
     "@storybook/nextjs-vite": "^10.3.5",
@@ -154,6 +160,7 @@
     "husky": "^9.1.7",
     "jsdom": "^29.0.2",
     "prettier": "^3.8.3",
+    "remotion": "^4.0.459",
     "sharp": "^0.34.5",
     "storybook": "^10.3.5",
     "tailwindcss": "^4",

@@ -188,14 +188,18 @@ function CompletedMeetingWorkspace({ meeting }: { meeting: CompletedMeeting }) {
           actions={actionRows}
           decisions={summary.decisions}
           stats={stats}
-          askPanel={
+          // Render-prop form so the canvas can hand a citation seek+highlight
+          // handler down to MeetingChat. Without this, citation pills render
+          // but don't navigate anywhere (PROD-464).
+          askPanel={({ onCitationClick }) => (
             <MeetingChat
               key="ask-panel"
               meetingId={meeting.id}
               variant="workspace"
               participantName={summary.participants[0] ?? null}
+              onCitationClick={onCitationClick}
             />
-          }
+          )}
           footerStatus="Summary - transcript ready"
         />
         </div>
