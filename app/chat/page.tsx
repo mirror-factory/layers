@@ -6,6 +6,10 @@ import { MessageSquare } from "lucide-react";
 import { TopBar } from "@/components/top-bar";
 import { ChatMessage } from "@/components/chat-message";
 import { ChatInput } from "@/components/chat-input";
+import {
+  LIBRARY_EMPTY_STATE_SAMPLE,
+  LIBRARY_PROMPTS,
+} from "@/lib/chat/contextual-prompts";
 
 export default function ChatPage() {
   const { messages, sendMessage, status } = useChat();
@@ -37,21 +41,30 @@ export default function ChatPage() {
                 Ask anything from your meeting library.
               </p>
               <p className="mt-2 max-w-sm text-xs leading-5 text-[var(--text-muted)]">
-                Ask across meetings, pull summaries, or turn notes into next
-                steps.
+                Try:{" "}
+                <button
+                  type="button"
+                  onClick={() => sendMessage({ text: LIBRARY_EMPTY_STATE_SAMPLE })}
+                  disabled={isLoading}
+                  className="italic text-[var(--text-secondary)] underline decoration-dotted underline-offset-4 transition-colors hover:text-layers-mint focus:outline-none focus:ring-2 focus:ring-layers-mint/40 disabled:opacity-50"
+                >
+                  &lsquo;{LIBRARY_EMPTY_STATE_SAMPLE}&rsquo;
+                </button>
               </p>
-              <div className="mt-5 flex flex-wrap justify-center gap-2">
-                {[
-                  "Find decisions",
-                  "Draft follow-up",
-                  "Summarize this week",
-                ].map((prompt) => (
-                  <span
+              <div
+                className="mt-5 flex flex-wrap justify-center gap-2"
+                aria-label="Suggested prompts"
+              >
+                {LIBRARY_PROMPTS.map((prompt) => (
+                  <button
                     key={prompt}
-                    className="signal-chip signal-chip-neutral"
+                    type="button"
+                    onClick={() => sendMessage({ text: prompt })}
+                    disabled={isLoading}
+                    className="signal-chip signal-chip-neutral cursor-pointer transition-colors hover:border-layers-mint/50 hover:text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-layers-mint/40 disabled:opacity-50"
                   >
                     {prompt}
-                  </span>
+                  </button>
                 ))}
               </div>
             </div>

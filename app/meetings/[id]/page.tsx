@@ -193,6 +193,7 @@ function CompletedMeetingWorkspace({ meeting }: { meeting: CompletedMeeting }) {
               key="ask-panel"
               meetingId={meeting.id}
               variant="workspace"
+              participantName={summary.participants[0] ?? null}
             />
           }
           footerStatus="Summary - transcript ready"
