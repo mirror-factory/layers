@@ -7,16 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.1.73] — 2026-05-12
-
-### Other
-- Merge PR #38: PROD-327 AI tool registry + contract tests (`c4b257c`)
-
-
 ## [0.1.72] — 2026-05-12
 
-### Testing
-- test: extend tool registry contract checks (PROD-327) (`cc1a26e`)
+### Other
+- test(evals): per-tool eval cases — happy/malformed/adversarial (PROD-328) (`6a521cb`)
 
 
 ## [0.1.71] — 2026-05-07
