@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.74] — 2026-05-12
+
+### Documentation
+- docs: competitive UX research vs Granola/Otter/Fireflies/Tactiq/Read.ai (`f0915b7`)
+
+
 ## [0.1.73] — 2026-05-12
 
 ### Other
