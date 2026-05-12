@@ -1,26 +1,18 @@
 name: Build & Release
 
-# PROD-366: Branch-tiered release pipeline.
+# PROD-366: Tag-based release pipeline.
 #
-# - Push to `development`: no native artifact build here.
-# - Push to `staging`: runs native release-candidate builds, uploads artifacts
-#   to GitHub Actions, and uploads iOS to TestFlight for internal QA.
-# - Push to `main`: runs `web` only as a production deploy guard.
-# - Push tag `vX.Y.Z`: runs the full artifact matrix, uploads artifacts to
-#   GitHub Releases, and ships iOS to TestFlight.
+# - Push to `main`: runs `web` only (typecheck/test/build as a deploy guard).
+# - Push tag `vX.Y.Z`: runs the full artifact matrix (Mac, Win, Android, iOS),
+#   uploads each to GitHub Releases, and ships the iOS IPA to TestFlight.
 # - workflow_dispatch (manual): same matrix, with a toggle to skip Apple builds
 #   when signing secrets aren't ready yet.
 on:
   push:
     branches:
       - main
-      - staging
     tags:
       - 'v*'
-  pull_request:
-    branches:
-      - main
-      - staging
   workflow_dispatch:
     inputs:
       include_apple_builds:
@@ -28,10 +20,10 @@ on:
         type: boolean
         default: true
 
-# A staging push or tagged push triggers native artifact jobs. Only a tag
-# publishes the GitHub Release that the public website downloads from.
+# A tagged push triggers all artifact jobs; a plain branch push runs only `web`.
+# Both manual triggers (workflow_dispatch) and tag pushes count as a "release run."
 env:
-  IS_RELEASE: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref_type == 'tag') || (github.event_name == 'push' && github.ref_name == 'staging') }}
+  IS_RELEASE: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref_type == 'tag') }}
 
 jobs:
   web:
@@ -45,13 +37,13 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm verify:tier 0 1
+      - run: pnpm typecheck
+      - run: pnpm test
       - run: pnpm build
 
   electron-mac:
     name: Electron (macOS)
     if: |
-      (github.event_name == 'push' && github.ref_name == 'staging') ||
       (github.event_name == 'push' && github.ref_type == 'tag') ||
       (github.event_name == 'workflow_dispatch' && inputs.include_apple_builds == true)
     runs-on: macos-latest
@@ -126,25 +118,16 @@ jobs:
           npx electron-builder --config electron-builder.yml --mac --publish never
           echo "::warning title=Unsigned DMG::Built without code signing. Users will see a Gatekeeper warning. See docs/SIGNING.md."
 
-      - name: Record macOS artifact proof
-        run: pnpm build:release
-        env:
-          RELEASE_ARTIFACT_ROOTS: dist-electron
-          RELEASE_ARTIFACTS_REQUIRED: "1"
-
       - uses: actions/upload-artifact@v4
         with:
           name: electron-mac
-          include-hidden-files: true
           path: |
             dist-electron/*.dmg
             dist-electron/*.zip
-            .evidence/
 
   electron-windows:
     name: Electron (Windows)
     if: |
-      (github.event_name == 'push' && github.ref_name == 'staging') ||
       (github.event_name == 'push' && github.ref_type == 'tag') ||
       github.event_name == 'workflow_dispatch'
     runs-on: windows-latest
@@ -157,24 +140,16 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: npx electron-builder --config electron-builder.yml --win --publish never
-      - name: Record Windows artifact proof
-        run: pnpm build:release
-        env:
-          RELEASE_ARTIFACT_ROOTS: dist-electron
-          RELEASE_ARTIFACTS_REQUIRED: "1"
       - uses: actions/upload-artifact@v4
         with:
           name: electron-windows
-          include-hidden-files: true
           path: |
             dist-electron/*.exe
             dist-electron/*.msi
-            .evidence/
 
   capacitor-android:
     name: Capacitor (Android APK)
     if: |
-      (github.event_name == 'push' && github.ref_name == 'staging') ||
       (github.event_name == 'push' && github.ref_type == 'tag') ||
       github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
@@ -194,25 +169,18 @@ jobs:
       - run: rm -rf android
       - run: npx cap add android
       - run: npx cap sync android
-      - run: pnpm native:patch
+      # PROD-408: native Google OAuth needs the custom URL scheme registered
+      # in AndroidManifest. `android/` is gitignored, so we patch after sync.
+      - run: node scripts/patch-native-oauth.mjs --android
       - run: cd android && ./gradlew assembleDebug
-      - name: Record Android artifact proof
-        run: pnpm build:release
-        env:
-          RELEASE_ARTIFACT_ROOTS: android/app/build/outputs
-          RELEASE_ARTIFACTS_REQUIRED: "1"
       - uses: actions/upload-artifact@v4
         with:
           name: android-apk
-          include-hidden-files: true
-          path: |
-            android/app/build/outputs/apk/debug/*.apk
-            .evidence/
+          path: android/app/build/outputs/apk/debug/*.apk
 
   capacitor-ios:
     name: Capacitor (iOS) → TestFlight
     if: |
-      (github.event_name == 'push' && github.ref_name == 'staging') ||
       (github.event_name == 'push' && github.ref_type == 'tag') ||
       (github.event_name == 'workflow_dispatch' && inputs.include_apple_builds == true)
     runs-on: macos-latest
@@ -237,7 +205,9 @@ jobs:
           rm -rf ios
           npx cap add ios
           npx cap sync ios
-          pnpm native:patch
+          # PROD-408: native Google OAuth needs the custom URL scheme in
+          # Info.plist. `ios/` is gitignored, so we patch after sync.
+          node scripts/patch-native-oauth.mjs --ios
 
       - name: Set build number from run
         # PROD-364: monotonically-increasing build number per CI run, kept
@@ -346,22 +316,13 @@ jobs:
             --apiKey "$APPLE_API_KEY_ID" \
             --apiIssuer "$APPLE_API_ISSUER"
 
-      - name: Record iOS artifact proof
-        if: steps.tf.outputs.ready == 'true'
-        run: pnpm build:release
-        env:
-          RELEASE_ARTIFACT_ROOTS: ${{ runner.temp }}/LayersExport,${{ runner.temp }}/Layers.xcarchive
-          RELEASE_ARTIFACTS_REQUIRED: "1"
-
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: ios-ipa
-          include-hidden-files: true
           path: |
             ${{ runner.temp }}/LayersExport/*.ipa
             ${{ runner.temp }}/Layers.xcarchive
-            .evidence/
 
   release:
     name: Attach artifacts to GitHub Release

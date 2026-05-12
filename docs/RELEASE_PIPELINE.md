@@ -2,7 +2,7 @@
 
 How the Layers app reaches users on every platform — what triggers builds, where artifacts land, who pays for the compute, and how to ship a new version.
 
-> **TL;DR.** Merge to `staging` to build release-candidate native artifacts and upload an internal TestFlight build. Merge to `main` to deploy production web. Push a tag from `main` (`git tag vX.Y.Z && git push origin vX.Y.Z`) to build Mac/Windows/Android/iOS in parallel, attach Mac/Win/Android to a GitHub Release, upload iOS to TestFlight, and update what `/download` serves through GitHub's latest-release URLs.
+> **TL;DR.** Push a tag (`git tag vX.Y.Z && git push --tags`) → GitHub Actions builds Mac/Windows/Android/iOS in parallel → Mac/Win/Android attach to a new GitHub Release → iOS auto-uploads to TestFlight. The `/download` page picks up the new artifacts automatically. Public repo, so all CI is free.
 
 ---
 
@@ -11,12 +11,12 @@ How the Layers app reaches users on every platform — what triggers builds, whe
 | Surface | Framework | What ships | Where users get it |
 | --- | --- | --- | --- |
 | Web | Next.js 15 on Vercel | continuous deploy from `main` | `layers.mirrorfactory.ai` |
-| macOS desktop | Electron | release candidate on `staging`; release on tag | Actions artifacts on `staging`, GitHub Releases on tag |
-| Windows desktop | Electron | release candidate on `staging`; release on tag | Actions artifacts on `staging`, GitHub Releases on tag |
-| Android | Capacitor + Gradle | release candidate APK on `staging`; release APK on tag | Actions artifacts on `staging`, GitHub Releases on tag |
-| iOS | Capacitor + Xcode | TestFlight on `staging` and tag | TestFlight, then App Store manual promotion later |
+| macOS desktop | Electron | signed + notarized DMG (arm64 + x64) | GitHub Releases → linked from `/download` |
+| Windows desktop | Electron | NSIS `.exe` installer (unsigned today) | GitHub Releases → linked from `/download` |
+| Android | Capacitor + Gradle | debug APK | GitHub Releases → linked from `/download` |
+| iOS | Capacitor + Xcode | signed IPA | TestFlight (auto) → App Store (manual promotion) |
 
-Web is **continuous** only from `main` through Vercel's GitHub integration. Native artifacts are release-candidate gated on `staging` and public-release gated on version tags from `main`.
+Web is **continuous** — every push to `main` deploys via Vercel's own GitHub integration. The other four are **release-gated**: they only build when you push a `vX.Y.Z` tag.
 
 ---
 
@@ -25,71 +25,39 @@ Web is **continuous** only from `main` through Vercel's GitHub integration. Nati
 There are three ways CI runs:
 
 ```
-PR to development         -> Tier 0/1/2 checks only
-push: staging             -> native release-candidate matrix + Actions artifacts + TestFlight
-push: main                -> web build guard and Vercel production deploy
-push: tags: 'v*'          -> full native matrix + GitHub Release publish + TestFlight
-workflow_dispatch         -> full matrix, no GitHub Release publish
+push: branches: main      → web only (typecheck/test/build as a deploy guard)
+push: tags: 'v*'          → full matrix + GitHub Release publish + TestFlight upload
+workflow_dispatch         → full matrix, no GH Release publish (dry-run mode)
 ```
 
 This means:
 
-- Routine commits to `development` stay cheap and do not build native artifacts.
-- Merges to `staging` produce release-candidate artifacts for QA but do not update the public `/download` page.
-- Merges to `main` deploy the production website.
-- A tagged push from `main` is the only way a new DMG / EXE / APK reaches public GitHub Release download URLs.
-- iOS TestFlight receives both staging candidates and tagged release candidates.
+- Routine commits to `main` are cheap (one Linux job, no artifacts, no notarization).
+- A tagged push is the *only* way a new DMG / EXE / APK / IPA reaches users.
+- Tags can point at **any** commit on **any** branch — the workflow checks out the tagged commit and builds it. Convention: tag from `main` after the version-bump commit hits.
+
+> **There is no `dev` or `staging` auto-publish.** The legacy `AGENTS.md` mentions `feature → development → staging → main`, but the `development` and `staging` branches don't exist yet (PROD-383 is Backlog). Until they're set up, the only path is `feature → main → tag`.
 
 ---
 
 ## How a release happens, step by step
 
-### 1. Integrate through the branch ladder
+### 1. Bump version, merge to main
 
-```text
-feature or Symphony branch -> PR to development
-development -> PR to staging
-staging -> PR to main
-```
+The repo's commit hook auto-bumps `package.json`'s `version` after every code commit, so by the time you're ready to ship, `version` is already correct (e.g. `0.1.70`).
 
-The repo's commit hook auto-bumps `package.json`'s `version` after code
-commits, so by the time you're ready to ship, `version` should already be
-correct.
-
-### 2. Verify staging release candidate
-
-Merging to `staging` runs `.github/workflows/build-release.yml` and kicks off
-the native release-candidate matrix:
-
-```text
-                         push staging
-                              |
-              +---------------+---------------+
-              |               |               |
-              v               v               v
-        electron-mac    electron-win    capacitor-android
-              |               |               |
-              +---------------+---------------+
-                              |
-                       GitHub Actions artifacts
-
-        capacitor-ios ----------------> TestFlight internal QA
-```
-
-These artifacts are for QA. They do not create or update a GitHub Release.
-
-### 3. Tag and push from main
+### 2. Tag and push
 
 ```bash
 git checkout main
 git pull
 git tag v0.1.70
-git push origin v0.1.70
+git push --tags
 ```
 
 That's it. The rest is automatic.
 
-### 4. CI fans out across five jobs
+### 3. CI fans out across five jobs
 
 The workflow is `.github/workflows/build-release.yml`. On a tag push it kicks off:
 
@@ -114,10 +82,9 @@ The workflow is `.github/workflows/build-release.yml`. On a tag push it kicks of
                gh release create v0.1.70 --generate-notes --latest
 ```
 
-### 5. Filenames and where they land
+### 4. Filenames and where they land
 
-The `release` job runs only on tags. It renames raw build outputs into stable
-filenames the `/download` page knows how to fetch:
+The `release` job renames raw build outputs into stable filenames the `/download` page knows how to fetch:
 
 | Built file | Renamed to | Final URL |
 | --- | --- | --- |
@@ -128,7 +95,7 @@ filenames the `/download` page knows how to fetch:
 
 `/releases/latest/download/<filename>` always 302-redirects to the most recent release tagged `--latest`, so the `/download` page never needs version awareness.
 
-### 6. iOS goes elsewhere
+### 5. iOS goes elsewhere
 
 The iOS job archives + exports the IPA, then runs `xcrun altool --upload-app`. The IPA never appears on GitHub Releases — it goes straight to App Store Connect. Apple takes ~5–15 min to process it; once processed it shows up under your TestFlight tab as `1.0 (<build_number>)` ready to push to your test groups.
 
@@ -227,45 +194,34 @@ Note: the `/download` page links don't change between releases — they always p
 
 ---
 
-## OAuth in-app behavior on iOS and Android
+## OAuth in-app behavior on iOS — fixed in PROD-408
 
-The native Sign in with Google path must use the system browser surface and
-return to the app through a deep link. As of 2026-05-09, the app code does this
-through `@capacitor/browser`, `@capacitor/app`, and
-`com.mirrorfactory.layers://auth/callback`.
+The iOS Capacitor build now keeps Sign in with Google entirely inside the app via SFSafariViewController + custom URL scheme deep-link. Android uses the equivalent Custom Tabs path. Web behavior is unchanged.
 
-### Why it happens
+### How the native flow works
 
-`app/(public)/sign-in/page.tsx` calls `supabase.auth.signInWithOAuth({ provider: "google" })`. Under the hood Supabase does a top-level `window.location.href = <google url>`. Inside Capacitor's WKWebView this hits two issues simultaneously:
+1. `app/(public)/sign-in/page.tsx` checks `Capacitor.isNativePlatform()`. On native it calls `signInWithGoogleNative()` from `lib/auth/native-oauth.ts`.
+2. That helper asks Supabase for the Google OAuth URL with `skipBrowserRedirect: true` and `redirectTo: "com.mirrorfactory.layers://auth/callback"`.
+3. The URL is opened with `@capacitor/browser`'s `Browser.open({ url, presentationStyle: "popover" })`. iOS surfaces it as SFSafariViewController; Android as a Custom Tab. Both are acceptable to Google's OAuth policy (no `disallowed_useragent`).
+4. After consent, Safari/Chrome redirects to the custom scheme. iOS/Android hand the URL back to the app via `App.addListener('appUrlOpen', ...)` (Capacitor's `@capacitor/app` plugin).
+5. The listener parses `?code=...` and calls `supabase.auth.exchangeCodeForSession(code)` inside the WebView, then navigates to `/record`.
 
-1. The Capacitor config has `server.allowNavigation: ["api.assemblyai.com", "layers.mirrorfactory.ai"]`. `accounts.google.com` is **not** allowlisted, so any navigation there is treated as external and punted to Safari by Capacitor's default policy.
-2. Even if we allowlisted `accounts.google.com`, Google detects WebViews via `User-Agent` and refuses OAuth flows with `disallowed_useragent`. This is Google's anti-phishing rule and is non-negotiable.
+### Required Supabase dashboard config
 
-### Implemented fix (Capacitor + Supabase OAuth)
+The custom scheme must be on the Supabase Auth allowlist:
 
-The app code now does three things:
+- Dashboard → Authentication → URL Configuration → Redirect URLs → add `com.mirrorfactory.layers://auth/callback`.
 
-1. **Detect Capacitor at runtime** in `sign-in/page.tsx`. If running inside Capacitor:
-   - Open the Google OAuth URL via `@capacitor/browser`'s `Browser.open({ url, presentationStyle: 'popover' })` instead of `window.location.href`. SFSafariViewController appears as an in-app overlay, leaves the app in the background, and is acceptable to Google for OAuth.
-2. **Set `redirectTo` to the app's URL scheme** (`com.mirrorfactory.layers://auth/callback?code=…`). Google → Safari overlay → redirects to the scheme → iOS reopens the app with the code → Capacitor's `App.addListener('appUrlOpen', …)` handler grabs the URL and exchanges the code via `supabase.auth.exchangeCodeForSession(code)`.
-3. **Add the redirect URL to Supabase project's allowlist** (Supabase dashboard → Authentication → URL Configuration → Redirect URLs): include `com.mirrorfactory.layers://auth/callback`.
+Without this Supabase returns `redirect_uri_mismatch` on the native path.
 
-The CI native build runs `pnpm native:patch` after `npx cap sync` so regenerated
-iOS/Android projects keep the callback scheme registered. `pnpm
-test:native:config` verifies the scheme, Android intent filter, iOS bundle id,
-and release workflow id.
+### Platform manifests
 
-Reference docs:
+- iOS: `ios/App/App/Info.plist` already declares the `com.mirrorfactory.layers` URL scheme under `CFBundleURLTypes`.
+- Android: `android/app/src/main/AndroidManifest.xml` declares an `<intent-filter>` with `<data android:scheme="com.mirrorfactory.layers"/>` on MainActivity.
 
-- Capacitor Browser plugin: <https://capacitorjs.com/docs/apis/browser>
-- Capacitor deep links: <https://capacitorjs.com/docs/guides/deep-links>
-- Google OAuth embedded WebView policy: <https://developers.googleblog.com/upcoming-security-changes-to-googles-oauth-20-authorization-endpoint-in-embedded-webviews/>
+### Web flow is unchanged
 
-### Operator requirement
-
-Supabase must allow `com.mirrorfactory.layers://auth/callback`. Without that
-dashboard setting, the app code is correct but Supabase will reject the native
-redirect.
+The web build skips the native branch entirely. `supabase.auth.signInWithOAuth({ provider: "google", options: { redirectTo: <site>/auth/callback?next=... } })` still hits the existing `/auth/callback` route, which exchanges the PKCE code and forwards to `next`.
 
 ---
 
