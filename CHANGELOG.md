@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.109] — 2026-05-12
+
+### Other
+- docs(qa): Android authed walk + auth-nav fix verified live (`374239d`)
+
+
 ## [0.1.108] — 2026-05-12
 
 ### Other
