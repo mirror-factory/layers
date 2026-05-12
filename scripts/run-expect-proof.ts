@@ -9,8 +9,8 @@
  */
 
 import { spawn, spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
+import { join, relative } from "node:path";
 
 import { compactText, extractExpectTuiReport, isZeroStepTuiTimeout, shouldRunExpectFallback } from "./lib/expect-proof-utils";
 
@@ -33,6 +33,7 @@ const timeoutArg = timeoutMs && /^\d+$/.test(timeoutMs) ? timeoutMs : "";
 const tuiTimeoutMs = process.env.EXPECT_TUI_TIMEOUT_MS?.trim();
 const tuiTimeoutArg = tuiTimeoutMs && /^\d+$/.test(tuiTimeoutMs) ? Number(tuiTimeoutMs) : 180_000;
 const fallbackEnabled = process.env.EXPECT_FALLBACK !== "0";
+const forceFallback = envFlag("EXPECT_FORCE_FALLBACK");
 const autoStartServer = process.env.EXPECT_AUTO_START_SERVER !== "0";
 const command = `pnpm exec expect tui --ci${agent ? ` --agent ${agent}` : ""} --target ${target} --output json --message ${JSON.stringify(message)} --yes${url ? ` --url ${url}` : ""}${timeoutArg ? ` --timeout ${timeoutArg}` : ""}`;
 
@@ -278,6 +279,82 @@ function stopManagedServer(server: ManagedExpectServer | null) {
   }
 }
 
+function listReplayFiles(dir: string): Array<{ path: string; bytes: number }> {
+  const files: Array<{ path: string; bytes: number }> = [];
+  if (!existsSync(dir)) return files;
+
+  function walk(current: string) {
+    for (const entry of readdirSync(current, { withFileTypes: true })) {
+      const full = join(current, entry.name);
+      if (entry.isDirectory()) {
+        walk(full);
+        continue;
+      }
+      if (!entry.isFile()) continue;
+      const stat = statSync(full);
+      files.push({ path: relative(cwd, full), bytes: stat.size });
+    }
+  }
+
+  walk(dir);
+  return files.sort((a, b) => a.path.localeCompare(b.path));
+}
+
+function runReplayCapture(targetUrl: string) {
+  const startedAt = Date.now();
+  const replayDir = join(cwd, ".expect", "replays", new Date().toISOString().replace(/[:.]/g, "-"));
+  mkdirSync(replayDir, { recursive: true });
+
+  const script = `
+const targetUrl = process.argv[1];
+const replayDir = process.argv[2];
+const {chromium} = await import("@playwright/test");
+const browser = await chromium.launch();
+const context = await browser.newContext({
+  viewport: {width: 1440, height: 1000},
+  recordVideo: {dir: replayDir, size: {width: 1440, height: 1000}},
+});
+const page = await context.newPage();
+const response = await page.goto(targetUrl, {waitUntil: "networkidle", timeout: 60000});
+const bodyText = await page.locator("body").innerText({timeout: 10000}).catch(() => "");
+await page.screenshot({path: replayDir + "/page.png", fullPage: true});
+await context.close();
+await browser.close();
+console.log(JSON.stringify({
+  status: response ? response.status() : null,
+  url: page.url(),
+  title: await page.title().catch(() => ""),
+  bodyCharacters: bodyText.trim().length,
+  bodyPreview: bodyText.trim().slice(0, 500)
+}));
+`;
+
+  const result = spawnSync(process.execPath, ["--input-type=module", "-e", script, targetUrl, replayDir], {
+    cwd,
+    encoding: "utf-8",
+    env: process.env,
+    timeout: 120_000,
+  });
+  const exitCode = typeof result.status === "number" ? result.status : 1;
+  const files = listReplayFiles(replayDir);
+  const videoFiles = files.filter((file) => file.path.endsWith(".webm"));
+  const screenshotFiles = files.filter((file) => file.path.endsWith(".png"));
+  const pass = exitCode === 0 && videoFiles.length > 0 && screenshotFiles.length > 0;
+
+  return {
+    pass,
+    command: `node --input-type=module -e <playwright-replay-capture> ${targetUrl}`,
+    dir: relative(cwd, replayDir),
+    durationMs: Date.now() - startedAt,
+    exitCode,
+    stdout: compactText(result.stdout ?? ""),
+    stderr: compactText(result.stderr ?? ""),
+    files,
+    videoFiles: videoFiles.map((file) => file.path),
+    screenshotFiles: screenshotFiles.map((file) => file.path),
+  };
+}
+
 function resolveFallbackUrl() {
   const candidates = fallbackUrlCandidates();
   const reachable = candidates.find(isUrlReachable);
@@ -330,6 +407,7 @@ function runFallbackProof() {
     const open = runExpectCli(["exec", "expect", "open", "--browser", "chromium", "--wait-until", "load", fallbackUrl.url]);
     commands.push(open);
     if (!open.pass) {
+      const replay = runReplayCapture(fallbackUrl.url);
       return {
         pass: false,
         reason: fallbackUrl.reachable ? "expect open failed" : "No probed fallback URL was reachable; attempted first candidate.",
@@ -337,6 +415,7 @@ function runFallbackProof() {
         candidates: fallbackUrl.candidates,
         server: fallbackUrl.server,
         commands,
+        replay,
       };
     }
 
@@ -362,17 +441,48 @@ function runFallbackProof() {
       commands.push(runExpectCli(["exec", "expect", "close"], 120_000));
     }
 
+    const replay = runReplayCapture(fallbackUrl.url);
+
     return {
-      pass: commands.every(item => item.pass),
+      pass: commands.every(item => item.pass) && replay.pass,
       reason,
       url: fallbackUrl.url,
       candidates: fallbackUrl.candidates,
       server: fallbackUrl.server,
       commands,
+      replay,
     };
   } finally {
     stopManagedServer(fallbackUrl.server);
   }
+}
+
+if (forceFallback) {
+  console.log("[expect-proof] EXPECT_FORCE_FALLBACK=1; running deterministic replay fallback without AI TUI.");
+  const start = Date.now();
+  const fallback = runFallbackProof();
+  const pass = Boolean(fallback.pass);
+  write({
+    runAt: new Date().toISOString(),
+    pass,
+    skipped: false,
+    required,
+    agent: agent || null,
+    target,
+    url: url || null,
+    durationMs: Date.now() - start,
+    exitCode: pass ? 0 : 1,
+    mode: "expect-cli-fallback-forced",
+    stdout: "",
+    stderr: "",
+    tui: {
+      pass: false,
+      skipped: true,
+      reason: "EXPECT_FORCE_FALLBACK=1",
+    },
+    fallback,
+  });
+  process.exit(pass ? 0 : 1);
 }
 
 console.log(`[expect-proof] pnpm ${args.join(" ")}`);

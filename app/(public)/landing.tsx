@@ -126,6 +126,7 @@ export function LandingPage() {
   return (
     <div className={`${display.variable} layers-home`} style={{ overflowX: "hidden" }}>
       <Hero />
+      <SectionMemoryTrail />
       {/* "Built on" trust bar removed 2026-05-01: in invite-only
           alpha we don't have customer logos to show, and the vendor
           list felt like padding. Kept the function below in case we
@@ -276,6 +277,122 @@ export function LandingPage() {
         }
       `}</style>
     </div>
+  );
+}
+
+/* ─────────────────────── Memory trail section ─────────────────────── */
+
+function SectionMemoryTrail() {
+  const steps = [
+    {
+      label: "Capture",
+      text: "Live audio becomes a searchable transcript while the meeting is still moving.",
+    },
+    {
+      label: "Structure",
+      text: "Decisions, owners, risks, and follow-ups are separated from the raw notes.",
+    },
+    {
+      label: "Recall",
+      text: "Teams can ask what changed without rereading every conversation.",
+    },
+  ];
+
+  return (
+    <section
+      aria-labelledby="home-memory-trail-heading"
+      className="section-shell"
+      data-testid="home-memory-trail"
+      style={{ paddingBlock: "clamp(40px, 6vw, 76px)" }}
+    >
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "minmax(0, 0.72fr) minmax(0, 1fr)",
+          gap: "clamp(28px, 5vw, 72px)",
+          alignItems: "start",
+        }}
+        className="memory-trail-grid"
+      >
+        <div style={{ display: "grid", gap: 14 }}>
+          <span className="home-eyebrow">Memory trail</span>
+          <h2
+            id="home-memory-trail-heading"
+            className="home-display"
+            style={{
+              margin: 0,
+              color: "var(--fg-default)",
+              fontSize: "clamp(2rem, 3vw + 0.6rem, 3.5rem)",
+              lineHeight: 1.08,
+              fontWeight: 560,
+              maxWidth: "12ch",
+            }}
+          >
+            From live call to durable team memory.
+          </h2>
+        </div>
+
+        <ol
+          style={{
+            listStyle: "none",
+            margin: 0,
+            padding: 0,
+            display: "grid",
+            gap: 10,
+          }}
+        >
+          {steps.map((step, index) => (
+            <li
+              key={step.label}
+              style={{
+                display: "grid",
+                gridTemplateColumns: "auto minmax(0, 1fr)",
+                gap: 16,
+                alignItems: "start",
+                padding: "16px 0",
+                borderTop: "1px solid var(--border-subtle)",
+              }}
+            >
+              <span
+                aria-hidden
+                style={{
+                  width: 34,
+                  height: 34,
+                  borderRadius: "var(--radius-pill)",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "var(--layers-ink)",
+                  background: index === 1 ? "var(--layers-mint-soft)" : "var(--bg-surface)",
+                  border: "1px solid var(--border-default)",
+                  fontSize: "0.78rem",
+                  fontWeight: 700,
+                  fontVariantNumeric: "tabular-nums",
+                }}
+              >
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <span style={{ display: "grid", gap: 4 }}>
+                <strong style={{ color: "var(--fg-default)", fontSize: "0.95rem" }}>
+                  {step.label}
+                </strong>
+                <span style={{ color: "var(--fg-muted)", lineHeight: 1.55 }}>
+                  {step.text}
+                </span>
+              </span>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      <style jsx>{`
+        @media (max-width: 840px) {
+          :global(.memory-trail-grid) {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
+    </section>
   );
 }
 

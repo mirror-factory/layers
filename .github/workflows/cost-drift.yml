@@ -7,7 +7,7 @@ name: Cost drift
 
 on:
   schedule:
-    - cron: "0 12 * * 1"   # Mondays 12:00 UTC
+    - cron: "0 12 * * 1" # Mondays 12:00 UTC
   workflow_dispatch: {}
 
 permissions:
@@ -16,6 +16,7 @@ permissions:
 
 jobs:
   check:
+    if: ${{ vars.HOSTED_ACTIONS_ENABLED == 'true' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

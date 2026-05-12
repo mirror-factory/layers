@@ -127,7 +127,6 @@ describe("API route coverage", () => {
     "app/api/dev-kit/sessions/[id]/route.ts",
     "app/api/dev-kit/sessions/route.ts",
     "app/api/dev-kit/status/route.ts",
-    "app/api/dev-kit/tools/route.ts",
     "app/api/embeddings/backfill/route.ts",
     "app/api/health/route.ts",
     "app/api/models/route.ts",

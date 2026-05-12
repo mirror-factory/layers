@@ -80,7 +80,7 @@ export async function getSettings(): Promise<ModelSettings> {
   // ... source=env" if a tester reports the wrong vendor.
   if (process.env.NODE_ENV !== "test" && streaming.source !== "cookie") {
     // eslint-disable-next-line no-console
-    console.log(
+    console.warn(
       `[settings.resolved] streaming=${streaming.value} source=${streaming.source}`,
     );
   }

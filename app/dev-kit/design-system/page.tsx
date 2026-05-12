@@ -13,6 +13,8 @@ import { getDevKitTheme, type DevKitTheme } from '@/lib/dev-kit-theme';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { InlineEditor, type SerializedTheme } from './inline-editor';
+import { ChatMessage } from '@/components/chat-message';
+import type { UIMessage } from 'ai';
 
 export const dynamic = 'force-dynamic';
 
@@ -92,6 +94,43 @@ export default function DesignSystemPage() {
               theme={flatTheme}
             />
             <YamlBlock src={systemSrc ?? '# design-system.yaml not present'} theme={theme} />
+          </Section>
+
+          <Section title="Chat message proof state" theme={theme} populated>
+            <div
+              data-testid="chat-message-proof"
+              style={{
+                background: theme.colors.surface,
+                border: `1px solid ${theme.colors.border}`,
+                borderRadius: theme.radius('md'),
+                padding: theme.space(4),
+                maxWidth: 720,
+              }}
+            >
+              <ChatMessage
+                message={{
+                  id: 'devkit-reasoning-proof',
+                  role: 'assistant',
+                  parts: [
+                    {
+                      type: 'reasoning',
+                      text: 'Verified tool contract coverage before presenting the final answer.',
+                    },
+                    {
+                      type: 'text',
+                      text: 'The chat renderer keeps reasoning, final text, and citations visible in the same transcript lane.',
+                    },
+                  ],
+                } as unknown as UIMessage}
+              />
+              <ChatMessage
+                message={{
+                  id: 'devkit-user-proof',
+                  role: 'user',
+                  parts: [{ type: 'text', text: 'Show the proof for this change.' }],
+                } as unknown as UIMessage}
+              />
+            </div>
           </Section>
 
           <Section title="Component registry" theme={theme} populated={!!componentsSrc}>

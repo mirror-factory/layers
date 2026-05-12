@@ -7,6 +7,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.103] — 2026-05-12
+
+### Other
+- Guard hosted workflows for zero Actions budget [skip ci] (`fba595e`)
+
+
+## [0.1.102] — 2026-05-12
+
+### Other
+- chore: bump to 0.1.101 [skip ci] (`f3420e7`)
+
+
+## [0.1.101] — 2026-05-12
+
+### Other
+- chore: bump to 0.1.100 [skip ci] (`2049568`)
+
+
+## [0.1.100] — 2026-05-12
+
+### Other
+- Polish DevKit proof dashboard [skip ci] (`859d6d5`)
+
+
+## [0.1.99] — 2026-05-11
+
+### Other
+- chore: bump to 0.1.98 [skip ci] (`988adc8`)
+
+
+## [0.1.98] — 2026-05-11
+
+### Other
+- Harden local proof harness and dashboard evidence [skip ci] (`1adaeff`)
+
+
+## [0.1.97] — 2026-05-10
+
+### Other
+- Prove homepage memory trail locally (`f657bf2`)
+
+
 ## [0.1.96] — 2026-05-10
 
 ### Other

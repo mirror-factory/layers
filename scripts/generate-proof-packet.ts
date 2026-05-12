@@ -7,6 +7,7 @@
  */
 
 import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { evaluateProjectHarness } from '../lib/ai-dev-kit/project-profile';
@@ -32,8 +33,13 @@ function changedFiles(): string[] {
   ])).sort((a, b) => a.localeCompare(b));
 }
 
-function listFiles(dir: string): Array<{ path: string; bytes: number; modifiedAt: string }> {
-  const files: Array<{ path: string; bytes: number; modifiedAt: string }> = [];
+function checksumFile(path: string, bytes: number): string | undefined {
+  if (bytes > 128 * 1024 * 1024) return undefined;
+  return `sha256:${createHash('sha256').update(readFileSync(path)).digest('hex')}`;
+}
+
+function listFiles(dir: string): Array<{ path: string; bytes: number; modifiedAt: string; checksum?: string }> {
+  const files: Array<{ path: string; bytes: number; modifiedAt: string; checksum?: string }> = [];
   if (!existsSync(dir)) return files;
 
   function walk(current: string) {
@@ -49,6 +55,7 @@ function listFiles(dir: string): Array<{ path: string; bytes: number; modifiedAt
         path: relative(cwd, full),
         bytes: stat.size,
         modifiedAt: stat.mtime.toISOString(),
+        checksum: checksumFile(full, stat.size),
       });
     }
   }
@@ -126,6 +133,9 @@ function summarizeExpectProof(path: string, source: Record<string, unknown>) {
   const fallback = source.fallback;
   const fallbackCommands = isRecord(fallback) && Array.isArray(fallback.commands) ? fallback.commands : undefined;
   const fallbackFailedCommands = fallbackCommands?.filter(command => isRecord(command) && command.pass === false).length;
+  const replay = isRecord(fallback) && isRecord(fallback.replay) ? fallback.replay : undefined;
+  const replayFiles = isRecord(replay) && Array.isArray(replay.files) ? replay.files : undefined;
+  const replayVideos = isRecord(replay) && Array.isArray(replay.videoFiles) ? replay.videoFiles : undefined;
 
   return {
     ...statusSummary(path, source),
@@ -133,6 +143,10 @@ function summarizeExpectProof(path: string, source: Record<string, unknown>) {
     fallbackPass: isRecord(fallback) ? booleanField(fallback, 'pass') : undefined,
     fallbackCommandCount: fallbackCommands?.length,
     fallbackFailedCommandCount: fallbackFailedCommands,
+    fallbackReplayPass: isRecord(replay) ? booleanField(replay, 'pass') : undefined,
+    fallbackReplayDir: isRecord(replay) ? stringField(replay, 'dir') : undefined,
+    fallbackReplayArtifactCount: replayFiles?.length,
+    fallbackReplayVideoCount: replayVideos?.length,
   };
 }
 
@@ -213,27 +227,287 @@ function summarizeProofEvidence(evidenceDir: string) {
   return Object.keys(summary).length > 0 ? summary : undefined;
 }
 
+type ArtifactKind = 'json' | 'image' | 'video' | 'trace' | 'directory' | 'report' | 'artifact';
+type ArtifactSource = 'expect' | 'playwright' | 'remotion' | 'native' | 'proof-packet' | 'release';
+type ProofArtifact = { path: string; bytes: number; modifiedAt: string; checksum?: string };
+
+function readRunContext(): {
+  run_id?: string | null;
+  feature_name?: string | null;
+  branch?: string | null;
+  task?: string | null;
+} {
+  const envRunId = process.env.RUN_ID?.trim();
+  if (envRunId) {
+    return {
+      run_id: envRunId,
+      feature_name: process.env.FEATURE_NAME?.trim() || null,
+      branch: process.env.RUN_BRANCH?.trim() || null,
+      task: process.env.RUN_TASK?.trim() || null,
+    };
+  }
+  return readJson(join(cwd, '.ai-dev-kit', 'state', 'current-run.json')) ?? {};
+}
+
+function splitIds(value: string | null | undefined): string[] {
+  return (value ?? '').split(/[,\s]+/).map(item => item.trim()).filter(Boolean);
+}
+
+function unique(values: Array<string | null | undefined>): string[] {
+  return Array.from(new Set(values.map(value => value?.trim()).filter((value): value is string => Boolean(value))));
+}
+
+function envTaskIds(): string[] {
+  return unique([
+    ...splitIds(process.env.AI_DEV_KIT_TASK_IDS),
+    ...splitIds(process.env.SYMPHONY_TASK_IDS),
+    process.env.AI_DEV_KIT_TASK_ID,
+    process.env.LINEAR_TASK_ID,
+    process.env.LINEAR_ISSUE_ID,
+    process.env.LINEAR_IDENTIFIER,
+    process.env.SYMPHONY_TASK_ID,
+    process.env.SYMPHONY_TICKET_ID,
+    process.env.TICKET_ID,
+    process.env.ISSUE_ID,
+    process.env.TASK_ID,
+  ]);
+}
+
+function idsFromText(text: string | null | undefined): string[] {
+  return Array.from(new Set((text ?? '').match(/\b[A-Z][A-Z0-9]+-\d+\b/g) ?? []));
+}
+
+function artifactTaskIds(branch: string | null | undefined, runTask: string | null | undefined): string[] {
+  const explicit = envTaskIds();
+  if (explicit.length) return explicit;
+  const linearIds = unique([...idsFromText(branch), ...idsFromText(runTask)]);
+  if (linearIds.length) return linearIds;
+  return branch?.startsWith('agent/') ? [branch] : [];
+}
+
+function artifactFeatureIds(featureProof: unknown, runFeature: string | null | undefined): string[] {
+  const ids: string[] = [];
+  if (runFeature) ids.push(runFeature);
+  if (isRecord(featureProof) && Array.isArray(featureProof.matchedFeatures)) {
+    for (const feature of featureProof.matchedFeatures) {
+      if (isRecord(feature) && typeof feature.id === 'string') ids.push(feature.id);
+    }
+  }
+  return unique(ids);
+}
+
+function artifactKindFromPath(path: string): ArtifactKind {
+  if (/\/$/.test(path)) return 'directory';
+  if (/\.(png|jpe?g|gif|webp|svg)$/i.test(path)) return 'image';
+  if (/\.(mp4|webm|mov)$/i.test(path)) return 'video';
+  if (/\.(zip|trace)$/i.test(path) || /trace/i.test(path)) return 'trace';
+  if (/\.json$/i.test(path)) return 'json';
+  if (/\.(html?|md|txt|log)$/i.test(path)) return 'report';
+  return 'artifact';
+}
+
+function artifactSourceFromPath(path: string): ArtifactSource {
+  const normalized = path.toLowerCase();
+  if (normalized.includes('expect')) return 'expect';
+  if (normalized.includes('playwright') || normalized.startsWith('test-results/')) return 'playwright';
+  if (normalized.includes('remotion') || normalized.includes('frame-check')) return 'remotion';
+  if (normalized.startsWith('android/') || normalized.startsWith('ios/') || normalized.includes('native')) return 'native';
+  if (normalized.includes('proof-packet')) return 'proof-packet';
+  if (normalized.startsWith('dist/') || normalized.startsWith('release/') || normalized.startsWith('out/')) return 'release';
+  return 'proof-packet';
+}
+
+function laneForArtifact(source: ArtifactSource, path: string): string {
+  if (source === 'expect') return 'expect';
+  if (source === 'playwright') return /\.(png|jpe?g|webp)$/i.test(path) ? 'visual-proof' : 'playwright';
+  if (source === 'remotion') return 'media-proof';
+  if (source === 'native') return 'native-device';
+  if (source === 'release') return 'release';
+  return 'proof-packet';
+}
+
+function commandForArtifact(source: ArtifactSource, path: string): string {
+  if (source === 'expect') return 'pnpm test:expect';
+  if (source === 'playwright') return path.startsWith('test-results/') ? 'pnpm test:e2e' : 'pnpm test:playwright';
+  if (source === 'remotion') return 'pnpm --dir examples/remotion-harness-explainer check:frames';
+  if (source === 'native') return 'pnpm test:native:smoke';
+  if (source === 'release') return 'pnpm build:release';
+  return 'pnpm test:proof';
+}
+
+function platformForArtifact(source: ArtifactSource, path: string, kind: ArtifactKind): string {
+  const text = path.toLowerCase();
+  const parts: string[] = [];
+  if (/ios|iphone|ipad/.test(text)) parts.push('ios');
+  if (/android/.test(text)) parts.push('android');
+  if (/macos|darwin/.test(text)) parts.push('macos');
+  if (/windows|win32/.test(text)) parts.push('windows');
+  if (/mobile/.test(text)) parts.push('mobile');
+  if (/desktop/.test(text)) parts.push('desktop');
+  if (/light/.test(text)) parts.push('light');
+  if (/dark/.test(text)) parts.push('dark');
+  if (source === 'expect' || source === 'playwright' || source === 'remotion') parts.push('web');
+  if (!parts.length && kind === 'json') parts.push('data');
+  if (!parts.length) parts.push(source);
+  return unique(parts).join(', ');
+}
+
+function passForArtifact(artifactPath: string): boolean | undefined {
+  const payload = artifactPath.endsWith('.json') ? readJson<Record<string, unknown>>(join(cwd, artifactPath)) : null;
+  if (!isRecord(payload)) return undefined;
+  if (typeof payload.pass === 'boolean') return payload.pass;
+  if (payload.status === 'pass' || payload.status === 'green') return true;
+  if (payload.status === 'fail' || payload.status === 'blocked') return false;
+  return undefined;
+}
+
+function reviewUrlForArtifact(path: string): string {
+  return process.env.ARTIFACT_REVIEW_URL
+    ?? process.env.PROOF_REVIEW_URL
+    ?? process.env.PULL_REQUEST_URL
+    ?? process.env.GITHUB_PULL_REQUEST_URL
+    ?? (process.env.GITHUB_SERVER_URL && process.env.GITHUB_REPOSITORY && process.env.GITHUB_RUN_ID
+      ? `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`
+      : path);
+}
+
+function isMetaEvidenceArtifact(path: string): boolean {
+  return path === '.evidence/artifact-provenance.json' || path === '.evidence/proof-packet.json';
+}
+
+function buildArtifactProvenance(artifacts: ProofArtifact[], options: {
+  branch?: string | null;
+  commit?: string | null;
+  runId?: string | null;
+  taskIds?: string[];
+  featureIds?: string[];
+  includeMetaEvidence?: boolean;
+}) {
+  const branch = options.branch ?? git(['branch', '--show-current']) ?? process.env.GITHUB_HEAD_REF ?? process.env.GITHUB_REF_NAME ?? '';
+  const commit = options.commit ?? git(['rev-parse', '--short', 'HEAD']) ?? process.env.GITHUB_SHA?.slice(0, 12) ?? '';
+  const runContext = readRunContext();
+  const taskIds = options.taskIds ?? artifactTaskIds(branch, runContext.task);
+  const featureIds = options.featureIds ?? artifactFeatureIds(readJson(join(evidenceDir, 'feature-proof-plan.json')), runContext.feature_name);
+  const runId = options.runId ?? runContext.run_id ?? null;
+
+  return artifacts
+    .filter(artifact => options.includeMetaEvidence || !isMetaEvidenceArtifact(artifact.path))
+    .map((artifact) => {
+      const source = artifactSourceFromPath(artifact.path);
+      const kind = artifactKindFromPath(artifact.path);
+      const laneId = laneForArtifact(source, artifact.path);
+      const platform = platformForArtifact(source, artifact.path, kind);
+      const capturedAt = artifact.modifiedAt;
+      const reviewUrl = reviewUrlForArtifact(artifact.path);
+      const checksum = artifact.checksum ?? '';
+      const fields = { branch, commit, platform, capturedAt, checksum, reviewUrl };
+      const missing: string[] = [];
+      if (!taskIds.length) missing.push('taskIds');
+      for (const [key, value] of Object.entries(fields)) {
+        if (!value) missing.push(key);
+      }
+      const pass = passForArtifact(artifact.path);
+      return {
+        ...artifact,
+        artifactId: createHash('sha256').update(`${artifact.path}:${artifact.modifiedAt}:${artifact.bytes}`).digest('hex').slice(0, 16),
+        taskIds,
+        featureIds,
+        laneId,
+        command: commandForArtifact(source, artifact.path),
+        source,
+        branch: branch ?? '',
+        commit: commit ?? '',
+        platform,
+        capturedAt,
+        checksum,
+        reviewUrl,
+        href: artifact.path,
+        kind,
+        pass,
+        state: missing.length ? 'blocked' : pass === false ? 'blocked' : 'green',
+        tags: unique([source, laneId, kind, platform, ...taskIds, ...featureIds]),
+        runId,
+        missing,
+      };
+    });
+}
+
+function writeArtifactProvenanceManifest(artifacts: ProofArtifact[], context: {
+  branch: string | null;
+  commit: string | null;
+  runId: string | null;
+  taskIds: string[];
+  featureIds: string[];
+}) {
+  const manifest = {
+    schemaVersion: 1,
+    generatedAt: new Date().toISOString(),
+    taskIds: context.taskIds,
+    branch: context.branch ?? '',
+    commit: context.commit ?? '',
+    runId: context.runId,
+    artifacts: buildArtifactProvenance(artifacts, {
+      ...context,
+      includeMetaEvidence: true,
+    }).filter(artifact => artifact.path !== '.evidence/artifact-provenance.json'),
+  };
+  const out = join(evidenceDir, 'artifact-provenance.json');
+  writeFileSync(out, JSON.stringify(manifest, null, 2) + '\n');
+  return { path: out, manifest };
+}
+
 function main() {
   mkdirSync(evidenceDir, { recursive: true });
+  const evidence = listFiles(evidenceDir);
+  const testResults = listFiles(testResultsDir);
+  const browserArtifacts = listFiles(join(cwd, 'playwright-report'));
+  const remotionArtifacts = [
+    ...listFiles(join(cwd, 'remotion-output')),
+    ...listFiles(join(cwd, 'examples', 'remotion-harness-explainer', 'out')),
+  ];
+  const nativeArtifacts = [
+    ...listFiles(join(cwd, 'dist')),
+    ...listFiles(join(cwd, 'release')),
+    ...listFiles(join(cwd, 'out')),
+    ...listFiles(join(cwd, 'android/app/build/outputs')),
+    ...listFiles(join(cwd, 'ios/App/build')),
+  ].slice(0, 500);
+  const branch = git(['branch', '--show-current']);
+  const head = git(['rev-parse', '--short', 'HEAD']) ?? process.env.GITHUB_SHA?.slice(0, 12) ?? null;
+  const runContext = readRunContext();
+  const featureProof = readJson(join(evidenceDir, 'feature-proof-plan.json'));
+  const taskIds = artifactTaskIds(branch, runContext.task);
+  const featureIds = artifactFeatureIds(featureProof, runContext.feature_name);
+  const artifactProvenance = buildArtifactProvenance([
+    ...evidence,
+    ...testResults,
+    ...browserArtifacts,
+    ...remotionArtifacts,
+    ...nativeArtifacts,
+  ], {
+    branch,
+    commit: head,
+    runId: runContext.run_id ?? null,
+    taskIds,
+    featureIds,
+  });
   const packet = {
     generatedAt: new Date().toISOString(),
     projectHarness: evaluateProjectHarness(cwd),
     git: {
-      branch: git(['branch', '--show-current']),
-      head: git(['rev-parse', '--short', 'HEAD']),
+      branch,
+      head,
       status: git(['status', '--short']),
       changedFiles: changedFiles(),
     },
     summary: summarizeProofEvidence(evidenceDir),
-    evidence: listFiles(evidenceDir),
-    featureProof: readJson(join(evidenceDir, 'feature-proof-plan.json')),
-    testResults: listFiles(testResultsDir),
-    browserArtifacts: listFiles(join(cwd, 'playwright-report')),
-    nativeArtifacts: [
-      ...listFiles(join(cwd, 'dist')),
-      ...listFiles(join(cwd, 'android/app/build/outputs')),
-      ...listFiles(join(cwd, 'ios/App/build')),
-    ].slice(0, 500),
+    evidence,
+    featureProof,
+    testResults,
+    browserArtifacts,
+    nativeArtifacts,
+    remotionArtifacts,
+    artifactProvenance,
     starter: {
       scorecard: existsSync(join(cwd, '.ai-starter/runs/latest-scorecard.json'))
         ? '.ai-starter/runs/latest-scorecard.json'
@@ -246,6 +520,19 @@ function main() {
 
   const out = join(evidenceDir, 'proof-packet.json');
   writeFileSync(out, JSON.stringify(packet, null, 2) + '\n');
+  writeArtifactProvenanceManifest([
+    ...listFiles(evidenceDir),
+    ...testResults,
+    ...browserArtifacts,
+    ...remotionArtifacts,
+    ...nativeArtifacts,
+  ], {
+    branch,
+    commit: head,
+    runId: runContext.run_id ?? null,
+    taskIds,
+    featureIds,
+  });
   console.log(`[generate-proof-packet] wrote ${out}`);
 }
 

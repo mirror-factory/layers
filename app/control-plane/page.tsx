@@ -482,25 +482,28 @@ export default function ControlPlanePage() {
 
   if (!data) {
     return (
-      <main className="starter-pixel min-h-dvh bg-neutral-950 bg-[linear-gradient(rgba(245,245,245,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(245,245,245,0.045)_1px,transparent_1px)] bg-[size:24px_24px] px-6 py-8 text-neutral-100">
-        <PixelStyles />
-        <div className="mx-auto flex max-w-5xl flex-col gap-6">
-          <div className="border-2 border-neutral-100 bg-neutral-950 p-6 shadow-[8px_8px_0_0_rgba(245,245,245,0.18)]">
-            <p className="font-mono text-[11px] uppercase tracking-[0.26em] text-neutral-400">
-              Local Control Plane
-            </p>
-            <h1 className="mt-3 font-mono text-4xl font-semibold tracking-tight text-neutral-50">
-              Loading starter and runtime state...
-            </h1>
-            <p className="mt-4 max-w-2xl text-sm leading-6 text-neutral-400">
-              Pulling live state from <code>/api/control-plane</code>.
-            </p>
-            {error ? (
-              <p className="mt-4 text-sm text-neutral-200">{error}</p>
-            ) : null}
+      <>
+        <main className="starter-pixel min-h-dvh bg-neutral-950 bg-[linear-gradient(rgba(245,245,245,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(245,245,245,0.045)_1px,transparent_1px)] bg-[size:24px_24px] px-6 py-8 text-neutral-100">
+          <PixelStyles />
+          <div className="mx-auto flex max-w-5xl flex-col gap-6">
+            <div className="border-2 border-neutral-100 bg-neutral-950 p-6 shadow-[8px_8px_0_0_rgba(245,245,245,0.18)]">
+              <p className="font-mono text-[11px] uppercase tracking-[0.26em] text-neutral-400">
+                Local Control Plane
+              </p>
+              <h1 className="mt-3 font-mono text-4xl font-semibold tracking-tight text-neutral-50">
+                Loading starter and runtime state...
+              </h1>
+              <p className="mt-4 max-w-2xl text-sm leading-6 text-neutral-400">
+                Pulling live state from <code>/api/control-plane</code>.
+              </p>
+              {error ? (
+                <p className="mt-4 text-sm text-neutral-200">{error}</p>
+              ) : null}
+            </div>
           </div>
-        </div>
-      </main>
+        </main>
+        {process.env.NODE_ENV === "development" ? <AIDebugPanel /> : null}
+      </>
     );
   }
 

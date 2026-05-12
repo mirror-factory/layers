@@ -13,7 +13,7 @@ name: Nightly AI Regression
 
 on:
   schedule:
-    - cron: '0 6 * * *' # 6 AM UTC daily
+    - cron: "0 6 * * *" # 6 AM UTC daily
   workflow_dispatch: # Manual trigger from GitHub UI
 
 env:
@@ -23,6 +23,7 @@ jobs:
   # ── Layer 1: Free, fast, blocking ──────────────────────────────────
   unit-and-types:
     name: Typecheck + Unit Tests
+    if: ${{ vars.HOSTED_ACTIONS_ENABLED == 'true' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:

@@ -87,6 +87,7 @@ for (const bp of BREAKPOINTS) {
           // Animation-friendly: allow slight differences from transitions
           animations: 'disabled',
           scale: 'device',
+          timeout: 30_000,
         });
       });
     }

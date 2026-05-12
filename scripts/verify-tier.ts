@@ -7,7 +7,7 @@
  */
 
 import { spawnSync } from 'node:child_process';
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 type TierId = '0' | '1' | '2' | '3' | '4' | '5';
@@ -43,6 +43,20 @@ function has(path: string): boolean {
   return existsSync(join(cwd, path));
 }
 
+function featureProofRequiresLane(laneId: string): boolean {
+  const planPath = join(evidenceDir, 'feature-proof-plan.json');
+  if (!existsSync(planPath)) return false;
+
+  try {
+    const plan = JSON.parse(readFileSync(planPath, 'utf-8')) as {
+      requiredLanes?: Array<{ id?: string }>;
+    };
+    return (plan.requiredLanes ?? []).some((lane) => lane.id === laneId);
+  } catch {
+    return false;
+  }
+}
+
 const tiers: Record<TierId, TierSpec> = {
   '0': {
     id: '0',
@@ -62,6 +76,10 @@ const tiers: Record<TierId, TierSpec> = {
     commands: [
       { name: 'fast tests', command: 'pnpm test:fast' },
       { name: 'feature proof plan', command: 'pnpm test:feature-proof', when: () => has('scripts/resolve-feature-proof.ts') },
+      { name: 'critical API/tool/chat coverage', command: 'npx tsx scripts/check-critical-coverage.ts', when: () => has('scripts/check-critical-coverage.ts') },
+      { name: 'mapped AI eval proof', command: 'pnpm test:eval', when: () => featureProofRequiresLane('ai-evals') },
+      { name: 'feature proof plan refresh', command: 'pnpm test:feature-proof', when: () => has('scripts/resolve-feature-proof.ts') },
+      { name: 'docs lookup coverage', command: 'npx tsx scripts/check-docs-lookup-coverage.ts', when: () => has('scripts/check-docs-lookup-coverage.ts') },
       { name: 'manifest drift', command: 'npx tsx scripts/check-manifest-drift.ts', when: () => has('scripts/check-manifest-drift.ts') },
       { name: 'compliance', command: 'npx tsx scripts/check-compliance.ts', when: () => has('scripts/check-compliance.ts') },
       { name: 'expect coverage', command: 'npx tsx scripts/check-expect-coverage.ts', when: () => has('scripts/check-expect-coverage.ts') },
@@ -81,11 +99,12 @@ const tiers: Record<TierId, TierSpec> = {
     label: 'Visual, mobile, usability, and staging',
     description: 'Browser-heavy checks for UI confidence and staging validation.',
     commands: [
-      { name: 'mobile visual matrix', command: 'PLAYWRIGHT_FORCE_CHROMIUM=1 pnpm exec playwright test tests/e2e/*.visual.spec.ts tests/e2e/*.visual.test.ts tests/e2e/visual-regression.spec.ts --project=mobile-light --project=mobile-dark --output=test-results/tier-3/mobile-visual' },
-      { name: 'desktop visual matrix', command: 'pnpm exec playwright test tests/e2e/*.visual.spec.ts tests/e2e/*.visual.test.ts tests/e2e/visual-regression.spec.ts --project=desktop-light --project=desktop-dark --output=test-results/tier-3/desktop-visual' },
-      { name: 'mobile flows', command: 'PLAYWRIGHT_FORCE_CHROMIUM=1 pnpm exec playwright test tests/e2e/mobile.spec.ts --project=mobile-light --output=test-results/tier-3/mobile-flows' },
+      { name: 'mobile visual matrix', command: 'PLAYWRIGHT_VIDEO=on PLAYWRIGHT_FORCE_CHROMIUM=1 pnpm exec playwright test tests/e2e/*.visual.spec.ts tests/e2e/*.visual.test.ts tests/e2e/visual-regression.spec.ts --project=mobile-light --project=mobile-dark --output=test-results/tier-3/mobile-visual' },
+      { name: 'desktop visual matrix', command: 'PLAYWRIGHT_VIDEO=on pnpm exec playwright test tests/e2e/*.visual.spec.ts tests/e2e/*.visual.test.ts tests/e2e/visual-regression.spec.ts --project=desktop-light --project=desktop-dark --output=test-results/tier-3/desktop-visual' },
+      { name: 'mobile flows', command: 'PLAYWRIGHT_VIDEO=on PLAYWRIGHT_FORCE_CHROMIUM=1 pnpm exec playwright test tests/e2e/mobile.spec.ts --project=mobile-light --project=mobile-dark --output=test-results/tier-3/mobile-flows' },
       { name: 'expect AI browser proof', command: 'pnpm test:expect', when: () => has('scripts/run-expect-proof.ts') },
       { name: 'feature proof artifacts', command: 'pnpm test:feature-proof -- --enforce-artifacts --enforce-lanes=visual-video,expect', when: () => has('scripts/resolve-feature-proof.ts') },
+      { name: 'all mapped proof lanes green', command: 'npx tsx scripts/check-done-proof.ts', when: () => has('scripts/check-done-proof.ts') },
       { name: 'design drift', command: 'npx tsx scripts/check-design-drift.ts', when: () => has('scripts/check-design-drift.ts') },
     ],
   },
@@ -99,7 +118,6 @@ const tiers: Record<TierId, TierSpec> = {
       { name: 'evals', command: 'pnpm test:eval' },
       { name: 'live integrations', command: 'pnpm test:live', required: false },
       { name: 'doctor strict', command: 'pnpm dev-kit:doctor:strict', required: false },
-      { name: 'docs lookup coverage', command: 'npx tsx scripts/check-docs-lookup-coverage.ts', when: () => has('scripts/check-docs-lookup-coverage.ts') },
     ],
   },
   '5': {

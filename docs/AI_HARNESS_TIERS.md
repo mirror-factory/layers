@@ -50,6 +50,11 @@ pnpm verify:tier 1
 Runs:
 
 - `pnpm test:fast`
+- feature proof plan resolution from `.ai-dev-kit/registries/feature-proof.json`
+- critical API/tool/chat/MCP/DevKit tab coverage sentry
+- mapped AI/MCP eval proof when changed files require the `ai-evals` lane
+- feature proof plan refresh after generated lane evidence is written
+- docs lookup coverage for changed flagged SDK/vendor files
 - manifest drift check
 - compliance check
 - Expect route coverage check
@@ -60,12 +65,34 @@ Used by:
 - `.husky/pre-push`
 - PR CI
 - Symphony after implementation turns
+- Symphony before any PR/handoff packet
 
 Blocks:
 
 - pushes
 - PR CI
 - Symphony PR creation
+
+Tier 1 is where LLM drift starts getting blocked. If an agent adds or changes
+chat, tool, MCP, or DevKit surfaces but leaves the high-risk proof as
+`describe.todo`, the `critical API/tool/chat coverage` gate fails. If an agent
+touches flagged SDK/vendor imports without a fresh docs lookup recorded in
+`.ai-dev-kit/state/docs-lookups.jsonl`, the docs coverage gate fails.
+
+LLM/API/chat/tool/MCP changes are also mapped in
+`.ai-dev-kit/registries/feature-proof.json` as
+`llm.api-chat-tools`. That feature requires fast tests, critical coverage, and
+AI/MCP eval coverage before the final done gate can pass. This is how the
+harness prevents a model-routing or tool change from landing with only a happy
+path unit test. Tier 1 now runs `pnpm test:eval` automatically when the current
+feature-proof plan includes the `ai-evals` lane, then refreshes the plan so the
+dashboard and done gate read current evidence.
+
+User-facing transcript work is mapped as `chat.message-ui`. Changes to
+`components/chat-message.tsx`, `/chat`, chat input, meeting chat, or the
+chat-message proof specs require fast tests, browser proof, Tier 3 media proof,
+and Expect proof. The DevKit design-system tab renders a sample reasoning
+message so this component has a stable browser proof surface.
 
 ## Tier 2: Focused Ticket Proof
 
@@ -115,10 +142,11 @@ pnpm verify:tier 3
 
 Runs:
 
-- targeted mobile visual specs (portable Chromium mobile emulation locally)
-- desktop visual matrix
+- targeted mobile light/dark visual specs (portable Chromium mobile emulation locally)
+- desktop light/dark visual matrix
 - focused mobile flows
 - Expect AI browser proof when `EXPECT_RUN=1`
+- all-mapped-lanes-green done proof gate
 - design drift
 
 Expect is not part of the default inner loop. Tier 3 records a skipped Expect
@@ -126,15 +154,16 @@ evidence file unless `EXPECT_RUN=1` is set. Use it for focused usability proof
 on changed routes or manually requested audits, and set `EXPECT_AGENT=codex`
 or another installed/authenticated provider when running from CI.
 
-Video is opt-in for deliberate media proof. Local Tier 3 keeps video off unless
-you set `PLAYWRIGHT_VIDEO=on`; CI keeps failure video by default, and the PR
-workflow sets `PLAYWRIGHT_VIDEO=on` when the PR has `tier3:run` or
-`proof:required`. Tier 3 writes each Playwright lane into its own
+Video is deliberate proof in Tier 3. The Tier 3 runner sets
+`PLAYWRIGHT_VIDEO=on` for the mobile visual matrix, desktop visual matrix, and
+mobile flows, then writes each Playwright lane into its own
 `test-results/tier-3/*` directory so video artifacts from one lane do not get
 deleted by the next lane.
 The final feature-proof artifact check is scoped to Tier 3 lanes
 (`visual-video`, `expect`) because Tier 0/1 and Tier 2 artifacts are produced
-by separate CI jobs.
+by separate CI jobs. The final done gate then reads the full feature-proof plan
+and fails unless every mapped lane is green. A ticket is not "done" while any
+mapped lane is pending, missing, or blocked.
 
 Local Tier 3 forces Chromium mobile emulation so agents can run it without
 root-level WebKit dependencies. WebKit/iOS-specific proof belongs in CI or the
@@ -238,6 +267,11 @@ pnpm evidence:export
 into `.evidence/proof-packet.json`. Symphony and `/dev-kit` should link this
 packet from each ticket and PR.
 
+Expect fallback proof writes deterministic replay media under `.expect/replays/`
+and records the replay directory in `.evidence/expect-proof.json`. The proof
+packet summarizes the replay artifact count and video count so Symphony can
+show the media proof instead of a bare green badge.
+
 ## Symphony Contract
 
 Symphony should use the same commands humans use:
@@ -250,3 +284,8 @@ Symphony should use the same commands humans use:
 
 If a tier fails, Symphony should pause the ticket, attach the evidence file,
 and avoid spending more tokens until the failure is understood.
+
+For a zero-hosted-Actions budget, use `docs/ZERO_ACTIONS_PR_FLOW.md` and
+`pnpm pr:zero-actions`. That path generates a local handoff packet and refuses
+to pretend a normal push is safe when workflow files would consume hosted
+Actions minutes.

@@ -309,6 +309,14 @@ Required after merge:
 Staging artifacts live in GitHub Actions artifacts and TestFlight. They do not
 update the public `/download` page.
 
+While GitHub-hosted Actions budget is unavailable, those hosted release jobs are
+opt-in only. The workflows skip hosted runners by default unless a maintainer
+sets `HOSTED_ACTIONS_ENABLED=true`, manually dispatches the workflow, applies
+the `hosted-actions:run` PR label, or pushes with `[hosted-actions]` in the
+commit message. Local, CT100, CT102, or self-hosted proof is the source of truth
+until hosted runners are explicitly re-enabled; a skipped hosted workflow is not
+release proof.
+
 ### Main
 
 Required before merge:
