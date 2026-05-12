@@ -170,4 +170,6 @@ Then `pnpm dev:staging` boots the dev server pointed at staging-tier creds local
 - [ ] Update `AGENTS.md` to reference this doc and the "no direct push to main" rule.
 - [ ] Open a soak PR `development` → `staging` → `main` to prove the pipeline before retiring the direct-push habit.
 - [ ] Confirm spend caps still configured (see [SPEND_CAPS.md](./SPEND_CAPS.md))
+- [ ] Confirm credentials are fresh per quarterly cadence (see [KEY_ROTATION.md](./KEY_ROTATION.md))
+- [ ] Run the manual real-device QA pass across all supported devices (see [RECORDING_MANUAL_QA.md](./RECORDING_MANUAL_QA.md))
 - [ ] Close [PROD-383](https://linear.app/mirror-factory/issue/PROD-383).
