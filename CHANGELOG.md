@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.103] — 2026-05-12
+
+### Other
+- Guard hosted workflows for zero Actions budget [skip ci] (`fba595e`)
+
+
 ## [0.1.102] — 2026-05-12
 
 ### Other
