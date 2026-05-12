@@ -7,6 +7,28 @@ export interface ProofArtifact {
   path: string;
   bytes: number;
   modifiedAt: string;
+  checksum?: string;
+}
+
+export interface ArtifactProvenance extends ProofArtifact {
+  artifactId: string;
+  taskIds: string[];
+  featureIds: string[];
+  laneId: string;
+  command: string;
+  source: "expect" | "playwright" | "remotion" | "native" | "proof-packet" | "release";
+  branch: string;
+  commit: string;
+  platform: string;
+  capturedAt: string;
+  reviewUrl: string;
+  href: string;
+  kind: "json" | "image" | "video" | "trace" | "directory" | "report" | "artifact";
+  pass?: boolean;
+  state: "green" | "blocked" | "pending";
+  tags: string[];
+  runId?: string | null;
+  missing: string[];
 }
 
 export interface ProofStatusSummary {
@@ -98,6 +120,8 @@ export interface ProofPacket {
   testResults?: ProofArtifact[];
   browserArtifacts?: ProofArtifact[];
   nativeArtifacts?: ProofArtifact[];
+  remotionArtifacts?: ProofArtifact[];
+  artifactProvenance?: ArtifactProvenance[];
   starter?: {
     scorecard?: string | null;
     browserProof?: string | null;
