@@ -9,37 +9,39 @@ test.describe("Home page navigation", () => {
     await page.goto("/", { waitUntil: "domcontentloaded" });
   });
 
-  test("has primary auth CTAs linking to sign-up and sign-in", async ({
+  test("nav shows invite-only state with sign-in link and disabled hero CTA", async ({
     page,
   }) => {
     test.setTimeout(10_000);
-
-    const getStarted = page
-      .locator('a[href="/sign-up"]')
-      .filter({ hasText: "Start free" });
-    await expect(getStarted.first()).toBeVisible();
 
     const signIn = page
       .locator('a[href="/sign-in"]')
       .filter({ hasText: "Sign in" });
     await expect(signIn.first()).toBeVisible();
+
+    const comingSoon = page.getByRole("button", { name: "Coming soon" });
+    await expect(comingSoon.first()).toBeVisible();
+    await expect(comingSoon.first()).toBeDisabled();
   });
 
-  test("landing sections expose product, demo, and pricing content", async ({
+  test("landing renders hero, pricing, and final CTA sections", async ({
     page,
   }) => {
     test.setTimeout(10_000);
 
-    const expectedHeadings = [
-      "Turn meetings into structured team memory.",
-      "Connect once. Your meeting memory lives in every AI tool.",
-      "Search across every meeting.",
-      "Simple pricing. Start free, scale when you are ready.",
-    ];
+    await expect(
+      page.getByRole("heading", { name: /AI memory for your meetings/i }),
+    ).toBeVisible();
 
-    for (const heading of expectedHeadings) {
-      await expect(page.getByRole("heading", { name: heading })).toBeVisible();
-    }
+    await expect(
+      page.getByRole("heading", { name: /Simple pricing/i }),
+    ).toBeVisible();
+
+    await expect(
+      page.getByRole("heading", {
+        name: /Ready to make every meeting/i,
+      }),
+    ).toBeVisible();
   });
 });
 

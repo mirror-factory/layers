@@ -1,6 +1,6 @@
 {
   "name": "audio-layer",
-  "version": "0.1.72",
+  "version": "0.1.78",
   "private": true,
   "main": "electron/main.js",
   "scripts": {
@@ -79,12 +79,16 @@
     "product:validate": "tsx scripts/product-validation.ts",
     "mfdr": "tsx scripts/mfdr.ts",
     "usage:check": "tsx scripts/check-integration-usage.ts",
-    "branding:generate": "node scripts/branding-generate.mjs"
+    "branding:generate": "node scripts/branding-generate.mjs",
+    "cap:patch-oauth": "node scripts/patch-native-oauth.mjs",
+    "cap:sync": "npx cap sync && node scripts/patch-native-oauth.mjs"
   },
   "dependencies": {
     "@ai-sdk/gateway": "^3.0.104",
     "@base-ui/react": "^1.4.1",
     "@capacitor/android": "^8.3.1",
+    "@capacitor/app": "^8.1.0",
+    "@capacitor/browser": "^8.0.3",
     "@capacitor/core": "^8.3.1",
     "@capacitor/ios": "^8.3.1",
     "@capacitor/local-notifications": "^8.0.2",

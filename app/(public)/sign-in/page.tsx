@@ -5,6 +5,10 @@ import { useSearchParams } from "next/navigation";
 import { getSupabaseBrowser } from "@/lib/supabase/browser";
 import { GOOGLE_SIGN_IN_AUTH_SCOPES } from "@/lib/auth/google-oauth";
 import {
+  isNativePlatform,
+  signInWithGoogleNative,
+} from "@/lib/auth/native-oauth";
+import {
   AuthShell,
   AuthField,
   AuthError,
@@ -74,6 +78,22 @@ function SignInForm() {
     try {
       const supabase = getSupabaseBrowser();
       if (!supabase) throw new Error("Auth not configured");
+
+      // Native Capacitor build (iOS/Android): WKWebView punts unallowlisted
+      // navigations to Safari, and Google refuses OAuth from WebViews via
+      // `disallowed_useragent`. Use the in-app browser (SFSafariViewController
+      // on iOS, Custom Tabs on Android) and finish the PKCE exchange on
+      // deep-link return. See lib/auth/native-oauth.ts (PROD-408).
+      if (isNativePlatform()) {
+        await signInWithGoogleNative(
+          {
+            scopes: GOOGLE_SIGN_IN_AUTH_SCOPES,
+            next: getPostLoginRedirect(),
+          },
+          { supabase },
+        );
+        return;
+      }
 
       // For Google OAuth (PKCE flow), Supabase redirects back to redirectTo
       // with `?code=...`. Our /auth/callback route exchanges the code, then

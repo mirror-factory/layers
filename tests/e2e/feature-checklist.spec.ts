@@ -114,13 +114,16 @@ test.describe("Feature checklist", () => {
     page,
   }) => {
     await page.goto("/pricing", { waitUntil: "load" });
+    // Public pricing during the invite-only alpha: the h1 is now
+    // "Pay for the meeting memory ..." and every tier CTA reads
+    // "Coming soon" / disabled. Match generously so editorial copy can
+    // evolve without breaking this gate.
     await expect(
-      page.getByRole("heading", { name: "Simple, transparent pricing" }),
+      page.getByRole("heading", { name: /pay for the meeting memory/i }),
     ).toBeVisible();
-    await expect(page.getByText("Current plan")).toBeVisible();
-    await expect(page.getByRole("button", { name: "Subscribe" })).toHaveCount(
-      2,
-    );
+    await expect(
+      page.getByRole("button", { name: "Coming soon" }).first(),
+    ).toBeVisible();
 
     await page.goto("/sign-in", { waitUntil: "load" });
     await expect(
