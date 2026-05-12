@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.89] — 2026-05-12
+
+### Documentation
+- docs: Supabase production migration audit + critical RLS finding (PROD-224) (`64565c2`)
+
+
 ## [0.1.88] — 2026-05-12
 
 ### Other
