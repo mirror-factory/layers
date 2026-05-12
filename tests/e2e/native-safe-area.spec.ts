@@ -40,9 +40,9 @@ async function mockSafeArea(page: import("@playwright/test").Page): Promise<void
   });
 }
 
-test.describe("PROD-460 — safe-area insets on native viewports", () => {
-  test.use({ ...devices["iPhone 13 Pro"] });
+test.use({ ...devices["iPhone 13 Pro"] });
 
+test.describe("PROD-460 — safe-area insets on native viewports (iPhone)", () => {
   test("root layout viewport meta has viewport-fit=cover", async ({ page }) => {
     await page.goto("/", { waitUntil: "domcontentloaded" });
     const viewportMeta = await page
@@ -139,20 +139,7 @@ test.describe("PROD-460 — safe-area insets on native viewports", () => {
   }
 });
 
-test.describe("PROD-460 — Pixel hole-punch coverage", () => {
-  test.use({ ...devices["Pixel 7"] });
-
-  test("public site nav respects safe-top on Pixel viewport", async ({ page }) => {
-    await page.goto("/", { waitUntil: "domcontentloaded" });
-    await mockSafeArea(page);
-    await page.waitForTimeout(100);
-
-    const banner = page.locator('[role="status"]').first();
-    if (await banner.count()) {
-      const padTop = await banner.evaluate(
-        (el) => parseFloat(window.getComputedStyle(el).paddingTop) || 0
-      );
-      expect(padTop).toBeGreaterThanOrEqual(MOCK_INSET_PX);
-    }
-  });
-});
+// Note: Pixel/Android hole-punch is covered in
+// tests/e2e/native-safe-area-android.spec.ts. Playwright forbids switching
+// `defaultBrowserType` mid-file via test.use() inside describe blocks, so
+// the Android case lives in its own spec.
