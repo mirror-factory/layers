@@ -1,6 +1,13 @@
 "use client";
 
-import { useId, useState, type FormEvent, type ReactNode } from "react";
+import {
+  useCallback,
+  useId,
+  useRef,
+  useState,
+  type FormEvent,
+  type ReactNode,
+} from "react";
 import {
   ArrowDown,
   AudioLines,
@@ -53,6 +60,16 @@ interface SessionCaptureCardProps {
   controlSlot?: ReactNode;
 }
 
+/**
+ * Render-prop bag passed to `askPanel` when it is supplied as a function.
+ * Consumers (typically `MeetingChat`) use `onCitationClick` so chat citation
+ * pills can seek + highlight the transcript pane that lives inside this
+ * canvas. See PROD-464.
+ */
+export interface SessionAskPanelRenderProps {
+  onCitationClick: (segmentNumber: number) => void;
+}
+
 interface SessionIntelligenceCanvasProps {
   mode: "live" | "summary";
   summaryText: string;
@@ -62,7 +79,12 @@ interface SessionIntelligenceCanvasProps {
   actions: SessionActionRow[];
   decisions?: string[];
   stats?: SessionWorkspaceStats;
-  askPanel?: ReactNode;
+  /**
+   * Either a static panel node or a render-prop function that receives a
+   * citation-click callback. When supplied as a function, citation pills in
+   * chat messages can seek + highlight the matching transcript segment.
+   */
+  askPanel?: ReactNode | ((props: SessionAskPanelRenderProps) => ReactNode);
   askTimestampLabel?: string;
   footerStatus?: string;
 }
@@ -196,6 +218,13 @@ function SessionStat({ value, label }: { value: number; label: string }) {
   );
 }
 
+/**
+ * Highlight duration must match the `.citation-flash` keyframe in
+ * `app/globals.css` (PROD-464). Kept as a constant so tests can wait on a
+ * deterministic value without re-reading the CSS.
+ */
+export const CITATION_FLASH_DURATION_MS = 1500;
+
 export function SessionIntelligenceCanvas({
   mode,
   summaryText,
@@ -217,12 +246,75 @@ export function SessionIntelligenceCanvas({
   const pointCount = keyPoints.length;
   const decisionCount = decisions.length;
   const tabs = mode === "summary" ? SUMMARY_SESSION_TABS : LIVE_SESSION_TABS;
+  const transcriptPanelRef = useRef<HTMLElement | null>(null);
+  const flashTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  /**
+   * Citation seek + highlight handler (PROD-464). Chat citation pills like
+   * `[S12]` call this with the 1-indexed segment number. We:
+   *   1. Switch to the transcript tab if not already active so the row is
+   *      mounted before we try to scroll to it (this also "expands" the
+   *      transcript section in the summary view where it is otherwise
+   *      collapsed behind another tab).
+   *   2. Locate the row via `[data-segment="<n>"]` and scroll it into view.
+   *   3. Add a transient `.citation-flash` class for a brief mint-glow pulse
+   *      matching the onboarding glow ring (PROD-389) style.
+   *
+   * We defer the DOM lookup with rAF so the tab swap can mount the
+   * transcript list before we query for the segment.
+   */
+  const handleCitationClick = useCallback(
+    (segmentNumber: number) => {
+      setActiveTab("transcript");
+
+      if (flashTimeoutRef.current) {
+        clearTimeout(flashTimeoutRef.current);
+        flashTimeoutRef.current = null;
+      }
+
+      const seekAndFlash = () => {
+        const panel = transcriptPanelRef.current;
+        if (!panel) return;
+        const target = panel.querySelector<HTMLElement>(
+          `[data-segment="${segmentNumber}"]`,
+        );
+        if (!target) return;
+
+        target.scrollIntoView({ behavior: "smooth", block: "center" });
+        target.classList.remove("citation-flash");
+        // Force a reflow so re-adding the class restarts the animation
+        // even if the same segment is clicked twice in a row.
+        void target.offsetWidth;
+        target.classList.add("citation-flash");
+        flashTimeoutRef.current = setTimeout(() => {
+          target.classList.remove("citation-flash");
+          flashTimeoutRef.current = null;
+        }, CITATION_FLASH_DURATION_MS);
+      };
+
+      if (typeof window !== "undefined") {
+        // Two rAFs: first to let React flush the tab-state update, second to
+        // ensure the new tab's content has painted before we query for it.
+        window.requestAnimationFrame(() => {
+          window.requestAnimationFrame(seekAndFlash);
+        });
+      } else {
+        seekAndFlash();
+      }
+    },
+    [],
+  );
 
   function tabCount(tab: SessionTab) {
     if (tab === "key-points") return pointCount;
     if (tab === "actions") return actionCount;
     return null;
   }
+
+  const renderedAskPanel =
+    typeof askPanel === "function"
+      ? askPanel({ onCitationClick: handleCitationClick })
+      : askPanel;
 
   return (
     <section className="session-intelligence-canvas" aria-label="Meeting notes">
@@ -314,7 +406,10 @@ export function SessionIntelligenceCanvas({
               </article>
             )}
 
-            <article className="session-panel session-transcript-panel">
+            <article
+              ref={transcriptPanelRef}
+              className="session-panel session-transcript-panel"
+            >
               <header>
                 <div>
                   <h2>{mode === "live" ? "Live transcript" : "Transcript"}</h2>
@@ -342,7 +437,7 @@ export function SessionIntelligenceCanvas({
         )}
 
         {activeTab === "ask" &&
-          (askPanel ?? (
+          (renderedAskPanel ?? (
             <LiveAskChat
               decisions={decisions}
               actions={actions}
@@ -393,8 +488,14 @@ function SessionTranscriptList({
         onScroll={onScroll}
         className="session-transcript-list"
       >
-        {rows.map((row) => (
-          <article className="session-transcript-row" key={row.id}>
+        {rows.map((row, index) => (
+          // `data-segment` is 1-indexed to match the `[S<n>]` citation tokens
+          // emitted by the chat backend (see PROD-464 / chat-message.tsx).
+          <article
+            className="session-transcript-row"
+            key={row.id}
+            data-segment={index + 1}
+          >
             <time>{row.timestamp}</time>
             <span
               className={`session-transcript-dot is-${row.tone ?? "blue"} ${
