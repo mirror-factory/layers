@@ -17,6 +17,15 @@ mac:
   gatekeeperAssess: false
   entitlements: electron/entitlements.mac.plist
   entitlementsInherit: electron/entitlements.mac.plist
+  # PROD-476: macOS shows this string in the system microphone permission
+  # prompt the first time Layers calls getUserMedia. Without it macOS denies
+  # the request outright (TCC requires a usage description) and the app
+  # never sees the prompt. Keep the copy aligned with the iOS Info.plist
+  # patched by scripts/patch-native-oauth.mjs.
+  extendInfo:
+    NSMicrophoneUsageDescription: >-
+      Layers needs your microphone to record meetings and transcribe what's
+      said. Audio is captured only while you're recording.
   # Code signing + notarization (PROD-380).
   # Default OFF so local/dev builds don't require certs.
   # CI flips `notarize` to true via env override (`NOTARIZE=true`) when secrets

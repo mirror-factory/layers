@@ -30,6 +30,7 @@ import {
   microphoneUnsupportedMessage,
   recordingStartErrorMessage,
 } from "@/lib/recording/microphone-errors";
+import { detectCurrentRecordingPlatform } from "@/lib/recording/platform";
 import {
   formatRecordingContextTime,
   type RecordingMeetingContext,
@@ -927,7 +928,7 @@ function LiveRecorder(
         }
       };
     } catch (err) {
-      setError(recordingStartErrorMessage(err));
+      setError(recordingStartErrorMessage(err, detectCurrentRecordingPlatform()));
       cleanup();
       stateRef.current = "idle";
       setState("idle");
