@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.73] — 2026-05-12
+
+### Other
+- Merge PR #40: PROD-363 OpenAI transcription adapter (`a720e3e`)
+
+
 ## [0.1.72] — 2026-05-12
 
 ### Other
