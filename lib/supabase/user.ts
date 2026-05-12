@@ -46,6 +46,8 @@ export async function getSupabaseUser(): Promise<SupabaseClient | null> {
 /**
  * Get the current authenticated user's ID.
  * Returns null if Supabase is not configured or user is not authenticated.
+ * NOTE: includes anonymous Supabase sessions (which Layers auto-creates) —
+ * use `getCurrentSignedInUserId()` for "is this a real, email-bound user?".
  */
 export async function getCurrentUserId(): Promise<string | null> {
   const supabase = await getSupabaseUser();
@@ -55,4 +57,22 @@ export async function getCurrentUserId(): Promise<string | null> {
     data: { user },
   } = await supabase.auth.getUser();
   return user?.id ?? null;
+}
+
+/**
+ * Get the current SIGNED-IN user's ID — i.e. one with a real email/OAuth
+ * identity, not an auto-issued anonymous session. Auth guards for
+ * /sign-in, /sign-up, /meetings, etc. should use this so anon sessions
+ * don't accidentally trigger "you're already signed in" flows. (PROD-487)
+ */
+export async function getCurrentSignedInUserId(): Promise<string | null> {
+  const supabase = await getSupabaseUser();
+  if (!supabase) return null;
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return null;
+  if (user.is_anonymous) return null;
+  return user.id;
 }

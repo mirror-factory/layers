@@ -1,8 +1,11 @@
 import { redirect } from "next/navigation";
-import { getCurrentUserId } from "@/lib/supabase/user";
+import { getCurrentSignedInUserId } from "@/lib/supabase/user";
 import { SignInPageClient } from "./sign-in-form";
 
 export default async function SignInPage() {
-  if (await getCurrentUserId()) redirect("/record");
+  // PROD-487: must use getCurrentSignedInUserId — getCurrentUserId returns
+  // true for anonymous Supabase sessions, which the site auto-creates on
+  // every visit. Using it here made /sign-in unreachable for ALL users.
+  if (await getCurrentSignedInUserId()) redirect("/record");
   return <SignInPageClient />;
 }
