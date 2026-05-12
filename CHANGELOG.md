@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.94] — 2026-05-12
+
+### Other
+- feat(monitoring): watchlist + cron-driven alert tick (PROD-371) (`ca2a305`)
+
+
 ## [0.1.93] — 2026-05-12
 
 ### Documentation
