@@ -194,31 +194,34 @@ Note: the `/download` page links don't change between releases — they always p
 
 ---
 
-## OAuth in-app behavior on iOS — known issue
+## OAuth in-app behavior on iOS — fixed in PROD-408
 
-The iOS TestFlight build's Sign in with Google currently kicks the user out to Safari instead of staying inside the app. Reproduces consistently as of 2026-05-07. Tracked under PROD-364 follow-up.
+The iOS Capacitor build now keeps Sign in with Google entirely inside the app via SFSafariViewController + custom URL scheme deep-link. Android uses the equivalent Custom Tabs path. Web behavior is unchanged.
 
-### Why it happens
+### How the native flow works
 
-`app/(public)/sign-in/page.tsx` calls `supabase.auth.signInWithOAuth({ provider: "google" })`. Under the hood Supabase does a top-level `window.location.href = <google url>`. Inside Capacitor's WKWebView this hits two issues simultaneously:
+1. `app/(public)/sign-in/page.tsx` checks `Capacitor.isNativePlatform()`. On native it calls `signInWithGoogleNative()` from `lib/auth/native-oauth.ts`.
+2. That helper asks Supabase for the Google OAuth URL with `skipBrowserRedirect: true` and `redirectTo: "com.mirrorfactory.layers://auth/callback"`.
+3. The URL is opened with `@capacitor/browser`'s `Browser.open({ url, presentationStyle: "popover" })`. iOS surfaces it as SFSafariViewController; Android as a Custom Tab. Both are acceptable to Google's OAuth policy (no `disallowed_useragent`).
+4. After consent, Safari/Chrome redirects to the custom scheme. iOS/Android hand the URL back to the app via `App.addListener('appUrlOpen', ...)` (Capacitor's `@capacitor/app` plugin).
+5. The listener parses `?code=...` and calls `supabase.auth.exchangeCodeForSession(code)` inside the WebView, then navigates to `/record`.
 
-1. The Capacitor config has `server.allowNavigation: ["api.assemblyai.com", "layers.mirrorfactory.ai"]`. `accounts.google.com` is **not** allowlisted, so any navigation there is treated as external and punted to Safari by Capacitor's default policy.
-2. Even if we allowlisted `accounts.google.com`, Google detects WebViews via `User-Agent` and refuses OAuth flows with `disallowed_useragent`. This is Google's anti-phishing rule and is non-negotiable.
+### Required Supabase dashboard config
 
-### The standard fix (Capacitor + Supabase OAuth)
+The custom scheme must be on the Supabase Auth allowlist:
 
-Three changes in the app code:
+- Dashboard → Authentication → URL Configuration → Redirect URLs → add `com.mirrorfactory.layers://auth/callback`.
 
-1. **Detect Capacitor at runtime** in `sign-in/page.tsx`. If running inside Capacitor:
-   - Open the Google OAuth URL via `@capacitor/browser`'s `Browser.open({ url, presentationStyle: 'popover' })` instead of `window.location.href`. SFSafariViewController appears as an in-app overlay, leaves the app in the background, and is acceptable to Google for OAuth.
-2. **Set `redirectTo` to the app's URL scheme** (`com.mirrorfactory.layers://auth/callback?code=…`). Google → Safari overlay → redirects to the scheme → iOS reopens the app with the code → Capacitor's `App.addListener('appUrlOpen', …)` handler grabs the URL and exchanges the code via `supabase.auth.exchangeCodeForSession(code)`.
-3. **Add the redirect URL to Supabase project's allowlist** (Supabase dashboard → Authentication → URL Configuration → Redirect URLs): include `com.mirrorfactory.layers://auth/callback`.
+Without this Supabase returns `redirect_uri_mismatch` on the native path.
 
-This is a meaningful chunk of work — touches auth, scheme handling, and Supabase config — and isn't a quick fix. Sized like a small feature, not a hotfix. Same fix works for Android (with the Android scheme handler).
+### Platform manifests
 
-### Quick workaround for now
+- iOS: `ios/App/App/Info.plist` already declares the `com.mirrorfactory.layers` URL scheme under `CFBundleURLTypes`.
+- Android: `android/app/src/main/AndroidManifest.xml` declares an `<intent-filter>` with `<data android:scheme="com.mirrorfactory.layers"/>` on MainActivity.
 
-Users on iOS who hit this can sign in with email + password (`/sign-in` has both forms). Google sign-in stays Safari-bound until the deep-link OAuth is implemented.
+### Web flow is unchanged
+
+The web build skips the native branch entirely. `supabase.auth.signInWithOAuth({ provider: "google", options: { redirectTo: <site>/auth/callback?next=... } })` still hits the existing `/auth/callback` route, which exchanges the PKCE code and forwards to `next`.
 
 ---
 

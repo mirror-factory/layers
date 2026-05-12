@@ -17,11 +17,10 @@
  *   6. Revoked client (simulated): mocked validateMcpBearerToken returns null
  *      -> 401 invalid_token.
  *
- * NB: the route does NOT yet have a dedicated client_revoked code path (the
- * `oauth_clients` table + revocation flow ships in PROD-403). Until then,
- * `validateMcpBearerToken` returning null is the only way the route can know
- * a token is dead, and the response is always the generic invalid_token shape.
- * Test (6) reflects the route as built today.
+ * PROD-403 update: revocation now goes through `validateMcpBearerOutcome`
+ * which returns `{ kind: "revoked" }` for a user-revoked oauth_clients row.
+ * The route turns that into `error: "client_revoked"`. Tests below cover
+ * both the generic invalid_token path and the new client_revoked path.
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -63,6 +62,26 @@ const mocks = vi.hoisted(() => {
   const registeredAppResources: Array<{ name: string; uri: string }> = [];
 
   const validateMcpBearerToken = vi.fn();
+  // PROD-403: the route now calls `validateMcpBearerOutcome` so it can
+  // distinguish `client_revoked` from generic `invalid_token`. We wire it
+  // to the same fake so existing test setups (mockResolvedValue(null) /
+  // mockResolvedValue({userId})) keep working: a null outcome is normalized
+  // to `{kind:"invalid"}`, a `{userId}` shape to `{kind:"ok",userId,clientId}`.
+  type Outcome =
+    | { kind: "ok"; userId: string; clientId: string | null }
+    | { kind: "invalid" }
+    | { kind: "revoked" };
+  const validateMcpBearerOutcome = vi.fn<(token: string) => Promise<Outcome>>(
+    async (token: string) => {
+      const legacy = await validateMcpBearerToken(token);
+      if (!legacy) return { kind: "invalid" };
+      return {
+        kind: "ok",
+        userId: legacy.userId as string,
+        clientId: (legacy.clientId ?? null) as string | null,
+      };
+    },
+  );
 
   // Stand-in for `mcp-handler`'s createMcpHandler. We:
   //   - capture every server.tool() registration so individual tests can
@@ -124,6 +143,7 @@ const mocks = vi.hoisted(() => {
     registerAppTool,
     registerAppResource,
     validateMcpBearerToken,
+    validateMcpBearerOutcome,
   };
 });
 
@@ -139,6 +159,7 @@ vi.mock("@modelcontextprotocol/ext-apps/server", () => ({
 
 vi.mock("@/lib/mcp/auth", () => ({
   validateMcpBearerToken: mocks.validateMcpBearerToken,
+  validateMcpBearerOutcome: mocks.validateMcpBearerOutcome,
 }));
 
 // ---------------------------------------------------------------------------
@@ -338,6 +359,19 @@ describe("PROD-402 -- /api/mcp/[transport] auth hardening", () => {
     seeded.length = 0;
     seeded.push({ ...meetingA }, { ...meetingB });
     mocks.validateMcpBearerToken.mockReset();
+    // Re-install the through-call shim after a reset so legacy `null` /
+    // `{userId}` mocks on validateMcpBearerToken continue to drive the
+    // route through validateMcpBearerOutcome.
+    mocks.validateMcpBearerOutcome.mockReset();
+    mocks.validateMcpBearerOutcome.mockImplementation(async (token: string) => {
+      const legacy = await mocks.validateMcpBearerToken(token);
+      if (!legacy) return { kind: "invalid" };
+      return {
+        kind: "ok",
+        userId: legacy.userId as string,
+        clientId: (legacy.clientId ?? null) as string | null,
+      };
+    });
     mocks.createMcpHandler.mockClear();
   });
 
@@ -568,12 +602,10 @@ describe("PROD-402 -- /api/mcp/[transport] auth hardening", () => {
     });
   });
 
-  describe("revoked client (simulated until PROD-403 ships oauth_clients)", () => {
-    it("validator returning null (the only revocation signal today) -> 401 invalid_token", async () => {
-      // Until PROD-403 lands the oauth_clients table + revocation flow, the
-      // route can't distinguish "revoked" from "unknown". We assert the
-      // observed behavior: any null from validateMcpBearerToken collapses to
-      // the generic invalid_token + "Invalid bearer token" description.
+  describe("revoked client (PROD-403)", () => {
+    it("validator returning null still 401s invalid_token (unknown token)", async () => {
+      // Generic "this bearer doesn't decode / isn't recognized" still
+      // collapses to the RFC 6750 `invalid_token` shape.
       mocks.validateMcpBearerToken.mockResolvedValueOnce(null);
 
       const res = await POST(
@@ -588,14 +620,12 @@ describe("PROD-402 -- /api/mcp/[transport] auth hardening", () => {
       expect(body.error_description).toBe("Invalid bearer token");
     });
 
-    it("revocation lookup returning a truthy {revoked} flag still 401s today", async () => {
-      // Even if a future revoked-client lookup returns truthy data, the route
-      // currently keys off a non-null userId. Mock returning null is the
-      // correct behavior; this test guards against accidentally letting a
-      // {revoked: true} object slip through as a valid auth result.
-      mocks.validateMcpBearerToken.mockResolvedValueOnce(
-        null as unknown as { userId: string },
-      );
+    it("validator returning {kind:'revoked'} surfaces client_revoked 401", async () => {
+      // PROD-403: a user-revoked oauth_clients row must produce a
+      // distinguishable response so MCP clients can tell their users
+      // "the app you connected was revoked" instead of "auth failed,
+      // retrying..." in an infinite loop.
+      mocks.validateMcpBearerOutcome.mockResolvedValueOnce({ kind: "revoked" });
 
       const res = await POST(
         jsonRequest(
@@ -605,7 +635,10 @@ describe("PROD-402 -- /api/mcp/[transport] auth hardening", () => {
         ),
       );
 
-      await expectInvalidToken401(res);
+      expect(res.status).toBe(401);
+      const body = (await res.json()) as { error: string; error_description: string };
+      expect(body.error).toBe("client_revoked");
+      expect(body.error_description).toMatch(/revoked/i);
     });
   });
 

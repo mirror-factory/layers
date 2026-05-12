@@ -26,11 +26,11 @@ test.describe("Sign-in page", () => {
     await expect(page.locator('input[type="password"]')).toBeVisible();
   });
 
-  test("has or divider between Google and email", async ({ page }) => {
+  test("has divider between Google and email", async ({ page }) => {
     await page.goto("/sign-in", { waitUntil: "domcontentloaded" });
-    // The divider has "or" as uppercase text between two lines
-    const divider = page.locator("span", { hasText: /^or$/i });
+    const divider = page.locator(".auth-divider-label").first();
     await expect(divider).toBeVisible({ timeout: 5000 });
+    await expect(divider).toContainText(/^or\b/i);
   });
 });
 
@@ -43,24 +43,21 @@ test.describe("Sign-up page", () => {
     await expect(googleBtn).toBeVisible({ timeout: 5000 });
   });
 
-  test("keeps create account disabled until password meets minimum length", async ({
-    page,
-  }) => {
+  // Public sign-ups are paused for the invite-only alpha; the form's submit
+  // button is hard-disabled and labelled "Coming soon" (see ALPHA_INVITE_MESSAGE
+  // in app/(public)/sign-up/page.tsx). Assert that state instead of the
+  // create-account password-length flow that the original test covered. When
+  // public sign-ups re-open, restore the original assertions from git.
+  test("renders the invite-only Coming soon state", async ({ page }) => {
     await page.goto("/sign-up", { waitUntil: "load" });
     await expect(
       page.getByRole("button", { name: "Continue with Google" }),
     ).toBeVisible();
-
-    await page.locator('input[type="email"]').fill("test@example.com");
-    await page.locator('input[type="password"]').fill("12345");
+    await expect(page.locator('input[type="email"]')).toBeVisible();
+    await expect(page.locator('input[type="password"]')).toBeVisible();
     await expect(
-      page.getByRole("button", { name: "Create account" }),
+      page.getByRole("button", { name: "Coming soon" }),
     ).toBeDisabled();
-
-    await page.locator('input[type="password"]').fill("123456");
-    await expect(
-      page.getByRole("button", { name: "Create account" }),
-    ).toBeEnabled();
   });
 });
 
