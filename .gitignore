@@ -81,3 +81,4 @@ supabase/.temp/
 tmp/
 src-tauri/target/
 src-tauri/Cargo.lock
+docs/evidence/**/*.mp4
