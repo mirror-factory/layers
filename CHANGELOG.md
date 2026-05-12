@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.72] — 2026-05-12
+
+### Other
+- test(e2e): reconcile sign-in divider, sign-up CTA, and pricing with invite-only state (PROD-459 part 1) (`419500e`)
+
+
 ## [0.1.71] — 2026-05-07
 
 ### Other
