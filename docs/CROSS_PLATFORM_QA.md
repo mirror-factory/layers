@@ -107,7 +107,9 @@ Wherever any of these breaks: file `platform:<x>` ticket with pre-fix screenshot
 
 | # | Check | ios | and | mac | win | web |
 |---|-------|-----|-----|-----|-----|-----|
-| C1 | Hamburger opens drawer; X closes it; nav items tappable | ⏭ | ✓ | ⏭ | ⏭ | ✓ |
+| C1 | Hamburger opens drawer; X closes it; nav items tappable | ⏭ | 🟢 verified | ⏭ | ⏭ | ✓ |
+| C1a | Hamburger menu shows AUTHED links when signed in (Meetings/Chat/Settings/Profile) | ⏭ | 🟢 PR#78 | ⏭ | ⏭ | ✓ PR#78 |
+| C1b | `/sign-in` and `/sign-up` redirect to `/record` when already signed in | ⏭ | 🟢 PR#78 | ⏭ | ⏭ | ✓ PR#78 |
 | C2 | Theme toggle (sun/moon) switches html class; persists across reload | ✓ | ✓ | ✓ | ✓ | ✓ |
 | C3 | Site honors system `prefers-color-scheme` on first load | 🔴 PROD-482 | 🔴 PROD-482 | 🔴 PROD-482 | 🔴 PROD-482 | 🔴 PROD-482 |
 | C4 | Browser back / swipe-back works inside the Capacitor / Electron shell | ✓ | ✓ | ✓ | ✓ | ✓ |
@@ -142,7 +144,7 @@ Test user `qa-walkthrough-2026-05-12@mirrorfactory.ai` (`d0b8989a-…`) was mint
 
 | # | Surface | ios | and | mac | win | web |
 |---|---------|-----|-----|-----|-----|-----|
-| E1 | `/meetings` list — page returns 200 with cookie auth; UI not visually walked | ❓ | ❓ | ❓ | ❓ | 🟢 200 |
+| E1 | `/meetings` list — empty state renders ("No meetings yet", New recording CTA, search bar, stats 0/0/0); floating Ask pill visible | ❓ | 🟢 verified | ❓ | ❓ | 🟢 200 |
 | E2 | `/meetings/[id]` — not walked (test user has no meetings yet) | ❓ | ❓ | ❓ | ❓ | ❓ |
 | E3 | Meeting notes editor auto-saves (1 s debounce) | ❓ | ❓ | ❓ | ❓ | ❓ |
 | E4 | Meeting chat (per-meeting AI) streams responses | ❓ | ❓ | ❓ | ❓ | ❓ |
