@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.75] — 2026-05-12
+
+### Other
+- Merge PR #35: PROD-457+458 footer/nav cleanup (`546cc9c`)
+
+
 ## [0.1.74] — 2026-05-11
 
 ### Other
