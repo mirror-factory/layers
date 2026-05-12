@@ -199,6 +199,7 @@ export function ConfigEditor({
         <h1 style={{ margin: 0 }}>Config</h1>
         <p style={muted}>
           Edit the project-level YAML configs that the kit treats as sources of truth.
+          These files are editable project contracts for the harness.
           Changes write directly to disk under <code style={codeStyle(theme)}>.ai-dev-kit/</code>.
         </p>
       </header>

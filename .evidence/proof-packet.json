@@ -1,0 +1,556 @@
+{
+  "generatedAt": "2026-05-10T09:50:24.277Z",
+  "projectHarness": {
+    "generatedAt": "2026-05-10T09:50:24.280Z",
+    "profilePath": ".ai-dev-kit/project-profile.json",
+    "project": {
+      "id": "layers",
+      "name": "Layers",
+      "repo": "mirror-factory/layers",
+      "primaryDashboardUrl": "https://work.hustletogether.com/projects/layers",
+      "linearProjectSlug": "layers-786bd350532f"
+    },
+    "branchModel": {
+      "integration": "development",
+      "releaseCandidate": "staging",
+      "production": "main",
+      "agentBranchPrefix": "agent/",
+      "requiredPrTarget": "development"
+    },
+    "pass": true,
+    "checks": [
+      {
+        "id": "project-profile.valid-json",
+        "label": "Project profile JSON",
+        "status": "pass",
+        "detail": "Profile parsed.",
+        "path": ".ai-dev-kit/project-profile.json"
+      },
+      {
+        "id": "project.id",
+        "label": "Project identity",
+        "status": "pass",
+        "detail": "Layers (mirror-factory/layers)",
+        "path": ".ai-dev-kit/project-profile.json"
+      },
+      {
+        "id": "branch.integration",
+        "label": "Integration branch",
+        "status": "pass",
+        "detail": "Agents target development.",
+        "path": ".ai-dev-kit/project-profile.json"
+      },
+      {
+        "id": "branch.production",
+        "label": "Production branch",
+        "status": "pass",
+        "detail": "Production is main.",
+        "path": ".ai-dev-kit/project-profile.json"
+      },
+      {
+        "id": "tool.typescript",
+        "label": "TypeScript",
+        "status": "pass",
+        "detail": "typecheck script present.",
+        "path": "package.json"
+      },
+      {
+        "id": "tool.vitest",
+        "label": "Vitest",
+        "status": "pass",
+        "detail": "Vitest and test:fast present.",
+        "path": "package.json"
+      },
+      {
+        "id": "tool.playwright",
+        "label": "Playwright",
+        "status": "pass",
+        "detail": "Playwright config and e2e tests present.",
+        "path": "playwright.config.ts"
+      },
+      {
+        "id": "tool.expect",
+        "label": "Expect",
+        "status": "pass",
+        "detail": "Expect dependency and flows present.",
+        "path": "tests/expect"
+      },
+      {
+        "id": "tool.api-tests",
+        "label": "API tests",
+        "status": "pass",
+        "detail": "API contract tests present.",
+        "path": "tests"
+      },
+      {
+        "id": "tool.proof",
+        "label": "Proof packet generator",
+        "status": "pass",
+        "detail": "Proof packet command present.",
+        "path": "scripts/generate-proof-packet.ts"
+      },
+      {
+        "id": "design.tokens",
+        "label": "Design tokens",
+        "status": "pass",
+        "detail": "Design tokens declared.",
+        "path": ".ai-dev-kit/registries/design-tokens.yaml"
+      },
+      {
+        "id": "design.system",
+        "label": "Design system registry",
+        "status": "pass",
+        "detail": "Design-system registry declared.",
+        "path": ".ai-dev-kit/registries/design-system.yaml"
+      },
+      {
+        "id": "design.no-inference",
+        "label": "No-inference design mode",
+        "status": "pass",
+        "detail": "AI design inference is disabled.",
+        "path": ".ai-dev-kit/project-profile.json"
+      },
+      {
+        "id": "service.ai-gateway",
+        "label": "Vercel AI Gateway",
+        "status": "pass",
+        "detail": "AI Gateway dependency present or service disabled.",
+        "path": "package.json"
+      },
+      {
+        "id": "service.supabase",
+        "label": "Supabase",
+        "status": "pass",
+        "detail": "Supabase dependency present or service disabled.",
+        "path": "package.json"
+      },
+      {
+        "id": "service.resend",
+        "label": "Resend",
+        "status": "pass",
+        "detail": "Resend dependency present or service disabled.",
+        "path": "package.json"
+      },
+      {
+        "id": "service.stripe",
+        "label": "Stripe",
+        "status": "pass",
+        "detail": "Stripe dependency present or service disabled.",
+        "path": "package.json"
+      },
+      {
+        "id": "service.transcription",
+        "label": "Transcription vendors",
+        "status": "pass",
+        "detail": "Transcription dependencies present or services disabled.",
+        "path": "package.json"
+      },
+      {
+        "id": "platform.capacitor",
+        "label": "Capacitor mobile",
+        "status": "pass",
+        "detail": "Capacitor mobile dependencies present.",
+        "path": "package.json"
+      },
+      {
+        "id": "platform.electron",
+        "label": "Electron desktop",
+        "status": "pass",
+        "detail": "Electron dependency present.",
+        "path": "package.json"
+      },
+      {
+        "id": "platform.maestro",
+        "label": "Native flow harness",
+        "status": "pass",
+        "detail": "Native flow harness present or not required yet.",
+        "path": ".maestro"
+      },
+      {
+        "id": "platform.native-config",
+        "label": "Native config proof",
+        "status": "pass",
+        "detail": "Native config proof command present.",
+        "path": "scripts/check-native-config.ts"
+      },
+      {
+        "id": "platform.native-smoke",
+        "label": "Native smoke proof",
+        "status": "pass",
+        "detail": "Native smoke proof command present.",
+        "path": "scripts/run-native-smoke.ts"
+      },
+      {
+        "id": "platform.release-artifacts",
+        "label": "Release artifact proof",
+        "status": "pass",
+        "detail": "Release artifact proof command present.",
+        "path": "scripts/check-release-artifacts.ts"
+      },
+      {
+        "id": "dashboard.dev-kit",
+        "label": "Dev-kit dashboard",
+        "status": "pass",
+        "detail": "Dev-kit dashboard routes present.",
+        "path": "app/dev-kit"
+      },
+      {
+        "id": "dashboard.project",
+        "label": "Project control panel",
+        "status": "pass",
+        "detail": "Project control panel present.",
+        "path": "app/dev-kit/project/page.tsx"
+      },
+      {
+        "id": "dashboard.proof",
+        "label": "Proof center",
+        "status": "pass",
+        "detail": "Proof center routes present.",
+        "path": "app/dev-kit/proof/page.tsx"
+      },
+      {
+        "id": "proof.latest-evidence",
+        "label": "Latest local evidence",
+        "status": "pass",
+        "detail": "Latest evidence updated 2026-05-10T09:49:43.398Z.",
+        "path": ".evidence"
+      }
+    ],
+    "enabledPlatforms": [
+      "web",
+      "ios",
+      "android",
+      "macos",
+      "windows"
+    ],
+    "enabledServices": [
+      "supabase",
+      "vercelAiGateway",
+      "resend",
+      "stripe",
+      "assemblyai",
+      "deepgram",
+      "langfuse"
+    ],
+    "requiredTools": [
+      "typescript",
+      "vitest",
+      "playwright",
+      "expect"
+    ]
+  },
+  "git": {
+    "branch": "agent/PROD-433-1778406184",
+    "head": "bf51207",
+    "status": "M app/dev-kit/config/config-editor.tsx",
+    "changedFiles": [
+      "app/dev-kit/config/config-editor.tsx"
+    ]
+  },
+  "evidence": [
+    {
+      "path": ".evidence/expect-proof.json",
+      "bytes": 1746,
+      "modifiedAt": "2026-05-10T09:49:36.494Z"
+    },
+    {
+      "path": ".evidence/feature-proof-plan.json",
+      "bytes": 3210,
+      "modifiedAt": "2026-05-10T09:47:35.806Z"
+    },
+    {
+      "path": ".evidence/project-harness.json",
+      "bytes": 6391,
+      "modifiedAt": "2026-05-10T09:47:40.708Z"
+    },
+    {
+      "path": ".evidence/proof-packet.json",
+      "bytes": 16144,
+      "modifiedAt": "2026-05-10T09:49:43.398Z"
+    },
+    {
+      "path": ".evidence/ticket-proof.json",
+      "bytes": 1078,
+      "modifiedAt": "2026-05-10T09:48:19.692Z"
+    },
+    {
+      "path": ".evidence/tier-0.json",
+      "bytes": 1056,
+      "modifiedAt": "2026-05-10T09:46:54.798Z"
+    },
+    {
+      "path": ".evidence/tier-1.json",
+      "bytes": 1466,
+      "modifiedAt": "2026-05-10T09:47:34.402Z"
+    },
+    {
+      "path": ".evidence/tier-2.json",
+      "bytes": 424,
+      "modifiedAt": "2026-05-10T09:48:19.716Z"
+    },
+    {
+      "path": ".evidence/tier-latest.json",
+      "bytes": 424,
+      "modifiedAt": "2026-05-10T09:48:19.716Z"
+    }
+  ],
+  "featureProof": {
+    "generatedAt": "2026-05-10T09:47:35.806Z",
+    "registryPath": ".ai-dev-kit/registries/feature-proof.json",
+    "policy": {
+      "requireRegistryForUserFacingChanges": true,
+      "expectPolicy": "Expect is required for every ticket that touches a registered user-facing Layers feature.",
+      "defaultUserFacingProof": [
+        "fast",
+        "playwright",
+        "expect"
+      ],
+      "defaultNativeProof": [
+        "native-config",
+        "native-device"
+      ]
+    },
+    "changedFiles": [
+      "app/dev-kit/config/config-editor.tsx",
+      "playwright-report/index.html",
+      "test-results/.last-run.json",
+      "test-results/playwright-no-run.json"
+    ],
+    "matchedFeatures": [
+      {
+        "id": "dashboard.devkit",
+        "name": "DevKit dashboard and proof center",
+        "description": "Project-local operator dashboard, registries, proof packet views, and run surfaces.",
+        "category": "operator-dashboard",
+        "status": "active",
+        "userFacing": true,
+        "surfaces": [
+          "web"
+        ],
+        "routes": [
+          "/dev-kit",
+          "/dev-kit/proof",
+          "/dev-kit/project"
+        ],
+        "paths": [
+          "app/dev-kit/**",
+          "app/api/dev-kit/**",
+          "components/ai-debug-panel.tsx",
+          "lib/ai-dev-kit/**",
+          "lib/starter-control-plane.ts",
+          "lib/dashboard-data.ts",
+          ".ai-dev-kit/registries/**"
+        ],
+        "proof": [
+          "fast",
+          "playwright",
+          "expect"
+        ],
+        "tests": {
+          "playwright": [
+            "tests/e2e/app-dev-kit-page.smoke.spec.ts",
+            "tests/e2e/app-dev-kit-runs-page.smoke.spec.ts"
+          ],
+          "expect": [
+            "tests/expect/app-dev-kit-page.md",
+            "tests/expect/app-dev-kit-runs-page.md"
+          ]
+        },
+        "matchedPaths": [
+          "app/dev-kit/config/config-editor.tsx"
+        ]
+      }
+    ],
+    "unmatchedUserFacingFiles": [],
+    "requiredLanes": [
+      {
+        "id": "expect",
+        "label": "Expect AI user-flow proof",
+        "command": "EXPECT_RUN=1 EXPECT_REQUIRED=1 EXPECT_AGENT=codex pnpm test:expect",
+        "evidence": [
+          ".evidence/expect-proof.json",
+          ".expect/replays"
+        ],
+        "description": "Instruction-driven AI browser proof for user-facing feature behavior.",
+        "missingEvidence": []
+      },
+      {
+        "id": "fast",
+        "label": "Fast deterministic tests",
+        "command": "pnpm test:fast",
+        "evidence": [
+          ".evidence/tier-1.json",
+          "test-results/unit.json"
+        ],
+        "description": "Unit, contract, and non-browser regression checks.",
+        "missingEvidence": []
+      },
+      {
+        "id": "playwright",
+        "label": "Playwright browser proof",
+        "command": "pnpm verify:tier 2",
+        "evidence": [
+          ".evidence/ticket-proof.json",
+          "playwright-report/index.html"
+        ],
+        "description": "Focused route, visual, and mobile browser proof for touched surfaces.",
+        "missingEvidence": []
+      }
+    ],
+    "commands": [
+      "EXPECT_RUN=1 EXPECT_REQUIRED=1 EXPECT_AGENT=codex pnpm test:expect",
+      "pnpm test:fast",
+      "pnpm verify:tier 2"
+    ],
+    "enforcedArtifactLanes": [],
+    "pass": true,
+    "blocked": {
+      "unregisteredUserFacingChange": false,
+      "missingArtifactLanes": []
+    }
+  },
+  "testResults": [
+    {
+      "path": "test-results/.last-run.json",
+      "bytes": 45,
+      "modifiedAt": "2026-05-10T09:50:17.650Z"
+    },
+    {
+      "path": "test-results/e2e-smoke-Home-loads-with-200-and-renders-desktop-light/error-context.md",
+      "bytes": 4758,
+      "modifiedAt": "2026-05-10T09:48:19.223Z"
+    },
+    {
+      "path": "test-results/e2e-smoke-Home-loads-with-200-and-renders-desktop-light/trace.zip",
+      "bytes": 4328,
+      "modifiedAt": "2026-05-10T09:48:19.282Z"
+    },
+    {
+      "path": "test-results/e2e-smoke-Home-loads-with-200-and-renders-mobile-light/error-context.md",
+      "bytes": 4758,
+      "modifiedAt": "2026-05-10T09:48:18.254Z"
+    },
+    {
+      "path": "test-results/e2e-smoke-Home-loads-with-200-and-renders-mobile-light/trace.zip",
+      "bytes": 4333,
+      "modifiedAt": "2026-05-10T09:48:18.297Z"
+    },
+    {
+      "path": "test-results/playwright-no-run.json",
+      "bytes": 144761,
+      "modifiedAt": "2026-05-10T09:50:17.650Z"
+    }
+  ],
+  "browserArtifacts": [
+    {
+      "path": "playwright-report/data/73ac55a2899600ca3791a3272331b67de7e18150.zip",
+      "bytes": 4328,
+      "modifiedAt": "2026-05-10T09:48:19.407Z"
+    },
+    {
+      "path": "playwright-report/data/9e0785d31d5d59170e34066d37e798a4b00fa50b.zip",
+      "bytes": 4333,
+      "modifiedAt": "2026-05-10T09:48:19.405Z"
+    },
+    {
+      "path": "playwright-report/data/c79876918575444ba18a7f05dffac3e29c2bf0a1.md",
+      "bytes": 4758,
+      "modifiedAt": "2026-05-10T09:48:19.406Z"
+    },
+    {
+      "path": "playwright-report/data/d48ca6cba38ed17c2edfb37e6760232da927beed.md",
+      "bytes": 4758,
+      "modifiedAt": "2026-05-10T09:48:19.405Z"
+    },
+    {
+      "path": "playwright-report/index.html",
+      "bytes": 561044,
+      "modifiedAt": "2026-05-10T09:50:17.650Z"
+    },
+    {
+      "path": "playwright-report/trace/assets/codeMirrorModule-DS0FLvoc.js",
+      "bytes": 313023,
+      "modifiedAt": "2026-05-10T09:48:19.633Z"
+    },
+    {
+      "path": "playwright-report/trace/assets/defaultSettingsView-GTWI-W_B.js",
+      "bytes": 643623,
+      "modifiedAt": "2026-05-10T09:48:19.658Z"
+    },
+    {
+      "path": "playwright-report/trace/codeMirrorModule.DYBRYzYX.css",
+      "bytes": 6421,
+      "modifiedAt": "2026-05-10T09:48:19.458Z"
+    },
+    {
+      "path": "playwright-report/trace/codicon.DCmgc-ay.ttf",
+      "bytes": 80340,
+      "modifiedAt": "2026-05-10T09:48:19.468Z"
+    },
+    {
+      "path": "playwright-report/trace/defaultSettingsView.B4dS75f0.css",
+      "bytes": 110544,
+      "modifiedAt": "2026-05-10T09:48:19.548Z"
+    },
+    {
+      "path": "playwright-report/trace/index.C5466mMT.js",
+      "bytes": 6509,
+      "modifiedAt": "2026-05-10T09:48:19.577Z"
+    },
+    {
+      "path": "playwright-report/trace/index.CzXZzn5A.css",
+      "bytes": 2111,
+      "modifiedAt": "2026-05-10T09:48:19.578Z"
+    },
+    {
+      "path": "playwright-report/trace/index.html",
+      "bytes": 2283,
+      "modifiedAt": "2026-05-10T09:48:19.578Z"
+    },
+    {
+      "path": "playwright-report/trace/manifest.webmanifest",
+      "bytes": 429,
+      "modifiedAt": "2026-05-10T09:48:19.579Z"
+    },
+    {
+      "path": "playwright-report/trace/playwright-logo.svg",
+      "bytes": 5033,
+      "modifiedAt": "2026-05-10T09:48:19.604Z"
+    },
+    {
+      "path": "playwright-report/trace/snapshot.html",
+      "bytes": 935,
+      "modifiedAt": "2026-05-10T09:48:19.605Z"
+    },
+    {
+      "path": "playwright-report/trace/sw.bundle.js",
+      "bytes": 95084,
+      "modifiedAt": "2026-05-10T09:48:19.610Z"
+    },
+    {
+      "path": "playwright-report/trace/uiMode.Btcz36p_.css",
+      "bytes": 60239,
+      "modifiedAt": "2026-05-10T09:48:19.612Z"
+    },
+    {
+      "path": "playwright-report/trace/uiMode.html",
+      "bytes": 647,
+      "modifiedAt": "2026-05-10T09:48:19.620Z"
+    },
+    {
+      "path": "playwright-report/trace/uiMode.Vipi55dB.js",
+      "bytes": 38156,
+      "modifiedAt": "2026-05-10T09:48:19.619Z"
+    },
+    {
+      "path": "playwright-report/trace/xtermModule.DYP7pi_n.css",
+      "bytes": 4150,
+      "modifiedAt": "2026-05-10T09:48:19.621Z"
+    }
+  ],
+  "nativeArtifacts": [],
+  "starter": {
+    "scorecard": ".ai-starter/runs/latest-scorecard.json",
+    "browserProof": ".ai-starter/manifests/browser-proof.json"
+  }
+}
