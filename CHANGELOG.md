@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.90] — 2026-05-12
+
+### Other
+- feat(chat): Recipes library + slash menu — saved prompts (PROD-463) (`67aa493`)
+
+
 ## [0.1.89] — 2026-05-12
 
 ### Documentation
