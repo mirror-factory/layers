@@ -1,409 +1,158 @@
-# Layers Launch Checklist
-
-**Owner:** Alfonso + Codex launch swarm
-**Last updated:** 2026-04-30
-**Purpose:** Single launch checklist for product readiness, billing, transcription providers, web pages, native packaging, store submission, QA, and agent workstream assignment.
-
-## Launch Definition
-
-Launch means Layers is ready for real users to sign up, subscribe, record meetings, receive transcripts/summaries/actions, download the right app for their platform, and use the product without hidden setup gaps.
-
-The current launch target is the fast public launch path:
-
-- [ ] Web-only launch
-- [ ] Web + desktop beta
-- [ ] Web + desktop + iOS TestFlight
-- [x] Web + desktop beta + iOS TestFlight + Android internal testing
-- [ ] Full public launch across web, desktop, iOS, and Android
-
-## Current Status
-
-- [x] Public landing page exists.
-- [x] Pricing page exists.
-- [x] Download page exists.
-- [x] Download page has Mac, Windows, iOS, Android, and web options.
-- [x] Download page detects visitor platform and promotes the right install action.
-- [x] Default summary/intake model is `anthropic/claude-haiku-4-5`.
-- [x] Pricing economics default to Deepgram Nova-3 streaming with speaker diarization.
-- [x] Deepgram pricing was refreshed on 2026-04-30.
-- [x] Stripe checkout and webhook routes exist.
-- [x] AssemblyAI batch and streaming transcription are implemented.
-- [x] Deepgram and OpenAI transcription are in pricing metadata as adapter candidates.
-- [x] Deepgram is implemented as a runtime provider behind `DEEPGRAM_API_KEY`.
-- [x] OpenAI Whisper/GPT transcription is deferred until after this launch pass.
-- [ ] Real App Store and Google Play listing URLs are not wired.
-- [ ] Mac/Windows release URLs need final packaged artifacts.
-- [x] iOS TestFlight archive/upload workflow is documented; Apple account/signing access is still required.
-- [x] Android signed AAB workflow is documented; Java/keystore/Play Console access is still required.
-- [x] Privacy, terms, and account deletion surfaces exist; legal approval is still required.
-
-## Critical Launch Decisions
-
-- [x] Confirm public product name: `Layers`.
-- [x] Confirm whether `Layer One` appears anywhere user-facing after launch: use `Layers` as public brand; remove or de-emphasize `Layer One` where practical.
-- [x] Confirm pricing tiers:
-  - [x] Free: `$0`
-  - [x] Core: `$20/month`
-  - [x] Pro: `$30/month`
-- [x] Confirm included usage:
-  - [x] Free: `25` lifetime meetings and `120` monthly minutes
-  - [x] Core: `600` monthly transcription minutes
-  - [x] Pro: `1,500` monthly transcription minutes
-- [x] Confirm whether Deepgram becomes the runtime default after adapter implementation: make Deepgram a launch-scope runtime option and preferred high-end STT path once `DEEPGRAM_API_KEY` is available.
-- [x] Confirm whether OpenAI transcription is needed for launch or can be post-launch: defer OpenAI/Wispr transcription.
-- [x] Confirm launch platforms and store release strategy: production website first, iOS TestFlight, Google Play internal testing, desktop beta download slots.
-- [ ] Confirm final support email.
-- [ ] Confirm final privacy policy and terms ownership.
-
-## Alfonso-Owned Setup
-
-These items require account access, business verification, legal approval, or secrets.
-
-### Stripe
-
-- [ ] Create Stripe sandbox products for Core and Pro.
-- [ ] Create Core recurring monthly price at `$20`.
-- [ ] Create Pro recurring monthly price at `$30`.
-- [ ] Provide `STRIPE_SECRET_KEY`.
-- [ ] Provide `STRIPE_PRICE_CORE`.
-- [ ] Provide `STRIPE_PRICE_PRO`.
-- [ ] Create webhook endpoint: `/api/stripe/webhook`.
-- [ ] Select webhook events:
-  - [ ] `checkout.session.completed`
-  - [ ] `customer.subscription.created`
-  - [ ] `customer.subscription.updated`
-  - [ ] `customer.subscription.deleted`
-- [ ] Provide `STRIPE_WEBHOOK_SECRET`.
-- [ ] Repeat the same setup with live Stripe keys before production launch.
-
-### Apple
-
-- [ ] Confirm Apple Developer Program access.
-- [ ] Confirm D-U-N-S / Dunn & Bradstreet setup is complete.
-- [ ] Create or confirm App Store Connect app record.
-- [ ] Confirm bundle ID.
-- [ ] Confirm team ID.
-- [ ] Approve app name, subtitle, description, keywords, and category.
-- [ ] Approve privacy policy and terms URLs.
-- [ ] Approve App Privacy nutrition answers.
-- [ ] Approve screenshots and preview assets.
-
-### Google Play
-
-- [ ] Create Google Play Console developer account.
-- [ ] Complete organization/developer verification.
-- [ ] Create Play app record.
-- [ ] Confirm package name.
-- [ ] Choose Google Play app signing settings.
-- [ ] Approve Data Safety answers.
-- [ ] Approve screenshots, feature graphic, icon, short description, and full description.
-- [ ] Provide final Google Play listing URL when available.
-
-### Legal And Brand
+# Layers Launch-Day Checklist (v0)
 
-- [ ] Approve privacy policy.
-- [ ] Approve terms of service.
-- [ ] Approve account deletion policy.
-- [ ] Approve recording consent language.
-- [ ] Approve support contact.
-- [ ] Approve final launch copy.
+Tracks: [PROD-369](https://linear.app/mirror-factory/issue/PROD-369)
 
-## Codex-Owned Setup
+> **Status:** v0 skeleton. This is the conditional run-order for launch day. Each item gets fleshed out as the underlying M6 ticket closes. If an upstream PROD ticket is still open, **skip** the dependent item and write a one-line note in the post-launch retrospective.
+>
+> Companion docs:
+> - [SPEND_CAPS.md](./SPEND_CAPS.md) — vendor caps, alert mailbox, kill-switches
+> - [KEY_ROTATION.md](./KEY_ROTATION.md) — rotation schedule + procedure
+> - [RECORDING_MANUAL_QA.md](./RECORDING_MANUAL_QA.md) — 5-device manual QA pass
+> - [SUPABASE_PROD_MIGRATION.md](./SUPABASE_PROD_MIGRATION.md) — prod migration audit + RLS plan
+> - [INCIDENT_RUNBOOK.md](./INCIDENT_RUNBOOK.md) — rollback + paging procedures
+> - [RELEASE.md](./RELEASE.md) — branch flow, Vercel envs, OAuth allow-lists
 
-These items can be handled by agents in the repo once account credentials or decisions are available.
+## How to use this doc
 
-- [x] Wire Stripe env names and missing-env diagnostics.
-- [x] Add Stripe checkout integration tests.
-- [x] Add Stripe webhook integration tests.
-- [x] Add public `/privacy`.
-- [x] Add public `/terms`.
-- [x] Add account deletion route or in-app deletion flow.
-- [ ] Add final App Store and Play Store URLs to `/download`.
-- [ ] Add final Mac and Windows release URLs to `/download`.
-- [x] Add Deepgram runtime adapter.
-- [ ] Keep OpenAI transcription adapter deferred unless explicitly pulled into post-launch scope.
-- [x] Add final iOS privacy manifest.
-- [x] Add iOS archive/export/TestFlight workflow.
-- [x] Add Android signed release AAB workflow.
-- [x] Add release checklist to CI or docs.
-- [x] Run full verification and evidence export before launch.
+Each row uses the form:
 
-## Agent Swarm Workstreams
+```
+- [ ] **PROD-XXX**: short imperative
+      - **Skip if**: condition (usually "PROD-XXX is still open")
+      - **Verify**: how to confirm the item is done
+```
 
-Each agent should own a non-overlapping write scope. Agents should not edit each other workstream files without coordination.
+If the "Skip if" condition is true, **do not run the item** and note `skipped: PROD-XXX open` in the launch report. The day-of operator should walk the doc top-to-bottom in order. Anything in **Pre-launch (T-7)** that is still open by T-3 escalates to a launch-blocker decision: ship anyway, delay, or descope.
 
-### Agent 1: Competitive Positioning
+---
 
-**Write scope:** `docs/COMPETITIVE_LANDSCAPE_AND_GTM.md`, landing/pricing copy notes only.
+## Pre-launch (T-7 days)
 
-- [ ] Produce Tana teardown.
-- [ ] Compare Tana vs Layers: structured notes, meetings, graph, AI agents, capture.
-- [ ] Identify what Layers should borrow, avoid, and differentiate.
-- [ ] Produce concise homepage and pricing copy recommendations.
+Lock the long-lead items a week out. Anything still open here at T-1 is a launch decision, not a check.
 
-### Agent 2: Transcription Runtime Architecture
+- [ ] **PROD-224**: All Supabase production migrations applied.
+      - **Skip if**: PROD-224 is still open. Block launch — production schema must match `main`.
+      - **Verify**: `supabase db diff --linked` returns empty against the production project; `docs/SUPABASE_PROD_MIGRATION.md` "Post-migration sign-off" section is checked. RLS audit findings flagged in PROD-224 are closed.
 
-**Write scope:** `lib/settings-shared.ts`, provider architecture docs, provider type definitions.
+- [ ] **PROD-396**: All vendor spend caps configured.
+      - **Skip if**: PROD-396 is still open. Block launch — uncapped vendors are not allowed for the public launch.
+      - **Verify**: every vendor in the [SPEND_CAPS.md](./SPEND_CAPS.md) cap matrix has its cap, alert threshold, and kill-switch confirmed in the vendor dashboard. Screenshot the cap config into the launch evidence folder.
 
-- [ ] Map current AssemblyAI runtime path.
-- [ ] Design provider abstraction for AssemblyAI, Deepgram, and OpenAI.
-- [ ] Decide namespaced model IDs.
-- [ ] Define settings migration path.
-- [ ] Ensure adapter-needed models cannot appear in user settings.
+- [ ] **PROD-407**: All API keys rotated and repo confirmed private.
+      - **Skip if**: PROD-407 is still open. Block launch — assume any pre-rotation key is leaked.
+      - **Verify**: each env var listed in [KEY_ROTATION.md](./KEY_ROTATION.md) has a rotation timestamp ≥ T-7. `gh repo view --json visibility` returns `PRIVATE`. No keys present in `.env*`, `git log -p`, or Vercel preview branches outside the allowlist.
 
-### Agent 3: Deepgram Runtime Adapter
+- [ ] **PROD-471**: Apple Developer account verified.
+      - **Skip if**: PROD-471 is still open. iOS launch slips to next window; web/Android launch can proceed.
+      - **Verify**: App Store Connect shows account status Active, paid, with valid D-U-N-S; team ID `36J9E4325G` is linked.
 
-**Write scope:** new `lib/deepgram/*`, Deepgram route/client changes, focused tests.
+- [ ] **PROD-472**: Google Play account verified.
+      - **Skip if**: PROD-472 is still open. Android launch slips to next window; web/iOS launch can proceed.
+      - **Verify**: Play Console shows developer verification Complete and payment profile linked.
 
-- [x] Install `@deepgram/sdk`.
-- [x] Add `DEEPGRAM_API_KEY` handling.
-- [x] Implement Deepgram client.
-- [x] Implement live streaming auth/session flow.
-- [x] Adapt live recorder WebSocket parsing for Deepgram results.
-- [x] Support Nova-3, Nova-3 multilingual, and Flux.
-- [x] Wire diarization/keyterm/redaction costs.
-- [x] Add tests for missing key, stream creation, finalization, and cost reporting.
+- [ ] **PROD-364**: iOS TestFlight build uploaded.
+      - **Skip if**: PROD-364 is still open **or** PROD-471 was skipped. No iOS launch in this window.
+      - **Verify**: TestFlight shows the launch build processed (not "Missing Compliance"); external testers group has access; install + cold-launch on a real device succeeds.
 
-### Agent 4: OpenAI Transcription Adapter
+- [ ] **PROD-365**: Android signed AAB uploaded.
+      - **Skip if**: PROD-365 is still open **or** PROD-472 was skipped. No Android launch in this window.
+      - **Verify**: Play Console internal testing track shows the AAB Rolled out; install via internal-testing opt-in link succeeds on a real device.
 
-**Write scope:** new `lib/openai-transcription/*`, batch route changes, focused tests.
+- [ ] **PROD-357**: App Store assets and Privacy Nutrition submitted.
+      - **Skip if**: PROD-357 is still open **or** PROD-471 was skipped. No iOS launch in this window.
+      - **Verify**: App Store Connect "Prepare for Submission" page is fully green (screenshots, description, keywords, App Privacy answers, review notes, support URL).
 
-- [ ] Support `whisper-1`.
-- [ ] Support `gpt-4o-mini-transcribe`.
-- [ ] Support `gpt-4o-transcribe`.
-- [ ] Document diarization limitations.
-- [ ] Add batch fallback tests.
-- [ ] Keep OpenAI models hidden until runtime support is complete.
+- [ ] **PROD-359**: Play Data Safety form submitted.
+      - **Skip if**: PROD-359 is still open **or** PROD-472 was skipped. No Android launch in this window.
+      - **Verify**: Play Console "Data safety" page shows status Submitted (or Approved) with the latest content review answers matching `app/privacy/page.tsx`.
 
-### Agent 5: Model Defaults And Settings
+- [ ] **PROD-225**: Stripe production keys swapped.
+      - **Skip if**: PROD-225 is still open. Launch on live keys is blocked — either delay or launch in test mode and disable paid signups.
+      - **Verify**: Vercel production env shows live `STRIPE_SECRET_KEY`, `STRIPE_PRICE_CORE`, `STRIPE_PRICE_PRO`, and live `STRIPE_WEBHOOK_SECRET`. A `$0.50` test checkout against live mode succeeds end-to-end and the webhook flips `profiles.subscription_tier` in production Supabase.
 
-**Write scope:** settings UI, model option tests, default docs.
+- [ ] **PROD-477**: Manual real-device QA pass complete on 5 devices.
+      - **Skip if**: PROD-477 is still open. Web launch can proceed if web routes pass desktop+mobile Playwright; native launch is blocked.
+      - **Verify**: [RECORDING_MANUAL_QA.md](./RECORDING_MANUAL_QA.md) results table has 5 of 5 devices marked Pass with screenshots in the evidence folder.
 
-- [ ] Confirm Claude Haiku 4.5 is the visible default everywhere.
-- [ ] Ensure `DEFAULT_MODEL` env override still works.
-- [ ] Separate runtime STT defaults from pricing economics defaults.
-- [ ] Add UI labels for implemented vs candidate models where needed.
-- [ ] Add tests that runtime defaults cannot point to adapter-needed providers.
+---
 
-### Agent 6: Stripe And Billing
+## Launch day (T-0)
 
-**Write scope:** Stripe routes, billing docs, pricing config tests.
+Walk this section linearly the morning of launch. Stop on the first hard failure and escalate per [INCIDENT_RUNBOOK.md](./INCIDENT_RUNBOOK.md).
 
-- [x] Add checkout route integration tests.
-- [x] Add webhook route integration tests.
-- [ ] Validate Supabase `profiles` billing columns.
-- [ ] Confirm subscription tier sync.
-- [x] Improve missing-env errors.
-- [ ] Decide whether pricing copy should move to shared config.
-
-### Agent 7: Landing Page
+- [ ] **PROD-369-A**: Confirm Vercel deploy from `main` is green.
+      - **Skip if**: never — this is a hard gate. If red, do not announce.
+      - **Verify**: Vercel dashboard shows the latest `main` commit as Ready on `layers.mirrorfactory.ai`; production domain returns 200 on `/`, `/pricing`, `/download`, `/sign-in`.
 
-**Write scope:** `app/landing.tsx`, landing CSS, landing docs/tests.
+- [ ] **PROD-369-B**: Run `pnpm gates` locally and verify all required gates pass.
+      - **Skip if**: never — hard gate.
+      - **Verify**: `pnpm gates` exits 0; the gates report is saved into the launch evidence folder. Any "recommended" gate failure is noted but does not block.
 
-- [ ] Make sections blend into a continuous narrative.
-- [ ] Keep waves organic and under the H1/workflow, not trapped behind boxes.
-- [ ] Show workflow: calendar -> record -> transcript -> summary -> actions -> tools.
-- [ ] Use recognizable app surfaces/icons thoughtfully.
-- [ ] Verify desktop and mobile screenshots.
+- [ ] **PROD-397**: Verify GCP billing fully paid.
+      - **Skip if**: PROD-397 is still open. Block launch of anything that hits Google Cloud (Vertex, Calendar, OAuth). Web/Stripe-only launch may still proceed if no GCP dependencies are live.
+      - **Verify**: GCP Cloud Billing shows the launch-window project with status Active, no overdue invoices, budget alerts armed.
 
-### Agent 8: Pricing Page
-
-**Write scope:** `app/pricing/page.tsx`, pricing docs/tests.
+- [ ] **PROD-369-C**: Verify health endpoint returns 200.
+      - **Skip if**: never — hard gate.
+      - **Verify**: `curl -H "x-admin-token: $LAYERS_ADMIN_TOKEN" https://layers.mirrorfactory.ai/api/internal/health` returns 200 with `status: "ok"` and every downstream check `ok: true` (Supabase, Stripe, AI gateway, transcription).
 
-- [ ] Align Free/Core/Pro copy with real quotas.
-- [ ] Explain enhanced STT honestly.
-- [ ] Add FAQ for minutes, privacy, integrations, and cancellation.
-- [ ] Test checkout when logged out.
-- [ ] Test checkout when signed in.
-
-### Agent 9: Download Page
-
-**Write scope:** `app/download/*`, download docs/tests.
-
-- [ ] Replace placeholder iOS URL with final App Store or TestFlight URL.
-- [ ] Replace placeholder Android URL with final Play Store or internal testing URL.
-- [ ] Replace desktop fallback with final Mac/Windows release URLs.
-- [x] Add install requirements for macOS and Windows.
-- [x] Add stable/beta channel labeling.
-- [x] Re-run platform detection screenshot checks.
-
-### Agent 10: Desktop Packaging
-
-**Write scope:** `electron/*`, `electron-builder.yml`, release workflow docs.
-
-- [ ] Confirm Electron app name and bundle ID.
-- [ ] Confirm icon and app metadata.
-- [ ] Build Mac DMG for Apple Silicon.
-- [ ] Build Mac DMG for Intel if supported.
-- [ ] Build Windows installer.
-- [ ] Verify microphone/capture behavior.
-- [ ] Plan macOS signing and notarization.
-- [ ] Plan Windows code signing.
-
-### Agent 11: iOS Release Readiness
-
-**Write scope:** `ios/*`, Capacitor config, iOS release docs.
-
-- [x] Add `PrivacyInfo.xcprivacy`.
-- [ ] Confirm microphone permission copy.
-- [ ] Confirm display name.
-- [ ] Confirm bundle ID.
-- [ ] Confirm version and build number.
-- [x] Add archive/export workflow.
-- [x] Add TestFlight upload notes.
-- [ ] Verify app on simulator and physical device if available.
-
-### Agent 12: Android Release Readiness
-
-**Write scope:** `android/*`, Android release workflow docs.
-
-- [x] Configure signed release AAB.
-- [x] Add keystore env documentation.
-- [ ] Confirm package name.
-- [ ] Confirm versionCode and versionName.
-- [ ] Verify Android permissions.
-- [ ] Check foreground service requirements for recording.
-- [x] Prepare Play internal testing build instructions.
-
-### Agent 13: Legal And Compliance
-
-**Write scope:** legal pages, profile/account deletion, compliance docs.
-
-- [x] Add `/privacy`.
-- [x] Add `/terms`.
-- [x] Add account deletion page or in-app flow.
-- [x] Add data retention explanation.
-- [x] Add recording consent language.
-- [x] Add support contact.
-- [ ] Verify Apple account deletion requirement.
-- [ ] Verify Google Play user data policy readiness.
-
-### Agent 14: QA And Release Evidence
-
-**Write scope:** tests, evidence docs, release report.
-
-- [x] Run `pnpm typecheck`.
-- [x] Run `pnpm test`.
-- [x] Run `npx eslint .`.
-- [x] Run `npx ai-dev-kit tool validate`.
-- [x] Run `pnpm gates`.
-- [x] Run browser proof against launch routes.
-- [x] Capture desktop and mobile screenshots.
-- [ ] Test Stripe sandbox checkout.
-- [ ] Test AssemblyAI recording.
-- [ ] Test Deepgram live after `DEEPGRAM_API_KEY` is provided.
-- [ ] Test packaged desktop builds.
-- [ ] Test iOS and Android builds.
-- [x] Export launch evidence bundle.
-
-## Launch Gates
-
-### Gate 1: Product Surface
-
-- [ ] Landing page approved.
-- [ ] Pricing page approved.
-- [ ] Download page approved.
-- [ ] Sign in/sign up flows approved.
-- [ ] Record flow approved.
-- [ ] Meeting detail/summary flow approved.
-- [ ] Settings/profile flow approved.
-- [ ] Mobile layouts approved.
-
-### Gate 2: Money
-
-- [ ] Stripe sandbox checkout works.
-- [ ] Stripe webhook syncs subscription state.
-- [ ] Core price ID is set.
-- [ ] Pro price ID is set.
-- [ ] Supabase `profiles` billing columns work.
-- [ ] Quota behavior matches plan.
-- [ ] Cancellation/downgrade behavior is understood.
-- [ ] Live Stripe keys are ready before production launch.
-
-### Gate 3: Recording And AI
-
-- [ ] AssemblyAI batch transcription works.
-- [ ] AssemblyAI live transcription works.
-- [ ] Summary generation works with Claude Haiku 4.5.
-- [ ] Intake/actions extraction works.
-- [ ] Search works on completed meetings.
-- [ ] Meeting chat works.
-- [ ] Provider costs are recorded.
-- [x] Deepgram runtime is complete; live provider test requires `DEEPGRAM_API_KEY`.
-
-### Gate 4: Native Builds
-
-- [ ] Mac build installs.
-- [ ] Windows build installs.
-- [ ] iOS build runs.
-- [ ] Android build runs.
-- [ ] Native permissions are clear.
-- [ ] Download URLs point to real artifacts or store pages.
-- [ ] Version numbers are consistent.
-
-### Gate 5: Store Compliance
-
-- [x] Privacy policy exists.
-- [x] Terms exist.
-- [x] Account deletion path exists.
-- [ ] App Store privacy nutrition is complete.
-- [ ] Google Play Data Safety is complete.
-- [x] iOS privacy manifest exists.
-- [ ] Recording consent language is present.
-- [ ] Support URL/email is present.
-
-### Gate 6: QA Evidence
-
-- [x] Typecheck passes.
-- [x] Tests pass.
-- [x] ESLint has no errors.
-- [x] Tool validation passes.
-- [x] Gates pass.
-- [x] Browser proof passes or exceptions are documented.
-- [x] Launch screenshots are captured.
-- [x] Release report is written.
-
-## Recommended Swarm Order
-
-1. Legal/compliance pages and account deletion.
-2. Stripe sandbox verification and route tests.
-3. Landing, pricing, and download final copy/UI.
-4. Desktop artifact URLs and packaging.
-5. iOS TestFlight readiness.
-6. Android internal testing readiness.
-7. Deepgram runtime adapter.
-8. OpenAI transcription fallback if still in launch scope.
-9. Full QA/evidence pass.
-10. Production env and launch report.
-
-## Launch-Day Checklist
-
-- [ ] Freeze launch branch.
-- [ ] Confirm no unrelated dirty changes are included.
-- [ ] Confirm production env vars in Vercel.
-- [ ] Confirm Stripe live mode keys and webhook.
-- [ ] Confirm Supabase production schema.
-- [ ] Confirm provider API keys.
-- [ ] Confirm `/`, `/pricing`, `/download`, `/sign-in`, `/sign-up`, `/record`, and `/settings` load.
-- [ ] Run a real recording.
-- [ ] Generate a summary and actions.
-- [ ] Run a paid checkout in live/test mode as appropriate.
-- [ ] Confirm support email works.
-- [ ] Confirm app download links work.
-- [ ] Capture final launch screenshots.
-- [ ] Create launch tag.
-- [ ] Publish release notes.
-- [ ] Monitor logs, Stripe events, provider usage, and signup funnel.
-
-## Post-Launch Watchlist
-
-- [ ] Stripe webhook failures.
-- [ ] Failed recordings.
-- [ ] Provider cost spikes.
-- [ ] Quota false positives.
-- [ ] Sign-in errors.
-- [ ] Mobile layout regressions.
-- [ ] App Store / Play review feedback.
-- [ ] Users confused by minutes or plans.
-- [ ] Users asking for calendar, Gmail, Outlook, Slack, Linear, Notion, or MCP setup.
-- [ ] Users requesting Deepgram/OpenAI transcription quality options.
+- [ ] **PROD-369-D**: Send launch email to invite list (if Resend wired).
+      - **Skip if**: Resend env (`RESEND_API_KEY`, `RESEND_AUDIENCE_ID`) is not configured in production, or the email-send PROD ticket is still open.
+      - **Verify**: Resend dashboard shows the broadcast Sent with a non-zero delivered count; no hard bounces over 1% of sent.
+
+- [ ] **PROD-391 / PROD-392**: Post LinkedIn and Mirror Factory blog announcement.
+      - **Skip if**: PROD-391 is still open (skip LinkedIn) and/or PROD-392 is still open (skip blog). One can proceed without the other.
+      - **Verify**: live URLs of LinkedIn post and `mirrorfactory.ai/blog/...` are linked into the launch report; both load anonymously.
+
+- [ ] **PROD-369-E**: Watch the Langfuse burn-rate dashboard for the first hour.
+      - **Skip if**: never — hard gate during launch hour.
+      - **Verify**: Langfuse `burn-rate` dashboard is pinned in a tab; spend trend over the first 60 minutes is within 2× the [SPEND_CAPS.md](./SPEND_CAPS.md) per-meeting cost-per-active-user assumption. Spike > 5× triggers the incident runbook.
+
+---
+
+## Day-1 watchlist (T+1)
+
+Tour these the morning after launch. Anything red here turns into a Linear `kind:bug` ticket and is folded into the week-1 retro.
+
+- [ ] **PROD-396 (recurring)**: Confirm spend caps are still configured per `docs/SPEND_CAPS.md`.
+      - **Skip if**: never — vendors occasionally reset caps on plan upgrades; re-check daily for the first week.
+      - **Verify**: each vendor in the [SPEND_CAPS.md](./SPEND_CAPS.md) matrix still shows the documented cap and alert threshold. Diff against the T-7 screenshot.
+
+- [ ] **PROD-369-F**: Watch `support@mirrorfactory.ai` for `[Spend]`, `[Budget]`, `[Usage]` alert subjects.
+      - **Skip if**: never.
+      - **Verify**: inbox has no unhandled alert; any matching email is triaged within 1 hour and linked into the launch report.
+
+- [ ] **PROD-369-G**: Check `/observability` for any error rate > 1%.
+      - **Skip if**: `/observability` page or its underlying telemetry is not wired in production. Note as a follow-up and use Vercel logs + Langfuse instead.
+      - **Verify**: error-rate panel shows < 1% over the trailing 24h for every surface (chat, recording, transcription, billing, auth). Anything > 1% gets a bug ticket.
+
+- [ ] **PROD-369-H**: Sample 3–5 user meetings end-to-end.
+      - **Skip if**: never — this is the primary product confidence check.
+      - **Verify**: pick 3–5 real user meetings from the last 24h and confirm the full pipeline ran: recording captured, transcript generated, summary written, in-meeting chat usable, and MCP surface reachable from Claude Desktop. Any gap becomes a `kind:bug` ticket with the meeting ID redacted.
+
+---
+
+## Week-1 retrospective
+
+Do this at T+7. Compile what we learned before scoping the next slice.
+
+- [ ] **PROD-369-I**: Aggregate cost-per-active-user vs `docs/SPEND_CAPS.md` cost-per-meeting math.
+      - **Skip if**: spend data is unavailable (fewer than 5 active users, vendor invoices not yet finalized). Defer to T+14.
+      - **Verify**: total vendor spend ÷ active users for the week is calculated and compared to the per-meeting model in [SPEND_CAPS.md](./SPEND_CAPS.md). Variance is logged in the retro doc; caps are adjusted if reality diverges > 25%.
+
+- [ ] **PROD-369-J**: Survey first testers on top friction point.
+      - **Skip if**: fewer than 5 active users in the week — defer until the cohort is large enough to be useful.
+      - **Verify**: 5+ short responses collected (email or in-app), themes summarized in 3–5 bullets, top-friction items filed as Linear issues.
+
+- [ ] **PROD-369-K**: Triage Linear `kind:bug` tickets created since launch.
+      - **Skip if**: never.
+      - **Verify**: every `kind:bug` ticket created since the launch tag has a priority and an owner; P0/P1 bugs have an ETA. Triage notes are added to the retro doc.
+
+---
+
+## Notes for the operator
+
+- **This is v0.** Items will get more specific commands, expected outputs, and rollback notes as the underlying M6 tickets close. If you find yourself improvising a step, write it down in the launch report and turn it into a new line in this checklist.
+- **Hard gates** are explicitly labeled `Skip if: never`. They block launch — there is no override.
+- **Soft gates** (anything with a real `Skip if`) degrade gracefully. Skipping is fine; silent skipping is not. Note every skip in the launch report.
+- For any rollback decision, follow [INCIDENT_RUNBOOK.md](./INCIDENT_RUNBOOK.md). For any branch/deploy decision, follow [RELEASE.md](./RELEASE.md).
