@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.73] — 2026-05-12
+
+### Other
+- Merge PR #44: PROD-403 OAuth client + API key lifecycle (`1b569a5`)
+
+
 ## [0.1.72] — 2026-05-12
 
 ### Other
