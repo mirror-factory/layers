@@ -14825,3 +14825,55 @@ body.dark:has(.paper-calm-page) {
   }
 }
 
+/* Citation seek+highlight pulse (PROD-464). Applied to a
+   `.session-transcript-row` when a chat `[S<n>]` pill is clicked. Reuses the
+   same mint-glow language as the onboarding tour anchor so the credibility
+   cue feels native to the rest of the surface. The class is added
+   imperatively and removed after `CITATION_FLASH_DURATION_MS` (1500ms) in
+   session-workspace.tsx. */
+@keyframes citation-flash {
+  0% {
+    box-shadow:
+      0 0 0 0 color-mix(in oklch, var(--layers-mint) 0%, transparent),
+      0 0 0 0 color-mix(in oklch, var(--layers-mint) 0%, transparent);
+    background-color: transparent;
+  }
+  20% {
+    box-shadow:
+      0 0 0 4px color-mix(in oklch, var(--layers-mint) 30%, transparent),
+      0 0 0 1px color-mix(in oklch, var(--layers-mint) 55%, transparent);
+    background-color: color-mix(
+      in oklch,
+      var(--layers-mint) 14%,
+      transparent
+    );
+  }
+  100% {
+    box-shadow:
+      0 0 0 0 color-mix(in oklch, var(--layers-mint) 0%, transparent),
+      0 0 0 0 color-mix(in oklch, var(--layers-mint) 0%, transparent);
+    background-color: transparent;
+  }
+}
+
+.citation-flash {
+  position: relative;
+  z-index: 2;
+  border-radius: 12px;
+  animation: citation-flash 1500ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .citation-flash {
+    animation: none;
+    box-shadow:
+      0 0 0 4px color-mix(in oklch, var(--layers-mint) 30%, transparent),
+      0 0 0 1px color-mix(in oklch, var(--layers-mint) 55%, transparent);
+    background-color: color-mix(
+      in oklch,
+      var(--layers-mint) 14%,
+      transparent
+    );
+  }
+}
+
