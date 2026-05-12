@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.110] — 2026-05-12
+
+### Other
+- fix(auth): exclude anon Supabase sessions from /sign-in /sign-up redirect (PROD-487 — regression from PR #78) (`c1f59af`)
+
+
 ## [0.1.109] — 2026-05-12
 
 ### Other
