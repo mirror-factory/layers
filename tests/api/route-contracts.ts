@@ -149,8 +149,11 @@ export const apiRouteContracts = [
   route("/api/settings", "app/api/settings/route.ts", ["GET", "PUT"], "public", true, badRequestOrUnavailable),
   route("/api/stripe/checkout", "app/api/stripe/checkout/route.ts", ["POST"], "user", true, badRequestOrUnavailable),
   route("/api/stripe/webhook", "app/api/stripe/webhook/route.ts", ["POST"], "webhook", true, [200, 400, 503]),
+  route("/api/recordings/sign-upload", "app/api/recordings/sign-upload/route.ts", ["POST"], "user", true, [200, 400, 401, 502, 503], {
+    POST: { body: { contentType: "audio/webm", sizeBytes: 1024 }, expectStatuses: [200, 401, 503] },
+  }),
   route("/api/transcribe/[id]", "app/api/transcribe/[id]/route.ts", ["GET"], "user", true, [200, 202, 401, 404, 502, 503], undefined, "/api/transcribe/sample"),
-  route("/api/transcribe", "app/api/transcribe/route.ts", ["POST"], "user", true, [202, 400, 401, 402, 413, 502, 503]),
+  route("/api/transcribe", "app/api/transcribe/route.ts", ["POST"], "user", true, [202, 400, 401, 402, 403, 413, 502, 503]),
   route("/api/transcribe/stream/autosave", "app/api/transcribe/stream/autosave/route.ts", ["POST"], "user", true, badRequestOrUnavailable),
   route("/api/transcribe/stream/finalize", "app/api/transcribe/stream/finalize/route.ts", ["POST"], "user", true, badRequestOrUnavailable),
   route("/api/transcribe/stream/preflight", "app/api/transcribe/stream/preflight/route.ts", ["GET"], "user", true, [200, 401, 403, 503]),
