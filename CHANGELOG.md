@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.88] — 2026-05-12
+
+### Other
+- feat(recording): storage-backed upload path for files >4.5MB (PROD-473) (`755a1ac`)
+
+
 ## [0.1.87] — 2026-05-12
 
 ### Documentation
