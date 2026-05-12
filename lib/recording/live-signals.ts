@@ -1,3 +1,22 @@
+/**
+ * Live meeting signals: post-processing over the transcript buffer that
+ * surfaces key points / actions / decisions / questions while a recording
+ * is in flight.
+ *
+ * NOTE: this file does NOT own the recorder session state machine. The
+ * provider-connection state machine (checking-mic -> creating-session ->
+ * connecting-provider -> listening -> transcribing -> reconnecting ->
+ * finalizing -> provider-issue) lives inline in `components/live-recorder.tsx`
+ * because it's coupled to WebSocket/MediaStream lifecycle. See the
+ * `RecorderConnectionStatus` union in that file for the canonical state
+ * list and `docs/RECORDING_RELIABILITY.md` -> "Session States" for the
+ * UX-facing description.
+ *
+ * PROD-474: AssemblyAI Universal Streaming token + WS path coverage lives
+ * in `tests/assemblyai-live-results.test.ts` and
+ * `tests/recording-streaming-session.test.ts`.
+ */
+
 export type LiveNotesMode =
   | "transcript"
   | "keyPoints"

@@ -1618,6 +1618,200 @@ body {
   }
 }
 
+/* --------------------------------------------------------------------------
+   Floating Ask pill (PROD-461)
+   Anchored bottom-right of every authenticated page. Cmd/Ctrl+K opens the
+   sheet. Lifts above the mobile primary nav on routes where it lives.
+   -------------------------------------------------------------------------- */
+.floating-ask-pill {
+  position: fixed;
+  right: max(0.75rem, var(--safe-right));
+  bottom: max(0.75rem, var(--safe-bottom));
+  z-index: 45;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 40px;
+  padding: 0 0.85rem 0 0.75rem;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in oklch, var(--layers-mint) 55%, transparent);
+  background: color-mix(in oklch, var(--layers-mint) 92%, white 8%);
+  color: var(--layers-ink);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  cursor: pointer;
+  box-shadow:
+    0 10px 30px color-mix(in oklch, var(--layers-mint) 28%, transparent),
+    inset 0 1px 0 color-mix(in oklch, white 65%, transparent);
+  transition:
+    transform 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 180ms ease,
+    opacity 140ms ease;
+}
+
+.floating-ask-pill:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 14px 36px color-mix(in oklch, var(--layers-mint) 34%, transparent),
+    inset 0 1px 0 color-mix(in oklch, white 70%, transparent);
+}
+
+.floating-ask-pill:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px color-mix(in oklch, var(--layers-mint) 45%, transparent),
+    0 10px 30px color-mix(in oklch, var(--layers-mint) 28%, transparent);
+}
+
+.floating-ask-pill:active {
+  transform: translateY(0);
+}
+
+.floating-ask-pill-label {
+  line-height: 1;
+}
+
+.floating-ask-pill-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 18px;
+  padding: 0 0.3rem;
+  border-radius: 6px;
+  background: color-mix(in oklch, var(--layers-ink) 14%, transparent);
+  font-family: inherit;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: color-mix(in oklch, var(--layers-ink) 78%, transparent);
+}
+
+.floating-ask-pill--above-nav {
+  bottom: calc(72px + var(--safe-bottom) + 0.5rem);
+}
+
+@media (min-width: 768px) {
+  .floating-ask-pill--above-nav {
+    /* Mobile nav is hidden on >=md; revert to the standard offset. */
+    bottom: max(0.75rem, var(--safe-bottom));
+  }
+}
+
+.floating-ask-pill--hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.92);
+}
+
+.floating-ask-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: color-mix(in oklch, var(--layers-ink) 45%, transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: floating-ask-overlay-in 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes floating-ask-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.floating-ask-sheet {
+  position: relative;
+  width: min(100%, 760px);
+  height: min(70vh, 720px);
+  margin: 0 0.5rem;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-card);
+  border-top-left-radius: 22px;
+  border-top-right-radius: 22px;
+  background: var(--bg-card);
+  box-shadow:
+    0 -28px 60px color-mix(in oklch, var(--layers-ink) 22%, transparent),
+    inset 0 1px 0 color-mix(in oklch, white 60%, transparent);
+  padding-bottom: env(safe-area-inset-bottom);
+  animation: floating-ask-sheet-in 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .floating-ask-overlay {
+    align-items: center;
+  }
+  .floating-ask-sheet {
+    height: min(60vh, 640px);
+    border-radius: 22px;
+    margin: 0;
+  }
+}
+
+@keyframes floating-ask-sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.floating-ask-sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.floating-ask-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  background: transparent;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.floating-ask-close:hover {
+  background: var(--surface-control-hover);
+  color: var(--text-primary);
+}
+
+.floating-ask-close:focus-visible {
+  outline: 2px solid color-mix(in oklch, var(--layers-mint) 45%, transparent);
+  outline-offset: 2px;
+}
+
+.floating-ask-sheet-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.floating-ask-sheet-body > * {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
 .recorder-page {
   background: linear-gradient(
     180deg,

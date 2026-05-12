@@ -7,10 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.84] — 2026-05-12
+
+### Other
+- chore: merge main into PR #50 (`71c92ba`)
+
+
 ## [0.1.83] — 2026-05-12
 
 ### Other
-- feat(chat): wire citation pills to seek + highlight transcript (PROD-464) (`a4b827c`)
+- chore: merge main into PR #49 to resolve auto-bump cascade (`2cfbd52`)
 
 
 ## [0.1.82] — 2026-05-12
