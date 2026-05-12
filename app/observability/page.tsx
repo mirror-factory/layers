@@ -122,13 +122,43 @@ const S = {
 
 // ── Component ─────────────────────────────────────────────────────────
 
-type Tab = 'calls' | 'errors' | 'sessions' | 'charts' | 'http';
+type Tab = 'calls' | 'errors' | 'sessions' | 'charts' | 'http' | 'watchlist';
+
+interface WatchlistCondition {
+  id: string;
+  passing: boolean;
+  severity: 'warning' | 'critical';
+  observed: number;
+  threshold: number;
+  unit: string;
+  summary: string;
+  cooldownKey: string;
+  sampleSize?: number;
+  description?: string;
+}
+
+interface WatchlistTickLogEntry {
+  ts: string;
+  firedIds: string[];
+  suppressedIds: string[];
+  webhookConfigured: boolean;
+  webhookOk?: boolean;
+}
+
+interface WatchlistSnapshot {
+  ts: string;
+  conditions: WatchlistCondition[];
+  thresholds: Record<string, number | string | readonly string[]>;
+  recentFired24h: WatchlistTickLogEntry[];
+  recentTicks24h: WatchlistTickLogEntry[];
+}
 
 export default function AIObservabilityPage() {
   const [tab, setTab] = useState<Tab>('calls');
   const [logs, setLogs] = useState<AILogRecord[]>([]);
   const [errors, setErrors] = useState<ErrorRecord[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
+  const [watchlist, setWatchlist] = useState<WatchlistSnapshot | null>(null);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<AILogRecord | null>(null);
   const [selectedError, setSelectedError] = useState<ErrorRecord | null>(null);
@@ -143,14 +173,16 @@ export default function AIObservabilityPage() {
       if (filters.label) params.set('label', filters.label);
       params.set('limit', '200');
 
-      const [logsR, statsR, errorsR] = await Promise.all([
+      const [logsR, statsR, errorsR, watchR] = await Promise.all([
         fetch(`/api/ai-logs?${params}`),
         fetch(`/api/ai-logs/stats?${params}`),
         fetch(`/api/ai-logs/errors?${params}`),
+        fetch(`/api/observability/watchlist`),
       ]);
       if (logsR.ok) setLogs(await logsR.json());
       if (statsR.ok) setStats(await statsR.json());
       if (errorsR.ok) setErrors(await errorsR.json());
+      if (watchR.ok) setWatchlist(await watchR.json());
     } catch { /* best-effort */ } finally { setLoading(false); }
   }, [filters]);
 
@@ -216,11 +248,18 @@ export default function AIObservabilityPage() {
 
       {/* Tabs */}
       <div style={S.tabs}>
-        {(['calls', 'errors', 'sessions', 'charts', 'http'] as Tab[]).map(t => (
-          <div key={t} style={S.tab(tab === t)} onClick={() => setTab(t)}>
-            {t}{t === 'errors' && stats && stats.totalErrors > 0 ? ` (${stats.totalErrors})` : ''}
-          </div>
-        ))}
+        {(['calls', 'errors', 'sessions', 'charts', 'http', 'watchlist'] as Tab[]).map(t => {
+          const firingCount = t === 'watchlist' && watchlist
+            ? watchlist.conditions.filter(c => !c.passing).length
+            : 0;
+          return (
+            <div key={t} style={S.tab(tab === t)} onClick={() => setTab(t)}>
+              {t}
+              {t === 'errors' && stats && stats.totalErrors > 0 ? ` (${stats.totalErrors})` : ''}
+              {t === 'watchlist' && firingCount > 0 ? ` (${firingCount})` : ''}
+            </div>
+          );
+        })}
       </div>
 
       {/* Filters (shown on calls + errors tabs) */}
@@ -450,6 +489,107 @@ export default function AIObservabilityPage() {
               <br /><br />
               See <code style={{ color: OBS_COLORS.mint }}>templates/ai-telemetry-middleware.ts</code> for the <code style={{ color: OBS_COLORS.mint }}>logHTTPRequest()</code> function.
             </div>
+          </div>
+        )}
+
+        {/* ─── Watchlist Tab ─────────────────────────────────────── */}
+        {!loading && tab === 'watchlist' && (
+          <div style={{ padding: 'clamp(12px, 4vw, 24px)', display: 'flex', flexDirection: 'column', gap: 20 }}>
+            {!watchlist && (
+              <div style={{ padding: 40, textAlign: 'center', color: OBS_COLORS.faint }}>
+                Watchlist data unavailable.
+              </div>
+            )}
+            {watchlist && (
+              <>
+                <div data-testid="watchlist-conditions" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: 12 }}>
+                  {watchlist.conditions.map(c => {
+                    const color = c.passing
+                      ? OBS_COLORS.success
+                      : c.severity === 'critical'
+                        ? OBS_COLORS.live
+                        : OBS_COLORS.warning;
+                    return (
+                      <div
+                        key={c.id}
+                        data-testid={`watchlist-condition-${c.id}`}
+                        data-state={c.passing ? 'pass' : 'fail'}
+                        style={{
+                          ...S.card,
+                          boxShadow: c.passing ? undefined : `inset 0 0 0 1px ${color}`,
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+                          <span style={{ fontSize: 11, color: OBS_COLORS.text, fontWeight: 600 }}>
+                            {c.id.replace(/_/g, ' ')}
+                          </span>
+                          <span style={S.badge(color)}>{c.passing ? 'PASS' : c.severity.toUpperCase()}</span>
+                        </div>
+                        <div style={{ ...S.statVal(color), fontSize: 18 }}>
+                          {c.observed}{c.unit}
+                          <span style={{ fontSize: 11, color: OBS_COLORS.muted, marginLeft: 8, fontWeight: 400 }}>
+                            threshold {c.threshold}{c.unit}
+                          </span>
+                        </div>
+                        <div style={{ fontSize: 11, color: OBS_COLORS.muted, marginTop: 6, lineHeight: 1.5 }}>
+                          {c.summary}
+                        </div>
+                        {c.description && (
+                          <div style={{ fontSize: 10, color: OBS_COLORS.faint, marginTop: 6, lineHeight: 1.5 }}>
+                            {c.description}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div data-testid="watchlist-recent" style={S.card}>
+                  <div style={{ ...S.statLabel, marginBottom: 12 }}>Last 24h alert log</div>
+                  {watchlist.recentFired24h.length === 0 ? (
+                    <div style={{ color: OBS_COLORS.success, fontSize: 11 }}>
+                      No watchlist alerts have fired in the last 24 hours.
+                    </div>
+                  ) : (
+                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                      <thead>
+                        <tr style={{ borderBottom: `1px solid ${OBS_COLORS.border}` }}>
+                          {['Time', 'Fired', 'Suppressed', 'Webhook'].map(h => (
+                            <th key={h} style={S.tableHead}>{h}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {watchlist.recentFired24h.slice().reverse().map((e, i) => (
+                          <tr key={`${e.ts}-${i}`} style={{ borderBottom: `1px solid ${OBS_COLORS.border}` }}>
+                            <td style={{ ...S.td, color: OBS_COLORS.muted, fontSize: 11 }}>{fmt.ago(e.ts)}</td>
+                            <td style={S.td}>
+                              {e.firedIds.map(id => (
+                                <span key={id} style={{ ...S.badge(OBS_COLORS.live), marginRight: 4 }}>{id}</span>
+                              ))}
+                            </td>
+                            <td style={S.td}>
+                              {e.suppressedIds.length === 0
+                                ? <span style={{ color: OBS_COLORS.faint, fontSize: 11 }}>-</span>
+                                : e.suppressedIds.map(id => (
+                                    <span key={id} style={{ ...S.badge(OBS_COLORS.warning), marginRight: 4 }}>{id}</span>
+                                  ))}
+                            </td>
+                            <td style={S.td}>
+                              {!e.webhookConfigured
+                                ? <span style={{ color: OBS_COLORS.muted, fontSize: 11 }}>log-only</span>
+                                : e.webhookOk
+                                  ? <span style={{ color: OBS_COLORS.success, fontSize: 11 }}>delivered</span>
+                                  : <span style={{ color: OBS_COLORS.live, fontSize: 11 }}>failed</span>}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}
+                </div>
+              </>
+            )}
           </div>
         )}
       </div>
