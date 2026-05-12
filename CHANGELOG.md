@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.105] — 2026-05-12
+
+### Other
+- docs(visual-qa): mobile sim walkthrough checklist + 2026-05-12 evidence (`a2e9d14`)
+
+
 ## [0.1.104] — 2026-05-12
 
 ### Other
