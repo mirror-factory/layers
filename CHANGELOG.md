@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.73] — 2026-05-12
+
+### Other
+- Merge PR #36: PROD-459 e2e tests reconciled (`a83edf6`)
+
+
 ## [0.1.72] — 2026-05-12
 
 ### Other
