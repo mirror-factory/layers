@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.73] — 2026-05-12
+
+### Other
+- fix(tests): split Pixel device cases to separate spec per Playwright constraint (PROD-460) (`34a676e`)
+
+
 ## [0.1.72] — 2026-05-12
 
 ### Other
