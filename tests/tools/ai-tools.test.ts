@@ -34,19 +34,97 @@ function executable<Input, Output>(tool: unknown): Required<ExecutableTool<Input
   return candidate as Required<ExecutableTool<Input, Output>>;
 }
 
+// Tools intentionally left in non-passing state must explicitly land here
+// with a dated TODO. The dated TODO is enforced by the regex below — empty
+// strings, undated entries, and stale (> 30d) entries all fail.
+//
+// Format: "PROD-NNN <YYYY-MM-DD> <reason>". Example:
+//   "searchMeetings": "PROD-XXX 2026-05-12 — relying on TestKit canary suite",
+const UNTESTED_TOOL_ALLOWLIST: Readonly<Record<string, string>> = {};
+
+const UNTESTED_NOTE_PATTERN = /^PROD-\d+\s+(\d{4}-\d{2}-\d{2})\s+—\s+.+/;
+const ALLOWLIST_FRESHNESS_DAYS = 30;
+
 describe("AI tool registry", () => {
-  it("tracks every server-side AI tool with passing metadata", () => {
+  it("tracks every server-side AI tool with metadata for every required field", () => {
+    // codeReview is exported separately from allTools but is a server-side tool.
     const implemented = new Set([...Object.keys(allTools), "codeReview"]);
     const registered = new Set(TOOL_METADATA.map((tool) => tool.name));
 
     expect(registered).toEqual(implemented);
 
     for (const tool of TOOL_METADATA) {
-      expect(tool.description.length, `${tool.name} description is too short`).toBeGreaterThanOrEqual(50);
+      expect(tool.description.length, `${tool.name} description is too short (need ≥ 40 chars per PROD-327)`).toBeGreaterThanOrEqual(40);
       expect(tool.permissionTier, `${tool.name} missing permission tier`).toBeDefined();
+      expect(tool.access, `${tool.name} missing access level`).toBeDefined();
+      expect(["read", "write", "client-side"]).toContain(tool.access);
+      expect(tool.service, `${tool.name} missing service`).toBeDefined();
+      expect(tool.service.length, `${tool.name} service must not be empty`).toBeGreaterThan(0);
       expect(tool.costEstimate, `${tool.name} missing cost estimate`).toBeDefined();
-      expect(tool.testStatus, `${tool.name} is not marked tested`).toBe("passing");
     }
+  });
+
+  it("untested tools must be explicitly allow-listed with a dated TODO ≤ 30 days old", () => {
+    const today = new Date();
+    const failures: string[] = [];
+
+    for (const tool of TOOL_METADATA) {
+      if (tool.testStatus === "passing") continue;
+
+      const note = UNTESTED_TOOL_ALLOWLIST[tool.name];
+      if (!note) {
+        failures.push(
+          `${tool.name} has testStatus="${tool.testStatus ?? "unset"}" but no UNTESTED_TOOL_ALLOWLIST entry. Add one or fix the tool's tests.`,
+        );
+        continue;
+      }
+
+      const match = UNTESTED_NOTE_PATTERN.exec(note);
+      if (!match) {
+        failures.push(
+          `${tool.name} allow-list entry "${note}" must match "PROD-NNN YYYY-MM-DD — reason".`,
+        );
+        continue;
+      }
+
+      const noted = new Date(match[1]);
+      const ageDays = Math.floor((today.getTime() - noted.getTime()) / (1000 * 60 * 60 * 24));
+      if (ageDays > ALLOWLIST_FRESHNESS_DAYS) {
+        failures.push(
+          `${tool.name} allow-list entry is ${ageDays} days old (max ${ALLOWLIST_FRESHNESS_DAYS}). Re-test or refresh the note.`,
+        );
+      }
+    }
+
+    if (failures.length > 0) {
+      throw new Error(`AI tool allow-list violations:\n${failures.map((f) => `  - ${f}`).join("\n")}`);
+    }
+
+    expect(failures).toEqual([]);
+  });
+
+  it("client-side tools are never executed on the server", () => {
+    const clientSideToolNames = TOOL_METADATA.filter(
+      (t) => t.clientSide === true || t.access === "client-side",
+    ).map((t) => t.name);
+
+    const offenders: string[] = [];
+    for (const name of clientSideToolNames) {
+      const exported = (allTools as Record<string, unknown>)[name] as
+        | { execute?: unknown }
+        | undefined;
+      if (exported && typeof exported.execute === "function") {
+        offenders.push(name);
+      }
+    }
+
+    if (offenders.length > 0) {
+      throw new Error(
+        `Client-side tools must not define a server-side execute() function: ${offenders.join(", ")}`,
+      );
+    }
+
+    expect(offenders).toEqual([]);
   });
 });
 
