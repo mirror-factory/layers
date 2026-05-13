@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.111] — 2026-05-13
+
+### Other
+- Allow reviewable release artifact proof (`903c699`)
+
+
 ## [0.1.110] — 2026-05-13
 
 ### Other
