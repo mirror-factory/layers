@@ -1,0 +1,63 @@
+# Maestro flow: walk authed surfaces inside the iOS Capacitor app.
+# Relaunches between each page — avoids brittle in-app back-arrow taps.
+
+appId: com.mirrorfactory.audiolayer
+---
+# /record (landing for signed-in users)
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 6000
+- takeScreenshot: ios-walk-00-record
+
+# /meetings
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 6000
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 1500
+- tapOn: "Meetings"
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: ios-walk-01-meetings
+
+# /chat
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 6000
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 1500
+- tapOn: "Chat"
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: ios-walk-02-chat
+
+# /settings
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 6000
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 1500
+- tapOn: "Settings"
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: ios-walk-03-settings
+
+# /profile
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 6000
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 1500
+- tapOn: "Profile"
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: ios-walk-04-profile
