@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.110] — 2026-05-13
+
+### Other
+- Add native proof runbook to handoff (`351bbf6`)
+
+
 ## [0.1.109] — 2026-05-13
 
 ### Other
