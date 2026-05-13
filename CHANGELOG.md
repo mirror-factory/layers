@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.111] — 2026-05-13
+
+### Other
+- docs(activity-log): append-only chronological log + AGENTS.md contract (`5ae0432`)
+
+
 ## [0.1.110] — 2026-05-12
 
 ### Other
