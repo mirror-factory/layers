@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.105] — 2026-05-13
+
+### Other
+- Add native provider readiness proof artifact (`b38496d`)
+
+
 ## [0.1.104] — 2026-05-13
 
 ### Other
