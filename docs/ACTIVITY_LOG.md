@@ -79,3 +79,14 @@ Event types: `pr-merged`, `pr-opened`, `linear-filed`, `linear-resolved`, `linea
 ---
 
 <!-- New entries below. Append, do not edit prior rows. -->
+
+### 2026-05-12  ~19:15 ET  —  Claude Opus 4.7 (1M)  —  pr-merged  —  #81 docs(activity-log): contract + backfill
+
+- **What:** Landed `docs/ACTIVITY_LOG.md` (this file) + `## Activity Log Contract` section in AGENTS.md. Backfilled all of today's session.
+- **PR:** [PR #81](https://github.com/mirror-factory/layers/pull/81)
+- **Why it matters:** From now on, "give me a rundown" is one-file. Every provider is bound by the contract.
+
+### 2026-05-12  ~19:15 ET  —  Claude Opus 4.7 (1M)  —  session-checkpoint  —  rundown pushed to NTFY
+
+- **What:** Pushed condensed rundown to NTFY topic `layers-mf-08ebf1d1` (msg id `d2uSyX3fYwlK`). Default action on "give me a rundown" requests going forward.
+- **Why it matters:** User receives push notifications on phone/desktop and can scroll back through them historically.
