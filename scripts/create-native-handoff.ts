@@ -298,6 +298,59 @@ const packets = [
 ];
 
 const pendingPackets = packets.filter((packet) => packet.state !== "ready");
+const readyProviderIds = listField(providerReadiness, "readyProviderIds").map((item) => String(item));
+const providerReady = (id: string): boolean => readyProviderIds.includes(id);
+const runbookPaths = [
+  {
+    id: "mac-ios-proof",
+    label: "Mac iOS proof",
+    state: nativeSmokeReadyFor("ios"),
+    bestWhen: "Use this when a Mac with Xcode, Simulator or TestFlight access, and signing context is available.",
+    proves: ["iOS runtime behavior", "native auth callback surface", "safe-area behavior", "iOS screenshot/video evidence"],
+    command: packets.find((packet) => packet.id === "ios-simulator-or-testflight")?.command,
+    copyBackCommand: packets.find((packet) => packet.id === "ios-simulator-or-testflight")?.copyBackCommand,
+    expectedOutputs: [".evidence/native-smoke.json", "iOS screenshot", "iOS video or simulator recording", "runner URL or logs"],
+    unblocks: ["auth.google-native", "mobile.safe-area", "iOS release evidence"],
+  },
+  {
+    id: "android-device-proof",
+    label: "Android device proof",
+    state: nativeSmokeReadyFor("android"),
+    bestWhen: "Use this when an Android phone is attached, KVM emulator access exists, or a cloud Android runner is available.",
+    proves: ["Android runtime behavior", "safe-area behavior", "Android screenshot/video evidence"],
+    command: packets.find((packet) => packet.id === "android-device-smoke")?.command,
+    copyBackCommand: packets.find((packet) => packet.id === "android-device-smoke")?.copyBackCommand,
+    expectedOutputs: [".evidence/native-smoke.json", "Android screenshot", "Android video or replay", "runner URL or logs"],
+    unblocks: ["mobile.safe-area", "Android runtime proof", "native-device proof lanes"],
+  },
+  {
+    id: "browserstack-real-device",
+    label: "BrowserStack real-device proof",
+    state: providerReady("browserstack-maestro") ? "ready" : "pending",
+    bestWhen: "Use this when BrowserStack credentials are available and one provider should cover real Android and iOS device evidence.",
+    proves: ["real Android device evidence", "real iOS device evidence", "device-cloud run URL", "screenshots and video"],
+    command: packets.find((packet) => packet.id === "browserstack-maestro-real-device")?.command,
+    copyBackCommand: packets.find((packet) => packet.id === "browserstack-maestro-real-device")?.copyBackCommand,
+    expectedOutputs: [".evidence/native-smoke.json", "BrowserStack build/session URL", "real-device screenshots", "real-device video"],
+    unblocks: ["Android runtime proof", "iOS runtime proof", "native-device proof lanes"],
+  },
+  {
+    id: "signed-release-proof",
+    label: "Signed release artifact proof",
+    state: signedReleaseReady(),
+    bestWhen: "Use this after native proof is green and release credentials are available for signed, notarized, uploaded, or explicitly reviewable artifacts.",
+    proves: ["signed or reviewable build artifact", "artifact checksum", "release upload or notarization status", "install/open verification"],
+    command: packets.find((packet) => packet.id === "signed-release-packages")?.command,
+    copyBackCommand: packets.find((packet) => packet.id === "signed-release-packages")?.copyBackCommand,
+    expectedOutputs: [".evidence/release-artifacts.json", "signed or reviewable package", "checksum", "store, notarization, or release URL"],
+    unblocks: ["release.artifacts", "production release approval"],
+  },
+];
+const recommendedRunbookPath =
+  runbookPaths.find((item) => item.id === "browserstack-real-device" && item.state === "ready")
+  ?? runbookPaths.find((item) => item.id === "mac-ios-proof" && item.state !== "ready")
+  ?? runbookPaths.find((item) => item.state !== "ready")
+  ?? runbookPaths[0];
 const payload = {
   schemaVersion: 1,
   generatedAt: new Date().toISOString(),
@@ -329,6 +382,26 @@ const payload = {
     releaseArtifacts: releaseArtifacts ? ".evidence/release-artifacts.json" : null,
   },
   packets,
+  runbook: {
+    title: "Native and release proof runbook",
+    summary: "Use these paths to close native/device and signed release blockers without paid GitHub-hosted Actions.",
+    recommendedPathId: recommendedRunbookPath?.id ?? null,
+    dashboardTarget: reviewUrl,
+    paths: runbookPaths,
+    copyBackRequirements: [
+      "Record device or simulator identity.",
+      "Attach at least one screenshot and one video or replay for native runtime proof.",
+      "Record the runner name, flow command, and run URL, logs, or artifact bundle.",
+      "Regenerate native-device-handoff.json and proof-packet.json after native:record-smoke.",
+      "Mirror the updated .evidence files and media back to the dashboard artifact root."
+    ],
+    releaseRequirements: [
+      "Record signed, notarized, uploaded, release-ready, or explicitly reviewable status.",
+      "Attach release artifact path, byte size, checksum, and install/open verification.",
+      "Keep staging/main promotion held until native and release proof artifacts are green."
+    ],
+    proofBoundary: "This runbook is coordination evidence only. Native and release lanes turn green only after native-smoke.json, release-artifacts.json, media, and proof-packet.json are copied back with passing evidence."
+  },
   artifactContract: {
     requiredFields: ["taskIds", "branch", "commit", "platform", "device", "capturedAt", "checksum", "reviewUrl"],
     requiredMediaForUiNative: ["desktop light screenshot", "desktop dark screenshot", "mobile light screenshot", "mobile dark screenshot", "video or replay"],
