@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.101] — 2026-05-13
+
+### Other
+- Keep unsigned release artifacts pending (`a8c8bd8`)
+
+
 ## [0.1.100] — 2026-05-13
 
 ### Other
