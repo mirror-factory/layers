@@ -200,6 +200,14 @@ cd android
 
 `bundleRelease` requires the four `LAYERS_ANDROID_*` signing variables for a Play-ready signed artifact.
 
+## Windows Electron Smoke
+
+The Windows Electron smoke pass is tracked separately because it needs a real
+Windows host or `windows-latest` runner plus Authenticode signing material for
+SmartScreen and signature verdicts. Use
+[`docs/qa/windows-electron-smoke.md`](qa/windows-electron-smoke.md) for the
+ready-to-run checklist, evidence rules, and blocked rows.
+
 Current check results on 2026-04-30:
 
 | Check | Result |
