@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.114] — 2026-05-13
+
+### Other
+- feat(qa): Maestro iOS automation — sign-in + authed walk flows (`bcf4d19`)
+
+
 ## [0.1.113] — 2026-05-13
 
 ### Other
