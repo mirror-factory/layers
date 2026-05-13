@@ -155,7 +155,7 @@
     "@ai-sdk/react": "^3.0.170",
     "@capacitor/assets": "^3.0.5",
     "@capacitor/cli": "^8.3.1",
-    "@mirror-factory/ai-dev-kit": "github:mirror-factory/vercel-ai-starter-kit#3b8fc3be0e3984394debb1f67703f502181c7687",
+    "@mirror-factory/ai-dev-kit": "github:mirror-factory/vercel-ai-starter-kit#0458ebf4aca7480a92e2c98ae69890c869b62ba1",
     "@playwright/test": "^1.59.1",
     "@storybook/addon-a11y": "^10.3.5",
     "@storybook/addon-vitest": "^10.3.5",

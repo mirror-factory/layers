@@ -88,6 +88,13 @@ function currentGithubUser(): string | null {
   return result.status === 0 ? result.stdout.trim() || null : null;
 }
 
+function currentBranchName(): string | null {
+  const result = run("git", ["rev-parse", "--abbrev-ref", "HEAD"]);
+  if (result.status !== 0) return null;
+  const branch = result.stdout.trim();
+  return branch && branch !== "HEAD" ? branch : null;
+}
+
 function readPrView(): { pr: PullRequestView | null; source: string; error?: string } {
   if (inputPath) {
     try {
@@ -121,7 +128,15 @@ function readPrView(): { pr: PullRequestView | null; source: string; error?: str
     "statusCheckRollup",
   ].join(",");
   const args = ["pr", "view"];
-  if (prNumber) args.push(prNumber);
+  const prSelector = prNumber || currentBranchName();
+  if (prSelector) args.push(prSelector);
+  if (repo && !prSelector) {
+    return {
+      pr: null,
+      source: "gh pr view",
+      error: "Could not infer a pull request number, URL, or branch for gh pr view.",
+    };
+  }
   if (repo) args.push("--repo", repo);
   args.push("--json", fields);
   const result = run("gh", args);
@@ -182,7 +197,7 @@ else if (reviewDecision === "APPROVED" || separateApprovals.length > 0) status =
 else if (reviewDecision === "CHANGES_REQUESTED" || changesRequested.length > 0) status = "changes-requested";
 else status = "review-required";
 
-const pass = !required || status === "approved";
+const pass = status !== "unavailable" && (!required || status === "approved");
 const currentAssignment = !pr
   ? "No pull request review state could be read."
   : requestedReviewers.length
