@@ -174,13 +174,26 @@ If a secret is missing, the corresponding step degrades gracefully (e.g. unsigne
 
 ## Costs
 
-**The `mirror-factory/layers` repo is public.** That means GitHub Actions is **free, unlimited, on every runner type**. No per-minute charges, no monthly cap, no Mac runner premium.
+**Current operating policy: keep GitHub-hosted Actions off unless explicitly
+enabled.** Alfonso has a zero-dollar Actions budget for this workstream, so PR
+proof should come from CT100/CT102, local workspaces, a self-hosted Mac/Android
+runner, or a device-cloud provider with an explicit budget decision.
 
-- macOS runners: free for public repos (would otherwise be ~$0.08/min × 10 min = $0.80/release)
-- Windows runners: free
-- Linux runners: free
-- Storage of build artifacts: 500 MB-month is free, more than enough for a couple of recent builds; old runs auto-expire after 90 days
-- GitHub Releases storage: free, unlimited
+GitHub's billing docs say GitHub Actions usage is free for self-hosted runners
+and for public repositories using standard GitHub-hosted runners, but they also
+call out storage billing, account budgets, and larger-runner charges. Because
+the account budget is the real constraint here, this repo treats hosted proof
+jobs as opt-in even when a public-repo free path may be available.
+
+- Self-hosted runners: preferred for repeatable $0 compute on owned hardware.
+- Standard hosted runners: do not use for this harness unless the operator
+  explicitly opts in for the PR or release.
+- Larger hosted runners: always treat as paid/blocked unless specifically
+  approved.
+- Storage/artifact retention: keep artifacts mirrored into the Work Dashboard
+  and prune hosted artifacts aggressively if hosted jobs are enabled.
+- GitHub Releases storage: acceptable for release distribution, but release
+  readiness still requires the native/release proof lanes.
 
 If the repo were ever flipped to **private**, costs would be:
 
@@ -190,14 +203,17 @@ If the repo were ever flipped to **private**, costs would be:
 | Pro ($4/user/mo) | 3,000 | same | ~$2 | ~15 |
 | Team ($4/user/mo) | 3,000 | same | ~$2 | ~15 |
 
-**Today: $0. Don't change repo visibility unless you need to (see below).**
+**Today: treat GitHub-hosted proof as $0 budget / disabled by default.** Do not
+change repo visibility or runner policy without updating the dashboard release
+gate and the zero-Actions docs.
 
 ### Things that incur GitHub costs even on a public repo
 
 - **GitHub Packages storage** (npm/Docker) above 500 MB-month — we don't use this for the app.
 - **GitHub Copilot** seats (separate product).
 - **GitHub Codespaces** beyond the free tier — we don't use these in CI.
-- **Self-hosted runners** would need our own infra; we use GitHub-hosted runners.
+- **Self-hosted runners** use our own infra and are the preferred automation
+  path for the current zero-dollar operating mode.
 
 ### What costs do exist outside of GitHub
 
@@ -210,7 +226,8 @@ If the repo were ever flipped to **private**, costs would be:
 | Apple notarization | Free with Developer Program | — |
 | TestFlight | Free | — |
 
-So today: **$99/year (Apple) + $0 (GitHub) = $99/year**.
+So today: **$99/year (Apple) + owned-runner/device-cloud decisions as needed**.
+GitHub-hosted proof remains disabled by policy until explicitly re-enabled.
 
 ---
 

@@ -160,12 +160,64 @@ function looksUserFacing(file: string): boolean {
   return false;
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function stringField(record: Record<string, unknown>, key: string): string {
+  const value = record[key];
+  return typeof value === "string" ? value : "";
+}
+
+function releaseArtifactReady(payload: Record<string, unknown>): boolean {
+  const statusText = [
+    stringField(payload, "status"),
+    stringField(payload, "releaseStatus"),
+    stringField(payload, "uploadStatus"),
+  ].filter(Boolean).join(" ").toLowerCase();
+  return payload.signed === true
+    || payload.notarized === true
+    || payload.releaseReady === true
+    || payload.releaseReviewable === true
+    || payload.storeUpload === true
+    || /\b(signed|notarized|uploaded|reviewable|release-ready|green)\b/.test(statusText);
+}
+
+function genericEvidenceIssue(rel: string, payload: Record<string, unknown>): { failed?: string; pending?: string } {
+  const status = stringField(payload, "status").toLowerCase();
+  if (payload.skipped === true || status === "pending" || status === "not-applicable") {
+    return { pending: `${rel} (${status || "skipped"})` };
+  }
+  if (status === "blocked" || status === "failed" || status === "fail") {
+    return { failed: `${rel} (${status})` };
+  }
+  return {};
+}
+
+function releaseEvidenceIssue(rel: string, payload: Record<string, unknown>): { failed?: string; pending?: string } {
+  if (!rel.endsWith("release-artifacts.json")) return {};
+
+  const status = stringField(payload, "status").toLowerCase();
+  if (status === "blocked" || status === "fail" || payload.pass === false) {
+    return { failed: `${rel} (${status || "failed"})` };
+  }
+  if (status === "pending" || payload.skipped === true) {
+    return { pending: `${rel} (pending signed/notarized/uploaded/reviewable release proof)` };
+  }
+  if (payload.pass === true || status === "ready" || status === "pass" || status === "green" || status === "release-ready") {
+    return releaseArtifactReady(payload) ? {} : { pending: `${rel} (pending signed/notarized/uploaded/reviewable release proof)` };
+  }
+
+  return {};
+}
+
 function evidenceState(lane: ProofLane, root: string): { satisfied: boolean | null; missingEvidence: string[] } {
   const evidence = lane.evidence ?? [];
   if (evidence.length === 0) return { satisfied: true, missingEvidence: [] };
 
   const missing: string[] = [];
   const invalid: string[] = [];
+  const pending: string[] = [];
   let anyPresent = false;
 
   for (const rel of evidence) {
@@ -179,8 +231,18 @@ function evidenceState(lane: ProofLane, root: string): { satisfied: boolean | nu
     try {
       const stat = statSync(full);
       if (stat.isFile() && rel.endsWith(".json")) {
-        const parsed = JSON.parse(readFileSync(full, "utf-8")) as { pass?: boolean };
-        if (parsed.pass === false) invalid.push(`${rel} (failed)`);
+        const parsed = JSON.parse(readFileSync(full, "utf-8")) as unknown;
+        if (!isRecord(parsed)) {
+          invalid.push(`${rel} (invalid)`);
+          continue;
+        }
+        const releaseIssue = releaseEvidenceIssue(rel, parsed);
+        const genericIssue = releaseIssue.failed || releaseIssue.pending ? {} : genericEvidenceIssue(rel, parsed);
+        if (releaseIssue.failed) invalid.push(releaseIssue.failed);
+        if (releaseIssue.pending) pending.push(releaseIssue.pending);
+        if (genericIssue.failed) invalid.push(genericIssue.failed);
+        if (genericIssue.pending) pending.push(genericIssue.pending);
+        if (!releaseIssue.failed && !releaseIssue.pending && !genericIssue.failed && !genericIssue.pending && parsed.pass === false) invalid.push(`${rel} (failed)`);
       }
     } catch {
       invalid.push(`${rel} (unreadable)`);
@@ -188,6 +250,7 @@ function evidenceState(lane: ProofLane, root: string): { satisfied: boolean | nu
   }
 
   if (invalid.length > 0) return { satisfied: false, missingEvidence: invalid };
+  if (pending.length > 0) return { satisfied: null, missingEvidence: pending };
   if (anyPresent) return { satisfied: true, missingEvidence: [] };
 
   return { satisfied: null, missingEvidence: missing };

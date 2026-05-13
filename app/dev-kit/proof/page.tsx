@@ -6,6 +6,41 @@ import { getDevKitTheme } from "@/lib/dev-kit-theme";
 export const dynamic = "force-dynamic";
 
 type Theme = ReturnType<typeof getDevKitTheme>;
+type FeatureProofRow = { id: string; name: string; proof: string[] };
+type RequiredProofLane = { id: string; label: string; command: string; satisfied: boolean | null };
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function stringValue(value: unknown, fallback = ""): string {
+  return typeof value === "string" ? value : fallback;
+}
+
+function stringArray(value: unknown): string[] {
+  return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : [];
+}
+
+function matchedFeatureRows(featureProof: Record<string, unknown> | null): FeatureProofRow[] {
+  const rows = featureProof?.matchedFeatures;
+  if (!Array.isArray(rows)) return [];
+  return rows.filter(isRecord).map((feature) => ({
+    id: stringValue(feature.id, "feature"),
+    name: stringValue(feature.name, stringValue(feature.id, "Feature")),
+    proof: stringArray(feature.proof),
+  }));
+}
+
+function requiredProofLaneRows(featureProof: Record<string, unknown> | null): RequiredProofLane[] {
+  const rows = featureProof?.requiredLanes;
+  if (!Array.isArray(rows)) return [];
+  return rows.filter(isRecord).map((lane) => ({
+    id: stringValue(lane.id, "lane"),
+    label: stringValue(lane.label, stringValue(lane.id, "Proof lane")),
+    command: stringValue(lane.command, ""),
+    satisfied: typeof lane.satisfied === "boolean" ? lane.satisfied : null,
+  }));
+}
 
 function Card({ children, theme }: { children: ReactNode; theme: Theme }) {
   return (
@@ -99,10 +134,11 @@ export default function ProofPage() {
   const tests = packet?.testResults ?? [];
   const browser = packet?.browserArtifacts ?? [];
   const native = packet?.nativeArtifacts ?? [];
-  const featureProof = packet?.featureProof ?? null;
-  const matchedFeatures = featureProof?.matchedFeatures ?? [];
-  const requiredLanes = featureProof?.requiredLanes ?? [];
-  const unmatchedUserFacingFiles = featureProof?.unmatchedUserFacingFiles ?? [];
+  const featureProof = isRecord(packet?.featureProof) ? packet.featureProof : null;
+  const matchedFeatures = matchedFeatureRows(featureProof);
+  const requiredLanes = requiredProofLaneRows(featureProof);
+  const unmatchedUserFacingFiles = stringArray(featureProof?.unmatchedUserFacingFiles);
+  const featureProofPass = typeof featureProof?.pass === "boolean" ? featureProof.pass : null;
 
   return (
     <main style={{ maxWidth: 1180 }}>
@@ -148,7 +184,7 @@ export default function ProofPage() {
           <Card theme={theme}>
             <div style={{ display: "flex", justifyContent: "space-between", gap: theme.space(3), alignItems: "baseline" }}>
               <h2 style={{ color: theme.colors.text, margin: 0, fontSize: 17 }}>Feature proof requirements</h2>
-              <StatusPill pass={typeof featureProof?.pass === "boolean" ? featureProof.pass : null} theme={theme} />
+              <StatusPill pass={featureProofPass} theme={theme} />
             </div>
             <p style={{ color: theme.colors.textMuted, marginTop: theme.space(2) }}>
               Registry-driven proof for this ticket. User-facing feature changes require Expect proof plus the lanes declared by the matched feature.
@@ -188,7 +224,7 @@ export default function ProofPage() {
                       <tr key={lane.id} style={{ borderBottom: `1px solid ${theme.colors.border}` }}>
                         <td style={{ padding: "8px 6px", color: theme.colors.text }}>{lane.label}</td>
                         <td style={{ padding: "8px 6px" }}>
-                          <StatusPill pass={typeof lane.satisfied === "boolean" ? lane.satisfied : null} theme={theme} />
+                          <StatusPill pass={lane.satisfied} theme={theme} />
                         </td>
                         <td style={{ padding: "8px 6px", color: theme.colors.textMuted, fontFamily: theme.font.mono }}>{lane.command}</td>
                       </tr>

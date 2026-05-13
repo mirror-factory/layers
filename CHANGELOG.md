@@ -7,6 +7,120 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.115] — 2026-05-13
+
+### Other
+- Clarify native provider readiness proof (`52ab7af`)
+
+
+## [0.1.114] — 2026-05-13
+
+### Other
+- Harden native release evidence semantics (`48e5e3a`)
+
+
+## [0.1.113] — 2026-05-13
+
+### Other
+- Detect Android SDK paths in native provider readiness (`9d98311`)
+
+
+## [0.1.112] — 2026-05-13
+
+### Other
+- Skip hosted proof gates by default (`2617178`)
+
+
+## [0.1.111] — 2026-05-13
+
+### Other
+- Allow reviewable release artifact proof (`903c699`)
+
+
+## [0.1.110] — 2026-05-13
+
+### Other
+- Add native proof runbook to handoff (`351bbf6`)
+
+
+## [0.1.109] — 2026-05-13
+
+### Other
+- Clarify Android native proof blocker (`1e06e1d`)
+
+
+## [0.1.108] — 2026-05-13
+
+### Other
+- Clarify requested PR review handoff (`b7a97c3`)
+
+
+## [0.1.107] — 2026-05-13
+
+### Other
+- Harden PR review-state proof (`97017b4`)
+
+
+## [0.1.106] — 2026-05-13
+
+### Other
+- Add PR review-state evidence lane (`8d343a9`)
+
+
+## [0.1.105] — 2026-05-13
+
+### Other
+- Add native provider readiness proof artifact (`b38496d`)
+
+
+## [0.1.104] — 2026-05-13
+
+### Other
+- Keep pending release artifacts out of Layers proof (`8947949`)
+
+
+## [0.1.103] — 2026-05-13
+
+### Other
+- Add BrowserStack Maestro handoff to Layers (`ae96845`)
+
+
+## [0.1.102] — 2026-05-13
+
+### Other
+- Add signed release handoff copy-back command (`588c11d`)
+
+
+## [0.1.101] — 2026-05-13
+
+### Other
+- Keep unsigned release artifacts pending (`a8c8bd8`)
+
+
+## [0.1.100] — 2026-05-13
+
+### Other
+- Add native smoke copy-back proof path (`ccf65e6`)
+
+
+## [0.1.99] — 2026-05-13
+
+### Other
+- Add native proof handoff script (`1077ffc`)
+
+
+## [0.1.98] — 2026-05-13
+
+### Other
+- chore: refresh ai dev kit runner proof (`83c40a8`)
+
+
+## [0.1.97] — 2026-05-13
+
+### Other
+- chore: align ai dev kit to 0.5.0 [skip ci] (`0339daa`)
+
+
 ## [0.1.96] — 2026-05-10
 
 ### Other
