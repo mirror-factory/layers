@@ -264,6 +264,7 @@ const packets = [
       ".evidence/proof-packet.json",
       "signed APK/AAB, IPA, DMG, EXE/MSI, or ZIP artifacts with checksums",
     ],
+    copyBackCommand: `RELEASE_ARTIFACTS_REQUIRED=1 RELEASE_SIGNED=1 RELEASE_NOTARIZED=1 RELEASE_STORE_UPLOAD=1 RELEASE_READY=1 RELEASE_STATUS=release-ready RELEASE_UPLOAD_STATUS="<store, notarization, or release URL>" pnpm build:release && pnpm native:handoff && pnpm test:proof`,
     unblocks: ["release.artifacts", "production release approval"],
     dashboardTarget: reviewUrl,
   },
@@ -309,6 +310,7 @@ const payload = {
   candidateArtifacts,
   copyBack: {
     recordCommand: `NATIVE_SMOKE_PASS=1 NATIVE_SMOKE_PLATFORM=<platform> NATIVE_SMOKE_DEVICE=<device> NATIVE_SMOKE_RUNNER=<runner> NATIVE_SMOKE_FLOW=<flow> NATIVE_SMOKE_SCREENSHOTS=<paths-or-urls> NATIVE_SMOKE_VIDEOS=<paths-or-urls> pnpm native:record-smoke`,
+    releaseRecordCommand: `RELEASE_ARTIFACTS_REQUIRED=1 RELEASE_SIGNED=1 RELEASE_NOTARIZED=1 RELEASE_STORE_UPLOAD=1 RELEASE_READY=1 RELEASE_STATUS=release-ready RELEASE_UPLOAD_STATUS=<store-or-release-url> pnpm build:release`,
     archiveCommand: `tar -czf native-evidence-${(branch ?? "local").replace(/[^A-Za-z0-9._-]+/g, "-")}.tgz .evidence android/app/build/outputs ios/App/build dist release out 2>/dev/null || true`,
     dashboardTarget: reviewUrl,
   },
