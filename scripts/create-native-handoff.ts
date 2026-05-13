@@ -109,10 +109,46 @@ function envOrDefault(name: string, fallback: string): string {
   return value ? value : fallback;
 }
 
-function packetState(...payloads: Array<JsonObject | null>): "ready" | "pending" | "blocked" {
-  if (payloads.some((payload) => payload?.pass === false && payload?.required === true)) return "blocked";
-  if (payloads.some((payload) => payload?.pass === true && payload?.skipped !== true)) return "ready";
-  return "pending";
+function stringField(payload: JsonObject | null, key: string): string {
+  const value = payload?.[key];
+  return typeof value === "string" ? value.toLowerCase() : "";
+}
+
+function listField(payload: JsonObject | null, key: string): unknown[] {
+  const value = payload?.[key];
+  return Array.isArray(value) ? value : [];
+}
+
+function nativeSmokeReadyFor(targetPlatform: string): "ready" | "pending" | "blocked" {
+  if (nativeSmoke?.pass === false && nativeSmoke.required === true) return "blocked";
+  if (nativeSmoke?.pass !== true || nativeSmoke.skipped === true) return "pending";
+  const target = targetPlatform.toLowerCase();
+  const platformText = [
+    stringField(nativeSmoke, "platform"),
+    ...listField(nativeSmoke, "platforms").map((item) => String(item).toLowerCase()),
+  ].join(" ");
+  const hasTargetPlatform = platformText.includes(target);
+  const hasDevice = Boolean(nativeSmoke.device || nativeSmoke.deviceName || nativeSmoke.simulator);
+  const hasRunner = Boolean(nativeSmoke.runner || nativeSmoke.runnerName || nativeSmoke.runUrl);
+  const hasFlow = Boolean(nativeSmoke.flowCommand || nativeSmoke.command);
+  const hasMedia = listField(nativeSmoke, "screenshots").length > 0 && listField(nativeSmoke, "videos").length > 0;
+  return hasTargetPlatform && hasDevice && hasRunner && hasFlow && hasMedia ? "ready" : "pending";
+}
+
+function signedReleaseReady(): "ready" | "pending" | "blocked" {
+  if (releaseArtifacts?.pass === false && releaseArtifacts.required === true) return "blocked";
+  if (releaseArtifacts?.pass !== true) return "pending";
+  const statusText = [
+    stringField(releaseArtifacts, "status"),
+    stringField(releaseArtifacts, "releaseStatus"),
+    stringField(releaseArtifacts, "uploadStatus"),
+  ].join(" ");
+  const explicitReady = releaseArtifacts.signed === true
+    || releaseArtifacts.notarized === true
+    || releaseArtifacts.releaseReady === true
+    || releaseArtifacts.storeUpload === true
+    || /\b(signed|notarized|uploaded|release-ready|green)\b/.test(statusText);
+  return explicitReady ? "ready" : "pending";
 }
 
 const branch = git(["branch", "--show-current"]) ?? process.env.GITHUB_HEAD_REF ?? process.env.GITHUB_REF_NAME ?? null;
@@ -147,7 +183,7 @@ const packets = [
     id: "android-device-smoke",
     label: "Android device or emulator smoke",
     owner: "Android runner, physical Android device, or device cloud",
-    state: packetState(nativeSmoke),
+    state: nativeSmokeReadyFor("android"),
     runnerRequirement: "Android SDK, installed app, KVM emulator or attached real device, and Maestro/Appium/Firebase Test Lab equivalent.",
     command: `pnpm runner:doctor && pnpm test:native:config && NATIVE_BUILD_RUN=1 NATIVE_REQUIRED=1 ANDROID_BUILD_COMMAND="pnpm exec cap sync android && cd android && ./gradlew :app:assembleDebug" pnpm build:native && MAESTRO_RUN=1 NATIVE_REQUIRED=1 pnpm test:native:smoke && pnpm native:handoff && pnpm test:proof`,
     expectedArtifacts: [
@@ -159,6 +195,7 @@ const packets = [
       ".evidence/proof-packet.json",
       "test-results or device-cloud screenshot/video links",
     ],
+    copyBackCommand: `NATIVE_SMOKE_PASS=1 NATIVE_SMOKE_PLATFORM=android NATIVE_SMOKE_DEVICE="<device model>" NATIVE_SMOKE_RUNNER="<runner name>" NATIVE_SMOKE_FLOW="<flow command>" NATIVE_SMOKE_SCREENSHOTS="<screenshot paths or URLs>" NATIVE_SMOKE_VIDEOS="<video paths or URLs>" NATIVE_SMOKE_RUN_URL="<runner URL>" pnpm native:record-smoke && pnpm native:handoff && pnpm test:proof`,
     unblocks: ["auth.google-native", "mobile.safe-area", "native-device proof lanes"],
     dashboardTarget: reviewUrl,
   },
@@ -175,6 +212,7 @@ const packets = [
       "device screenshots",
       "device video or Robo/action log",
     ],
+    copyBackCommand: `NATIVE_SMOKE_PASS=1 NATIVE_SMOKE_PLATFORM=android NATIVE_SMOKE_DEVICE="Firebase Test Lab device matrix" NATIVE_SMOKE_RUNNER="Firebase Test Lab" NATIVE_SMOKE_FLOW="gcloud firebase test android run" NATIVE_SMOKE_SCREENSHOTS="<downloaded screenshot paths or URLs>" NATIVE_SMOKE_VIDEOS="<downloaded video paths or URLs>" NATIVE_SMOKE_RUN_URL="<matrix URL>" pnpm native:record-smoke && pnpm native:handoff && pnpm test:proof`,
     unblocks: ["Android real/virtual device evidence when mirrored into native-smoke.json"],
     dashboardTarget: reviewUrl,
   },
@@ -191,6 +229,7 @@ const packets = [
       "cloud screenshots",
       "cloud video",
     ],
+    copyBackCommand: `NATIVE_SMOKE_PASS=1 NATIVE_SMOKE_PLATFORM=android NATIVE_SMOKE_DEVICE="Maestro Cloud device" NATIVE_SMOKE_RUNNER="Maestro Cloud" NATIVE_SMOKE_FLOW="maestro cloud --app-file ${androidApp} --flows .maestro" NATIVE_SMOKE_SCREENSHOTS="<cloud screenshot paths or URLs>" NATIVE_SMOKE_VIDEOS="<cloud video paths or URLs>" NATIVE_SMOKE_RUN_URL="<Maestro Cloud run URL>" pnpm native:record-smoke && pnpm native:handoff && pnpm test:proof`,
     unblocks: ["Android or iOS smoke evidence when the cloud run is mirrored back"],
     dashboardTarget: reviewUrl,
   },
@@ -198,7 +237,7 @@ const packets = [
     id: "ios-simulator-or-testflight",
     label: "iOS Simulator or TestFlight proof",
     owner: "Alfonso Mac or another macOS runner",
-    state: packetState(nativeBuild, nativeSmoke),
+    state: nativeSmokeReadyFor("ios"),
     runnerRequirement: "macOS, Xcode, Apple signing/provisioning as needed, and Simulator/TestFlight access.",
     command: `pnpm runner:doctor && pnpm test:native:config && NATIVE_BUILD_RUN=1 NATIVE_REQUIRED=1 IOS_BUILD_COMMAND="pnpm exec cap sync ios && xcodebuild -project ios/App/App.xcodeproj -scheme ${iosScheme} -configuration Debug -destination '${iosDestination}' build" pnpm build:native && MAESTRO_RUN=1 NATIVE_REQUIRED=1 pnpm test:native:smoke && pnpm native:handoff && pnpm test:proof`,
     expectedArtifacts: [
@@ -208,6 +247,7 @@ const packets = [
       ".evidence/native-device-handoff.json",
       "Simulator or TestFlight screenshot/video evidence",
     ],
+    copyBackCommand: `NATIVE_SMOKE_PASS=1 NATIVE_SMOKE_PLATFORM=ios NATIVE_SMOKE_DEVICE="<simulator or TestFlight device>" NATIVE_SMOKE_RUNNER="macOS/Xcode" NATIVE_SMOKE_FLOW="<xcodebuild or Maestro command>" NATIVE_SMOKE_SCREENSHOTS="<screenshot paths or URLs>" NATIVE_SMOKE_VIDEOS="<video paths or URLs>" NATIVE_SMOKE_RUN_URL="<review URL>" pnpm native:record-smoke && pnpm native:handoff && pnpm test:proof`,
     unblocks: ["auth.google-native", "mobile.safe-area", "iOS/TestFlight release evidence"],
     dashboardTarget: reviewUrl,
   },
@@ -215,7 +255,7 @@ const packets = [
     id: "signed-release-packages",
     label: "Signed desktop/mobile release packages",
     owner: "Release runner with signing credentials",
-    state: packetState(releaseArtifacts),
+    state: signedReleaseReady(),
     runnerRequirement: "Signing certificates, notarization/store credentials, and install/open verification on the target platform.",
     command: "RELEASE_ARTIFACTS_REQUIRED=1 pnpm build:release && pnpm native:handoff && pnpm test:proof",
     expectedArtifacts: [
@@ -268,6 +308,7 @@ const payload = {
   },
   candidateArtifacts,
   copyBack: {
+    recordCommand: `NATIVE_SMOKE_PASS=1 NATIVE_SMOKE_PLATFORM=<platform> NATIVE_SMOKE_DEVICE=<device> NATIVE_SMOKE_RUNNER=<runner> NATIVE_SMOKE_FLOW=<flow> NATIVE_SMOKE_SCREENSHOTS=<paths-or-urls> NATIVE_SMOKE_VIDEOS=<paths-or-urls> pnpm native:record-smoke`,
     archiveCommand: `tar -czf native-evidence-${(branch ?? "local").replace(/[^A-Za-z0-9._-]+/g, "-")}.tgz .evidence android/app/build/outputs ios/App/build dist release out 2>/dev/null || true`,
     dashboardTarget: reviewUrl,
   },
