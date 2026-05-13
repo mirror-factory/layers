@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.113] — 2026-05-13
+
+### Other
+- Detect Android SDK paths in native provider readiness (`9d98311`)
+
+
 ## [0.1.112] — 2026-05-13
 
 ### Other
