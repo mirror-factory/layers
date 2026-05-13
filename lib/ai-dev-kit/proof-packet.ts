@@ -315,6 +315,7 @@ function artifactSourceFromPath(path: string): ArtifactSource {
   if (normalized.includes('playwright') || normalized.startsWith('test-results/')) return 'playwright';
   if (normalized.includes('remotion') || normalized.includes('frame-check')) return 'remotion';
   if (normalized.startsWith('android/') || normalized.startsWith('ios/') || normalized.includes('native')) return 'native';
+  if (normalized.includes('release-artifacts')) return 'release';
   if (normalized.includes('proof-packet')) return 'proof-packet';
   if (normalized.startsWith('dist/') || normalized.startsWith('release/') || normalized.startsWith('out/')) return 'release';
   return 'proof-packet';
@@ -364,9 +365,30 @@ function passForArtifact(cwd: string, artifactPath: string): boolean | undefined
   return undefined;
 }
 
+function releaseArtifactReady(payload: Record<string, unknown>): boolean {
+  const statusText = [
+    stringField(payload, 'status'),
+    stringField(payload, 'releaseStatus'),
+    stringField(payload, 'uploadStatus'),
+  ].filter(Boolean).join(' ').toLowerCase();
+  return payload.signed === true
+    || payload.notarized === true
+    || payload.releaseReady === true
+    || payload.storeUpload === true
+    || /\b(signed|notarized|uploaded|release-ready|green)\b/.test(statusText);
+}
+
 function stateForArtifact(cwd: string, artifactPath: string): 'green' | 'blocked' | 'pending' | undefined {
   const payload = artifactPath.endsWith('.json') ? readJson<Record<string, unknown>>(join(cwd, artifactPath)) : null;
   if (!isRecord(payload)) return undefined;
+  if (artifactPath.endsWith('release-artifacts.json')) {
+    if (payload.status === 'blocked' || payload.status === 'fail' || (payload.pass === false && payload.required === true)) return 'blocked';
+    if (payload.status === 'pending' || payload.skipped === true) return 'pending';
+    if (payload.pass === true || payload.status === 'ready' || payload.status === 'pass' || payload.status === 'green') {
+      return releaseArtifactReady(payload) ? 'green' : 'pending';
+    }
+    return undefined;
+  }
   if (payload.status === 'pending' || payload.skipped === true) return 'pending';
   if (payload.status === 'blocked' || payload.status === 'fail' || payload.pass === false) return 'blocked';
   if (payload.status === 'ready' || payload.status === 'pass' || payload.status === 'green' || payload.pass === true) return 'green';
