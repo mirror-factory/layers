@@ -160,12 +160,52 @@ function looksUserFacing(file: string): boolean {
   return false;
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function stringField(record: Record<string, unknown>, key: string): string {
+  const value = record[key];
+  return typeof value === "string" ? value : "";
+}
+
+function releaseArtifactReady(payload: Record<string, unknown>): boolean {
+  const statusText = [
+    stringField(payload, "status"),
+    stringField(payload, "releaseStatus"),
+    stringField(payload, "uploadStatus"),
+  ].filter(Boolean).join(" ").toLowerCase();
+  return payload.signed === true
+    || payload.notarized === true
+    || payload.releaseReady === true
+    || payload.storeUpload === true
+    || /\b(signed|notarized|uploaded|release-ready|green)\b/.test(statusText);
+}
+
+function releaseEvidenceIssue(rel: string, payload: Record<string, unknown>): { failed?: string; pending?: string } {
+  if (!rel.endsWith("release-artifacts.json")) return {};
+
+  const status = stringField(payload, "status").toLowerCase();
+  if (status === "blocked" || status === "fail" || payload.pass === false) {
+    return { failed: `${rel} (${status || "failed"})` };
+  }
+  if (status === "pending" || payload.skipped === true) {
+    return { pending: `${rel} (pending signed/notarized/uploaded release proof)` };
+  }
+  if (payload.pass === true || status === "ready" || status === "pass" || status === "green" || status === "release-ready") {
+    return releaseArtifactReady(payload) ? {} : { pending: `${rel} (pending signed/notarized/uploaded release proof)` };
+  }
+
+  return {};
+}
+
 function evidenceState(lane: ProofLane, root: string): { satisfied: boolean | null; missingEvidence: string[] } {
   const evidence = lane.evidence ?? [];
   if (evidence.length === 0) return { satisfied: true, missingEvidence: [] };
 
   const missing: string[] = [];
   const invalid: string[] = [];
+  const pending: string[] = [];
   let anyPresent = false;
 
   for (const rel of evidence) {
@@ -179,8 +219,15 @@ function evidenceState(lane: ProofLane, root: string): { satisfied: boolean | nu
     try {
       const stat = statSync(full);
       if (stat.isFile() && rel.endsWith(".json")) {
-        const parsed = JSON.parse(readFileSync(full, "utf-8")) as { pass?: boolean };
-        if (parsed.pass === false) invalid.push(`${rel} (failed)`);
+        const parsed = JSON.parse(readFileSync(full, "utf-8")) as unknown;
+        if (!isRecord(parsed)) {
+          invalid.push(`${rel} (invalid)`);
+          continue;
+        }
+        const releaseIssue = releaseEvidenceIssue(rel, parsed);
+        if (releaseIssue.failed) invalid.push(releaseIssue.failed);
+        if (releaseIssue.pending) pending.push(releaseIssue.pending);
+        if (!releaseIssue.failed && parsed.pass === false) invalid.push(`${rel} (failed)`);
       }
     } catch {
       invalid.push(`${rel} (unreadable)`);
@@ -188,6 +235,7 @@ function evidenceState(lane: ProofLane, root: string): { satisfied: boolean | nu
   }
 
   if (invalid.length > 0) return { satisfied: false, missingEvidence: invalid };
+  if (pending.length > 0) return { satisfied: null, missingEvidence: pending };
   if (anyPresent) return { satisfied: true, missingEvidence: [] };
 
   return { satisfied: null, missingEvidence: missing };
