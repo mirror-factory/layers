@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-05-10T11:04:53.317Z",
+  "generatedAt": "2026-05-13T14:31:09.657Z",
   "docs": [
     {
       "id": "ai-harness-tiers",
@@ -899,7 +899,7 @@
     {
       "id": "native-release-readiness",
       "localPath": "docs/NATIVE_RELEASE_READINESS.md",
-      "contentHash": "c0ab1a81fa01a16ef6ae1513f86d62c50c0f307cbd462c6881b92eb9947cfa2b",
+      "contentHash": "fd04283a051558843af47dd9913b41a3d60ca3d8749a41db5576aad32c0c7e4d",
       "priority": "cold"
     },
     {
@@ -929,7 +929,13 @@
     {
       "id": "production-quality-system",
       "localPath": "docs/PRODUCTION_QUALITY_SYSTEM.md",
-      "contentHash": "fcee48c4e9d464866f68d71beee6eb371431079c53e4ee62f682b658638101fd",
+      "contentHash": "a750492abc305cb98f5cab43e7c0c326add2313fa78b9ed2d64f39e360715b94",
+      "priority": "cold"
+    },
+    {
+      "id": "qa-windows-electron-smoke",
+      "localPath": "docs/qa/windows-electron-smoke.md",
+      "contentHash": "10c4391f9a05664ec6a89cc3ea3498bd808651395f3dbf61f303030becda80a3",
       "priority": "cold"
     },
     {
@@ -953,7 +959,7 @@
     {
       "id": "release-pipeline",
       "localPath": "docs/RELEASE_PIPELINE.md",
-      "contentHash": "1e051975b899544f90ebb920effef400f41a44ca3735deb6b670f606383dab27",
+      "contentHash": "3f301351f927255c718d74554527e761074256cd45164f4ef65221cf37f0997e",
       "priority": "cold"
     },
     {

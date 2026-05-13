@@ -177,6 +177,9 @@ Manual:
 - Install on a clean Windows VM.
 - Confirm SmartScreen/signing behavior.
 - Confirm microphone permissions and recorder flow.
+- Execute the Windows Electron smoke runbook in
+  [`docs/qa/windows-electron-smoke.md`](qa/windows-electron-smoke.md) before
+  claiming a Windows QA pass.
 
 Current signing note: Windows Authenticode signing is still placeholder until an
 OV/EV certificate is acquired and wired into CI.

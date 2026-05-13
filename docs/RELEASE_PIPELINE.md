@@ -281,6 +281,12 @@ You don't need to update any URL by hand. The `latest` segment auto-tracks which
 
 If you ever want to override it (Vercel edge cache, custom CDN, beta channel), the page also reads `NEXT_PUBLIC_WINDOWS_EXE_URL` from Vercel env first and falls back to the GitHub URL.
 
+Before promoting a Windows artifact, run the Windows Electron smoke checklist in
+[`docs/qa/windows-electron-smoke.md`](qa/windows-electron-smoke.md). The
+SmartScreen and Authenticode rows require the Windows signing secrets and final
+`electron-builder` signing configuration; unsigned release-candidate artifacts
+cannot satisfy those rows.
+
 ---
 
 ## Cheat sheet
