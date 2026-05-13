@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.113] — 2026-05-13
+
+### Other
+- docs(activity-log): append PR #81 + NTFY rundown entries (`605e2eb`)
+
+
 ## [0.1.112] — 2026-05-13
 
 ### Other
