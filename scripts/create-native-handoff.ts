@@ -158,6 +158,7 @@ const runnerCapability = readJson(join(evidenceDir, "runner-capability.json"));
 const nativeBuild = readJson(join(evidenceDir, "native-build.json"));
 const nativeSmoke = readJson(join(evidenceDir, "native-smoke.json"));
 const releaseArtifacts = readJson(join(evidenceDir, "release-artifacts.json"));
+const providerReadiness = readJson(join(evidenceDir, "native-provider-readiness.json"));
 const platforms = enabledNativePlatforms();
 const ids = taskIds(branch);
 const reviewUrl = envOrDefault(
@@ -186,9 +187,10 @@ const packets = [
     owner: "Android runner, physical Android device, or device cloud",
     state: nativeSmokeReadyFor("android"),
     runnerRequirement: "Android SDK, installed app, KVM emulator or attached real device, and Maestro/Appium/Firebase Test Lab equivalent.",
-    command: `pnpm runner:doctor && pnpm test:native:config && NATIVE_BUILD_RUN=1 NATIVE_REQUIRED=1 ANDROID_BUILD_COMMAND="pnpm exec cap sync android && cd android && ./gradlew :app:assembleDebug" pnpm build:native && MAESTRO_RUN=1 NATIVE_REQUIRED=1 pnpm test:native:smoke && pnpm native:handoff && pnpm test:proof`,
+    command: `pnpm runner:doctor && pnpm native:providers && pnpm test:native:config && NATIVE_BUILD_RUN=1 NATIVE_REQUIRED=1 ANDROID_BUILD_COMMAND="pnpm exec cap sync android && cd android && ./gradlew :app:assembleDebug" pnpm build:native && MAESTRO_RUN=1 NATIVE_REQUIRED=1 pnpm test:native:smoke && pnpm native:handoff && pnpm test:proof`,
     expectedArtifacts: [
       ".evidence/runner-capability.json",
+      ".evidence/native-provider-readiness.json",
       ".evidence/native-config.json",
       ".evidence/native-build.json",
       ".evidence/native-smoke.json",
@@ -263,9 +265,10 @@ const packets = [
     owner: "Alfonso Mac or another macOS runner",
     state: nativeSmokeReadyFor("ios"),
     runnerRequirement: "macOS, Xcode, Apple signing/provisioning as needed, and Simulator/TestFlight access.",
-    command: `pnpm runner:doctor && pnpm test:native:config && NATIVE_BUILD_RUN=1 NATIVE_REQUIRED=1 IOS_BUILD_COMMAND="pnpm exec cap sync ios && xcodebuild -project ios/App/App.xcodeproj -scheme ${iosScheme} -configuration Debug -destination '${iosDestination}' build" pnpm build:native && MAESTRO_RUN=1 NATIVE_REQUIRED=1 pnpm test:native:smoke && pnpm native:handoff && pnpm test:proof`,
+    command: `pnpm runner:doctor && pnpm native:providers && pnpm test:native:config && NATIVE_BUILD_RUN=1 NATIVE_REQUIRED=1 IOS_BUILD_COMMAND="pnpm exec cap sync ios && xcodebuild -project ios/App/App.xcodeproj -scheme ${iosScheme} -configuration Debug -destination '${iosDestination}' build" pnpm build:native && MAESTRO_RUN=1 NATIVE_REQUIRED=1 pnpm test:native:smoke && pnpm native:handoff && pnpm test:proof`,
     expectedArtifacts: [
       ".evidence/runner-capability.json",
+      ".evidence/native-provider-readiness.json",
       ".evidence/native-build.json",
       ".evidence/native-smoke.json",
       ".evidence/native-device-handoff.json",
@@ -320,6 +323,7 @@ const payload = {
   sourceEvidence: {
     nativeConfig: nativeConfig ? ".evidence/native-config.json" : null,
     runnerCapability: runnerCapability ? ".evidence/runner-capability.json" : null,
+    providerReadiness: providerReadiness ? ".evidence/native-provider-readiness.json" : null,
     nativeBuild: nativeBuild ? ".evidence/native-build.json" : null,
     nativeSmoke: nativeSmoke ? ".evidence/native-smoke.json" : null,
     releaseArtifacts: releaseArtifacts ? ".evidence/release-artifacts.json" : null,
