@@ -26,6 +26,11 @@ these evidence files:
 dashboard. It does not mean signed, notarized, uploaded, install-tested, or
 production-approved unless those fields are explicitly true.
 
+`native-provider-readiness.json` uses `pass=true` only when at least one native
+proof provider path is ready. A blocked scan still exits successfully when not
+required so the dashboard can record the blocker, but the artifact remains
+`status=blocked` and `pass=false`.
+
 ## Current Metadata
 
 ### iOS

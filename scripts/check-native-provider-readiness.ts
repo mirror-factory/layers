@@ -227,7 +227,8 @@ const recommendedProvider =
 
 const payload = {
   runAt: new Date().toISOString(),
-  pass: !required || readyProviders.length > 0,
+  pass: readyProviders.length > 0,
+  scanCompleted: true,
   required,
   status: readyProviders.length > 0 ? "ready" : "blocked",
   summary: readyProviders.length > 0
@@ -260,4 +261,4 @@ const payload = {
 mkdirSync(dirname(out), { recursive: true });
 writeFileSync(out, `${JSON.stringify(payload, null, 2)}\n`);
 console.log(`[native-provider-readiness] wrote ${out}`);
-if (!payload.pass) process.exit(1);
+if (required && !payload.pass) process.exit(1);

@@ -86,6 +86,13 @@ writes `.evidence/native-evidence-index.json`, which links each native/release
 artifact to the command that produced it and makes blocked emulator attempts
 visible without counting them as green proof.
 
+`pnpm native:providers` is also honest about blocked readiness. On a server with
+no runnable local or cloud provider configured, it writes
+`.evidence/native-provider-readiness.json` with `status=blocked` and
+`pass=false`, while still exiting successfully unless `NATIVE_PROVIDER_REQUIRED=1`
+is set. This lets the control plane show the blocker without treating readiness
+as device proof.
+
 ## iOS And macOS Hold
 
 iOS Simulator, TestFlight, and macOS Electron signing cannot run on this Linux
