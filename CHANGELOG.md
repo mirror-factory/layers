@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.115] — 2026-05-13
+
+### Other
+- Clarify native provider readiness proof (`52ab7af`)
+
+
 ## [0.1.114] — 2026-05-13
 
 ### Other
