@@ -212,6 +212,8 @@ const nextAction = status === "approved"
   ? "Separate reviewer approval is present. Continue merge/release gates."
   : status === "changes-requested"
     ? "Resolve requested changes, rerun proof, and request review again."
+    : requestedReviewers.length
+      ? `Review request is sent to ${requestedReviewers.join(", ")}. Wait for approval or follow up with the requested reviewer${requestedReviewers.length === 1 ? "" : "s"}.`
     : "Request a review from a separate GitHub user with write or review access.";
 
 const payload = {
