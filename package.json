@@ -22,6 +22,7 @@
     "test:proof": "npx tsx scripts/generate-proof-packet.ts",
     "test:native:config": "npx tsx scripts/check-native-config.ts",
     "test:native:smoke": "npx tsx scripts/run-native-smoke.ts",
+    "native:handoff": "npx tsx scripts/create-native-handoff.ts",
     "native:patch": "npx tsx scripts/patch-capacitor-deeplinks.ts",
     "build:native": "npx tsx scripts/run-native-build.ts",
     "build:release": "npx tsx scripts/check-release-artifacts.ts",
