@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.104] — 2026-05-13
+
+### Other
+- Keep pending release artifacts out of Layers proof (`8947949`)
+
+
 ## [0.1.103] — 2026-05-13
 
 ### Other
