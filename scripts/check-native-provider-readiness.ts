@@ -105,6 +105,10 @@ const hasMaestroFlows = dirExists(".maestro") || fileExists("maestro.yaml");
 const hasAndroidApp = fileExists(androidApp);
 const hasIosApp = dirExists(iosApp) || fileExists(iosApp);
 const kvmReady = existsSync("/dev/kvm") && cpuVirtualizationFlags() > 0;
+const androidToolingReady = Boolean(tools.adb && tools.emulator && tools.maestro);
+const localAndroidNextAction = androidToolingReady
+  ? "Expose /dev/kvm to this runner, attach an Android device with ANDROID_SERIAL, or use a device-cloud provider; then run native smoke and copy back native-smoke.json."
+  : "Install adb, Android emulator, and Maestro; then expose /dev/kvm or attach a device before running native smoke and copying back native-smoke.json.";
 
 const providers: Provider[] = [
   provider({
@@ -112,7 +116,7 @@ const providers: Provider[] = [
     label: "Local Android emulator or attached device",
     kind: "local",
     canProve: ["Android runtime smoke", "Android screenshots", "Android video when recorder is configured"],
-    nextAction: "Expose KVM or attach a device, install adb/emulator and Maestro, then run native smoke and copy back native-smoke.json.",
+    nextAction: localAndroidNextAction,
     checks: [
       check("android-app", "Android app artifact", hasAndroidApp, `${androidApp} exists.`, `${androidApp} is missing.`),
       check("adb", "ADB available", Boolean(tools.adb), "adb is available.", "adb is not on PATH."),
