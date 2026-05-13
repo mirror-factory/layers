@@ -167,6 +167,7 @@ const reviewUrl = envOrDefault(
 const androidApp = envOrDefault("NATIVE_HANDOFF_ANDROID_APP", "android/app/build/outputs/apk/debug/app-debug.apk");
 const iosScheme = envOrDefault("NATIVE_HANDOFF_IOS_SCHEME", "App");
 const iosDestination = envOrDefault("NATIVE_HANDOFF_IOS_DESTINATION", "platform=iOS Simulator,name=iPhone 16");
+const maestroSuiteZip = envOrDefault("NATIVE_HANDOFF_MAESTRO_SUITE_ZIP", "maestro-flows.zip");
 const candidateArtifactRoots = (process.env.NATIVE_HANDOFF_ARTIFACT_ROOTS ?? "android/app/build/outputs,ios/App/build,dist,release,out")
   .split(",")
   .map((item) => item.trim())
@@ -198,6 +199,29 @@ const packets = [
     copyBackCommand: `NATIVE_SMOKE_PASS=1 NATIVE_SMOKE_PLATFORM=android NATIVE_SMOKE_DEVICE="<device model>" NATIVE_SMOKE_RUNNER="<runner name>" NATIVE_SMOKE_FLOW="<flow command>" NATIVE_SMOKE_SCREENSHOTS="<screenshot paths or URLs>" NATIVE_SMOKE_VIDEOS="<video paths or URLs>" NATIVE_SMOKE_RUN_URL="<runner URL>" pnpm native:record-smoke && pnpm native:handoff && pnpm test:proof`,
     unblocks: ["auth.google-native", "mobile.safe-area", "native-device proof lanes"],
     dashboardTarget: reviewUrl,
+  },
+  {
+    id: "browserstack-maestro-real-device",
+    label: "BrowserStack Maestro real-device proof",
+    owner: "BrowserStack App Automate account",
+    state: "pending",
+    runnerRequirement: "BrowserStack username/access key, uploaded APK or IPA, zipped Maestro flow suite, and selected real Android/iOS devices.",
+    command: `zip -r ${maestroSuiteZip} .maestro && curl -u "$BROWSERSTACK_USERNAME:$BROWSERSTACK_ACCESS_KEY" -X POST "https://api-cloud.browserstack.com/app-automate/maestro/v2/app" -F "file=@${androidApp}" -F "custom_id=layers-native" && curl -u "$BROWSERSTACK_USERNAME:$BROWSERSTACK_ACCESS_KEY" -X POST "https://api-cloud.browserstack.com/app-automate/maestro/v2/test-suite" -F "file=@${maestroSuiteZip}" -F "custom_id=layers-maestro" && curl -u "$BROWSERSTACK_USERNAME:$BROWSERSTACK_ACCESS_KEY" -X POST "https://api-cloud.browserstack.com/app-automate/maestro/v2/android/build" -H "Content-Type: application/json" -d '{"app":"<bs://app_url>","testSuite":"<bs://test_suite_url>","project":"Layers Native Proof","devices":["Google Pixel 7-13.0"]}'`,
+    expectedArtifacts: [
+      ".evidence/native-smoke.json",
+      "BrowserStack build URL",
+      "real-device screenshots",
+      "real-device video",
+      "device logs or Maestro session logs",
+    ],
+    copyBackCommand: `NATIVE_SMOKE_PASS=1 NATIVE_SMOKE_PLATFORM="<ios or android>" NATIVE_SMOKE_DEVICE="<BrowserStack device and OS>" NATIVE_SMOKE_RUNNER="BrowserStack Maestro" NATIVE_SMOKE_FLOW="BrowserStack App Automate Maestro build" NATIVE_SMOKE_SCREENSHOTS="<BrowserStack screenshot paths or URLs>" NATIVE_SMOKE_VIDEOS="<BrowserStack video paths or URLs>" NATIVE_SMOKE_RUN_URL="<BrowserStack build/session URL>" pnpm native:record-smoke && pnpm native:handoff && pnpm test:proof`,
+    unblocks: ["Android real-device evidence", "iOS real-device evidence", "native-device proof lanes"],
+    dashboardTarget: reviewUrl,
+    docs: [
+      "https://www.browserstack.com/docs/app-automate/maestro",
+      "https://www.browserstack.com/docs/app-automate/api-reference/maestro/apps",
+      "https://www.browserstack.com/docs/app-automate/api-reference/maestro/tests",
+    ],
   },
   {
     id: "firebase-test-lab-android",
@@ -323,9 +347,9 @@ const payload = {
     },
     {
       id: "browserstack-app-automate",
-      label: "BrowserStack App Automate",
-      bestFor: "Real-device Appium coverage when a paid device-cloud account is available.",
-      docs: "https://www.browserstack.com/docs/app-automate/appium/getting-started",
+      label: "BrowserStack App Automate Maestro",
+      bestFor: "Real iOS and Android device proof using Maestro flows when a paid device-cloud account is available.",
+      docs: "https://www.browserstack.com/docs/app-automate/maestro",
     },
     {
       id: "aws-device-farm",
