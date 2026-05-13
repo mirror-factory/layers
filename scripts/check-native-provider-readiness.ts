@@ -36,7 +36,16 @@ const required = process.env.NATIVE_PROVIDER_REQUIRED === "1";
 const androidApp = process.env.NATIVE_PROVIDER_ANDROID_APP ?? "android/app/build/outputs/apk/debug/app-debug.apk";
 const iosApp = process.env.NATIVE_PROVIDER_IOS_APP ?? "ios/App/build/Build/Products/Debug-iphonesimulator/App.app";
 
-function commandPath(command: string): string | null {
+function executablePath(path: string | undefined, relative: string): string | null {
+  if (!path) return null;
+  const candidate = join(path, relative);
+  return existsSync(candidate) ? candidate : null;
+}
+
+function commandPath(command: string, fallbackPaths: Array<string | null> = []): string | null {
+  for (const fallback of fallbackPaths) {
+    if (fallback) return fallback;
+  }
   const result = spawnSync("sh", ["-c", `command -v ${command}`], { cwd, encoding: "utf-8" });
   return result.status === 0 ? result.stdout.trim() || null : null;
 }
@@ -93,8 +102,18 @@ function provider(input: Omit<Provider, "state">): Provider {
 const runnerCapability = readJson(join(cwd, ".evidence", "runner-capability.json"));
 const readiness = (runnerCapability?.readiness ?? {}) as Record<string, unknown>;
 const tools = {
-  adb: commandPath("adb"),
-  emulator: commandPath("emulator"),
+  adb: commandPath("adb", [
+    executablePath(process.env.ANDROID_HOME, "platform-tools/adb"),
+    executablePath(process.env.ANDROID_SDK_ROOT, "platform-tools/adb"),
+  ]),
+  emulator: commandPath("emulator", [
+    executablePath(process.env.ANDROID_HOME, "emulator/emulator"),
+    executablePath(process.env.ANDROID_SDK_ROOT, "emulator/emulator"),
+  ]),
+  sdkmanager: commandPath("sdkmanager", [
+    executablePath(process.env.ANDROID_HOME, "cmdline-tools/latest/bin/sdkmanager"),
+    executablePath(process.env.ANDROID_SDK_ROOT, "cmdline-tools/latest/bin/sdkmanager"),
+  ]),
   gcloud: commandPath("gcloud"),
   maestro: commandPath("maestro"),
   aws: commandPath("aws"),
@@ -105,10 +124,10 @@ const hasMaestroFlows = dirExists(".maestro") || fileExists("maestro.yaml");
 const hasAndroidApp = fileExists(androidApp);
 const hasIosApp = dirExists(iosApp) || fileExists(iosApp);
 const kvmReady = existsSync("/dev/kvm") && cpuVirtualizationFlags() > 0;
-const androidToolingReady = Boolean(tools.adb && tools.emulator && tools.maestro);
+const androidToolingReady = Boolean(tools.adb && tools.emulator && tools.sdkmanager && tools.maestro);
 const localAndroidNextAction = androidToolingReady
   ? "Expose /dev/kvm to this runner, attach an Android device with ANDROID_SERIAL, or use a device-cloud provider; then run native smoke and copy back native-smoke.json."
-  : "Install adb, Android emulator, and Maestro; then expose /dev/kvm or attach a device before running native smoke and copying back native-smoke.json.";
+  : "Install or expose adb, sdkmanager, Android emulator, and Maestro; then expose /dev/kvm or attach a device before running native smoke and copying back native-smoke.json.";
 
 const providers: Provider[] = [
   provider({
@@ -120,6 +139,8 @@ const providers: Provider[] = [
     checks: [
       check("android-app", "Android app artifact", hasAndroidApp, `${androidApp} exists.`, `${androidApp} is missing.`),
       check("adb", "ADB available", Boolean(tools.adb), "adb is available.", "adb is not on PATH."),
+      check("sdkmanager", "Android SDK manager available", Boolean(tools.sdkmanager), "sdkmanager is available.", "sdkmanager is not on PATH."),
+      check("emulator", "Android emulator available", Boolean(tools.emulator), "Android emulator is available.", "Android emulator is not on PATH."),
       check("emulator-or-device", "Emulator host or attached device path", kvmReady || envPresent("ANDROID_SERIAL"), "KVM/device path is present.", "No /dev/kvm and ANDROID_SERIAL is not set."),
       check("maestro", "Maestro available", Boolean(tools.maestro), "Maestro is available.", "Maestro is not on PATH."),
     ],
