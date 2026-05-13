@@ -110,3 +110,54 @@ Event types: `pr-merged`, `pr-opened`, `linear-filed`, `linear-resolved`, `linea
   - `tests/maestro/ios-authed-walk.yml` — walks `/meetings`, `/chat`, `/settings`, `/profile` via `launchApp` between each (cleaner than tapping back-arrow).
 - **Evidence:** 5 fresh iOS Capacitor screenshots in `docs/evidence/2026-05-12-walkthrough/ios-walk-*.png`. Profile page confirms test user UUID `d0b8989a-4cc0-4fe0-aa22-61952f6da63b` + email `qa-walkthrough-2026-05-12@mirrorfactory.ai` rendering authentically. PR #78 auth-aware nav fix verified live on iOS.
 - **Why it matters:** Closes the iOS automation gap. Future QA passes don't need a human to drive the iPhone sim.
+
+### 2026-05-12  ~21:05 ET  —  Claude Opus 4.7 (1M)  —  linear-filed  —  PROD-496 + 3 sub-issues for Brand Kit + Remotion + HTML-in-Canvas skill
+
+- **What:** Goal: stand up a shareable Layers brand kit, a Remotion brand template, and a combined Claude skill for branded video work — all in one push. Created PROD-496 (parent, In Progress) + 3 sub-issues:
+  - [PROD-497](https://linear.app/mirror-factory/issue/PROD-497) — Brand Foundation (narrative, design-kit.html, organic logo variant)
+  - [PROD-498](https://linear.app/mirror-factory/issue/PROD-498) — HTML-in-Canvas playground
+  - [PROD-499](https://linear.app/mirror-factory/issue/PROD-499) — Remotion brand template + combined skill
+- **Linear:** [PROD-496](https://linear.app/mirror-factory/issue/PROD-496)
+- **Why it matters:** Single tracked surface for the brand work — future "where's that brand kit?" / "where's the Remotion template?" lookups land on one ticket tree.
+
+### 2026-05-12  ~21:35 ET  —  Claude Opus 4.7 (1M)  —  doc-shipped  —  Brand Narrative + Design Kit + Playground + Remotion Template + Combined Skill
+
+- **What:** Single push delivering all of PROD-496:
+  - `branding/BRAND_NARRATIVE.md` — 11-section voice + visual + narrative source of truth
+  - `branding/design-kit.html` — self-contained shareable kit (tokens, fonts, three wave colors with live demo, current vs. proposed organic logo side-by-side for approval, voice do/don't, partner-logo gallery)
+  - `branding/htmlcanvas-playground.html` — six live brand-narrative demos in stock Chrome (you-are-the-dot, magnifier, paper-grain stats, CRT terminal, organic-wave generator, context-flow with real LLM logos)
+  - `remotion/scenes/brand-template/` — six-beat 40-second template (ColdOpen → Wedge → FaceToDot → Layers → ContextFlow → Outro) wired into `remotion/Root.tsx` as `BrandTemplate`
+  - `.claude/skills/layers-brand-remotion/SKILL.md` — combined skill bundling brand voice + Layers Remotion patterns + Remotion `<HtmlInCanvas>` patterns with which-effect-for-which-narrative-beat guidance
+- **Constraint honored:** new organic logo is approval-only — `components/layers-logo.tsx`, `components/top-bar.tsx`, and `remotion/components/LayersMark.tsx` are untouched. Other agent's iOS walkthrough surfaces left alone.
+- **Verify:** `pnpm typecheck` clean.
+- **How to view locally:**
+  - Design kit: open `branding/design-kit.html` directly in a browser
+  - Playground: open `branding/htmlcanvas-playground.html` directly in a browser
+  - Remotion: `pnpm video:dev` (opens Studio; pick `BrandTemplate` from the sidebar)
+  - Render a still: `pnpm exec remotion still BrandTemplate out/brand-template-cover.png --frame=480`
+- **Linear:** [PROD-496](https://linear.app/mirror-factory/issue/PROD-496), [PROD-497](https://linear.app/mirror-factory/issue/PROD-497), [PROD-498](https://linear.app/mirror-factory/issue/PROD-498), [PROD-499](https://linear.app/mirror-factory/issue/PROD-499)
+- **Why it matters:** First time the brand has a shareable, agent-readable source of truth. New skill means any future video / branded asset task picks up the voice + tokens + Remotion conventions without a human re-briefing.
+
+### 2026-05-12  ~21:13 ET  —  Claude Opus 4.7 (1M)  —  prod-incident  —  Recording flow crashes on Stop (PROD-500)
+
+- **What:** Maestro recording flow on iOS Capacitor (`tests/maestro/ios-record-meeting.yml`) drove Start → 26s wait → Stop. The Stop tap rendered a page-level error boundary: `Something broke. The page failed to render. Reference: 3452159959`.
+- **Evidence:** `docs/evidence/2026-05-12-walkthrough/ios-rec-{01,02,03,04}*.png`
+- **Linear:** [PROD-500](https://linear.app/mirror-factory/issue/PROD-500)
+- **Why it matters:** 100% repro of the headline workflow failing. Likely empty-audio (sim has no mic) crashing the `finalize` route or the demo-meeting id mismatching the AssemblyAI handoff.
+
+### 2026-05-12  ~21:21 ET  —  Claude Opus 4.7 (1M)  —  linear-filed  —  Cross-Platform QA suite (PROD-501 + 4 children)
+
+- **What:** Built the master Linear QA tree per the user's spec — one parent + per-platform children, each with the full checkable checklist + platform-only extras (notifications, code-signing, deep-links, etc.).
+- **Linear:**
+  - Master [PROD-501](https://linear.app/mirror-factory/issue/PROD-501)
+  - Web [PROD-502](https://linear.app/mirror-factory/issue/PROD-502)
+  - iOS [PROD-503](https://linear.app/mirror-factory/issue/PROD-503)
+  - Android [PROD-504](https://linear.app/mirror-factory/issue/PROD-504)
+  - macOS [PROD-505](https://linear.app/mirror-factory/issue/PROD-505)
+  - Windows (deferred) [PROD-506](https://linear.app/mirror-factory/issue/PROD-506)
+- **Why it matters:** Replaces the ad-hoc walks with a structured rolling suite. Each row commented + ticked with screenshot + video proof. Pass-rate visible at the master level.
+
+### 2026-05-12  ~21:30 ET  —  Claude Opus 4.7 (1M)  —  doc-shipped  —  `.claude/skills/cross-platform-qa/SKILL.md`
+
+- **What:** Dual-format playbook — Section 1 is the agent procedure (machine-runnable, references Maestro flows + adb commands + claude-in-chrome MCP); Section 2 is the human runbook. Both reference PROD-501.
+- **Why it matters:** The next agent (Codex / Cursor / future Claude) or human tester opens this and can run the suite without re-deriving the setup.
