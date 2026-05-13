@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.114] — 2026-05-13
+
+### Other
+- Harden native release evidence semantics (`48e5e3a`)
+
+
 ## [0.1.113] — 2026-05-13
 
 ### Other
