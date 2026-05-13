@@ -141,10 +141,12 @@ if (requestedPass) {
 
 const pass = requestedPass && missing.length === 0;
 const state = pass ? "green" : requestedPass ? "blocked" : "failed";
+const status = pass ? "passed" : requestedPass ? "blocked" : "failed";
 const payload = {
   runAt: new Date().toISOString(),
   pass,
-  status: state,
+  nativeProofSatisfied: pass,
+  status,
   skipped: false,
   required,
   source: "native-smoke-record",
@@ -163,6 +165,7 @@ const payload = {
   artifacts: artifacts.map(artifactFor),
   notes,
   missing,
+  proofBoundary: "This file satisfies native/device proof only when pass=true and device, runner, flow command, screenshot, video, and run URL/log/artifact evidence are all present.",
 };
 
 mkdirSync(dirname(out), { recursive: true });

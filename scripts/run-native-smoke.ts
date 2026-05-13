@@ -16,6 +16,22 @@ function write(payload: Record<string, unknown>) {
   console.log(`[native-smoke] wrote ${out}`);
 }
 
+function skippedPayload(reason: string, extra: Record<string, unknown> = {}) {
+  const blocked = required;
+  return {
+    runAt: new Date().toISOString(),
+    pass: false,
+    nativeProofSatisfied: false,
+    status: blocked ? "blocked" : "pending",
+    state: blocked ? "blocked" : "pending",
+    skipped: true,
+    required,
+    reason,
+    proofBoundary: "Skipped native smoke is coordination evidence only. It does not satisfy native/device proof until a real simulator, device, or device-cloud run records device identity, screenshot, video, and a run URL or logs.",
+    ...extra,
+  };
+}
+
 function enabledNativePlatforms(): string[] {
   if (!existsSync(profilePath)) return [];
   const profile = JSON.parse(readFileSync(profilePath, "utf-8")) as {
@@ -31,49 +47,39 @@ if (platforms.length === 0) {
   write({
     runAt: new Date().toISOString(),
     pass: true,
+    nativeProofSatisfied: false,
+    status: "not-applicable",
+    state: "not-applicable",
     skipped: true,
+    required: false,
     reason: "No native platforms enabled in .ai-dev-kit/project-profile.json.",
+    proofBoundary: "No native proof is required because this project profile has no enabled native platforms.",
   });
   process.exit(0);
 }
 
 if (!existsSync(join(cwd, ".maestro"))) {
-  write({
-    runAt: new Date().toISOString(),
-    pass: !required,
-    skipped: true,
-    required,
+  write(skippedPayload("Native platforms are enabled, but .maestro flows are not installed yet.", {
     platforms,
-    reason: "Native platforms are enabled, but .maestro flows are not installed yet.",
-  });
+  }));
   if (required) process.exit(1);
   process.exit(0);
 }
 
 if (!shouldRun) {
-  write({
-    runAt: new Date().toISOString(),
-    pass: !required,
-    skipped: true,
-    required,
+  write(skippedPayload("MAESTRO_RUN is not set to 1.", {
     platforms,
-    reason: "MAESTRO_RUN is not set to 1.",
-  });
+  }));
   if (required) process.exit(1);
   process.exit(0);
 }
 
 const version = spawnSync("maestro", ["--version"], { cwd, encoding: "utf-8" });
 if (version.status !== 0) {
-  write({
-    runAt: new Date().toISOString(),
-    pass: !required,
-    skipped: true,
-    required,
+  write(skippedPayload("maestro CLI is not installed on this machine.", {
     platforms,
-    reason: "maestro CLI is not installed on this machine.",
     stderr: version.stderr?.slice(-4000),
-  });
+  }));
   if (required) process.exit(1);
   process.exit(0);
 }
@@ -93,6 +99,9 @@ const exitCode = typeof result.status === "number" ? result.status : 1;
 write({
   runAt: new Date().toISOString(),
   pass: exitCode === 0,
+  nativeProofSatisfied: exitCode === 0,
+  status: exitCode === 0 ? "passed" : "failed",
+  state: exitCode === 0 ? "green" : "failed",
   skipped: false,
   required,
   platforms,
@@ -100,6 +109,7 @@ write({
   exitCode,
   stdout: result.stdout.slice(-20_000),
   stderr: result.stderr.slice(-20_000),
+  proofBoundary: "This is direct native smoke proof only when Maestro ran against an installed app on a real device, simulator, emulator, or approved device-cloud session.",
 });
 
 if (result.stdout) process.stdout.write(result.stdout);

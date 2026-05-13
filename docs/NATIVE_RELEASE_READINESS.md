@@ -6,6 +6,26 @@ Scope: iOS TestFlight and Google Play internal testing prep without Apple or Goo
 
 Repository note: the root `.gitignore` ignores `/ios/` and `/android/`. Native changes in those directories exist on disk but will not appear in normal `git status`; commit them with an explicit force-add or update the ignore policy when native artifacts are meant to be tracked.
 
+## Evidence Contract
+
+Native/release status is not inferred from build output alone. The harness uses
+these evidence files:
+
+| Command | Evidence | Release meaning |
+| --- | --- | --- |
+| `pnpm runner:doctor` | `.evidence/runner-capability.json` | Runner readiness only. |
+| `pnpm native:providers` | `.evidence/native-provider-readiness.json` | Which local, Mac, Android, and device-cloud proof paths are ready or blocked. |
+| `pnpm test:native:config` | `.evidence/native-config.json` | Static Capacitor/bundle/deep-link config proof only. |
+| `pnpm test:native:smoke` | `.evidence/native-smoke.json` | Passing native proof only when a real device, emulator, simulator, or approved device cloud run records device identity, screenshot, video, and run URL/log evidence. A skipped file is pending coordination evidence, not proof. |
+| `pnpm native:record-smoke` | `.evidence/native-smoke.json` | Copy-back command for external device proof. |
+| `pnpm build:release` | `.evidence/release-artifacts.json` | Artifact discovery, reviewable internal artifact proof, or production release readiness depending on explicit signing/notarization/upload/review fields. |
+| `pnpm native:evidence-index` | `.evidence/native-evidence-index.json` | Reviewer-facing index of native evidence files, commands, statuses, and proof boundaries. |
+| `pnpm native:handoff` | `.evidence/native-device-handoff.json` | Copy-back runbook for Mac, Android, BrowserStack, Firebase Test Lab, Maestro Cloud, AWS Device Farm, and release runner paths. |
+
+`reviewable-internal-artifact` means an artifact can be inspected through the
+dashboard. It does not mean signed, notarized, uploaded, install-tested, or
+production-approved unless those fields are explicitly true.
+
 ## Current Metadata
 
 ### iOS

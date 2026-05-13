@@ -70,8 +70,21 @@ NATIVE_BUILD_RUN=1 NATIVE_REQUIRED=1 \
   ANDROID_BUILD_COMMAND="npx cap sync android && cd android && ./gradlew assembleDebug" \
   pnpm build:native
 NATIVE_REQUIRED=1 MAESTRO_RUN=1 pnpm test:native:smoke
+pnpm native:evidence-index
 pnpm test:proof
 ```
+
+If `pnpm test:native:smoke` is skipped because `MAESTRO_RUN` is not set, the
+resulting `.evidence/native-smoke.json` is intentionally marked
+`status=pending`, `pass=false`, and `nativeProofSatisfied=false`. That file is
+coordination evidence, not device proof. Use `pnpm native:record-smoke` after a
+real device, emulator, simulator, or device-cloud run to write passing native
+proof with device identity, screenshot, video, and run URL/log evidence.
+
+Run `pnpm native:evidence-index` after native/release evidence changes. It
+writes `.evidence/native-evidence-index.json`, which links each native/release
+artifact to the command that produced it and makes blocked emulator attempts
+visible without counting them as green proof.
 
 ## iOS And macOS Hold
 

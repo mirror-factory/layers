@@ -160,6 +160,8 @@ const nativeBuild = readJson(join(evidenceDir, "native-build.json"));
 const nativeSmoke = readJson(join(evidenceDir, "native-smoke.json"));
 const releaseArtifacts = readJson(join(evidenceDir, "release-artifacts.json"));
 const providerReadiness = readJson(join(evidenceDir, "native-provider-readiness.json"));
+const nativeEvidenceIndex = readJson(join(evidenceDir, "native-evidence-index.json"));
+const androidEmulatorAttempt = readJson(join(evidenceDir, "android-emulator-proof", "attempt.json"));
 const platforms = enabledNativePlatforms();
 const ids = taskIds(branch);
 const reviewUrl = envOrDefault(
@@ -281,10 +283,10 @@ const packets = [
   },
   {
     id: "signed-release-packages",
-    label: "Signed desktop/mobile release packages",
+    label: "Signed or reviewable release packages",
     owner: "Release runner with signing credentials",
     state: signedReleaseReady(),
-    runnerRequirement: "Signing certificates, notarization/store credentials, and install/open verification on the target platform.",
+    runnerRequirement: "Signing certificates, notarization/store credentials, or an explicitly reviewable internal artifact plus install/open verification on the target platform.",
     command: "RELEASE_ARTIFACTS_REQUIRED=1 pnpm build:release && pnpm native:handoff && pnpm test:proof",
     expectedArtifacts: [
       ".evidence/release-artifacts.json",
@@ -378,10 +380,18 @@ const payload = {
     nativeConfig: nativeConfig ? ".evidence/native-config.json" : null,
     runnerCapability: runnerCapability ? ".evidence/runner-capability.json" : null,
     providerReadiness: providerReadiness ? ".evidence/native-provider-readiness.json" : null,
+    nativeEvidenceIndex: nativeEvidenceIndex ? ".evidence/native-evidence-index.json" : null,
+    androidEmulatorAttempt: androidEmulatorAttempt ? ".evidence/android-emulator-proof/attempt.json" : null,
     nativeBuild: nativeBuild ? ".evidence/native-build.json" : null,
     nativeSmoke: nativeSmoke ? ".evidence/native-smoke.json" : null,
     releaseArtifacts: releaseArtifacts ? ".evidence/release-artifacts.json" : null,
   },
+  blockedAttemptEvidence: androidEmulatorAttempt ? {
+    path: ".evidence/android-emulator-proof/attempt.json",
+    status: androidEmulatorAttempt.status ?? androidEmulatorAttempt.state ?? "blocked",
+    summary: androidEmulatorAttempt.summary ?? androidEmulatorAttempt.reason ?? "CT100 Android emulator attempt did not produce device proof.",
+    proofBoundary: "This is blocked attempt evidence. It explains why CT100 did not produce native/device proof and must not be counted as a passing native lane."
+  } : null,
   packets,
   runbook: {
     title: "Native and release proof runbook",

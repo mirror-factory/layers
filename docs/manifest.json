@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-05-10T11:04:53.317Z",
+  "generatedAt": "2026-05-13T13:47:06.823Z",
   "docs": [
     {
       "id": "ai-harness-tiers",
@@ -899,7 +899,7 @@
     {
       "id": "native-release-readiness",
       "localPath": "docs/NATIVE_RELEASE_READINESS.md",
-      "contentHash": "c0ab1a81fa01a16ef6ae1513f86d62c50c0f307cbd462c6881b92eb9947cfa2b",
+      "contentHash": "9fb649ee1c9b91933ba56e0eef99676d2e344998bdee94fd4f6cb16f4f7b795d",
       "priority": "cold"
     },
     {
@@ -953,7 +953,7 @@
     {
       "id": "release-pipeline",
       "localPath": "docs/RELEASE_PIPELINE.md",
-      "contentHash": "1e051975b899544f90ebb920effef400f41a44ca3735deb6b670f606383dab27",
+      "contentHash": "f6e86104726ff8b968a5444d45637573c173bc57b4f8c02a4fc4a17ba5ee6a24",
       "priority": "cold"
     },
     {
@@ -977,7 +977,7 @@
     {
       "id": "self-hosted-runners",
       "localPath": "docs/SELF_HOSTED_RUNNERS.md",
-      "contentHash": "0f9890b9ca4c858d7f537e3f47965c03c5471363cc18e9d7548bf4cc046c7b26",
+      "contentHash": "dbb4e0929447c424ea54ab23f079ab881c7d3c9d0165075d718d9c4495f41f84",
       "priority": "cold"
     },
     {

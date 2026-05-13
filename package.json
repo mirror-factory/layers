@@ -23,6 +23,7 @@
     "test:native:config": "npx tsx scripts/check-native-config.ts",
     "test:native:smoke": "npx tsx scripts/run-native-smoke.ts",
     "native:providers": "npx tsx scripts/check-native-provider-readiness.ts",
+    "native:evidence-index": "npx tsx scripts/index-native-evidence.ts",
     "native:record-smoke": "npx tsx scripts/record-native-smoke.ts",
     "native:handoff": "npx tsx scripts/create-native-handoff.ts",
     "native:patch": "npx tsx scripts/patch-capacitor-deeplinks.ts",

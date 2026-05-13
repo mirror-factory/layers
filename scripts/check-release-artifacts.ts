@@ -9,7 +9,8 @@ const signed = process.env.RELEASE_SIGNED === '1';
 const notarized = process.env.RELEASE_NOTARIZED === '1';
 const storeUpload = process.env.RELEASE_STORE_UPLOAD === '1';
 const releaseReviewable = process.env.RELEASE_REVIEWABLE === '1';
-const releaseReady = process.env.RELEASE_READY === '1' || signed || notarized || storeUpload || releaseReviewable;
+const releaseReady = process.env.RELEASE_READY === '1' || signed || notarized || storeUpload;
+const releaseProofSatisfied = releaseReady || releaseReviewable;
 const roots = [
   'dist',
   'release',
@@ -49,27 +50,40 @@ const artifacts = roots.flatMap(listFiles)
   .sort((a, b) => a.path.localeCompare(b.path))
   .slice(0, 500);
 
+const status = artifacts.length === 0
+  ? required ? 'blocked' : 'pending'
+  : releaseReady
+    ? 'release-ready'
+    : releaseReviewable
+      ? 'reviewable-internal-artifact'
+      : 'artifact-discovery-only';
+
 mkdirSync(evidenceDir, { recursive: true });
 const out = join(evidenceDir, 'release-artifacts.json');
 writeFileSync(out, JSON.stringify({
   runAt: new Date().toISOString(),
-  pass: artifacts.length > 0 || !required,
-  status: releaseReady ? 'release-ready' : artifacts.length > 0 ? 'pending' : required ? 'blocked' : 'pending',
+  pass: required ? artifacts.length > 0 && releaseProofSatisfied : artifacts.length > 0 || !required,
+  status,
   required,
   signed,
   notarized,
   storeUpload,
   releaseReviewable,
   releaseReady,
-  releaseStatus: process.env.RELEASE_STATUS ?? (releaseReady ? (releaseReviewable && !signed && !notarized && !storeUpload ? 'reviewable-internal-artifact' : 'release-ready') : 'artifact-discovery-only'),
+  productionReleaseReady: releaseReady,
+  releaseProofSatisfied,
+  releaseStatus: process.env.RELEASE_STATUS ?? status,
   uploadStatus: process.env.RELEASE_UPLOAD_STATUS ?? null,
   reviewUrl: process.env.RELEASE_REVIEW_URL ?? null,
   artifactCount: artifacts.length,
   artifacts,
+  proofBoundary: "Reviewable internal artifacts are build-review evidence only. They do not prove signing, notarization, store upload, install/open behavior, or production release approval unless those fields are explicitly true.",
 }, null, 2) + '\n');
 console.log(`[release-artifacts] wrote ${out}`);
 
-if (artifacts.length === 0 && required) {
-  console.error('[release-artifacts] no release/native artifacts found.');
+if (required && (artifacts.length === 0 || !releaseProofSatisfied)) {
+  console.error(artifacts.length === 0
+    ? '[release-artifacts] no release/native artifacts found.'
+    : '[release-artifacts] artifacts found, but no signed, notarized, uploaded, release-ready, or explicitly reviewable proof was recorded.');
   process.exit(1);
 }

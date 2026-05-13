@@ -183,6 +183,17 @@ function releaseArtifactReady(payload: Record<string, unknown>): boolean {
     || /\b(signed|notarized|uploaded|reviewable|release-ready|green)\b/.test(statusText);
 }
 
+function genericEvidenceIssue(rel: string, payload: Record<string, unknown>): { failed?: string; pending?: string } {
+  const status = stringField(payload, "status").toLowerCase();
+  if (payload.skipped === true || status === "pending" || status === "not-applicable") {
+    return { pending: `${rel} (${status || "skipped"})` };
+  }
+  if (status === "blocked" || status === "failed" || status === "fail") {
+    return { failed: `${rel} (${status})` };
+  }
+  return {};
+}
+
 function releaseEvidenceIssue(rel: string, payload: Record<string, unknown>): { failed?: string; pending?: string } {
   if (!rel.endsWith("release-artifacts.json")) return {};
 
@@ -226,9 +237,12 @@ function evidenceState(lane: ProofLane, root: string): { satisfied: boolean | nu
           continue;
         }
         const releaseIssue = releaseEvidenceIssue(rel, parsed);
+        const genericIssue = releaseIssue.failed || releaseIssue.pending ? {} : genericEvidenceIssue(rel, parsed);
         if (releaseIssue.failed) invalid.push(releaseIssue.failed);
         if (releaseIssue.pending) pending.push(releaseIssue.pending);
-        if (!releaseIssue.failed && parsed.pass === false) invalid.push(`${rel} (failed)`);
+        if (genericIssue.failed) invalid.push(genericIssue.failed);
+        if (genericIssue.pending) pending.push(genericIssue.pending);
+        if (!releaseIssue.failed && !releaseIssue.pending && !genericIssue.failed && !genericIssue.pending && parsed.pass === false) invalid.push(`${rel} (failed)`);
       }
     } catch {
       invalid.push(`${rel} (unreadable)`);
