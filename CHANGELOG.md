@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.109] — 2026-05-13
+
+### Other
+- Clarify Android native proof blocker (`1e06e1d`)
+
+
 ## [0.1.108] — 2026-05-13
 
 ### Other
