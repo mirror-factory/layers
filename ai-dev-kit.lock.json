@@ -1,19 +1,50 @@
 {
   "$schema": "https://mirror-factory.dev/ai-dev-kit.lock.schema.json",
-  "version": "0.2.22",
-  "generatedAt": "2026-05-09T00:00:00.000Z",
+  "version": "0.5.0",
+  "generatedAt": "2026-05-13T01:34:39.403Z",
   "modules": {
-    "core": { "installed": true, "version": "0.2.22" },
-    "gateway": { "installed": true, "version": "0.2.22" },
-    "sandbox": { "installed": true, "version": "0.2.22" },
-    "workflow": { "installed": true, "version": "0.2.22" },
-    "connectors": { "installed": true, "version": "0.2.22" },
-    "observability": { "installed": true, "version": "0.2.22" },
-    "dashboard": { "installed": true, "version": "0.2.22" }
+    "core": {
+      "installed": true,
+      "version": "0.5.0"
+    },
+    "gateway": {
+      "installed": true,
+      "version": "0.5.0"
+    },
+    "sandbox": {
+      "installed": true,
+      "version": "0.5.0"
+    },
+    "workflow": {
+      "installed": true,
+      "version": "0.5.0"
+    },
+    "connectors": {
+      "installed": true,
+      "version": "0.5.0"
+    },
+    "observability": {
+      "installed": true,
+      "version": "0.5.0"
+    },
+    "dashboard": {
+      "installed": true,
+      "version": "0.5.0"
+    }
   },
-  "tools": ["registries", "playwright", "expect", "tiered-verification"],
-  "evalSuites": ["vitest.eval.config.ts"],
-  "connectors": ["mcp", "control-plane"],
+  "tools": [
+    "registries",
+    "playwright",
+    "expect",
+    "tiered-verification"
+  ],
+  "evalSuites": [
+    "vitest.eval.config.ts"
+  ],
+  "connectors": [
+    "mcp",
+    "control-plane"
+  ],
   "schemaVersion": 1,
   "contextBudget": {
     "T1": 500,

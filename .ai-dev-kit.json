@@ -1,6 +1,6 @@
 {
-  "version": "0.2.22",
-  "installedAt": "2026-04-21T02:48:39.851Z",
+  "version": "0.5.0",
+  "installedAt": "2026-05-13T01:34:39.403Z",
   "modules": [
     "core",
     "gateway",
