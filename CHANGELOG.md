@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.115] — 2026-05-13
+
+### Other
+- feat(qa): Cross-Platform QA suite — Linear master/children + dual-format SKILL.md (`f82274e`)
+
+
 ## [0.1.114] — 2026-05-13
 
 ### Other
