@@ -90,3 +90,23 @@ Event types: `pr-merged`, `pr-opened`, `linear-filed`, `linear-resolved`, `linea
 
 - **What:** Pushed condensed rundown to NTFY topic `layers-mf-08ebf1d1` (msg id `d2uSyX3fYwlK`). Default action on "give me a rundown" requests going forward.
 - **Why it matters:** User receives push notifications on phone/desktop and can scroll back through them historically.
+
+### 2026-05-12  ~20:33 ET  —  Claude Opus 4.7 (1M)  —  prod-incident  —  /sign-in loop in Capacitor iOS
+
+- **What:** While walking iOS authed surfaces I had set `CAPACITOR_SERVER_URL=https://layers.mirrorfactory.ai/sign-in` to land the app on the form. After a successful Google OAuth attempt the WebView reloaded from `server.url` and bounced back to /sign-in → /record → reload → loop.
+- **User-visible:** Tapping "Continue with Google" looped infinitely.
+- **Mitigation:** Reverted Capacitor's `server.url` to root, rebuilt + reinstalled. Loop gone.
+- **Lesson:** Don't pin `server.url` to a non-root path for Capacitor sims — OAuth round-trip lands on a different path than what the WebView reloads to.
+
+### 2026-05-12  ~20:38 ET  —  Claude Opus 4.7 (1M)  —  config-change  —  Maestro CLI installed
+
+- **What:** `brew install --formula mobile-dev-inc/tap/maestro` (v2.5.1) — UI testing CLI for iOS sim. Replaces the gap where `xcrun simctl` has no `tap` subcommand.
+- **Why it matters:** iOS sim now scriptable end-to-end (sign-in, navigation, screenshot). Mirrors Android's `adb shell input tap` capability.
+
+### 2026-05-12  ~20:42 ET  —  Claude Opus 4.7 (1M)  —  session-checkpoint  —  iOS Capacitor authed walk done via Maestro
+
+- **What:** Wrote two flows:
+  - `tests/maestro/ios-signin-test-user.yml` — full sign-in drive (hamburger → Sign in → form fill → Enter to submit). Avoids `hideKeyboard` because it taps off-keyboard and accidentally hits the "Create an account" link.
+  - `tests/maestro/ios-authed-walk.yml` — walks `/meetings`, `/chat`, `/settings`, `/profile` via `launchApp` between each (cleaner than tapping back-arrow).
+- **Evidence:** 5 fresh iOS Capacitor screenshots in `docs/evidence/2026-05-12-walkthrough/ios-walk-*.png`. Profile page confirms test user UUID `d0b8989a-4cc0-4fe0-aa22-61952f6da63b` + email `qa-walkthrough-2026-05-12@mirrorfactory.ai` rendering authentically. PR #78 auth-aware nav fix verified live on iOS.
+- **Why it matters:** Closes the iOS automation gap. Future QA passes don't need a human to drive the iPhone sim.

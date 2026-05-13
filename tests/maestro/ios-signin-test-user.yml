@@ -1,0 +1,32 @@
+# Maestro flow: sign in to the iOS Capacitor app as the QA test user.
+# Run: PATH=/opt/homebrew/opt/openjdk@21/bin:$PATH maestro --device <UDID> test tests/maestro/ios-signin-test-user.yml
+
+appId: com.mirrorfactory.audiolayer
+---
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 8000
+# Open hamburger menu — aria-label is "Open menu" per components/public-site-nav.tsx
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 2000
+# Tap the "Sign in" link in the menu drawer.
+- tapOn: "Sign in"
+- waitForAnimationToEnd:
+    timeout: 4000
+- assertVisible: "Sign in to Layers"
+# Fill the form
+- tapOn:
+    text: "you@example.com"
+- inputText: "qa-walkthrough-2026-05-12@mirrorfactory.ai"
+- tapOn:
+    text: "Your password"
+- inputText: "LayersQA2026!Walkthrough"
+# Submit via the form's Enter key (Go on iOS keyboard) — avoids tapping
+# around the page where a stray Create-an-account link can hijack
+# navigation to /sign-up.
+- pressKey: Enter
+- waitForAnimationToEnd:
+    timeout: 10000
+- takeScreenshot: ios-signin-success.png
