@@ -146,8 +146,9 @@ function signedReleaseReady(): "ready" | "pending" | "blocked" {
   const explicitReady = releaseArtifacts.signed === true
     || releaseArtifacts.notarized === true
     || releaseArtifacts.releaseReady === true
+    || releaseArtifacts.releaseReviewable === true
     || releaseArtifacts.storeUpload === true
-    || /\b(signed|notarized|uploaded|release-ready|green)\b/.test(statusText);
+    || /\b(signed|notarized|uploaded|reviewable|release-ready|green)\b/.test(statusText);
   return explicitReady ? "ready" : "pending";
 }
 
@@ -291,7 +292,7 @@ const packets = [
       ".evidence/proof-packet.json",
       "signed APK/AAB, IPA, DMG, EXE/MSI, or ZIP artifacts with checksums",
     ],
-    copyBackCommand: `RELEASE_ARTIFACTS_REQUIRED=1 RELEASE_SIGNED=1 RELEASE_NOTARIZED=1 RELEASE_STORE_UPLOAD=1 RELEASE_READY=1 RELEASE_STATUS=release-ready RELEASE_UPLOAD_STATUS="<store, notarization, or release URL>" pnpm build:release && pnpm native:handoff && pnpm test:proof`,
+    copyBackCommand: `RELEASE_ARTIFACTS_REQUIRED=1 RELEASE_REVIEWABLE=1 RELEASE_REVIEW_URL="<dashboard artifact URL>" RELEASE_STATUS=reviewable-internal-artifact RELEASE_UPLOAD_STATUS="<store, notarization, release URL, or review URL>" pnpm build:release && pnpm native:handoff && pnpm test:proof`,
     unblocks: ["release.artifacts", "production release approval"],
     dashboardTarget: reviewUrl,
   },

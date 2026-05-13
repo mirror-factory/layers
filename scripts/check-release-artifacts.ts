@@ -8,7 +8,8 @@ const required = process.env.RELEASE_ARTIFACTS_REQUIRED === '1';
 const signed = process.env.RELEASE_SIGNED === '1';
 const notarized = process.env.RELEASE_NOTARIZED === '1';
 const storeUpload = process.env.RELEASE_STORE_UPLOAD === '1';
-const releaseReady = process.env.RELEASE_READY === '1' || signed || notarized || storeUpload;
+const releaseReviewable = process.env.RELEASE_REVIEWABLE === '1';
+const releaseReady = process.env.RELEASE_READY === '1' || signed || notarized || storeUpload || releaseReviewable;
 const roots = [
   'dist',
   'release',
@@ -58,9 +59,11 @@ writeFileSync(out, JSON.stringify({
   signed,
   notarized,
   storeUpload,
+  releaseReviewable,
   releaseReady,
-  releaseStatus: process.env.RELEASE_STATUS ?? (releaseReady ? 'release-ready' : 'artifact-discovery-only'),
+  releaseStatus: process.env.RELEASE_STATUS ?? (releaseReady ? (releaseReviewable && !signed && !notarized && !storeUpload ? 'reviewable-internal-artifact' : 'release-ready') : 'artifact-discovery-only'),
   uploadStatus: process.env.RELEASE_UPLOAD_STATUS ?? null,
+  reviewUrl: process.env.RELEASE_REVIEW_URL ?? null,
   artifactCount: artifacts.length,
   artifacts,
 }, null, 2) + '\n');

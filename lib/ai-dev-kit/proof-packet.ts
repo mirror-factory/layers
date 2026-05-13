@@ -374,8 +374,9 @@ function releaseArtifactReady(payload: Record<string, unknown>): boolean {
   return payload.signed === true
     || payload.notarized === true
     || payload.releaseReady === true
+    || payload.releaseReviewable === true
     || payload.storeUpload === true
-    || /\b(signed|notarized|uploaded|release-ready|green)\b/.test(statusText);
+    || /\b(signed|notarized|uploaded|reviewable|release-ready|green)\b/.test(statusText);
 }
 
 function stateForArtifact(cwd: string, artifactPath: string): 'green' | 'blocked' | 'pending' | undefined {

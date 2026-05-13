@@ -178,8 +178,9 @@ function releaseArtifactReady(payload: Record<string, unknown>): boolean {
   return payload.signed === true
     || payload.notarized === true
     || payload.releaseReady === true
+    || payload.releaseReviewable === true
     || payload.storeUpload === true
-    || /\b(signed|notarized|uploaded|release-ready|green)\b/.test(statusText);
+    || /\b(signed|notarized|uploaded|reviewable|release-ready|green)\b/.test(statusText);
 }
 
 function releaseEvidenceIssue(rel: string, payload: Record<string, unknown>): { failed?: string; pending?: string } {
@@ -190,10 +191,10 @@ function releaseEvidenceIssue(rel: string, payload: Record<string, unknown>): { 
     return { failed: `${rel} (${status || "failed"})` };
   }
   if (status === "pending" || payload.skipped === true) {
-    return { pending: `${rel} (pending signed/notarized/uploaded release proof)` };
+    return { pending: `${rel} (pending signed/notarized/uploaded/reviewable release proof)` };
   }
   if (payload.pass === true || status === "ready" || status === "pass" || status === "green" || status === "release-ready") {
-    return releaseArtifactReady(payload) ? {} : { pending: `${rel} (pending signed/notarized/uploaded release proof)` };
+    return releaseArtifactReady(payload) ? {} : { pending: `${rel} (pending signed/notarized/uploaded/reviewable release proof)` };
   }
 
   return {};
