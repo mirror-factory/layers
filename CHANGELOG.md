@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.116] — 2026-05-14
+
+### Other
+- feat(brand): narrative + shareable design kit + HTML-in-Canvas playground + cached vendor SVGs (PROD-497, PROD-498) (`6c23a7a`)
+
+
 ## [0.1.115] — 2026-05-13
 
 ### Other
