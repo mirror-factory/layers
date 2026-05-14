@@ -92,6 +92,17 @@ Available runtime skills. Claude Code skills live in `.claude/skills/`; Codex sh
 | product-validation | name: product-validation | .claude/skills/product-validation/SKILL.md |
 | visual-qa | Verify UI changes didn't break layout, styling, or functionality on desktop and  | .claude/skills/visual-qa/SKILL.md |
 | wire-telemetry | Ensure every AI call has proper observability. Use when writing or modifying cod | .claude/skills/wire-telemetry/SKILL.md |
+| layers-brand-remotion | Layers-branded video / motion / Remotion / HTML-in-Canvas / organic wave / design kit | .claude/skills/layers-brand-remotion/SKILL.md |
+
+### Brand kit
+
+When working on visual / video / branded-asset surfaces, read these **before** writing code:
+
+- [`branding/BRAND_NARRATIVE.md`](./branding/BRAND_NARRATIVE.md) — voice + visual + narrative source of truth (the 11-section "who Layers is for / wedge / end state / mark / colors / motion / voice / real-logo policy" doc).
+- [`branding/design-kit.html`](./branding/design-kit.html) — shareable kit. Anchored on a faithful `SessionCaptureCard` replica. Tokens, typography, the three signature wave colors, motion, current vs. proposed organic-arc logo, buttons / pills / forms / chat / data / icons / loading.
+- [`branding/htmlcanvas-playground.html`](./branding/htmlcanvas-playground.html) — six live brand-narrative demos: Atrium (Three.js GPGPU particles), magnifier, paper-grain stat card, CRT terminal, organic wave generator, context flow with real LLM logos.
+- [`branding/icons/`](./branding/icons/) + [`public/brand-icons/`](./public/brand-icons/) — cached real vendor SVGs (Claude, OpenAI, Gemini, Cursor, Anthropic, MCP from LobeHub; Linear, Notion from SimpleIcons). **Never approximate** — use these or fetch via the context.dev MCP.
+- [`remotion/scenes/brand-template/`](./remotion/scenes/brand-template/) — six-beat brand template (`BrandTemplate` composition). Reuse via fork; mirror sub-folder structure for new videos.
 
 ---
 
