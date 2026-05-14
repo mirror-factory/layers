@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.118] — 2026-05-14
+
+### Other
+- feat(skills): layers-brand-remotion — brand voice + Layers Remotion patterns + HTML-in-Canvas playbook in one skill (PROD-499) (`8bf63cf`)
+
+
 ## [0.1.117] — 2026-05-14
 
 ### Other
