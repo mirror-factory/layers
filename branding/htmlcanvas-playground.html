@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Layers — Brand Playground</title>
+<meta name="description" content="Interactive WebGL+Canvas demos that act out the Layers brand narrative. Stock Chrome — no Canary required. Three.js + postprocessing via importmap." />
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.169.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.169.0/examples/jsm/",
+    "postprocessing": "https://unpkg.com/postprocessing@6.36.0/build/index.js"
+  }
+}
+</script>
+<style>
+  :root {
+    --layers-mint:         oklch(0.68 0.13 166);
+    --layers-mint-soft:    oklch(0.82 0.10 168);
+    --layers-mint-tint:    oklch(0.95 0.04 168);
+    --layers-violet:       oklch(0.66 0.16 282);
+    --layers-violet-soft:  oklch(0.78 0.13 282);
+    --layers-violet-tint:  oklch(0.95 0.03 284);
+    --layers-blue:         oklch(0.66 0.13 240);
+    --layers-blue-soft:    oklch(0.80 0.09 240);
+    --layers-blue-tint:    oklch(0.94 0.03 240);
+
+    --wave-indigo:         rgba(99, 102, 241, 1);
+    --wave-violet:         rgba(196, 181, 253, 1);
+    --wave-mint:           rgba(52, 211, 153, 1);
+
+    --bg-page:             oklch(0.982 0.012 168);
+    --bg-surface:          oklch(0.997 0.004 168);
+    --bg-surface-muted:    oklch(0.972 0.014 168);
+
+    --ink:                 oklch(0.22 0.035 256);
+    --fg-muted:            oklch(0.46 0.025 256);
+    --fg-faint:            oklch(0.62 0.025 256);
+
+    --border-default:      oklch(0.84 0.024 168 / 0.74);
+    --border-subtle:       oklch(0.84 0.024 168 / 0.46);
+
+    --radius-card: 24px;
+    --radius-md: 10px;
+    --radius-pill: 9999px;
+
+    --motion-fast:     140ms cubic-bezier(0.22, 1, 0.36, 1);
+    --motion-standard: 220ms cubic-bezier(0.22, 1, 0.36, 1);
+
+    --font-display: "Iowan Old Style", "Charter", "Georgia", serif;
+    --font-ui: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", ui-sans-serif, sans-serif;
+    --font-mono: "JetBrains Mono", "SF Mono", "Menlo", ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-ui);
+    color: var(--ink);
+    background: var(--bg-page);
+    background-image:
+      radial-gradient(ellipse at 50% 12%, var(--layers-mint-tint) 0%, transparent 55%),
+      radial-gradient(circle at 90% 88%, var(--layers-violet-tint) 0%, transparent 35%);
+    background-attachment: fixed;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 56px 32px 96px; }
+  h1, h2, h3 { letter-spacing: -0.02em; margin: 0; }
+  h1 { font-size: clamp(36px, 5.5vw, 56px); font-weight: 600; line-height: 1.05; }
+  h1 em { font-style: normal; font-weight: 600; color: var(--layers-mint); }
+  h2 { font-size: 28px; font-weight: 600; }
+  .lede { font-size: 19px; line-height: 1.5; color: var(--fg-muted); max-width: 64ch; margin-top: 12px; }
+  .pill { display: inline-block; padding: 4px 10px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 600; letter-spacing: 0.04em; background: var(--layers-mint-tint); color: oklch(0.34 0.12 166); border: 1px solid color-mix(in oklch, var(--layers-mint) 40%, transparent); }
+  .meta { color: var(--fg-muted); font-size: 13.5px; font-family: var(--font-mono); }
+
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 24px; margin: -56px -32px 56px;
+    background: color-mix(in oklch, var(--bg-surface) 80%, transparent);
+    backdrop-filter: blur(12px) saturate(120%);
+    border-bottom: 1px solid var(--border-subtle);
+    position: sticky; top: 0; z-index: 10;
+  }
+  .topbar .brand { display: flex; align-items: center; gap: 12px; font-weight: 600; }
+  .topbar .brand .wordmark { font-family: var(--font-ui); font-weight: 600; font-size: 18px; letter-spacing: -0.01em; }
+  .topbar nav { display: flex; gap: 16px; font-size: 13.5px; color: var(--fg-muted); flex-wrap: wrap; }
+  .topbar nav a { color: inherit; text-decoration: none; transition: color var(--motion-fast); }
+  .topbar nav a:hover { color: var(--ink); }
+
+  /* Hero */
+  section.hero { margin-bottom: 64px; }
+
+  /* Demo card */
+  .demo {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    margin-bottom: 36px;
+  }
+  .demo header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  }
+  .demo header .titles { flex: 1; min-width: 240px; }
+  .demo header .titles .num { font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-faint); margin-bottom: 2px; }
+  .demo header .titles h2 { font-size: 22px; }
+  .demo header .titles .caption { color: var(--fg-muted); font-size: 14px; margin-top: 4px; }
+
+  .demo .body {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 0;
+  }
+  @media (max-width: 900px) { .demo .body { grid-template-columns: 1fr; } }
+  .demo .stage {
+    padding: 26px;
+    background: var(--bg-page);
+    border-right: 1px solid var(--border-subtle);
+    min-height: 360px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  @media (max-width: 900px) { .demo .stage { border-right: 0; border-bottom: 1px solid var(--border-subtle); } }
+  .demo pre {
+    margin: 0;
+    padding: 22px 24px;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    line-height: 1.55;
+    background: var(--bg-surface-muted);
+    overflow: auto;
+    max-height: 520px;
+  }
+  .demo pre code .k { color: var(--layers-violet); }
+  .demo pre code .s { color: oklch(0.4 0.13 166); }
+  .demo pre code .c { color: var(--fg-faint); font-style: italic; }
+
+  .controls {
+    display: flex; gap: 14px; flex-wrap: wrap;
+    margin-top: 14px;
+  }
+  .controls label { font-size: 12.5px; color: var(--fg-muted); display: flex; align-items: center; gap: 8px; }
+  .controls input[type="range"] { accent-color: var(--layers-mint); }
+  .controls select { font: inherit; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border-default); background: var(--bg-surface); color: var(--ink); }
+  .controls button {
+    font: inherit; font-weight: 500; padding: 6px 14px; border-radius: var(--radius-pill);
+    border: 1px solid var(--border-default); background: var(--bg-surface); color: var(--ink); cursor: pointer;
+  }
+  .controls button.primary { background: var(--ink); color: var(--bg-page); border-color: var(--ink); }
+  .controls button:hover { background: var(--bg-surface-muted); }
+  .controls button.primary:hover { background: oklch(0.3 0.035 256); }
+
+  /* Demo 1 stage — Atrium (Three.js GPGPU particles) */
+  .demo .stage.is-atrium { padding: 0; background: oklch(0.13 0.025 250); }
+  .stage-atrium { position: relative; width: 100%; height: 100%; min-height: 360px; background: oklch(0.13 0.025 250); overflow: hidden; }
+  .stage-atrium canvas { position: absolute !important; inset: 0; display: block; width: 100% !important; height: 100% !important; }
+  .stage-atrium .atrium-loading {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    color: oklch(0.7 0.04 240); font-family: var(--font-mono); font-size: 12.5px; letter-spacing: 0.08em;
+    pointer-events: none;
+  }
+  .stage-atrium .atrium-fallback {
+    position: absolute; inset: 0;
+    display: none;
+    align-items: center; justify-content: center;
+    color: oklch(0.75 0.06 166); font-family: var(--font-mono); font-size: 12px; padding: 24px; text-align: center;
+  }
+  .stage-atrium .atrium-fallback.visible { display: flex; }
+  .stage-atrium .atrium-legend {
+    position: absolute; left: 18px; bottom: 14px;
+    display: flex; gap: 14px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.04em;
+    color: oklch(0.78 0.05 240); pointer-events: none; z-index: 2;
+  }
+  .stage-atrium .atrium-legend i { width: 7px; height: 7px; border-radius: 50%; display: inline-block; margin-right: 5px; vertical-align: 1px; }
+
+  /* Demo 2 stage — magnifier */
+  .stage-mag { width: 100%; height: 360px; }
+  .stage-mag canvas { display: block; width: 100%; height: 100%; border-radius: 14px; }
+
+  /* Demo 3 stage — paper stat card */
+  .stage-stat { width: 100%; height: 360px; padding: 18px; display: flex; align-items: center; justify-content: center; background: oklch(0.94 0.012 168); }
+  .paper-sheet {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 22px 26px 26px;
+    width: 100%; max-width: 480px;
+    box-shadow: 0 24px 60px -36px oklch(0.2 0.04 240 / 0.45);
+    position: relative;
+    overflow: hidden;
+  }
+  .paper-sheet::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 12% 18%, transparent 70%, oklch(0.7 0.02 80 / 0.06) 90%),
+                radial-gradient(circle at 85% 78%, transparent 70%, oklch(0.7 0.02 80 / 0.05) 88%);
+    pointer-events: none;
+    /* fine grain via repeating gradient */
+  }
+  .paper-sheet h3 { font-family: var(--font-ui); font-weight: 700; font-size: 26px; letter-spacing: -0.015em; margin-bottom: 14px; }
+  .paper-sheet .bars { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; align-items: end; height: 180px; padding: 0 4px; }
+  .paper-sheet .bar { background-color: oklch(0.86 0.018 240); background-image: radial-gradient(circle at 50% 50%, oklch(0.97 0.012 240 / 0.5) 1.4px, transparent 1.5px); background-size: 5.5px 5.5px; border-radius: 4px 4px 0 0; transition: height 600ms var(--motion-standard); }
+  .paper-sheet .bar.brand { background-color: var(--layers-blue); background-image: radial-gradient(circle at 50% 50%, oklch(0.96 0.04 240 / 0.55) 1.4px, transparent 1.5px); }
+  .paper-sheet .x-axis { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; padding: 8px 4px 0; font-family: var(--font-mono); font-size: 11.5px; color: var(--fg-muted); text-align: center; border-top: 1px solid var(--border-subtle); margin-top: 4px; }
+
+  /* Demo 4 stage — CRT terminal */
+  .stage-crt { width: 100%; height: 360px; display: flex; align-items: center; justify-content: center; background: oklch(0.16 0.02 240); padding: 14px; }
+  .crt-screen {
+    position: relative; width: 100%; height: 100%; max-width: 600px;
+    background: oklch(0.14 0.02 256);
+    border-radius: 22px;
+    overflow: hidden;
+    color: oklch(0.9 0.08 166);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.55;
+    padding: 22px 22px 26px;
+    box-shadow: inset 0 0 80px oklch(0 0 0 / 0.6);
+    transform: perspective(900px) rotateX(2.3deg);
+  }
+  .crt-screen::before {
+    /* Aperture grille + scanlines */
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      repeating-linear-gradient(0deg,
+        oklch(0 0 0 / 0.13) 0px, oklch(0 0 0 / 0.13) 1px,
+        transparent 1px, transparent 3px),
+      repeating-linear-gradient(90deg,
+        oklch(0.7 0.16 26 / 0.04) 0px, oklch(0.7 0.16 26 / 0.04) 1px,
+        oklch(0.7 0.20 166 / 0.04) 1px, oklch(0.7 0.20 166 / 0.04) 2px,
+        oklch(0.7 0.16 240 / 0.04) 2px, oklch(0.7 0.16 240 / 0.04) 3px);
+    pointer-events: none;
+    mix-blend-mode: overlay;
+  }
+  .crt-screen::after {
+    /* Vignette */
+    content: "";
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 50%, transparent 55%, oklch(0 0 0 / 0.4) 90%);
+    pointer-events: none;
+  }
+  .crt-screen .line { white-space: pre-wrap; }
+  .crt-screen .prompt { color: var(--layers-mint-soft); }
+  .crt-screen .out { color: oklch(0.92 0 0); }
+  .crt-screen .cursor { display: inline-block; width: 7px; height: 14px; background: var(--layers-mint); vertical-align: -2px; animation: blink 1s steps(2,end) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* Demo 5 stage — wave generator */
+  .stage-wave { width: 100%; height: 360px; padding: 18px; display: flex; flex-direction: column; align-items: stretch; justify-content: center; background: var(--bg-page); }
+  .stage-wave canvas { width: 100%; flex: 1; min-height: 200px; border-radius: 14px; }
+
+  /* Demo 6 stage — context flow */
+  .stage-flow { width: 100%; height: 360px; position: relative; }
+  .stage-flow svg { width: 100%; height: 100%; display: block; }
+  .flow-label { position: absolute; font-family: var(--font-mono); font-size: 11px; color: var(--fg-muted); pointer-events: none; }
+
+  footer { color: var(--fg-muted); font-size: 13px; margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border-subtle); }
+  footer a { color: var(--layers-violet); text-decoration: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .crt-screen .cursor { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <svg id="topbar-mark" class="organic-mark" width="28" height="28" viewBox="0 0 64 64" aria-hidden="true">
+      <g>
+        <path class="ring outer"  fill="none" stroke="var(--layers-blue)"   stroke-width="3" stroke-linecap="round"></path>
+        <path class="ring middle" fill="none" stroke="var(--layers-violet)" stroke-width="3" stroke-linecap="round"></path>
+        <circle cx="32" cy="32" r="9" fill="var(--layers-mint)" opacity="0.22"></circle>
+        <circle cx="32" cy="32" r="4.4" fill="var(--layers-mint)"></circle>
+      </g>
+    </svg>
+    <span class="wordmark">Layers</span>
+    <span class="pill">Brand Playground</span>
+  </div>
+  <nav>
+    <a href="./design-kit.html">Design Kit</a>
+    <a href="./BRAND_NARRATIVE.md">Narrative</a>
+    <a href="#d1">Dot</a>
+    <a href="#d2">Magnifier</a>
+    <a href="#d3">Paper card</a>
+    <a href="#d4">Terminal</a>
+    <a href="#d5">Wave</a>
+    <a href="#d6">Context flow</a>
+  </nav>
+</header>
+
+<div class="wrap">
+
+<section class="hero">
+  <span class="pill">Six demos · Stock Chrome · Steal the patterns</span>
+  <h1 style="margin-top: 14px;">Acting out the <em>brand</em>, in HTML.</h1>
+  <p class="lede">
+    Six live demos that walk through the Layers narrative: you, the dot; layers accumulating; context flowing out to the LLM tools you already use. Each demo's source is on the right — copy it. The Remotion brand template lifts the same ideas at video resolution and adds <code style="font-family: var(--font-mono);">&lt;HtmlInCanvas&gt;</code> shader passes on top.
+  </p>
+</section>
+
+<!-- ============================================================
+     DEMO 1 — "Atrium" (Three.js GPGPU particles + bloom)
+     ============================================================ -->
+<article class="demo" id="d1">
+  <header>
+    <div class="titles">
+      <div class="num">01 · Atrium</div>
+      <h2>You are the still point.</h2>
+      <div class="caption">~65k layers of context curl around you on a GPU flow field, decelerating into orbits around the mint dot. Three.js GPGPU position+velocity textures, bloom and chromatic-aberration post-processing.</div>
+    </div>
+    <div class="controls">
+      <button id="d1-restart">Restart</button>
+    </div>
+  </header>
+  <div class="body">
+    <div class="stage is-atrium">
+      <div class="stage-atrium" id="d1-stage">
+        <div class="atrium-loading">Booting WebGL…</div>
+        <div class="atrium-fallback" id="d1-fallback">
+          WebGL2 unavailable in this browser. Try a recent Chrome to see the GPGPU particles in motion.
+        </div>
+        <div class="atrium-legend">
+          <span><i style="background: rgba(99,102,241,1);"></i>context layers</span>
+          <span><i style="background: rgba(196,181,253,1);"></i>active</span>
+          <span><i style="background: rgba(52,211,153,1);"></i>you</span>
+        </div>
+      </div>
+    </div>
+<pre><code><span class="c">// Atrium — Three.js GPGPU particles. ~65k positions in a 256x256 RGBA32F
+// texture, advected by a curl-noise velocity texture each frame.</span>
+
+<span class="k">import</span> * <span class="k">as</span> THREE <span class="k">from</span> <span class="s">'three'</span>;
+<span class="k">import</span> { GPUComputationRenderer } <span class="k">from</span>
+  <span class="s">'three/addons/misc/GPUComputationRenderer.js'</span>;
+<span class="k">import</span> { EffectComposer, RenderPass, EffectPass,
+         BloomEffect, ChromaticAberrationEffect } <span class="k">from</span> <span class="s">'postprocessing'</span>;
+
+<span class="c">// Velocity update: curl-noise advection + radial gravity well at the mint dot.</span>
+<span class="k">const</span> VELOCITY_SHADER = <span class="s">`
+  uniform float uTime;
+  void main() {
+    vec2 uv = gl_FragCoord.xy / resolution.xy;
+    vec4 vel = texture2D(textureVelocity, uv);
+    vec4 pos = texture2D(texturePosition, uv);
+    vec3 p3 = vec3(pos.xy * 0.5, uTime * 0.04);
+    vec3 c  = curl(p3);                  // 3D curl-noise field
+    vel.xy += c.xy * 0.045;              // flow
+    vec2 r  = -pos.xy;                   // pull toward 0,0
+    vel.xy += normalize(r) * smoothstep(0.0, 2.5, length(pos.xy)) * 0.032;
+    vel.xy *= 0.962;                     // damping
+    gl_FragColor = vel;
+  }
+`</span>;
+<span class="c">// Particles use additive blending + per-particle indigo/violet/mint tint,
+// then everything passes through Bloom + ChromaticAberration via postprocessing.</span></code></pre>
+  </div>
+</article>
+
+<!-- ============================================================
+     DEMO 2 — Magnifier over a transcript
+     ============================================================ -->
+<article class="demo" id="d2">
+  <header>
+    <div class="titles">
+      <div class="num">02 · Magnifier over a transcript</div>
+      <h2>Move your cursor over the page to magnify what you read.</h2>
+      <div class="caption">A live meeting transcript. The lens warps the page underneath — same idea as the Remotion <code style="font-family: var(--font-mono);">MagnifyingGlass</code> shader, but in stock Canvas2D.</div>
+    </div>
+  </header>
+  <div class="body">
+    <div class="stage">
+      <div class="stage-mag">
+        <canvas id="d2-canvas"></canvas>
+      </div>
+    </div>
+<pre><code><span class="c">// Magnifier — render text into an offscreen canvas, then drawImage with
+// a scaled crop into a circular clip. drawImage() is enough — no shader needed.</span>
+
+const off = new OffscreenCanvas(W, H);
+const oc = off.getContext('2d');
+paintTranscript(oc);   <span class="c">// serif paragraph, paper background</span>
+
+function paint(mx, my) {
+  ctx.clearRect(0, 0, W, H);
+  ctx.drawImage(off, 0, 0);                <span class="c">// page</span>
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(mx, my, R, 0, Math.PI * 2);      <span class="c">// lens</span>
+  ctx.clip();
+  const zoom = 1.9;
+  const sw = R * 2 / zoom, sh = R * 2 / zoom;
+  ctx.drawImage(off,
+    mx - sw / 2, my - sh / 2, sw, sh,      <span class="c">// source crop</span>
+    mx - R, my - R, R * 2, R * 2);          <span class="c">// dest = lens</span>
+  ctx.restore();
+  drawLensChrome(mx, my);                  <span class="c">// rim + highlight</span>
+}</code></pre>
+  </div>
+</article>
+
+<!-- ============================================================
+     DEMO 3 — Paper-grain stat card
+     ============================================================ -->
+<article class="demo" id="d3">
+  <header>
+    <div class="titles">
+      <div class="num">03 · Paper-grain stat card</div>
+      <h2>One bar in Layers blue. Five quieter bars. Paper grain on top.</h2>
+      <div class="caption">The proof-card pattern. Same shape as the Remotion paper-grain demo — CSS radial-gradient halftone and the blue accent on the freshest bar.</div>
+    </div>
+    <div class="controls">
+      <button id="d3-replay">Replay</button>
+    </div>
+  </header>
+  <div class="body">
+    <div class="stage stage-stat">
+      <div class="paper-sheet">
+        <h3>Hours of context, captured</h3>
+        <div class="bars" id="d3-bars">
+          <div class="bar" style="height: 0;"></div>
+          <div class="bar" style="height: 0;"></div>
+          <div class="bar" style="height: 0;"></div>
+          <div class="bar" style="height: 0;"></div>
+          <div class="bar" style="height: 0;"></div>
+          <div class="bar brand" style="height: 0;"></div>
+        </div>
+        <div class="x-axis">
+          <div>Dec</div><div>Jan</div><div>Feb</div><div>Mar</div><div>Apr</div><div>May</div>
+        </div>
+      </div>
+    </div>
+<pre><code><span class="c">// CSS-only halftone bars + paper grain.
+// .bar { background-color: <span class="s">oklch(0.86 0.018 240)</span>;
+//        background-image: radial-gradient(circle, white 1.4px, transparent 1.5px);
+//        background-size: 5.5px 5.5px; }
+// .bar.brand swaps background-color to <span class="s">var(--layers-blue)</span>.</span>
+
+const targets = [42, 48, 55, 64, 78, 100];   <span class="c">// % heights</span>
+const bars = document.querySelectorAll('#d3-bars .bar');
+function play() {
+  bars.forEach((bar, i) =&gt; {
+    bar.style.height = '0%';
+    setTimeout(() =&gt; { bar.style.height = targets[i] + '%'; }, 90 + i * 90);
+  });
+}
+play();</code></pre>
+  </div>
+</article>
+
+<!-- ============================================================
+     DEMO 4 — CRT terminal
+     ============================================================ -->
+<article class="demo" id="d4">
+  <header>
+    <div class="titles">
+      <div class="num">04 · CRT terminal — a claude-code session</div>
+      <h2>Code reveals dressed up like a CRT.</h2>
+      <div class="caption">Stock CSS: aperture-grille scanlines via repeating-linear-gradient, vignette via radial-gradient, perspective rotate. No shader required.</div>
+    </div>
+  </header>
+  <div class="body">
+    <div class="stage stage-crt">
+      <div class="crt-screen" id="d4-screen">
+        <div class="line"><span class="prompt">~/layers $</span> <span id="d4-typed"></span><span class="cursor"></span></div>
+        <div class="line out" id="d4-out" style="opacity: 0; margin-top: 6px;"></div>
+      </div>
+    </div>
+<pre><code><span class="c">/* CRT scanlines + aperture grille — CSS only */</span>
+.crt-screen::before {
+  background:
+    <span class="c">/* horizontal scanlines */</span>
+    repeating-linear-gradient(0deg,
+      rgba(0,0,0,0.13) 0px, rgba(0,0,0,0.13) 1px,
+      transparent 1px, transparent 3px),
+    <span class="c">/* aperture grille — R/G/B columns */</span>
+    repeating-linear-gradient(90deg,
+      rgba(255,0,30,0.04)  0px, rgba(255,0,30,0.04)  1px,
+      rgba(30,255,80,0.04) 1px, rgba(30,255,80,0.04) 2px,
+      rgba(30,80,255,0.04) 2px, rgba(30,80,255,0.04) 3px);
+  mix-blend-mode: overlay;
+}
+.crt-screen { transform: perspective(900px) rotateX(2.3deg); }</code></pre>
+  </div>
+</article>
+
+<!-- ============================================================
+     DEMO 5 — Organic wave generator
+     ============================================================ -->
+<article class="demo" id="d5">
+  <header>
+    <div class="titles">
+      <div class="num">05 · Organic wave generator</div>
+      <h2>The three signature colors, breathing.</h2>
+      <div class="caption">The same waveform that plays in the app's recorder (<code style="font-family: var(--font-mono);">components/audio-wave-ribbon.tsx</code>). Sliders for level, motion, and texture so you can feel what each parameter does.</div>
+    </div>
+    <div class="controls">
+      <label>Level <input type="range" id="d5-level" min="0" max="100" value="55" /></label>
+      <label>Motion <input type="range" id="d5-motion" min="20" max="180" value="100" /></label>
+      <label>Texture <select id="d5-texture"><option value="clean" selected>clean</option><option value="mesh">mesh</option></select></label>
+    </div>
+  </header>
+  <div class="body">
+    <div class="stage stage-wave">
+      <canvas id="d5-canvas"></canvas>
+      <div class="meta" style="margin-top: 12px; text-align: center;">
+        <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--wave-indigo);vertical-align:-1px;"></span> indigo
+        &nbsp;·&nbsp;
+        <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--wave-violet);vertical-align:-1px;"></span> violet-soft
+        &nbsp;·&nbsp;
+        <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--wave-mint);vertical-align:-1px;"></span> mint
+      </div>
+    </div>
+<pre><code><span class="c">// yAt(x) layers three sines + an undertow.
+// Phases advance with seconds * motion. This is a 1:1 port of
+// audio-wave-ribbon.tsx, so anything tuned here transfers to the product.</span>
+const drift = Math.sin(n * Math.PI * 1.62 + phaseA * 0.72 + offset);
+const weave = Math.sin(n * Math.PI * 4.15 - phaseB * 0.68 + offset * 0.55);
+const fine  = Math.sin(n * Math.PI * 8.8  + phaseA * 0.58 + offset * 0.18);
+const undertow = Math.sin(n * Math.PI * 0.86 - phaseC + offset * 0.4)
+               * amplitude * 0.16;
+return centerY
+     + drift    * amplitude * 0.56
+     + weave    * amplitude * 0.34
+     + fine     * amplitude * 0.035
+     + undertow;</code></pre>
+  </div>
+</article>
+
+<!-- ============================================================
+     DEMO 6 — Context flow
+     ============================================================ -->
+<article class="demo" id="d6">
+  <header>
+    <div class="titles">
+      <div class="num">06 · Context flows out</div>
+      <h2>One central library. Every LLM you already use.</h2>
+      <div class="caption">The Layers mint dot at center. Organic curves connecting to Claude, ChatGPT, Gemini, Cursor — the tools where the work actually happens.</div>
+    </div>
+  </header>
+  <div class="body">
+    <div class="stage">
+      <div class="stage-flow">
+        <svg viewBox="0 0 600 360" id="d6-svg" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+          <defs>
+            <radialGradient id="d6-halo" cx="50%" cy="50%" r="50%">
+              <stop offset="0" stop-color="var(--layers-mint)" stop-opacity="0.45" />
+              <stop offset="1" stop-color="var(--layers-mint)" stop-opacity="0" />
+            </radialGradient>
+            <filter id="d6-glow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="3" />
+            </filter>
+          </defs>
+
+          <!-- Halo behind center dot -->
+          <circle cx="300" cy="180" r="80" fill="url(#d6-halo)" />
+
+          <!-- Center: Layers dot -->
+          <g>
+            <circle class="ring outer"  cx="300" cy="180" r="0" fill="none" stroke="var(--layers-blue)"   stroke-width="2.2" />
+            <circle class="ring middle" cx="300" cy="180" r="0" fill="none" stroke="var(--layers-violet)" stroke-width="2.2" />
+            <circle cx="300" cy="180" r="11" fill="var(--layers-mint)" />
+          </g>
+
+          <!-- Flow paths to vendors (populated by JS so they breathe) -->
+          <g id="d6-paths"></g>
+
+          <!-- Vendor logos (positioned by JS) -->
+          <g id="d6-logos"></g>
+        </svg>
+      </div>
+    </div>
+<pre><code><span class="c">// Organic flow curves — one per destination.
+// Each path is a smooth bezier from the Layers dot to a vendor logo,
+// with a sine-perturbed control point so the line breathes.</span>
+
+const vendors = [
+  { name: 'Claude',   x: 120, y:  60, color: '#cc785c' },
+  { name: 'ChatGPT',  x: 480, y:  60, color: '#10a37f' },
+  { name: 'Gemini',   x: 120, y: 300, color: '#7c5cff' },
+  { name: 'Cursor',   x: 480, y: 300, color: '#0b0c0e' },
+];
+
+function curve(v, t) {
+  const mx = (300 + v.x) / 2;
+  const my = (180 + v.y) / 2 + Math.sin(t * 1.4 + v.x) * 14;
+  return `M 300 180 Q ${mx} ${my} ${v.x} ${v.y}`;
+}
+<span class="c">// Stroke each curve with the wave-indigo color and a soft halo (drawn first).</span></code></pre>
+  </div>
+</article>
+
+<footer>
+  Layers Brand Playground · Stock Chrome · Pair with
+  <a href="./design-kit.html">design-kit.html</a>,
+  <a href="./BRAND_NARRATIVE.md">BRAND_NARRATIVE.md</a>, and
+  <a href="../remotion/scenes/brand-template/">remotion/scenes/brand-template/</a>.
+</footer>
+
+</div>
+
+<script>
+/* =================================================================
+ * Shared helpers
+ * ================================================================= */
+const TAU = Math.PI * 2;
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const lerp = (a, b, t) => a + (b - a) * Math.max(0, Math.min(1, t));
+
+/* Organic ring path (used by the topbar logo + Demo 1 + Demo 6) */
+function organicPath({ cx = 32, cy = 32, baseR, amp, lobesA, lobesB, phase, samples = 96 }) {
+  const pts = [];
+  for (let i = 0; i <= samples; i++) {
+    const t = (i / samples) * TAU;
+    const r = baseR + amp * 0.62 * Math.sin(lobesA * t + phase)
+                    + amp * 0.38 * Math.sin(lobesB * t - phase * 1.7);
+    pts.push([cx + r * Math.cos(t), cy + r * Math.sin(t)]);
+  }
+  let d = `M ${pts[0][0].toFixed(2)} ${pts[0][1].toFixed(2)}`;
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[i - 1] || pts[pts.length - 2];
+    const p1 = pts[i];
+    const p2 = pts[i + 1];
+    const p3 = pts[i + 2] || pts[1];
+    const cp1x = p1[0] + (p2[0] - p0[0]) / 6;
+    const cp1y = p1[1] + (p2[1] - p0[1]) / 6;
+    const cp2x = p2[0] - (p3[0] - p1[0]) / 6;
+    const cp2y = p2[1] - (p3[1] - p1[1]) / 6;
+    d += ` C ${cp1x.toFixed(2)} ${cp1y.toFixed(2)}, ${cp2x.toFixed(2)} ${cp2y.toFixed(2)}, ${p2[0].toFixed(2)} ${p2[1].toFixed(2)}`;
+  }
+  return d + ' Z';
+}
+
+// Open semi-circle organic arc — matches the original logo's open-arc family.
+function organicArc({ cx = 32, cy = 32, baseR, amp, lobesA, lobesB, phase,
+                      startAngle = -Math.PI / 2, endAngle = Math.PI / 2, samples = 64 }) {
+  const pts = [];
+  for (let i = 0; i <= samples; i++) {
+    const t = i / samples;
+    const θ = startAngle + (endAngle - startAngle) * t;
+    const r = baseR + amp * 0.62 * Math.sin(lobesA * θ + phase)
+                    + amp * 0.38 * Math.sin(lobesB * θ - phase * 1.7);
+    pts.push([cx + r * Math.cos(θ), cy + r * Math.sin(θ)]);
+  }
+  let d = `M ${pts[0][0].toFixed(2)} ${pts[0][1].toFixed(2)}`;
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[i - 1] || pts[i];
+    const p1 = pts[i];
+    const p2 = pts[i + 1];
+    const p3 = pts[i + 2] || pts[i + 1];
+    const cp1x = p1[0] + (p2[0] - p0[0]) / 6;
+    const cp1y = p1[1] + (p2[1] - p0[1]) / 6;
+    const cp2x = p2[0] - (p3[0] - p1[0]) / 6;
+    const cp2y = p2[1] - (p3[1] - p1[1]) / 6;
+    d += ` C ${cp1x.toFixed(2)} ${cp1y.toFixed(2)}, ${cp2x.toFixed(2)} ${cp2y.toFixed(2)}, ${p2[0].toFixed(2)} ${p2[1].toFixed(2)}`;
+  }
+  return d;
+}
+
+/* Topbar logo animation */
+(function () {
+  const svg = document.getElementById('topbar-mark');
+  if (!svg) return;
+  const outer  = svg.querySelector('.ring.outer');
+  const middle = svg.querySelector('.ring.middle');
+  function paint(t) {
+    const phase = reducedMotion ? 0 : t * 0.00065;
+    outer.setAttribute('d',  organicArc({ baseR: 22.0, amp: 1.7, lobesA: 3, lobesB: 5, phase }));
+    middle.setAttribute('d', organicArc({ baseR: 13.5, amp: 1.4, lobesA: 4, lobesB: 6, phase: phase + 1.2 }));
+    if (!reducedMotion) requestAnimationFrame(paint);
+  }
+  requestAnimationFrame(paint);
+})();
+
+/* Demo 1 (Atrium) runs as a separate ES module below the page —
+ * see the <script type="module"> block at the end of <body>. */
+
+/* =================================================================
+ * Demo 2 — Magnifier
+ * ================================================================= */
+(function () {
+  const canvas = document.getElementById('d2-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  let W = 0, H = 0;
+  let off = document.createElement('canvas');
+  let oc = off.getContext('2d');
+  let mouse = { x: 240, y: 180, has: false };
+  const R = 78;
+  const ZOOM = 1.85;
+
+  const lines = [
+    'Q4 pricing review — Thursday.',
+    '',
+    'We are holding current tiers. The team agreed to revisit after onboarding',
+    'data lands in the first two weeks of June. Sara is tracking a customer',
+    'concern raised in the Onboarding kickoff — Layers will surface the related',
+    'meeting note next time anyone opens a Claude chat about pricing.',
+    '',
+    'Three follow-ups: ship pricing-comparison doc, send recap to legal,',
+    'add a flag in Layers so the next pricing question routes to this thread.',
+  ];
+
+  function resize() {
+    const rect = canvas.getBoundingClientRect();
+    W = Math.floor(rect.width);
+    H = Math.floor(rect.height);
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    off.width = canvas.width;
+    off.height = canvas.height;
+    oc.setTransform(dpr, 0, 0, dpr, 0, 0);
+    paintPage();
+    draw();
+  }
+
+  function paintPage() {
+    // Paper
+    oc.fillStyle = 'oklch(0.97 0.012 168)';
+    oc.fillRect(0, 0, W, H);
+
+    // Subtle paper grain
+    oc.save();
+    oc.globalAlpha = 0.06;
+    for (let i = 0; i < 380; i++) {
+      oc.fillStyle = i % 3 === 0 ? 'oklch(0.5 0.04 80)' : 'oklch(0.3 0.04 256)';
+      oc.fillRect(Math.random() * W, Math.random() * H, 1, 1);
+    }
+    oc.restore();
+
+    // Title
+    oc.fillStyle = 'oklch(0.22 0.035 256)';
+    oc.font = '600 18px "Iowan Old Style", "Charter", Georgia, serif';
+    oc.fillText('Pricing tier review — 2026-05-09', 32, 38);
+
+    // Body
+    oc.font = '15px "Iowan Old Style", "Charter", Georgia, serif';
+    oc.fillStyle = 'oklch(0.28 0.03 256)';
+    let y = 70;
+    for (const line of lines) {
+      oc.fillText(line, 32, y);
+      y += 26;
+    }
+
+    // Highlight band over "Layers will surface the related meeting note"
+    const highlightX = 32, highlightY = 152, highlightW = 412, highlightH = 22;
+    oc.save();
+    oc.globalCompositeOperation = 'multiply';
+    oc.fillStyle = 'rgb(255, 235, 90)';
+    oc.fillRect(highlightX, highlightY - 16, highlightW, highlightH);
+    oc.restore();
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    ctx.drawImage(off, 0, 0, W, H);
+
+    if (!mouse.has) return;
+
+    // Magnifier shadow
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(mouse.x + 3, mouse.y + 6, R, 0, TAU);
+    ctx.fillStyle = 'oklch(0.2 0.04 240 / 0.18)';
+    ctx.filter = 'blur(10px)';
+    ctx.fill();
+    ctx.restore();
+
+    // Lens content
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(mouse.x, mouse.y, R, 0, TAU);
+    ctx.clip();
+
+    const sw = (R * 2) / ZOOM;
+    const sh = (R * 2) / ZOOM;
+    ctx.drawImage(
+      off,
+      (mouse.x - sw / 2) * dpr, (mouse.y - sh / 2) * dpr,
+      sw * dpr, sh * dpr,
+      mouse.x - R, mouse.y - R,
+      R * 2, R * 2,
+    );
+
+    // Subtle inner highlight
+    const grad = ctx.createRadialGradient(mouse.x - R * 0.35, mouse.y - R * 0.4, 0, mouse.x, mouse.y, R);
+    grad.addColorStop(0, 'rgba(255, 255, 255, 0.22)');
+    grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(mouse.x - R, mouse.y - R, R * 2, R * 2);
+    ctx.restore();
+
+    // Lens rim + chromatic edge
+    ctx.beginPath();
+    ctx.arc(mouse.x, mouse.y, R, 0, TAU);
+    ctx.strokeStyle = 'oklch(0.2 0.04 240 / 0.85)';
+    ctx.lineWidth = 2.2;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(mouse.x, mouse.y, R - 3, 0, TAU);
+    ctx.strokeStyle = 'oklch(0.96 0.02 168 / 0.55)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  canvas.addEventListener('pointermove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+    mouse.has = true;
+    draw();
+  });
+  canvas.addEventListener('pointerleave', () => { mouse.has = false; draw(); });
+  // Auto-pan idle animation so the demo still moves on touch / no-cursor devices
+  let t0 = performance.now();
+  function idle(now) {
+    if (!mouse.has) {
+      const t = (now - t0) / 1000;
+      mouse.x = W * 0.5 + Math.sin(t * 0.6) * (W * 0.32);
+      mouse.y = H * 0.5 + Math.cos(t * 0.4) * (H * 0.22);
+      mouse.has = true; draw(); mouse.has = false;
+    }
+    requestAnimationFrame(idle);
+  }
+  requestAnimationFrame(idle);
+
+  new ResizeObserver(resize).observe(canvas);
+  resize();
+})();
+
+/* =================================================================
+ * Demo 3 — Paper-grain stat card
+ * ================================================================= */
+(function () {
+  const bars = document.querySelectorAll('#d3-bars .bar');
+  const targets = [42, 48, 55, 64, 78, 100];
+  const button = document.getElementById('d3-replay');
+  function play() {
+    bars.forEach((bar, i) => {
+      bar.style.height = '0%';
+      setTimeout(() => { bar.style.height = targets[i] + '%'; }, 90 + i * 90);
+    });
+  }
+  button.addEventListener('click', play);
+  setTimeout(play, 300);
+})();
+
+/* =================================================================
+ * Demo 4 — CRT terminal typing
+ * ================================================================= */
+(function () {
+  const typed = document.getElementById('d4-typed');
+  const out = document.getElementById('d4-out');
+  const command = 'claude --search "pricing decisions" --since 30d';
+  const result =
+`▸ found 2 layers in your context library
+  ── Pricing tier review · 2026-05-09 · "hold current tiers"
+  ── Onboarding kickoff · 2026-05-12 · "pricing unchanged this cycle"
+
+▸ piping the relevant excerpts into Claude…`;
+
+  let i = 0;
+  function tick() {
+    if (i <= command.length) {
+      typed.textContent = command.slice(0, i++);
+      setTimeout(tick, 38 + Math.random() * 22);
+    } else {
+      out.style.transition = 'opacity 420ms cubic-bezier(0.22, 1, 0.36, 1)';
+      out.style.opacity = '1';
+      out.textContent = result;
+    }
+  }
+  setTimeout(tick, 360);
+})();
+
+/* =================================================================
+ * Demo 5 — Organic wave generator (parallel of audio-wave-ribbon.tsx)
+ * ================================================================= */
+(function () {
+  const canvas = document.getElementById('d5-canvas');
+  const levelInput = document.getElementById('d5-level');
+  const motionInput = document.getElementById('d5-motion');
+  const textureSelect = document.getElementById('d5-texture');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  let started = performance.now();
+
+  function resize() {
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = Math.floor(rect.width * dpr);
+    canvas.height = Math.floor(rect.height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  new ResizeObserver(resize).observe(canvas);
+  resize();
+
+  function draw(now) {
+    const rect = canvas.getBoundingClientRect();
+    const width = rect.width, height = rect.height;
+    const seconds = reducedMotion ? 0 : (now - started) / 1000;
+    const lvl = (+levelInput.value || 55) / 100;
+    const motion = (+motionInput.value || 100) / 100;
+    const texture = textureSelect.value;
+    const clean = texture === 'clean';
+
+    const energy = Math.min(1, lvl + 0.08);
+    const breath = 0.93 + 0.07 * Math.sin(seconds * 2.4 * motion);
+    const baseAmp = height * 0.086 * Math.min(1.48, motion);
+    const soundAmp = height * 0.15 * energy;
+    const amplitude = (baseAmp + soundAmp) * breath;
+    const phaseA = seconds * 1.9 * motion;
+    const phaseB = seconds * 2.9 * motion;
+    const phaseC = seconds * 1.2 * motion;
+    const centerY = height * 0.5;
+    const ridgeStrength = 7 + energy * 22 + 3 * motion;
+
+    ctx.clearRect(0, 0, width, height);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+
+    function yAt(x, offset = 0) {
+      const n = x / Math.max(width, 1);
+      const drift = Math.sin(n * Math.PI * (clean ? 1.62 : 2.15) + phaseA * (clean ? 0.72 : 1) + offset);
+      const weave = Math.sin(n * Math.PI * (clean ? 4.15 : 6.8) - phaseB * (clean ? 0.68 : 1) + offset * 0.55);
+      const fine = Math.sin(n * Math.PI * (clean ? 8.8 : 18) + phaseA * 0.58 + offset * 0.18);
+      const undertow = Math.sin(n * Math.PI * 0.86 - phaseC + offset * 0.4) * amplitude * 0.16;
+      return centerY + drift * amplitude * 0.56 + weave * amplitude * 0.34 + fine * amplitude * 0.035 + undertow;
+    }
+    function points(offset) {
+      const step = clean ? 13 : 8;
+      const out = [];
+      for (let x = -step; x <= width + step; x += step) out.push([x, yAt(x, offset)]);
+      return out;
+    }
+    function drawCurve(offset, color, lineWidth, alpha = 1) {
+      const ps = points(offset);
+      ctx.save(); ctx.globalAlpha = alpha; ctx.beginPath();
+      for (let i = 0; i < ps.length - 1; i++) {
+        const p0 = ps[i - 1] || ps[i];
+        const p1 = ps[i];
+        const p2 = ps[i + 1];
+        const p3 = ps[i + 2] || p2;
+        if (i === 0) ctx.moveTo(p1[0], p1[1]);
+        ctx.bezierCurveTo(p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6,
+                          p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6,
+                          p2[0], p2[1]);
+      }
+      ctx.strokeStyle = color; ctx.lineWidth = lineWidth; ctx.stroke(); ctx.restore();
+    }
+
+    ctx.save();
+    ctx.filter = 'blur(18px)';
+    drawCurve(0.9, 'rgba(99, 102, 241, 0.28)', 28 + energy * 24, 0.86);
+    drawCurve(2.2, 'rgba(196, 181, 253, 0.24)', 22 + energy * 18, 0.78);
+    drawCurve(-1.4, 'rgba(52, 211, 153, 0.18)', 20 + energy * 14, 0.68);
+    ctx.restore();
+
+    if (texture === 'mesh') {
+      ctx.save();
+      for (let x = 10; x < width - 10; x += 8) {
+        const y = yAt(x);
+        const yPrev = yAt(x - 2);
+        const yNext = yAt(x + 2);
+        const tangentY = yNext - yPrev;
+        const normalX = -tangentY;
+        const normalY = 4;
+        const len = Math.max(1, Math.hypot(normalX, normalY));
+        const nx = normalX / len, ny = normalY / len;
+        const pulse = 0.55 + 0.45 * Math.sin(x * 0.055 + seconds * 8.2 * motion);
+        const ridge = ridgeStrength * pulse + 1.5;
+        ctx.beginPath();
+        ctx.moveTo(x - nx * ridge, y - ny * ridge);
+        ctx.lineTo(x + nx * ridge, y + ny * ridge);
+        ctx.strokeStyle = `rgba(99, 102, 241, ${0.08 + energy * 0.12})`;
+        ctx.lineWidth = 0.68;
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    drawCurve(1.3, 'rgba(196, 181, 253, 0.58)', 3.2 + energy * 1.8, 0.88);
+    drawCurve(-0.8, 'rgba(52, 211, 153, 0.48)', 2.5 + energy * 1.6, 0.76);
+    drawCurve(0, 'rgba(15, 23, 42, 0.2)', 9 + energy * 3, 0.3);
+    drawCurve(0, 'rgba(99, 102, 241, 0.9)', 2.1 + energy * 1.7, 0.96);
+    drawCurve(0.18, 'rgba(255, 255, 255, 0.76)', 0.9, 0.86);
+
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+
+/* =================================================================
+ * Demo 6 — Context flow
+ * ================================================================= */
+(function () {
+  const svg = document.getElementById('d6-svg');
+  if (!svg) return;
+  const pathsG = svg.querySelector('#d6-paths');
+  const logosG = svg.querySelector('#d6-logos');
+  const ringOuter = svg.querySelector('.ring.outer');
+  const ringMiddle = svg.querySelector('.ring.middle');
+
+  // Real vendor SVGs cached locally — see branding/icons/ (LobeHub +
+  // SimpleIcons). The skill `.claude/skills/layers-brand-remotion/SKILL.md`
+  // documents the canonical sources + the context.dev MCP for new brands.
+  const vendors = [
+    { name: 'Claude',  x: 120, y:  64, color: '#cc785c', iconFile: 'claude-color.svg' },
+    { name: 'ChatGPT', x: 480, y:  64, color: '#10a37f', iconFile: 'openai.svg' },
+    { name: 'Gemini',  x: 120, y: 296, color: '#7c5cff', iconFile: 'gemini-color.svg' },
+    { name: 'Cursor',  x: 480, y: 296, color: '#1a1c1f', iconFile: 'cursor.svg' },
+  ];
+
+  function flowPath(v, t, jitter) {
+    const mx = (300 + v.x) / 2 + Math.sin(t * 0.9 + jitter) * 14;
+    const my = (180 + v.y) / 2 + Math.cos(t * 1.1 + jitter * 1.4) * 18;
+    return `M 300 180 Q ${mx.toFixed(1)} ${my.toFixed(1)} ${v.x} ${v.y}`;
+  }
+
+  // Vendor logo cells
+  vendors.forEach((v) => {
+    const cell = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    cell.setAttribute('transform', `translate(${v.x - 28} ${v.y - 28})`);
+    cell.innerHTML = `
+      <rect x="0" y="0" width="56" height="56" rx="12" fill="var(--bg-surface)" stroke="var(--border-default)"/>
+      <image href="./icons/${v.iconFile}" x="10" y="10" width="36" height="36" preserveAspectRatio="xMidYMid meet"/>
+    `;
+    logosG.appendChild(cell);
+    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    label.setAttribute('x', String(v.x));
+    label.setAttribute('y', String(v.y + 46));
+    label.setAttribute('text-anchor', 'middle');
+    label.setAttribute('fill', 'var(--fg-muted)');
+    label.setAttribute('font-family', 'ui-monospace, monospace');
+    label.setAttribute('font-size', '11');
+    label.textContent = v.name;
+    logosG.appendChild(label);
+  });
+
+  let t0 = performance.now();
+  function paint(now) {
+    const t = (now - t0) / 1000;
+    const phase = reducedMotion ? 0 : t * 0.6;
+
+    // Center rings breathe
+    ringOuter.setAttribute('r', String(36 + 2 * Math.sin(t * 1.1)));
+    ringMiddle.setAttribute('r', String(20 + 1.4 * Math.sin(t * 1.4 + 1.2)));
+
+    // Flow paths
+    pathsG.innerHTML = vendors.map((v, i) => {
+      const d = flowPath(v, reducedMotion ? 0 : t, i * 1.7);
+      // Soft halo first, then primary
+      return `
+        <path d="${d}" fill="none" stroke="rgba(99, 102, 241, 0.18)" stroke-width="6" stroke-linecap="round"
+              filter="url(#d6-glow)" />
+        <path d="${d}" fill="none" stroke="var(--wave-indigo)" stroke-width="1.6" stroke-linecap="round" opacity="0.85" />
+        <path d="${d}" fill="none" stroke="var(--layers-mint)" stroke-width="1" stroke-linecap="round"
+              stroke-dasharray="3 8" stroke-dashoffset="${(-t * 24).toFixed(1)}" opacity="0.7" />
+      `;
+    }).join('');
+
+    if (!reducedMotion) requestAnimationFrame(paint);
+  }
+  requestAnimationFrame(paint);
+
+})();
+
+</script>
+
+<!-- ============================================================
+ *  Atrium (Demo 1) — Three.js + GPGPU curl-noise particles
+ *  Loaded as a separate ES module via the importmap at the top.
+ *  Falls back to a still notice if WebGL2 is unavailable.
+ * ============================================================ -->
+<script type="module">
+import * as THREE from 'three';
+import { GPUComputationRenderer } from 'three/addons/misc/GPUComputationRenderer.js';
+import { EffectComposer, RenderPass, EffectPass, BloomEffect, ChromaticAberrationEffect } from 'postprocessing';
+
+const stage = document.getElementById('d1-stage');
+const restart = document.getElementById('d1-restart');
+const loading = stage?.querySelector('.atrium-loading');
+const fallback = document.getElementById('d1-fallback');
+
+if (!stage) {
+  // nothing to do
+} else if (!window.WebGL2RenderingContext) {
+  loading?.remove();
+  fallback?.classList.add('visible');
+} else {
+  bootAtrium().catch((err) => {
+    console.error('[Atrium] boot failed', err);
+    loading?.remove();
+    if (fallback) {
+      fallback.textContent = 'WebGL boot failed — open the console for details.';
+      fallback.classList.add('visible');
+    }
+  });
+}
+
+async function bootAtrium() {
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- Renderer + Scene ---------- */
+  const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, powerPreference: 'high-performance' });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  function size() { return [stage.clientWidth || 600, stage.clientHeight || 360]; }
+  let [W, H] = size();
+  renderer.setSize(W, H);
+  renderer.setClearColor(0x0a0e1a, 1);
+  stage.appendChild(renderer.domElement);
+  loading?.remove();
+
+  const scene = new THREE.Scene();
+  const aspect0 = W / H;
+  const camera = new THREE.OrthographicCamera(-aspect0 * 2.4, aspect0 * 2.4, 2.4, -2.4, 0.1, 10);
+  camera.position.z = 1;
+
+  /* ---------- Shaders (GLSL) ---------- */
+  // Ashima/Stefan Gustavson 3D simplex noise + curl derivative
+  const SNOISE = `
+    vec3 mod289(vec3 x){return x-floor(x*(1.0/289.0))*289.0;}
+    vec4 mod289(vec4 x){return x-floor(x*(1.0/289.0))*289.0;}
+    vec4 permute(vec4 x){return mod289(((x*34.0)+1.0)*x);}
+    vec4 taylorInvSqrt(vec4 r){return 1.79284291400159-0.85373472095314*r;}
+    float snoise(vec3 v){
+      const vec2 C = vec2(1.0/6.0, 1.0/3.0);
+      const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
+      vec3 i  = floor(v + dot(v, C.yyy));
+      vec3 x0 = v - i + dot(i, C.xxx);
+      vec3 g = step(x0.yzx, x0.xyz);
+      vec3 l = 1.0 - g;
+      vec3 i1 = min(g.xyz, l.zxy);
+      vec3 i2 = max(g.xyz, l.zxy);
+      vec3 x1 = x0 - i1 + C.xxx;
+      vec3 x2 = x0 - i2 + C.yyy;
+      vec3 x3 = x0 - D.yyy;
+      i = mod289(i);
+      vec4 p = permute(permute(permute(
+              i.z + vec4(0.0, i1.z, i2.z, 1.0))
+            + i.y + vec4(0.0, i1.y, i2.y, 1.0))
+            + i.x + vec4(0.0, i1.x, i2.x, 1.0));
+      float n_ = 0.142857142857;
+      vec3 ns = n_ * D.wyz - D.xzx;
+      vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
+      vec4 x_ = floor(j * ns.z);
+      vec4 y_ = floor(j - 7.0 * x_);
+      vec4 x = x_ *ns.x + ns.yyyy;
+      vec4 y = y_ *ns.x + ns.yyyy;
+      vec4 h = 1.0 - abs(x) - abs(y);
+      vec4 b0 = vec4(x.xy, y.xy);
+      vec4 b1 = vec4(x.zw, y.zw);
+      vec4 s0 = floor(b0)*2.0 + 1.0;
+      vec4 s1 = floor(b1)*2.0 + 1.0;
+      vec4 sh = -step(h, vec4(0.0));
+      vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy;
+      vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww;
+      vec3 p0 = vec3(a0.xy, h.x);
+      vec3 p1 = vec3(a0.zw, h.y);
+      vec3 p2 = vec3(a1.xy, h.z);
+      vec3 p3 = vec3(a1.zw, h.w);
+      vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2,p2), dot(p3,p3)));
+      p0 *= norm.x; p1 *= norm.y; p2 *= norm.z; p3 *= norm.w;
+      vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+      m = m * m;
+      return 42.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));
+    }
+    vec3 curl(vec3 p){
+      const float e = 0.06;
+      float n1 = snoise(p + vec3(0.0, e, 0.0));
+      float n2 = snoise(p - vec3(0.0, e, 0.0));
+      float n3 = snoise(p + vec3(0.0, 0.0, e));
+      float n4 = snoise(p - vec3(0.0, 0.0, e));
+      float n5 = snoise(p + vec3(e, 0.0, 0.0));
+      float n6 = snoise(p - vec3(e, 0.0, 0.0));
+      float x = (n2 - n1) - (n4 - n3);
+      float y = (n4 - n3) - (n6 - n5);
+      float z = (n6 - n5) - (n2 - n1);
+      return vec3(x, y, z) / (2.0 * e);
+    }
+    float hash11(float p){ p = fract(p*0.1031); p *= p+33.33; p *= p+p; return fract(p); }
+  `;
+
+  const POSITION_SHADER = `
+    uniform float uTime;
+    float hash11(float p){ p = fract(p*0.1031); p *= p+33.33; p *= p+p; return fract(p); }
+    void main(){
+      vec2 uv = gl_FragCoord.xy / resolution.xy;
+      vec4 pos = texture2D(texturePosition, uv);
+      vec4 vel = texture2D(textureVelocity, uv);
+      pos.xy += vel.xy * 0.55;
+      pos.w += 0.008;
+      float r = length(pos.xy);
+      if (r > 3.6 || pos.w > 1.0) {
+        float seed = uv.x * 12.9898 + uv.y * 78.233 + uTime * 0.13;
+        float rr = 1.2 + hash11(seed) * 2.0;
+        float aa = hash11(seed * 1.31) * 6.28318530718;
+        pos.xy = vec2(cos(aa), sin(aa)) * rr;
+        pos.w = 0.0;
+      }
+      gl_FragColor = pos;
+    }
+  `;
+
+  const VELOCITY_SHADER = `
+    ${SNOISE}
+    uniform float uTime;
+    void main(){
+      vec2 uv = gl_FragCoord.xy / resolution.xy;
+      vec4 vel = texture2D(textureVelocity, uv);
+      vec4 pos = texture2D(texturePosition, uv);
+      vec3 p3 = vec3(pos.xy * 0.6, uTime * 0.05);
+      vec3 c  = curl(p3);
+      vel.xy += c.xy * 0.055;
+      vec2 r  = -pos.xy;
+      float rl = length(pos.xy);
+      // gentler pull near center (lets particles orbit close), stronger far out
+      vel.xy += normalize(r + vec2(1e-5, 0.0)) * smoothstep(0.5, 3.0, rl) * 0.028;
+      // tangential swirl proportional to radius (orbital motion)
+      vel.xy += vec2(-pos.y, pos.x) * 0.012;
+      vel.xy *= 0.965;
+      gl_FragColor = vel;
+    }
+  `;
+
+  /* ---------- GPGPU setup ---------- */
+  const SIZE = 256; // 65,536 particles
+  const gpu = new GPUComputationRenderer(SIZE, SIZE, renderer);
+  if (renderer.capabilities.isWebGL2 === false) {
+    fallback?.classList.add('visible');
+    return;
+  }
+
+  const dtPosition = gpu.createTexture();
+  const dtVelocity = gpu.createTexture();
+  fillInitialTextures(dtPosition.image.data, dtVelocity.image.data, SIZE);
+
+  const positionVariable = gpu.addVariable('texturePosition', POSITION_SHADER, dtPosition);
+  const velocityVariable = gpu.addVariable('textureVelocity', VELOCITY_SHADER, dtVelocity);
+  gpu.setVariableDependencies(positionVariable, [positionVariable, velocityVariable]);
+  gpu.setVariableDependencies(velocityVariable, [positionVariable, velocityVariable]);
+  positionVariable.material.uniforms.uTime = { value: 0 };
+  velocityVariable.material.uniforms.uTime = { value: 0 };
+  const gpuErr = gpu.init();
+  if (gpuErr) { console.error('[Atrium] gpu init', gpuErr); fallback?.classList.add('visible'); return; }
+
+  /* ---------- Particle render geometry ---------- */
+  const N = SIZE * SIZE;
+  const positions = new Float32Array(N * 3);
+  const refs = new Float32Array(N * 2);
+  const colors = new Float32Array(N * 3);
+  const sizesAttr = new Float32Array(N);
+  for (let i = 0; i < N; i++) {
+    const x = (i % SIZE) / SIZE;
+    const y = Math.floor(i / SIZE) / SIZE;
+    refs[i * 2] = x;
+    refs[i * 2 + 1] = y;
+    const tier = Math.random();
+    if (tier < 0.55) {       // indigo majority
+      colors[i*3]=0.39; colors[i*3+1]=0.40; colors[i*3+2]=0.95;
+      sizesAttr[i] = 0.9 + Math.random() * 0.6;
+    } else if (tier < 0.88) { // violet-soft
+      colors[i*3]=0.77; colors[i*3+1]=0.71; colors[i*3+2]=0.99;
+      sizesAttr[i] = 0.7 + Math.random() * 0.5;
+    } else {                  // mint accent
+      colors[i*3]=0.20; colors[i*3+1]=0.83; colors[i*3+2]=0.60;
+      sizesAttr[i] = 1.4 + Math.random() * 0.8;
+    }
+  }
+  const geom = new THREE.BufferGeometry();
+  geom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geom.setAttribute('aRef', new THREE.BufferAttribute(refs, 2));
+  geom.setAttribute('aColor', new THREE.BufferAttribute(colors, 3));
+  geom.setAttribute('aSize', new THREE.BufferAttribute(sizesAttr, 1));
+
+  const pMat = new THREE.ShaderMaterial({
+    uniforms: {
+      uPositionTex: { value: null },
+      uVelocityTex: { value: null },
+      uTime: { value: 0 },
+      uPxRatio: { value: renderer.getPixelRatio() },
+    },
+    vertexShader: `
+      uniform sampler2D uPositionTex;
+      uniform sampler2D uVelocityTex;
+      uniform float uTime;
+      uniform float uPxRatio;
+      attribute vec2 aRef;
+      attribute vec3 aColor;
+      attribute float aSize;
+      varying vec3 vColor;
+      varying float vAlpha;
+      void main(){
+        vec4 pos = texture2D(uPositionTex, aRef);
+        vec4 vel = texture2D(uVelocityTex, aRef);
+        vec3 world = vec3(pos.xy, 0.0);
+        vec4 mv = modelViewMatrix * vec4(world, 1.0);
+        gl_Position = projectionMatrix * mv;
+        float speed = length(vel.xy);
+        gl_PointSize = (1.4 + speed * 9.0) * aSize * uPxRatio;
+        vColor = aColor;
+        // life ramps in opacity, speed adds glow
+        vAlpha = smoothstep(0.0, 0.2, pos.w) * (0.28 + speed * 2.2);
+      }
+    `,
+    fragmentShader: `
+      varying vec3 vColor;
+      varying float vAlpha;
+      void main(){
+        vec2 p = gl_PointCoord - 0.5;
+        float d = length(p);
+        if (d > 0.5) discard;
+        float falloff = exp(-d * d * 9.0);
+        gl_FragColor = vec4(vColor * 1.05, falloff * vAlpha * 0.55);
+      }
+    `,
+    transparent: true,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+    depthTest: false,
+  });
+  const points = new THREE.Points(geom, pMat);
+  scene.add(points);
+
+  /* ---------- Mint center dot (mesh with shader) ---------- */
+  const dotMat = new THREE.ShaderMaterial({
+    uniforms: { uTime: { value: 0 } },
+    vertexShader: `
+      varying vec2 vUv;
+      void main(){
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: `
+      varying vec2 vUv;
+      uniform float uTime;
+      void main(){
+        vec2 p = vUv - 0.5;
+        float d = length(p);
+        float core = 1.0 - smoothstep(0.038, 0.052, d);
+        float ring1 = smoothstep(0.078, 0.075, d) * (1.0 - smoothstep(0.094, 0.097, d));
+        float ring2 = smoothstep(0.140, 0.137, d) * (1.0 - smoothstep(0.162, 0.165, d)) * 0.7;
+        float halo = (1.0 - smoothstep(0.0, 0.34, d)) * 0.55;
+        float pulse = 0.92 + 0.08 * sin(uTime * 2.2);
+        vec3 mint = vec3(0.32, 1.0, 0.74);
+        float a = (core * 1.4 + halo + ring1 * 0.7 + ring2 * 0.5) * pulse;
+        gl_FragColor = vec4(mint, a);
+      }
+    `,
+    transparent: true,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  });
+  const dotMesh = new THREE.Mesh(new THREE.PlaneGeometry(1.8, 1.8), dotMat);
+  dotMesh.position.z = 0.01;
+  dotMesh.renderOrder = 10;
+  scene.add(dotMesh);
+
+  /* ---------- Postprocessing ---------- */
+  const composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, camera));
+  const bloom = new BloomEffect({ intensity: 1.05, luminanceThreshold: 0.18, luminanceSmoothing: 0.55, mipmapBlur: true });
+  const aberration = new ChromaticAberrationEffect({ offset: new THREE.Vector2(0.0012, 0.0012) });
+  composer.addPass(new EffectPass(camera, bloom, aberration));
+
+  /* ---------- Resize ---------- */
+  const ro = new ResizeObserver(() => {
+    [W, H] = size();
+    renderer.setSize(W, H);
+    composer.setSize(W, H);
+    const a = W / H;
+    camera.left = -a * 2.4; camera.right = a * 2.4;
+    camera.updateProjectionMatrix();
+    pMat.uniforms.uPxRatio.value = renderer.getPixelRatio();
+  });
+  ro.observe(stage);
+
+  /* ---------- Loop ---------- */
+  let t0 = performance.now();
+  restart?.addEventListener('click', () => {
+    // Reset textures
+    const dt2P = gpu.createTexture();
+    const dt2V = gpu.createTexture();
+    fillInitialTextures(dt2P.image.data, dt2V.image.data, SIZE);
+    const tgtP = gpu.getCurrentRenderTarget(positionVariable);
+    const tgtV = gpu.getCurrentRenderTarget(velocityVariable);
+    renderer.copyTextureToTexture(new THREE.Vector2(0, 0), dt2P, tgtP.texture);
+    renderer.copyTextureToTexture(new THREE.Vector2(0, 0), dt2V, tgtV.texture);
+    t0 = performance.now();
+  });
+
+  let raf = 0;
+  function loop(now) {
+    const t = (now - t0) / 1000;
+    velocityVariable.material.uniforms.uTime.value = t;
+    positionVariable.material.uniforms.uTime.value = t;
+    pMat.uniforms.uTime.value = t;
+    dotMat.uniforms.uTime.value = t;
+
+    gpu.compute();
+    pMat.uniforms.uPositionTex.value = gpu.getCurrentRenderTarget(positionVariable).texture;
+    pMat.uniforms.uVelocityTex.value = gpu.getCurrentRenderTarget(velocityVariable).texture;
+    composer.render();
+    if (!reducedMotion) raf = requestAnimationFrame(loop);
+  }
+  raf = requestAnimationFrame(loop);
+}
+
+function fillInitialTextures(p, v, size) {
+  const n = size * size;
+  for (let i = 0; i < n; i++) {
+    const r = 1.2 + Math.random() * 2.0;
+    const a = Math.random() * Math.PI * 2;
+    const i4 = i * 4;
+    p[i4]     = Math.cos(a) * r;
+    p[i4 + 1] = Math.sin(a) * r;
+    p[i4 + 2] = 0;
+    p[i4 + 3] = Math.random();        // life
+    v[i4]     = -Math.sin(a) * 0.08;  // tangential nudge
+    v[i4 + 1] =  Math.cos(a) * 0.08;
+    v[i4 + 2] = 0;
+    v[i4 + 3] = 1;
+  }
+}
+</script>
+
+</body>
+</html>

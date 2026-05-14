@@ -1,0 +1,1880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Layers — Brand Design Kit v1.1</title>
+<meta name="description" content="The shareable brand kit for Layers. Narrative, typography, colors, organic motion, and the organic-line logo variant for approval. Paper Calm v1.1." />
+<style>
+  /* ============================================================
+   * LAYERS BRAND TOKENS  (canonical — mirrors DESIGN.md + remotion/lib/tokens.ts)
+   * Edits here must also update DESIGN.md and the registries.
+   * ============================================================ */
+  :root {
+    /* Brand */
+    --layers-mint:         oklch(0.68 0.13 166);
+    --layers-mint-soft:    oklch(0.82 0.10 168);
+    --layers-mint-tint:    oklch(0.95 0.04 168);
+    --layers-violet:       oklch(0.66 0.16 282);
+    --layers-violet-soft:  oklch(0.78 0.13 282);
+    --layers-violet-tint:  oklch(0.95 0.03 284);
+    --layers-blue:         oklch(0.66 0.13 240);
+    --layers-blue-soft:    oklch(0.80 0.09 240);
+    --layers-blue-tint:    oklch(0.94 0.03 240);
+
+    /* The three signature wave-ribbon RGBA values (canvas-side, see components/audio-wave-ribbon.tsx) */
+    --wave-indigo:         rgba(99, 102, 241, 1);
+    --wave-violet:         rgba(196, 181, 253, 1);
+    --wave-mint:           rgba(52, 211, 153, 1);
+
+    /* Paper Calm surfaces */
+    --bg-page:             oklch(0.982 0.012 168);
+    --bg-surface:          oklch(0.997 0.004 168);
+    --bg-surface-muted:    oklch(0.972 0.014 168);
+
+    --ink:                 oklch(0.22 0.035 256);
+    --fg-muted:            oklch(0.46 0.025 256);
+    --fg-faint:            oklch(0.62 0.025 256);
+
+    --border-default:      oklch(0.84 0.024 168 / 0.74);
+    --border-subtle:       oklch(0.84 0.024 168 / 0.46);
+
+    /* Signals */
+    --success:             oklch(0.68 0.13 166);
+    --warning:             oklch(0.74 0.14 74);
+    --danger:              oklch(0.64 0.20 26);
+
+    /* Spacing (4pt grid) */
+    --grid: 4px;
+    --space-compact: 8px;
+    --space-field: 12px;
+    --space-panel: 24px;
+    --space-section: 48px;
+    --space-stage: 96px;
+
+    /* Radii */
+    --radius-xs: 4px;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 20px;
+    --radius-card: 24px;
+    --radius-pill: 9999px;
+
+    /* Motion */
+    --motion-fast:     140ms cubic-bezier(0.22, 1, 0.36, 1);
+    --motion-standard: 220ms cubic-bezier(0.22, 1, 0.36, 1);
+    --motion-slow:     420ms cubic-bezier(0.22, 1, 0.36, 1);
+
+    /* Fonts */
+    --font-display: "Iowan Old Style", "Charter", "Georgia", "Playfair Display", "Times New Roman", serif;
+    --font-ui:      -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-mono:    "JetBrains Mono", "SF Mono", "Menlo", ui-monospace, monospace;
+    --font-hand:    "Caveat", "Bradley Hand", "Marker Felt", cursive;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg-page);
+    color: var(--ink);
+    font-family: var(--font-ui);
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    /* Paper Calm wash — same shape as remotion PaperBackground */
+    background-image:
+      radial-gradient(ellipse at 50% 14%, var(--layers-mint-tint) 0%, transparent 55%),
+      radial-gradient(circle at 92% 88%, var(--layers-violet-tint) 0%, transparent 35%);
+    background-attachment: fixed;
+  }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 64px 32px 96px;
+  }
+
+  /* --- Top bar --- */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 24px;
+    margin: -64px -32px 64px;
+    background: color-mix(in oklch, var(--bg-surface) 80%, transparent);
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    border-bottom: 1px solid var(--border-subtle);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .topbar .brand { display: flex; align-items: center; gap: 12px; font-weight: 600; letter-spacing: -0.01em; }
+  .topbar .brand .wordmark { font-family: var(--font-ui); font-weight: 600; font-size: 18px; letter-spacing: -0.01em; }
+  .topbar nav { display: flex; gap: 18px; font-size: 14px; color: var(--fg-muted); }
+  .topbar nav a { color: inherit; text-decoration: none; transition: color var(--motion-fast); }
+  .topbar nav a:hover { color: var(--ink); }
+
+  /* --- Typography --- */
+  h1, h2, h3, h4 { letter-spacing: -0.02em; }
+  h1 { font-size: clamp(40px, 6vw, 60px); font-weight: 600; margin: 0 0 8px; line-height: 1.05; }
+  h1 em, h2 em { font-style: normal; font-weight: 600; color: var(--layers-mint); }
+  h2 { font-size: 28px; font-weight: 600; margin: 0 0 8px; }
+  h3 { font-size: 20px; font-weight: 600; margin: 0 0 6px; }
+  h4 { font-size: 14px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-muted); margin: 0 0 12px; }
+  p { margin: 0 0 14px; }
+  .lede { font-size: 19px; line-height: 1.5; color: var(--fg-muted); max-width: 64ch; }
+
+  /* --- Sections --- */
+  section { margin: 0 0 var(--space-stage); }
+  section header { margin-bottom: 28px; }
+  section header .label { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-faint); margin-bottom: 8px; }
+  section header h2 { margin-bottom: 6px; }
+  section header p { color: var(--fg-muted); max-width: 64ch; }
+
+  /* --- Cards / Surfaces --- */
+  .card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-card);
+    padding: 24px;
+  }
+
+  .grid { display: grid; gap: 18px; }
+  .grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .grid.cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  @media (max-width: 760px) {
+    .grid.cols-2, .grid.cols-3, .grid.cols-4 { grid-template-columns: 1fr; }
+  }
+
+  /* --- Color swatches --- */
+  .swatch {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-default);
+    overflow: hidden;
+    background: var(--bg-surface);
+  }
+  .swatch .chip {
+    height: 92px;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    padding: 14px;
+  }
+  .swatch .meta { padding: 12px 14px 14px; font-family: var(--font-mono); font-size: 12.5px; line-height: 1.5; }
+  .swatch .meta .name { font-family: var(--font-ui); font-weight: 600; color: var(--ink); font-size: 14px; letter-spacing: -0.005em; margin-bottom: 2px; }
+  .swatch .meta .role { font-family: var(--font-ui); color: var(--fg-muted); font-size: 13px; margin-top: 4px; }
+
+  /* --- Token table --- */
+  .toks {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    font-size: 14px;
+  }
+  .toks th, .toks td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border-subtle); }
+  .toks th { background: var(--bg-surface-muted); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-muted); }
+  .toks tr:last-child td { border-bottom: 0; }
+  .toks code { font-family: var(--font-mono); font-size: 13px; background: var(--bg-surface-muted); padding: 2px 6px; border-radius: 4px; }
+
+  /* --- Wave demo --- */
+  .wave-stage {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-card);
+    padding: 28px;
+    margin-top: 18px;
+  }
+  .wave-stage canvas { display: block; width: 100%; height: 180px; border-radius: var(--radius-lg); }
+  .wave-controls { display: flex; gap: 18px; margin-top: 14px; flex-wrap: wrap; }
+  .wave-controls label { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--fg-muted); }
+  .wave-controls input[type="range"] { accent-color: var(--layers-mint); }
+
+  /* --- Logo board --- */
+  .logo-board { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+  @media (max-width: 760px) { .logo-board { grid-template-columns: 1fr; } }
+  .logo-tile {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-card);
+    padding: 28px;
+  }
+  .logo-tile .badge {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    padding: 3px 9px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-pill);
+    margin-bottom: 14px;
+  }
+  .logo-tile .badge.new { color: var(--layers-mint); border-color: color-mix(in oklch, var(--layers-mint) 40%, transparent); }
+  .logo-tile .stage { display: flex; align-items: center; gap: 36px; padding: 28px 0; flex-wrap: wrap; }
+  .logo-tile .stage svg { display: block; }
+  .logo-tile .stage .lockup { display: flex; align-items: center; gap: 14px; }
+  .logo-tile .stage .lockup .word { font-family: var(--font-ui); font-weight: 600; font-size: 30px; letter-spacing: -0.015em; color: var(--ink); }
+  .logo-tile pre {
+    margin: 14px 0 0;
+    background: var(--bg-surface-muted);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    overflow: auto;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    line-height: 1.55;
+    max-height: 220px;
+  }
+  .logo-tile .copy {
+    margin-top: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-surface);
+    padding: 6px 10px;
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    color: var(--fg-muted);
+    transition: color var(--motion-fast), border-color var(--motion-fast);
+  }
+  .logo-tile .copy:hover { color: var(--ink); border-color: var(--border-default); }
+
+  /* --- Logo: organic variant SVG defaults --- */
+  .organic-mark, .arc-mark { display: block; }
+
+  /* --- Voice list --- */
+  .voice { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 760px) { .voice { grid-template-columns: 1fr; } }
+  .voice .col { background: var(--bg-surface); border: 1px solid var(--border-default); border-radius: var(--radius-card); padding: 22px 24px; }
+  .voice ul { padding-left: 20px; margin: 8px 0 0; }
+  .voice li { margin-bottom: 8px; color: var(--ink); }
+  .voice .col h3 .tag {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: var(--radius-pill);
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  .voice .col.do h3 .tag { background: color-mix(in oklch, var(--layers-mint-tint) 90%, transparent); color: oklch(0.4 0.13 166); }
+  .voice .col.dont h3 .tag { background: color-mix(in oklch, var(--danger) 18%, transparent); color: oklch(0.4 0.12 26); }
+
+  /* --- Logo gallery --- */
+  .logos-row { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 14px; }
+  @media (max-width: 760px) { .logos-row { grid-template-columns: repeat(3, 1fr); } }
+  .logo-cell {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    aspect-ratio: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px;
+  }
+  .logo-cell svg,
+  .logo-cell img { display: block; width: 44px; height: 44px; object-fit: contain; }
+  .logo-cell .name { font-size: 11px; color: var(--fg-muted); letter-spacing: 0.04em; }
+
+  /* --- Spacing scale visual --- */
+  .scale {
+    display: flex;
+    align-items: flex-end;
+    gap: 18px;
+  }
+  .scale .bar {
+    background: var(--layers-mint-tint);
+    border: 1px solid color-mix(in oklch, var(--layers-mint) 50%, transparent);
+    border-radius: var(--radius-sm);
+    width: 32px;
+  }
+  .scale .col-meta { font-family: var(--font-mono); font-size: 12px; color: var(--fg-muted); margin-top: 6px; text-align: center; width: 32px; }
+
+  /* --- Motion samples --- */
+  .motion-row { display: flex; gap: 18px; flex-wrap: wrap; }
+  .motion-card { background: var(--bg-surface); border: 1px solid var(--border-default); border-radius: var(--radius-card); padding: 18px; flex: 1; min-width: 240px; }
+  .motion-card .dot {
+    width: 18px; height: 18px; border-radius: var(--radius-pill);
+    background: var(--layers-mint);
+    margin: 8px 0;
+  }
+  .motion-card.fast .dot { animation: pulse-fast 1.2s var(--motion-fast) infinite; }
+  .motion-card.std  .dot { animation: pulse-std 1.6s var(--motion-standard) infinite; }
+  .motion-card.slow .dot { animation: pulse-slow 2.2s var(--motion-slow) infinite; }
+  @keyframes pulse-fast { 0%,100% { transform: translateX(0); } 50% { transform: translateX(60px); } }
+  @keyframes pulse-std  { 0%,100% { transform: translateX(0); } 50% { transform: translateX(60px); } }
+  @keyframes pulse-slow { 0%,100% { transform: translateX(0); } 50% { transform: translateX(60px); } }
+
+  /* --- Type specimens --- */
+  .type-spec { background: var(--bg-surface); border: 1px solid var(--border-default); border-radius: var(--radius-card); padding: 28px; }
+  .type-spec + .type-spec { margin-top: 18px; }
+  .type-spec .label { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-faint); margin-bottom: 8px; }
+  .type-spec .sample { line-height: 1.18; letter-spacing: -0.02em; }
+  .type-spec.display .sample { font-family: var(--font-ui); font-weight: 600; font-size: 48px; color: var(--ink); letter-spacing: -0.02em; }
+  .type-spec.ui .sample { font-family: var(--font-ui); font-weight: 500; font-size: 28px; }
+  .type-spec.mono .sample { font-family: var(--font-mono); font-size: 16px; color: var(--ink); }
+  .type-spec .meta { color: var(--fg-muted); font-size: 13.5px; margin-top: 12px; font-family: var(--font-mono); }
+
+  /* --- Footer --- */
+  footer { color: var(--fg-muted); font-size: 13px; margin-top: 96px; padding-top: 24px; border-top: 1px solid var(--border-subtle); }
+  footer a { color: var(--layers-violet); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  /* --- Misc --- */
+  .pill { display: inline-block; padding: 4px 10px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 600; letter-spacing: 0.04em; background: var(--bg-surface-muted); color: var(--fg-muted); border: 1px solid var(--border-subtle); }
+  .pill.mint { background: var(--layers-mint-tint); color: oklch(0.34 0.12 166); border-color: color-mix(in oklch, var(--layers-mint) 40%, transparent); }
+  .copyable { font-family: var(--font-mono); font-size: 12.5px; }
+
+  /* --- App-anchor (SessionCaptureCard replica) --- */
+  .app-anchor {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 28px auto 8px;
+    padding: 8px;
+    max-width: 520px;
+  }
+  .capture-card {
+    position: relative;
+    width: 100%;
+    max-width: 460px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(18px, 2vw, 28px);
+    border: 1px solid rgba(18, 31, 54, 0.08);
+    border-radius: 28px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.74)),
+      rgba(255, 255, 255, 0.82);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.92),
+      0 30px 80px rgba(21, 31, 55, 0.08);
+    padding: 32px 24px;
+    color: #061229;
+  }
+  .cc-date {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: oklch(0.5 0.18 264);
+    font-size: 0.95rem;
+    font-weight: 700;
+  }
+  .cc-timer { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
+  .cc-timer strong {
+    color: #061229;
+    font-size: clamp(4.7rem, 7.2vw, 5.6rem);
+    font-weight: 800;
+    line-height: 0.92;
+    letter-spacing: -0.01em;
+    text-shadow: 0 18px 38px rgba(7, 19, 43, 0.1);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+  .cc-state {
+    display: inline-flex; flex-wrap: wrap; align-items: center; justify-content: center;
+    gap: 14px;
+    color: #6f7891;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .cc-badge {
+    display: inline-flex; min-height: 28px; align-items: center; gap: 6px;
+    border-radius: 999px; padding: 0 12px;
+    font-size: 0.68rem; font-weight: 800; letter-spacing: 0; font-style: normal;
+  }
+  .cc-badge.done { background: rgba(209, 250, 229, 0.86); color: #059669; }
+  .cc-badge.live { background: rgba(255, 228, 230, 0.78); color: #e11d48; }
+  .cc-badge span { width: 7px; height: 7px; border-radius: 999px; background: currentColor; }
+  .cc-wave { width: min(100%, 380px); height: 92px; margin: -8px 0 -20px; }
+  .cc-wave canvas { width: 100%; height: 100%; display: block; }
+  .cc-context {
+    display: grid; grid-template-columns: auto minmax(0, 1fr);
+    align-items: center; align-self: flex-start;
+    gap: 18px;
+    width: 100%;
+    margin-top: 4px;
+  }
+  .cc-date-tile {
+    display: flex; width: 70px; height: 70px;
+    flex-direction: column; align-items: center; justify-content: center;
+    border: 1px solid rgba(18, 31, 54, 0.1);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.86);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 14px 30px rgba(7, 19, 43, 0.1);
+  }
+  .cc-date-tile span {
+    color: oklch(0.64 0.20 26);
+    font-size: 0.66rem;
+    font-weight: 900;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+  .cc-date-tile strong {
+    margin-top: 6px;
+    color: #061229;
+    font-size: 1.7rem;
+    font-weight: 500;
+    line-height: 1;
+  }
+  .cc-copy { min-width: 0; }
+  .cc-copy h3 {
+    margin: 0;
+    color: #061229;
+    font-size: 1rem;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: 0;
+  }
+  .cc-copy p { margin: 4px 0 0; color: #6c768f; font-size: 0.82rem; line-height: 1.45; }
+  .cc-cal-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 10px;
+    min-height: 28px;
+    border-radius: 999px;
+    padding: 0 12px;
+    background: rgba(209, 250, 229, 0.72);
+    color: #3f5f57;
+    font-size: 0.74rem;
+    font-weight: 650;
+  }
+  .cc-cta {
+    display: inline-flex; align-items: center; justify-content: center; gap: 14px;
+    width: 100%; max-width: 380px; min-height: 64px;
+    margin-top: 6px;
+    border: 0; border-radius: 999px;
+    color: #fff;
+    font-family: var(--font-ui);
+    font-size: 0.95rem; font-weight: 800;
+    cursor: pointer;
+    background:
+      radial-gradient(circle at 50% 0%, rgba(52, 211, 153, 0.28), transparent 44%),
+      linear-gradient(180deg, #15203a 0%, #061229 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      0 18px 44px rgba(7, 19, 43, 0.22);
+    transition: transform 180ms ease, background 220ms ease;
+  }
+  .cc-cta:hover { transform: translateY(-1px); }
+  .cc-cta span {
+    display: inline-flex; width: 36px; height: 36px;
+    align-items: center; justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  /* Token cheat-sheet below the card — replaces the old floating annotations */
+  .anchor-keys {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px 18px;
+    margin: 28px auto 0;
+    max-width: 760px;
+    font-size: 13.5px;
+    color: var(--fg-muted);
+    line-height: 1.5;
+  }
+  .anchor-keys div { padding: 8px 12px; background: var(--bg-surface-muted); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); }
+  .anchor-keys strong { display: block; font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); margin-bottom: 2px; }
+  .anchor-keys code { background: var(--bg-surface); padding: 1px 5px; border-radius: 4px; font-size: 12px; color: var(--ink); font-family: var(--font-mono); }
+  @media (max-width: 720px) { .anchor-keys { grid-template-columns: 1fr; } }
+
+  /* ============================================================
+   * BUTTONS — mirrors session-stop-button, recorder-primary-control, etc.
+   * ============================================================ */
+  .btn-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .ly-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-pill);
+    font: inherit; font-weight: 600; font-size: 14px;
+    padding: 10px 18px;
+    cursor: pointer;
+    transition: transform 180ms ease, background 200ms ease, border-color 200ms ease, color 200ms ease;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .ly-btn.primary {
+    background:
+      radial-gradient(circle at 50% 0%, rgba(52, 211, 153, 0.28), transparent 44%),
+      linear-gradient(180deg, #15203a 0%, #061229 100%);
+    color: #fff;
+    border-color: #061229;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 18px 44px rgba(7, 19, 43, 0.18);
+  }
+  .ly-btn.primary:hover { transform: translateY(-1px); }
+  .ly-btn.secondary {
+    background: var(--bg-surface);
+    color: var(--ink);
+    border-color: var(--border-default);
+  }
+  .ly-btn.secondary:hover { background: var(--bg-surface-muted); }
+  .ly-btn.ghost {
+    background: transparent;
+    color: var(--fg-muted);
+    border-color: transparent;
+  }
+  .ly-btn.ghost:hover { color: var(--ink); background: var(--bg-surface-muted); }
+  .ly-btn.mint {
+    background: color-mix(in oklch, var(--layers-mint-tint) 80%, transparent);
+    color: oklch(0.34 0.12 166);
+    border-color: color-mix(in oklch, var(--layers-mint) 40%, transparent);
+  }
+  .ly-btn.destructive {
+    background: color-mix(in oklch, var(--danger) 14%, transparent);
+    color: oklch(0.42 0.16 26);
+    border-color: color-mix(in oklch, var(--danger) 36%, transparent);
+  }
+  .ly-btn.destructive:hover { background: color-mix(in oklch, var(--danger) 22%, transparent); }
+  .ly-btn[disabled], .ly-btn.is-disabled { opacity: 0.55; cursor: not-allowed; transform: none !important; }
+  .ly-btn.icon-only { padding: 8px; width: 36px; height: 36px; border-radius: 999px; }
+  .ly-btn .btn-icon { width: 16px; height: 16px; display: inline-block; }
+
+  /* Big record-control replica */
+  .ly-record-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 14px;
+    width: 100%; max-width: 380px; min-height: 64px;
+    border: 0; border-radius: 999px;
+    color: #fff; font: 800 0.95rem/1 var(--font-ui);
+    cursor: pointer;
+    background:
+      radial-gradient(circle at 50% 0%, rgba(52, 211, 153, 0.28), transparent 44%),
+      linear-gradient(180deg, #15203a 0%, #061229 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 18px 44px rgba(7, 19, 43, 0.22);
+    transition: transform 180ms ease;
+  }
+  .ly-record-btn:hover { transform: translateY(-1px); }
+  .ly-record-btn .slot {
+    display: inline-flex; width: 36px; height: 36px;
+    align-items: center; justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  /* ============================================================
+   * PILLS & BADGES — session-live-badge, session-calendar-pill, etc.
+   * ============================================================ */
+  .ly-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    min-height: 28px; border-radius: 999px;
+    padding: 0 12px;
+    font: 800 11.5px/1 var(--font-ui);
+    letter-spacing: 0;
+    font-style: normal;
+  }
+  .ly-pill .dot { width: 7px; height: 7px; border-radius: 999px; background: currentColor; }
+  .ly-pill.live { background: rgba(255, 228, 230, 0.78); color: #e11d48; }
+  .ly-pill.ready { background: rgba(209, 250, 229, 0.86); color: #059669; }
+  .ly-pill.warning { background: color-mix(in oklch, var(--warning) 18%, transparent); color: oklch(0.45 0.14 74); }
+  .ly-pill.muted { background: rgba(226, 232, 240, 0.7); color: #667085; }
+  .ly-pill.connected {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(209, 250, 229, 0.72); color: #3f5f57; border-radius: 999px; padding: 4px 10px;
+    font-weight: 650; font-size: 12.5px;
+  }
+  .ly-pill.tag {
+    background: var(--bg-surface-muted); color: var(--fg-muted);
+    border: 1px solid var(--border-subtle);
+    font-weight: 600; letter-spacing: 0.04em;
+    text-transform: uppercase; font-size: 10.5px;
+  }
+
+  /* ============================================================
+   * FORM ELEMENTS
+   * ============================================================ */
+  .form-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  @media (max-width: 720px) { .form-row { grid-template-columns: 1fr; } }
+  .ly-field {
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .ly-field label {
+    font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--fg-muted);
+  }
+  .ly-field input,
+  .ly-field select,
+  .ly-field textarea {
+    width: 100%;
+    border: 1px solid var(--border-default);
+    background: var(--bg-surface);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font: 500 14px/1.4 var(--font-ui);
+    color: var(--ink);
+    transition: border-color 180ms ease, box-shadow 180ms ease;
+    appearance: none;
+  }
+  .ly-field input:focus,
+  .ly-field select:focus,
+  .ly-field textarea:focus {
+    outline: none;
+    border-color: var(--layers-mint);
+    box-shadow: 0 0 0 4px color-mix(in oklch, var(--layers-mint) 16%, transparent);
+  }
+  .ly-field input[type="range"] {
+    height: 8px; padding: 0; background: var(--bg-surface-muted);
+    accent-color: var(--layers-mint);
+  }
+  .ly-search {
+    position: relative;
+  }
+  .ly-search svg {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    width: 16px; height: 16px; color: var(--fg-muted);
+  }
+  .ly-search input { padding-left: 38px; }
+  .ly-toggle { display: inline-flex; align-items: center; gap: 10px; user-select: none; cursor: pointer; }
+  .ly-toggle .track {
+    width: 36px; height: 22px; border-radius: 999px; background: var(--bg-surface-muted); border: 1px solid var(--border-default);
+    position: relative; transition: background 180ms ease;
+  }
+  .ly-toggle .knob {
+    position: absolute; top: 1px; left: 1px; width: 18px; height: 18px; border-radius: 999px;
+    background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+    transition: transform 180ms ease;
+  }
+  .ly-toggle input:checked + .track { background: var(--layers-mint); border-color: var(--layers-mint); }
+  .ly-toggle input:checked + .track .knob { transform: translateX(14px); }
+  .ly-toggle input { position: absolute; opacity: 0; pointer-events: none; }
+
+  /* ============================================================
+   * CHAT / TOOL CALL — mirrors remotion/scenes/Mcp.tsx chrome
+   * ============================================================ */
+  .ly-chat {
+    border: 1px solid var(--border-default);
+    border-radius: 20px;
+    background: var(--bg-surface);
+    overflow: hidden;
+  }
+  .ly-chat .head {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border-subtle);
+    background: var(--bg-surface-muted);
+    font-size: 13px; color: var(--fg-muted); font-weight: 600; letter-spacing: 0.03em;
+  }
+  .ly-chat .head .dot { width: 9px; height: 9px; border-radius: 999px; background: rgba(20, 30, 50, 0.18); }
+  .ly-chat .body { padding: 20px; display: grid; gap: 16px; }
+  .bubble {
+    max-width: 540px;
+    border-radius: 16px;
+    padding: 12px 16px;
+    font-size: 14.5px;
+    line-height: 1.5;
+  }
+  .bubble.user {
+    margin-left: auto;
+    background: color-mix(in oklch, var(--layers-mint-tint) 70%, var(--bg-surface) 30%);
+    color: var(--ink);
+  }
+  .bubble.assistant {
+    display: flex; gap: 10px; max-width: none; background: transparent; padding: 0;
+  }
+  .bubble.assistant .avatar {
+    width: 30px; height: 30px; border-radius: 999px;
+    background: var(--bg-page); border: 1px solid var(--border-subtle);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .bubble.assistant .text { flex: 1; color: var(--ink); font-size: 14.5px; line-height: 1.5; }
+  .tool-call {
+    border: 1px solid var(--border-default);
+    background: var(--bg-surface-muted);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .tool-call .meta {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px; border-bottom: 1px solid var(--border-subtle);
+    font-size: 13px;
+  }
+  .tool-call .meta .label {
+    font-size: 10.5px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--layers-violet);
+  }
+  .tool-call .meta code { font-family: var(--font-mono); font-size: 12.5px; color: var(--ink); flex: 1; }
+  .tool-call .meta .check { font-size: 10.5px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--layers-mint); }
+  .tool-call pre { margin: 0; padding: 14px 16px; font-family: var(--font-mono); font-size: 12.5px; line-height: 1.55; color: var(--ink); white-space: pre-wrap; background: var(--bg-surface); }
+
+  /* ============================================================
+   * DATA / METRICS
+   * ============================================================ */
+  .stat-strip {
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+  }
+  .stat-strip > div {
+    padding: 18px 20px;
+    border-right: 1px solid var(--border-subtle);
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .stat-strip > div:last-child { border-right: 0; }
+  .stat-strip strong { font-size: 28px; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; }
+  .stat-strip small { font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-muted); }
+  @media (max-width: 720px) { .stat-strip { grid-template-columns: repeat(2, 1fr); } .stat-strip > div { border-right: 0; } }
+
+  .transcript-rows { background: var(--bg-surface); border: 1px solid var(--border-default); border-radius: var(--radius-card); overflow: hidden; }
+  .transcript-row { display: grid; grid-template-columns: 72px 1fr; gap: 14px; padding: 14px 18px; border-bottom: 1px solid var(--border-subtle); font-size: 14px; align-items: start; }
+  .transcript-row:last-child { border-bottom: 0; }
+  .transcript-row .ts { font-family: var(--font-mono); font-size: 12px; color: var(--fg-muted); letter-spacing: 0.04em; padding-top: 1px; }
+  .transcript-row.is-blue .ts { color: oklch(0.5 0.16 256); }
+  .transcript-row.is-cyan .ts { color: oklch(0.62 0.13 200); }
+  .transcript-row.is-orange .ts { color: oklch(0.62 0.18 50); }
+  .transcript-row.is-live { background: color-mix(in oklch, var(--layers-mint-tint) 30%, transparent); }
+  .transcript-row.is-live .text::after { content: ""; display: inline-block; width: 2px; height: 1em; background: var(--layers-mint); margin-left: 4px; vertical-align: -2px; animation: caret 0.8s steps(2,end) infinite; }
+  @keyframes caret { 50% { opacity: 0; } }
+
+  /* ============================================================
+   * ICONS — lucide-style strokes for the vocabulary we actually use
+   * ============================================================ */
+  .icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
+  .icon-tile { background: var(--bg-surface); border: 1px solid var(--border-default); border-radius: var(--radius-md); padding: 14px; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+  .icon-tile svg { width: 22px; height: 22px; color: var(--ink); stroke-width: 1.7; }
+  .icon-tile .name { font-family: var(--font-mono); font-size: 11px; color: var(--fg-muted); letter-spacing: 0.04em; text-align: center; }
+
+  /* ============================================================
+   * LOADING STATES
+   * ============================================================ */
+  .ly-spin {
+    width: 24px; height: 24px;
+    border: 2.4px solid var(--border-default);
+    border-top-color: var(--layers-mint);
+    border-radius: 50%;
+    animation: ly-spin 1s linear infinite;
+    display: inline-block;
+  }
+  @keyframes ly-spin { to { transform: rotate(360deg); } }
+
+  .ly-skeleton { background: linear-gradient(90deg, var(--bg-surface-muted) 0%, var(--bg-surface) 50%, var(--bg-surface-muted) 100%); background-size: 200% 100%; animation: ly-shimmer 1.6s ease-in-out infinite; border-radius: 6px; }
+  @keyframes ly-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+  .ly-dots { display: inline-flex; gap: 5px; align-items: center; }
+  .ly-dots span { width: 6px; height: 6px; border-radius: 999px; background: var(--layers-mint); animation: ly-pulse 1.2s ease-in-out infinite; }
+  .ly-dots span:nth-child(2) { animation-delay: 0.15s; }
+  .ly-dots span:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes ly-pulse { 0%, 60%, 100% { opacity: 0.35; transform: scale(1); } 30% { opacity: 1; transform: scale(1.3); } }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .motion-card .dot { animation: none !important; }
+    .organic-mark .breathe { animation: none !important; }
+    .wave-stage canvas { /* still draws first frame */ }
+  }
+
+  /* TOC */
+  .toc { position: sticky; top: 72px; align-self: start; font-size: 13.5px; }
+  .toc h4 { margin-bottom: 10px; }
+  .toc ol { padding-left: 18px; margin: 0; }
+  .toc a { color: var(--fg-muted); text-decoration: none; }
+  .toc a:hover { color: var(--ink); }
+  .layout { display: grid; grid-template-columns: 220px 1fr; gap: 56px; }
+  @media (max-width: 980px) { .layout { grid-template-columns: 1fr; } .toc { position: static; } }
+
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <div class="brand">
+    <!-- Logo + wordmark (uses the NEW organic-line variant by default, so the
+         brand bar advertises the proposal at first glance) -->
+    <svg class="organic-mark" id="topbar-mark" width="28" height="28" viewBox="0 0 64 64" aria-hidden="true">
+      <g class="breathe">
+        <path class="ring outer" fill="none" stroke="var(--layers-blue)" stroke-width="3" stroke-linecap="round"></path>
+        <path class="ring middle" fill="none" stroke="var(--layers-violet)" stroke-width="3" stroke-linecap="round"></path>
+        <circle cx="32" cy="32" r="9" fill="var(--layers-mint)" opacity="0.22"></circle>
+        <circle cx="32" cy="32" r="4.4" fill="var(--layers-mint)"></circle>
+      </g>
+    </svg>
+    <span class="wordmark">Layers</span>
+    <span class="pill mint">Brand Kit v1.1</span>
+  </div>
+  <nav>
+    <a href="#narrative">Narrative</a>
+    <a href="#type">Type</a>
+    <a href="#color">Color</a>
+    <a href="#wave">Wave</a>
+    <a href="#logo">Logo</a>
+    <a href="#buttons">UI</a>
+    <a href="#chat">Chat</a>
+    <a href="#icons">Icons</a>
+    <a href="#voice">Voice</a>
+    <a href="#partners">Partners</a>
+  </nav>
+</header>
+
+<div class="wrap">
+<div class="layout">
+
+<!-- TOC -->
+<aside class="toc">
+  <h4>Contents</h4>
+  <ol>
+    <li><a href="#narrative">Narrative</a></li>
+    <li><a href="#type">Typography</a></li>
+    <li><a href="#color">Color &amp; tokens</a></li>
+    <li><a href="#wave">The three wave colors</a></li>
+    <li><a href="#spacing">Spacing &amp; radii</a></li>
+    <li><a href="#motion">Motion</a></li>
+    <li><a href="#logo">Logo — current vs. organic</a></li>
+    <li><a href="#buttons">Buttons &amp; controls</a></li>
+    <li><a href="#pills">Pills, badges &amp; status</a></li>
+    <li><a href="#forms">Form elements</a></li>
+    <li><a href="#chat">Chat &amp; tool calls</a></li>
+    <li><a href="#data">Data &amp; metrics</a></li>
+    <li><a href="#icons">Icon vocabulary</a></li>
+    <li><a href="#loading">Loading states</a></li>
+    <li><a href="#voice">Voice</a></li>
+    <li><a href="#partners">Partner logos</a></li>
+    <li><a href="#using">Using this kit</a></li>
+  </ol>
+</aside>
+
+<!-- BODY -->
+<main>
+
+<!-- Hero -->
+<section id="hero" style="margin-bottom: var(--space-stage);">
+  <span class="pill mint">v1.1 — Paper Calm</span>
+  <h1 style="margin-top: 14px;">Your context, <span style="color: var(--layers-mint);">layered.</span></h1>
+  <p class="lede">
+    The shareable design kit for Layers. Covers the brand narrative, typography, the full token palette, the three signature wave colors, motion, and a proposed organic-line logo variant for your approval. Tokens here mirror <code style="font-family: var(--font-mono); font-size: 13px;">DESIGN.md</code> and <code style="font-family: var(--font-mono); font-size: 13px;">remotion/lib/tokens.ts</code>; edits propagate through the registries.
+  </p>
+</section>
+
+<!-- 1. APP AESTHETIC — the brand is the product -->
+<section id="narrative">
+  <header>
+    <div class="label">01 — The brand is the product</div>
+    <h2>This is what Layers <span style="color: var(--layers-mint);">looks &amp; feels</span> like.</h2>
+    <p>
+      The brand is not the marketing site. The brand is the <strong style="color: var(--ink); font-weight: 600;">recording session card</strong> on the live page — soft paper, a heavy navy timer, the breathing wave, a calendar tile that feels like a real torn-page date, the mint "connected" pill. Every other branded asset is downstream of this.
+    </p>
+  </header>
+
+  <!-- Live SessionCaptureCard replica -->
+  <div class="app-anchor">
+    <!-- The actual card replica -->
+    <article class="capture-card" role="img" aria-label="Layers recording session card preview">
+      <div class="cc-date">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        <span>Tuesday, April 28</span>
+      </div>
+
+      <div class="cc-timer">
+        <strong>00:13</strong>
+        <div class="cc-state">
+          <span>READY TO RECORD</span>
+          <em class="cc-badge done"><span aria-hidden="true"></span>READY</em>
+        </div>
+      </div>
+
+      <div class="cc-wave" aria-hidden="true">
+        <canvas id="anchor-wave-canvas"></canvas>
+      </div>
+
+      <div class="cc-context">
+        <time class="cc-date-tile" datetime="2026-04-28">
+          <span>TUE</span>
+          <strong>28</strong>
+        </time>
+        <div class="cc-copy">
+          <h3>Product planning session</h3>
+          <p>Layers roadmap</p>
+          <span class="cc-cal-pill">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+            Connected to calendar
+          </span>
+        </div>
+      </div>
+
+      <button class="cc-cta" type="button" aria-label="Start recording">
+        <span aria-hidden="true">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3" ry="3"></rect><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+        </span>
+        Start recording
+      </button>
+    </article>
+  </div>
+
+  <div class="anchor-keys">
+    <div><strong>Date header</strong>Blue <code>oklch(0.5 0.18 264)</code>, weight 700, calendar-days icon at 18px.</div>
+    <div><strong>The hero</strong>Timer at <code>clamp(4.7rem, 7.2vw, 5.6rem)</code>, weight 800, ink-navy <code>#061229</code>, soft 18px shadow.</div>
+    <div><strong>Status row</strong>Sans, 0.78rem, weight 800, <code>0.18em</code> uppercase letter-spacing, color <code>#6f7891</code>.</div>
+    <div><strong>READY pill</strong><code>oklch(0.94 0.08 156)</code> bg, <code>#059669</code> text. Switches to <code>#fee</code>/red for LIVE.</div>
+    <div><strong>Audio wave</strong>Indigo hero stroke + violet/mint echoes; the same canvas math as <code>audio-wave-ribbon.tsx</code>.</div>
+    <div><strong>Date tile</strong>70px white card, red weekday, ink day number weight 500, 16px radius.</div>
+    <div><strong>Calendar pill</strong>Mint on mint when linked (<code>rgba(209, 250, 229, 0.72)</code>), slate when not.</div>
+    <div><strong>Primary control</strong>Dark navy <code>#061229</code>, 64px pill, mint radial halo at the top, 36px circle slot for the icon.</div>
+  </div>
+
+  <p style="margin-top: 28px; color: var(--fg-muted); max-width: 64ch;">
+    Component source: <code class="copyable">components/session-workspace.tsx → SessionCaptureCard</code>; CSS in <code class="copyable">app/globals.css</code> (lines ~6785-7100). Brand narrative source: <code class="copyable">branding/BRAND_NARRATIVE.md</code>. Treat this card as the canonical brand instance — match its weights, colors, and rhythm in any new surface.
+  </p>
+</section>
+
+<!-- 2. TYPOGRAPHY -->
+<section id="type">
+  <header>
+    <div class="label">02 — Typography</div>
+    <h2>System sans. Light weights for body. Heavy for hero numbers.</h2>
+    <p>
+      The product uses the system stack at native rendering — no web-font flash, no upscale serif. Emphasis comes from <strong style="color: var(--ink); font-weight: 600;">color</strong> and <strong style="color: var(--ink); font-weight: 600;">weight</strong>, not font-family changes.
+    </p>
+  </header>
+
+  <div class="type-spec display">
+    <div class="label">Hero — Display weight</div>
+    <div class="sample">Your context, layered.</div>
+    <div class="meta">System sans, weight 600, letter-spacing −0.02em. Heavy 800 reserved for big numerals (the recording timer).</div>
+  </div>
+
+  <div class="type-spec ui">
+    <div class="label">UI — System sans, light to medium</div>
+    <div class="sample">Tap once. Layered for life.</div>
+    <div class="meta">-apple-system → SF Pro Text → Inter → ui-sans-serif. Body: weight 400 / 500. Labels: 600. Headings: 600. Hero numerals: 800.</div>
+  </div>
+
+  <div class="type-spec mono">
+    <div class="label">Mono — tool calls, transcripts, code reveals</div>
+    <div class="sample">layers.search({ query: "pricing decisions", since: "30d" })</div>
+    <div class="meta">JetBrains Mono → SF Mono → Menlo → ui-monospace. Same family the explainer video uses (see <code>remotion/scenes/Mcp.tsx</code>).</div>
+  </div>
+</section>
+
+<!-- 3. COLOR -->
+<section id="color">
+  <header>
+    <div class="label">03 — Color &amp; tokens</div>
+    <h2>Three brand colors. Soft &amp; tint variants on top. Paper underneath.</h2>
+    <p>OKLCH everywhere. Never paste a raw hex into product code; the canvas-side rgba values below are only for shader/canvas surfaces where OKLCH isn't supported.</p>
+  </header>
+
+  <h4 style="margin-top: 28px;">Primary</h4>
+  <div class="grid cols-3">
+    <div class="swatch">
+      <div class="chip" style="background: var(--layers-mint);"></div>
+      <div class="meta"><div class="name">layers-mint</div>oklch(0.68 0.13 166)<div class="role">You. The center. The accent.</div></div>
+    </div>
+    <div class="swatch">
+      <div class="chip" style="background: var(--layers-violet);"></div>
+      <div class="meta"><div class="name">layers-violet</div>oklch(0.66 0.16 282)<div class="role">Active context — the now ring.</div></div>
+    </div>
+    <div class="swatch">
+      <div class="chip" style="background: var(--layers-blue);"></div>
+      <div class="meta"><div class="name">layers-blue</div>oklch(0.66 0.13 240)<div class="role">The library — accumulated layers.</div></div>
+    </div>
+  </div>
+
+  <h4 style="margin-top: 28px;">Soft (washes &amp; halos)</h4>
+  <div class="grid cols-3">
+    <div class="swatch">
+      <div class="chip" style="background: var(--layers-mint-soft);"></div>
+      <div class="meta"><div class="name">layers-mint-soft</div>oklch(0.82 0.10 168)</div>
+    </div>
+    <div class="swatch">
+      <div class="chip" style="background: var(--layers-violet-soft);"></div>
+      <div class="meta"><div class="name">layers-violet-soft</div>oklch(0.78 0.13 282)</div>
+    </div>
+    <div class="swatch">
+      <div class="chip" style="background: var(--layers-blue-soft);"></div>
+      <div class="meta"><div class="name">layers-blue-soft</div>oklch(0.80 0.09 240)</div>
+    </div>
+  </div>
+
+  <h4 style="margin-top: 28px;">Tint (paper-on-paper)</h4>
+  <div class="grid cols-3">
+    <div class="swatch">
+      <div class="chip" style="background: var(--layers-mint-tint);"></div>
+      <div class="meta"><div class="name">layers-mint-tint</div>oklch(0.95 0.04 168)</div>
+    </div>
+    <div class="swatch">
+      <div class="chip" style="background: var(--layers-violet-tint);"></div>
+      <div class="meta"><div class="name">layers-violet-tint</div>oklch(0.95 0.03 284)</div>
+    </div>
+    <div class="swatch">
+      <div class="chip" style="background: var(--layers-blue-tint);"></div>
+      <div class="meta"><div class="name">layers-blue-tint</div>oklch(0.94 0.03 240)</div>
+    </div>
+  </div>
+
+  <h4 style="margin-top: 28px;">Paper, ink &amp; lines</h4>
+  <div class="grid cols-4">
+    <div class="swatch">
+      <div class="chip" style="background: var(--bg-page); border-bottom: 1px solid var(--border-subtle);"></div>
+      <div class="meta"><div class="name">bg-page</div>oklch(0.982 0.012 168)</div>
+    </div>
+    <div class="swatch">
+      <div class="chip" style="background: var(--bg-surface); border-bottom: 1px solid var(--border-subtle);"></div>
+      <div class="meta"><div class="name">bg-surface</div>oklch(0.997 0.004 168)</div>
+    </div>
+    <div class="swatch">
+      <div class="chip" style="background: var(--ink);"></div>
+      <div class="meta"><div class="name">ink</div>oklch(0.22 0.035 256)</div>
+    </div>
+    <div class="swatch">
+      <div class="chip" style="background: var(--fg-muted);"></div>
+      <div class="meta"><div class="name">fg-muted</div>oklch(0.46 0.025 256)</div>
+    </div>
+  </div>
+
+  <h4 style="margin-top: 28px;">Signals</h4>
+  <div class="grid cols-3">
+    <div class="swatch">
+      <div class="chip" style="background: var(--success);"></div>
+      <div class="meta"><div class="name">success</div>oklch(0.68 0.13 166) — same hue as mint</div>
+    </div>
+    <div class="swatch">
+      <div class="chip" style="background: var(--warning);"></div>
+      <div class="meta"><div class="name">warning</div>oklch(0.74 0.14 74)</div>
+    </div>
+    <div class="swatch">
+      <div class="chip" style="background: var(--danger);"></div>
+      <div class="meta"><div class="name">danger</div>oklch(0.64 0.20 26)</div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. WAVE -->
+<section id="wave">
+  <header>
+    <div class="label">04 — The three wave colors</div>
+    <h2>The colors on the moving organic ribbon.</h2>
+    <p>
+      These three rgba values are the canonical canvas-side equivalents of mint, violet, and indigo on the live audio-wave ribbon (<code class="copyable">components/audio-wave-ribbon.tsx</code>). They show up everywhere motion appears: in app, in the playground, in Remotion. Treat them as a single chord — they always travel together.
+    </p>
+  </header>
+
+  <div class="grid cols-3">
+    <div class="swatch">
+      <div class="chip" style="background: var(--wave-indigo);"></div>
+      <div class="meta"><div class="name">wave-indigo (primary line)</div>rgba(99, 102, 241, 1)<div class="role">The hero stroke on the ribbon.</div></div>
+    </div>
+    <div class="swatch">
+      <div class="chip" style="background: var(--wave-violet);"></div>
+      <div class="meta"><div class="name">wave-violet (echo)</div>rgba(196, 181, 253, 1)<div class="role">The soft halo trailing the line.</div></div>
+    </div>
+    <div class="swatch">
+      <div class="chip" style="background: var(--wave-mint);"></div>
+      <div class="meta"><div class="name">wave-mint (accent)</div>rgba(52, 211, 153, 1)<div class="role">The accent — same hue as the mint center dot.</div></div>
+    </div>
+  </div>
+
+  <div class="wave-stage">
+    <canvas id="wave-canvas" aria-hidden="true"></canvas>
+    <div class="wave-controls">
+      <label>Level <input type="range" id="wave-level" min="0" max="100" value="45" /></label>
+      <label>Motion <input type="range" id="wave-motion" min="20" max="180" value="100" /></label>
+      <label>Texture
+        <select id="wave-texture">
+          <option value="clean" selected>clean</option>
+          <option value="mesh">mesh</option>
+        </select>
+      </label>
+    </div>
+  </div>
+</section>
+
+<!-- 5. SPACING -->
+<section id="spacing">
+  <header>
+    <div class="label">05 — Spacing &amp; radii</div>
+    <h2>4 pt grid. Card &amp; pill radii. Nothing in between.</h2>
+  </header>
+
+  <h4>Spacing scale</h4>
+  <div class="card" style="display: flex; gap: 24px; flex-wrap: wrap; align-items: flex-end;">
+    <div><div class="scale"><div class="bar" style="height: 16px;"></div></div><div class="col-meta">grid<br/>4px</div></div>
+    <div><div class="scale"><div class="bar" style="height: 32px;"></div></div><div class="col-meta">compact<br/>8px</div></div>
+    <div><div class="scale"><div class="bar" style="height: 48px;"></div></div><div class="col-meta">field<br/>12px</div></div>
+    <div><div class="scale"><div class="bar" style="height: 96px;"></div></div><div class="col-meta">panel<br/>24px</div></div>
+    <div><div class="scale"><div class="bar" style="height: 192px;"></div></div><div class="col-meta">section<br/>48px</div></div>
+    <div><div class="scale"><div class="bar" style="height: 256px;"></div></div><div class="col-meta">stage<br/>96px</div></div>
+  </div>
+
+  <h4 style="margin-top: 28px;">Radii</h4>
+  <div class="grid cols-4">
+    <div class="card" style="display:flex; align-items:center; gap:18px;">
+      <div style="width: 56px; height: 56px; background: var(--layers-mint-tint); border-radius: var(--radius-xs); border: 1px solid var(--border-default);"></div>
+      <div><div style="font-weight:600;">xs</div><div class="copyable">4px</div></div>
+    </div>
+    <div class="card" style="display:flex; align-items:center; gap:18px;">
+      <div style="width: 56px; height: 56px; background: var(--layers-violet-tint); border-radius: var(--radius-md); border: 1px solid var(--border-default);"></div>
+      <div><div style="font-weight:600;">md</div><div class="copyable">10px</div></div>
+    </div>
+    <div class="card" style="display:flex; align-items:center; gap:18px;">
+      <div style="width: 56px; height: 56px; background: var(--layers-blue-tint); border-radius: var(--radius-card); border: 1px solid var(--border-default);"></div>
+      <div><div style="font-weight:600;">card</div><div class="copyable">24px</div></div>
+    </div>
+    <div class="card" style="display:flex; align-items:center; gap:18px;">
+      <div style="width: 56px; height: 56px; background: var(--layers-mint-tint); border-radius: var(--radius-pill); border: 1px solid var(--border-default);"></div>
+      <div><div style="font-weight:600;">pill</div><div class="copyable">9999px</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. MOTION -->
+<section id="motion">
+  <header>
+    <div class="label">06 — Motion</div>
+    <h2>Three durations. One easing.</h2>
+    <p>Same cubic-bezier across all three so motion feels related. Reduced-motion zeros out animation while keeping layout.</p>
+  </header>
+
+  <div class="motion-row">
+    <div class="motion-card fast"><h3>fast</h3><div class="copyable">140ms · cubic-bezier(0.22, 1, 0.36, 1)</div><div class="dot"></div></div>
+    <div class="motion-card std"><h3>standard</h3><div class="copyable">220ms · cubic-bezier(0.22, 1, 0.36, 1)</div><div class="dot"></div></div>
+    <div class="motion-card slow"><h3>slow</h3><div class="copyable">420ms · cubic-bezier(0.22, 1, 0.36, 1)</div><div class="dot"></div></div>
+  </div>
+</section>
+
+<!-- 7. LOGO -->
+<section id="logo">
+  <header>
+    <div class="label">07 — Logo — review for approval</div>
+    <h2>Current arc-based mark vs. the new organic-line variant.</h2>
+    <p>
+      Same conceptual structure — mint dot at the center, a middle violet ring, an outer blue ring. The proposed variant replaces the two geometric arcs with flowing organic lines whose radius breathes — same family as the audio-wave ribbon. The current mark stays in the app until you approve.
+    </p>
+  </header>
+
+  <div class="logo-board">
+
+    <!-- CURRENT (arc-based) -->
+    <div class="logo-tile">
+      <span class="badge">Current — in app</span>
+      <h3>Arc mark</h3>
+      <div class="stage">
+        <div class="lockup">
+          <svg class="arc-mark" width="56" height="56" viewBox="0 0 32 32" aria-hidden="true">
+            <path d="M16 4 a12 12 0 1 1 0 24" fill="none" stroke="var(--layers-blue)" stroke-linecap="round" stroke-width="2.6"></path>
+            <path d="M16 8.5 a7.5 7.5 0 1 1 0 15" fill="none" stroke="var(--layers-violet)" stroke-linecap="round" stroke-width="2.6"></path>
+            <circle cx="16" cy="16" r="4" fill="var(--layers-mint)" opacity="0.22"></circle>
+            <circle cx="16" cy="16" r="2" fill="var(--layers-mint)"></circle>
+          </svg>
+          <span class="word">Layers</span>
+        </div>
+        <!-- size scale -->
+        <svg class="arc-mark" width="40" height="40" viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M16 4 a12 12 0 1 1 0 24" fill="none" stroke="var(--layers-blue)" stroke-linecap="round" stroke-width="2.6"></path>
+          <path d="M16 8.5 a7.5 7.5 0 1 1 0 15" fill="none" stroke="var(--layers-violet)" stroke-linecap="round" stroke-width="2.6"></path>
+          <circle cx="16" cy="16" r="4" fill="var(--layers-mint)" opacity="0.22"></circle>
+          <circle cx="16" cy="16" r="2" fill="var(--layers-mint)"></circle>
+        </svg>
+        <svg class="arc-mark" width="24" height="24" viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M16 4 a12 12 0 1 1 0 24" fill="none" stroke="var(--layers-blue)" stroke-linecap="round" stroke-width="2.6"></path>
+          <path d="M16 8.5 a7.5 7.5 0 1 1 0 15" fill="none" stroke="var(--layers-violet)" stroke-linecap="round" stroke-width="2.6"></path>
+          <circle cx="16" cy="16" r="4" fill="var(--layers-mint)" opacity="0.22"></circle>
+          <circle cx="16" cy="16" r="2" fill="var(--layers-mint)"></circle>
+        </svg>
+      </div>
+      <pre id="arc-svg-source">&lt;svg viewBox="0 0 32 32" aria-hidden="true"&gt;
+  &lt;path d="M16 4 a12 12 0 1 1 0 24" fill="none"
+        stroke="var(--layers-blue)"   stroke-linecap="round" stroke-width="2.6"/&gt;
+  &lt;path d="M16 8.5 a7.5 7.5 0 1 1 0 15" fill="none"
+        stroke="var(--layers-violet)" stroke-linecap="round" stroke-width="2.6"/&gt;
+  &lt;circle cx="16" cy="16" r="4" fill="var(--layers-mint)" opacity="0.22"/&gt;
+  &lt;circle cx="16" cy="16" r="2" fill="var(--layers-mint)"/&gt;
+&lt;/svg&gt;</pre>
+      <button class="copy" data-copy="arc-svg-source">⎘ Copy SVG</button>
+    </div>
+
+    <!-- ORGANIC (proposed) -->
+    <div class="logo-tile">
+      <span class="badge new">Proposed — needs approval</span>
+      <h3>Organic-line mark</h3>
+      <div class="stage">
+        <div class="lockup">
+          <svg class="organic-mark big" width="56" height="56" viewBox="0 0 64 64" aria-hidden="true">
+            <g class="breathe">
+              <path class="ring outer" fill="none" stroke="var(--layers-blue)" stroke-width="3" stroke-linecap="round"></path>
+              <path class="ring middle" fill="none" stroke="var(--layers-violet)" stroke-width="3" stroke-linecap="round"></path>
+              <circle cx="32" cy="32" r="9" fill="var(--layers-mint)" opacity="0.22"></circle>
+              <circle cx="32" cy="32" r="4.4" fill="var(--layers-mint)"></circle>
+            </g>
+          </svg>
+          <span class="word">Layers</span>
+        </div>
+        <svg class="organic-mark md" width="40" height="40" viewBox="0 0 64 64" aria-hidden="true">
+          <g class="breathe">
+            <path class="ring outer" fill="none" stroke="var(--layers-blue)" stroke-width="3.4" stroke-linecap="round"></path>
+            <path class="ring middle" fill="none" stroke="var(--layers-violet)" stroke-width="3.4" stroke-linecap="round"></path>
+            <circle cx="32" cy="32" r="9" fill="var(--layers-mint)" opacity="0.22"></circle>
+            <circle cx="32" cy="32" r="4.4" fill="var(--layers-mint)"></circle>
+          </g>
+        </svg>
+        <svg class="organic-mark sm" width="24" height="24" viewBox="0 0 64 64" aria-hidden="true">
+          <g class="breathe">
+            <path class="ring outer" fill="none" stroke="var(--layers-blue)" stroke-width="4.4" stroke-linecap="round"></path>
+            <path class="ring middle" fill="none" stroke="var(--layers-violet)" stroke-width="4.4" stroke-linecap="round"></path>
+            <circle cx="32" cy="32" r="9" fill="var(--layers-mint)" opacity="0.22"></circle>
+            <circle cx="32" cy="32" r="5.6" fill="var(--layers-mint)"></circle>
+          </g>
+        </svg>
+      </div>
+      <pre id="org-svg-source">&lt;!-- Static fallback path (animated via inline JS — see &lt;script&gt; below). --&gt;
+&lt;svg viewBox="0 0 64 64" aria-hidden="true"&gt;
+  &lt;path class="ring outer"  fill="none" stroke="var(--layers-blue)"   stroke-linecap="round" stroke-width="3"/&gt;
+  &lt;path class="ring middle" fill="none" stroke="var(--layers-violet)" stroke-linecap="round" stroke-width="3"/&gt;
+  &lt;circle cx="32" cy="32" r="9"   fill="var(--layers-mint)" opacity="0.22"/&gt;
+  &lt;circle cx="32" cy="32" r="4.4" fill="var(--layers-mint)"/&gt;
+&lt;/svg&gt;
+
+&lt;!-- JS samples a sine-modulated radius:
+     r(θ) = baseR + amp * (0.6*sin(3θ + φ) + 0.4*sin(5θ - 1.7φ))
+     and emits the path each frame. φ advances 0.018 rad/frame for outer,
+     0.024 rad/frame for middle (different phases create the layered look).
+     prefers-reduced-motion freezes φ at 0. --&gt;</pre>
+      <button class="copy" data-copy="org-svg-source">⎘ Copy SVG</button>
+    </div>
+
+  </div>
+
+  <p style="margin-top: 24px; color: var(--fg-muted);">
+    <strong style="color: var(--ink);">Approval gate.</strong>
+    The proposed variant is <em>not</em> wired into the app yet. Once you approve, the swap target is <code class="copyable">components/layers-logo.tsx</code> + a frame-deterministic equivalent in <code class="copyable">remotion/components/LayersMark.tsx</code>.
+  </p>
+</section>
+
+<!-- 8. VOICE -->
+<section id="voice">
+  <header>
+    <div class="label">08 — Voice</div>
+    <h2>Calm, specific, portable, inevitable.</h2>
+    <p>From <code class="copyable">branding/BRAND_NARRATIVE.md §7</code>.</p>
+  </header>
+
+  <div class="voice">
+    <div class="col do">
+      <h3>Do <span class="tag">say</span></h3>
+      <ul>
+        <li>"Your meeting memory in every AI tool."</li>
+        <li>"Tap once. Layered for life."</li>
+        <li>"Your context, layered."</li>
+        <li>"Claude knew about Thursday. We didn't have to tell it."</li>
+        <li>Specific verbs: <em>capture, layer, recall, hand off, route, surface.</em></li>
+        <li>Always name destinations: Claude, ChatGPT, Gemini, Cursor.</li>
+      </ul>
+    </div>
+    <div class="col dont">
+      <h3>Don't <span class="tag">avoid</span></h3>
+      <ul>
+        <li>"Layers is the future of knowledge work." (too grand)</li>
+        <li>"Magically gives your AI context." (cliché &amp; dodges the verb)</li>
+        <li>"Unlock the power of…" (cliché stack)</li>
+        <li>"Revolutionary / 10x / supercharge / mind-blowing."</li>
+        <li>Pretending Layers is the destination instead of the substrate.</li>
+        <li>AI sparkles on every surface. <em>One</em> flourish per layout.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 8B. BUTTONS & CONTROLS -->
+<section id="buttons">
+  <header>
+    <div class="label">09 — Buttons &amp; controls</div>
+    <h2>One primary. Everything else, quieter.</h2>
+    <p>The primary control on every Layers surface is the dark-navy pill with the mint radial halo (matches <code class="copyable">.session-stop-button.is-start</code>). Secondaries are sans on paper. Ghost for tertiary. Destructive uses the danger token sparingly.</p>
+  </header>
+
+  <div class="card" style="display: flex; flex-direction: column; gap: 18px;">
+    <div class="btn-row">
+      <button class="ly-btn primary">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        Start recording
+      </button>
+      <button class="ly-btn secondary">Open meeting</button>
+      <button class="ly-btn ghost">Cancel</button>
+      <button class="ly-btn mint">Connected</button>
+      <button class="ly-btn destructive">Discard recording</button>
+      <button class="ly-btn primary" disabled>Disabled state</button>
+      <button class="ly-btn secondary icon-only" aria-label="More">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+      </button>
+    </div>
+
+    <h4 style="margin-top: 4px;">Hero recording control</h4>
+    <button class="ly-record-btn">
+      <span class="slot">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </span>
+      Start recording
+    </button>
+  </div>
+</section>
+
+<!-- 10. PILLS & BADGES -->
+<section id="pills">
+  <header>
+    <div class="label">10 — Pills, badges &amp; status</div>
+    <h2>Calm chips. Loud signals only when they earn it.</h2>
+    <p>Mirrors the badge family from <code class="copyable">SessionCaptureCard</code> and the readiness/preflight states in <code class="copyable">live-recorder.tsx</code>.</p>
+  </header>
+
+  <div class="card" style="display: flex; gap: 12px; flex-wrap: wrap;">
+    <span class="ly-pill live"><span class="dot"></span>LIVE</span>
+    <span class="ly-pill ready"><span class="dot"></span>READY</span>
+    <span class="ly-pill warning"><span class="dot"></span>WARNING</span>
+    <span class="ly-pill muted"><span class="dot" style="background: #6f7891;"></span>IDLE</span>
+    <span class="ly-pill connected">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      Connected to calendar
+    </span>
+    <span class="ly-pill tag">Tool call</span>
+    <span class="ly-pill tag">Decision</span>
+    <span class="ly-pill tag">Action item</span>
+  </div>
+</section>
+
+<!-- 11. FORM ELEMENTS -->
+<section id="forms">
+  <header>
+    <div class="label">11 — Form elements</div>
+    <h2>Soft borders. Mint focus. Native rendering.</h2>
+    <p>Every input lands on a paper-on-paper border, with mint focus ring at 16% mint. No outlines, no flash.</p>
+  </header>
+
+  <div class="card">
+    <div class="form-row">
+      <div class="ly-field">
+        <label>Meeting title</label>
+        <input type="text" placeholder="Pricing tier review" />
+      </div>
+      <div class="ly-field">
+        <label>Calendar event</label>
+        <select>
+          <option>Auto-detect</option>
+          <option>Product planning · Tue 11:00</option>
+          <option>1:1 with Sara · Tue 14:30</option>
+        </select>
+      </div>
+      <div class="ly-field ly-search" style="grid-column: span 2;">
+        <label>Search the library</label>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="top: 70%;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="search" placeholder="pricing decisions last 30 days" />
+      </div>
+      <div class="ly-field">
+        <label>Sensitivity</label>
+        <input type="range" min="0" max="100" value="58" />
+      </div>
+      <div class="ly-field">
+        <label>Auto-summarize</label>
+        <label class="ly-toggle" style="margin-top: 6px;">
+          <input type="checkbox" checked />
+          <span class="track"><span class="knob"></span></span>
+          <span style="font-size: 13.5px; color: var(--fg-muted);">After every recording</span>
+        </label>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 12. CHAT & TOOL CALL -->
+<section id="chat">
+  <header>
+    <div class="label">12 — Chat &amp; tool calls</div>
+    <h2>The Layers <code class="copyable">layers.search</code> moment, in chrome.</h2>
+    <p>Mirrors <code class="copyable">remotion/scenes/Mcp.tsx</code>. User bubble in mint-tint, assistant with the Layers mark, tool-call card with violet label + mint check.</p>
+  </header>
+
+  <div class="ly-chat">
+    <div class="head">
+      <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      <span style="margin-left: 12px;">Claude · with Layers MCP</span>
+    </div>
+    <div class="body">
+      <div class="bubble user">What did we decide about pricing in the last few weeks?</div>
+      <div class="bubble assistant">
+        <div class="avatar">
+          <svg width="14" height="14" viewBox="0 0 32 32" aria-hidden>
+            <path d="M16 4 a12 12 0 1 1 0 24" fill="none" stroke="var(--layers-blue)" stroke-linecap="round" stroke-width="2.6"/>
+            <path d="M16 8.5 a7.5 7.5 0 1 1 0 15" fill="none" stroke="var(--layers-violet)" stroke-linecap="round" stroke-width="2.6"/>
+            <circle cx="16" cy="16" r="2" fill="var(--layers-mint)"/>
+          </svg>
+        </div>
+        <div class="text">Let me check your meeting memory for any pricing-related decisions.</div>
+      </div>
+      <div class="tool-call">
+        <div class="meta">
+          <span class="label">Tool call</span>
+          <code>layers.search({ query: "pricing decisions", since: "30d" })</code>
+          <span class="check">✓ ok</span>
+        </div>
+<pre>{
+  "results": [
+    {
+      "meeting": "Pricing tier review",
+      "date": "2026-05-09",
+      "decision": "Hold current tiers. Revisit after onboarding data lands."
+    }
+  ]
+}</pre>
+      </div>
+      <div class="bubble assistant">
+        <div class="avatar">
+          <svg width="14" height="14" viewBox="0 0 32 32" aria-hidden>
+            <path d="M16 4 a12 12 0 1 1 0 24" fill="none" stroke="var(--layers-blue)" stroke-linecap="round" stroke-width="2.6"/>
+            <path d="M16 8.5 a7.5 7.5 0 1 1 0 15" fill="none" stroke="var(--layers-violet)" stroke-linecap="round" stroke-width="2.6"/>
+            <circle cx="16" cy="16" r="2" fill="var(--layers-mint)"/>
+          </svg>
+        </div>
+        <div class="text">Pricing has been held steady the past two weeks — the team agreed to revisit after onboarding data lands.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 13. DATA & METRICS -->
+<section id="data">
+  <header>
+    <div class="label">13 — Data &amp; metrics</div>
+    <h2>Stat strips. Transcript rows. Tone-coded segments.</h2>
+    <p>From <code class="copyable">SessionMetricsStrip</code> + <code class="copyable">SessionIntelligenceCanvas</code>. Transcript rows ship in three tones (blue / cyan / orange) plus a live state.</p>
+  </header>
+
+  <div class="stat-strip">
+    <div><strong>14</strong><small>Layers</small></div>
+    <div><strong>4,287</strong><small>Words</small></div>
+    <div><strong>11</strong><small>Decisions</small></div>
+    <div><strong>6</strong><small>Open actions</small></div>
+  </div>
+
+  <h4 style="margin-top: 28px;">Transcript rows</h4>
+  <div class="transcript-rows">
+    <div class="transcript-row is-blue"><span class="ts">00:04</span><span class="text">Audio notes are working well, but transcript search should be next.</span></div>
+    <div class="transcript-row is-blue"><span class="ts">00:18</span><span class="text">Calendar context needs to appear before recording starts.</span></div>
+    <div class="transcript-row is-cyan"><span class="ts">00:35</span><span class="text">Action items should include owners, due dates, and priority.</span></div>
+    <div class="transcript-row is-orange"><span class="ts">00:54</span><span class="text">We can test the new flow with five users this week.</span></div>
+    <div class="transcript-row is-cyan is-live"><span class="ts">01:11</span><span class="text">Let's share the prototype internally before the Friday review</span></div>
+  </div>
+</section>
+
+<!-- 14. ICONS -->
+<section id="icons">
+  <header>
+    <div class="label">14 — Icon vocabulary</div>
+    <h2>Lucide, weight 1.7, no fills.</h2>
+    <p>The exact icons the product uses (<code class="copyable">lucide-react</code>). Match this weight when adding new ones; never mix with another icon family.</p>
+  </header>
+
+  <div class="icon-grid">
+    <div class="icon-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span class="name">calendar-days</span></div>
+    <div class="icon-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg><span class="name">mic</span></div>
+    <div class="icon-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="16" rx="2"/></svg><span class="name">square (stop)</span></div>
+    <div class="icon-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span class="name">link-2</span></div>
+    <div class="icon-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.91 5.78L4 9.83l4.36 3.74L7.27 19 12 16l4.73 3-1.09-5.43L20 9.83l-6.09-1.05L12 3z"/></svg><span class="name">sparkles</span></div>
+    <div class="icon-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span class="name">bookmark</span></div>
+    <div class="icon-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m11 10 2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg><span class="name">check-circle</span></div>
+    <div class="icon-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m3 6 3 3 5-5"/><path d="m3 13 3 3 5-5"/><path d="m3 20 3 3 5-5"/><line x1="13" y1="6" x2="21" y2="6"/><line x1="13" y1="13" x2="21" y2="13"/><line x1="13" y1="20" x2="21" y2="20"/></svg><span class="name">list-checks</span></div>
+    <div class="icon-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h3l3-9 6 18 3-9h3"/></svg><span class="name">audio-lines</span></div>
+    <div class="icon-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="name">message-circle</span></div>
+    <div class="icon-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span class="name">search</span></div>
+    <div class="icon-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20v2"/><path d="M12 2v2"/><path d="m4.93 19.07 1.41-1.41"/><path d="m17.66 6.34 1.41-1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><circle cx="12" cy="12" r="4"/></svg><span class="name">loader</span></div>
+  </div>
+</section>
+
+<!-- 15. LOADING STATES -->
+<section id="loading">
+  <header>
+    <div class="label">15 — Loading states</div>
+    <h2>Mint spinner. Shimmer for skeletons. Pulse for "thinking."</h2>
+    <p>The product never shows a generic OS spinner — always one of these three.</p>
+  </header>
+
+  <div class="grid cols-3">
+    <div class="card" style="display: flex; flex-direction: column; gap: 12px; align-items: center;">
+      <span class="ly-spin"></span>
+      <div style="font-size: 12.5px; color: var(--fg-muted); letter-spacing: 0.04em;">.ly-spin · 24px · mint top arc</div>
+    </div>
+    <div class="card" style="display: flex; flex-direction: column; gap: 8px;">
+      <div class="ly-skeleton" style="height: 14px; width: 60%;"></div>
+      <div class="ly-skeleton" style="height: 14px; width: 88%;"></div>
+      <div class="ly-skeleton" style="height: 14px; width: 72%;"></div>
+      <div style="font-size: 12.5px; color: var(--fg-muted); letter-spacing: 0.04em; margin-top: 6px;">.ly-skeleton · 1.6s shimmer</div>
+    </div>
+    <div class="card" style="display: flex; flex-direction: column; gap: 14px; align-items: center;">
+      <div class="ly-dots"><span></span><span></span><span></span></div>
+      <div style="font-size: 12.5px; color: var(--fg-muted); letter-spacing: 0.04em;">.ly-dots · "Layers is thinking…"</div>
+    </div>
+  </div>
+</section>
+
+<!-- 9. PARTNERS -->
+<section id="partners">
+  <header>
+    <div class="label">09 — Partner logos</div>
+    <h2>Always the real mark, sourced.</h2>
+    <p>
+      Whenever Claude / ChatGPT / Gemini / Cursor / Notion / Linear / MCP appear on a Layers asset, use the real monogram from the vendor's brand page. Below are stand-in approximations for layout planning — for production assets, swap in the canonical SVGs from the sources listed.
+    </p>
+  </header>
+
+  <div class="logos-row">
+    <div class="logo-cell" title="Anthropic Claude — sourced from @lobehub/icons-static-svg">
+      <img src="./icons/claude-color.svg" alt="Claude" loading="lazy" />
+      <span class="name">Claude</span>
+    </div>
+    <div class="logo-cell" title="OpenAI / ChatGPT — sourced from @lobehub/icons-static-svg">
+      <img src="./icons/openai.svg" alt="OpenAI" loading="lazy" style="color: oklch(0.2 0.04 240);" />
+      <span class="name">ChatGPT</span>
+    </div>
+    <div class="logo-cell" title="Google Gemini — sourced from @lobehub/icons-static-svg">
+      <img src="./icons/gemini-color.svg" alt="Gemini" loading="lazy" />
+      <span class="name">Gemini</span>
+    </div>
+    <div class="logo-cell" title="Cursor — sourced from @lobehub/icons-static-svg">
+      <img src="./icons/cursor.svg" alt="Cursor" loading="lazy" style="color: oklch(0.2 0.04 240);" />
+      <span class="name">Cursor</span>
+    </div>
+    <div class="logo-cell" title="Linear — sourced from SimpleIcons (LobeHub doesn't carry Linear)">
+      <img src="./icons/linear.svg" alt="Linear" loading="lazy" />
+      <span class="name">Linear</span>
+    </div>
+    <div class="logo-cell" title="Notion — sourced from SimpleIcons (LobeHub doesn't carry Notion)">
+      <img src="./icons/notion.svg" alt="Notion" loading="lazy" />
+      <span class="name">Notion</span>
+    </div>
+    <div class="logo-cell" title="Model Context Protocol — sourced from @lobehub/icons-static-svg">
+      <img src="./icons/mcp.svg" alt="MCP" loading="lazy" style="color: oklch(0.2 0.04 240);" />
+      <span class="name">MCP</span>
+    </div>
+  </div>
+
+  <div style="margin-top: 18px; padding: 14px 18px; background: var(--bg-surface-muted); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); font-size: 13px; color: var(--fg-muted); line-height: 1.55;">
+    <strong style="color: var(--ink); font-weight: 600;">Real-asset policy.</strong> These logos are the actual vendor SVGs, cached locally to <code class="copyable">branding/icons/</code> from
+    <a href="https://github.com/lobehub/lobe-icons" style="color: var(--layers-violet);">@lobehub/icons-static-svg</a> (Claude, OpenAI, Gemini, Cursor, MCP) and
+    <a href="https://simpleicons.org" style="color: var(--layers-violet);">SimpleIcons</a> (Linear, Notion). The skill
+    <code class="copyable">.claude/skills/layers-brand-remotion/SKILL.md</code> documents the CDN URL pattern + the
+    <a href="https://context.dev" style="color: var(--layers-violet);">context.dev</a> MCP server for brands we don't have cached. <strong style="color: var(--ink); font-weight: 600;">Never approximate</strong> — always reach for a skill or MCP first.
+  </div>
+</section>
+
+<!-- 10. USING -->
+<section id="using">
+  <header>
+    <div class="label">10 — Using this kit</div>
+    <h2>One file. Share it. Drop tokens straight in.</h2>
+  </header>
+
+  <div class="grid cols-2">
+    <div class="card">
+      <h3>For designers</h3>
+      <p style="color: var(--fg-muted); font-size: 14.5px;">
+        Send this file. It opens by double-click. Every token name maps 1:1 to <code class="copyable">DESIGN.md</code>, <code class="copyable">app/globals.css</code>, and <code class="copyable">remotion/lib/tokens.ts</code>. Copy SVGs straight from the logo board.
+      </p>
+    </div>
+    <div class="card">
+      <h3>For agents</h3>
+      <p style="color: var(--fg-muted); font-size: 14.5px;">
+        Read <code class="copyable">branding/BRAND_NARRATIVE.md</code> first, then <code class="copyable">DESIGN.md</code>. Never paste raw hex into product code. Use the semantic OKLCH tokens. For canvas/shader code, the rgba wave colors are listed in §4 above.
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Layers Brand Kit v1.1 · Paper Calm · 2026-05-12 ·
+  Companion files: <a href="./BRAND_NARRATIVE.md">BRAND_NARRATIVE.md</a> ·
+  <a href="./htmlcanvas-playground.html">HTML-in-Canvas Playground</a> ·
+  <a href="../.claude/skills/layers-brand-remotion/SKILL.md">Combined skill</a>
+</footer>
+
+</main>
+</div>
+</div>
+
+<script>
+  /* ============================================================
+   * Organic-line logo — sine-modulated radius, animated.
+   * Same family as the audio-wave ribbon: layered low-frequency sines.
+   * ============================================================ */
+  (function () {
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Open organic arc — same family as the original semi-circle logo, but
+    // each arc is a flowing sine-modulated line. Returns an SVG path string
+    // (no Z — open path).
+    function organicArc({ baseR, amp, lobesA, lobesB, phase, cx = 32, cy = 32,
+                          startAngle = -Math.PI / 2, endAngle = Math.PI / 2, samples = 64 }) {
+      const pts = [];
+      for (let i = 0; i <= samples; i++) {
+        const t = i / samples;
+        const θ = startAngle + (endAngle - startAngle) * t;
+        const r = baseR
+          + amp * 0.62 * Math.sin(lobesA * θ + phase)
+          + amp * 0.38 * Math.sin(lobesB * θ - phase * 1.7);
+        pts.push([cx + r * Math.cos(θ), cy + r * Math.sin(θ)]);
+      }
+      // Catmull-Rom → Bezier, open ended (no closing Z).
+      let d = `M ${pts[0][0].toFixed(2)} ${pts[0][1].toFixed(2)}`;
+      for (let i = 0; i < pts.length - 1; i++) {
+        const p0 = pts[i - 1] || pts[i];
+        const p1 = pts[i];
+        const p2 = pts[i + 1];
+        const p3 = pts[i + 2] || pts[i + 1];
+        const cp1x = p1[0] + (p2[0] - p0[0]) / 6;
+        const cp1y = p1[1] + (p2[1] - p0[1]) / 6;
+        const cp2x = p2[0] - (p3[0] - p1[0]) / 6;
+        const cp2y = p2[1] - (p3[1] - p1[1]) / 6;
+        d += ` C ${cp1x.toFixed(2)} ${cp1y.toFixed(2)}, ${cp2x.toFixed(2)} ${cp2y.toFixed(2)}, ${p2[0].toFixed(2)} ${p2[1].toFixed(2)}`;
+      }
+      return d;
+    }
+
+    function paint(t) {
+      const phaseOuter  = reduced ? 0 : t * 0.00065;
+      const phaseMiddle = reduced ? 0 : t * 0.00088 + 1.2;
+      // Re-query each tick so marks added later (e.g. dynamic content) are picked up.
+      document.querySelectorAll('.organic-mark').forEach((svg) => {
+        const outer  = svg.querySelector('.ring.outer');
+        const middle = svg.querySelector('.ring.middle');
+        if (!outer || !middle) return;
+        // Both arcs span -π/2 → +π/2 (top → bottom via right side),
+        // matching the original logo's open semi-circle structure.
+        outer.setAttribute('d',  organicArc({ baseR: 22.0, amp: 1.7, lobesA: 3, lobesB: 5, phase: phaseOuter  }));
+        middle.setAttribute('d', organicArc({ baseR: 13.5, amp: 1.4, lobesA: 4, lobesB: 6, phase: phaseMiddle }));
+      });
+      if (!reduced) requestAnimationFrame(paint);
+    }
+    // Paint once synchronously so the marks have a `d` attr immediately,
+    // then start the rAF loop for the breathing motion.
+    paint(0);
+    requestAnimationFrame(paint);
+  })();
+
+  /* ============================================================
+   * Audio wave demo — mirrors components/audio-wave-ribbon.tsx
+   * (clean texture only — full canvas-2d implementation, deterministic on
+   * time so it animates on screen but doesn't fork from the product code).
+   * ============================================================ */
+  (function () {
+    const canvas = document.getElementById('wave-canvas');
+    const levelInput = document.getElementById('wave-level');
+    const motionInput = document.getElementById('wave-motion');
+    const textureSelect = document.getElementById('wave-texture');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let raf = 0;
+    let started = performance.now();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function resize() {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = Math.floor(rect.width * dpr);
+      canvas.height = Math.floor(rect.height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    new ResizeObserver(resize).observe(canvas);
+    resize();
+
+    function draw(now) {
+      const rect = canvas.getBoundingClientRect();
+      const width = rect.width;
+      const height = rect.height;
+      const seconds = reducedMotion ? 0 : (now - started) / 1000;
+      const lvl = (+levelInput.value || 45) / 100;
+      const motion = (+motionInput.value || 100) / 100;
+      const texture = textureSelect.value;
+      const clean = texture === 'clean';
+
+      const energy = Math.min(1, lvl + 0.08);
+      const breath = 0.93 + 0.07 * Math.sin(seconds * 2.4 * motion);
+      const baseAmp = height * 0.086 * Math.min(1.48, motion);
+      const soundAmp = height * 0.15 * energy;
+      const amplitude = (baseAmp + soundAmp) * breath;
+      const phaseA = seconds * 1.9 * motion;
+      const phaseB = seconds * 2.9 * motion;
+      const phaseC = seconds * 1.2 * motion;
+      const centerY = height * 0.5;
+
+      ctx.clearRect(0, 0, width, height);
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      function yAt(x, offset = 0) {
+        const n = x / Math.max(width, 1);
+        const drift = Math.sin(n * Math.PI * (clean ? 1.62 : 2.15) + phaseA * (clean ? 0.72 : 1) + offset);
+        const weave = Math.sin(n * Math.PI * (clean ? 4.15 : 6.8) - phaseB * (clean ? 0.68 : 1) + offset * 0.55);
+        const fine = Math.sin(n * Math.PI * (clean ? 8.8 : 18) + phaseA * 0.58 + offset * 0.18);
+        const undertow = Math.sin(n * Math.PI * 0.86 - phaseC + offset * 0.4) * amplitude * 0.16;
+        return centerY + drift * amplitude * 0.56 + weave * amplitude * 0.34 + fine * amplitude * 0.035 + undertow;
+      }
+
+      function points(offset) {
+        const step = clean ? 13 : 8;
+        const out = [];
+        for (let x = -step; x <= width + step; x += step) out.push([x, yAt(x, offset)]);
+        return out;
+      }
+
+      function drawCurve(offset, color, lineWidth, alpha = 1) {
+        const ps = points(offset);
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.beginPath();
+        for (let i = 0; i < ps.length - 1; i++) {
+          const p0 = ps[i - 1] || ps[i];
+          const p1 = ps[i];
+          const p2 = ps[i + 1];
+          const p3 = ps[i + 2] || p2;
+          if (i === 0) ctx.moveTo(p1[0], p1[1]);
+          ctx.bezierCurveTo(p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6,
+                            p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6,
+                            p2[0], p2[1]);
+        }
+        ctx.strokeStyle = color;
+        ctx.lineWidth = lineWidth;
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // Soft halos
+      ctx.save();
+      ctx.filter = 'blur(18px)';
+      drawCurve(0.9, 'rgba(99, 102, 241, 0.28)', 28 + energy * 24, 0.86);
+      drawCurve(2.2, 'rgba(196, 181, 253, 0.24)', 22 + energy * 18, 0.78);
+      drawCurve(-1.4, 'rgba(52, 211, 153, 0.18)', 20 + energy * 14, 0.68);
+      ctx.restore();
+
+      // Echoes
+      drawCurve(1.3, 'rgba(196, 181, 253, 0.58)', 3.2 + energy * 1.8, 0.88);
+      drawCurve(-0.8, 'rgba(52, 211, 153, 0.48)', 2.5 + energy * 1.6, 0.76);
+      // Primary
+      drawCurve(0, 'rgba(15, 23, 42, 0.2)', 9 + energy * 3, 0.3);
+      drawCurve(0, 'rgba(99, 102, 241, 0.9)', 2.1 + energy * 1.7, 0.96);
+      drawCurve(0.18, 'rgba(255, 255, 255, 0.76)', 0.9, 0.86);
+
+      raf = requestAnimationFrame(draw);
+    }
+    raf = requestAnimationFrame(draw);
+  })();
+
+  /* ============================================================
+   * Anchor wave — inside the SessionCaptureCard replica.
+   * Shares the same wave math as components/audio-wave-ribbon.tsx;
+   * tuned for the smaller 380×92 canvas inside the card.
+   * ============================================================ */
+  (function () {
+    const canvas = document.getElementById('anchor-wave-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let started = performance.now();
+
+    function resize() {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = Math.floor(rect.width * dpr);
+      canvas.height = Math.floor(rect.height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    new ResizeObserver(resize).observe(canvas);
+    resize();
+
+    function draw(now) {
+      const rect = canvas.getBoundingClientRect();
+      const width = rect.width, height = rect.height;
+      const seconds = reducedMotion ? 0 : (now - started) / 1000;
+      const lvl = 0.42; // matches the live page's reference-preview level
+      const motion = 1.28;
+
+      const energy = Math.min(1, lvl + 0.08);
+      const breath = 0.93 + 0.07 * Math.sin(seconds * 2.4 * motion);
+      const baseAmp = height * 0.086 * Math.min(1.48, motion);
+      const soundAmp = height * 0.15 * energy;
+      const amplitude = (baseAmp + soundAmp) * breath;
+      const phaseA = seconds * 1.9 * motion;
+      const phaseB = seconds * 2.9 * motion;
+      const phaseC = seconds * 1.2 * motion;
+      const centerY = height * 0.5;
+
+      ctx.clearRect(0, 0, width, height);
+      ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+
+      function yAt(x, offset = 0) {
+        const n = x / Math.max(width, 1);
+        const drift = Math.sin(n * Math.PI * 1.62 + phaseA * 0.72 + offset);
+        const weave = Math.sin(n * Math.PI * 4.15 - phaseB * 0.68 + offset * 0.55);
+        const fine = Math.sin(n * Math.PI * 8.8 + phaseA * 0.58 + offset * 0.18);
+        const undertow = Math.sin(n * Math.PI * 0.86 - phaseC + offset * 0.4) * amplitude * 0.16;
+        return centerY + drift * amplitude * 0.56 + weave * amplitude * 0.34 + fine * amplitude * 0.035 + undertow;
+      }
+      function points(offset) {
+        const step = 13, out = [];
+        for (let x = -step; x <= width + step; x += step) out.push([x, yAt(x, offset)]);
+        return out;
+      }
+      function drawCurve(offset, color, lineWidth, alpha = 1) {
+        const ps = points(offset);
+        ctx.save(); ctx.globalAlpha = alpha; ctx.beginPath();
+        for (let i = 0; i < ps.length - 1; i++) {
+          const p0 = ps[i - 1] || ps[i];
+          const p1 = ps[i];
+          const p2 = ps[i + 1];
+          const p3 = ps[i + 2] || p2;
+          if (i === 0) ctx.moveTo(p1[0], p1[1]);
+          ctx.bezierCurveTo(p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6,
+                            p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6,
+                            p2[0], p2[1]);
+        }
+        ctx.strokeStyle = color; ctx.lineWidth = lineWidth; ctx.stroke(); ctx.restore();
+      }
+
+      ctx.save();
+      ctx.filter = 'blur(14px)';
+      drawCurve(0.9, 'rgba(99, 102, 241, 0.28)', 22, 0.86);
+      drawCurve(2.2, 'rgba(196, 181, 253, 0.24)', 18, 0.78);
+      drawCurve(-1.4, 'rgba(52, 211, 153, 0.18)', 16, 0.68);
+      ctx.restore();
+
+      drawCurve(1.3, 'rgba(196, 181, 253, 0.58)', 2.6, 0.88);
+      drawCurve(-0.8, 'rgba(52, 211, 153, 0.48)', 2.0, 0.76);
+      drawCurve(0, 'rgba(15, 23, 42, 0.2)', 6, 0.3);
+      drawCurve(0, 'rgba(99, 102, 241, 0.9)', 1.8, 0.96);
+      drawCurve(0.18, 'rgba(255, 255, 255, 0.76)', 0.7, 0.86);
+
+      requestAnimationFrame(draw);
+    }
+    requestAnimationFrame(draw);
+  })();
+
+  /* Copy buttons */
+  document.querySelectorAll('.copy[data-copy]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-copy');
+      const el = document.getElementById(id);
+      if (!el) return;
+      const text = el.textContent || '';
+      navigator.clipboard.writeText(text).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = '✓ Copied';
+        setTimeout(() => { btn.textContent = orig; }, 1200);
+      });
+    });
+  });
+</script>
+</body>
+</html>
