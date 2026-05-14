@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.119] — 2026-05-14
+
+### Other
+- docs(brand): README + AGENTS pointers, activity-log entries, evidence (PROD-496) (`78eae87`)
+
+
 ## [0.1.118] — 2026-05-14
 
 ### Other
