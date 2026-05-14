@@ -16,6 +16,7 @@ Other essentials:
 
 - 🚦 [`docs/RELEASE.md`](./docs/RELEASE.md) — feature → development → staging → main. Vercel setup, GitHub branch protection, OAuth/webhook allow-lists. **Read before pushing.**
 - 🎨 [`DESIGN.md`](./DESIGN.md) — Paper Calm v1 tokens. OKLCH only. 4pt grid. Source of truth for visual decisions.
+- 🪪 [`branding/`](./branding/) — Brand kit ([`BRAND_NARRATIVE.md`](./branding/BRAND_NARRATIVE.md), shareable [`design-kit.html`](./branding/design-kit.html), [`htmlcanvas-playground.html`](./branding/htmlcanvas-playground.html), cached vendor SVGs). Open the HTML files directly to share with a designer.
 - 🤖 [`AGENTS.md`](./AGENTS.md) — agent contract. AI SDK v6 patterns. Skill registry.
 - 🧪 [`docs/V1_PLAN.md`](./docs/V1_PLAN.md) — sprints + milestones, mapped to [Linear M1–M6](https://linear.app/mirror-factory/project/layers-786bd350532f).
 

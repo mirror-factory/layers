@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.119] — 2026-05-14
+
+### Other
+- docs(brand): README + AGENTS pointers, activity-log entries, evidence (PROD-496) (`78eae87`)
+
+
+## [0.1.118] — 2026-05-14
+
+### Other
+- feat(skills): layers-brand-remotion — brand voice + Layers Remotion patterns + HTML-in-Canvas playbook in one skill (PROD-499) (`8bf63cf`)
+
+
+## [0.1.117] — 2026-05-14
+
+### Other
+- feat(remotion): BrandTemplate composition — six-beat 1920x1080 brand video with particle fields + organic semi-circle mark (PROD-499) (`907791e`)
+
+
+## [0.1.116] — 2026-05-14
+
+### Other
+- feat(brand): narrative + shareable design kit + HTML-in-Canvas playground + cached vendor SVGs (PROD-497, PROD-498) (`6c23a7a`)
+
+
 ## [0.1.115] — 2026-05-13
 
 ### Other
