@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.120] — 2026-05-14
+
+### Other
+- docs(activity-log): pr-merged #87 brand kit + branch-prune summary (`dd0edbc`)
+
+
 ## [0.1.119] — 2026-05-14
 
 ### Other
