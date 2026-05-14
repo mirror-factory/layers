@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.117] — 2026-05-14
+
+### Other
+- feat(remotion): BrandTemplate composition — six-beat 1920x1080 brand video with particle fields + organic semi-circle mark (PROD-499) (`907791e`)
+
+
 ## [0.1.116] — 2026-05-14
 
 ### Other
