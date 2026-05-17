@@ -31,6 +31,7 @@ on:
 # A staging push or tagged push triggers native artifact jobs. Only a tag
 # publishes the GitHub Release that the public website downloads from.
 env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
   IS_RELEASE: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref_type == 'tag') || (github.event_name == 'push' && github.ref_name == 'staging') }}
 
 jobs:

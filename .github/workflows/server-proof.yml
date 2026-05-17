@@ -16,6 +16,7 @@ on:
     branches: [development, staging, main]
 
 env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
   NODE_VERSION: "22"
 
 jobs:

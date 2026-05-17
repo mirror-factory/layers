@@ -17,7 +17,9 @@ on:
   workflow_dispatch: # Manual trigger from GitHub UI
 
 env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
   NODE_ENV: test
+  NODE_VERSION: "22"
 
 jobs:
   # ── Layer 1: Free, fast, blocking ──────────────────────────────────
@@ -30,7 +32,7 @@ jobs:
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm verify:tier 0

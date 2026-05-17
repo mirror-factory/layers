@@ -5,6 +5,10 @@ on:
     - cron: '0 11 * * 1'  # Mondays 11:00 UTC
   workflow_dispatch: {}
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+  NODE_VERSION: "22"
+
 jobs:
   audit:
     runs-on: ubuntu-latest
@@ -18,7 +22,7 @@ jobs:
           version: 10
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec tsx scripts/sync-dependencies.ts
