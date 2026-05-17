@@ -289,11 +289,12 @@
           <p>
             TLDR: the release-readiness branch is in materially better shape.
             Web, brand, smoke, native configuration, Expect coverage, and CI
-            release gates have been pushed and verified. The newest workflow
-            modernization commit has Tier 0-1 and Vercel green, with Tier 2
-            browser proof still running. It is not yet a production-safe release
-            because review, signing secrets, Android release signing, and
-            default-branch security cleanup remain open.
+            release gates have been pushed and verified. The newest functional
+            QA commit has Tier 0-1 and Vercel green, with Tier 2 browser proof
+            still running. Report-only commits may be newer than the functional
+            evidence head. It is not yet a production-safe release because
+            review, signing secrets, Android release signing, and default-branch
+            security cleanup remain open.
           </p>
 
           <div class="meta" role="list" aria-label="Report metadata">
@@ -311,7 +312,7 @@
             </div>
             <div role="listitem">
               <span class="label">QA Evidence Head</span>
-              <span class="value">4593aeb latest; Tier 2 remote proof pending</span>
+              <span class="value">4593aeb functional; report commit may be newer</span>
             </div>
           </div>
         </header>
@@ -322,9 +323,9 @@
             <div class="card good">
               <h3>What Is Good</h3>
               <ul>
-                <li>Tier 0-1 Fast Gates passed remotely on the latest pushed head.</li>
+                <li>Tier 0-1 Fast Gates passed remotely on the latest functional QA head.</li>
                 <li>Vercel preview deployment completed successfully.</li>
-                <li>Tier 2 Focused Browser Proof is running on the latest pushed head.</li>
+                <li>Tier 2 Focused Browser Proof is running for the latest functional QA head.</li>
                 <li>The working tree is clean and branch is pushed.</li>
               </ul>
             </div>
@@ -382,7 +383,7 @@
               <tr>
                 <td>Remote latest-head CI</td>
                 <td><span class="stamp waiting">Running</span></td>
-                <td>Commit 4593aeb has Tier 0-1 and Vercel green; Tier 2 Focused Browser Proof is currently in progress.</td>
+                <td>Functional commit 4593aeb has Tier 0-1 and Vercel green; Tier 2 Focused Browser Proof is currently in progress. Report-only commits may have their own newer CI runs.</td>
               </tr>
               <tr>
                 <td>Compliance</td>
@@ -502,7 +503,7 @@
             <li>PROD-365 updated for Android signed AAB gate and upload-key requirement.</li>
             <li>PROD-383 updated to keep the three-branch, three-domain release path visible.</li>
             <li>PROD-523 created for default-branch Dependabot vulnerability cleanup.</li>
-            <li>PROD-524 created for GitHub Actions Node 24 runner transition cleanup; workflows now use current action majors plus Node 24 opt-in. Latest head has Tier 0-1 and Vercel green, with Tier 2 still running.</li>
+            <li>PROD-524 created for GitHub Actions Node 24 runner transition cleanup; workflows now use current action majors plus Node 24 opt-in. Functional QA head 4593aeb has Tier 0-1 and Vercel green, with Tier 2 still running.</li>
           </ul>
         </section>
 
