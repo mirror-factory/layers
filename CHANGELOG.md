@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.121] — 2026-05-17
+
+### Other
+- chore: harden release readiness checks (`fb48166`)
+
+
 ## [0.1.120] — 2026-05-14
 
 ### Other
