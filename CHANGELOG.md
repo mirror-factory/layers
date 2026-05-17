@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.124] — 2026-05-17
+
+### Testing
+- test: stabilize navigation smoke checks (`e7fd011`)
+
+
 ## [0.1.123] — 2026-05-17
 
 ### Testing
