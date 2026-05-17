@@ -29,14 +29,24 @@ function writeFixtureProject(dir: string) {
         evidence: [".evidence/expect-proof.json"],
       },
     },
-    features: [{
-      id: "dashboard.devkit",
-      name: "DevKit",
-      userFacing: true,
-      surfaces: ["web"],
-      paths: ["app/dev-kit/**"],
-      proof: ["fast", "expect"],
-    }],
+    features: [
+      {
+        id: "dashboard.devkit",
+        name: "DevKit",
+        userFacing: true,
+        surfaces: ["web"],
+        paths: ["app/dev-kit/**"],
+        proof: ["fast", "expect"],
+      },
+      {
+        id: "meeting.workspace",
+        name: "Meeting workspace",
+        userFacing: true,
+        surfaces: ["web"],
+        paths: ["components/meeting-*.tsx"],
+        proof: ["fast"],
+      },
+    ],
   }));
 }
 
@@ -80,6 +90,25 @@ describe("feature proof resolver", () => {
       const output = runResolver(dir, true);
       expect(output.pass).toBe(false);
       expect(output.requiredLanes.find(lane => lane.id === "fast")?.satisfied).toBeNull();
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it("matches single-star file globs in feature paths", () => {
+    const dir = mkdtempSync(join(tmpdir(), "feature-proof-resolver-"));
+    try {
+      writeFixtureProject(dir);
+
+      const output = resolveFeatureProof({
+        root: dir,
+        files: ["components/meeting-chat.tsx"],
+        write: false,
+      });
+
+      expect(output.pass).toBe(true);
+      expect(output.matchedFeatures.map(feature => feature.id)).toContain("meeting.workspace");
+      expect(output.unmatchedUserFacingFiles).toEqual([]);
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
