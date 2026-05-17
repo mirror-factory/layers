@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.132] — 2026-05-17
+
+### Documentation
+- docs: add release readiness cpo report (`24fa998`)
+
+
 ## [0.1.131] — 2026-05-17
 
 ### Other
