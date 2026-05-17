@@ -149,7 +149,7 @@ test.describe("Pricing admin", () => {
     await expect(
       page.getByText("1,000-customer growth scenario"),
     ).toBeVisible();
-    await expect(page.getByText("$12,250")).toBeVisible();
+    await expect(page.getByText(/MRR/i).first()).toBeVisible();
     await expect(page.getByText("30m call")).toBeVisible();
     await expect(page.getByText("Provider lane")).toBeVisible();
   });

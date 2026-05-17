@@ -11,8 +11,8 @@ test("app/terms/page.tsx route smoke proof", async ({ page }) => {
   ).toBeVisible();
   await expect(page.getByText("Launch draft - legal review pending")).toBeVisible();
   await expect(
-    page.getByLabel("Legal navigation").getByRole("link", {
-      name: "Privacy",
+    page.getByLabel("Related actions").getByRole("link", {
+      name: "Privacy Policy",
       exact: true,
     }),
   ).toBeVisible();

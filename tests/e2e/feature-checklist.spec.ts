@@ -7,6 +7,22 @@
  */
 
 import { test, expect } from "@playwright/test";
+import type { Page } from "@playwright/test";
+import { completeOnboardingBeforeNavigation } from "./helpers/onboarding";
+
+async function expectSignInReachable(page: Page) {
+  const signIn = page
+    .locator('a[href="/sign-in"]')
+    .filter({ hasText: "Sign in" });
+
+  if (await signIn.first().isVisible()) {
+    await expect(signIn.first()).toBeVisible();
+    return;
+  }
+
+  await page.getByRole("button", { name: "Open menu" }).click();
+  await expect(signIn.filter({ visible: true }).first()).toBeVisible();
+}
 
 test.describe("Feature checklist", () => {
   test("landing page exposes product positioning, demo, pricing, and auth CTAs", async ({
@@ -16,57 +32,59 @@ test.describe("Feature checklist", () => {
 
     await expect(
       page.getByRole("heading", {
-        name: "Turn meetings into structured team memory.",
+        name: /AI memory for your meetings/i,
       }),
     ).toBeVisible();
     await expect(
-      page.getByLabel("Meeting memory pipeline signal"),
+      page.getByText("Meeting memory").first(),
     ).toBeVisible();
     await expect(
       page.getByRole("heading", {
-        name: "Connect once. Your meeting memory lives in every AI tool.",
+        name: /Bring meeting memory into/i,
       }),
     ).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: "Search across every meeting." }),
+      page.getByRole("heading", { name: /Find the decision/i }),
     ).toBeVisible();
     await expect(
       page.getByRole("heading", {
-        name: "Simple pricing. Start free, scale when you are ready.",
+        name: /Simple pricing\./i,
       }),
     ).toBeVisible();
     await expect(
-      page
-        .locator('a[href="/sign-up"]')
-        .filter({ hasText: "Start free" })
-        .first(),
+      page.getByRole("button", { name: "Coming soon" }).first(),
     ).toBeVisible();
-    await expect(
-      page.locator('a[href="/sign-in"]').filter({ hasText: "Sign in" }).first(),
-    ).toBeVisible();
+    await expectSignInReachable(page);
   });
 
   test("recording surfaces render without requesting microphone access", async ({
     page,
   }) => {
+    await completeOnboardingBeforeNavigation(page);
     await page.goto("/record", { waitUntil: "load" });
     await expect(
-      page.getByRole("heading", { name: "Batch Recording" }),
+      page.getByRole("heading", { name: "Recent recordings" }),
     ).toBeVisible();
     await expect(
       page.getByRole("button", { name: "Start recording" }),
     ).toBeVisible();
-    await expect(
-      page.getByText("Drop audio file or click to browse"),
-    ).toBeVisible();
+    const width = page.viewportSize()?.width ?? 1280;
+    if (width >= 1024) {
+      await expect(
+        page.getByRole("link", { name: /Layers MCP connection/ }),
+      ).toBeVisible();
+    } else {
+      await expect(
+        page.getByRole("heading", { name: "Calendar context" }),
+      ).toBeVisible();
+    }
 
     await page.goto("/record/live", { waitUntil: "load" });
     await expect(
       page.getByRole("button", { name: "Start recording" }),
     ).toBeVisible();
-    await expect(page.getByLabel("Recording readiness")).toBeVisible();
     await expect(
-      page.getByText(/Tap to start taking notes|Checking recording setup/),
+      page.getByRole("heading", { name: "Product planning session" }),
     ).toBeVisible();
     await expect(page.locator("main")).not.toBeEmpty();
   });

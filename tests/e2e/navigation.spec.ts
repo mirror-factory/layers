@@ -3,6 +3,22 @@
  */
 
 import { test, expect } from "@playwright/test";
+import type { Page } from "@playwright/test";
+import { completeOnboardingBeforeNavigation } from "./helpers/onboarding";
+
+async function expectSignInReachable(page: Page) {
+  const signIn = page
+    .locator('a[href="/sign-in"]')
+    .filter({ hasText: "Sign in" });
+
+  if (await signIn.first().isVisible()) {
+    await expect(signIn.first()).toBeVisible();
+    return;
+  }
+
+  await page.getByRole("button", { name: "Open menu" }).click();
+  await expect(signIn.filter({ visible: true }).first()).toBeVisible();
+}
 
 test.describe("Home page navigation", () => {
   test.beforeEach(async ({ page }) => {
@@ -14,10 +30,7 @@ test.describe("Home page navigation", () => {
   }) => {
     test.setTimeout(10_000);
 
-    const signIn = page
-      .locator('a[href="/sign-in"]')
-      .filter({ hasText: "Sign in" });
-    await expect(signIn.first()).toBeVisible();
+    await expectSignInReachable(page);
 
     const comingSoon = page.getByRole("button", { name: "Coming soon" });
     await expect(comingSoon.first()).toBeVisible();
@@ -49,6 +62,7 @@ test.describe("TopBar back button", () => {
   test("navigates back after app-shell link navigation", async ({ page }) => {
     test.setTimeout(10_000);
 
+    await completeOnboardingBeforeNavigation(page);
     await page.goto("/record", { waitUntil: "load" });
     const menuButton = page.locator('button[aria-label="Open account menu"]');
     await expect(menuButton).toBeVisible();
@@ -72,6 +86,7 @@ test.describe("Slide menu", () => {
   }) => {
     test.setTimeout(10_000);
 
+    await completeOnboardingBeforeNavigation(page);
     await page.goto("/record", { waitUntil: "load" });
 
     // Open the menu
@@ -109,6 +124,7 @@ test.describe("Slide menu", () => {
   test("close button dismisses menu", async ({ page }) => {
     test.setTimeout(10_000);
 
+    await completeOnboardingBeforeNavigation(page);
     await page.goto("/record", { waitUntil: "load" });
 
     const menuButton = page.locator('button[aria-label="Open account menu"]');
