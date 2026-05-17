@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.122] — 2026-05-17
+
+### Testing
+- test: update visual baselines (`68afba0`)
+
+
 ## [0.1.121] — 2026-05-17
 
 ### Other
