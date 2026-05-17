@@ -42,7 +42,34 @@ Reserve for actual incidents — broken auth, broken billing, leaking data. Anyt
 
 ## Vercel setup (one-time)
 
-Open the Vercel project (`layers` under the `mirror-factory` team) → **Settings**.
+Open the Vercel project (`audio-layer` under the `mirror-factorys-projects-836be98a`
+team) → **Settings**.
+
+Current verified status as of 2026-05-17:
+
+- `layers.mirrorfactory.ai` is attached to `audio-layer` as the production domain.
+- `dev.layers.mirrorfactory.ai` is attached to `audio-layer` and pinned to `development`.
+- `staging.layers.mirrorfactory.ai` is attached to `audio-layer` and pinned to `staging`.
+- The dev/staging domains are not verified yet because DNS is hosted at Cloudflare
+  (`bowen.ns.cloudflare.com`, `cora.ns.cloudflare.com`) and the required records
+  are not present.
+- GitHub's default branch is `development`, matching the integration branch.
+
+Required Cloudflare records:
+
+| Type | Name | Value |
+| --- | --- | --- |
+| `CNAME` | `dev.layers` | `03e5eba20f4a886c.vercel-dns-017.com` |
+| `CNAME` | `staging.layers` | `03e5eba20f4a886c.vercel-dns-017.com` |
+| `TXT` | `_vercel` | `vc-domain-verify=dev.layers.mirrorfactory.ai,ab5d9cd48927b35731e8` |
+| `TXT` | `_vercel` | `vc-domain-verify=staging.layers.mirrorfactory.ai,e55419497a240a420457` |
+
+After DNS propagates, verify the two project domains from Vercel or run:
+
+```bash
+vercel api '/v9/projects/prj_QUjIKb0gKB5KxDI0lulFnKfgAZhP/domains/dev.layers.mirrorfactory.ai/verify' --scope mirror-factorys-projects-836be98a -X POST
+vercel api '/v9/projects/prj_QUjIKb0gKB5KxDI0lulFnKfgAZhP/domains/staging.layers.mirrorfactory.ai/verify' --scope mirror-factorys-projects-836be98a -X POST
+```
 
 ### 1. Production branch
 - **Settings → Git → Production Branch:** `main`
@@ -167,9 +194,9 @@ Then `pnpm dev:staging` boots the dev server pointed at staging-tier creds local
 ## Migration checklist (when first turning this on)
 
 - [x] Create `staging` and `development` branches off current `main`.
-- [ ] Vercel: set production branch to `main`, pin staging + dev domains.
+- [x] Vercel: set production branch to `main`, pin staging + dev domains.
 - [ ] Vercel: copy env vars, swap creds for staging + dev.
-- [ ] Add DNS records for `staging.` and `dev.` subdomains.
+- [ ] Add Cloudflare DNS records for `staging.layers.` and `dev.layers.` subdomains.
 - [ ] Supabase: add staging + dev redirect URLs.
 - [ ] Google OAuth: add staging + dev origins + redirects.
 - [ ] Stripe: create staging + dev webhook endpoints (test mode).

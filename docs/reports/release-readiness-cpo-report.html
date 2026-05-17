@@ -289,19 +289,19 @@
           <p>
             TLDR: the release-readiness branch is in materially better shape.
             Web, brand, smoke, native configuration, Expect coverage, and CI
-            release gates have been pushed and verified. Latest proof head
-            3e25093 has Tier 0-1, Tier 2, Tier 3, and Vercel green. This
+            release gates have been pushed and verified. Current proof head
+            ef18882 has Tier 0-1, Tier 2, Tier 3, and Vercel green. This
             report may have a newer docs-only commit after publication. It is not yet a
             production-safe release because review, signing secrets, Android
-            release signing, self-hosted runner infrastructure, Vercel/domain
-            ownership confirmation, and default-branch security cleanup remain
-            open. Main branch protection was corrected during this update.
+            release signing, self-hosted runner infrastructure, Cloudflare DNS
+            verification, and default-branch security cleanup remain open. Main
+            branch protection and the GitHub default branch were corrected.
           </p>
 
           <div class="meta" role="list" aria-label="Report metadata">
             <div role="listitem">
               <span class="label">Updated</span>
-              <span class="value">2026-05-17 19:29 EDT</span>
+              <span class="value">2026-05-17 19:45 EDT</span>
             </div>
             <div role="listitem">
               <span class="label">Branch</span>
@@ -313,7 +313,7 @@
             </div>
             <div role="listitem">
               <span class="label">QA Evidence Head</span>
-              <span class="value">3e25093 latest proof head; full AI Dev Kit green</span>
+              <span class="value">ef18882 current proof head; full AI Dev Kit green</span>
             </div>
           </div>
         </header>
@@ -329,6 +329,8 @@
                 <li>Tier 3 Broad Browser Matrix passed remotely on the current PR head.</li>
                 <li>Vercel preview deployment completed successfully.</li>
                 <li>Main branch protection now requires the current gate names and 1 approval.</li>
+                <li>GitHub default branch now points at `development`, not stale `dev`.</li>
+                <li>Vercel branch domains are now attached: dev → development, staging → staging.</li>
                 <li>The working tree is clean and branch is pushed.</li>
               </ul>
             </div>
@@ -356,7 +358,7 @@
                 <li>Android upload-key secrets must be installed and a signed AAB verified.</li>
                 <li>GitHub reports 41 default-branch Dependabot alerts: 24 high, 15 medium, 2 low.</li>
                 <li>Self-hosted `layers-web` and `layers-android` runners are not registered at repo scope.</li>
-                <li>Vercel CLI access points at `mirror-factory/layers`, while GitHub preview status points at an `audio-layer` Vercel project; domain changes are paused until the owning project is confirmed.</li>
+                <li>Cloudflare DNS records are still missing for `dev.layers.mirrorfactory.ai` and `staging.layers.mirrorfactory.ai`.</li>
                 <li>Cloudflare CLI/API access is not present in this shell, so DNS records cannot be safely changed from here yet.</li>
               </ul>
             </div>
@@ -391,7 +393,7 @@
               <tr>
                 <td>Remote latest-head CI</td>
                 <td><span class="stamp pass">Passed</span></td>
-                <td>Commit 3e25093 has Tier 0-1, Tier 2 Focused Browser Proof, Tier 3 Broad Browser Matrix, and Vercel green. Server/native proof was attempted and blocked by missing self-hosted runners.</td>
+                <td>Commit ef18882 has Tier 0-1, Tier 2 Focused Browser Proof, Tier 3 Broad Browser Matrix, and Vercel green. Server/native proof was attempted and blocked by missing self-hosted runners.</td>
               </tr>
               <tr>
                 <td>Compliance</td>
@@ -510,13 +512,13 @@
               </tr>
               <tr>
                 <td>What about the three-domain promotion path?</td>
-                <td>The documented target remains dev.layers.mirrorfactory.ai, staging.layers.mirrorfactory.ai, and layers.mirrorfactory.ai. GitHub main protection has now been corrected to match the current gate names.</td>
-                <td>Next is Vercel project ownership reconciliation, then Vercel branch-domain pinning, then Cloudflare DNS records, then a dev to staging to main proof PR chain.</td>
+                <td>The documented target remains dev.layers.mirrorfactory.ai, staging.layers.mirrorfactory.ai, and layers.mirrorfactory.ai. GitHub main protection and the repo default branch are corrected. Vercel branch-domain pinning is now done on the live `audio-layer` project.</td>
+                <td>Next is Cloudflare DNS records, Vercel domain verification, staging/dev env var separation, then a development to staging to main proof PR chain.</td>
               </tr>
               <tr>
                 <td>Can infra be configured from here?</td>
-                <td>GitHub branch protection can be configured and was fixed. Vercel CLI is logged in but points at a project/account state that does not match the GitHub preview project. Cloudflare CLI/API access is absent.</td>
-                <td>Do not mutate Vercel or DNS until the correct Vercel project and Cloudflare account access are confirmed.</td>
+                <td>GitHub branch protection/default branch and Vercel project domains can be configured and were updated. Cloudflare CLI/API access is absent.</td>
+                <td>Add the required Cloudflare CNAME/TXT records, then verify the two Vercel project domains.</td>
               </tr>
               <tr>
                 <td>Is Claude still being used?</td>
@@ -606,10 +608,11 @@
             <div class="card blocked">
               <h3>Vercel + Cloudflare Access</h3>
               <p>
-                Vercel and DNS setup should wait until we confirm the actual
-                production Vercel project owner. This shell can see a linked
-                `mirror-factory/layers` project, but GitHub status points at an
-                `audio-layer` project under a different Vercel slug.
+                Vercel setup is now attached to the live `audio-layer` project.
+                DNS setup still needs Cloudflare access. Add CNAME records for
+                `dev.layers` and `staging.layers` pointing to
+                `03e5eba20f4a886c.vercel-dns-017.com`, plus the Vercel TXT
+                verification records in docs/RELEASE.md.
               </p>
             </div>
           </div>
@@ -625,7 +628,8 @@
             <li>PROD-523 created for default-branch Dependabot vulnerability cleanup.</li>
             <li>PROD-524 created for GitHub Actions Node 24 runner transition cleanup; workflows now use current action majors plus Node 24 opt-in. Current PR head 1488cf7 has Tier 0-1, Tier 2, Tier 3, and Vercel green.</li>
             <li>PROD-383 follow-up: `main` branch protection was corrected to require `Tier 0-1 Fast Gates`, `Tier 2 Focused Browser Proof`, `Web (Vercel)`, and 1 approval.</li>
-            <li>PROD-383 still needs Vercel project ownership confirmation, branch-domain pinning, Cloudflare DNS setup, and a promotion proof chain.</li>
+            <li>PROD-383 follow-up: GitHub default branch is now `development`; Vercel branch-domain pinning is done for dev and staging.</li>
+            <li>PROD-383 still needs Cloudflare DNS setup, Vercel domain verification, env var separation, and a promotion proof chain.</li>
           </ul>
         </section>
 
