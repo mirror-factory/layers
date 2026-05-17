@@ -1,7 +1,13 @@
 {
   "version": 1,
-  "generatedAt": "2026-05-10T11:04:53.317Z",
+  "generatedAt": "2026-05-17T21:08:25.798Z",
   "docs": [
+    {
+      "id": "activity-log",
+      "localPath": "docs/ACTIVITY_LOG.md",
+      "contentHash": "e52394d7b26bd260da067f0728c926f1f49da1c39edb6eccb2634ef42f62bc7e",
+      "priority": "cold"
+    },
     {
       "id": "ai-harness-tiers",
       "localPath": "docs/AI_HARNESS_TIERS.md",
@@ -495,9 +501,27 @@
       "priority": "warm"
     },
     {
+      "id": "cross-platform-qa",
+      "localPath": "docs/CROSS_PLATFORM_QA.md",
+      "contentHash": "f5974be163dcf7a9cedbdd81ae56c237cd608bf99a4b95abf486f32368c468dc",
+      "priority": "cold"
+    },
+    {
       "id": "embeddings-and-search",
       "localPath": "docs/EMBEDDINGS_AND_SEARCH.md",
       "contentHash": "50eb980843649e4df6df9db4159244381b47d41e8d91fc97730be30010842b4d",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-12-brand-kit-browser-verification",
+      "localPath": "docs/evidence/2026-05-12-brand-kit/BROWSER_VERIFICATION.md",
+      "contentHash": "1f61726d42304c59346a7e98016e6ee39aa1f62be1bf1044dedbc78738113ee7",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-13-web-pass-g7-mcp-initialize",
+      "localPath": "docs/evidence/2026-05-13-web-pass/G7_mcp_initialize.json",
+      "contentHash": "a75da7463664b11289d0a6c0967dc95450bbf7b79c225ee4aad0f5c7220ed168",
       "priority": "cold"
     },
     {
@@ -873,9 +897,15 @@
       "priority": "hot"
     },
     {
+      "id": "key-rotation",
+      "localPath": "docs/KEY_ROTATION.md",
+      "contentHash": "faa606b4b564bc5897530a15a323d9e1fad35f7ac6f342ef2aa347331608b4bb",
+      "priority": "cold"
+    },
+    {
       "id": "launch-checklist",
       "localPath": "docs/LAUNCH_CHECKLIST.md",
-      "contentHash": "55755a5e7b25e62368dd873e20cf3ba25f2eb9d901b17cdf91892d98e2eddb61",
+      "contentHash": "51030b07f7670337378160a75ac5c27cb18a1ce5627669bc840bcb29c1ff34d2",
       "priority": "hot"
     },
     {
@@ -897,9 +927,15 @@
       "priority": "cold"
     },
     {
+      "id": "mobile-visual-qa",
+      "localPath": "docs/MOBILE_VISUAL_QA.md",
+      "contentHash": "a914935a9222c001555624c4c19842237ef24e3d958d3af1eab7c3c08491c81c",
+      "priority": "cold"
+    },
+    {
       "id": "native-release-readiness",
       "localPath": "docs/NATIVE_RELEASE_READINESS.md",
-      "contentHash": "c0ab1a81fa01a16ef6ae1513f86d62c50c0f307cbd462c6881b92eb9947cfa2b",
+      "contentHash": "dd80283b37e534a76fe92b607f01a1435a12cb1fd087aefd577f46ac77ef6aaf",
       "priority": "cold"
     },
     {
@@ -911,7 +947,7 @@
     {
       "id": "post-launch-monitoring",
       "localPath": "docs/POST_LAUNCH_MONITORING.md",
-      "contentHash": "958b65b6b891d84a6c3eb43a164e5e5392fc21d580eee29dbbe7383a29fe44e1",
+      "contentHash": "d04240b3585a828e363c3efb4219bd070d48ac50d55d417d4d21f52f70ff0a40",
       "priority": "cold"
     },
     {
@@ -933,9 +969,15 @@
       "priority": "cold"
     },
     {
+      "id": "recording-manual-qa",
+      "localPath": "docs/RECORDING_MANUAL_QA.md",
+      "contentHash": "3e848d4fc3eb5b664bb0ce4b8d5c1c174f374e7a39fafac0f202c2ff5eae971b",
+      "priority": "cold"
+    },
+    {
       "id": "recording-reliability",
       "localPath": "docs/RECORDING_RELIABILITY.md",
-      "contentHash": "d0fb9a248d9be135bb052faa85d0e97673d5c8ea1cc8eed09a749e2e1b5d16b6",
+      "contentHash": "53910ba4d4e1ca1b0da4433ae44783494770b92e0949e933211b7dd677a1bec9",
       "priority": "hot"
     },
     {
@@ -953,13 +995,13 @@
     {
       "id": "release-pipeline",
       "localPath": "docs/RELEASE_PIPELINE.md",
-      "contentHash": "1e051975b899544f90ebb920effef400f41a44ca3735deb6b670f606383dab27",
+      "contentHash": "9c6519f3a771e97590802d65d2947c3612bdcb72507388d2ad45e7a402f53cd6",
       "priority": "cold"
     },
     {
       "id": "release",
       "localPath": "docs/RELEASE.md",
-      "contentHash": "60cb87f6187f77ddaeb948b69331d4471e36eecc45094d9c98035d6ce7087f7e",
+      "contentHash": "5241847e3820716c77e1d272408ef7a6a812be7395aca569a37f2541b0cfee50",
       "priority": "hot"
     },
     {
@@ -981,6 +1023,12 @@
       "priority": "cold"
     },
     {
+      "id": "session-2026-05-12",
+      "localPath": "docs/SESSION_2026-05-12.md",
+      "contentHash": "1fdbac1773974c714df30714ffebe12a376bef88504e0d8b009956112c5e1cf4",
+      "priority": "cold"
+    },
+    {
       "id": "signing",
       "localPath": "docs/SIGNING.md",
       "contentHash": "40667457639587123085e2559492e8a3cbf041f101b7c3d4c4245656b2583f2c",
@@ -995,7 +1043,7 @@
     {
       "id": "spend-caps",
       "localPath": "docs/SPEND_CAPS.md",
-      "contentHash": "ff3ce22da157052b7449e6d774656e77273d8939af4fb5e70dbfa56ab00a8dfb",
+      "contentHash": "7fc9c2bfd62e1d2cdc9ff25627e039c19ab4894a93ed48a7f432615bcfad2e39",
       "priority": "cold"
     },
     {
@@ -1008,6 +1056,12 @@
       "id": "supabase-mcp-oauth-setup",
       "localPath": "docs/SUPABASE_MCP_OAUTH_SETUP.md",
       "contentHash": "083c57e283da4af6a9d458851c48a9bf884d442c29b7718e7a9d0d6587ce8f0a",
+      "priority": "cold"
+    },
+    {
+      "id": "supabase-prod-migration",
+      "localPath": "docs/SUPABASE_PROD_MIGRATION.md",
+      "contentHash": "e28987b56b3137b352d1cd1ba362f945409bde7e163455532ae74900c31fc5e1",
       "priority": "cold"
     },
     {
