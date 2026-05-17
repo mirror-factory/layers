@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.133] — 2026-05-17
+
+### Documentation
+- docs: update release domain setup status (`00ac1ec`)
+
+
 ## [0.1.132] — 2026-05-17
 
 ### Documentation
