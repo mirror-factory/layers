@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.129] — 2026-05-17
+
+### Other
+- remove vulnerable icon builder dependency (`7491a91`)
+
+
 ## [0.1.128] — 2026-05-17
 
 ### Other
