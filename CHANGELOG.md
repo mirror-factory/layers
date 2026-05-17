@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.123] — 2026-05-17
+
+### Testing
+- test: align e2e smoke with release UI (`d46d6a0`)
+
+
 ## [0.1.122] — 2026-05-17
 
 ### Testing
