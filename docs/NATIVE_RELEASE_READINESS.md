@@ -1,7 +1,7 @@
 # Native Release Readiness
 
 Owner: Agent D, Native Release Prep
-Last updated: 2026-04-30
+Last updated: 2026-05-17
 Scope: iOS TestFlight and Google Play internal testing prep without Apple or Google account credentials.
 
 Repository note: the root `.gitignore` ignores `/ios/` and `/android/`. Native changes in those directories exist on disk but will not appear in normal `git status`; commit them with an explicit force-add or update the ignore policy when native artifacts are meant to be tracked.
@@ -13,7 +13,7 @@ Repository note: the root `.gitignore` ignores `/ios/` and `/android/`. Native c
 | Field | Current value | Source |
 | --- | --- | --- |
 | Display name | `Layers` | `ios/App/App/Info.plist` |
-| Bundle ID | `com.mirrorfactory.audiolayer` | `ios/App/App.xcodeproj/project.pbxproj`, `capacitor.config.ts` |
+| Bundle ID | `com.mirafactory.layers` | `ios/App/App.xcodeproj/project.pbxproj`, `capacitor.config.ts` |
 | Version | `1.0` | `MARKETING_VERSION` |
 | Build | `1` | `CURRENT_PROJECT_VERSION` |
 | Team ID | `36J9E4325G` | Xcode project signing settings |
@@ -28,7 +28,7 @@ The initial privacy manifest declares email address, user ID, audio data, and ot
 | Field | Current value | Source |
 | --- | --- | --- |
 | App label | `Layers` | `android/app/src/main/res/values/strings.xml` |
-| Package/application ID | `com.mirrorfactory.audiolayer` | `android/app/build.gradle`, `AndroidManifest.xml` |
+| Package/application ID | `com.mirafactory.layers` | `android/app/build.gradle`, `AndroidManifest.xml` |
 | Version name | `1.0` | `android/app/build.gradle` |
 | Version code | `1` | `android/app/build.gradle` |
 | Min SDK | `24` | `android/variables.gradle` |
@@ -41,7 +41,7 @@ Prerequisites Alfonso must complete:
 
 - Apple Developer Program membership and App Store Connect access.
 - App Store Connect app record for `Layers`.
-- Bundle ID `com.mirrorfactory.audiolayer` registered under the Apple Developer team.
+- Bundle ID `com.mirafactory.layers` registered under the Apple Developer team.
 - Signing/provisioning access for team `36J9E4325G`, or update the Xcode project to the correct team ID.
 - Final privacy policy URL, terms URL, support URL/email, app category, age rating, encryption/export compliance answer, and App Privacy nutrition labels.
 - Account deletion and recording consent surfaces reviewed before wider TestFlight or App Review.
@@ -160,7 +160,7 @@ ls -lh app/build/outputs/bundle/release/app-release.aab
 Play Console tasks for Alfonso:
 
 - Create the Play app record for `Layers`.
-- Confirm package name `com.mirrorfactory.audiolayer` before first upload; Google fixes the package name after the first artifact.
+- Confirm package name `com.mirafactory.layers` before first upload; Google fixes the package name after the first artifact.
 - Configure Play App Signing. Use the generated upload key for the AAB upload unless Alfonso has an existing app signing strategy.
 - Complete app content requirements: Data Safety, privacy policy URL, content rating, target audience, ads declaration, and app access instructions.
 - Go to `Testing > Internal testing`, create or select a tester email list, and add up to 100 testers.
@@ -199,7 +199,7 @@ cd android
 
 `bundleRelease` requires the four `LAYERS_ANDROID_*` signing variables for a Play-ready signed artifact.
 
-Current check results on 2026-04-30:
+Current check results on 2026-05-17:
 
 | Check | Result |
 | --- | --- |
@@ -207,8 +207,8 @@ Current check results on 2026-04-30:
 | `plutil -lint ios/App/App/Info.plist` | Pass |
 | `xcodebuild -project ios/App/App.xcodeproj -list` | Pass; scheme `App` is visible |
 | `xmllint --noout android/app/src/main/AndroidManifest.xml` | Pass |
-| `./gradlew :app:assembleDebug` | Blocked; local Java runtime is missing |
-| `./gradlew :app:bundleRelease` | Blocked; local Java runtime is missing |
+| `JAVA_HOME=/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home ANDROID_HOME=/opt/homebrew/share/android-commandlinetools ./gradlew :app:assembleDebug` | Pass |
+| `./gradlew :app:bundleRelease` | Not run; requires release-signing variables for a Play-ready artifact |
 
 ## Official References
 

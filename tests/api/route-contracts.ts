@@ -76,8 +76,8 @@ export const apiRouteContracts = [
   route("/api/account/api-keys/[id]", "app/api/account/api-keys/[id]/route.ts", ["DELETE"], "user", true, [200, 400, 401, 403, 404, 503], {
     DELETE: { expectStatuses: [200, 400, 401, 403, 404, 503], skipReason: "revokes a caller-owned API key" },
   }, "/api/account/api-keys/sample"),
-  route("/api/calendar/callback/[provider]", "app/api/calendar/callback/[provider]/route.ts", ["GET"], "oauth", false, [302, 307, 308], undefined, "/api/calendar/callback/google"),
-  route("/api/calendar/connect/[provider]", "app/api/calendar/connect/[provider]/route.ts", ["GET"], "user", false, [302, 307, 308], undefined, "/api/calendar/connect/google"),
+  route("/api/calendar/callback/[provider]", "app/api/calendar/callback/[provider]/route.ts", ["GET"], "oauth", false, [302, 307, 308], undefined, "/api/calendar/callback/google", false),
+  route("/api/calendar/connect/[provider]", "app/api/calendar/connect/[provider]/route.ts", ["GET"], "user", false, [302, 307, 308], undefined, "/api/calendar/connect/google", false),
   route("/api/calendar/disconnect/[provider]", "app/api/calendar/disconnect/[provider]/route.ts", ["POST"], "user", true, [200, 400, 401, 403, 500, 503], {
     POST: { expectStatuses: [400, 401, 403, 503], skipReason: "disconnects a user calendar connection" },
   }, "/api/calendar/disconnect/google"),

@@ -1,0 +1,17 @@
+appId: com.mirafactory.layers
+---
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 6000
+
+# Tap "See how it works" to get to /download which has more links
+- tapOn: "See how it works"
+- waitForAnimationToEnd:
+    timeout: 5000
+
+# Try tapping "v0.1.115" portion of release line link
+- tapOn: "v0.1.115"
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: ios-walk-D6-changelog-v2

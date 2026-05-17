@@ -73,6 +73,7 @@ supabase/.temp/
 .ai-starter/evidence/
 .ai-dev-kit/state/
 .claude/hooks/state.json
+.claude/*.lock
 .codex/hooks/state.json
 .codex/hooks/observer-state.json
 .claude/hooks/__pycache__/

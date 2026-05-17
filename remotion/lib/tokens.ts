@@ -46,9 +46,7 @@ export const RADII = {
 } as const;
 
 /**
- * Italic display family — the brand uses a quiet serif italic for emphasis
- * (see app/(public)/landing.tsx: "home-italic-serif"). Iowan / Charter ship
- * with Chromium on macOS; we fall back through to Georgia as the universal
- * serif. Display sans loads in remotion/Root.tsx via @remotion/google-fonts.
+ * Shared sans emphasis stack. Layers does not use serif display accents;
+ * emphasis comes from color, weight, and spacing.
  */
-export const FONT_ITALIC_SERIF = `"Iowan Old Style", "Charter", "Georgia", serif`;
+export const FONT_EMPHASIS_SANS = `"Geist Sans", Inter, ui-sans-serif, system-ui, sans-serif`;

@@ -1,0 +1,60 @@
+# Maestro flow: walk public marketing pages for QA section B/C/D.
+# Captures one screenshot per page. Pre-sign-in (no auth needed).
+
+appId: com.mirafactory.layers
+---
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 6000
+- takeScreenshot: ios-pub-00-landing
+
+# Open menu
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 1500
+- takeScreenshot: ios-pub-01-drawer-open
+
+# Pricing
+- tapOn: "Pricing"
+- waitForAnimationToEnd:
+    timeout: 4000
+- takeScreenshot: ios-pub-02-pricing
+
+# Open menu → Download
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 1500
+- tapOn: "Download"
+- waitForAnimationToEnd:
+    timeout: 4000
+- takeScreenshot: ios-pub-03-download
+
+# Open menu → Changelog
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 1500
+- tapOn: "Changelog"
+- waitForAnimationToEnd:
+    timeout: 4000
+- takeScreenshot: ios-pub-04-changelog
+
+# Open menu → Docs
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 1500
+- tapOn: "Docs"
+- waitForAnimationToEnd:
+    timeout: 4000
+- takeScreenshot: ios-pub-05-docs
+
+# Privacy via footer or direct nav. Use deep link.
+- openLink: "com.mirafactory.layers://privacy"
+- waitForAnimationToEnd:
+    timeout: 4000
+- takeScreenshot: ios-pub-06-privacy
+
+- openLink: "com.mirafactory.layers://terms"
+- waitForAnimationToEnd:
+    timeout: 4000
+- takeScreenshot: ios-pub-07-terms

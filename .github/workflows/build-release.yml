@@ -273,7 +273,7 @@ jobs:
             -allowProvisioningUpdates \
             DEVELOPMENT_TEAM="${APPLE_TEAM_ID}" \
             CODE_SIGN_STYLE=Automatic \
-            PRODUCT_BUNDLE_IDENTIFIER=com.mirrorfactory.layers \
+            PRODUCT_BUNDLE_IDENTIFIER=com.mirafactory.layers \
             -quiet
 
       - name: Export IPA (App Store)

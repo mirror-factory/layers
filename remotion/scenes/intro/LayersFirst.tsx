@@ -7,7 +7,7 @@ import {
   useVideoConfig,
   spring,
 } from "remotion";
-import { TOKENS, RADII, FONT_ITALIC_SERIF } from "../../lib/tokens";
+import { TOKENS, RADII, FONT_EMPHASIS_SANS } from "../../lib/tokens";
 import { AudioWave } from "../../components/AudioWave";
 
 /**
@@ -203,10 +203,10 @@ export const LayersFirst: React.FC = () => {
       >
         <em
           style={{
-            fontFamily: FONT_ITALIC_SERIF,
-            fontStyle: "italic",
+            fontFamily: FONT_EMPHASIS_SANS,
+            fontStyle: "normal",
             color: TOKENS.ink,
-            fontWeight: 400,
+            fontWeight: 650,
           }}
         >
           Layers

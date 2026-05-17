@@ -11,7 +11,7 @@ import { log } from "@/lib/logger";
  *
  * Native (Capacitor) Google OAuth does NOT come through this route. On
  * iOS/Android the Supabase `redirectTo` is the custom URL scheme
- * `com.mirrorfactory.layers://auth/callback`, which Safari hands back to
+ * `com.mirafactory.layers://auth/callback`, which Safari hands back to
  * the app via `App.addListener('appUrlOpen', ...)`. The PKCE code is
  * exchanged inside the WebView by `lib/auth/native-oauth.ts`, so this
  * server route only sees web traffic. See PROD-408.

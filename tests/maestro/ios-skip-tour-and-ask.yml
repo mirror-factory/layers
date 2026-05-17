@@ -1,0 +1,32 @@
+appId: com.mirafactory.layers
+---
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 6000
+
+# Dismiss first-run if present
+- runFlow:
+    when:
+      visible: "Skip tour"
+    commands:
+      - tapOn: "Skip tour"
+      - waitForAnimationToEnd:
+          timeout: 2500
+
+# Also dismiss "I'll explore on my own" if shown
+- runFlow:
+    when:
+      visible: "I'll explore on my own"
+    commands:
+      - tapOn: "I'll explore on my own"
+      - waitForAnimationToEnd:
+          timeout: 2500
+
+- takeScreenshot: ios-walk-F1-record-screen
+
+# Tap Ask in bottom tab
+- tapOn: "Ask"
+- waitForAnimationToEnd:
+    timeout: 6000
+- takeScreenshot: ios-walk-G2-ask-tab

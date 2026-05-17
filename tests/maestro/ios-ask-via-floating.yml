@@ -1,0 +1,29 @@
+# Use floating Ask button from a page that shows it (Meetings list).
+appId: com.mirafactory.layers
+---
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 6000
+
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 1500
+- tapOn: "Meetings"
+- waitForAnimationToEnd:
+    timeout: 6000
+
+# Tap Ask in bottom tab (Meetings page has it)
+- tapOn: "Ask"
+- waitForAnimationToEnd:
+    timeout: 6000
+- takeScreenshot: ios-walk-G2-ask-screen
+
+# Try Chat via floating Ask (or back nav)
+- runFlow:
+    when:
+      visible: "Back"
+    commands:
+      - tapOn: "Back"
+      - waitForAnimationToEnd:
+          timeout: 3000

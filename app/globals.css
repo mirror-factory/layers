@@ -13418,9 +13418,10 @@ body.dark:has(.paper-calm-page) {
 .reference-script {
   margin-top: var(--space-2);
   color: color-mix(in oklch, var(--layers-mint) 78%, var(--layers-ink));
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-brand-sans);
   font-size: clamp(1.45rem, 2.1vw, 2.2rem) !important;
-  font-style: italic;
+  font-style: normal;
+  font-weight: 650;
   line-height: 1.14 !important;
 }
 
@@ -14960,4 +14961,3 @@ body.dark:has(.paper-calm-page) {
     );
   }
 }
-

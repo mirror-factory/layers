@@ -6,7 +6,7 @@ import {
   Easing,
   useVideoConfig,
 } from "remotion";
-import { TOKENS, RADII, FONT_ITALIC_SERIF } from "../../lib/tokens";
+import { TOKENS, RADII, FONT_EMPHASIS_SANS } from "../../lib/tokens";
 
 /**
  * Scene 04 (20-28s, 240f) — "More coming."
@@ -173,11 +173,11 @@ export const MoreComing: React.FC = () => {
               <div
                 style={{
                   fontSize: 22,
-                  color: tile.current ? TOKENS.ink : TOKENS.fgMuted,
                   fontWeight: 500,
                   letterSpacing: "-0.005em",
-                  fontStyle: tile.current ? "normal" : "italic",
-                  fontFamily: tile.current ? undefined : FONT_ITALIC_SERIF,
+                  fontStyle: "normal",
+                  fontFamily: tile.current ? undefined : FONT_EMPHASIS_SANS,
+                  color: tile.current ? TOKENS.ink : TOKENS.layersMint,
                 }}
               >
                 {tile.label}
@@ -204,9 +204,9 @@ export const MoreComing: React.FC = () => {
             fontSize: 34,
             color: TOKENS.ink,
             letterSpacing: "-0.012em",
-            fontWeight: 400,
-            fontFamily: FONT_ITALIC_SERIF,
-            fontStyle: "italic",
+            fontWeight: 650,
+            fontFamily: FONT_EMPHASIS_SANS,
+            fontStyle: "normal",
           }}
         >
           More coming.

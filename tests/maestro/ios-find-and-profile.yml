@@ -1,0 +1,31 @@
+appId: com.mirafactory.layers
+---
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 6000
+
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 1500
+- tapOn: "Meetings"
+- waitForAnimationToEnd:
+    timeout: 6000
+
+# Tap Ask in bottom tab
+- tapOn: "Ask"
+- waitForAnimationToEnd:
+    timeout: 5000
+
+# Tap Find mode
+- tapOn: "Find"
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: ios-walk-G3-find-mode
+
+# Tap user avatar to enter Profile or Settings menu
+- tapOn:
+    id: "user-avatar"
+- waitForAnimationToEnd:
+    timeout: 4000
+- takeScreenshot: ios-walk-H6-after-avatar-tap

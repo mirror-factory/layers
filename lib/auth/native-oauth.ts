@@ -30,7 +30,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
  */
 
 export const NATIVE_OAUTH_REDIRECT_URL =
-  "com.mirrorfactory.layers://auth/callback";
+  "com.mirafactory.layers://auth/callback";
 
 /**
  * Detect whether we're running inside Capacitor (iOS or Android).
@@ -46,7 +46,7 @@ export function isNativePlatform(): boolean {
 
 /**
  * Extract the OAuth `code` (or error) from a deep-link URL like
- * `com.mirrorfactory.layers://auth/callback?code=abc&state=...`.
+ * `com.mirafactory.layers://auth/callback?code=abc&state=...`.
  *
  * URL parsing of custom schemes is unreliable on some engines, so we
  * pull the query string by hand.

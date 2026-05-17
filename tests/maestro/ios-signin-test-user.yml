@@ -1,7 +1,7 @@
 # Maestro flow: sign in to the iOS Capacitor app as the QA test user.
 # Run: PATH=/opt/homebrew/opt/openjdk@21/bin:$PATH maestro --device <UDID> test tests/maestro/ios-signin-test-user.yml
 
-appId: com.mirrorfactory.audiolayer
+appId: com.mirafactory.layers
 ---
 - launchApp:
     clearState: false

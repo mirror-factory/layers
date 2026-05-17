@@ -2,7 +2,7 @@
 import type { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
-  appId: "com.mirrorfactory.layers",
+  appId: "com.mirafactory.layers",
   appName: "Layers",
   // webDir must point at an existing directory even though server.url
   // is set. `npx cap sync android` writes capacitor.config.json into
@@ -23,7 +23,7 @@ const config: CapacitorConfig = {
     backgroundColor: "#0a0a0a",
     scrollEnabled: false,
     preferredContentMode: "mobile",
-    scheme: "com.mirrorfactory.layers",
+    scheme: "com.mirafactory.layers",
   },
   android: {
     allowMixedContent: process.env.NODE_ENV !== "production",

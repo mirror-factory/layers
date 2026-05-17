@@ -1,0 +1,77 @@
+# Maestro flow: drive the recording flow on iOS Capacitor.
+# Assumes signed in as the QA test user.
+#
+# Notes:
+#   - iOS sim has no real microphone by default. Audio capture may be
+#     silent. The flow exercises the *UI state machine*: permission
+#     prompt → recording → stop → processing → result page.
+#   - To capture real audio, enable in Simulator:
+#       Hardware menu → Microphone → "Use This Mac's Microphone"
+#
+# Run:
+#   PATH=/opt/homebrew/opt/openjdk@21/bin:$PATH maestro --device \
+#     CD658077-5378-49B2-8A17-7068111DD447 test \
+#     tests/maestro/ios-recording-flow.yml
+
+appId: com.mirafactory.layers
+---
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 6000
+
+# Should be on /record (signed-in landing). Confirm we see the
+# "Start recording" CTA. If we see the FIRST RUN modal, dismiss it
+# by tapping "Record now" which is the primary action.
+- takeScreenshot: ios-rec-00-record-page
+- assertVisible: "Start recording"
+
+# Tap the big dark Start recording button on /record. We use the
+# accessibility text — the button label is literally "Start recording".
+- tapOn: "Start recording"
+- waitForAnimationToEnd:
+    timeout: 4000
+
+# First-time-only iOS system mic permission dialog. Maestro auto-allows
+# in newer versions but explicitly issue a "Allow" tap as a safety net.
+- runFlow:
+    when:
+      visible: "Allow"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd:
+          timeout: 2000
+
+- takeScreenshot: ios-rec-01-recording-started
+
+# Let the session run ~12s — long enough for AssemblyAI streaming to
+# return at least one partial chunk if audio is reaching the network.
+- waitForAnimationToEnd:
+    timeout: 12000
+
+- takeScreenshot: ios-rec-02-recording-12s
+
+# Stop. The button label flips from "Start recording" to "Stop" or
+# similar. Try both common variants.
+- runFlow:
+    when:
+      visible: "Stop"
+    commands:
+      - tapOn: "Stop"
+- runFlow:
+    when:
+      visible: "Stop recording"
+    commands:
+      - tapOn: "Stop recording"
+
+- waitForAnimationToEnd:
+    timeout: 6000
+
+- takeScreenshot: ios-rec-03-after-stop
+
+# Give the backend up to 30s to flip the meeting from "processing"
+# to "completed". Different network conditions will vary.
+- waitForAnimationToEnd:
+    timeout: 30000
+
+- takeScreenshot: ios-rec-04-post-process

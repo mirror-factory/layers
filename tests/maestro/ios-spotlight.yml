@@ -1,0 +1,18 @@
+# Spotlight search test (iOS1) — uses iOS Spotlight from home screen.
+# We're not in the Layers app — drive Spotlight UI directly.
+appId: com.apple.springboard
+---
+- tapOn: "Search"
+- waitForAnimationToEnd:
+    timeout: 2000
+- inputText: "Layers"
+- waitForAnimationToEnd:
+    timeout: 2500
+- takeScreenshot: ios-walk-iOS1-spotlight-results
+
+- tapOn:
+    text: "Layers"
+    index: 0
+- waitForAnimationToEnd:
+    timeout: 6000
+- takeScreenshot: ios-walk-iOS1-app-opened-via-spotlight

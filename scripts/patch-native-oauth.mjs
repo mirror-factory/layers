@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Patch native projects with the `com.mirrorfactory.layers` URL-scheme
+ * Patch native projects with the `com.mirafactory.layers` URL-scheme
  * deep-link wiring required for Google OAuth (PROD-408) AND the per-platform
  * microphone permission strings required for live recording (PROD-476).
  *
@@ -10,7 +10,7 @@
  * the in-app OAuth + recording contracts:
  *
  *   - iOS:
- *       * add `com.mirrorfactory.layers` to `CFBundleURLSchemes` in
+ *       * add `com.mirafactory.layers` to `CFBundleURLSchemes` in
  *         `ios/App/App/Info.plist` (PROD-408)
  *       * add `NSMicrophoneUsageDescription` so iOS shows the first-tap
  *         permission prompt with human-readable copy (PROD-476)
@@ -34,7 +34,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 const ROOT = process.cwd();
-const URL_SCHEME = "com.mirrorfactory.layers";
+const URL_SCHEME = "com.mirafactory.layers";
 const LEGACY_SCHEME = "layers";
 
 // PROD-476: human-readable microphone usage copy shown in the iOS first-tap
@@ -56,7 +56,7 @@ function patchIosUrlSchemes(original) {
     original.includes(`<string>${URL_SCHEME}</string>`) &&
     /<key>CFBundleURLTypes<\/key>/.test(original)
   ) {
-    log("ios: CFBundleURLTypes already contains com.mirrorfactory.layers — skipping URL schemes");
+    log("ios: CFBundleURLTypes already contains com.mirafactory.layers — skipping URL schemes");
     return original;
   }
 

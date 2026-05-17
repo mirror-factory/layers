@@ -1,4 +1,4 @@
-appId: com.mirrorfactory.audiolayer
+appId: com.mirafactory.layers
 productName: Layers
 directories:
   output: dist-electron

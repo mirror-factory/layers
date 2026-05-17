@@ -38,7 +38,7 @@ type Props = {
 // Deterministic 1D hash — same family as the shader-side `hash11`. Returns
 // a number in [0, 1). Stable for any integer-keyed input.
 function hash(n: number): number {
-  let x = Math.sin(n * 12.9898 + 78.233) * 43758.5453;
+  const x = Math.sin(n * 12.9898 + 78.233) * 43758.5453;
   return x - Math.floor(x);
 }
 

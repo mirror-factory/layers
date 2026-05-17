@@ -201,7 +201,7 @@ The iOS Capacitor build now keeps Sign in with Google entirely inside the app vi
 ### How the native flow works
 
 1. `app/(public)/sign-in/page.tsx` checks `Capacitor.isNativePlatform()`. On native it calls `signInWithGoogleNative()` from `lib/auth/native-oauth.ts`.
-2. That helper asks Supabase for the Google OAuth URL with `skipBrowserRedirect: true` and `redirectTo: "com.mirrorfactory.layers://auth/callback"`.
+2. That helper asks Supabase for the Google OAuth URL with `skipBrowserRedirect: true` and `redirectTo: "com.mirafactory.layers://auth/callback"`.
 3. The URL is opened with `@capacitor/browser`'s `Browser.open({ url, presentationStyle: "popover" })`. iOS surfaces it as SFSafariViewController; Android as a Custom Tab. Both are acceptable to Google's OAuth policy (no `disallowed_useragent`).
 4. After consent, Safari/Chrome redirects to the custom scheme. iOS/Android hand the URL back to the app via `App.addListener('appUrlOpen', ...)` (Capacitor's `@capacitor/app` plugin).
 5. The listener parses `?code=...` and calls `supabase.auth.exchangeCodeForSession(code)` inside the WebView, then navigates to `/record`.
@@ -210,14 +210,14 @@ The iOS Capacitor build now keeps Sign in with Google entirely inside the app vi
 
 The custom scheme must be on the Supabase Auth allowlist:
 
-- Dashboard → Authentication → URL Configuration → Redirect URLs → add `com.mirrorfactory.layers://auth/callback`.
+- Dashboard → Authentication → URL Configuration → Redirect URLs → add `com.mirafactory.layers://auth/callback`.
 
 Without this Supabase returns `redirect_uri_mismatch` on the native path.
 
 ### Platform manifests
 
-- iOS: `ios/App/App/Info.plist` already declares the `com.mirrorfactory.layers` URL scheme under `CFBundleURLTypes`.
-- Android: `android/app/src/main/AndroidManifest.xml` declares an `<intent-filter>` with `<data android:scheme="com.mirrorfactory.layers"/>` on MainActivity.
+- iOS: `ios/App/App/Info.plist` already declares the `com.mirafactory.layers` URL scheme under `CFBundleURLTypes`.
+- Android: `android/app/src/main/AndroidManifest.xml` declares an `<intent-filter>` with `<data android:scheme="com.mirafactory.layers"/>` on MainActivity.
 
 ### Web flow is unchanged
 

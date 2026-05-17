@@ -476,7 +476,7 @@ export function SessionIntelligenceCanvas({
                 </div>
               </header>
               <p className="session-summary-empty">
-                Notes will appear here. Open this meeting's detail page to
+                Notes will appear here. Open this meeting&apos;s detail page to
                 start writing.
               </p>
             </article>

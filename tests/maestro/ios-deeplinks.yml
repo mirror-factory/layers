@@ -1,0 +1,54 @@
+appId: com.mirafactory.layers
+---
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 6000
+
+- openLink: "layers://changelog"
+- waitForAnimationToEnd:
+    timeout: 3000
+- runFlow:
+    when:
+      visible: "Open"
+    commands:
+      - tapOn: "Open"
+      - waitForAnimationToEnd:
+          timeout: 6000
+- takeScreenshot: ios-walk-D6-changelog
+
+- openLink: "layers://docs"
+- waitForAnimationToEnd:
+    timeout: 3000
+- runFlow:
+    when:
+      visible: "Open"
+    commands:
+      - tapOn: "Open"
+      - waitForAnimationToEnd:
+          timeout: 6000
+- takeScreenshot: ios-walk-D7-docs
+
+- openLink: "layers://privacy"
+- waitForAnimationToEnd:
+    timeout: 3000
+- runFlow:
+    when:
+      visible: "Open"
+    commands:
+      - tapOn: "Open"
+      - waitForAnimationToEnd:
+          timeout: 6000
+- takeScreenshot: ios-walk-D10-privacy
+
+- openLink: "layers://terms"
+- waitForAnimationToEnd:
+    timeout: 3000
+- runFlow:
+    when:
+      visible: "Open"
+    commands:
+      - tapOn: "Open"
+      - waitForAnimationToEnd:
+          timeout: 6000
+- takeScreenshot: ios-walk-D11-terms

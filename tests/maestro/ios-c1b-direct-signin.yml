@@ -1,0 +1,11 @@
+# C1b verification: authed user opens /sign-in deep link → should redirect away.
+appId: com.mirafactory.layers
+---
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 6000
+- openLink: "https://layers.mirrorfactory.ai/sign-in"
+- waitForAnimationToEnd:
+    timeout: 6000
+- takeScreenshot: ios-walk-C1b-signin-redirect

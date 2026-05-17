@@ -50,8 +50,8 @@ import {
  *
  * Display face: Bricolage Grotesque (variable, optical-size aware).
  *   Picked for "settled · attentive · purposeful". Optical-size axis lets
- *   headlines breathe at large sizes. Italic moments via system serif fallback
- *   so the mission line gets a true italic-serif inflection.
+ *   headlines breathe at large sizes. Emphasis stays in the same sans system:
+ *   color, weight, and spacing carry the accent.
  *
  * Body face: Geist Sans (already loaded globally via app/layout.tsx as
  *   --font-sans), kept to maintain product-wide UI/marketing parity.
@@ -150,12 +150,11 @@ export function LandingPage() {
           font-feature-settings: "ss01", "ss02";
         }
 
-        .layers-home :global(.home-italic-serif) {
-          font-family: "Iowan Old Style", "Charter", "Georgia", serif;
-          font-style: italic;
-          font-weight: 400;
+        .layers-home :global(.home-emphasis) {
+          font-family: var(--font-display-marketing), var(--font-brand-sans);
+          font-weight: 650;
           color: var(--brand-accent-subtle, var(--layers-mint));
-          letter-spacing: -0.012em;
+          letter-spacing: -0.018em;
         }
 
         .layers-home :global(.home-eyebrow) {
@@ -385,7 +384,7 @@ function HeroComposition() {
       aria-hidden
       style={{
         position: "relative",
-        minHeight: "clamp(360px, 40vw, 440px)",
+        minHeight: "clamp(380px, 40vw, 440px)",
         isolation: "isolate",
         // Decorative halos and offset cards inside this composition use
         // negative insets and percentage offsets that can extend past the
@@ -398,7 +397,7 @@ function HeroComposition() {
       <div
         style={{
           position: "absolute",
-          inset: "10% -10% 10% -5%",
+          inset: "10% 0",
           background:
             "radial-gradient(ellipse at 60% 50%, color-mix(in oklch, var(--layers-mint-tint) 65%, transparent) 0%, transparent 65%)",
           filter: "blur(2px)",
@@ -423,21 +422,31 @@ function HeroComposition() {
         }}
       >
         <div
+          className="hero-card-header"
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
             gap: 12,
+            flexWrap: "wrap",
             marginBottom: 14,
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              minWidth: 0,
+            }}
+          >
             <LayersLogoMark size={22} animated />
             <span
               style={{
                 fontSize: "0.78rem",
                 color: "var(--fg-muted)",
                 letterSpacing: "0.04em",
+                minWidth: 0,
               }}
             >
               Recording workspace
@@ -494,7 +503,7 @@ function HeroComposition() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
+            gridTemplateColumns: "repeat(auto-fit, minmax(72px, 1fr))",
             gap: 8,
             marginTop: 16,
             paddingTop: 14,
@@ -535,7 +544,7 @@ function HeroComposition() {
 
       {/* Floating: AI memory · Always learning */}
       <FloatingChip
-        style={{ top: "0%", left: "-2%", zIndex: 3 }}
+        style={{ top: "0%", left: 0, zIndex: 3 }}
         accent="var(--layers-violet)"
         label="AI memory"
         sub="Always learning"
@@ -551,7 +560,7 @@ function HeroComposition() {
 
       {/* Floating: Decisions 2 Captured */}
       <FloatingStat
-        style={{ top: "2%", right: "-4%", zIndex: 3 }}
+        style={{ top: "2%", right: 0, zIndex: 3 }}
         value="2"
         label="Decisions"
         sub="Captured"
@@ -565,10 +574,10 @@ function HeroComposition() {
       {/* Floating: Meeting memory · Updating */}
       <div
         style={{
-          position: "absolute",
-          right: "-2%",
-          top: "52%",
-          width: "52%",
+        position: "absolute",
+        right: 0,
+        top: "52%",
+        width: "50%",
           background: "var(--bg-surface)",
           border: "1px solid var(--border-default)",
           borderRadius: "var(--radius-lg, 14px)",
@@ -649,6 +658,11 @@ function HeroComposition() {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.4; }
         }
+        @media (max-width: 460px) {
+          :global(.hero-card-header) {
+            align-items: flex-start !important;
+          }
+        }
       `}</style>
     </div>
   );
@@ -676,9 +690,9 @@ function LiveTranscriptCard() {
     <div
       style={{
         position: "absolute",
-        left: "-4%",
+        left: 0,
         top: "44%",
-        width: "62%",
+        width: "60%",
         background: "var(--bg-surface)",
         border: "1px solid var(--border-default)",
         borderRadius: "var(--radius-lg, 14px)",
@@ -727,8 +741,7 @@ function LiveTranscriptCard() {
           display: "grid",
           gap: 6,
           fontSize: "0.74rem",
-          maxHeight: 78,
-          overflow: "hidden",
+          minHeight: 78,
         }}
       >
         {feed.map(([t, line]) => (
@@ -956,7 +969,7 @@ function SectionMemory() {
         heading={
           <>
             Your AI copilots learn from{" "}
-            <span className="home-italic-serif">every meeting.</span>
+            <span className="home-emphasis">every meeting.</span>
           </>
         }
         lede="Layers builds a structured record of what your team decided, owns, and said — and keeps it in one searchable memory you can act on."
@@ -1128,7 +1141,7 @@ function SectionSearch() {
         heading={
           <>
             Find the decision without{" "}
-            <span className="home-italic-serif">reopening every transcript.</span>
+            <span className="home-emphasis">reopening every transcript.</span>
           </>
         }
         lede="Ask in your own words. Layers jumps to the moment — across every meeting your team has had."
@@ -1394,7 +1407,7 @@ function SectionReuse() {
         heading={
           <>
             Turn conversations into{" "}
-            <span className="home-italic-serif">reusable assets.</span>
+            <span className="home-emphasis">reusable assets.</span>
           </>
         }
         lede="Decision logs, action trackers, customer updates — generated from every meeting and routed where your team already works."
@@ -1584,7 +1597,7 @@ function SectionConnect() {
         heading={
           <>
             Bring meeting memory into{" "}
-            <span className="home-italic-serif">the AI you already use.</span>
+            <span className="home-emphasis">the AI you already use.</span>
           </>
         }
         lede="Layers ships an MCP server. Any Model Context Protocol client — ChatGPT, Claude, Gemini, or your own — can search and reason across your meetings without copying transcripts around."
@@ -1850,7 +1863,7 @@ function ConnectMediaCard() {
         }}
       >
         <span style={{ color: "var(--fg-muted)" }}>
-          // call from your AI client
+          {"// call from your AI client"}
         </span>
         <span>
           layers.search
@@ -1869,9 +1882,9 @@ function ConnectMediaCard() {
         aria-live="polite"
         style={{
           position: "relative",
-          height: 22,
+          minHeight: 32,
           textAlign: "center",
-          overflow: "hidden",
+          overflow: "visible",
         }}
       >
         {CONNECT_TAGLINES.map((line, i) => {
@@ -1884,6 +1897,7 @@ function ConnectMediaCard() {
                 position: "absolute",
                 inset: 0,
                 fontSize: "0.78rem",
+                lineHeight: 1.4,
                 fontWeight: 500,
                 color: "var(--fg-default)",
                 letterSpacing: "-0.005em",
@@ -2117,11 +2131,11 @@ function SectionPricing() {
             }}
           >
             Simple pricing.{" "}
-            <span className="home-italic-serif">Serious value.</span>
+            <span className="home-emphasis">Serious value.</span>
           </h2>
           <p className="home-prose" style={{ margin: 0, fontSize: "1.02rem" }}>
             Start free with 25 meetings. Upgrade when memory becomes a habit
-            your team can't work without.
+            your team can&apos;t work without.
           </p>
         </div>
 
@@ -2392,7 +2406,7 @@ function FinalCta() {
             }}
           >
             Ready to make every meeting{" "}
-            <span className="home-italic-serif">count?</span>
+            <span className="home-emphasis">count?</span>
           </h2>
           <p className="home-prose" style={{ margin: 0, maxWidth: "44ch" }}>
             Join teams that ship faster because the meeting actually went somewhere.
@@ -2444,9 +2458,9 @@ function FinalCta() {
           className="cta-wave"
           style={{
             position: "absolute",
-            right: -40,
-            bottom: -30,
-            width: "55%",
+            right: 0,
+            bottom: 0,
+            width: "42%",
             opacity: 0.42,
             pointerEvents: "none",
             zIndex: 1,
@@ -2465,12 +2479,13 @@ function FinalCta() {
         {/* Soft corner halo */}
         <div
           aria-hidden
+          className="cta-halo"
           style={{
             position: "absolute",
-            right: -160,
-            top: -100,
-            width: 400,
-            height: 400,
+            right: 0,
+            top: 0,
+            width: 180,
+            height: 180,
             borderRadius: "50%",
             background:
               "radial-gradient(circle, color-mix(in oklch, var(--layers-mint) 22%, transparent) 0%, transparent 65%)",
@@ -2520,6 +2535,9 @@ function FinalCta() {
             grid-template-columns: minmax(0, 1fr) !important;
           }
           :global(.cta-wave) {
+            display: none !important;
+          }
+          :global(.cta-halo) {
             display: none !important;
           }
         }

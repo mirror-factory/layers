@@ -8,9 +8,9 @@
 
 | Code | Platform | Build | Bundle ID | Loads |
 |------|----------|-------|-----------|-------|
-| `ios` | Capacitor iOS WebView | Xcode + `pnpm cap:sync` | `com.mirrorfactory.audiolayer` | live `layers.mirrorfactory.ai` |
-| `and` | Capacitor Android WebView | `(cd android && ./gradlew :app:assembleDebug)` | `com.mirrorfactory.layers` | live `layers.mirrorfactory.ai` |
-| `mac` | Electron (macOS) | `pnpm electron:pack` | `com.mirrorfactory.audiolayer` | live URL (prod) / `localhost:3000` (dev) |
+| `ios` | Capacitor iOS WebView | Xcode + `pnpm cap:sync` | `com.mirafactory.layers` | live `layers.mirrorfactory.ai` |
+| `and` | Capacitor Android WebView | `(cd android && ./gradlew :app:assembleDebug)` | `com.mirafactory.layers` | live `layers.mirrorfactory.ai` |
+| `mac` | Electron (macOS) | `pnpm electron:pack` | `com.mirafactory.layers` | live URL (prod) / `localhost:3000` (dev) |
 | `win` | Electron (Windows NSIS) | `pnpm electron:build` w/ Windows runner | same | same |
 | `web` | Vercel + Chrome / Safari / Firefox | `pnpm build` | n/a | self-hosted |
 
@@ -41,7 +41,7 @@ Per session: `docs/evidence/YYYY-MM-DD-<slug>/`
 - `pnpm cap:sync` regenerates `ios/App/App.xcodeproj`
 - Build: `xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Debug -destination "id=<UDID>" CODE_SIGNING_ALLOWED=NO build`
 - Install: `xcrun simctl install booted <path/to/App.app>`
-- Launch: `xcrun simctl launch booted com.mirrorfactory.audiolayer`
+- Launch: `xcrun simctl launch booted com.mirafactory.layers`
 - Screenshot: `xcrun simctl io booted screenshot path.png`
 - Video: `xcrun simctl io booted recordVideo --codec=h264 path.mp4` (SIGINT to stop)
 
@@ -51,7 +51,7 @@ Per session: `docs/evidence/YYYY-MM-DD-<slug>/`
 - Wait: poll `adb shell getprop sys.boot_completed` until `1`
 - Build: `(cd android && JAVA_HOME=/opt/homebrew/opt/openjdk@21 ./gradlew :app:assembleDebug)`
 - Install: `adb install -r android/app/build/outputs/apk/debug/app-debug.apk`
-- Launch: `adb shell am start -n com.mirrorfactory.layers/.MainActivity`
+- Launch: `adb shell am start -n com.mirafactory.layers/.MainActivity`
 - Screenshot: `adb shell screencap -p > path.png`
 - Video: `adb shell screenrecord --time-limit 30 /sdcard/out.mp4 && adb pull /sdcard/out.mp4 path.mp4`
 
@@ -197,7 +197,7 @@ Test user `qa-walkthrough-2026-05-12@mirrorfactory.ai` (`d0b8989a-…`) was mint
 | # | Check | ios | and | mac | win | web |
 |---|-------|-----|-----|-----|-----|-----|
 | I1 | Google OAuth — web flow: redirect → consent → callback → signed in | ⏭ | ⏭ | ⏭ | ⏭ | ❓ |
-| I2 | Google OAuth — native deep-link: in-app browser opens, `com.mirrorfactory.layers://auth/callback?...` returns to Layers app | ❓ PROD-408 | ❓ PROD-408 | ⏭ | ⏭ | ⏭ |
+| I2 | Google OAuth — native deep-link: in-app browser opens, `com.mirafactory.layers://auth/callback?...` returns to Layers app | ❓ PROD-408 | ❓ PROD-408 | ⏭ | ⏭ | ⏭ |
 | I3 | Google Calendar connect → upcoming events show on dashboard | ❓ | ❓ | ❓ | ❓ | ❓ |
 | I4 | Calendar disconnect — provider removed, no orphaned events | ❓ | ❓ | ❓ | ❓ | ❓ |
 | I5 | MCP OAuth: external client (Claude Desktop) completes register → authorize → token → tool call | ⏭ | ⏭ | ✓ | ❓ | ⏭ |

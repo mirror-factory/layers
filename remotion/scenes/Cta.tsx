@@ -4,7 +4,7 @@ import {
   useCurrentFrame,
   interpolate,
 } from "remotion";
-import { TOKENS, FONT_ITALIC_SERIF } from "../lib/tokens";
+import { TOKENS, FONT_EMPHASIS_SANS } from "../lib/tokens";
 import { LayersMark } from "../components/LayersMark";
 
 /**
@@ -77,9 +77,9 @@ export const Cta: React.FC = () => {
         Currently in{" "}
         <em
           style={{
-            fontFamily: FONT_ITALIC_SERIF,
-            fontStyle: "italic",
-            fontWeight: 400,
+            fontFamily: FONT_EMPHASIS_SANS,
+            fontStyle: "normal",
+            fontWeight: 650,
             color: TOKENS.layersMint,
           }}
         >
