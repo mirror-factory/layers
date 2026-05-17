@@ -119,6 +119,16 @@ function main() {
   const iosBundleIds = Array.from(new Set(allMatches(iosProject, /PRODUCT_BUNDLE_IDENTIFIER = ([^;]+);/g)));
   const workflowBundleId = firstMatch(releaseWorkflow, /PRODUCT_BUNDLE_IDENTIFIER=([A-Za-z0-9_.-]+)/);
   const electronBuilderAppId = firstMatch(electronBuilder, /^appId:\s*([^\n]+)/m);
+  const macNotarizationGate = Boolean(
+    releaseWorkflow?.includes("notarization_method") &&
+    releaseWorkflow.includes("Refusing to publish a signed-but-unnotarized macOS app") &&
+    releaseWorkflow.includes("spctl --assess --type execute"),
+  );
+  const androidSignedAabGate = Boolean(
+    releaseWorkflow?.includes("LAYERS_ANDROID_KEYSTORE_BASE64") &&
+    releaseWorkflow.includes("./gradlew :app:bundleRelease") &&
+    releaseWorkflow.includes("Layers-android.aab"),
+  );
 
   addCheck(checks, "native.profile-policy", "Native policy", Boolean(policy.mobileAppId), "Native policy is declared.", "Missing nativePolicy.mobileAppId; using fallback.", ".ai-dev-kit/project-profile.json");
   addCheck(checks, "native.capacitor-app-id", "Capacitor app id", capAppId === mobileAppId, `Capacitor appId is ${mobileAppId}.`, `Expected ${mobileAppId}, got ${capAppId ?? "missing"}.`, "capacitor.config.ts");
@@ -130,6 +140,8 @@ function main() {
   addCheck(checks, "native.ios-url-scheme", "iOS OAuth URL scheme", !iosInfoPlist || iosInfoPlist.includes(`<string>${deepLinkScheme}</string>`), "Generated iOS Info.plist handles OAuth callback deep links or is not generated locally.", `Missing ${deepLinkScheme} URL type in generated iOS Info.plist.`, "ios/App/App/Info.plist");
   addCheck(checks, "native.release-workflow-bundle-id", "Release workflow bundle id", workflowBundleId === mobileAppId, `Release workflow uses ${mobileAppId}.`, `Expected ${mobileAppId}, got ${workflowBundleId ?? "missing"}.`, ".github/workflows/build-release.yml");
   addCheck(checks, "native.electron-app-id", "Electron app id", electronBuilderAppId === electronAppId, `Electron appId is ${electronAppId}.`, `Expected ${electronAppId}, got ${electronBuilderAppId ?? "missing"}.`, "electron-builder.yml");
+  addCheck(checks, "native.macos-notarization-gate", "macOS notarization gate", macNotarizationGate, "Release workflow refuses signed-but-unnotarized macOS builds and verifies Gatekeeper acceptance.", "Release workflow does not prove macOS notarization before uploading artifacts.", ".github/workflows/build-release.yml");
+  addCheck(checks, "native.android-signed-aab-gate", "Android signed AAB gate", androidSignedAabGate, "Release workflow can build and publish a signed Android AAB when upload-key secrets are present.", "Release workflow does not build a signed Android AAB for Play internal testing.", ".github/workflows/build-release.yml");
 
   const artifacts = listArtifacts(artifactRoots);
   checks.push({

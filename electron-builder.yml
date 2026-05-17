@@ -26,10 +26,11 @@ mac:
     NSMicrophoneUsageDescription: >-
       Layers needs your microphone to record meetings and transcribe what's
       said. Audio is captured only while you're recording.
-  # Code signing + notarization (PROD-380).
-  # Default OFF so local/dev builds don't require certs.
-  # CI flips `notarize` to true via env override (`NOTARIZE=true`) when secrets
-  # are populated. See .github/workflows/build-release.yml + docs/SIGNING.md.
+  # Code signing + notarization (PROD-380 / PROD-512).
+  # electron-builder only runs notarization when the required Apple notary env
+  # vars are present. CI fails closed for signed builds when those credentials
+  # are incomplete, then verifies with stapler + spctl before upload.
+  # See .github/workflows/build-release.yml + docs/SIGNING.md.
   # Reference: https://www.electron.build/code-signing-mac.html
   # Reference: https://www.electron.build/configuration/mac.html
   notarize: true

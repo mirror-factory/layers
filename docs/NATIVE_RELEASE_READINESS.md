@@ -133,6 +133,22 @@ export LAYERS_ANDROID_KEY_ALIAS="layers-upload"
 export LAYERS_ANDROID_KEY_PASSWORD="..."
 ```
 
+GitHub Actions uses the same Gradle variables after decoding this repository
+secret:
+
+| Secret | What it is |
+| --- | --- |
+| `LAYERS_ANDROID_KEYSTORE_BASE64` | Base64-encoded upload keystore (`layers-upload.jks`). |
+| `LAYERS_ANDROID_KEYSTORE_PASSWORD` | Keystore password. |
+| `LAYERS_ANDROID_KEY_ALIAS` | Upload-key alias, usually `layers-upload`. |
+| `LAYERS_ANDROID_KEY_PASSWORD` | Upload-key password. |
+
+On `staging` and manual workflow runs, CI always builds the debug APK for
+smoke proof. When all four upload-key secrets are present, CI also builds the
+signed release AAB at `android/app/build/outputs/bundle/release/app-release.aab`.
+Tagged releases fail if those secrets are missing, because a tag is intended to
+publish release artifacts, not debug-only Android builds.
+
 Create an upload keystore if Alfonso has not created one:
 
 ```bash
@@ -209,6 +225,7 @@ Current check results on 2026-05-17:
 | `xmllint --noout android/app/src/main/AndroidManifest.xml` | Pass |
 | `JAVA_HOME=/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home ANDROID_HOME=/opt/homebrew/share/android-commandlinetools ./gradlew :app:assembleDebug` | Pass |
 | `./gradlew :app:bundleRelease` | Not run; requires release-signing variables for a Play-ready artifact |
+| GitHub Actions Android release path | Builds debug APK always; builds signed AAB when `LAYERS_ANDROID_*` upload-key secrets are present; tagged releases fail if signed AAB secrets are missing |
 
 ## Official References
 
