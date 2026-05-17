@@ -289,17 +289,19 @@
           <p>
             TLDR: the release-readiness branch is in materially better shape.
             Web, brand, smoke, native configuration, Expect coverage, and CI
-            release gates have been pushed and verified. Current PR head
-            1488cf7 has Tier 0-1, Tier 2, Tier 3, and Vercel green. It is not
-            yet a production-safe release because review, signing secrets,
-            Android release signing, self-hosted runner infrastructure, branch
-            protection drift, and default-branch security cleanup remain open.
+            release gates have been pushed and verified. Latest proof head
+            3e25093 has Tier 0-1, Tier 2, Tier 3, and Vercel green. This
+            report may have a newer docs-only commit after publication. It is not yet a
+            production-safe release because review, signing secrets, Android
+            release signing, self-hosted runner infrastructure, Vercel/domain
+            ownership confirmation, and default-branch security cleanup remain
+            open. Main branch protection was corrected during this update.
           </p>
 
           <div class="meta" role="list" aria-label="Report metadata">
             <div role="listitem">
               <span class="label">Updated</span>
-              <span class="value">2026-05-17 19:21 EDT</span>
+              <span class="value">2026-05-17 19:29 EDT</span>
             </div>
             <div role="listitem">
               <span class="label">Branch</span>
@@ -311,7 +313,7 @@
             </div>
             <div role="listitem">
               <span class="label">QA Evidence Head</span>
-              <span class="value">1488cf7 current PR head</span>
+              <span class="value">3e25093 latest proof head; full AI Dev Kit green</span>
             </div>
           </div>
         </header>
@@ -324,8 +326,9 @@
               <ul>
                 <li>Tier 0-1 Fast Gates passed remotely on the current PR head.</li>
                 <li>Tier 2 Focused Browser Proof passed remotely on the current PR head.</li>
-                <li>Tier 3 Broad Browser Matrix passed after enabling the proof label.</li>
+                <li>Tier 3 Broad Browser Matrix passed remotely on the current PR head.</li>
                 <li>Vercel preview deployment completed successfully.</li>
+                <li>Main branch protection now requires the current gate names and 1 approval.</li>
                 <li>The working tree is clean and branch is pushed.</li>
               </ul>
             </div>
@@ -339,6 +342,8 @@
                 <li>Android CI can build a signed AAB when upload-key secrets exist.</li>
                 <li>GitHub Actions workflows were upgraded to current Node 24-compatible action majors.</li>
                 <li>Extended proof labels were tested; missing self-hosted runners are now a documented infra blocker.</li>
+                <li>A reusable Codex skill was created for this report workflow at ~/.codex/skills/layers-cpo-release-report.</li>
+                <li>Main branch protection was fixed from legacy `Tests` / `Quality Gates` to the active AI Dev Kit and release gate names.</li>
                 <li>Version bumped to 0.1.132 by the repo hook.</li>
               </ul>
             </div>
@@ -351,7 +356,8 @@
                 <li>Android upload-key secrets must be installed and a signed AAB verified.</li>
                 <li>GitHub reports 41 default-branch Dependabot alerts: 24 high, 15 medium, 2 low.</li>
                 <li>Self-hosted `layers-web` and `layers-android` runners are not registered at repo scope.</li>
-                <li>Main branch protection still references legacy check names and needs promotion-path cleanup.</li>
+                <li>Vercel CLI access points at `mirror-factory/layers`, while GitHub preview status points at an `audio-layer` Vercel project; domain changes are paused until the owning project is confirmed.</li>
+                <li>Cloudflare CLI/API access is not present in this shell, so DNS records cannot be safely changed from here yet.</li>
               </ul>
             </div>
           </div>
@@ -385,7 +391,7 @@
               <tr>
                 <td>Remote latest-head CI</td>
                 <td><span class="stamp pass">Passed</span></td>
-                <td>Commit 1488cf7 has Tier 0-1, Tier 2 Focused Browser Proof, Tier 3 Broad Browser Matrix, and Vercel green. Server/native proof was attempted and blocked by missing self-hosted runners.</td>
+                <td>Commit 3e25093 has Tier 0-1, Tier 2 Focused Browser Proof, Tier 3 Broad Browser Matrix, and Vercel green. Server/native proof was attempted and blocked by missing self-hosted runners.</td>
               </tr>
               <tr>
                 <td>Compliance</td>
@@ -482,6 +488,91 @@
         </section>
 
         <section>
+          <h2>CPO Questions Answered</h2>
+          <table class="scoreboard">
+            <thead>
+              <tr>
+                <th>Question</th>
+                <th>Answer</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Are Apple and Android blockers store/TestFlight blockers?</td>
+                <td>Yes. Apple blocks notarized macOS distribution and iOS TestFlight upload. Android blocks a Play-ready signed AAB for internal testing. They do not block web QA or local debug smoke.</td>
+                <td>Alfonso needs to provide App Store Connect API key material and Android upload-key secrets before CI can prove public native distribution.</td>
+              </tr>
+              <tr>
+                <td>What about default-branch Dependabot vulnerabilities?</td>
+                <td>Current branch local audit is clean, but GitHub still reports 41 open default-branch alerts: 24 high, 15 medium, 2 low. They are mostly Next.js, protobufjs, Hono, systeminformation, and OpenTelemetry advisories.</td>
+                <td>Promote the patched dependency set through development to the default branch, then verify Dependabot alert closure. Do not call production-ready until those alerts clear or are explicitly risk-accepted.</td>
+              </tr>
+              <tr>
+                <td>What about the three-domain promotion path?</td>
+                <td>The documented target remains dev.layers.mirrorfactory.ai, staging.layers.mirrorfactory.ai, and layers.mirrorfactory.ai. GitHub main protection has now been corrected to match the current gate names.</td>
+                <td>Next is Vercel project ownership reconciliation, then Vercel branch-domain pinning, then Cloudflare DNS records, then a dev to staging to main proof PR chain.</td>
+              </tr>
+              <tr>
+                <td>Can infra be configured from here?</td>
+                <td>GitHub branch protection can be configured and was fixed. Vercel CLI is logged in but points at a project/account state that does not match the GitHub preview project. Cloudflare CLI/API access is absent.</td>
+                <td>Do not mutate Vercel or DNS until the correct Vercel project and Cloudflare account access are confirmed.</td>
+              </tr>
+              <tr>
+                <td>Is Claude still being used?</td>
+                <td>Yes. Claude Code has been used as a bounded read-only worker for cross-checking QA, docs, and infra cautions while Codex performs orchestration and durable updates.</td>
+                <td>Continue using Claude for bounded verification and sub-reviews; keep repo mutations in the orchestrated path.</td>
+              </tr>
+              <tr>
+                <td>Is this report now standardized?</td>
+                <td>Yes. A Codex skill now exists for this exact report workflow.</td>
+                <td>Future CPO status requests should update this same HTML report first, then summarize.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section>
+          <h2>Documentation Map</h2>
+          <table class="scoreboard">
+            <thead>
+              <tr>
+                <th>Need</th>
+                <th>Document</th>
+                <th>What It Covers</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Full quality system</td>
+                <td>docs/PRODUCTION_QUALITY_SYSTEM.md</td>
+                <td>Branch ladder, Tier 0-5 verification, platform coverage, native-test expectations.</td>
+              </tr>
+              <tr>
+                <td>AI Dev Kit tiers</td>
+                <td>docs/AI_HARNESS_TIERS.md and docs/AI_OPERATING_SYSTEM_IMPLEMENTATION_PLAN.md</td>
+                <td>Tier commands, proof packet expectations, Expect policy, native proof policy, dashboard plan.</td>
+              </tr>
+              <tr>
+                <td>Cross-platform QA</td>
+                <td>docs/CROSS_PLATFORM_QA.md, docs/MOBILE_VISUAL_QA.md, docs/RECORDING_MANUAL_QA.md</td>
+                <td>Web, mobile web, iOS, Android, recording, and evidence capture checklists.</td>
+              </tr>
+              <tr>
+                <td>Native distribution</td>
+                <td>docs/NATIVE_RELEASE_READINESS.md and .github/workflows/build-release.yml</td>
+                <td>iOS TestFlight, macOS notarization, Android signed AAB, and required secrets.</td>
+              </tr>
+              <tr>
+                <td>Remotion video</td>
+                <td>package.json, remotion/, branding/BRAND_NARRATIVE.md, docs/evidence/2026-05-12-brand-kit/BROWSER_VERIFICATION.md</td>
+                <td>`pnpm video:dev`, `pnpm video:render`, brand-template evidence, and current limitation that video output is visually reviewed rather than fully automated.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section>
           <h2>What I Need From You</h2>
           <div class="grid">
             <div class="card blocked">
@@ -499,6 +590,8 @@
                 For real macOS tester distribution, GitHub needs the Developer
                 ID certificate secrets and complete notarization credentials.
                 The workflow now refuses a signed-but-unnotarized artifact.
+                For iOS TestFlight, GitHub needs App Store Connect API key
+                credentials before unattended archive/export/upload can run.
               </p>
             </div>
 
@@ -507,6 +600,16 @@
               <p>
                 For Play internal testing, GitHub needs the upload keystore
                 secret set so CI can produce and publish the signed release AAB.
+              </p>
+            </div>
+
+            <div class="card blocked">
+              <h3>Vercel + Cloudflare Access</h3>
+              <p>
+                Vercel and DNS setup should wait until we confirm the actual
+                production Vercel project owner. This shell can see a linked
+                `mirror-factory/layers` project, but GitHub status points at an
+                `audio-layer` project under a different Vercel slug.
               </p>
             </div>
           </div>
@@ -521,7 +624,8 @@
             <li>PROD-383 updated to keep the three-branch, three-domain release path visible.</li>
             <li>PROD-523 created for default-branch Dependabot vulnerability cleanup.</li>
             <li>PROD-524 created for GitHub Actions Node 24 runner transition cleanup; workflows now use current action majors plus Node 24 opt-in. Current PR head 1488cf7 has Tier 0-1, Tier 2, Tier 3, and Vercel green.</li>
-            <li>PROD-383 needs a follow-up for main-branch protection drift: `main` still requires legacy `Tests` / `Quality Gates` checks while the active checks are `Tier 0-1 Fast Gates` and `Tier 2 Focused Browser Proof`.</li>
+            <li>PROD-383 follow-up: `main` branch protection was corrected to require `Tier 0-1 Fast Gates`, `Tier 2 Focused Browser Proof`, `Web (Vercel)`, and 1 approval.</li>
+            <li>PROD-383 still needs Vercel project ownership confirmation, branch-domain pinning, Cloudflare DNS setup, and a promotion proof chain.</li>
           </ul>
         </section>
 
