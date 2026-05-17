@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.125] — 2026-05-17
+
+### Other
+- merge development into release readiness branch (`c63a0f4`)
+
+
 ## [0.1.96] — 2026-05-10
 
 ### Other
