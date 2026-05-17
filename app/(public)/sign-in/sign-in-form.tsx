@@ -92,6 +92,7 @@ function SignInForm() {
           },
           { supabase },
         );
+        setGoogleLoading(false);
         return;
       }
 

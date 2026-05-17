@@ -98,6 +98,7 @@ describe("signInWithGoogleNative", () => {
   });
 
   afterEach(() => {
+    vi.useRealTimers();
     vi.clearAllMocks();
   });
 
@@ -144,8 +145,36 @@ describe("signInWithGoogleNative", () => {
     );
     expect(fakes.browserOpen).toHaveBeenCalledWith({
       url: "https://accounts.google.com/o/oauth2/auth?foo=bar",
-      presentationStyle: "popover",
+      presentationStyle: "fullscreen",
     });
+  });
+
+  it("fails fast if the native browser never opens", async () => {
+    vi.useFakeTimers();
+    mocks.isNativePlatform.mockReturnValue(true);
+    const supabase = makeSupabase();
+    const fakes = makeFakes();
+    fakes.browserOpen.mockImplementation(() => new Promise(() => undefined));
+
+    const signIn = signInWithGoogleNative(
+      { next: "/record" },
+      {
+        supabase: asClient(supabase),
+        loadApp: async () => fakes.App,
+        loadBrowser: async () => fakes.Browser,
+      },
+    );
+
+    const expectation = expect(signIn).rejects.toThrow(
+      /Google sign-in did not open/,
+    );
+
+    await vi.advanceTimersByTimeAsync(8_000);
+    await expectation;
+    expect(fakes.App.addListener).toHaveBeenCalledWith(
+      "appUrlOpen",
+      expect.any(Function),
+    );
   });
 
   it("exchanges the deep-link code and navigates to next on success", async () => {

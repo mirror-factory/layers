@@ -102,6 +102,8 @@ type SignInDeps = {
   navigate?: (url: string) => void;
 };
 
+const BROWSER_OPEN_TIMEOUT_MS = 8_000;
+
 /**
  * Native-platform Google sign-in. Returns the registered listener
  * handle so callers can dispose it explicitly during teardown; in
@@ -212,11 +214,34 @@ export async function signInWithGoogleNative(
   handleRef.current = registration;
 
   // 3. Open Google's consent screen as an in-app overlay.
-  await Browser.open({ url: data.url, presentationStyle: "popover" });
+  await withTimeout(
+    Browser.open({ url: data.url, presentationStyle: "fullscreen" }),
+    BROWSER_OPEN_TIMEOUT_MS,
+    "Google sign-in did not open. Please try again.",
+  );
 
   return {
     get disposed() {
       return disposed;
     },
   };
+}
+
+async function withTimeout<T>(
+  promise: Promise<T>,
+  timeoutMs: number,
+  message: string,
+): Promise<T> {
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
+
+  try {
+    return await Promise.race([
+      promise,
+      new Promise<never>((_, reject) => {
+        timeoutId = setTimeout(() => reject(new Error(message)), timeoutMs);
+      }),
+    ]);
+  } finally {
+    if (timeoutId) clearTimeout(timeoutId);
+  }
 }
