@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.126] — 2026-05-17
+
+### Other
+- fix feature proof registry matching (`65e2e8c`)
+
+
 ## [0.1.125] — 2026-05-17
 
 ### Other
