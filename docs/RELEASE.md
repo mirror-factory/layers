@@ -28,9 +28,9 @@ canonical place to test against staging credentials.
    ```
 2. **Push and open a PR into `development`.** Vercel posts a preview URL on the PR. Manual smoke + reviewer required.
 3. **Merge into `development`.** Vercel rebuilds `dev.layers.mirrorfactory.ai`. The whole team gets the change against dev creds. Soak overnight.
-4. **Promote to `staging`.** Open a PR `development` → `staging`. CI runs the full gate suite (typecheck, unit, e2e, smoke). Reviewer required. Merge.
-5. **Verify on `staging.layers.mirrorfactory.ai`.** Sign in with a staging account, exercise the changed surface, watch error rates, run any manual checks listed in the PR.
-6. **Promote to `main`.** Open a PR `staging` → `main`. Reviewer required. CI runs the gate suite again. Merge → Vercel deploys to `layers.mirrorfactory.ai`. Tag the release (`v0.1.X`) on `main`.
+4. **Promote to `staging`.** Open a PR `development` -> `staging`. CI runs Tier 0/1/2. Reviewer required. Merge.
+5. **Verify staging.** The `staging` push builds native release-candidate artifacts in GitHub Actions and uploads iOS to TestFlight when Apple secrets are configured. Sign in with a staging account, exercise the changed surface, watch error rates, and run any platform-specific manual checks listed in the PR.
+6. **Promote to `main`.** Open a PR `staging` -> `main`. Reviewer required. CI runs the gate suite again. Merge -> Vercel deploys to `layers.mirrorfactory.ai`. Tag the release (`v0.1.X`) on `main` to publish GitHub Release download assets and upload the release-candidate iOS build to TestFlight.
 
 **Hotfix path** (only when production is on fire):
 
@@ -84,6 +84,11 @@ Add to `dev.layers.mirrorfactory.ai` and `staging.layers.mirrorfactory.ai` only 
 
 `gh repo edit` doesn't cover everything; do this in **Settings → Rules → Rulesets** (or **Settings → Branches** classic):
 
+Current status as of 2026-05-09: classic branch protection is enabled on
+`development`, `staging`, and `main` with required PRs, required reviews,
+required status checks, conversation resolution, admin enforcement, blocked force
+pushes, and blocked deletions.
+
 ### Rule for `main`
 - Restrict who can push: **disabled** (everyone goes through PR)
 - Require a pull request: ✓
@@ -91,7 +96,7 @@ Add to `dev.layers.mirrorfactory.ai` and `staging.layers.mirrorfactory.ai` only 
   - Dismiss stale reviews on new commits
   - Require review from Code Owners (if you set CODEOWNERS)
 - Require status checks to pass: ✓
-  - Selected: `typecheck`, `unit-tests`, `e2e`, `smoke`, `gates` (whatever your CI exposes)
+  - Selected: `Tier 0-1 Fast Gates`, `Tier 2 Focused Browser Proof`, `Web (Vercel)`
   - Require branches to be up to date before merging: ✓
 - Require linear history: ✓ (forces fast-forward / squash, no merge commits)
 - Block force pushes: ✓
@@ -101,13 +106,13 @@ Add to `dev.layers.mirrorfactory.ai` and `staging.layers.mirrorfactory.ai` only 
 ### Rule for `staging`
 - Same as `main` minus the linear-history requirement (you may want merge commits here for promotion).
 - Required approvals: 1
-- Required checks: typecheck, unit-tests, e2e
+- Required checks: `Tier 0-1 Fast Gates`, `Tier 2 Focused Browser Proof`, `Web (Vercel)`
 - Block force pushes: ✓
 
 ### Rule for `development`
 - Require a PR: ✓
-- Required approvals: 0–1 (your call — 0 lets you self-merge after CI is green)
-- Required checks: typecheck, unit-tests
+- Required approvals: 1
+- Required checks: `Tier 0-1 Fast Gates`, `Tier 2 Focused Browser Proof`
 - Block force pushes: ✓
 
 ## Auth + webhook allow-lists
@@ -122,10 +127,12 @@ Each tier needs its own URLs registered upstream. Without these, OAuth bounces a
   - `https://dev.layers.mirrorfactory.ai/auth/callback`
   - `https://*-mirror-factory.vercel.app/auth/callback` (per-PR previews)
   - `http://localhost:3000/auth/callback`
+  - `com.mirrorfactory.layers://auth/callback` (Capacitor iOS/Android deep-link OAuth)
 
-### Google OAuth (Cloud Console → Credentials → OAuth 2.0 Client)
+### Google OAuth (Cloud Console -> Credentials -> OAuth 2.0 Client)
 - Authorised JavaScript origins: prod + staging + dev domains.
 - Authorised redirect URIs: each domain + `/auth/callback`.
+- Native mobile sign-in should use the external browser/deep-link flow, not the embedded WebView. Add the app scheme redirect where required by the selected OAuth implementation.
 
 ### Stripe (test mode for dev/staging, live for prod)
 - Webhook endpoints, one per environment:
@@ -159,15 +166,15 @@ Then `pnpm dev:staging` boots the dev server pointed at staging-tier creds local
 
 ## Migration checklist (when first turning this on)
 
-- [ ] Create `staging` and `development` branches off current `main`.
+- [x] Create `staging` and `development` branches off current `main`.
 - [ ] Vercel: set production branch to `main`, pin staging + dev domains.
 - [ ] Vercel: copy env vars, swap creds for staging + dev.
 - [ ] Add DNS records for `staging.` and `dev.` subdomains.
 - [ ] Supabase: add staging + dev redirect URLs.
 - [ ] Google OAuth: add staging + dev origins + redirects.
 - [ ] Stripe: create staging + dev webhook endpoints (test mode).
-- [ ] GitHub: enable branch protection rulesets on `main`, `staging`, `development`.
-- [ ] Update `AGENTS.md` to reference this doc and the "no direct push to main" rule.
+- [x] GitHub: enable branch protection on `main`, `staging`, `development`.
+- [x] Update `AGENTS.md` to reference this doc and the "no direct push to main" rule.
 - [ ] Open a soak PR `development` → `staging` → `main` to prove the pipeline before retiring the direct-push habit.
 - [ ] Confirm spend caps still configured (see [SPEND_CAPS.md](./SPEND_CAPS.md))
 - [ ] Confirm credentials are fresh per quarterly cadence (see [KEY_ROTATION.md](./KEY_ROTATION.md))

@@ -3,6 +3,7 @@ import { test, expect } from "@playwright/test";
 
 test("ai-debug-panel visual proof records a browser event", async ({ page }) => {
   await page.goto("/control-plane", { waitUntil: "networkidle" });
+  await expect(page.getByTestId("ai-debug-panel")).toBeVisible();
 
   await page.evaluate(() => {
     window.dispatchEvent(
@@ -26,7 +27,6 @@ test("ai-debug-panel visual proof records a browser event", async ({ page }) => 
     );
   });
 
-  await expect(page.getByText("AI Debug").first()).toBeVisible();
   await expect(page.getByText("visual-proof").first()).toBeVisible();
 
   mkdirSync(".evidence/screenshots", { recursive: true });

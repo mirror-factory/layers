@@ -15,6 +15,7 @@ A [Mirror Factory](https://mirrorfactory.ai) product. Currently in invite-only a
 Other essentials:
 
 - 🚦 [`docs/RELEASE.md`](./docs/RELEASE.md) — feature → development → staging → main. Vercel setup, GitHub branch protection, OAuth/webhook allow-lists. **Read before pushing.**
+- 🏭 [`docs/PRODUCTION_QUALITY_SYSTEM.md`](./docs/PRODUCTION_QUALITY_SYSTEM.md) — branch tiers, harness tiers, native platform testing, Symphony capacity, and executive confidence criteria.
 - 🎨 [`DESIGN.md`](./DESIGN.md) — Paper Calm v1 tokens. OKLCH only. 4pt grid. Source of truth for visual decisions.
 - 🪪 [`branding/`](./branding/) — Brand kit ([`BRAND_NARRATIVE.md`](./branding/BRAND_NARRATIVE.md), shareable [`design-kit.html`](./branding/design-kit.html), [`htmlcanvas-playground.html`](./branding/htmlcanvas-playground.html), cached vendor SVGs). Open the HTML files directly to share with a designer.
 - 🤖 [`AGENTS.md`](./AGENTS.md) — agent contract. AI SDK v6 patterns. Skill registry.
@@ -75,8 +76,11 @@ See [docs/PRICING_AND_BILLING.md](docs/PRICING_AND_BILLING.md) for complete bill
 |---------|---------|
 | `pnpm dev` | Dev server (Turbopack) |
 | `pnpm build` | Production build |
-| `pnpm typecheck` | TypeScript check |
-| `pnpm test` | Unit tests (95) |
+| `pnpm verify:tier 0` | Syntax, type, registry, and deprecation checks |
+| `pnpm verify:tier 1` | Fast deterministic tests and lightweight gates |
+| `pnpm verify:tier 2` | Focused ticket proof for changed surfaces |
+| `pnpm verify:tier 3` | Visual, mobile, usability, and staging proof |
+| `pnpm test` | Fast unit/integration test alias |
 | `pnpm test:e2e` | Playwright e2e (68 tests, 6 viewports) |
 | `pnpm electron:dev` | Electron desktop |
 | `pnpm electron:build` | Build DMG |

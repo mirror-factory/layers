@@ -20,20 +20,13 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
+import { getEditableConfig } from '../files';
 
 export const dynamic = 'force-dynamic';
 
-const EDITABLE: Record<string, string> = {
-  'design-tokens':  '.ai-dev-kit/registries/design-tokens.yaml',
-  'design-system':  '.ai-dev-kit/registries/design-system.yaml',
-  'budget':         '.ai-dev-kit/budget.yaml',
-  'notify':         '.ai-dev-kit/notify.yaml',
-  'observability':  '.ai-dev-kit/observability-requirements.yaml',
-  'requirements':   '.ai-dev-kit/requirements.yaml',
-};
-
 interface PostBody {
   content?: unknown;
+  yaml?: unknown;
 }
 
 function isPlausibleYaml(src: string): { ok: true } | { ok: false; reason: string } {
@@ -56,8 +49,8 @@ export async function POST(
   context: { params: Promise<{ name: string }> },
 ): Promise<NextResponse> {
   const { name } = await context.params;
-  const relPath = EDITABLE[name];
-  if (!relPath) {
+  const config = getEditableConfig(name);
+  if (!config) {
     return NextResponse.json(
       { error: 'not_found', message: `unknown config slug: ${name}` },
       { status: 404 },
@@ -74,10 +67,10 @@ export async function POST(
     );
   }
 
-  const content = body.content;
+  const content = body.content ?? body.yaml;
   if (typeof content !== 'string') {
     return NextResponse.json(
-      { error: 'invalid_body', message: '`content` must be a string' },
+      { error: 'invalid_body', message: '`content` or `yaml` must be a string' },
       { status: 400 },
     );
   }
@@ -90,7 +83,7 @@ export async function POST(
     );
   }
 
-  const abs = join(process.cwd(), relPath);
+  const abs = join(process.cwd(), config.path);
   try {
     mkdirSync(dirname(abs), { recursive: true });
     writeFileSync(abs, content, 'utf-8');
@@ -105,6 +98,6 @@ export async function POST(
   return NextResponse.json({
     ok: true,
     bytes: Buffer.byteLength(content, 'utf-8'),
-    path: relPath,
+    path: config.path,
   });
 }

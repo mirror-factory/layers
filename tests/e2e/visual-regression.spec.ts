@@ -49,6 +49,7 @@ async function ensureBaseline(page: Page, testInfo: TestInfo, name: string): Pro
   await page.screenshot({
     path: snapshotPath,
     animations: 'disabled',
+    scale: 'device',
   });
   testInfo.annotations.push({
     type: 'visual-baseline',
@@ -92,6 +93,7 @@ for (const bp of BREAKPOINTS) {
           maxDiffPixelRatio: MAX_DIFF_RATIO,
           // Animation-friendly: allow slight differences from transitions
           animations: 'disabled',
+          scale: 'device',
         });
       });
     }

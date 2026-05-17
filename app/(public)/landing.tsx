@@ -124,7 +124,7 @@ const BUILT_ON = [
 
 export function LandingPage() {
   return (
-    <div className={`${display.variable} layers-home`}>
+    <div className={`${display.variable} layers-home`} style={{ overflowX: "hidden" }}>
       <Hero />
       {/* "Built on" trust bar removed 2026-05-01: in invite-only
           alpha we don't have customer logos to show, and the vendor
@@ -291,7 +291,7 @@ function Hero() {
         className="home-hero-grid"
         style={{
           display: "grid",
-          gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1.05fr)",
+          gridTemplateColumns: "minmax(0, 1fr)",
           gap: "clamp(32px, 5vw, 80px)",
           alignItems: "center",
         }}
@@ -368,9 +368,9 @@ function Hero() {
       </div>
 
       <style jsx>{`
-        @media (max-width: 920px) {
+        @media (min-width: 921px) {
           :global(.home-hero-grid) {
-            grid-template-columns: minmax(0, 1fr) !important;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr) !important;
           }
         }
       `}</style>
@@ -384,6 +384,7 @@ function HeroComposition() {
       aria-hidden
       style={{
         position: "relative",
+        maxWidth: "100%",
         minHeight: "clamp(380px, 40vw, 440px)",
         isolation: "isolate",
         // Decorative halos and offset cards inside this composition use

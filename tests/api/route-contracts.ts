@@ -89,6 +89,7 @@ export const apiRouteContracts = [
   // (Vercel Cron) or `Authorization: Bearer ${CRON_SECRET}` (manual/scheduled).
   // Smoke runs unauthorized → 401, which is the expected contract response.
   route("/api/cron/onboarding-emails", "app/api/cron/onboarding-emails/route.ts", ["GET"], "service", true, [200, 401, 503]),
+  route("/api/dev-kit/config", "app/api/dev-kit/config/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
   route("/api/dev-kit/config/[name]", "app/api/dev-kit/config/[name]/route.ts", ["POST"], "dev-kit", false, badRequestOrUnavailable, {
     POST: { body: { yaml: "colors: {}\n" }, expectStatuses: [200, 400, 401, 403, 404] },
   }, "/api/dev-kit/config/design-tokens"),
@@ -105,6 +106,8 @@ export const apiRouteContracts = [
   route("/api/dev-kit/index", "app/api/dev-kit/index/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
   route("/api/dev-kit/logs/unified", "app/api/dev-kit/logs/unified/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
   route("/api/dev-kit/overview", "app/api/dev-kit/overview/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
+  route("/api/dev-kit/project-profile", "app/api/dev-kit/project-profile/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
+  route("/api/dev-kit/proof", "app/api/dev-kit/proof/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
   route("/api/dev-kit/registries", "app/api/dev-kit/registries/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
   route("/api/dev-kit/regressions", "app/api/dev-kit/regressions/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
   route("/api/dev-kit/runs/[run_id]", "app/api/dev-kit/runs/[run_id]/route.ts", ["GET"], "dev-kit", false, [200, 403, 404], undefined, "/api/dev-kit/runs/sample"),

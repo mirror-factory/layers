@@ -7,322 +7,154 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.1.124] — 2026-05-17
-
-### Testing
-- test: stabilize navigation smoke checks (`e7fd011`)
-
-
-## [0.1.123] — 2026-05-17
-
-### Testing
-- test: align e2e smoke with release UI (`d46d6a0`)
-
-
-## [0.1.122] — 2026-05-17
-
-### Testing
-- test: update visual baselines (`68afba0`)
-
-
-## [0.1.121] — 2026-05-17
+## [0.1.96] — 2026-05-10
 
 ### Other
-- chore: harden release readiness checks (`fb48166`)
+- Refine feature proof resolver tests (`f54ecdf`)
 
 
-## [0.1.120] — 2026-05-14
-
-### Other
-- docs(activity-log): pr-merged #87 brand kit + branch-prune summary (`dd0edbc`)
-
-
-## [0.1.119] — 2026-05-14
+## [0.1.95] — 2026-05-10
 
 ### Other
-- docs(brand): README + AGENTS pointers, activity-log entries, evidence (PROD-496) (`78eae87`)
+- Fix feature proof lane artifact state (`1a3ca94`)
 
 
-## [0.1.118] — 2026-05-14
-
-### Other
-- feat(skills): layers-brand-remotion — brand voice + Layers Remotion patterns + HTML-in-Canvas playbook in one skill (PROD-499) (`8bf63cf`)
-
-
-## [0.1.117] — 2026-05-14
+## [0.1.94] — 2026-05-10
 
 ### Other
-- feat(remotion): BrandTemplate composition — six-beat 1920x1080 brand video with particle fields + organic semi-circle mark (PROD-499) (`907791e`)
+- Fix Expect fallback dev server startup (`15d7006`)
 
 
-## [0.1.116] — 2026-05-14
-
-### Other
-- feat(brand): narrative + shareable design kit + HTML-in-Canvas playground + cached vendor SVGs (PROD-497, PROD-498) (`6c23a7a`)
-
-
-## [0.1.115] — 2026-05-13
+## [0.1.93] — 2026-05-10
 
 ### Other
-- feat(qa): Cross-Platform QA suite — Linear master/children + dual-format SKILL.md (`f82274e`)
+- Improve Expect fallback URL discovery (`1703cfc`)
 
 
-## [0.1.114] — 2026-05-13
-
-### Other
-- feat(qa): Maestro iOS automation — sign-in + authed walk flows (`bcf4d19`)
-
-
-## [0.1.113] — 2026-05-13
+## [0.1.92] — 2026-05-10
 
 ### Other
-- docs(activity-log): append PR #81 + NTFY rundown entries (`605e2eb`)
+- Fix Expect TUI timeout fallback (`b4bba00`)
 
 
-## [0.1.112] — 2026-05-13
-
-### Other
-- docs(activity-log): append PR #81 + NTFY rundown entries (`1d9df7b`)
-
-
-## [0.1.111] — 2026-05-13
+## [0.1.91] — 2026-05-10
 
 ### Other
-- docs(activity-log): append-only chronological log + AGENTS.md contract (`5ae0432`)
+- Fix Expect fallback URL resolution (`0a808bc`)
 
 
-## [0.1.110] — 2026-05-12
+## [0.1.90] — 2026-05-10
 
-### Other
-- fix(auth): exclude anon Supabase sessions from /sign-in /sign-up redirect (PROD-487 — regression from PR #78) (`c1f59af`)
-
-
-## [0.1.109] — 2026-05-12
-
-### Other
-- docs(qa): Android authed walk + auth-nav fix verified live (`374239d`)
+### Fixed
+- fix: fallback on expect tui infra failures (`bfc6200`)
 
 
-## [0.1.108] — 2026-05-12
+## [0.1.89] — 2026-05-10
 
-### Other
-- fix(public-nav): auth-aware nav + redirect signed-in users away from /sign-in /sign-up (PROD-485, PROD-486) (`06fe39a`)
-
-
-## [0.1.107] — 2026-05-12
-
-### Other
-- docs(qa): authed walkthrough — 4 missing prod migrations caught + applied (`1169617`)
+### Added
+- feat: harden devkit proof harness (`f24a4eb`)
 
 
-## [0.1.106] — 2026-05-12
+## [0.1.88] — 2026-05-10
+
+### Fixed
+- fix: complete devkit dashboard proof harness (`f512ecc`)
+
+
+## [0.1.87] — 2026-05-10
 
 ### Other
-- docs(qa): cross-platform QA checklist (iOS / Android / macOS / Windows / Web) (`2c41101`)
+- chore: refresh docs manifest (`726eab2`)
 
 
-## [0.1.105] — 2026-05-12
-
-### Other
-- docs(visual-qa): mobile sim walkthrough checklist + 2026-05-12 evidence (`a2e9d14`)
-
-
-## [0.1.104] — 2026-05-12
+## [0.1.86] — 2026-05-10
 
 ### Other
-- fix(sign-in): use canonical support@mirrorfactory.ai instead of orphan layers.app (`62edd83`)
+- chore: route smoke harness proof selection (`0873455`)
 
 
-## [0.1.103] — 2026-05-12
+## [0.1.85] — 2026-05-10
+
+### Fixed
+- fix: scope feature proof artifact enforcement (`d35153c`)
+
+
+## [0.1.84] — 2026-05-10
 
 ### Other
-- fix(public-nav): opaque sticky header on mobile to stop content bleed-through (`97eb609`)
+- chore: refresh docs manifest (`bd91863`)
 
 
-## [0.1.102] — 2026-05-12
+## [0.1.83] — 2026-05-10
 
-### Other
-- docs(evidence): iOS post-fix screenshot confirming Dynamic Island clearance (`4dfad0a`)
+### Fixed
+- fix: gate expect proof on explicit runner (`e3bc819`)
 
 
-## [0.1.101] — 2026-05-12
+## [0.1.82] — 2026-05-10
+
+### Added
+- feat: add registry-driven feature proof (`ae01416`)
+
+
+## [0.1.81] — 2026-05-09
+
+### Fixed
+- fix: preserve tier 3 video artifacts (`8718c48`)
+
+
+## [0.1.80] — 2026-05-09
 
 ### Documentation
-- docs: session log wave 3 — iOS+Android sim walkthrough + deploy-blocker fix (`8685903`)
+- docs: refresh docs manifest (`e746896`)
 
 
-## [0.1.100] — 2026-05-12
+## [0.1.79] — 2026-05-09
 
-### Other
-- fix(cron): un-export Zod schemas from watchlist-tick route (`8ec85b0`)
-
-
-## [0.1.99] — 2026-05-12
-
-### Other
-- fix(native): respect iOS dynamic island in TestingBanner (PROD-460 follow-up) (`973ff0d`)
+### Fixed
+- fix: allow tier 3 media proof video (`9af5439`)
 
 
-## [0.1.98] — 2026-05-12
-
-### Documentation
-- docs: session log second-wave update — 30 PRs merged total (`62d1772`)
-
-
-## [0.1.97] — 2026-05-12
+## [0.1.78] — 2026-05-09
 
 ### Other
-- chore: merge main into PR #67 (`092b586`)
+- ci: preserve proof evidence artifacts (`98ad6da`)
 
 
-## [0.1.96] — 2026-05-12
+## [0.1.77] — 2026-05-09
 
-### Other
-- feat(monitoring): watchlist + cron-driven alert tick (PROD-371) (`d2b2d61`)
-
-
-## [0.1.95] — 2026-05-12
-
-### Testing
-- test: integration anchors for PROD-473 + PROD-463 routes + fix transcribe-batch error-message assertion (`896a67c`)
+### Added
+- feat: wire native proof and OAuth bridge (`1a462aa`)
 
 
-## [0.1.94] — 2026-05-12
+## [0.1.76] — 2026-05-09
 
 ### Other
-- test+fix(e2e): finish PROD-459 — mobile landing + record/live (part 2) (`bd16ecb`)
+- ci: run dev-kit gates on staging (`6514072`)
 
 
-## [0.1.93] — 2026-05-12
+## [0.1.75] — 2026-05-09
 
-### Documentation
-- docs: final session log update — PRs #55-59 + process learnings (`a520c1a`)
-
-
-## [0.1.92] — 2026-05-12
-
-### Other
-- feat(meetings): raw ↔ enhanced notes toggle (PROD-465) (`4667a63`)
+### Added
+- feat: add project quality operating system (`0790630`)
 
 
-## [0.1.91] — 2026-05-12
+## [0.1.74] — 2026-05-09
 
 ### Other
-- feat(meetings): raw ↔ enhanced notes toggle (PROD-465) (`419f0bc`)
+- chore: sync docs manifest (`1ba6cd9`)
 
 
-## [0.1.90] — 2026-05-12
-
-### Other
-- feat(chat): Recipes library + slash menu — saved prompts (PROD-463) (`67aa493`)
-
-
-## [0.1.89] — 2026-05-12
-
-### Documentation
-- docs: Supabase production migration audit + critical RLS finding (PROD-224) (`64565c2`)
-
-
-## [0.1.88] — 2026-05-12
+## [0.1.73] — 2026-05-09
 
 ### Other
-- feat(recording): storage-backed upload path for files >4.5MB (PROD-473) (`755a1ac`)
+- chore: lazily install playwright for ticket proof (`bdb9f95`)
 
 
-## [0.1.87] — 2026-05-12
-
-### Documentation
-- docs: full session log 2026-05-11 → 2026-05-12 with all PR + ticket links (`ef66d94`)
-
-
-## [0.1.86] — 2026-05-12
+## [0.1.72] — 2026-05-09
 
 ### Other
-- chore: merge main into PR #54 (`805b8fd`)
-
-
-## [0.1.85] — 2026-05-12
-
-### Other
-- chore: merge main into PR #53 (`14c66bf`)
-
-
-## [0.1.84] — 2026-05-12
-
-### Other
-- chore: merge main into PR #50 (`71c92ba`)
-
-
-## [0.1.83] — 2026-05-12
-
-### Other
-- chore: merge main into PR #49 to resolve auto-bump cascade (`2cfbd52`)
-
-
-## [0.1.82] — 2026-05-12
-
-### Documentation
-- docs: KEY_ROTATION runbook + RECORDING_MANUAL_QA checklist (PROD-407, PROD-477) (`8fbef4c`)
-
-
-## [0.1.81] — 2026-05-12
-
-### Other
-- chore: merge main to PR #41 (`061afde`)
-
-
-## [0.1.80] — 2026-05-12
-
-### Other
-- chore: merge main to PR #44 (`bd9a7d5`)
-
-
-## [0.1.79] — 2026-05-12
-
-### Other
-- chore: merge main to PR #40 (`2c5d6ca`)
-
-
-## [0.1.78] — 2026-05-12
-
-### Other
-- chore: merge main to PR #39 (`0268e67`)
-
-
-## [0.1.77] — 2026-05-12
-
-### Other
-- chore: merge main to PR #38 (`79187c7`)
-
-
-## [0.1.76] — 2026-05-12
-
-### Other
-- chore: merge main to PR #37 (`c3dc459`)
-
-
-## [0.1.75] — 2026-05-12
-
-### Other
-- chore: merge latest main to resolve auto-bump conflict (PR #36) (`07ae808`)
-
-
-## [0.1.74] — 2026-05-11
-
-### Other
-- test(e2e): reconcile navigation.spec.ts with invite-only landing reality (`14ccf3e`)
-
-
-## [0.1.73] — 2026-05-11
-
-### Other
-- chore(research): refresh vitest entry to clear stale gate warning (`905a1ee`)
-
-
-## [0.1.72] — 2026-05-11
-
-### Other
-- chore(public): remove GitHub footer link + sign-up CTA from nav (`1703eba`)
+- chore: tier production quality gates (`e48e785`)
 
 
 ## [0.1.71] — 2026-05-07

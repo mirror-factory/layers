@@ -1,0 +1,173 @@
+{
+  "$schema": "./schemas/project-profile.schema.json",
+  "schemaVersion": 1,
+  "kitProfile": "mirror-factory.full-stack-ai-product",
+  "project": {
+    "id": "layers",
+    "name": "Layers",
+    "repo": "mirror-factory/layers",
+    "primaryDashboardUrl": "https://work.hustletogether.com/projects/layers",
+    "linearProjectSlug": "layers-786bd350532f"
+  },
+  "sourceOfTruth": {
+    "tickets": "linear",
+    "code": "github",
+    "proof": "dev-kit-dashboard",
+    "releases": "github-actions"
+  },
+  "branchModel": {
+    "integration": "development",
+    "releaseCandidate": "staging",
+    "production": "main",
+    "agentBranchPrefix": "agent/",
+    "requiredPrTarget": "development"
+  },
+  "platforms": {
+    "web": {
+      "enabled": true,
+      "reviewChannel": "vercel-preview",
+      "requiredTiers": [0, 1, 2, 3]
+    },
+    "ios": {
+      "enabled": true,
+      "reviewChannel": "testflight",
+      "requiredTiers": [0, 1, 2, 3, 5],
+      "nativeHarness": "maestro"
+    },
+    "android": {
+      "enabled": true,
+      "reviewChannel": "github-actions-apk",
+      "requiredTiers": [0, 1, 2, 3, 5],
+      "nativeHarness": "maestro"
+    },
+    "macos": {
+      "enabled": true,
+      "reviewChannel": "github-actions-dmg",
+      "requiredTiers": [0, 1, 2, 5]
+    },
+    "windows": {
+      "enabled": true,
+      "reviewChannel": "github-actions-exe",
+      "requiredTiers": [0, 1, 2, 5]
+    }
+  },
+  "services": {
+    "supabase": {
+      "default": true,
+      "enabled": true,
+      "requiredEnv": ["SUPABASE_URL", "SUPABASE_ANON_KEY", "SUPABASE_SERVICE_ROLE_KEY"]
+    },
+    "vercelAiGateway": {
+      "default": true,
+      "enabled": true,
+      "requiredEnv": ["AI_GATEWAY_API_KEY"]
+    },
+    "resend": {
+      "default": true,
+      "enabled": true,
+      "requiredEnv": ["RESEND_API_KEY"]
+    },
+    "stripe": {
+      "default": true,
+      "enabled": true,
+      "requiredEnv": ["STRIPE_SECRET_KEY", "STRIPE_WEBHOOK_SECRET"]
+    },
+    "assemblyai": {
+      "default": true,
+      "enabled": true,
+      "requiredEnv": ["ASSEMBLYAI_API_KEY"]
+    },
+    "deepgram": {
+      "default": true,
+      "enabled": true,
+      "requiredEnv": ["DEEPGRAM_API_KEY"]
+    },
+    "langfuse": {
+      "default": true,
+      "enabled": true,
+      "requiredEnv": ["LANGFUSE_PUBLIC_KEY", "LANGFUSE_SECRET_KEY"]
+    }
+  },
+  "tools": {
+    "typescript": { "required": true },
+    "vitest": { "required": true },
+    "playwright": { "required": true },
+    "expect": { "required": true, "tier": 3 },
+    "million": { "required": false, "reason": "Opted out until compiler issues are resolved for this app." },
+    "storybook": { "required": false },
+    "maestro": { "required": false, "requiredBeforeNativeAutomerge": true }
+  },
+  "designSystem": {
+    "mode": "no-inference",
+    "tokensPath": ".ai-dev-kit/registries/design-tokens.yaml",
+    "systemPath": ".ai-dev-kit/registries/design-system.yaml",
+    "componentsRegistryPath": ".ai-dev-kit/registries/components.yaml",
+    "referenceSurfaces": [
+      "/",
+      "/record",
+      "/record/live",
+      "/meetings",
+      "/dev-kit"
+    ],
+    "aiRules": [
+      "Do not invent net-new visual language without an explicit mockup or design-system update.",
+      "Use existing tokens, components, spacing, and layout conventions first.",
+      "Visual work requires screenshot proof."
+    ]
+  },
+  "proofPolicy": {
+    "packetPath": ".evidence/proof-packet.json",
+    "requireProofBeforeReview": true,
+    "requireVideoForUi": true,
+    "requireExpectForUsability": true,
+    "requireNativeArtifactForNative": true,
+    "maxNoFileChangeMinutes": 10,
+    "maxRepeatedFailures": 2,
+    "maxAgentTurns": 5
+  },
+  "nativePolicy": {
+    "mobileAppId": "com.mirafactory.layers",
+    "deepLinkScheme": "com.mirafactory.layers",
+    "oauthCallbackPath": "/callback",
+    "electronAppId": "com.mirafactory.layers",
+    "artifactRoots": [
+      "dist-electron",
+      "release-assets",
+      "android/app/build/outputs",
+      "ios/App/build"
+    ]
+  },
+  "reviewPolicy": {
+    "humanApprovalRequired": true,
+    "aiReviewRequired": true,
+    "codeRabbitOptional": true,
+    "autoMerge": {
+      "enabled": false,
+      "allowedRisk": ["low"],
+      "blockedSurfaces": ["auth", "billing", "native", "security", "database", "release"]
+    }
+  },
+  "dashboard": {
+    "portfolioPath": "/projects",
+    "projectPath": "/projects/layers",
+    "devKitPath": "/dev-kit",
+    "requiredPanels": [
+      "tickets",
+      "runs",
+      "pull-requests",
+      "proof",
+      "regressions",
+      "design-system",
+      "deployments",
+      "native-builds",
+      "cost"
+    ]
+  },
+  "symphony": {
+    "enabled": true,
+    "publicUrl": "https://work.hustletogether.com",
+    "workflowSource": "mf-symphony/deploy/ct-102/WORKFLOW.md",
+    "liveWorkflowPath": "/etc/symphony/WORKFLOW.md",
+    "maxConcurrentAgents": 1
+  }
+}
