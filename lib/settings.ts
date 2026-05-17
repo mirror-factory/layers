@@ -6,6 +6,7 @@
  */
 
 import { cookies } from "next/headers";
+import { log } from "@/lib/logger";
 import { DEFAULTS } from "./settings-shared";
 import type { ModelSettings } from "./settings-shared";
 
@@ -76,13 +77,11 @@ export async function getSettings(): Promise<ModelSettings> {
     DEFAULTS.streamingSpeechModel,
   );
 
-  // Lightweight server log so we can grep "settings.resolved provider=
-  // ... source=env" if a tester reports the wrong vendor.
   if (process.env.NODE_ENV !== "test" && streaming.source !== "cookie") {
-    // eslint-disable-next-line no-console
-    console.log(
-      `[settings.resolved] streaming=${streaming.value} source=${streaming.source}`,
-    );
+    log.info("settings.resolved", {
+      streaming: streaming.value,
+      source: streaming.source,
+    });
   }
 
   return {
