@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.138] — 2026-05-18
+
+### Documentation
+- docs: stabilize release report head wording (`dd674d0`)
+
+
 ## [0.1.137] — 2026-05-18
 
 ### Documentation
