@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.146] — 2026-05-18
+
+### Documentation
+- docs: update release blocker audit (`280ec6d`)
+
+
 ## [0.1.145] — 2026-05-18
 
 ### Documentation
