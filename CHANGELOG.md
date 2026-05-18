@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.161] — 2026-05-18
+
+### Other
+- chore: align release proof with feature registry (`f00d3d9`)
+
+
 ## [0.1.160] — 2026-05-18
 
 ### Other
