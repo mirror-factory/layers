@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generatedAt": "2026-05-18T04:51:13.129Z",
+  "generatedAt": "2026-05-18T05:12:44.964Z",
   "docs": [
     {
       "id": "activity-log",
       "localPath": "docs/ACTIVITY_LOG.md",
-      "contentHash": "1c1cecc80c75dce67e0abdf9268b122b1828400118fcfe77913ea26102df92f2",
+      "contentHash": "40f8cdecbc59dfcd9dd9886d1454118f8a03a51a14f8beed1b3bc13fdd9ab0dc",
       "priority": "cold"
     },
     {
@@ -503,7 +503,7 @@
     {
       "id": "cross-platform-qa",
       "localPath": "docs/CROSS_PLATFORM_QA.md",
-      "contentHash": "f5974be163dcf7a9cedbdd81ae56c237cd608bf99a4b95abf486f32368c468dc",
+      "contentHash": "bd067a8bbf7d33ce0eb898cc22cd4c30de64ea1af223114cf507402c1891a4b3",
       "priority": "cold"
     },
     {
@@ -527,7 +527,7 @@
     {
       "id": "evidence-2026-05-18-claude-cross-platform-qa-android-android-qa-report",
       "localPath": "docs/evidence/2026-05-18-claude-cross-platform-qa/android/ANDROID_QA_REPORT.md",
-      "contentHash": "ce244294e39615317565d25818662868ff9c30e8a3723458bf661df99697f30f",
+      "contentHash": "7b847008eed233899df04907cb8f62b61bf285ee08d1d293ea819b6ef4efec86",
       "priority": "cold"
     },
     {
@@ -545,13 +545,13 @@
     {
       "id": "evidence-2026-05-18-claude-cross-platform-qa-macos-macos-qa-report",
       "localPath": "docs/evidence/2026-05-18-claude-cross-platform-qa/macos/MACOS_QA_REPORT.md",
-      "contentHash": "9e48e28e51030a883a7f8e1809343608aad7d040785d9faffccda305e4f0e5e8",
+      "contentHash": "2e6b7111f8b0c05eb12bf4899c055936e69313959d2f8a42d4c883b5d95b6937",
       "priority": "cold"
     },
     {
       "id": "evidence-2026-05-18-claude-cross-platform-qa-web-web-qa-report",
       "localPath": "docs/evidence/2026-05-18-claude-cross-platform-qa/web/WEB_QA_REPORT.md",
-      "contentHash": "be363effb1518122a52bfb1035c2730b161336bb22de93d42569498ac287a396",
+      "contentHash": "f3a3f4cf1b126e03af260d0f58f67097bbdc0834fc276f95f54b0482317353c3",
       "priority": "cold"
     },
     {
@@ -564,6 +564,12 @@
       "id": "evidence-2026-05-18-claude-main-features-qa-web-web-main-features-report",
       "localPath": "docs/evidence/2026-05-18-claude-main-features-qa/web/WEB_MAIN_FEATURES_REPORT.md",
       "contentHash": "1893120664c3d004d5cea2a0f1fd03387048438cf5d132e22760cd0b598f3c11",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-homepage-auth-polish-browser-qa-results",
+      "localPath": "docs/evidence/2026-05-18-homepage-auth-polish/browser-qa-results.json",
+      "contentHash": "582ed9e5a36dc4a0118e7a309e9336f94af821f73de1f943da0fc87385edd74b",
       "priority": "cold"
     },
     {
@@ -899,7 +905,7 @@
     {
       "id": "getting-started",
       "localPath": "docs/GETTING_STARTED.md",
-      "contentHash": "a2582b2834b7a4e25e7783048bb171590d374fd9610bb26bdd487cdf5c7d8d45",
+      "contentHash": "a0ecd4389e07eadf33dcd00e5b40336bc2dbd1996024d9eaa9df4f8c80d6de49",
       "priority": "hot"
     },
     {
@@ -935,19 +941,19 @@
     {
       "id": "incident-runbook",
       "localPath": "docs/INCIDENT_RUNBOOK.md",
-      "contentHash": "662c205318bd177b20f110ebbbed1b480293ea43aa33366552cacbd0e0c37956",
+      "contentHash": "6a3a2c6f1edce4b2de8ad4993ebfa46904a25df8d9e4c9fb72da6f514405771e",
       "priority": "hot"
     },
     {
       "id": "key-rotation",
       "localPath": "docs/KEY_ROTATION.md",
-      "contentHash": "faa606b4b564bc5897530a15a323d9e1fad35f7ac6f342ef2aa347331608b4bb",
+      "contentHash": "7befcba8da8ccadacdf3adfe993d95df1fd50af84f82386d9fe98d378046bb30",
       "priority": "cold"
     },
     {
       "id": "launch-checklist",
       "localPath": "docs/LAUNCH_CHECKLIST.md",
-      "contentHash": "51030b07f7670337378160a75ac5c27cb18a1ce5627669bc840bcb29c1ff34d2",
+      "contentHash": "a209469fb8b18c56015b6cc0f7f2b3ac06acd1223ddd0dfb823fbebae5317044",
       "priority": "hot"
     },
     {
@@ -971,7 +977,7 @@
     {
       "id": "mobile-visual-qa",
       "localPath": "docs/MOBILE_VISUAL_QA.md",
-      "contentHash": "a914935a9222c001555624c4c19842237ef24e3d958d3af1eab7c3c08491c81c",
+      "contentHash": "6a57caf22f47c0ae9f0a57742972a5b37aca6bd22b3957fd74509c36837a9b7a",
       "priority": "cold"
     },
     {
@@ -1091,7 +1097,7 @@
     {
       "id": "spend-caps",
       "localPath": "docs/SPEND_CAPS.md",
-      "contentHash": "7fc9c2bfd62e1d2cdc9ff25627e039c19ab4894a93ed48a7f432615bcfad2e39",
+      "contentHash": "5e0371d7a9258418b3d7d3b05fb3ce903fa969c754475af7027ef35fbd758649",
       "priority": "cold"
     },
     {
