@@ -222,10 +222,14 @@ Current check results on 2026-05-17:
 | `plutil -lint ios/App/App/PrivacyInfo.xcprivacy` | Pass |
 | `plutil -lint ios/App/App/Info.plist` | Pass |
 | `xcodebuild -project ios/App/App.xcodeproj -list` | Pass; scheme `App` is visible |
+| `xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Debug -sdk iphonesimulator -destination "generic/platform=iOS Simulator" build` | Pass; simulator Debug app built locally |
 | `xmllint --noout android/app/src/main/AndroidManifest.xml` | Pass |
 | `JAVA_HOME=/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home ANDROID_HOME=/opt/homebrew/share/android-commandlinetools ./gradlew :app:assembleDebug` | Pass |
 | `./gradlew :app:bundleRelease` | Not run; requires release-signing variables for a Play-ready artifact |
 | GitHub Actions Android release path | Builds debug APK always; builds signed AAB when `LAYERS_ANDROID_*` upload-key secrets are present; tagged releases fail if signed AAB secrets are missing |
+
+Note: the system Java shim is not globally configured on this machine, so Android
+commands need the explicit `JAVA_HOME` above unless the shell profile is updated.
 
 ## Official References
 

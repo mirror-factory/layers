@@ -289,21 +289,21 @@
           <p>
             TLDR: the release-readiness branch is materially stronger, but it
             is not production-safe yet. PR #88 is open against development.
-            Latest fully green hosted proof head 9918ebc has Tier 0-1 Fast
+            Latest fully green hosted proof head 5eb6200 has Tier 0-1 Fast
             Gates, Tier 2 Focused Browser Proof, Tier 3 Broad Browser Matrix,
             Vercel, and Vercel Preview Comments passing. The Stop-flow
             QA patch is now pushed and green in hosted CI: it adds a deterministic
             non-production fake recording harness, proves Start recording
             through Stop/finalize/meeting-detail render, proves the local-draft
             failure path, and fixes release-risk bugs found during that proof.
-            If this report edit creates a docs/version-only head, recheck that
-            head before merge; the latest code-proof head is 9918ebc.
+            The latest code-proof head is 9918ebc; the final report/version
+            head 5eb6200 is also green in hosted web CI.
           </p>
 
           <div class="meta" role="list" aria-label="Report metadata">
             <div role="listitem">
               <span class="label">Updated</span>
-              <span class="value">2026-05-17 21:48 EDT</span>
+              <span class="value">2026-05-17 22:01 EDT</span>
             </div>
             <div role="listitem">
               <span class="label">Branch</span>
@@ -315,7 +315,7 @@
             </div>
             <div role="listitem">
               <span class="label">Latest Green Proof Head</span>
-              <span class="value">9918ebc: Tier 0-1, Tier 2, Tier 3, Vercel pass</span>
+              <span class="value">5eb6200: Tier 0-1, Tier 2, Tier 3, Vercel pass</span>
             </div>
           </div>
         </header>
@@ -327,16 +327,18 @@
               <h3>What Is Good</h3>
               <ul>
                 <li>Tier 0-1 Fast Gates passed remotely on the latest full proof run.</li>
-                <li>Tier 2 Focused Browser Proof passed remotely on latest fully green proof head 9918ebc.</li>
-                <li>Tier 3 Broad Browser Matrix passed remotely on latest fully green proof head 9918ebc.</li>
-                <li>Vercel preview deployment completed successfully on latest fully green proof head 9918ebc.</li>
+                <li>Tier 2 Focused Browser Proof passed remotely on latest fully green proof head 5eb6200.</li>
+                <li>Tier 3 Broad Browser Matrix passed remotely on latest fully green proof head 5eb6200.</li>
+                <li>Vercel preview deployment completed successfully on latest fully green proof head 5eb6200.</li>
                 <li>PROD-500 Stop/finalize fix passed targeted Vitest, typecheck, compliance, fast tests, pre-push Tier 1, and hosted proof.</li>
                 <li>New Stop-flow browser proof now passes locally across the full six-project matrix: mobile, tablet, desktop, light, and dark.</li>
                 <li>Main branch protection now requires the current gate names and 1 approval.</li>
                 <li>GitHub default branch now points at `development`, not stale unprotected `dev`.</li>
                 <li>Branch drift found: `origin/dev` still exists at 0.1.75 and is ahead of `origin/development`; #88 will advance `development` when reviewed/merged.</li>
                 <li>Current branch `pnpm audit --audit-level high` reports no known vulnerabilities.</li>
-                <li>The Stop-flow proof patch is pushed and green at 9918ebc; any later report-only head needs its own quick hosted recheck.</li>
+                <li>The Stop-flow proof patch is pushed and green at 9918ebc, and the final report/version head 5eb6200 is green.</li>
+                <li>Native config, iOS simulator Debug build, and Android debug APK build pass locally.</li>
+                <li>Local Vercel CLI is now relinked to the real `audio-layer` Next.js project used by CI.</li>
               </ul>
             </div>
 
@@ -347,6 +349,7 @@
                 <li>Native Google OAuth now opens fullscreen and exits loading state correctly.</li>
                 <li>macOS release CI now blocks signed-but-unnotarized apps.</li>
                 <li>Android CI can build a signed AAB when upload-key secrets exist.</li>
+                <li>Direct native debug builds were re-run: iOS simulator build succeeded and Android `:app:assembleDebug` succeeded with explicit JDK/SDK paths.</li>
                 <li>GitHub Actions workflows were upgraded to current Node 24-compatible action majors.</li>
                 <li>Extended proof labels were tested; missing self-hosted runners are now a documented infra blocker.</li>
                 <li>A reusable Codex skill was created for this report workflow at ~/.codex/skills/layers-cpo-release-report.</li>
@@ -368,9 +371,8 @@
                 <li>Android upload-key secrets must be installed and a signed AAB verified.</li>
                 <li>GitHub reports 41 default-branch Dependabot alerts: 24 high, 15 medium, 2 low.</li>
                 <li>Self-hosted `layers-web` and `layers-android` runners are not registered at repo scope.</li>
-                <li>Cloudflare DNS records are still missing for `dev.layers.mirrorfactory.ai` and `staging.layers.mirrorfactory.ai`.</li>
-                <li>Cloudflare tunnel access exists, but DNS-management access is not available from this shell yet.</li>
-                <li>Vercel project ownership needs reconciliation before domain mutation: CI deploys `audio-layer` under `mirror-factorys-projects-836be98a`, while local `.vercel/project.json` points to `mirror-factory/layers`.</li>
+                <li>Vercel has `dev.layers.mirrorfactory.ai` pinned to `development` and `staging.layers.mirrorfactory.ai` pinned to `staging`, but both domains are unverified until Cloudflare DNS records are added.</li>
+                <li>Cloudflare tunnel access exists, but DNS-management access is not available from this shell: no `wrangler` CLI and no Cloudflare API env vars are present.</li>
                 <li>PROD-500 browser Stop-flow proof is locally and hosted green; native follow-up is still pending.</li>
               </ul>
             </div>
@@ -405,7 +407,7 @@
               <tr>
                 <td>Remote release CI</td>
                 <td><span class="stamp pass">Green On Pushed Head</span></td>
-                <td>Latest fully green proof head 9918ebc has Tier 0-1, Tier 2, Tier 3, Vercel, and Vercel Preview Comments green. Server/native proof is skipped because repo-level self-hosted runners are missing. Any later report-only head must be checked after push.</td>
+                <td>Latest fully green proof head 5eb6200 has Tier 0-1, Tier 2, Tier 3, Vercel, and Vercel Preview Comments green. Server/native proof is skipped because repo-level self-hosted runners are missing. Any later report-only head must be checked after push.</td>
               </tr>
               <tr>
                 <td>Compliance</td>
@@ -469,13 +471,13 @@
               </tr>
               <tr>
                 <td>iOS simulator</td>
-                <td><span class="stamp pass">Built/launched</span></td>
-                <td>Xcode build succeeded, app installed/launched as com.mirafactory.layers, screenshot captured.</td>
+                <td><span class="stamp pass">Built</span></td>
+                <td>`plutil` checks passed, `xcodebuild -project ios/App/App.xcodeproj -list` passed, and `xcodebuild -scheme App -configuration Debug -sdk iphonesimulator` succeeded locally.</td>
               </tr>
               <tr>
-                <td>Android emulator</td>
-                <td><span class="stamp pass">Built/launched</span></td>
-                <td>Debug APK built with JDK 21, installed, launched, and loaded layers.mirrorfactory.ai.</td>
+                <td>Android debug APK</td>
+                <td><span class="stamp pass">Built</span></td>
+                <td>`xmllint` passed and `JAVA_HOME=/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home ANDROID_HOME=/opt/homebrew/share/android-commandlinetools ./gradlew :app:assembleDebug` succeeded locally.</td>
               </tr>
               <tr>
                 <td>Electron/macOS</td>
@@ -490,7 +492,7 @@
               <tr>
                 <td>Recording Stop flow</td>
                 <td><span class="stamp waiting">Local Proof Green; Hosted Pending</span></td>
-                <td>Focused Playwright proof now covers Start recording through Stop/finalize, completed meeting detail render, transcript persistence, local draft cleanup, visible finalize failure, and draft retention. It passed all six local projects: mobile-light, mobile-dark, tablet-light, tablet-dark, desktop-light, and desktop-dark. The pushed head 9918ebc also passed hosted Tier 2 and Tier 3 proof. Treat broad external tester recording rollout as blocked until native follow-up is complete.</td>
+                <td>Focused Playwright proof now covers Start recording through Stop/finalize, completed meeting detail render, transcript persistence, local draft cleanup, visible finalize failure, and draft retention. It passed all six local projects: mobile-light, mobile-dark, tablet-light, tablet-dark, desktop-light, and desktop-dark. The pushed code head 9918ebc and final report/version head 5eb6200 both passed hosted Tier 2 and Tier 3 proof. Treat broad external tester recording rollout as blocked until native follow-up is complete.</td>
               </tr>
               <tr>
                 <td>Tier 3 browser matrix</td>
@@ -529,13 +531,13 @@
               </tr>
               <tr>
                 <td>What about the three-domain promotion path?</td>
-                <td>The documented target remains dev.layers.mirrorfactory.ai, staging.layers.mirrorfactory.ai, and layers.mirrorfactory.ai. GitHub main/staging/development protections are configured, but stale `origin/dev` still needs retirement after #88 advances `development`. Vercel project context is split between the local linked `layers` project and CI's `audio-layer` project.</td>
-                <td>Next is #88 review/merge, stale `dev` retirement, Vercel project reconciliation, Cloudflare DNS records, Vercel domain verification, staging/dev env var separation, then a development to staging to main proof PR chain.</td>
+                <td>The documented target remains dev.layers.mirrorfactory.ai, staging.layers.mirrorfactory.ai, and layers.mirrorfactory.ai. GitHub main/staging/development protections are configured, but stale `origin/dev` still needs retirement after #88 advances `development`. Vercel project ownership is now clear: `audio-layer` under `mirror-factorys-projects-836be98a` is the real Next.js CI project, and local `.vercel/project.json` was relinked to it.</td>
+                <td>Next is #88 review/merge, stale `dev` retirement, Cloudflare DNS records, Vercel domain verification, staging/dev env var separation, then a development to staging to main proof PR chain.</td>
               </tr>
               <tr>
                 <td>Can infra be configured from here?</td>
-                <td>GitHub branch protection/default branch can be configured from here and are now protected. Vercel CLI access exists, but project/domain ownership is ambiguous. Cloudflare tunnel access exists; DNS API/zone management is not available from this shell.</td>
-                <td>Confirm which Vercel project should own the final Layers domains, then add the required Cloudflare CNAME/TXT records and verify the domains in that project.</td>
+                <td>GitHub branch protection/default branch can be configured from here and are now protected. Vercel CLI access exists and local project linking now points at the correct `audio-layer` project. Cloudflare tunnel access exists; DNS API/zone management is not available from this shell.</td>
+                <td>Add the required Cloudflare CNAME/TXT records for dev/staging, then verify the two branch-pinned Vercel domains in the `audio-layer` project.</td>
               </tr>
               <tr>
                 <td>Is Claude still being used?</td>
@@ -630,12 +632,11 @@
             <div class="card blocked">
               <h3>Vercel + Cloudflare Access</h3>
               <p>
-                Vercel CLI access exists, but the local project link and CI
-                deployment point at different Vercel projects. DNS setup still
-                needs Cloudflare zone-management access. Once the target Vercel
-                project is confirmed, add CNAME records for `dev.layers` and
-                `staging.layers` plus the Vercel TXT verification records in
-                docs/RELEASE.md.
+                Vercel CLI access exists and local project linking now points
+                at the same `audio-layer` Next.js project used by CI. DNS setup
+                still needs Cloudflare zone-management access. Add CNAME
+                records for `dev.layers` and `staging.layers` plus the Vercel
+                TXT verification records in docs/RELEASE.md.
               </p>
             </div>
           </div>
@@ -650,10 +651,11 @@
             <li>PROD-383 updated to keep the three-branch, three-domain release path visible.</li>
             <li>PROD-523 created for default-branch Dependabot vulnerability cleanup.</li>
             <li>PROD-383 follow-up: `main` branch protection was corrected to require `Tier 0-1 Fast Gates`, `Tier 2 Focused Browser Proof`, `Web (Vercel)`, and 1 approval.</li>
-            <li>PROD-383 follow-up: GitHub default branch is now `development`; Vercel project context needs reconciliation before domain ownership changes.</li>
+            <li>PROD-383 follow-up: GitHub default branch is now `development`; Vercel local project context has been relinked to the CI-backed `audio-layer` project.</li>
             <li>PROD-383 follow-up: stale `origin/dev` still exists at 0.1.75 and should be retired only after #88 advances protected `development`.</li>
             <li>PROD-500 has pushed render hardening plus finalize-route hardening; focused web Stop-flow proof is locally and hosted green, and remains open until native proof catches up.</li>
             <li>PROD-524 created for GitHub Actions Node 24 runner transition cleanup; workflows now use current action majors plus Node 24 opt-in. Latest pushed run has Tier 0-1, Tier 2, Tier 3, and Vercel green.</li>
+            <li>Native proof follow-up: iOS simulator Debug build and Android debug APK build both pass locally; store/TestFlight release artifacts still need signing/notarization/upload-key secrets.</li>
             <li>PROD-383 still needs Cloudflare DNS setup, Vercel domain verification, env var separation, and a promotion proof chain.</li>
           </ul>
         </section>
@@ -662,10 +664,10 @@
           <h2>Decision</h2>
           <p class="ticker">
             CPO READ: Safe to continue internal QA and reviewer handoff.
-            Not safe to call production-ready until PR review, the current
-            PROD-500 Stop-flow patch is pushed and green in hosted CI, native
+            Not safe to call production-ready until PR review, native
             recording follow-up, Apple notarization,
-            Android signed AAB, self-hosted runner proof, Dependabot
+            Android signed AAB, self-hosted runner proof, Cloudflare/Vercel
+            dev-staging domain verification, Dependabot
             remediation, and branch/domain promotion proof are closed.
           </p>
         </section>

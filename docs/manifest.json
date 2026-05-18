@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generatedAt": "2026-05-18T01:49:13.643Z",
+  "generatedAt": "2026-05-18T02:03:43.925Z",
   "docs": [
     {
       "id": "activity-log",
       "localPath": "docs/ACTIVITY_LOG.md",
-      "contentHash": "f2efc644033b41b235e6096f43b3b6023347633a03f77ba9af52c7a1b8c256b9",
+      "contentHash": "bb4f3b462a87e4b2a02548a2e39574b120991f4d869c6ccab45e827ebf50f028",
       "priority": "cold"
     },
     {
@@ -935,7 +935,7 @@
     {
       "id": "native-release-readiness",
       "localPath": "docs/NATIVE_RELEASE_READINESS.md",
-      "contentHash": "113fe20795a8f0b9a224ec03e6aba4b0e4689eac683ee7a7853356252a523375",
+      "contentHash": "a767d746bb0c7df303fd2ba2b50892d9f672ae688b0c04d6da0e9def7dfaf624",
       "priority": "cold"
     },
     {
@@ -1001,7 +1001,7 @@
     {
       "id": "release",
       "localPath": "docs/RELEASE.md",
-      "contentHash": "9dc6b6088cc3fff4b8df7d4f54b4e5a6401a2b25895e1443565689b10fa9c099",
+      "contentHash": "498c504e9002aab60f34471a2f74e55f12aa8de269c98d2ed44be6a86e970fd7",
       "priority": "hot"
     },
     {

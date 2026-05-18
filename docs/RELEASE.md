@@ -45,19 +45,26 @@ Reserve for actual incidents — broken auth, broken billing, leaking data. Anyt
 Open the Vercel project (`audio-layer` under the `mirror-factorys-projects-836be98a`
 team) → **Settings**.
 
-Current verified status as of 2026-05-17:
+Current verified status as of 2026-05-17 22:01 EDT:
 
 - GitHub/Vercel CI is deploying PR #88 through the `audio-layer` project under
   the `mirror-factorys-projects-836be98a` team.
-- The local `.vercel/project.json` in this checkout points at a different Vercel
-  project: `mirror-factory/layers` (`prj_sXKn0a66RmAsOG1mtid0ETrUiSsU`), which
-  appears to be older/stale and configured as a Vite project.
-- Do not mutate Vercel domains until the final owner project is reconciled. The
-  intended production project should be the one that runs the actual Next.js CI
-  deploys for this repo.
-- The dev/staging domains are not verified yet because DNS is hosted at
-  Cloudflare (`bowen.ns.cloudflare.com`, `cora.ns.cloudflare.com`) and the
-  required records are not present.
+- The real project is `audio-layer`
+  (`prj_QUjIKb0gKB5KxDI0lulFnKfgAZhP`), configured as a Next.js project. The
+  older `mirror-factory/layers` project (`prj_sXKn0a66RmAsOG1mtid0ETrUiSsU`)
+  still exists but is stale and configured as Vite.
+- The local `.vercel/project.json` in this checkout was relinked with
+  `vercel link --yes --project audio-layer --scope mirror-factorys-projects-836be98a`
+  so local CLI actions now target the same project CI uses.
+- `layers.mirrorfactory.ai` is verified on `audio-layer`.
+- `dev.layers.mirrorfactory.ai` exists on `audio-layer`, is pinned to
+  `development`, and is currently unverified.
+- `staging.layers.mirrorfactory.ai` exists on `audio-layer`, is pinned to
+  `staging`, and is currently unverified.
+- DNS is hosted at Cloudflare (`bowen.ns.cloudflare.com`, `cora.ns.cloudflare.com`),
+  but this shell has no DNS-management path yet: `wrangler` is not installed,
+  no Cloudflare API env vars are present, and `cloudflared` only exposes tunnel
+  access.
 - GitHub's default branch is `development`. Follow-up required: the old
   unprotected `dev` branch still exists at `0.1.75` and is ahead of the current
   protected `development` branch. Do not delete or retire `dev` until PR #88 has
