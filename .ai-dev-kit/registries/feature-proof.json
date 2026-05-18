@@ -107,6 +107,39 @@
       }
     },
     {
+      "id": "public.content",
+      "name": "Public content, pricing, docs, and legal pages",
+      "description": "Marketing support pages, documentation, pricing, changelog, and legal shell styling.",
+      "category": "marketing",
+      "status": "active",
+      "userFacing": true,
+      "surfaces": ["web"],
+      "routes": ["/pricing", "/docs", "/docs/api", "/docs/mcp", "/changelog", "/privacy", "/terms"],
+      "paths": [
+        "app/(public)/pricing/page.tsx",
+        "app/(public)/docs/page.tsx",
+        "app/(public)/docs/api/page.tsx",
+        "app/(public)/docs/mcp/page.tsx",
+        "app/(public)/changelog/page.tsx",
+        "components/legal-page-shell.tsx"
+      ],
+      "proof": ["fast", "playwright", "expect"],
+      "tests": {
+        "playwright": ["tests/e2e/smoke.spec.ts", "tests/e2e/mobile-polish.spec.ts"],
+        "expect": [
+          "tests/expect/pricing.expect.ts",
+          "tests/expect/docs.expect.ts",
+          "tests/expect/app-pricing-page.md",
+          "tests/expect/app-docs-page.md",
+          "tests/expect/app-privacy-page.md",
+          "tests/expect/app-terms-page.md"
+        ]
+      },
+      "notes": [
+        "Public support pages must inherit the same sans-only brand contract as the signed-in product."
+      ]
+    },
+    {
       "id": "auth.google-native",
       "name": "Google sign-in and native OAuth return",
       "description": "Supabase Google OAuth, native browser launch, deep-link return, and post-login redirect.",
