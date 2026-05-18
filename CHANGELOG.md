@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.155] — 2026-05-18
+
+### Documentation
+- docs: add all-platform release test matrix evidence (`92434d1`)
+
+
 ## [0.1.154] — 2026-05-18
 
 ### Other
