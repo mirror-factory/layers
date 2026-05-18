@@ -40,6 +40,12 @@ Safe for external tester debug QA, not safe for store/TestFlight/public release 
 | `pnpm test:native:smoke` | PASS harness result, skipped live Maestro because `MAESTRO_RUN=1` was not set |
 | `pnpm exec vitest run tests/auth-domain-config.test.ts tests/native-oauth.test.ts tests/onboarding-emails.test.ts --passWithNoTests` | PASS, 16 tests |
 | `PLAYWRIGHT_DISABLE_VIDEO=1 pnpm exec playwright test tests/e2e/smoke.spec.ts --project=desktop-light` | PASS, 17 tests |
+| `pnpm test:mcp` | PASS, 22 tests |
+| `pnpm test:tools` | PASS, 8 tests |
+| `pnpm test:contracts` | PASS, 4 tests |
+| `pnpm test:eval` | PASS, 34 tests, 5 live-only skipped |
+| `pnpm test:api` | PASS, production build/start plus 83 route checks, 12 skipped |
+| `PLAYWRIGHT_DISABLE_VIDEO=1 pnpm exec playwright test tests/e2e/smoke.spec.ts --project=desktop-light --project=desktop-dark --project=mobile-light --project=mobile-dark` | PASS, 68 tests |
 
 ## Native OAuth Proof
 

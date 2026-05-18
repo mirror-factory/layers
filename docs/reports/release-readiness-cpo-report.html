@@ -304,7 +304,7 @@
           <div class="meta" role="list" aria-label="Report metadata">
             <div role="listitem">
               <span class="label">Updated</span>
-              <span class="value">2026-05-18 13:20 EDT</span>
+              <span class="value">2026-05-18 13:35 EDT</span>
             </div>
             <div role="listitem">
               <span class="label">Branch</span>
@@ -312,11 +312,11 @@
             </div>
             <div role="listitem">
               <span class="label">PR</span>
-              <span class="value">#88 to development; review required</span>
+              <span class="value">#88 to development; checks green, review required</span>
             </div>
             <div role="listitem">
               <span class="label">Current Local State</span>
-              <span class="value">Intentional code/report/evidence changes pending; generated test noise restored</span>
+              <span class="value">Clean after push; generated local test noise restored before this update</span>
             </div>
           </div>
         </header>
@@ -327,7 +327,7 @@
             <div class="card good">
               <h3>What Is Good</h3>
               <ul>
-                <li>Latest PR checks were green before the continued evidence commit: Tier 0-1, Tier 2, Vercel, and Vercel Preview Comments passed.</li>
+                <li>Latest PR checks are green: Tier 0-1, Tier 2, Vercel, and Vercel Preview Comments passed. Native/self-hosted broad jobs are intentionally skipped.</li>
                 <li>Three Claude lanes completed: Web/Brand/Electron, iOS Capacitor, and Android Capacitor.</li>
                 <li>New 30-gate release matrix is committed at docs/RELEASE_TEST_MATRIX.md.</li>
                 <li>All-platform evidence is committed under docs/evidence/2026-05-18-release-test-matrix/.</li>
@@ -342,7 +342,8 @@
                 <li>Google OAuth retest now points at production Supabase `psatqzrakxauktmzahfc` and no Hustle Together URL appears in the OAuth request chain.</li>
                 <li>New auth-domain regression test prevents stale Hustle Together domains in runtime auth/native shell config.</li>
                 <li>Slim gates passed: typecheck, lint, compliance, deprecation check, secrets inventory, native config, focused native/auth/onboarding tests, and desktop-light Playwright smoke. Latest lint exits 0 with 70 warnings, mostly legacy story/script/test/evidence warnings.</li>
-                <li>API smoke improved to product-route health; Electron worker reports 83 passed / 12 skipped after clean .next.</li>
+                <li>Expanded automated suites passed after the push: MCP 22/22, tools 8/8, route contracts 4/4, evals 34 passed / 5 live-only skipped, API smoke 83 passed / 12 skipped, and cross-theme/cross-viewport smoke 68/68.</li>
+                <li>API smoke improved to product-route health; current API smoke builds production, starts `next start`, and passes 83 route checks with 12 intentional skips.</li>
                 <li>iOS simulator cap sync, build, install, launch, screenshots, safe-area checks, plist lint, and URL scheme registration passed.</li>
                 <li>Android emulator now boots and runs com.mirafactory.layers; the prior disk-space blocker is no longer the blocker.</li>
                 <li>Electron/macOS pack/sign/launch passed with Developer ID signing and correct window chrome.</li>
@@ -563,10 +564,16 @@
             <li>GitHub/Vercel/Cloudflare flow proof: docs/evidence/2026-05-18-continued-claude-testing/github-vercel-cloudflare-flow.md.</li>
             <li>Final finish pass summary: docs/evidence/2026-05-18-continued-claude-testing/final-finish-pass-summary.md.</li>
             <li>Focused native/auth/onboarding proof: `pnpm exec vitest run tests/auth-domain-config.test.ts tests/native-oauth.test.ts tests/onboarding-emails.test.ts --passWithNoTests` passed, 16 tests.</li>
+            <li>MCP proof: `pnpm test:mcp` passed, 22 tests.</li>
+            <li>Tools proof: `pnpm test:tools` passed, 8 tests.</li>
+            <li>Contracts proof: `pnpm test:contracts` passed, 4 tests.</li>
+            <li>Eval proof: `pnpm test:eval` passed, 34 tests with 5 live-only checks skipped.</li>
+            <li>API smoke proof: `pnpm test:api` passed, including production `next build`, `next start`, and 83 route checks with 12 skipped.</li>
             <li>Lint proof: `pnpm lint` passed with 70 warnings, 0 errors.</li>
             <li>Compliance proof: `pnpm compliance` passed 12/12 with 0 warnings and 0 errors.</li>
             <li>Native config proof: `pnpm test:native:config` passed app ID, bundle ID, deep links, release workflow, and artifact checks.</li>
             <li>Focused web smoke proof: `PLAYWRIGHT_DISABLE_VIDEO=1 pnpm exec playwright test tests/e2e/smoke.spec.ts --project=desktop-light` passed, 17 tests.</li>
+            <li>Cross-theme/cross-viewport smoke proof: `PLAYWRIGHT_DISABLE_VIDEO=1 pnpm exec playwright test tests/e2e/smoke.spec.ts --project=desktop-light --project=desktop-dark --project=mobile-light --project=mobile-dark` passed, 68 tests.</li>
           </ul>
         </section>
 
