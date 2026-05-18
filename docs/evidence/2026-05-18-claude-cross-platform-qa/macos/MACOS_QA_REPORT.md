@@ -44,7 +44,7 @@ macOS Electron build at 0.1.147 packs, signs (Developer ID), launches, paints, r
 | C8 | Focus ring on keyboard nav | ⏭ not walked (no Tab cycle test) |
 | D1 | `/` landing renders | ✅ pass | `mac-03-landing-clean.png`, `mac-09-landing-light.png` |
 | D2 | `/pricing` renders with three plan cards | ✅ pass | `mac-04-pricing-dark.png` |
-| D3 | `/sign-in` renders with Google OAuth + email/password + `support@mirrorfactory.ai` mailto | ✅ pass | `mac-08-signin-dark.png` |
+| D3 | `/sign-in` renders with Google OAuth + email/password + `admin@mirafactory.ai` mailto | ✅ pass | `mac-08-signin-dark.png` |
 | D5 | `/download` renders with platform-detection hero | ✅ pass | `mac-07-download-page.png` (note copy "Wherever your meetings happen, Layers is quietly listening." and release line "v0.1.120" — release-line is stale relative to packaged shell 0.1.147; site copy is owned by Vercel deploy not this shell) |
 | K4 | Traffic lights at (16, 16), no overlap with nav | ✅ pass | visible in every capture |
 | Resize | Window enforces `minWidth: 720, minHeight: 480` (per `electron/main.js`) | ✅ pass | requested 600×400, OS clamped to 720×480. `mac-11-min-window-720x480.png` shows hamburger + theme toggle visible, traffic lights clear of nav, hero copy wraps cleanly |

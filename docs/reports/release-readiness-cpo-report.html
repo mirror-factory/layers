@@ -287,21 +287,21 @@
         <header>
           <h1>CPO Release Readiness Report</h1>
           <p>
-            TLDR: the branch is stronger than the last pushed head, but it is
-            not external-tester safe yet. I removed active serif/display font
-            usage, rendered the Remotion video with the sans-only stack, fixed
-            the meeting-detail crash path found by web/macOS QA, fixed the
-            Android account-menu visual bleed, and patched native OAuth wiring.
-            The iOS simulator still found the key blocker: production Google
-            sign-in did not complete in-app and email sign-in exposed a focus
-            bug, so native auth needs one more proof pass after deployment to a
-            production-like env.
+            TLDR: the public homepage/auth polish pass is now locally green.
+            The homepage was rebuilt around the sign-in/app-shell feel, contact
+            links now use admin@mirafactory.ai, public sign-up no longer shows
+            a misleading Google OAuth button while alpha access is paused, and
+            mobile/desktop light/dark screenshots show no overflow or serif
+            font drift. The remaining release blocker is still native auth
+            proof in a production-like env: local Google sign-in reaches the
+            handler but stops at "Auth not configured" because this dev browser
+            env lacks Supabase public auth config.
           </p>
 
           <div class="meta" role="list" aria-label="Report metadata">
             <div role="listitem">
               <span class="label">Updated</span>
-              <span class="value">2026-05-18 00:55 EDT</span>
+              <span class="value">2026-05-18 01:06 EDT</span>
             </div>
             <div role="listitem">
               <span class="label">Branch</span>
@@ -313,7 +313,7 @@
             </div>
             <div role="listitem">
               <span class="label">Current Local State</span>
-              <span class="value">Pushed to PR branch; hosted CI pending</span>
+              <span class="value">Homepage/auth polish locally verified; hosted CI rerun required</span>
             </div>
           </div>
         </header>
@@ -325,10 +325,13 @@
               <h3>What Is Good</h3>
               <ul>
                 <li>Remote PR head 1dda53c has Tier 0-1 Fast Gates, Tier 2 Focused Browser Proof, Vercel, and Vercel Preview Comments green.</li>
+                <li>Current remote PR head c19ddb8 is green for Tier 0-1 Fast Gates, Tier 2 Focused Browser Proof, Vercel, and Vercel Preview Comments.</li>
+                <li>New local homepage/auth polish passed typecheck, targeted native OAuth/onboarding tests, Expect route coverage, native config, desktop/mobile Playwright smoke, production build, and screenshot QA.</li>
+                <li>Homepage screenshot QA passed desktop/mobile in light and dark mode with 0 horizontal overflow and no serif-like computed fonts.</li>
                 <li>Local Playwright smoke passed light and dark coverage: 58 light checks and 34 dark checks.</li>
                 <li>Expect route coverage passed for all 22 registered routes. The AI TUI run timed out, then deterministic fallback proof passed basic homepage, console, and network checks.</li>
                 <li>No active serif/display/handwritten font usage remains in app, public pages, legal shell, or Remotion source. Remaining scan hits are sans-serif stacks and no-serif documentation.</li>
-                <li>Remotion rendered successfully after the font cleanup: out/layers-explainer.mp4, 7.2 MB, sha256 2b4cd85b0de601c4386b80f5a124b2d9ca1673776e98df4de385c8d5809ea2f3.</li>
+                <li>Remotion rendered successfully after the font/contact cleanup: out/layers-explainer.mp4, 7.2 MB, sha256 0f4e8b9bd47dae5d6b8dc882cd1f8ccf496ed65bd4ee606b3d484fc602d8cb52.</li>
                 <li>Native config checks and iOS simulator debug build passed locally. Generated Capacitor configs were restored to the production server URL after the localhost iOS test.</li>
                 <li>Final slim local gate passed after the report update: typecheck, lint, native OAuth tests, fast tests, compliance, deprecations, native config, Expect coverage, and Next production build.</li>
               </ul>
@@ -343,6 +346,9 @@
                 <li>Native OAuth app ID and redirect wiring were corrected from the stale mirrorfactory identifier to com.mirafactory.layers.</li>
                 <li>Native Google OAuth no longer pins the sign-in button in a loading state while Capacitor Browser owns the flow; late browser-open failures now surface as an auth error.</li>
                 <li>iOS evidence was cleaned so screenshots do not retain visible test credentials.</li>
+                <li>Public homepage hero now matches the calmer sign-in/product UI: structured app preview, competitive MCP/search/decision copy, and alpha-access mail CTA.</li>
+                <li>admin@mirafactory.ai replaced the old support inbox across public contact pages, legal pages, MCP docs, footer, onboarding email template, active docs, and Remotion CTA copy.</li>
+                <li>Public sign-up now presents alpha access instead of a fake Google OAuth path; Continue with Google remains on the real sign-in surface.</li>
               </ul>
             </div>
 
@@ -351,7 +357,7 @@
               <ul>
                 <li>iOS Google auth is not proven. Production simulator testing stayed on the Google button/loading state instead of completing the in-app OAuth path.</li>
                 <li>iOS email/password auth is not proven. Maestro exposed a keyboard/focus bug where password entry was appended into the email field.</li>
-                <li>The fixes are now committed and pushed to the PR branch. Hosted CI for the new head is pending.</li>
+                <li>The homepage/auth polish has local proof and needs hosted CI on the pushed PR head.</li>
                 <li>GitHub required review is still missing on PR #88.</li>
                 <li>Apple notarization/TestFlight secrets and Android upload-key secrets are still needed for public native distribution artifacts.</li>
                 <li>Default-branch Dependabot alerts remain until the fixed dependency branch lands through development, staging, and main.</li>
@@ -389,13 +395,13 @@
               </tr>
               <tr>
                 <td>Remote CI</td>
-                <td><span class="stamp waiting">Previous head green</span></td>
-                <td>Previous PR head 1dda53c was green for Tier 0-1, Tier 2, Vercel, and Vercel Preview Comments. Current pushed head 1c4e47e has local/pre-push Tier 1 green and needs hosted CI completion.</td>
+                <td><span class="stamp pass">Current remote head green</span></td>
+                <td>PR #88 remote head c19ddb8 is green for Tier 0-1, Tier 2, Vercel, and Vercel Preview Comments. The homepage/auth polish requires the same hosted CI rerun after push.</td>
               </tr>
               <tr>
                 <td>Local slim gate</td>
                 <td><span class="stamp pass">Passed</span></td>
-                <td>typecheck passed; lint passed with 0 errors and 102 existing warnings; native OAuth tests passed 10/10; test:fast passed 115 files and 668 tests; compliance passed 12/12; deprecations passed; native config passed 13/13; Next build passed.</td>
+                <td>typecheck passed; lint passed with 0 errors and 96 existing warnings; native OAuth/onboarding tests passed 13/13; Expect route coverage passed 22/22; native config passed; desktop/mobile light Playwright smoke passed 34/34; Next build passed.</td>
               </tr>
             </tbody>
           </table>
@@ -415,7 +421,7 @@
               <tr>
                 <td>Web smoke</td>
                 <td><span class="stamp pass">Passed</span></td>
-                <td>Desktop/mobile light smoke, recording stop flow, and mobile polish passed: 58 checks.</td>
+                <td>Current local run: desktop-light and mobile-light smoke passed 34/34. Earlier broader light smoke also passed 58 checks.</td>
               </tr>
               <tr>
                 <td>Dark mode smoke</td>
@@ -430,12 +436,22 @@
               <tr>
                 <td>Brand and no-serif</td>
                 <td><span class="stamp pass">Patched</span></td>
-                <td>Public pages, legal pages, and Remotion no longer use Bricolage, Caveat, cursive, serif, or italic display styling as active brand UI.</td>
+                <td>Public pages, legal pages, Remotion, and the latest homepage screenshots no longer show active serif/display/handwritten drift. Screenshot font scan found no serif-like computed fonts.</td>
+              </tr>
+              <tr>
+                <td>Homepage polish</td>
+                <td><span class="stamp pass">Local proof passed</span></td>
+                <td>Desktop/mobile light/dark screenshots captured under docs/evidence/2026-05-18-homepage-auth-polish/. No overflow, no page errors, alpha CTA mailto verified.</td>
+              </tr>
+              <tr>
+                <td>Google auth</td>
+                <td><span class="stamp waiting">Code/config good; local env blocked</span></td>
+                <td>Sign-in Google button is present and calls the auth handler. Local browser stops at Auth not configured because Supabase public auth env is missing. Native config and native OAuth tests passed.</td>
               </tr>
               <tr>
                 <td>Remotion video</td>
                 <td><span class="stamp pass">Rendered</span></td>
-                <td>Rendered out/layers-explainer.mp4 with sha256 2b4cd85b0de601c4386b80f5a124b2d9ca1673776e98df4de385c8d5809ea2f3.</td>
+                <td>Rendered out/layers-explainer.mp4 with admin@mirafactory.ai CTA and sha256 0f4e8b9bd47dae5d6b8dc882cd1f8ccf496ed65bd4ee606b3d484fc602d8cb52.</td>
               </tr>
               <tr>
                 <td>iOS simulator</td>
@@ -510,6 +526,8 @@
             <li>macOS crash screenshots: docs/evidence/2026-05-18-claude-main-features-qa/macos/.</li>
             <li>Expect proof: .evidence/expect-proof.json.</li>
             <li>Native config proof: .evidence/native-config.json.</li>
+            <li>Homepage/auth screenshots: docs/evidence/2026-05-18-homepage-auth-polish/.</li>
+            <li>Homepage/auth browser QA JSON: docs/evidence/2026-05-18-homepage-auth-polish/browser-qa-results.json.</li>
           </ul>
         </section>
 
@@ -521,7 +539,8 @@
               <p>
                 A production-like iOS target with public Supabase browser env
                 and the patched native OAuth code is needed to prove Google
-                sign-in and deep-link return end to end.
+                sign-in and deep-link return end to end. Local web currently
+                reports "Auth not configured" on Continue with Google.
               </p>
             </div>
 
@@ -549,10 +568,10 @@
           <h2>Decision</h2>
           <p class="ticker">
             CPO READ: Do not send to broad external testers yet. Continue
-            internal QA and patch validation. The current branch has local
-            gates green and is pushed, but still needs hosted CI, iOS auth proof,
-            Android/menu rerun, PR review, and native distribution setup
-            before release.
+            internal QA and patch validation. The current remote PR head is
+            green, and the new homepage/auth polish has local proof, but this
+            polish still needs hosted CI plus production-like iOS Google auth
+            proof, PR review, and native distribution setup before release.
           </p>
         </section>
 

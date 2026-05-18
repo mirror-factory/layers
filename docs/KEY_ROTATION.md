@@ -183,7 +183,7 @@ After ANY rotation, run this top-to-bottom smoke list once:
 7. [ ] `/settings/integrations` → loads (validates `oauth_clients` + `api_keys` RLS works).
 8. [ ] `/api/internal/health` returns 200 with all components `ok`.
 9. [ ] A test Stripe webhook lands as 200 in runtime logs.
-10. [ ] No alert email in `support@mirrorfactory.ai` in the last hour.
+10. [ ] No alert email in `admin@mirafactory.ai` in the last hour.
 
 If any item fails, **roll back the relevant Vercel env to the old value, redeploy, and triage**.
 

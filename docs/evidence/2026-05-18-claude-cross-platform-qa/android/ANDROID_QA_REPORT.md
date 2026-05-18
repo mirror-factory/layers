@@ -58,7 +58,7 @@
 ### D. Public surfaces
 - **D1 — `/` landing** — hero, AI-memory section, MCP section, pricing teaser, footer. Evidence: `A3-cold-launch.png`, `B2-scrolled-*.png`.
 - **D2 — `/pricing`** — "Pay for the meeting memory you actually use." hero, Core $20 / Pro $30 cards, "A quiet comparison" capability table. Evidence: `D2-pricing.png`, `D2-pricing-scroll-*.png`.
-- **D3 — `/sign-in`** — "WELCOME BACK / Sign in to Layers", Google OAuth button, email + password, `support@mirrorfactory.ai` footnote, "Create an account →" link. Evidence: `D3-signin.png`.
+- **D3 — `/sign-in`** — "WELCOME BACK / Sign in to Layers", Google OAuth button, email + password, `admin@mirafactory.ai` footnote, "Create an account →" link. Evidence: `D3-signin.png`.
 - **D4 — `/sign-up`** — "CREATE ACCOUNT / Start with Layers", Google OAuth button, email + password fields, Terms + Privacy Policy notice, sign-in link. Email typed via `adb input text` and confirmed back via `uiautomator dump` (`resource-id="email" text="qa-android-2026-05-17@example.com"`). **CTA is "Coming soon" and disabled (`enabled="false"`) — consistent with invite-only alpha.** Evidence: `D4-signup.png`, `D4-signup-typed.png`.
 - **D5 — `/download`** — "Wherever your meetings happen, Layers is quietly listening.", release-line callout with v0.1.120, per-platform install cards (macOS, Windows, web, iOS, Android, plus support callout). Evidence: `D5-download.png`.
 - **D6 — `/changelog`** — "WHAT'S NEW / Changelog", "124 releases so far", v0.1.120 entry visible at top. Evidence: `D6-changelog.png`.

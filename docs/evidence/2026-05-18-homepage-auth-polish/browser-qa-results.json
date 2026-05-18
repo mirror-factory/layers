@@ -1,0 +1,66 @@
+{
+  "results": [
+    {
+      "label": "home-desktop-light",
+      "overflow": 0,
+      "badFonts": []
+    },
+    {
+      "label": "home-desktop-light-content",
+      "h1": "The meeting layer for your AI stack.Decisions that move work forward.",
+      "ctaHref": "mailto:admin@mirafactory.ai?subject=Layers%20alpha%20access"
+    },
+    {
+      "label": "home-desktop-dark",
+      "overflow": 0,
+      "badFonts": []
+    },
+    {
+      "label": "home-desktop-dark-content",
+      "h1": "The meeting layer for your AI stack.Decisions that move work forward.",
+      "ctaHref": "mailto:admin@mirafactory.ai?subject=Layers%20alpha%20access"
+    },
+    {
+      "label": "home-mobile-light",
+      "overflow": 0,
+      "badFonts": []
+    },
+    {
+      "label": "home-mobile-light-content",
+      "h1": "The meeting layer for your AI stack.Decisions that move work forward.",
+      "ctaHref": "mailto:admin@mirafactory.ai?subject=Layers%20alpha%20access"
+    },
+    {
+      "label": "home-mobile-dark",
+      "overflow": 0,
+      "badFonts": []
+    },
+    {
+      "label": "home-mobile-dark-content",
+      "h1": "The meeting layer for your AI stack.Decisions that move work forward.",
+      "ctaHref": "mailto:admin@mirafactory.ai?subject=Layers%20alpha%20access"
+    },
+    {
+      "label": "sign-in-mobile",
+      "overflow": 0,
+      "badFonts": []
+    },
+    {
+      "label": "sign-in-google",
+      "beforeUrl": "http://localhost:3000/sign-in",
+      "afterUrl": "http://localhost:3000/sign-in",
+      "error": "Auth not configured"
+    },
+    {
+      "label": "sign-up-mobile",
+      "overflow": 0,
+      "badFonts": []
+    },
+    {
+      "label": "sign-up-alpha-gate",
+      "hasGoogleButton": 0,
+      "alphaHref": "mailto:admin@mirafactory.ai?subject=Layers%20alpha%20access"
+    }
+  ],
+  "issues": []
+}

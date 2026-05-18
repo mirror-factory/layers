@@ -47,7 +47,7 @@ Event types: `pr-merged`, `pr-opened`, `linear-filed`, `linear-resolved`, `linea
 
 ### 2026-05-12  ~15:32 ET  —  Claude Opus 4.7 (1M)  —  pr-merged  —  #74 fix(sign-in): use canonical support email
 
-- **What:** Sign-in footnote linked users to `hello@layers.app` (orphan inbox) instead of `support@mirrorfactory.ai`.
+- **What:** Sign-in footnote linked users to `hello@layers.app` (orphan inbox) instead of `admin@mirafactory.ai`.
 - **PR / Linear:** [PR #74](https://github.com/mirror-factory/layers/pull/74)
 - **Why it matters:** Anyone hitting a sign-in error and following the help link got a bounce.
 

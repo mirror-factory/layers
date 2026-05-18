@@ -10,7 +10,7 @@ import { LayersMark } from "../components/LayersMark";
 /**
  * Scene 05 (78-85s) — CTA close.
  *
- * "Currently in invite-only alpha. Email support@mirrorfactory.ai for access."
+ * "Currently in invite-only alpha. Email admin@mirafactory.ai for access."
  *
  * The aperture mark fades in big, scale settles, then the copy types in below.
  * One mint pill underneath holds the email — that's it. Nothing else on the
@@ -106,7 +106,7 @@ export const Cta: React.FC = () => {
         }}
       >
         Email{" "}
-        <span style={{ fontWeight: 700 }}>support@mirrorfactory.ai</span> for access.
+        <span style={{ fontWeight: 700 }}>admin@mirafactory.ai</span> for access.
       </div>
     </AbsoluteFill>
   );

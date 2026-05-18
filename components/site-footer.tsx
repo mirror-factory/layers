@@ -57,8 +57,8 @@ export function SiteFooter() {
 
         <div className="flex items-center gap-4">
           <a
-            href="mailto:support@mirrorfactory.ai"
-            aria-label="Email support"
+            href="mailto:admin@mirafactory.ai"
+            aria-label="Email Layers"
             className="inline-flex min-h-11 items-center text-[14px] text-[var(--text-secondary,oklch(0.46_0.025_256))] transition-colors hover:text-[var(--text-primary,oklch(0.22_0.035_256))]"
           >
             Contact

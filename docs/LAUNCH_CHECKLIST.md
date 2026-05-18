@@ -118,7 +118,7 @@ Tour these the morning after launch. Anything red here turns into a Linear `kind
       - **Skip if**: never — vendors occasionally reset caps on plan upgrades; re-check daily for the first week.
       - **Verify**: each vendor in the [SPEND_CAPS.md](./SPEND_CAPS.md) matrix still shows the documented cap and alert threshold. Diff against the T-7 screenshot.
 
-- [ ] **PROD-369-F**: Watch `support@mirrorfactory.ai` for `[Spend]`, `[Budget]`, `[Usage]` alert subjects.
+- [ ] **PROD-369-F**: Watch `admin@mirafactory.ai` for `[Spend]`, `[Budget]`, `[Usage]` alert subjects.
       - **Skip if**: never.
       - **Verify**: inbox has no unhandled alert; any matching email is triaged within 1 hour and linked into the launch report.
 

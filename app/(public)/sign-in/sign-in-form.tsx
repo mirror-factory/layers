@@ -186,7 +186,7 @@ function SignInForm() {
 
       <AuthFootnote>
         Trouble signing in? Reach us at{" "}
-        <a href="mailto:support@mirrorfactory.ai">support@mirrorfactory.ai</a>.
+        <a href="mailto:admin@mirafactory.ai">admin@mirafactory.ai</a>.
       </AuthFootnote>
 
       <style jsx>{`

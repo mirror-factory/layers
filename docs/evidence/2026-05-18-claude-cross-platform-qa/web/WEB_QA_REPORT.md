@@ -74,7 +74,7 @@ Functional, route-availability and rendering proof on the web target.
 - Landing-page DOM contains only `sans-serif` (in the system-font fallback chain), no actual serif typography in use.
 - Geist Sans variable (`geist_*` className on `<html>`) is the active typeface.
 - Dark-mode smoke (`desktop-dark`) renders all 17 routes without throwing — no missing-token panels surfaced as test failures.
-- Landing page DOM tree confirmed: testing banner, Primary navigation, hero, AI-memory section, Search section, MCP section (with ChatGPT/Claude/Gemini logo refs), 3-card pricing tier (Free / Core / Pro), CTA, footer with all expected links and `mailto:support@mirrorfactory.ai`.
+- Landing page DOM tree confirmed: testing banner, Primary navigation, hero, AI-memory section, Search section, MCP section (with ChatGPT/Claude/Gemini logo refs), 3-card pricing tier (Free / Core / Pro), CTA, footer with all expected links and `mailto:admin@mirafactory.ai`.
 
 ### F. Console / runtime
 - No console error messages surfaced on the rendered landing page once loaded (read post-`load`, with `onlyErrors:false`, then re-read with `onlyErrors:true` after the routes finished — empty).

@@ -12,7 +12,7 @@
 | **P1** | Major degradation: a core feature (recording, transcription, login) broken for a meaningful subset of users, OR a spend cap tripped and revenue/runway is at risk. | Ack within 30 min. Mitigate within 2 hrs. | Founder. |
 | **P2** | Single user / non-blocking bug, slow background job, cosmetic regression, near-cap spend warning. | Triage during business hours. | Founder. |
 
-**Default on-call:** founder, until further notice. Paging: email to `support@mirrorfactory.ai` (alert source), SMS via Vercel Spend Management for spend events, manual escalation otherwise.
+**Default on-call:** founder, until further notice. Paging: email to `admin@mirafactory.ai` (alert source), SMS via Vercel Spend Management for spend events, manual escalation otherwise.
 
 ---
 

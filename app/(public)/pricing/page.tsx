@@ -77,7 +77,7 @@ const TIERS: Tier[] = [
       "AI summaries, decisions, actions, intake",
       "Calendar context",
       "AI tool-ready meeting memory",
-      "Priority email support",
+      "Priority response",
     ],
   },
   {
@@ -94,7 +94,7 @@ const TIERS: Tier[] = [
       "Advanced model routing",
       "Team library and sharing",
       "Admin controls",
-      "Priority support",
+      "Priority onboarding",
     ],
   },
 ];

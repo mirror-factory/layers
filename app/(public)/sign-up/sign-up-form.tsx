@@ -3,14 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
-import { getSupabaseBrowser } from "@/lib/supabase/browser";
-import { GOOGLE_SIGN_IN_AUTH_SCOPES } from "@/lib/auth/google-oauth";
 import {
   AuthShell,
   AuthField,
   AuthError,
   AuthDivider,
-  AuthGoogleButton,
   AuthPrimaryButton,
   AuthFootnote,
   AuthSwitchLink,
@@ -19,23 +16,16 @@ import {
 export function SignUpPageClient() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  const canSubmit = email.trim().length > 0 && password.length >= 6;
 
   // Public sign-ups paused while we run an invite-only alpha.
   // Restore the Supabase signUp / Google OAuth handlers from git when re-opening.
   const ALPHA_INVITE_MESSAGE =
-    "Public sign-ups are paused — we're in invite-only alpha. Email support@mirrorfactory.ai for access.";
+    "Public sign-ups are paused — we're in invite-only alpha. Email admin@mirafactory.ai for access.";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(ALPHA_INVITE_MESSAGE);
-  };
-
-  const handleGoogle = async () => {
     setError(ALPHA_INVITE_MESSAGE);
   };
 
@@ -176,9 +166,12 @@ export function SignUpPageClient() {
         />
       }
     >
-      <AuthGoogleButton loading={googleLoading} onClick={handleGoogle}>
-        Continue with Google
-      </AuthGoogleButton>
+      <a
+        href="mailto:admin@mirafactory.ai?subject=Layers%20alpha%20access"
+        className="auth-alpha-link"
+      >
+        Request alpha access
+      </a>
 
       <AuthDivider label="or with email" />
 
@@ -223,6 +216,37 @@ export function SignUpPageClient() {
           display: flex;
           flex-direction: column;
           gap: 18px;
+        }
+        .auth-alpha-link {
+          display: inline-flex;
+          min-height: 48px;
+          align-items: center;
+          justify-content: center;
+          border-radius: 999px;
+          border: 1px solid
+            color-mix(in oklch, var(--layers-mint) 42%, var(--border-default));
+          background: var(--layers-mint-soft);
+          color: var(--layers-ink);
+          font-size: 0.95rem;
+          font-weight: 650;
+          letter-spacing: -0.005em;
+          text-decoration: none;
+          transition:
+            background 150ms ease,
+            transform 150ms ease;
+        }
+        .auth-alpha-link:hover {
+          background: color-mix(
+            in oklch,
+            var(--layers-mint-soft) 86%,
+            var(--layers-mint) 14%
+          );
+          transform: translateY(-1px);
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .auth-alpha-link:hover {
+            transform: none;
+          }
         }
       `}</style>
     </AuthShell>

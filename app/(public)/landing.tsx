@@ -30,14 +30,6 @@ function useTypewriter(text: string, charsPerSecond = 28, startDelay = 200) {
   return out;
 }
 
-const HERO_TRANSCRIPT_FEED: ReadonlyArray<readonly [string, string]> = [
-  ["00:11", "Commit to ship onboarding first."],
-  ["00:14", "Jamie owns first-run copy by Friday."],
-  ["00:18", "Owen reviews Monday before the demo."],
-  ["00:22", "Pricing tier unchanged for now — agreed."],
-  ["00:27", "Customer concern logged for next sync."],
-  ["00:31", "Decision: launch staging next week."],
-];
 import {
   ChatGPTLogo,
   ClaudeLogo,
@@ -85,11 +77,11 @@ const PRICING = [
     name: "Pro",
     price: "$30",
     cadence: "per user · per month",
-    blurb: "Team memory, advanced privacy, priority support.",
+    blurb: "Team memory, advanced privacy, priority onboarding.",
     features: [
       "Shared team memory",
       "Advanced privacy & SSO",
-      "Priority support",
+      "Priority onboarding",
     ],
     href: "/pricing",
     cta: "See Pro",
@@ -272,7 +264,7 @@ function Hero() {
     <section
       aria-labelledby="home-hero-heading"
       className="section-shell"
-      style={{ paddingBlock: "clamp(48px, 7vw, 96px)" }}
+      style={{ paddingBlock: "clamp(36px, 6vw, 84px)" }}
     >
       <div
         className="home-hero-grid"
@@ -284,20 +276,25 @@ function Hero() {
         }}
       >
         <div style={{ display: "grid", gap: 24 }}>
+          <div className="home-pill" style={{ width: "fit-content" }}>
+            <span className="home-pill-dot" aria-hidden />
+            Built for bot-free meeting memory
+          </div>
+
           <h1
             id="home-hero-heading"
             className="home-display"
             style={{
-              fontSize: "clamp(2.5rem, 5vw + 0.5rem, 4.6rem)",
+              fontSize: "clamp(2.45rem, 4.5vw + 0.55rem, 4.35rem)",
               lineHeight: 1.04,
               margin: 0,
               color: "var(--fg-default)",
               fontWeight: 600,
               letterSpacing: "-0.022em",
-              maxWidth: "13ch",
+              maxWidth: "12.5ch",
             }}
           >
-            AI memory for your meetings.
+            The meeting layer for your AI stack.
             <br />
             <em
               style={{
@@ -322,8 +319,9 @@ function Hero() {
               maxWidth: "44ch",
             }}
           >
-            Layers remembers what matters from every conversation so your team
-            can make better decisions and ship faster.
+            Record the conversation, extract decisions and action items, search
+            across every meeting, and hand clean context to the tools your team
+            already uses.
           </p>
 
           <div
@@ -335,19 +333,39 @@ function Hero() {
               marginTop: 4,
             }}
           >
-            <button
-              type="button"
+            <a
+              href="mailto:admin@mirafactory.ai?subject=Layers%20alpha%20access"
               className="btn-primary"
-              disabled
-              aria-disabled="true"
-              title="Public sign-ups coming soon — invite-only alpha"
             >
-              Coming soon
-            </button>
+              Request alpha access
+            </a>
             <Link href="/download" className="btn-ghost">
-              See how it works
+              View downloads
             </Link>
           </div>
+
+          <ul
+            aria-label="Layers product strengths"
+            style={{
+              listStyle: "none",
+              margin: 0,
+              padding: 0,
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 10,
+            }}
+          >
+            {[
+              "Cross-meeting search",
+              "Structured decisions",
+              "MCP-ready context",
+              "Privacy-first notes",
+            ].map((item) => (
+              <li key={item} className="home-pill">
+                {item}
+              </li>
+            ))}
+          </ul>
 
         </div>
 
@@ -372,52 +390,44 @@ function HeroComposition() {
       style={{
         position: "relative",
         maxWidth: "100%",
-        minHeight: "clamp(380px, 40vw, 440px)",
+        minHeight: "clamp(520px, 44vw, 610px)",
         isolation: "isolate",
-        // Decorative halos and offset cards inside this composition use
-        // negative insets and percentage offsets that can extend past the
-        // mobile viewport. Clip overflow at the composition boundary so the
-        // landing page never produces a horizontal scrollbar.
         overflow: "hidden",
       }}
     >
-      {/* Soft mint halo behind composition */}
       <div
         style={{
           position: "absolute",
-          inset: "10% 0",
+          inset: "10% 2% 4%",
           background:
-            "radial-gradient(ellipse at 60% 50%, color-mix(in oklch, var(--layers-mint-tint) 65%, transparent) 0%, transparent 65%)",
-          filter: "blur(2px)",
+            "radial-gradient(ellipse at 58% 32%, color-mix(in oklch, var(--layers-mint-tint) 70%, transparent) 0%, transparent 64%)",
           zIndex: 0,
         }}
       />
 
-      {/* Main recording workspace card */}
       <div
         style={{
-          position: "absolute",
-          left: "8%",
-          top: "10%",
-          right: "8%",
-          background: "var(--bg-surface)",
+          position: "relative",
+          zIndex: 1,
+          display: "grid",
+          gap: 14,
+          height: "100%",
+          padding: "clamp(14px, 2vw, 18px)",
+          borderRadius: "var(--radius-2xl, 22px)",
+          background:
+            "color-mix(in oklch, var(--bg-surface) 88%, var(--layers-mint-tint) 12%)",
           border: "1px solid var(--border-default)",
-          borderRadius: "var(--radius-2xl, 20px)",
-          padding: "20px 22px 22px",
           boxShadow:
-            "0 30px 60px -30px color-mix(in oklch, var(--layers-violet) 22%, transparent), 0 6px 18px -10px color-mix(in oklch, var(--fg-default) 12%, transparent)",
-          zIndex: 2,
+            "0 30px 70px -36px color-mix(in oklch, var(--layers-violet) 26%, transparent), 0 12px 32px -24px color-mix(in oklch, var(--fg-default) 18%, transparent)",
         }}
       >
         <div
-          className="hero-card-header"
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
             gap: 12,
             flexWrap: "wrap",
-            marginBottom: 14,
           }}
         >
           <div
@@ -429,31 +439,29 @@ function HeroComposition() {
             }}
           >
             <LayersLogoMark size={22} animated />
-            <span
-              style={{
-                fontSize: "0.78rem",
-                color: "var(--fg-muted)",
-                letterSpacing: "0.04em",
-                minWidth: 0,
-              }}
-            >
-              Recording workspace
-            </span>
+            <div style={{ display: "grid", gap: 1, minWidth: 0 }}>
+              <span style={{ fontSize: "0.82rem", fontWeight: 650 }}>
+                Today in Layers
+              </span>
+              <span style={{ fontSize: "0.72rem", color: "var(--fg-muted)" }}>
+                Recording, memory, and follow-up in one place
+              </span>
+            </div>
           </div>
           <span
             style={{
               display: "inline-flex",
               alignItems: "center",
               gap: 6,
-              fontSize: "0.7rem",
+              fontSize: "0.68rem",
               fontWeight: 600,
               letterSpacing: "0.14em",
               textTransform: "uppercase",
-              color: "var(--danger, oklch(0.64 0.20 26))",
-              padding: "3px 10px",
+              color: "var(--fg-default)",
+              padding: "5px 10px",
               borderRadius: "var(--radius-pill)",
-              background:
-                "color-mix(in oklch, var(--danger, oklch(0.64 0.20 26)) 8%, transparent)",
+              background: "var(--bg-page)",
+              border: "1px solid var(--border-subtle)",
             }}
           >
             <span
@@ -461,437 +469,239 @@ function HeroComposition() {
                 width: 6,
                 height: 6,
                 borderRadius: 999,
-                background: "var(--danger, oklch(0.64 0.20 26))",
+                background: "var(--layers-mint)",
                 animation: "homePulse 1.6s ease-in-out infinite",
               }}
             />
-            00:13 LIVE
+            live ready
           </span>
         </div>
 
         <div
           style={{
-            borderRadius: "var(--radius-lg, 14px)",
-            padding: "10px 8px 4px",
-            background:
-              "linear-gradient(180deg, color-mix(in oklch, var(--layers-mint-tint) 40%, var(--bg-page)) 0%, var(--bg-surface) 100%)",
-            border: "1px solid var(--border-subtle)",
-          }}
-        >
-          <AudioWaveRibbon
-            active
-            audioLevel={0.62}
-            height={96}
-            motion={1.05}
-            sensitivity={0.82}
-            texture="clean"
-          />
-        </div>
-
-        <div
-          style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(72px, 1fr))",
-            gap: 8,
-            marginTop: 16,
-            paddingTop: 14,
-            borderTop: "1px solid var(--border-subtle)",
+            gridTemplateColumns: "minmax(0, 1.05fr) minmax(0, 0.95fr)",
+            gap: 14,
           }}
+          className="hero-preview-grid"
         >
-          {[
-            ["Decisions", "2"],
-            ["Actions", "3"],
-            ["Intake", "3"],
-            ["Follow-up", "2"],
-          ].map(([label, count]) => (
-            <div key={label} style={{ display: "grid", gap: 2 }}>
-              <span
+          <section
+            aria-label="Current meeting"
+            style={{
+              display: "grid",
+              gap: 14,
+              alignContent: "start",
+              borderRadius: "var(--radius-xl, 18px)",
+              background: "var(--bg-page)",
+              border: "1px solid var(--border-subtle)",
+              padding: "clamp(14px, 2vw, 18px)",
+            }}
+          >
+            <div style={{ display: "grid", gap: 8 }}>
+              <span className="home-eyebrow">Recording now</span>
+              <h2
                 className="home-display"
                 style={{
-                  fontSize: "1.1rem",
-                  lineHeight: 1,
-                  color: "var(--fg-default)",
-                  fontVariantNumeric: "tabular-nums",
+                  margin: 0,
+                  fontSize: "clamp(1.35rem, 1.8vw, 1.85rem)",
+                  lineHeight: 1.08,
                 }}
               >
-                {count}
-              </span>
+                Product sync: launch readiness
+              </h2>
               <span
                 style={{
-                  fontSize: "0.66rem",
+                  fontSize: "0.82rem",
                   color: "var(--fg-muted)",
-                  letterSpacing: "0.04em",
                 }}
               >
-                {label}
+                10:30 AM · 6 people · calendar context attached
               </span>
             </div>
-          ))}
-        </div>
-      </div>
 
-      {/* Floating: AI memory · Always learning */}
-      <FloatingChip
-        style={{ top: "0%", left: 0, zIndex: 3 }}
-        accent="var(--layers-violet)"
-        label="AI memory"
-        sub="Always learning"
-      />
+            <div
+              style={{
+                borderRadius: "var(--radius-lg, 14px)",
+                padding: "10px 8px 4px",
+                background:
+                  "color-mix(in oklch, var(--layers-mint-tint) 42%, var(--bg-surface))",
+                border: "1px solid var(--border-subtle)",
+              }}
+            >
+              <AudioWaveRibbon
+                active
+                audioLevel={0.62}
+                height={92}
+                motion={1.05}
+                sensitivity={0.82}
+                texture="clean"
+              />
+            </div>
 
-      {/* Floating: today's agenda — sets the upcoming-meeting context */}
-      <FloatingChip
-        style={{ top: "-3%", left: "32%", zIndex: 3 }}
-        accent="var(--layers-blue)"
-        label="Today"
-        sub="3 meetings · 1 live"
-      />
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+                gap: 8,
+              }}
+            >
+              {[
+                ["2", "Decisions"],
+                ["4", "Actions"],
+                ["8", "Moments"],
+                ["3", "Follow-ups"],
+              ].map(([value, label]) => (
+                <div
+                  key={label}
+                  style={{
+                    display: "grid",
+                    gap: 3,
+                    padding: "10px 12px",
+                    borderRadius: "var(--radius-md, 10px)",
+                    background: "var(--bg-surface)",
+                    border: "1px solid var(--border-subtle)",
+                  }}
+                >
+                  <span
+                    className="home-display"
+                    style={{
+                      fontSize: "1.35rem",
+                      lineHeight: 1,
+                      fontVariantNumeric: "tabular-nums",
+                    }}
+                  >
+                    {value}
+                  </span>
+                  <span style={{ fontSize: "0.72rem", color: "var(--fg-muted)" }}>
+                    {label}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </section>
 
-      {/* Floating: Decisions 2 Captured */}
-      <FloatingStat
-        style={{ top: "2%", right: 0, zIndex: 3 }}
-        value="2"
-        label="Decisions"
-        sub="Captured"
-        accent="var(--layers-mint)"
-      />
-
-      {/* Floating: Live transcript card — animated feed */}
-      <LiveTranscriptCard />
-
-
-      {/* Floating: Meeting memory · Updating */}
-      <div
-        style={{
-        position: "absolute",
-        right: 0,
-        top: "52%",
-        width: "50%",
-          background: "var(--bg-surface)",
-          border: "1px solid var(--border-default)",
-          borderRadius: "var(--radius-lg, 14px)",
-          padding: "12px 14px",
-          boxShadow:
-            "0 14px 28px -16px color-mix(in oklch, var(--layers-violet) 22%, transparent)",
-          zIndex: 4,
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: 8,
-            marginBottom: 8,
-          }}
-        >
-          <span
+          <section
+            aria-label="Meeting memory"
             style={{
-              fontSize: "0.7rem",
-              fontWeight: 600,
-              color: "var(--fg-default)",
+              display: "grid",
+              gap: 12,
+              alignContent: "start",
+              borderRadius: "var(--radius-xl, 18px)",
+              background: "var(--bg-page)",
+              border: "1px solid var(--border-subtle)",
+              padding: "clamp(14px, 2vw, 18px)",
             }}
           >
-            Meeting memory
-          </span>
-          <span
-            style={{
-              fontSize: "0.66rem",
-              color: "var(--brand-accent-subtle, var(--layers-mint))",
-              letterSpacing: "0.04em",
-            }}
-          >
-            Updating…
-          </span>
+            <div style={{ display: "grid", gap: 8 }}>
+              <span className="home-eyebrow">Ask meeting memory</span>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  minHeight: 42,
+                  padding: "0 12px",
+                  borderRadius: "var(--radius-pill)",
+                  background: "var(--bg-surface)",
+                  border: "1px solid var(--border-subtle)",
+                  color: "var(--fg-muted)",
+                  fontSize: "0.82rem",
+                }}
+              >
+                What changed before launch?
+              </div>
+            </div>
+
+            <div style={{ display: "grid", gap: 8 }}>
+              {[
+                ["Decision", "Keep the Core tier at $20 for alpha feedback."],
+                ["Action", "Maya owns native sign-in QA before Friday."],
+                ["Risk", "Android SDK path still blocks release builds."],
+              ].map(([label, copy]) => (
+                <div
+                  key={`${label}-${copy}`}
+                  style={{
+                    display: "grid",
+                    gap: 4,
+                    padding: "10px 12px",
+                    borderRadius: "var(--radius-md, 10px)",
+                    background: "var(--bg-surface)",
+                    border: "1px solid var(--border-subtle)",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: "0.68rem",
+                      letterSpacing: "0.12em",
+                      textTransform: "uppercase",
+                      color: "var(--fg-faint)",
+                      fontWeight: 650,
+                    }}
+                  >
+                    {label}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: "0.82rem",
+                      lineHeight: 1.45,
+                      color: "var(--fg-default)",
+                    }}
+                  >
+                    {copy}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </section>
         </div>
+
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 6,
-            fontSize: "0.7rem",
+            gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+            gap: 10,
           }}
+          className="hero-connect-grid"
         >
           {[
-            ["Decisions", "2"],
-            ["Actions", "3"],
-            ["Intake", "3"],
-            ["Follow-up", "2"],
-          ].map(([k, v]) => (
+            ["Claude", "MCP server"],
+            ["ChatGPT", "meeting context"],
+            ["Cursor", "decision history"],
+          ].map(([tool, detail]) => (
             <div
-              key={k as string}
+              key={tool}
               style={{
-                display: "flex",
-                justifyContent: "space-between",
-                padding: "4px 8px",
-                borderRadius: 6,
-                background:
-                  "color-mix(in oklch, var(--layers-mint-tint) 35%, transparent)",
+                display: "grid",
+                gap: 2,
+                padding: "11px 12px",
+                borderRadius: "var(--radius-md, 10px)",
+                background: "var(--bg-page)",
+                border: "1px solid var(--border-subtle)",
               }}
             >
-              <span style={{ color: "var(--fg-muted)" }}>{k}</span>
-              <span style={{ color: "var(--fg-default)", fontWeight: 600 }}>
-                {v}
+              <span style={{ fontSize: "0.82rem", fontWeight: 650 }}>
+                {tool}
+              </span>
+              <span style={{ fontSize: "0.72rem", color: "var(--fg-muted)" }}>
+                {detail}
               </span>
             </div>
           ))}
         </div>
       </div>
-
-      {/* Actions / Follow-ups stat cards removed 2026-05-01: they
-          duplicated the bottom stat row inside the recording panel
-          and read as orphaned chips no matter where we placed them. */}
 
       <style jsx>{`
         @keyframes homePulse {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.4; }
         }
-        @media (max-width: 460px) {
-          :global(.hero-card-header) {
-            align-items: flex-start !important;
+        @media (max-width: 720px) {
+          :global(.hero-preview-grid),
+          :global(.hero-connect-grid) {
+            grid-template-columns: 1fr !important;
           }
         }
       `}</style>
-    </div>
-  );
-}
-
-function LiveTranscriptCard() {
-  // Show 3 lines at a time. Append a new line every ~3.4s; oldest scrolls off.
-  const VISIBLE = 3;
-  const [feed, setFeed] = useState<ReadonlyArray<readonly [string, string]>>(
-    () => HERO_TRANSCRIPT_FEED.slice(0, VISIBLE),
-  );
-  useEffect(() => {
-    let cursor = VISIBLE;
-    const id = window.setInterval(() => {
-      setFeed((prev) => {
-        const next = HERO_TRANSCRIPT_FEED[cursor % HERO_TRANSCRIPT_FEED.length];
-        cursor += 1;
-        return [...prev.slice(1), next];
-      });
-    }, 3400);
-    return () => window.clearInterval(id);
-  }, []);
-
-  return (
-    <div
-      style={{
-        position: "absolute",
-        left: 0,
-        top: "44%",
-        width: "60%",
-        background: "var(--bg-surface)",
-        border: "1px solid var(--border-default)",
-        borderRadius: "var(--radius-lg, 14px)",
-        padding: "12px 14px",
-        boxShadow:
-          "0 12px 28px -16px color-mix(in oklch, var(--fg-default) 22%, transparent)",
-        zIndex: 4,
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-          marginBottom: 8,
-        }}
-      >
-        <span
-          style={{
-            width: 6,
-            height: 6,
-            borderRadius: 999,
-            background: "var(--layers-blue)",
-            animation: "homePulse 1.6s ease-in-out infinite",
-          }}
-        />
-        <span
-          style={{
-            fontSize: "0.7rem",
-            color: "var(--fg-default)",
-            fontWeight: 600,
-            letterSpacing: "0.02em",
-          }}
-        >
-          Live transcript
-        </span>
-        <span style={{ fontSize: "0.66rem", color: "var(--fg-muted)" }}>
-          · Captured live
-        </span>
-      </div>
-      <ul
-        style={{
-          listStyle: "none",
-          margin: 0,
-          padding: 0,
-          display: "grid",
-          gap: 6,
-          fontSize: "0.74rem",
-          minHeight: 78,
-        }}
-      >
-        {feed.map(([t, line]) => (
-          <li
-            key={`${t}-${line}`}
-            className="hero-transcript-line"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "auto 1fr",
-              gap: 10,
-              alignItems: "baseline",
-              color: "var(--fg-default)",
-            }}
-          >
-            <span
-              style={{
-                fontFamily: "var(--font-mono, ui-monospace)",
-                color: "var(--fg-faint)",
-              }}
-            >
-              {t}
-            </span>
-            <span>{line}</span>
-          </li>
-        ))}
-      </ul>
-      <style jsx>{`
-        @keyframes heroTranscriptIn {
-          0% {
-            opacity: 0;
-            transform: translateY(8px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        :global(.hero-transcript-line:last-child) {
-          animation: heroTranscriptIn 480ms cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        @media (prefers-reduced-motion: reduce) {
-          :global(.hero-transcript-line:last-child) {
-            animation: none;
-          }
-        }
-      `}</style>
-    </div>
-  );
-}
-
-function FloatingChip({
-  style,
-  accent,
-  label,
-  sub,
-}: {
-  style?: React.CSSProperties;
-  accent: string;
-  label: string;
-  sub: string;
-}) {
-  return (
-    <div
-      style={{
-        position: "absolute",
-        background: "var(--bg-surface)",
-        border: "1px solid var(--border-default)",
-        borderRadius: "var(--radius-pill, 9999px)",
-        padding: "8px 14px",
-        display: "inline-flex",
-        alignItems: "center",
-        gap: 8,
-        boxShadow:
-          "0 10px 24px -14px color-mix(in oklch, var(--fg-default) 18%, transparent)",
-        ...style,
-      }}
-    >
-      <span
-        style={{
-          width: 8,
-          height: 8,
-          borderRadius: 999,
-          background: accent,
-          boxShadow: `0 0 0 4px color-mix(in oklch, ${accent} 18%, transparent)`,
-        }}
-      />
-      <span
-        style={{
-          fontSize: "0.78rem",
-          fontWeight: 600,
-          color: "var(--fg-default)",
-        }}
-      >
-        {label}
-      </span>
-      <span
-        style={{
-          fontSize: "0.74rem",
-          color: "var(--fg-muted)",
-        }}
-      >
-        · {sub}
-      </span>
-    </div>
-  );
-}
-
-function FloatingStat({
-  style,
-  value,
-  label,
-  sub,
-  accent,
-}: {
-  style?: React.CSSProperties;
-  value: string;
-  label: string;
-  sub: string;
-  accent: string;
-}) {
-  return (
-    <div
-      style={{
-        position: "absolute",
-        background: "var(--bg-surface)",
-        border: "1px solid var(--border-default)",
-        borderRadius: "var(--radius-lg, 14px)",
-        padding: "10px 14px",
-        display: "inline-flex",
-        alignItems: "center",
-        gap: 10,
-        boxShadow:
-          "0 14px 28px -16px color-mix(in oklch, var(--fg-default) 18%, transparent)",
-        ...style,
-      }}
-    >
-      <span
-        className="home-display"
-        style={{
-          fontSize: "1.5rem",
-          lineHeight: 1,
-          color: accent,
-          fontVariantNumeric: "tabular-nums",
-          fontWeight: 600,
-        }}
-      >
-        {value}
-      </span>
-      <span style={{ display: "grid", lineHeight: 1.1 }}>
-        <span
-          style={{
-            fontSize: "0.78rem",
-            fontWeight: 600,
-            color: "var(--fg-default)",
-          }}
-        >
-          {label}
-        </span>
-        <span style={{ fontSize: "0.7rem", color: "var(--fg-muted)" }}>
-          {sub}
-        </span>
-      </span>
     </div>
   );
 }
@@ -1148,7 +958,8 @@ function SectionSearch() {
 function SearchMediaCard() {
   const QUERY = "What did we decide about pricing?";
   const typed = useTypewriter(QUERY, 26, 800);
-  const isDone = typed.length >= QUERY.length;
+  const typedText = typed || QUERY;
+  const isDone = typedText.length >= QUERY.length;
 
   return (
     <div
@@ -1218,7 +1029,7 @@ function SearchMediaCard() {
               minWidth: 0,
             }}
           >
-            {typed}
+            {typedText}
             <span
               aria-hidden
               style={{
@@ -2413,18 +2224,15 @@ function FinalCta() {
             zIndex: 2,
           }}
         >
-          <button
-            type="button"
+          <a
+            href="mailto:admin@mirafactory.ai?subject=Layers%20alpha%20access"
             className="btn-primary cta-pulse"
-            disabled
-            aria-disabled="true"
-            title="Public sign-ups coming soon — invite-only alpha"
             style={{ padding: "16px 26px", fontSize: "1rem" }}
           >
-            Coming soon
-          </button>
+            Request alpha access
+          </a>
           <a
-            href="mailto:support@mirrorfactory.ai?subject=Layers%20alpha%20access"
+            href="mailto:admin@mirafactory.ai?subject=Layers%20alpha%20access"
             style={{
               fontSize: "0.78rem",
               color: "var(--fg-muted)",
@@ -2435,7 +2243,7 @@ function FinalCta() {
           >
             Want in early?{" "}
             <span style={{ color: "var(--fg-default)", fontWeight: 600 }}>
-              Email support →
+              Email admin →
             </span>
           </a>
         </div>

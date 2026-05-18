@@ -126,7 +126,7 @@ Wherever any of these breaks: file `platform:<x>` ticket with pre-fix screenshot
 |---|-------|-----|-----|-----|-----|-----|
 | D1 | `/` landing — hero, AI memory section, search section, MCP section, pricing, CTA, footer | ✓ | ✓ | ❓ | ❓ | ✓ |
 | D2 | `/pricing` — Core $20 + Pro $30 + FAQ | ✓ | ✓ | ❓ | ❓ | ✓ |
-| D3 | `/sign-in` — Google OAuth button + email/password + footnote points to `support@mirrorfactory.ai` | ✓ PR#74 | ✓ PR#74 | ❓ | ❓ | ✓ |
+| D3 | `/sign-in` — Google OAuth button + email/password + footnote points to `admin@mirafactory.ai` | ✓ PR#74 | ✓ PR#74 | ❓ | ❓ | ✓ |
 | D4 | `/sign-up` — email entry + verification flow | ❓ | ❓ | ❓ | ❓ | ❓ |
 | D5 | `/download` — platform-detection card shows correct OS download | ✓ | ✓ | ❓ | ❓ | ✓ |
 | D6 | `/changelog` — newest release at top; release type labels render | ✓ | ❓ | ❓ | ❓ | ✓ |

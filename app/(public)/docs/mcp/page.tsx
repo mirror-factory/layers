@@ -448,10 +448,10 @@ export default function McpDocsPage() {
           </ul>
           If your client uses a different scheme, email{" "}
           <a
-            href="mailto:support@mirrorfactory.ai"
+            href="mailto:admin@mirafactory.ai"
             style={{ color: "var(--layers-blue)" }}
           >
-            support@mirrorfactory.ai
+            admin@mirafactory.ai
           </a>{" "}
           and we&rsquo;ll add it.
         </Callout>

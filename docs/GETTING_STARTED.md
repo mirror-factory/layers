@@ -118,7 +118,7 @@ If you're about to bypass any of the above, write down why in the PR description
 - Repo: <https://github.com/mirror-factory/audio-layer>
 - Linear: <https://linear.app/mirror-factory/project/layers-786bd350532f>
 - Vercel project: `layers` under the `mirror-factory` team
-- Support: <support@mirrorfactory.ai>
+- Support: <admin@mirafactory.ai>
 
 ---
 

@@ -44,7 +44,7 @@ iOS sim: `xcrun simctl io booted tap` does **not** exist. Use `xcrun simctl open
 | 3 | Hamburger menu open | Three links (Download / Pricing / Sign in) visible, no overlap with banner, X icon swaps in for hamburger. | `and-03-menu-open.png` | — |
 | 4 | Theme toggle (sun/moon) | Tapping switches `html.dark`/`html.light`; persists across reload. | `and-20-theme-attempt.png` | — |
 | 5 | /pricing | Hero copy + Core $20 / Pro $30 cards render; pricing values do not bleed through sticky header on scroll. | `and-pricing.png`, `ios-route-pricing.png` | — |
-| 6 | /sign-in | Google OAuth button + email/password form; support email link points to `support@mirrorfactory.ai`. | `and-signin.png` | PR #74 |
+| 6 | /sign-in | Google OAuth button + email/password form; support email link points to `admin@mirafactory.ai`. | `and-signin.png` | PR #74 |
 | 7 | /download | Platform recommendation card renders; download CTAs match the device. | `and-download.png`, `ios-route-download.png` | — |
 | 8 | /changelog | Latest release shows at top; release type labels visible. | `ios-route-changelog.png` | — |
 | 9 | /docs | TOC links render, no overflow. | `ios-route-docs.png` | — |
