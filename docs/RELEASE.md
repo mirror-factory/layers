@@ -42,7 +42,50 @@ Reserve for actual incidents — broken auth, broken billing, leaking data. Anyt
 
 ## Vercel setup (one-time)
 
-Open the Vercel project (`layers` under the `mirror-factory` team) → **Settings**.
+Open the Vercel project (`audio-layer` under the `mirror-factorys-projects-836be98a`
+team) → **Settings**.
+
+Current verified status as of 2026-05-17 22:01 EDT:
+
+- GitHub/Vercel CI is deploying PR #88 through the `audio-layer` project under
+  the `mirror-factorys-projects-836be98a` team.
+- The real project is `audio-layer`
+  (`prj_QUjIKb0gKB5KxDI0lulFnKfgAZhP`), configured as a Next.js project. The
+  older `mirror-factory/layers` project (`prj_sXKn0a66RmAsOG1mtid0ETrUiSsU`)
+  still exists but is stale and configured as Vite.
+- The local `.vercel/project.json` in this checkout was relinked with
+  `vercel link --yes --project audio-layer --scope mirror-factorys-projects-836be98a`
+  so local CLI actions now target the same project CI uses.
+- `layers.mirrorfactory.ai` is verified on `audio-layer`.
+- `dev.layers.mirrorfactory.ai` exists on `audio-layer`, is pinned to
+  `development`, and is currently unverified.
+- `staging.layers.mirrorfactory.ai` exists on `audio-layer`, is pinned to
+  `staging`, and is currently unverified.
+- DNS is hosted at Cloudflare (`bowen.ns.cloudflare.com`, `cora.ns.cloudflare.com`),
+  but this shell has no DNS-management path yet: `wrangler` is not installed,
+  no Cloudflare API env vars are present, and `cloudflared` only exposes tunnel
+  access.
+- GitHub's default branch is `development`. Follow-up required: the old
+  unprotected `dev` branch still exists at `0.1.75` and is ahead of the current
+  protected `development` branch. Do not delete or retire `dev` until PR #88 has
+  advanced `development` and a reviewer confirms there is no unique work left
+  there.
+
+Required Cloudflare records:
+
+| Type | Name | Value |
+| --- | --- | --- |
+| `CNAME` | `dev.layers` | `03e5eba20f4a886c.vercel-dns-017.com` |
+| `CNAME` | `staging.layers` | `03e5eba20f4a886c.vercel-dns-017.com` |
+| `TXT` | `_vercel` | `vc-domain-verify=dev.layers.mirrorfactory.ai,ab5d9cd48927b35731e8` |
+| `TXT` | `_vercel` | `vc-domain-verify=staging.layers.mirrorfactory.ai,e55419497a240a420457` |
+
+After DNS propagates, verify the two project domains from Vercel or run:
+
+```bash
+vercel api '/v9/projects/prj_QUjIKb0gKB5KxDI0lulFnKfgAZhP/domains/dev.layers.mirrorfactory.ai/verify' --scope mirror-factorys-projects-836be98a -X POST
+vercel api '/v9/projects/prj_QUjIKb0gKB5KxDI0lulFnKfgAZhP/domains/staging.layers.mirrorfactory.ai/verify' --scope mirror-factorys-projects-836be98a -X POST
+```
 
 ### 1. Production branch
 - **Settings → Git → Production Branch:** `main`
@@ -127,7 +170,7 @@ Each tier needs its own URLs registered upstream. Without these, OAuth bounces a
   - `https://dev.layers.mirrorfactory.ai/auth/callback`
   - `https://*-mirror-factory.vercel.app/auth/callback` (per-PR previews)
   - `http://localhost:3000/auth/callback`
-  - `com.mirrorfactory.layers://auth/callback` (Capacitor iOS/Android deep-link OAuth)
+  - `com.mirafactory.layers://auth/callback` (Capacitor iOS/Android deep-link OAuth)
 
 ### Google OAuth (Cloud Console -> Credentials -> OAuth 2.0 Client)
 - Authorised JavaScript origins: prod + staging + dev domains.
@@ -167,14 +210,18 @@ Then `pnpm dev:staging` boots the dev server pointed at staging-tier creds local
 ## Migration checklist (when first turning this on)
 
 - [x] Create `staging` and `development` branches off current `main`.
-- [ ] Vercel: set production branch to `main`, pin staging + dev domains.
+- [x] Vercel: set production branch to `main`, pin staging + dev domains.
 - [ ] Vercel: copy env vars, swap creds for staging + dev.
-- [ ] Add DNS records for `staging.` and `dev.` subdomains.
+- [ ] Add Cloudflare DNS records for `staging.layers.` and `dev.layers.` subdomains.
 - [ ] Supabase: add staging + dev redirect URLs.
 - [ ] Google OAuth: add staging + dev origins + redirects.
 - [ ] Stripe: create staging + dev webhook endpoints (test mode).
 - [x] GitHub: enable branch protection on `main`, `staging`, `development`.
 - [x] Update `AGENTS.md` to reference this doc and the "no direct push to main" rule.
+- [ ] Retire old `dev` branch after #88 lands on protected `development` and any
+  unique work is confirmed duplicated or intentionally superseded.
 - [ ] Open a soak PR `development` → `staging` → `main` to prove the pipeline before retiring the direct-push habit.
 - [ ] Confirm spend caps still configured (see [SPEND_CAPS.md](./SPEND_CAPS.md))
+- [ ] Confirm credentials are fresh per quarterly cadence (see [KEY_ROTATION.md](./KEY_ROTATION.md))
+- [ ] Run the manual real-device QA pass across all supported devices (see [RECORDING_MANUAL_QA.md](./RECORDING_MANUAL_QA.md))
 - [ ] Close [PROD-383](https://linear.app/mirror-factory/issue/PROD-383).

@@ -129,16 +129,13 @@ describe("API route coverage", () => {
     "app/api/dev-kit/status/route.ts",
     "app/api/dev-kit/tools/route.ts",
     "app/api/embeddings/backfill/route.ts",
-    "app/api/health/route.ts",
     "app/api/models/route.ts",
     "app/api/observability/health/route.ts",
     "app/api/oauth/authorize/route.ts",
     "app/api/oauth/callback/route.ts",
-    "app/api/oauth/consent/route.ts",
     "app/api/oauth/register/route.ts",
     "app/api/oauth/revoke/route.ts",
     "app/api/transcribe/stream/autosave/route.ts",
-    "app/api/transcribe/stream/finalize/route.ts",
     "app/api/transcribe/stream/preflight/route.ts",
   ]);
 

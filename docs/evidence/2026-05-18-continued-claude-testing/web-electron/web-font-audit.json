@@ -1,0 +1,323 @@
+{
+  "generatedAt": "2026-05-18T15:44:42.846Z",
+  "base": "http://localhost:3000",
+  "results": [
+    {
+      "tag": "home-desktop-light",
+      "url": "http://localhost:3000/",
+      "status": 200,
+      "screenshot": "docs/evidence/2026-05-18-continued-claude-testing/web-electron/home-desktop-light.png",
+      "fonts": {
+        "body": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "16px"
+        },
+        "h1": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif",
+          "fontWeight": "600",
+          "fontSize": "69.6px"
+        },
+        "h2": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif",
+          "fontWeight": "620",
+          "fontSize": "25.92px"
+        },
+        "p": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "18.88px"
+        },
+        "a": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "16px"
+        },
+        "button": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "16px"
+        }
+      },
+      "serifViolations": []
+    },
+    {
+      "tag": "signin-desktop-light",
+      "url": "http://localhost:3000/sign-in",
+      "status": 200,
+      "screenshot": "docs/evidence/2026-05-18-continued-claude-testing/web-electron/signin-desktop-light.png",
+      "fonts": {
+        "body": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "16px"
+        },
+        "h1": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif",
+          "fontWeight": "600",
+          "fontSize": "38.4px"
+        },
+        "h2": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "16px"
+        },
+        "p": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "540",
+          "fontSize": "11.52px"
+        },
+        "a": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "16px"
+        },
+        "button": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "16px"
+        }
+      },
+      "serifViolations": []
+    },
+    {
+      "tag": "home-mobile-light",
+      "url": "http://localhost:3000/",
+      "status": 200,
+      "screenshot": "docs/evidence/2026-05-18-continued-claude-testing/web-electron/home-mobile-light.png",
+      "fonts": {
+        "body": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "16px"
+        },
+        "h1": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif",
+          "fontWeight": "600",
+          "fontSize": "39.2px"
+        },
+        "h2": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif",
+          "fontWeight": "620",
+          "fontSize": "21.6px"
+        },
+        "p": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "17.15px"
+        },
+        "a": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "16px"
+        },
+        "button": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "16px"
+        }
+      },
+      "serifViolations": []
+    },
+    {
+      "tag": "signin-mobile-light",
+      "url": "http://localhost:3000/sign-in",
+      "status": 200,
+      "screenshot": "docs/evidence/2026-05-18-continued-claude-testing/web-electron/signin-mobile-light.png",
+      "fonts": {
+        "body": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "16px"
+        },
+        "h1": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif",
+          "fontWeight": "600",
+          "fontSize": "29.6px"
+        },
+        "h2": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "16px"
+        },
+        "p": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "540",
+          "fontSize": "11.52px"
+        },
+        "a": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "16px"
+        },
+        "button": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "16px"
+        }
+      },
+      "serifViolations": []
+    },
+    {
+      "tag": "home-desktop-dark",
+      "url": "http://localhost:3000/",
+      "status": 200,
+      "screenshot": "docs/evidence/2026-05-18-continued-claude-testing/web-electron/home-desktop-dark.png",
+      "fonts": {
+        "body": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "16px"
+        },
+        "h1": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif",
+          "fontWeight": "600",
+          "fontSize": "69.6px"
+        },
+        "h2": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif",
+          "fontWeight": "620",
+          "fontSize": "25.92px"
+        },
+        "p": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "18.88px"
+        },
+        "a": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "16px"
+        },
+        "button": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "16px"
+        }
+      },
+      "serifViolations": []
+    },
+    {
+      "tag": "signin-desktop-dark",
+      "url": "http://localhost:3000/sign-in",
+      "status": 200,
+      "screenshot": "docs/evidence/2026-05-18-continued-claude-testing/web-electron/signin-desktop-dark.png",
+      "fonts": {
+        "body": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "16px"
+        },
+        "h1": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif",
+          "fontWeight": "600",
+          "fontSize": "38.4px"
+        },
+        "h2": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "16px"
+        },
+        "p": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "540",
+          "fontSize": "11.52px"
+        },
+        "a": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "16px"
+        },
+        "button": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "16px"
+        }
+      },
+      "serifViolations": []
+    },
+    {
+      "tag": "home-mobile-dark",
+      "url": "http://localhost:3000/",
+      "status": 200,
+      "screenshot": "docs/evidence/2026-05-18-continued-claude-testing/web-electron/home-mobile-dark.png",
+      "fonts": {
+        "body": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "16px"
+        },
+        "h1": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif",
+          "fontWeight": "600",
+          "fontSize": "39.2px"
+        },
+        "h2": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif",
+          "fontWeight": "620",
+          "fontSize": "21.6px"
+        },
+        "p": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "17.15px"
+        },
+        "a": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "16px"
+        },
+        "button": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "16px"
+        }
+      },
+      "serifViolations": []
+    },
+    {
+      "tag": "signin-mobile-dark",
+      "url": "http://localhost:3000/sign-in",
+      "status": 200,
+      "screenshot": "docs/evidence/2026-05-18-continued-claude-testing/web-electron/signin-mobile-dark.png",
+      "fonts": {
+        "body": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "16px"
+        },
+        "h1": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif",
+          "fontWeight": "600",
+          "fontSize": "29.6px"
+        },
+        "h2": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "16px"
+        },
+        "p": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "540",
+          "fontSize": "11.52px"
+        },
+        "a": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "16px"
+        },
+        "button": {
+          "fontFamily": "Geist, Inter, ui-sans-serif, system-ui, sans-serif, Geist, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontWeight": "400",
+          "fontSize": "16px"
+        }
+      },
+      "serifViolations": []
+    }
+  ],
+  "totals": {
+    "runs": 8,
+    "withSerifViolations": 0,
+    "nonOk": 0
+  }
+}

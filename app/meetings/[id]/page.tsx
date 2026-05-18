@@ -1,9 +1,13 @@
 import { notFound } from "next/navigation";
 import { TopBar } from "@/components/top-bar";
 import { MeetingCostPanel } from "@/components/meeting-cost-panel";
-import { MeetingChat } from "@/components/meeting-chat";
+import { MeetingNotesEditor } from "@/components/meeting-notes-editor";
 import { MeetingNotesPushPanel } from "@/components/meeting-notes-push-panel";
+import { OnboardingProvider } from "@/components/onboarding/onboarding-provider";
+import { FirstMeetingToast } from "@/components/onboarding/first-meeting-toast";
+import { ONBOARDING_ANCHOR_ATTR } from "@/lib/onboarding/copy";
 import { MeetingDetailPollerWrapper } from "./poller-wrapper";
+import { formatCompletedActionDueLabel } from "@/lib/meetings/format";
 import { getMeetingsStore } from "@/lib/meetings/store";
 import { AudioWaveRibbon } from "@/components/audio-wave-ribbon";
 import {
@@ -34,6 +38,7 @@ export default async function MeetingDetailPage({
   const isCompleted = meeting.status === "completed";
 
   return (
+    <OnboardingProvider>
     <div className="paper-calm-page recorder-page session-workspace-page min-h-screen-safe flex flex-col">
       <TopBar
         title={meeting.title ?? "Meeting Detail"}
@@ -41,6 +46,11 @@ export default async function MeetingDetailPage({
       />
 
       <main className="meeting-detail-main session-detail-main flex-1 px-4 pb-safe py-6 mx-auto w-full space-y-6">
+        {isCompleted && (
+          <div className="mx-auto w-full max-w-5xl">
+            <FirstMeetingToast />
+          </div>
+        )}
         {!isCompleted && meeting.status !== "error" && (
           <div className="mx-auto max-w-5xl space-y-6">
             <div className="meeting-detail-header flex items-center justify-between rounded-xl border border-[var(--border-card)] bg-[var(--surface-panel)] p-4">
@@ -97,6 +107,7 @@ export default async function MeetingDetailPage({
         )}
       </main>
     </div>
+    </OnboardingProvider>
   );
 }
 
@@ -113,7 +124,6 @@ interface CompletedSummaryViewModel {
 }
 
 function CompletedMeetingWorkspace({ meeting }: { meeting: CompletedMeeting }) {
-  const meetingDate = new Date(meeting.createdAt);
   const summary = normalizeCompletedSummary(meeting.summary);
   const summaryText =
     summary.summary ??
@@ -138,7 +148,7 @@ function CompletedMeetingWorkspace({ meeting }: { meeting: CompletedMeeting }) {
     <>
       <div className="session-detail-workspace">
         <SessionCaptureCard
-          date={meetingDate}
+          date={meeting.createdAt}
           durationLabel={formatMeetingDuration(meeting.durationSeconds)}
           statusLabel="Summary ready"
           badgeLabel="DONE"
@@ -168,6 +178,7 @@ function CompletedMeetingWorkspace({ meeting }: { meeting: CompletedMeeting }) {
           }
         />
 
+        <div {...{ [ONBOARDING_ANCHOR_ATTR]: "summary" }}>
         <SessionIntelligenceCanvas
           mode="summary"
           summaryText={summaryText}
@@ -177,15 +188,19 @@ function CompletedMeetingWorkspace({ meeting }: { meeting: CompletedMeeting }) {
           actions={actionRows}
           decisions={summary.decisions}
           stats={stats}
-          askPanel={
-            <MeetingChat
-              key="ask-panel"
+          meetingChat={{
+            meetingId: meeting.id,
+            participantName: summary.participants[0] ?? null,
+          }}
+          notesPanel={
+            <MeetingNotesEditor
               meetingId={meeting.id}
-              variant="workspace"
+              initialValue={meeting.userNotes}
             />
           }
           footerStatus="Summary - transcript ready"
         />
+        </div>
       </div>
 
       <div className="session-detail-utilities">
@@ -289,12 +304,7 @@ function buildCompletedActions(
   return actionItems.map((action, index) => ({
     id: `${action.task}-${index}`,
     text: formatMeetingActionItem(action),
-    due: action.dueDate
-      ? new Intl.DateTimeFormat(undefined, {
-          month: "short",
-          day: "numeric",
-        }).format(new Date(action.dueDate))
-      : null,
+    due: formatCompletedActionDueLabel(action.dueDate),
     priority: priorities[index % priorities.length],
   }));
 }

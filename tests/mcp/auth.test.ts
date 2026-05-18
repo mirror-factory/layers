@@ -23,8 +23,24 @@ describe("MCP bearer auth", () => {
   it("accepts OAuth access tokens with mcp:tools scope", async () => {
     const token = await signToken({ sub: "user_123", scope: "mcp:tools" });
 
+    // PROD-403: the result now carries an optional `clientId` claim. Tokens
+    // without a `client_id` (legacy + tests like this one) get null.
     await expect(validateMcpBearerToken(token)).resolves.toEqual({
       userId: "user_123",
+      clientId: null,
+    });
+  });
+
+  it("propagates the client_id claim when present (PROD-403)", async () => {
+    const token = await signToken({
+      sub: "user_456",
+      scope: "mcp:tools",
+      client_id: "mcp-abc-123",
+    });
+
+    await expect(validateMcpBearerToken(token)).resolves.toEqual({
+      userId: "user_456",
+      clientId: "mcp-abc-123",
     });
   });
 

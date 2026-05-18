@@ -1,0 +1,63 @@
+05-18 16:09:13.779  7805  7838 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.mirafactory.layers/app_webview/variations_seed_new"
+05-18 16:09:13.933   539   567 I ActivityManager: Start proc 7842:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0i4 for  {com.mirafactory.layers/org.chromium.content.app.SandboxedProcessService0:0}
+05-18 16:09:14.461  7805  7805 D Capacitor: Starting BridgeActivity
+05-18 16:09:14.544  7805  7805 D Capacitor: Registering plugin instance: CapacitorCookies
+05-18 16:09:14.555  7805  7805 D Capacitor: Registering plugin instance: WebView
+05-18 16:09:14.560  7805  7805 D Capacitor: Registering plugin instance: CapacitorHttp
+05-18 16:09:14.580  7805  7805 D Capacitor: Registering plugin instance: SystemBars
+05-18 16:09:14.586  7805  7805 D Capacitor: Registering plugin instance: App
+05-18 16:09:14.590  7805  7805 D Capacitor: Registering plugin instance: Browser
+05-18 16:09:14.592  7805  7805 D Capacitor: Registering plugin instance: LocalNotifications
+05-18 16:09:14.601  7805  7805 D Capacitor: Registering plugin instance: StatusBar
+05-18 16:09:14.609  7805  7805 V Capacitor/StatusBarPlugin: Notifying listeners for event statusBarOverlayChanged
+05-18 16:09:14.609  7805  7805 D Capacitor/StatusBarPlugin: No listeners found for event statusBarOverlayChanged
+05-18 16:09:14.610  7805  7805 V Capacitor/StatusBarPlugin: Notifying listeners for event statusBarOverlayChanged
+05-18 16:09:14.610  7805  7805 D Capacitor/StatusBarPlugin: No listeners found for event statusBarOverlayChanged
+05-18 16:09:14.674  7805  7805 W Capacitor: Unable to read file at path public/plugins
+05-18 16:09:14.696  7805  7805 D Capacitor: Loading app at http://10.0.2.2:3101
+05-18 16:09:14.790  7805  7805 D Capacitor: App started
+05-18 16:09:14.796  7805  7805 D Capacitor/AppPlugin: Firing change: true
+05-18 16:09:14.796  7805  7805 V Capacitor/AppPlugin: Notifying listeners for event appStateChange
+05-18 16:09:14.796  7805  7805 D Capacitor/AppPlugin: No listeners found for event appStateChange
+05-18 16:09:14.805  7805  7805 V Capacitor/BrowserPlugin: Notifying listeners for event browserFinished
+05-18 16:09:14.805  7805  7805 D Capacitor/BrowserPlugin: No listeners found for event browserFinished
+05-18 16:09:14.806  7805  7805 D Capacitor: App resumed
+05-18 16:09:14.882  7805  7805 V Capacitor/AppPlugin: Notifying listeners for event pause
+05-18 16:09:14.882  7805  7805 D Capacitor/AppPlugin: No listeners found for event pause
+05-18 16:09:14.885  7805  7805 D Capacitor: App paused
+05-18 16:09:14.887  7805  7805 D Capacitor/AppPlugin: Firing change: true
+05-18 16:09:14.887  7805  7805 V Capacitor/AppPlugin: Notifying listeners for event appStateChange
+05-18 16:09:14.888  7805  7805 D Capacitor/AppPlugin: No listeners found for event appStateChange
+05-18 16:09:14.888  7805  7805 V Capacitor/AppPlugin: Notifying listeners for event resume
+05-18 16:09:14.888  7805  7805 D Capacitor/AppPlugin: No listeners found for event resume
+05-18 16:09:14.914  7805  7805 D Capacitor: App resumed
+05-18 16:09:14.946   539  1009 D CoreBackPreview: Window{825ce66 u0 com.mirafactory.layers/com.mirafactory.layers.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@3008ed8, mPriority=0, mIsAnimationCallback=false}
+05-18 16:09:15.132   539   556 W ziparchive: Unable to open '/data/app/~~At8NObWVDarnycY_tsgnww==/com.mirafactory.layers-ih5tzw1N5ejvyDvd_tKgOA==/base.dm': No such file or directory
+05-18 16:09:15.134   539   556 I ActivityTaskManager: Displayed com.mirafactory.layers/.MainActivity for user 0: +3s1ms
+05-18 16:09:15.226  7805  7805 E Capacitor/Console: File:  - Line 1 - Msg: Uncaught TypeError: Cannot read properties of undefined (reading 'triggerEvent')
+05-18 16:09:15.227  7805  7805 E Capacitor/Console: File:  - Line 1 - Msg: Uncaught TypeError: Cannot read properties of undefined (reading 'triggerEvent')
+05-18 16:09:15.274   539  1009 I ImeTracker: com.mirafactory.layers:a2c25577: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
+05-18 16:09:15.275   539  1009 I ImeTracker: com.mirafactory.layers:a2c25577: onCancelled at PHASE_SERVER_SHOULD_HIDE
+05-18 16:09:15.287  1358  1358 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x12000000 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.mirafactory.layers fieldId=0 fieldName=null extras=null}, false)
+05-18 16:09:15.448   539  1009 D CoreBackPreview: Window{6d33e3c u0 Splash Screen com.mirafactory.layers EXITING}: Setting back callback null
+05-18 16:09:15.450   539   734 W InputManager-JNI: Input channel object '6d33e3c Splash Screen com.mirafactory.layers (client)' was disposed without first being removed with the input manager!
+05-18 16:09:19.260  7805  7805 I Capacitor/Console: File: webpack-internal:///(app-pages-browser)/./node_modules/.pnpm/next@15.5.18_@babel+core@7.29.0_@opentelemetry+api@1.9.1_@playwright+test@1.59.1_react-_cdecf4b55fd0e477c2c8b5b955752f81/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js - Line 25631 - Msg: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+05-18 16:09:20.787  7805  7943 D ProfileInstaller: Installing profile for com.mirafactory.layers
+05-18 16:09:23.227  7805  7805 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+05-18 16:09:23.251  7805  7805 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 74352443, pluginId: Browser, methodName: close
+05-18 16:09:23.253  7805  7805 V Capacitor: callback: 74352443, pluginId: Browser, methodName: close, methodData: {}
+05-18 16:09:23.282  7805  7805 I Capacitor/Console: File: webpack-internal:///(app-pages-browser)/./node_modules/.pnpm/next@15.5.18_@babel+core@7.29.0_@opentelemetry+api@1.9.1_@playwright+test@1.59.1_react-_cdecf4b55fd0e477c2c8b5b955752f81/node_modules/next/dist/client/dev/hot-reloader/app/hot-reloader-app.js - Line 184 - Msg: [Fast Refresh] rebuilding
+05-18 16:09:23.330  7805  7805 I Capacitor/Console: File:  - Line 333 - Msg: undefined
+05-18 16:09:23.331  7805  7805 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+05-18 16:09:23.334  7805  7805 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 74352444, pluginId: App, methodName: getLaunchUrl
+05-18 16:09:23.335  7805  7805 V Capacitor: callback: 74352444, pluginId: App, methodName: getLaunchUrl, methodData: {}
+05-18 16:09:23.400  7805  7805 I Capacitor/Console: File:  - Line 333 - Msg: undefined
+05-18 16:09:23.402  7805  7805 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+05-18 16:09:23.403  7805  7805 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 74352445, pluginId: App, methodName: addListener
+05-18 16:09:23.403  7805  7805 V Capacitor: callback: 74352445, pluginId: App, methodName: addListener, methodData: {"eventName":"appUrlOpen"}
+05-18 16:09:23.405  7805  7805 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+05-18 16:09:23.417  7805  7805 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 74352446, pluginId: App, methodName: addListener
+05-18 16:09:23.418  7805  7805 V Capacitor: callback: 74352446, pluginId: App, methodName: addListener, methodData: {"eventName":"appStateChange"}
+05-18 16:09:23.957  7805  7805 I Capacitor/Console: File: webpack-internal:///(app-pages-browser)/./node_modules/.pnpm/next@15.5.18_@babel+core@7.29.0_@opentelemetry+api@1.9.1_@playwright+test@1.59.1_react-_cdecf4b55fd0e477c2c8b5b955752f81/node_modules/next/dist/client/dev/report-hmr-latency.js - Line 14 - Msg: [Fast Refresh] done in 651ms
+05-18 16:09:24.038   539  2682 W ProcessStats: Tracking association SourceState{25f806 com.mirafactory.layers/10196 BTop #7454} whose proc state 2 is better than process ProcessState{daae765 com.google.android.gms.persistent/10128 pkg=com.google.android.gms} proc state 4 (42 skipped)
+05-18 16:09:24.047  7805  7805 I Capacitor/Console: File: webpack-internal:///(app-pages-browser)/./node_modules/.pnpm/next@15.5.18_@babel+core@7.29.0_@opentelemetry+api@1.9.1_@playwright+test@1.59.1_react-_cdecf4b55fd0e477c2c8b5b955752f81/node_modules/next/dist/client/dev/hot-reloader/app/hot-reloader-app.js - Line 184 - Msg: [Fast Refresh] rebuilding

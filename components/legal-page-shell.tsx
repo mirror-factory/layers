@@ -16,8 +16,8 @@ import {
 // Shared "editorial paper" container for /privacy, /terms, /account-deletion.
 //
 // Design intent (Layers Design System v1.0 — Paper Calm):
-//   • Type-led: Bricolage Grotesque display + Geist body, body at ~17.5px /
-//     1.7 leading, line length capped at ~70ch for readability.
+//   • Type-led: Geist display/body, body at ~17.5px / 1.7 leading, line
+//     length capped at ~70ch for readability.
 //   • Sticky left-rail TOC on desktop with a single 1px vertical guide and a
 //     small mint dot for the current section. NO side-stripe borders. NO
 //     gradient text. NO colored callout stripes.
@@ -86,10 +86,8 @@ export function LegalSection({
 }
 
 const PAGE_STYLES = `
-  @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..700&display=swap');
-
   .legal-root {
-    --legal-display: 'Bricolage Grotesque', var(--font-brand-sans);
+    --legal-display: var(--font-brand-sans);
     --legal-body: var(--font-brand-sans);
     --legal-measure: 70ch;
     --legal-rule: color-mix(in oklch, var(--border-default) 78%, transparent);

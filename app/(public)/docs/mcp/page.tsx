@@ -234,8 +234,8 @@ export default function McpDocsPage() {
           Connect Layers to{" "}
           <em
             style={{
-              fontStyle: "italic",
-              fontWeight: 500,
+              fontStyle: "normal",
+              fontWeight: 650,
               color: "var(--layers-mint)",
             }}
           >
@@ -448,10 +448,10 @@ export default function McpDocsPage() {
           </ul>
           If your client uses a different scheme, email{" "}
           <a
-            href="mailto:support@mirrorfactory.ai"
+            href="mailto:admin@mirafactory.ai"
             style={{ color: "var(--layers-blue)" }}
           >
-            support@mirrorfactory.ai
+            admin@mirafactory.ai
           </a>{" "}
           and we&rsquo;ll add it.
         </Callout>

@@ -7,14 +7,20 @@ test("app/download/page.tsx shows launch-ready channel states", async ({
 
   await expect(
     page.getByRole("heading", {
-      name: "Wherever your meetings happen, Layers is quietly listening.",
+      name: /Wherever your meetings happen,\s*Layers is quietly listening\./,
     }),
   ).toBeVisible();
+  await expect(page.getByText("Stable alpha").first()).toBeVisible();
+  await expect(page.getByText("macOS").first()).toBeVisible();
+  await expect(page.getByText("Windows").first()).toBeVisible();
+  await expect(page.getByText("Web app").first()).toBeVisible();
   await expect(page.getByText("Release line").first()).toBeVisible();
   await expect(page.getByRole("heading", { name: "Web app" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "macOS" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Windows" }).first()).toBeVisible();
-  await expect(page.getByRole("heading", { name: "iPhone & iPad" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "iPhone & iPad", exact: true }).first(),
+  ).toBeVisible();
   await expect(page.getByRole("heading", { name: "Android" }).first()).toBeVisible();
 
   await expect(page.getByText("macOS 13 Ventura or later")).toBeVisible();
@@ -41,9 +47,9 @@ test("app/download/page.tsx remains usable on mobile", async ({ page }) => {
     page.getByRole("link", { name: /Open the web app/ }).first(),
   ).toBeVisible();
   await expect(
-    page.getByRole("heading", { name: "iPhone & iPad" }),
+    page.getByRole("heading", { name: "iPhone & iPad", exact: true }),
   ).toBeVisible();
   await expect(
-    page.getByText("TestFlight invite — opening soon"),
+    page.getByText("TestFlight invite — opening soon").first(),
   ).toBeVisible();
 });

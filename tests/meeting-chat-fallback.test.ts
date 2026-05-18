@@ -50,6 +50,7 @@ const meeting: Meeting = {
     nextSteps: ["Send proposal and pricing options"],
   },
   costBreakdown: null,
+  userNotes: null,
   error: null,
   createdAt: "2026-04-24T00:00:00.000Z",
   updatedAt: "2026-04-24T00:00:00.000Z",

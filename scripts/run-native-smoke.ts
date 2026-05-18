@@ -84,7 +84,7 @@ const result = spawnSync("maestro", ["test", ".maestro"], {
   encoding: "utf-8",
   env: {
     ...process.env,
-    MAESTRO_APP_ID: process.env.MAESTRO_APP_ID ?? "com.mirrorfactory.layers",
+    MAESTRO_APP_ID: process.env.MAESTRO_APP_ID ?? "com.mirafactory.layers",
     MAESTRO_HOME_TEXT: process.env.MAESTRO_HOME_TEXT ?? "Layers",
   },
 });

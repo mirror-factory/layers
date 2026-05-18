@@ -199,7 +199,7 @@ Manual:
 
 Native Google OAuth must not run inside the WebView. Layers routes native Google
 sign-in through Capacitor Browser and returns through
-`com.mirrorfactory.layers://auth/callback`, where the client-side native auth
+`com.mirafactory.layers://auth/callback`, where the client-side native auth
 bridge exchanges the Supabase PKCE code. Tier 5 checks the native scheme,
 Android intent filter, iOS URL scheme, and release workflow bundle id before
 native proof can be considered complete.

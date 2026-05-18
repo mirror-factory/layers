@@ -1,0 +1,20 @@
+appId: com.mirafactory.layers
+---
+# App is launched and dialog is showing — dismiss first
+- tapOn:
+    text: "Cancel"
+- waitForAnimationToEnd:
+    timeout: 2000
+
+# Now drive sign-in
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 1500
+- tapOn: "Sign in"
+- waitForAnimationToEnd:
+    timeout: 5000
+
+- tapOn: "Continue with Google"
+- waitForAnimationToEnd:
+    timeout: 8000
+- takeScreenshot: ios-walk-I2-google-oauth-screen

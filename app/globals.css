@@ -266,8 +266,8 @@
   --font-mono:
     ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
     monospace;
-  --font-heading: var(--font-sans);
-  --font-sans: var(--font-sans);
+  --font-heading: var(--font-brand-sans);
+  --font-sans: var(--font-brand-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -315,13 +315,24 @@ body {
   );
   color: var(--text-primary);
   font-family:
-    var(--font-sans), var(--font-brand-sans);
+    var(--font-brand-sans), Geist, Inter, ui-sans-serif, system-ui,
+    -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* Safe areas handled per-component: TopBar (top), chat-input (bottom), etc.
      Body padding would double-count on full-height pages like the recorder. */
   padding-left: var(--safe-left);
   padding-right: var(--safe-right);
+}
+
+:where(button, input, textarea, select) {
+  font: inherit;
+}
+
+:where(h1, h2, h3, h4, h5, h6, p, a, span, label, small, strong, em, li) {
+  font-family:
+    var(--font-brand-sans), Geist, Inter, ui-sans-serif, system-ui,
+    -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 .light body {
@@ -1521,7 +1532,9 @@ body {
   overflow: hidden;
   border: 1px solid var(--border-card) !important;
   border-radius: var(--radius-lg);
-  background: color-mix(in oklch, var(--surface-panel) 94%, var(--bg-primary) 6%) !important;
+  background: var(--bg-surface, var(--bg-primary)) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
   box-shadow:
     0 22px 58px color-mix(in oklch, var(--text-primary) 16%, transparent),
     inset 0 1px 0 color-mix(in oklch, white 44%, transparent);
@@ -1533,6 +1546,10 @@ body {
   transition:
     opacity var(--duration-fast) var(--ease-out),
     transform var(--duration-fast) var(--ease-out);
+}
+
+.dark .paper-calm-page .slide-menu-panel {
+  background: var(--bg-primary) !important;
 }
 
 .paper-calm-page .slide-menu-panel.translate-x-full,
@@ -1616,6 +1633,200 @@ body {
   .paper-calm-page {
     padding-bottom: calc(72px + var(--safe-bottom));
   }
+}
+
+/* --------------------------------------------------------------------------
+   Floating Ask pill (PROD-461)
+   Anchored bottom-right of every authenticated page. Cmd/Ctrl+K opens the
+   sheet. Lifts above the mobile primary nav on routes where it lives.
+   -------------------------------------------------------------------------- */
+.floating-ask-pill {
+  position: fixed;
+  right: max(0.75rem, var(--safe-right));
+  bottom: max(0.75rem, var(--safe-bottom));
+  z-index: 45;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 40px;
+  padding: 0 0.85rem 0 0.75rem;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in oklch, var(--layers-mint) 55%, transparent);
+  background: color-mix(in oklch, var(--layers-mint) 92%, white 8%);
+  color: var(--layers-ink);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  cursor: pointer;
+  box-shadow:
+    0 10px 30px color-mix(in oklch, var(--layers-mint) 28%, transparent),
+    inset 0 1px 0 color-mix(in oklch, white 65%, transparent);
+  transition:
+    transform 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 180ms ease,
+    opacity 140ms ease;
+}
+
+.floating-ask-pill:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 14px 36px color-mix(in oklch, var(--layers-mint) 34%, transparent),
+    inset 0 1px 0 color-mix(in oklch, white 70%, transparent);
+}
+
+.floating-ask-pill:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px color-mix(in oklch, var(--layers-mint) 45%, transparent),
+    0 10px 30px color-mix(in oklch, var(--layers-mint) 28%, transparent);
+}
+
+.floating-ask-pill:active {
+  transform: translateY(0);
+}
+
+.floating-ask-pill-label {
+  line-height: 1;
+}
+
+.floating-ask-pill-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 18px;
+  padding: 0 0.3rem;
+  border-radius: 6px;
+  background: color-mix(in oklch, var(--layers-ink) 14%, transparent);
+  font-family: inherit;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: color-mix(in oklch, var(--layers-ink) 78%, transparent);
+}
+
+.floating-ask-pill--above-nav {
+  bottom: calc(72px + var(--safe-bottom) + 0.5rem);
+}
+
+@media (min-width: 768px) {
+  .floating-ask-pill--above-nav {
+    /* Mobile nav is hidden on >=md; revert to the standard offset. */
+    bottom: max(0.75rem, var(--safe-bottom));
+  }
+}
+
+.floating-ask-pill--hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.92);
+}
+
+.floating-ask-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: color-mix(in oklch, var(--layers-ink) 45%, transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: floating-ask-overlay-in 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes floating-ask-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.floating-ask-sheet {
+  position: relative;
+  width: min(100%, 760px);
+  height: min(70vh, 720px);
+  margin: 0 0.5rem;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-card);
+  border-top-left-radius: 22px;
+  border-top-right-radius: 22px;
+  background: var(--bg-card);
+  box-shadow:
+    0 -28px 60px color-mix(in oklch, var(--layers-ink) 22%, transparent),
+    inset 0 1px 0 color-mix(in oklch, white 60%, transparent);
+  padding-bottom: env(safe-area-inset-bottom);
+  animation: floating-ask-sheet-in 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .floating-ask-overlay {
+    align-items: center;
+  }
+  .floating-ask-sheet {
+    height: min(60vh, 640px);
+    border-radius: 22px;
+    margin: 0;
+  }
+}
+
+@keyframes floating-ask-sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.floating-ask-sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.floating-ask-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  background: transparent;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.floating-ask-close:hover {
+  background: var(--surface-control-hover);
+  color: var(--text-primary);
+}
+
+.floating-ask-close:focus-visible {
+  outline: 2px solid color-mix(in oklch, var(--layers-mint) 45%, transparent);
+  outline-offset: 2px;
+}
+
+.floating-ask-sheet-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.floating-ask-sheet-body > * {
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .recorder-page {
@@ -4225,6 +4436,32 @@ body.dark:has(.paper-calm-page) {
   display: inline;
 }
 
+.paper-calm-page.recorder-page .recorder-error-alert {
+  width: min(100%, 340px);
+  border-radius: 18px !important;
+  padding: 0.78rem 0.9rem !important;
+  font-size: 0.82rem !important;
+  font-weight: 720;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  box-shadow: 0 14px 30px
+    color-mix(in oklch, var(--status-error) 10%, transparent);
+}
+
+.paper-calm-page.recorder-page .recorder-error-alert p {
+  min-width: 0;
+}
+
+.paper-calm-page.recorder-page
+  .recorder-has-error
+  .recorder-primary-control {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.24), transparent 42%),
+    linear-gradient(180deg, #15203a 0%, var(--layers-ink) 100%) !important;
+  color: white !important;
+  opacity: 1 !important;
+}
+
 .recorder-command-status {
   color: #0f9f8a;
   font-weight: 720;
@@ -5811,15 +6048,50 @@ body.dark:has(.paper-calm-page) {
   .recorder-control:not(:has(.recorder-live-indicator))
   .recorder-primary-control,
 .dark .paper-calm-page.recorder-page .home-calendar-connect {
-  background: #f8fafc !important;
-  color: #0b1220 !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.24), transparent 42%),
+    linear-gradient(180deg, #15203a 0%, var(--layers-ink) 100%) !important;
+  color: white !important;
 }
 
 .dark .paper-calm-page.recorder-page
   .recorder-control:not(:has(.recorder-live-indicator))
   .recorder-primary-control:hover,
 .dark .paper-calm-page.recorder-page .home-calendar-connect:hover {
-  background: #e2e8f0 !important;
+  background: #111b2d !important;
+}
+
+.dark .paper-calm-page.recorder-page
+  .recorder-has-error
+  .recorder-control:not(:has(.recorder-live-indicator))
+  .recorder-primary-control,
+.paper-calm-page.recorder-page
+  .recorder-has-error
+  .recorder-control:not(:has(.recorder-live-indicator))
+  .recorder-primary-control {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.24), transparent 42%),
+    linear-gradient(180deg, #15203a 0%, var(--layers-ink) 100%) !important;
+  color: white !important;
+  opacity: 1 !important;
+}
+
+.paper-calm-page.recorder-page .recent-empty-start-button {
+  width: min(100%, 312px);
+  min-height: 58px;
+  border-radius: 999px !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.24), transparent 42%),
+    linear-gradient(180deg, #15203a 0%, var(--layers-ink) 100%) !important;
+  color: white !important;
+  font-weight: 760 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 18px 34px rgba(11, 18, 32, 0.16) !important;
+}
+
+.paper-calm-page.recorder-page .recent-empty-start-button:hover {
+  background: #111b2d !important;
 }
 
 @media (min-width: 1024px) {
@@ -6363,8 +6635,13 @@ body.dark:has(.paper-calm-page) {
   .paper-calm-page.recorder-page
     .recorder-control:not(:has(.recorder-live-indicator))
     .recorder-primary-control {
-    width: min(100%, 286px) !important;
+    width: min(100%, 312px) !important;
     height: 60px !important;
+  }
+
+  .paper-calm-page.recorder-page .recorder-error-alert {
+    width: min(100%, 312px);
+    margin-top: 0.7rem !important;
   }
 
   .paper-calm-page.recorder-page .recorder-readiness .sm\:grid {
@@ -6928,6 +7205,20 @@ body.dark:has(.paper-calm-page) {
   animation: recording-status-pulse 1.15s ease-in-out infinite;
 }
 
+.recording-managed-error {
+  width: min(100%, 426px);
+  margin: 0;
+  border: 1px solid var(--status-error-border);
+  border-radius: 0.85rem;
+  background: var(--status-error-bg);
+  color: var(--status-error);
+  padding: 0.85rem 1rem;
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: left;
+}
+
 .recording-record-ring {
   animation: recording-ring-pulse 1.3s ease-out infinite;
 }
@@ -7151,6 +7442,90 @@ body.dark:has(.paper-calm-page) {
   font-size: 0.92rem;
   line-height: 1.85;
   overflow-wrap: anywhere;
+}
+
+/* PROD-465: raw notes panel — your-notes-as-author surface in the
+ * Notes tab. Sits next to .session-summary-panel and intentionally uses
+ * the same outer rhythm so flipping tabs feels like flipping between
+ * two views of the same artifact. */
+.session-notes-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: clamp(18px, 1.6vw, 26px);
+}
+
+.session-notes-panel header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+}
+
+.session-notes-panel header > div {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--text-primary, #1d2333);
+}
+
+.session-notes-panel header h3 {
+  font-size: 0.95rem;
+  font-weight: 620;
+  margin: 0;
+}
+
+.session-notes-editor {
+  width: 100%;
+  min-height: 240px;
+  resize: vertical;
+  padding: 0.85rem 1rem;
+  background: var(--bg-page, #fbfaf7);
+  border: 1px solid var(--border-subtle, oklch(0.84 0.024 168 / 0.5));
+  border-radius: 10px;
+  color: var(--text-primary, #1d2333);
+  font-size: 0.92rem;
+  line-height: 1.7;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.session-notes-editor:focus {
+  border-color: var(--layers-mint, oklch(0.74 0.13 168));
+  box-shadow: 0 0 0 3px oklch(0.74 0.13 168 / 0.18);
+}
+
+.session-notes-save-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  color: var(--text-muted, #6c768a);
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+  background: var(--bg-surface, oklch(0.997 0.004 168));
+}
+
+.session-notes-save-pill.is-saving {
+  color: var(--text-secondary, #303b53);
+}
+
+.session-notes-save-pill.is-saving svg {
+  animation: notes-pill-spin 900ms linear infinite;
+}
+
+.session-notes-save-pill.is-saved {
+  color: var(--layers-mint, oklch(0.55 0.13 168));
+}
+
+.session-notes-save-pill.is-error {
+  color: oklch(0.55 0.15 25);
+}
+
+@keyframes notes-pill-spin {
+  to { transform: rotate(360deg); }
 }
 
 .session-transcript-panel {
@@ -13140,9 +13515,10 @@ body.dark:has(.paper-calm-page) {
 .reference-script {
   margin-top: var(--space-2);
   color: color-mix(in oklch, var(--layers-mint) 78%, var(--layers-ink));
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-brand-sans);
   font-size: clamp(1.45rem, 2.1vw, 2.2rem) !important;
-  font-style: italic;
+  font-style: normal;
+  font-weight: 650;
   line-height: 1.14 !important;
 }
 
@@ -14609,4 +14985,76 @@ body.dark:has(.paper-calm-page) {
 
 .chat-markdown :where(ul ul, ol ol, ul ol, ol ul) {
   margin-top: 0.25rem;
+}
+
+/* Onboarding (PROD-389) — soft mint glow ring on a tour anchor while
+   its TourPopover is active. The glow is added via classList on the
+   anchor so we don't have to plumb data attributes through every
+   component just for a visual state. */
+[data-onboarding-anchor].is-onboarding-active {
+  position: relative;
+  z-index: 50;
+  box-shadow:
+    0 0 0 4px color-mix(in oklch, var(--layers-mint) 30%, transparent),
+    0 0 0 1px color-mix(in oklch, var(--layers-mint) 50%, transparent);
+  border-radius: 16px;
+  transition: box-shadow 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-onboarding-anchor].is-onboarding-active {
+    transition: none;
+  }
+}
+
+/* Citation seek+highlight pulse (PROD-464). Applied to a
+   `.session-transcript-row` when a chat `[S<n>]` pill is clicked. Reuses the
+   same mint-glow language as the onboarding tour anchor so the credibility
+   cue feels native to the rest of the surface. The class is added
+   imperatively and removed after `CITATION_FLASH_DURATION_MS` (1500ms) in
+   session-workspace.tsx. */
+@keyframes citation-flash {
+  0% {
+    box-shadow:
+      0 0 0 0 color-mix(in oklch, var(--layers-mint) 0%, transparent),
+      0 0 0 0 color-mix(in oklch, var(--layers-mint) 0%, transparent);
+    background-color: transparent;
+  }
+  20% {
+    box-shadow:
+      0 0 0 4px color-mix(in oklch, var(--layers-mint) 30%, transparent),
+      0 0 0 1px color-mix(in oklch, var(--layers-mint) 55%, transparent);
+    background-color: color-mix(
+      in oklch,
+      var(--layers-mint) 14%,
+      transparent
+    );
+  }
+  100% {
+    box-shadow:
+      0 0 0 0 color-mix(in oklch, var(--layers-mint) 0%, transparent),
+      0 0 0 0 color-mix(in oklch, var(--layers-mint) 0%, transparent);
+    background-color: transparent;
+  }
+}
+
+.citation-flash {
+  position: relative;
+  z-index: 2;
+  border-radius: 12px;
+  animation: citation-flash 1500ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .citation-flash {
+    animation: none;
+    box-shadow:
+      0 0 0 4px color-mix(in oklch, var(--layers-mint) 30%, transparent),
+      0 0 0 1px color-mix(in oklch, var(--layers-mint) 55%, transparent);
+    background-color: color-mix(
+      in oklch,
+      var(--layers-mint) 14%,
+      transparent
+    );
+  }
 }

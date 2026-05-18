@@ -1,0 +1,113 @@
+22:57:02.785 [ INFO] maestro.cli.report.TestDebugReporter.logSystemInfo: Debug output path: /Users/alfonso/.maestro/tests/2026-05-17_225702
+22:57:02.787 [ INFO] MAESTRO.logSystemInfo: ---- System Info ----
+22:57:02.787 [ INFO] MAESTRO.logSystemInfo: Maestro Version: 2.5.1
+22:57:02.788 [ INFO] MAESTRO.logSystemInfo: CI: Undefined
+22:57:02.788 [ INFO] MAESTRO.logSystemInfo: OS Name: Mac OS X
+22:57:02.789 [ INFO] MAESTRO.logSystemInfo: OS Version: 26.2
+22:57:02.789 [ INFO] MAESTRO.logSystemInfo: Architecture: aarch64
+22:57:02.792 [ INFO] MAESTRO.logSystemInfo: Java Version: 21
+22:57:02.879 [ INFO] MAESTRO.logSystemInfo: Xcode Version: 26.0.1
+22:57:02.883 [ INFO] MAESTRO.logSystemInfo: Flutter Version: Undefined
+22:57:02.887 [ INFO] MAESTRO.logSystemInfo: Flutter Channel: Undefined
+22:57:02.887 [ INFO] MAESTRO.logSystemInfo: ---------------------
+22:57:03.320 [DEBUG] io.micrometer.common.util.internal.logging.InternalLoggerFactory.newDefaultFactory: Using SLF4J as the default logging framework
+22:57:05.312 [ INFO] maestro.cli.command.TestCommand.runShardSuite: [shard 1] Selected device emulator-5554 using port 7001 with execution plan ExecutionPlan(flowsToRun=[/Users/alfonso/Documents/GitHub/layers/tests/maestro/ios-public-walk-clean.yml], sequence=FlowSequence(flows=[], continueOnFailure=true), workspaceConfig=WorkspaceConfig(flows=null, includeTags=null, excludeTags=null, executionOrder=null, baselineBranch=null, notifications=null, disableRetries=false, platform=PlatformConfiguration(android=AndroidConfiguration(disableAnimations=false), ios=IOSConfiguration(disableAnimations=false, snapshotKeyHonorModalViews=null)), testOutputDir=null))
+22:57:09.167 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow:  Running flow ios-public-walk-clean
+22:57:09.176 [ INFO] maestro.Maestro.cachedDeviceInfo_delegate$lambda$0: Getting device info
+22:57:09.332 [ INFO] maestro.Maestro.cachedDeviceInfo_delegate$lambda$0: Got device info: DeviceInfo(platform=ANDROID, widthPixels=1080, heightPixels=2400, widthGrid=1080, heightGrid=2400)
+22:57:09.466 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$5: Define variables RUNNING
+22:57:09.475 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$7: Define variables COMPLETED
+22:57:09.475 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$5: Apply configuration RUNNING
+22:57:09.475 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$7: Apply configuration COMPLETED
+22:57:09.476 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$5: Launch app "com.mirafactory.layers" RUNNING
+22:57:10.382 [ INFO] maestro.Maestro.launchApp$lambda$2: Launching app com.mirafactory.layers
+22:57:10.382 [ INFO] maestro.Maestro.launchApp$lambda$2: Stopping com.mirafactory.layers app during launch
+22:57:10.702 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$7: Launch app "com.mirafactory.layers" COMPLETED
+22:57:10.702 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$5: Wait for animation to end within 8000 ms RUNNING
+22:57:10.704 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$51: Waiting for animation to end with timeout 8000
+22:57:10.706 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+22:57:10.707 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+22:57:12.174 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+22:57:12.174 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+22:57:13.225 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+22:57:13.225 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+22:57:13.377 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+22:57:13.377 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+22:57:13.574 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$7: Wait for animation to end within 8000 ms COMPLETED
+22:57:13.574 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$5: Take screenshot ios-walk-D1-landing-clean RUNNING
+22:57:13.575 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+22:57:13.576 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+22:57:13.754 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$7: Take screenshot ios-walk-D1-landing-clean COMPLETED
+22:57:13.755 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$5: Tap on "Open menu" RUNNING
+22:57:14.883 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Open menu, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[913,317][1021,427], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.Button, important-for-accessibility=false, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=913, y=317, width=108, height=110))
+22:57:16.221 [ INFO] maestro.Maestro.tap-HgV9Ck0: Refreshed element
+22:57:16.224 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (967, 372) using hierarchy based logic for wait
+22:57:18.179 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+22:57:18.179 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$7: Tap on "Open menu" COMPLETED
+22:57:18.179 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$5: Wait for animation to end within 2000 ms RUNNING
+22:57:18.179 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$51: Waiting for animation to end with timeout 2000
+22:57:18.180 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+22:57:18.180 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+22:57:18.428 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+22:57:18.428 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+22:57:18.878 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$7: Wait for animation to end within 2000 ms COMPLETED
+22:57:18.878 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$5: Take screenshot ios-walk-D-drawer-public RUNNING
+22:57:18.879 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+22:57:18.879 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+22:57:19.164 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$7: Take screenshot ios-walk-D-drawer-public COMPLETED
+22:57:19.164 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$5: Tap on "Pricing" RUNNING
+22:57:20.392 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Pricing, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[91,682][220,737], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=false, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=91, y=682, width=129, height=55))
+22:57:21.390 [ INFO] maestro.Maestro.tap-HgV9Ck0: Refreshed element
+22:57:21.391 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (155, 709) using hierarchy based logic for wait
+22:57:22.968 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+22:57:22.969 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$7: Tap on "Pricing" COMPLETED
+22:57:22.969 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$5: Wait for animation to end within 5000 ms RUNNING
+22:57:22.969 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$51: Waiting for animation to end with timeout 5000
+22:57:22.969 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+22:57:22.970 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+22:57:23.370 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+22:57:23.371 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+22:57:24.013 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$7: Wait for animation to end within 5000 ms COMPLETED
+22:57:24.013 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$5: Take screenshot ios-walk-D2-pricing RUNNING
+22:57:24.014 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+22:57:24.014 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+22:57:24.351 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$7: Take screenshot ios-walk-D2-pricing COMPLETED
+22:57:24.351 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$5: Tap on "Open menu" RUNNING
+22:57:24.562 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Open menu, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[913,317][1021,427], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.Button, important-for-accessibility=false, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=913, y=317, width=108, height=110))
+22:57:25.780 [ INFO] maestro.Maestro.tap-HgV9Ck0: Refreshed element
+22:57:25.781 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (967, 372) using hierarchy based logic for wait
+22:57:26.899 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+22:57:26.900 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$7: Tap on "Open menu" COMPLETED
+22:57:26.900 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$5: Wait for animation to end within 1500 ms RUNNING
+22:57:26.900 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$51: Waiting for animation to end with timeout 1500
+22:57:26.900 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+22:57:26.900 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+22:57:27.088 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+22:57:27.088 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+22:57:27.354 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$7: Wait for animation to end within 1500 ms COMPLETED
+22:57:27.354 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$5: Tap on "Sign in" RUNNING
+22:57:27.568 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Sign in, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[91,813][220,868], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=false, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=91, y=813, width=129, height=55))
+22:57:33.430 [ INFO] maestro.Maestro.tap-HgV9Ck0: Refreshed element
+22:57:33.432 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (155, 840) using hierarchy based logic for wait
+22:57:34.292 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$7: Tap on "Sign in" COMPLETED
+22:57:34.292 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$5: Wait for animation to end within 4000 ms RUNNING
+22:57:34.293 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$51: Waiting for animation to end with timeout 4000
+22:57:34.293 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+22:57:34.293 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+22:57:34.613 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+22:57:34.614 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+22:57:36.205 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+22:57:36.205 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+22:57:36.419 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+22:57:36.419 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+22:57:36.724 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$7: Wait for animation to end within 4000 ms COMPLETED
+22:57:36.724 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$5: Take screenshot ios-walk-D3-signin RUNNING
+22:57:36.725 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+22:57:36.725 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+22:57:36.927 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$7: Take screenshot ios-walk-D3-signin COMPLETED
+22:57:36.927 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$5: Tap on "Open menu" RUNNING
+22:57:53.959 [ERROR] maestro.orchestra.Orchestra.executeCommands: [Command execution] CommandFailed: Element not found: Text matching regex: Open menu
+22:57:53.960 [ INFO] maestro.cli.runner.TestSuiteInteractor.runFlow$lambda$17$lambda$9: Tap on "Open menu" FAILED
+22:57:53.964 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+22:57:53.965 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+22:57:54.704 [ INFO] maestro.cli.report.TestDebugReporter.deleteOldFiles: Performing purge of logs older than 14 days from /Users/alfonso/.maestro/tests

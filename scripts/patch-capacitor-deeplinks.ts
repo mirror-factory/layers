@@ -15,7 +15,7 @@ interface ProjectProfile {
 const cwd = process.cwd();
 const profilePath = join(cwd, ".ai-dev-kit/project-profile.json");
 const evidenceDir = join(cwd, ".evidence");
-const defaultScheme = "com.mirrorfactory.layers";
+const defaultScheme = "com.mirafactory.layers";
 
 function readOptional(path: string): string | null {
   return existsSync(path) ? readFileSync(path, "utf-8") : null;

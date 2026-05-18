@@ -85,12 +85,17 @@ The ticket verifier looks at changed files and selects focused proof:
 | --- | --- |
 | `app/api/**` | route contracts |
 | AI/tool files | eval stubs |
-| `components/**` | matching component visual spec when present |
-| app pages/layout/nav | smoke proof and mobile proof |
-| `tests/e2e/smoke.spec.ts` | smoke proof |
+| app pages/components/styles | one desktop smoke proof |
+| recording surfaces | one desktop stop/finalize proof with the fake recording harness |
+| mobile/nav/native files | one mobile proof when `LAYERS_MOBILE_TICKET_PROOF=1` |
 
 Playwright Chromium is installed lazily only when the selected proof needs a
 browser. Docs, CI, registry, and config-only changes should not pay that cost.
+Tier 2 assumes Tier 1 already ran, so it does not rerun the full fast test suite
+unless `LAYERS_TICKET_FAST_TESTS=1` is set. Component visual specs are opt-in
+with `LAYERS_COMPONENT_VISUAL_PROOF=1`. Mobile proof is opt-in with
+`LAYERS_MOBILE_TICKET_PROOF=1`, and the older broad ticket behavior is available
+with `LAYERS_FULL_TICKET_PROOF=1`.
 
 Used by:
 
@@ -127,9 +132,9 @@ on changed routes or manually requested audits, and set `EXPECT_AGENT=codex`
 or another installed/authenticated provider when running from CI.
 
 Video is opt-in for deliberate media proof. Local Tier 3 keeps video off unless
-you set `PLAYWRIGHT_VIDEO=on`; CI keeps failure video by default, and the PR
-workflow sets `PLAYWRIGHT_VIDEO=on` when the PR has `tier3:run` or
-`proof:required`. Tier 3 writes each Playwright lane into its own
+you set `PLAYWRIGHT_VIDEO=on`; PR CI keeps video off by default. Tier 3 runs on
+manual dispatch, staging pushes, or PRs labeled `release:full-proof`; it does
+not run for normal feature/release PR updates. Tier 3 writes each Playwright lane into its own
 `test-results/tier-3/*` directory so video artifacts from one lane do not get
 deleted by the next lane.
 The final feature-proof artifact check is scoped to Tier 3 lanes
@@ -219,7 +224,7 @@ RELEASE_ARTIFACTS_REQUIRED=1 pnpm build:release
 ```
 
 The current native OAuth callback scheme is
-`com.mirrorfactory.layers://auth/callback`. Native Google sign-in uses the
+`com.mirafactory.layers://auth/callback`. Native Google sign-in uses the
 Capacitor Browser plugin plus the `appUrlOpen` bridge; it must not rely on a
 Google login page inside the embedded WebView.
 

@@ -1,7 +1,7 @@
 # Native Release Readiness
 
 Owner: Agent D, Native Release Prep
-Last updated: 2026-05-09
+Last updated: 2026-05-17
 Scope: iOS TestFlight and Google Play internal testing prep without Apple or Google account credentials.
 
 Repository note: the root `.gitignore` ignores `/ios/` and `/android/`. Native changes in those directories exist on disk but will not appear in normal `git status`; commit them with an explicit force-add or update the ignore policy when native artifacts are meant to be tracked.
@@ -13,7 +13,7 @@ Repository note: the root `.gitignore` ignores `/ios/` and `/android/`. Native c
 | Field | Current value | Source |
 | --- | --- | --- |
 | Display name | `Layers` | `ios/App/App/Info.plist` |
-| Bundle ID | `com.mirrorfactory.layers` | `ios/App/App.xcodeproj/project.pbxproj`, `capacitor.config.ts` |
+| Bundle ID | `com.mirafactory.layers` | `ios/App/App.xcodeproj/project.pbxproj`, `capacitor.config.ts` |
 | Version | `1.0` | `MARKETING_VERSION` |
 | Build | `1` | `CURRENT_PROJECT_VERSION` |
 | Team ID | `36J9E4325G` | Xcode project signing settings |
@@ -28,7 +28,7 @@ The initial privacy manifest declares email address, user ID, audio data, and ot
 | Field | Current value | Source |
 | --- | --- | --- |
 | App label | `Layers` | `android/app/src/main/res/values/strings.xml` |
-| Package/application ID | `com.mirrorfactory.layers` | `android/app/build.gradle`, `AndroidManifest.xml` |
+| Package/application ID | `com.mirafactory.layers` | `android/app/build.gradle`, `AndroidManifest.xml` |
 | Version name | `1.0` | `android/app/build.gradle` |
 | Version code | `1` | `android/app/build.gradle` |
 | Min SDK | `24` | `android/variables.gradle` |
@@ -41,7 +41,7 @@ Prerequisites Alfonso must complete:
 
 - Apple Developer Program membership and App Store Connect access.
 - App Store Connect app record for `Layers`.
-- Bundle ID `com.mirrorfactory.layers` registered under the Apple Developer team.
+- Bundle ID `com.mirafactory.layers` registered under the Apple Developer team.
 - Signing/provisioning access for team `36J9E4325G`, or update the Xcode project to the correct team ID.
 - Final privacy policy URL, terms URL, support URL/email, app category, age rating, encryption/export compliance answer, and App Privacy nutrition labels.
 - Account deletion and recording consent surfaces reviewed before wider TestFlight or App Review.
@@ -133,6 +133,22 @@ export LAYERS_ANDROID_KEY_ALIAS="layers-upload"
 export LAYERS_ANDROID_KEY_PASSWORD="..."
 ```
 
+GitHub Actions uses the same Gradle variables after decoding this repository
+secret:
+
+| Secret | What it is |
+| --- | --- |
+| `LAYERS_ANDROID_KEYSTORE_BASE64` | Base64-encoded upload keystore (`layers-upload.jks`). |
+| `LAYERS_ANDROID_KEYSTORE_PASSWORD` | Keystore password. |
+| `LAYERS_ANDROID_KEY_ALIAS` | Upload-key alias, usually `layers-upload`. |
+| `LAYERS_ANDROID_KEY_PASSWORD` | Upload-key password. |
+
+On `staging` and manual workflow runs, CI always builds the debug APK for
+smoke proof. When all four upload-key secrets are present, CI also builds the
+signed release AAB at `android/app/build/outputs/bundle/release/app-release.aab`.
+Tagged releases fail if those secrets are missing, because a tag is intended to
+publish release artifacts, not debug-only Android builds.
+
 Create an upload keystore if Alfonso has not created one:
 
 ```bash
@@ -160,7 +176,7 @@ ls -lh app/build/outputs/bundle/release/app-release.aab
 Play Console tasks for Alfonso:
 
 - Create the Play app record for `Layers`.
-- Confirm package name `com.mirrorfactory.layers` before first upload; Google fixes the package name after the first artifact.
+- Confirm package name `com.mirafactory.layers` before first upload; Google fixes the package name after the first artifact.
 - Configure Play App Signing. Use the generated upload key for the AAB upload unless Alfonso has an existing app signing strategy.
 - Complete app content requirements: Data Safety, privacy policy URL, content rating, target audience, ads declaration, and app access instructions.
 - Go to `Testing > Internal testing`, create or select a tester email list, and add up to 100 testers.
@@ -190,7 +206,6 @@ Blocker: if Android recording must continue while the app is backgrounded, scree
 Run before handoff when local toolchains are available:
 
 ```bash
-pnpm test:native:config
 plutil -lint ios/App/App/PrivacyInfo.xcprivacy
 xcodebuild -project ios/App/App.xcodeproj -list
 cd android
@@ -200,17 +215,21 @@ cd android
 
 `bundleRelease` requires the four `LAYERS_ANDROID_*` signing variables for a Play-ready signed artifact.
 
-Current check results on 2026-04-30:
+Current check results on 2026-05-17:
 
 | Check | Result |
 | --- | --- |
 | `plutil -lint ios/App/App/PrivacyInfo.xcprivacy` | Pass |
 | `plutil -lint ios/App/App/Info.plist` | Pass |
 | `xcodebuild -project ios/App/App.xcodeproj -list` | Pass; scheme `App` is visible |
+| `xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Debug -sdk iphonesimulator -destination "generic/platform=iOS Simulator" build` | Pass; simulator Debug app built locally |
 | `xmllint --noout android/app/src/main/AndroidManifest.xml` | Pass |
-| `pnpm test:native:config` | Pass on 2026-05-09 after aligning Capacitor, Android, iOS, release workflow, and OAuth deep-link scheme to `com.mirrorfactory.layers` |
-| `./gradlew :app:assembleDebug` | Blocked; local Java runtime is missing |
-| `./gradlew :app:bundleRelease` | Blocked; local Java runtime is missing |
+| `JAVA_HOME=/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home ANDROID_HOME=/opt/homebrew/share/android-commandlinetools ./gradlew :app:assembleDebug` | Pass |
+| `./gradlew :app:bundleRelease` | Not run; requires release-signing variables for a Play-ready artifact |
+| GitHub Actions Android release path | Builds debug APK always; builds signed AAB when `LAYERS_ANDROID_*` upload-key secrets are present; tagged releases fail if signed AAB secrets are missing |
+
+Note: the system Java shim is not globally configured on this machine, so Android
+commands need the explicit `JAVA_HOME` above unless the shell profile is updated.
 
 ## Official References
 

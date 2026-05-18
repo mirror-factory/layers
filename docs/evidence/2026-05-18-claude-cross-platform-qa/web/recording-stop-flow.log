@@ -1,0 +1,34 @@
+[1A[2K[2m[WebServer] [22m(node:98663) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[2m[WebServer] [22m(node:98664) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[2m[WebServer] [22m(node:98674) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[2m[WebServer] [22m ⚠ Webpack is configured while Turbopack is not, which may cause problems.
+[2m[WebServer] [22m ⚠ See instructions if you need to configure Turbopack:
+[2m[WebServer] [22m  https://nextjs.org/docs/app/api-reference/next-config-js/turbopack
+[2m[WebServer] [22m
+
+[1A[2K[2m[WebServer] [22m(node:98740) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+Running 2 tests using 1 worker
+
+[1A[2K(node:98764) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1A[2K(node:98764) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1A[2K[1/2] [desktop-light] › tests/e2e/recording-stop-flow.spec.ts:149:7 › Recording Stop flow › finalizes a live recording and renders the completed meeting detail page
+[1A[2K[2m[WebServer] [22m(node:98804) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[2/2] [desktop-light] › tests/e2e/recording-stop-flow.spec.ts:177:7 › Recording Stop flow › keeps the local draft and stays on the recorder when finalize fails
+[1A[2K  2 passed (14.4s)

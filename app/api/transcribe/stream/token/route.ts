@@ -16,6 +16,7 @@ import {
 } from "@/lib/deepgram/client";
 import { getMeetingsStore } from "@/lib/meetings/store";
 import { cleanRecordingTitle } from "@/lib/recording/meeting-context";
+import { isE2eFakeRecordingEnabled } from "@/lib/recording/e2e-fake-recording";
 import {
   providerEnvVarName,
   resolveRuntimeStreamingOption,
@@ -137,22 +138,30 @@ export const POST = withRoute(async (req, ctx) => {
 
   const settings = await getSettings();
   const speechOption = resolveRuntimeStreamingOption(settings);
-  const provider = runtimeProviderForOption(speechOption);
-  const speechModel = speechOption.model;
+  const fakeRecording = isE2eFakeRecordingEnabled();
+  const provider = fakeRecording
+    ? "assemblyai"
+    : runtimeProviderForOption(speechOption);
+  const speechModel = fakeRecording
+    ? "universal-streaming-english"
+    : speechOption.model;
   const sampleRate = 16000;
 
-  const assemblyAiClient = provider === "assemblyai" ? getAssemblyAI() : null;
-  if (provider === "assemblyai" && !assemblyAiClient) {
+  const assemblyAiClient =
+    !fakeRecording && provider === "assemblyai" ? getAssemblyAI() : null;
+  if (!fakeRecording && provider === "assemblyai" && !assemblyAiClient) {
     return missingProviderResponse(provider);
   }
 
-  if (provider === "deepgram" && !getDeepgramClient()) {
+  if (!fakeRecording && provider === "deepgram" && !getDeepgramClient()) {
     return missingProviderResponse(provider);
   }
 
   const deepgramConfig =
-    provider === "deepgram" ? getDeepgramStreamingConfig(speechModel) : null;
-  if (provider === "deepgram" && !deepgramConfig) {
+    !fakeRecording && provider === "deepgram"
+      ? getDeepgramStreamingConfig(speechModel)
+      : null;
+  if (!fakeRecording && provider === "deepgram" && !deepgramConfig) {
     return NextResponse.json(
       {
         error: `Deepgram streaming model "${speechModel}" is not implemented`,
@@ -178,6 +187,18 @@ export const POST = withRoute(async (req, ctx) => {
       { error: "Unable to create meeting before streaming" },
       { status: 503 },
     );
+  }
+
+  if (fakeRecording) {
+    return NextResponse.json({
+      provider,
+      token: "e2e-fake-recording-token",
+      meetingId,
+      expiresAt: Date.now() + STREAMING_TOKEN_TTL_SECONDS * 1000,
+      sampleRate,
+      speechModel,
+      wsUrl: "wss://layers-e2e.invalid/live",
+    });
   }
 
   if (provider === "assemblyai") {

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     "Request deletion of your Layers account and associated meeting data.",
 };
 
-const SUPPORT_EMAIL = "support@mirrorfactory.ai";
+const SUPPORT_EMAIL = "admin@mirafactory.ai";
 const LAST_UPDATED = "April 30, 2026";
 
 const DELETION_MAILTO =

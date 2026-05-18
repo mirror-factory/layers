@@ -7,6 +7,234 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.162] — 2026-05-18
+
+### Documentation
+- docs: update release test coverage report (`2f7fd26`)
+
+
+## [0.1.161] — 2026-05-18
+
+### Other
+- chore: align release proof with feature registry (`f00d3d9`)
+
+
+## [0.1.160] — 2026-05-18
+
+### Other
+- chore: restore story registry state (`d336ea1`)
+
+
+## [0.1.159] — 2026-05-18
+
+### Other
+- fix native auth and capture release evidence (`312686e`)
+
+
+## [0.1.158] — 2026-05-18
+
+### Documentation
+- docs: correct cpo report ci status (`cf43d4b`)
+
+
+## [0.1.157] — 2026-05-18
+
+### Documentation
+- docs: refresh cpo release status report (`1d85f51`)
+
+
+## [0.1.156] — 2026-05-18
+
+### Documentation
+- docs: refresh manifest for release test evidence (`002afba`)
+
+
+## [0.1.155] — 2026-05-18
+
+### Documentation
+- docs: add all-platform release test matrix evidence (`92434d1`)
+
+
+## [0.1.154] — 2026-05-18
+
+### Other
+- chore: refresh docs manifest (`d69fff9`)
+
+
+## [0.1.153] — 2026-05-18
+
+### Other
+- chore: register public surfaces for feature proof (`5450d2e`)
+
+
+## [0.1.152] — 2026-05-18
+
+### Other
+- polish homepage and alpha auth surfaces (`164cfad`)
+
+
+## [0.1.151] — 2026-05-18
+
+### Documentation
+- docs: refresh release readiness report (`c4cd876`)
+
+
+## [0.1.150] — 2026-05-18
+
+### Other
+- chore: bump to 0.1.149 (`4bd8eb4`)
+
+
+## [0.1.149] — 2026-05-18
+
+### Fixed
+- fix: harden release QA blockers (`bb2537d`)
+
+
+## [0.1.148] — 2026-05-18
+
+### Fixed
+- fix: restore iOS shell scroll and keyboard resize (`5da9baa`)
+
+
+## [0.1.147] — 2026-05-18
+
+### Other
+- ci: slim default release proof harness (`5159f81`)
+
+
+## [0.1.146] — 2026-05-18
+
+### Documentation
+- docs: update release blocker audit (`280ec6d`)
+
+
+## [0.1.145] — 2026-05-18
+
+### Documentation
+- docs: refresh stop flow proof status (`87de8e9`)
+
+
+## [0.1.144] — 2026-05-18
+
+### Testing
+- test: prove recording stop flow (`1fa9508`)
+
+
+## [0.1.143] — 2026-05-18
+
+### Documentation
+- docs: clarify cpo proof head wording (`3de1c24`)
+
+
+## [0.1.142] — 2026-05-18
+
+### Documentation
+- docs: refresh cpo release checkpoint (`a84afe6`)
+
+
+## [0.1.141] — 2026-05-18
+
+### Documentation
+- docs: refresh release readiness status (`ab96361`)
+
+
+## [0.1.140] — 2026-05-18
+
+### Fixed
+- fix: fail closed on missing meeting finalize (`ff856cd`)
+
+
+## [0.1.139] — 2026-05-18
+
+### Documentation
+- docs: update cpo release status (`ccdcb7d`)
+
+
+## [0.1.138] — 2026-05-18
+
+### Documentation
+- docs: stabilize release report head wording (`dd674d0`)
+
+
+## [0.1.137] — 2026-05-18
+
+### Documentation
+- docs: refresh release readiness report (`8cb642f`)
+
+
+## [0.1.136] — 2026-05-18
+
+### Fixed
+- fix: tolerate natural language meeting due dates (`1280532`)
+
+
+## [0.1.135] — 2026-05-18
+
+### Documentation
+- docs: avoid brittle report head wording (`78381ec`)
+
+
+## [0.1.134] — 2026-05-18
+
+### Documentation
+- docs: refresh release blocker report (`ae88e3b`)
+
+
+## [0.1.133] — 2026-05-17
+
+### Documentation
+- docs: update release domain setup status (`00ac1ec`)
+
+
+## [0.1.132] — 2026-05-17
+
+### Documentation
+- docs: add release readiness cpo report (`24fa998`)
+
+
+## [0.1.131] — 2026-05-17
+
+### Other
+- ci: harden native release gates (`0b1866c`)
+
+
+## [0.1.130] — 2026-05-17
+
+### Other
+- fix native oauth and mobile legal nav (`540bdae`)
+
+
+## [0.1.129] — 2026-05-17
+
+### Other
+- remove vulnerable icon builder dependency (`7491a91`)
+
+
+## [0.1.128] — 2026-05-17
+
+### Other
+- clear release compliance warnings (`c93329c`)
+
+
+## [0.1.127] — 2026-05-17
+
+### Other
+- refresh docs manifest (`5809d02`)
+
+
+## [0.1.126] — 2026-05-17
+
+### Other
+- fix feature proof registry matching (`65e2e8c`)
+
+
+## [0.1.125] — 2026-05-17
+
+### Other
+- merge development into release readiness branch (`c63a0f4`)
+
+
 ## [0.1.96] — 2026-05-10
 
 ### Other

@@ -10,17 +10,6 @@ const NAV_LINKS = [
   { href: "/account-deletion", label: "Account deletion" },
 ] as const;
 
-function GitHubIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
-      <path
-        fill="currentColor"
-        d="M12 1.27a11 11 0 0 0-3.48 21.46c.55.1.75-.24.75-.53v-1.85c-3.06.67-3.7-1.47-3.7-1.47-.5-1.27-1.22-1.6-1.22-1.6-1-.69.07-.67.07-.67 1.1.07 1.69 1.13 1.69 1.13.98 1.69 2.58 1.2 3.21.92.1-.71.39-1.2.7-1.48-2.45-.28-5.02-1.22-5.02-5.45 0-1.21.43-2.19 1.13-2.96-.11-.28-.49-1.4.11-2.93 0 0 .92-.3 3.02 1.13a10.5 10.5 0 0 1 5.5 0c2.1-1.43 3.02-1.13 3.02-1.13.6 1.53.22 2.65.11 2.93.7.77 1.13 1.75 1.13 2.96 0 4.24-2.58 5.17-5.04 5.44.4.34.75 1.02.75 2.06v3.05c0 .29.2.64.76.53A11 11 0 0 0 12 1.27Z"
-      />
-    </svg>
-  );
-}
-
 function XIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
@@ -46,7 +35,7 @@ export function SiteFooter() {
         <Link
           href="/"
           aria-label="Layers home"
-          className="inline-flex items-center"
+          className="inline-flex min-h-11 min-w-11 items-center"
         >
           <LayersLogo />
         </Link>
@@ -59,7 +48,7 @@ export function SiteFooter() {
             <Link
               key={href}
               href={href}
-              className="text-[var(--text-secondary,oklch(0.46_0.025_256))] transition-colors hover:text-[var(--text-primary,oklch(0.22_0.035_256))]"
+              className="inline-flex min-h-11 min-w-11 items-center justify-center text-[var(--text-secondary,oklch(0.46_0.025_256))] transition-colors hover:text-[var(--text-primary,oklch(0.22_0.035_256))]"
             >
               {label}
             </Link>
@@ -68,27 +57,18 @@ export function SiteFooter() {
 
         <div className="flex items-center gap-4">
           <a
-            href="mailto:support@mirrorfactory.ai"
-            aria-label="Email support"
-            className="text-[14px] text-[var(--text-secondary,oklch(0.46_0.025_256))] transition-colors hover:text-[var(--text-primary,oklch(0.22_0.035_256))]"
+            href="mailto:admin@mirafactory.ai"
+            aria-label="Email Layers"
+            className="inline-flex min-h-11 items-center text-[14px] text-[var(--text-secondary,oklch(0.46_0.025_256))] transition-colors hover:text-[var(--text-primary,oklch(0.22_0.035_256))]"
           >
             Contact
-          </a>
-          <a
-            href="https://github.com/mirror-factory"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Layers on GitHub"
-            className="text-[var(--text-secondary,oklch(0.46_0.025_256))] transition-colors hover:text-[var(--text-primary,oklch(0.22_0.035_256))]"
-          >
-            <GitHubIcon className="h-[18px] w-[18px]" />
           </a>
           <a
             href="https://x.com/mirrorfactory"
             target="_blank"
             rel="noreferrer"
             aria-label="Layers on X"
-            className="text-[var(--text-secondary,oklch(0.46_0.025_256))] transition-colors hover:text-[var(--text-primary,oklch(0.22_0.035_256))]"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center text-[var(--text-secondary,oklch(0.46_0.025_256))] transition-colors hover:text-[var(--text-primary,oklch(0.22_0.035_256))]"
           >
             <XIcon className="h-[16px] w-[16px]" />
           </a>

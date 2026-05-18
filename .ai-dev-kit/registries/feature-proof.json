@@ -90,11 +90,14 @@
       "surfaces": ["web"],
       "routes": ["/"],
       "paths": [
+        "app/(public)/layout.tsx",
         "app/(public)/page.tsx",
         "app/(public)/landing.tsx",
         "components/audio-wave-ribbon.tsx",
         "components/layers-logo.tsx",
-        "components/public-site-nav.tsx"
+        "components/public-site-nav.tsx",
+        "components/site-footer.tsx",
+        "public/brand-icons/*.svg"
       ],
       "proof": ["fast", "playwright", "visual-video", "expect"],
       "tests": {
@@ -102,6 +105,43 @@
         "playwright": ["tests/e2e/app-page.smoke.spec.ts", "tests/e2e/visual-regression.spec.ts"],
         "expect": ["tests/expect/page.tsx.expect.ts", "tests/expect/page-tsx.md"]
       }
+    },
+    {
+      "id": "public.content",
+      "name": "Public content, pricing, docs, and legal pages",
+      "description": "Marketing support pages, documentation, pricing, changelog, and legal shell styling.",
+      "category": "marketing",
+      "status": "active",
+      "userFacing": true,
+      "surfaces": ["web"],
+      "routes": ["/pricing", "/download", "/docs", "/docs/api", "/docs/mcp", "/changelog", "/privacy", "/terms", "/account-deletion"],
+      "paths": [
+        "app/(public)/pricing/page.tsx",
+        "app/(public)/download/page.tsx",
+        "app/(public)/docs/page.tsx",
+        "app/(public)/docs/api/page.tsx",
+        "app/(public)/docs/mcp/page.tsx",
+        "app/(public)/changelog/page.tsx",
+        "app/(public)/privacy/page.tsx",
+        "app/(public)/terms/page.tsx",
+        "app/(public)/account-deletion/page.tsx",
+        "components/legal-page-shell.tsx"
+      ],
+      "proof": ["fast", "playwright", "expect"],
+      "tests": {
+        "playwright": ["tests/e2e/smoke.spec.ts", "tests/e2e/mobile-polish.spec.ts"],
+        "expect": [
+          "tests/expect/pricing.expect.ts",
+          "tests/expect/docs.expect.ts",
+          "tests/expect/app-pricing-page.md",
+          "tests/expect/app-docs-page.md",
+          "tests/expect/app-privacy-page.md",
+          "tests/expect/app-terms-page.md"
+        ]
+      },
+      "notes": [
+        "Public support pages must inherit the same sans-only brand contract as the signed-in product."
+      ]
     },
     {
       "id": "auth.google-native",
@@ -114,7 +154,9 @@
       "routes": ["/sign-in", "/sign-up", "/auth/callback"],
       "paths": [
         "app/(public)/sign-in/page.tsx",
+        "app/(public)/sign-in/sign-in-form.tsx",
         "app/(public)/sign-up/page.tsx",
+        "app/(public)/sign-up/sign-up-form.tsx",
         "app/auth/**",
         "components/auth-card.tsx",
         "components/native-auth-bridge.tsx",
@@ -147,6 +189,7 @@
       "routes": ["/record", "/record/live", "/record/upload"],
       "paths": [
         "app/record/**",
+        "app/recorder.tsx",
         "components/audio-lines.tsx",
         "components/audio-recorder.tsx",
         "components/live-recorder.tsx",
@@ -174,6 +217,7 @@
         "app/meetings/**",
         "app/search/**",
         "components/meeting-*.tsx",
+        "components/session-workspace.tsx",
         "lib/meetings/**"
       ],
       "proof": ["fast", "playwright", "visual-video", "expect"],
@@ -201,6 +245,7 @@
       "paths": [
         "app/dev-kit/**",
         "app/api/dev-kit/**",
+        "app/observability/**",
         "components/ai-debug-panel.tsx",
         "lib/ai-dev-kit/**",
         "lib/starter-control-plane.ts",
@@ -209,8 +254,75 @@
       ],
       "proof": ["fast", "playwright", "expect"],
       "tests": {
-        "playwright": ["tests/e2e/app-dev-kit-page.smoke.spec.ts", "tests/e2e/app-dev-kit-runs-page.smoke.spec.ts"],
-        "expect": ["tests/expect/app-dev-kit-page.md", "tests/expect/app-dev-kit-runs-page.md"]
+        "playwright": ["tests/e2e/app-dev-kit-page.smoke.spec.ts", "tests/e2e/app-dev-kit-runs-page.smoke.spec.ts", "tests/e2e/app-observability-page.smoke.spec.ts"],
+        "expect": ["tests/expect/app-dev-kit-page.md", "tests/expect/app-dev-kit-runs-page.md", "tests/expect/observability.expect.ts"]
+      }
+    },
+    {
+      "id": "assistant.chat",
+      "name": "Ask and chat assistant surfaces",
+      "description": "Global Ask entry point, chat route, shared chat input, and floating assistant shell.",
+      "category": "core-product",
+      "status": "active",
+      "userFacing": true,
+      "surfaces": ["web", "ios", "android"],
+      "routes": ["/ask", "/chat"],
+      "paths": [
+        "app/ask/**",
+        "app/chat/**",
+        "app/template.tsx",
+        "components/chat-*.tsx",
+        "components/floating-ask.tsx",
+        "components/floating-ask.*.tsx"
+      ],
+      "proof": ["fast", "playwright", "visual-video", "expect"],
+      "tests": {
+        "unit": ["components/chat-input.test.tsx", "components/chat-message.test.tsx", "components/floating-ask.test.tsx", "tests/unit/ask-user.test.ts"],
+        "playwright": ["tests/e2e/app-ask-page.smoke.spec.ts", "tests/e2e/app-chat-page.smoke.spec.ts", "tests/e2e/chat-input.visual.spec.ts", "tests/e2e/chat-message.visual.spec.ts"],
+        "expect": ["tests/expect/ask.expect.ts", "tests/expect/chat.expect.ts"]
+      }
+    },
+    {
+      "id": "settings.integrations",
+      "name": "Settings, integrations, and recipes",
+      "description": "User settings, integration preferences, and automation recipe management surfaces.",
+      "category": "core-product",
+      "status": "active",
+      "userFacing": true,
+      "surfaces": ["web", "ios", "android"],
+      "routes": ["/settings", "/settings/integrations", "/settings/recipes"],
+      "paths": [
+        "app/settings/**",
+        "components/integrations-settings-panel.tsx",
+        "lib/settings.ts",
+        "lib/recipes/**"
+      ],
+      "proof": ["fast", "playwright", "visual-video", "expect"],
+      "tests": {
+        "unit": ["tests/settings-shared.test.ts", "tests/unit/update-settings.test.ts", "tests/unit/recipes-store.test.ts"],
+        "playwright": ["tests/e2e/app-settings-page.smoke.spec.ts", "tests/e2e/integrations-settings-panel.visual.spec.ts"],
+        "expect": ["tests/expect/settings.expect.ts", "tests/expect/app-settings-page.md"]
+      }
+    },
+    {
+      "id": "onboarding.guidance",
+      "name": "Onboarding guidance",
+      "description": "Welcome modal, guided tour, first-meeting toast, and onboarding persistence.",
+      "category": "activation",
+      "status": "active",
+      "userFacing": true,
+      "surfaces": ["web", "ios", "android"],
+      "routes": ["/", "/record", "/meetings"],
+      "paths": [
+        "components/onboarding/**",
+        "lib/onboarding/**",
+        "app/api/onboarding/**"
+      ],
+      "proof": ["fast", "playwright", "visual-video", "expect"],
+      "tests": {
+        "unit": ["tests/onboarding-state.test.ts", "tests/onboarding-emails.test.ts"],
+        "playwright": ["tests/e2e/smoke.spec.ts", "tests/e2e/mobile.spec.ts"],
+        "expect": ["tests/expect/page.tsx.expect.ts", "tests/expect/record.expect.ts", "tests/expect/meetings.expect.ts"]
       }
     },
     {
@@ -226,6 +338,7 @@
         "app/layout.tsx",
         "app/globals.css",
         "components/mobile-primary-nav.tsx",
+        "components/testing-banner.tsx",
         "tests/e2e/mobile*.spec.ts",
         "capacitor.config.ts",
         "android/**",

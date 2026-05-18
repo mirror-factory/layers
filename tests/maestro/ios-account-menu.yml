@@ -1,0 +1,29 @@
+appId: com.mirafactory.layers
+---
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 6000
+
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 1500
+- tapOn: "Meetings"
+- waitForAnimationToEnd:
+    timeout: 6000
+
+# Tap avatar
+- tapOn: "Open account menu"
+- waitForAnimationToEnd:
+    timeout: 4000
+- takeScreenshot: ios-walk-account-menu
+
+# Settings if present
+- runFlow:
+    when:
+      visible: "Settings"
+    commands:
+      - tapOn: "Settings"
+      - waitForAnimationToEnd:
+          timeout: 5000
+      - takeScreenshot: ios-walk-H1-settings

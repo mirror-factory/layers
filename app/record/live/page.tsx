@@ -249,6 +249,11 @@ export default function LiveRecordPage() {
                     }}
                     disabled={isArming || isFinalizing}
                   />
+                  {recorderSnapshot?.error && (
+                    <p className="recording-managed-error" role="alert">
+                      {recorderSnapshot.error}
+                    </p>
+                  )}
                 </div>
               </>
             }

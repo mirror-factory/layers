@@ -1,0 +1,225 @@
+05-17 23:44:38.078   546   742 I ActivityManager: Killing 6196:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0a195i3 (adj 0): isolated not needed
+05-17 23:44:38.423  6497  6497 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+05-17 23:45:31.278  6545  6545 I WebViewFactory: Loading com.google.android.webview version 113.0.5672.136 (code 567263634)
+05-17 23:45:31.282  6545  6545 D nativeloader: Configuring clns-7 for other apk /data/app/~~ZACK1VE6yujk3edFsxQ86A==/com.google.android.trichromelibrary_567263634-79-fijAQUBSg_tDlvI98Wg==/TrichromeLibrary.apk. target_sdk_version=34, uses_libraries=ALL, library_path=/data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/lib/arm64:/data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/WebViewGoogle.apk!/lib/arm64-v8a:/data/app/~~ZACK1VE6yujk3edFsxQ86A==/com.google.android.trichromelibrary_567263634-79-fijAQUBSg_tDlvI98Wg==/TrichromeLibrary.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand
+05-17 23:45:31.283  6545  6545 D nativeloader: Configuring clns-8 for other apk /data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/WebViewGoogle.apk. target_sdk_version=34, uses_libraries=, library_path=/data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/lib/arm64:/data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/WebViewGoogle.apk!/lib/arm64-v8a:/data/app/~~ZACK1VE6yujk3edFsxQ86A==/com.google.android.trichromelibrary_567263634-79-fijAQUBSg_tDlvI98Wg==/TrichromeLibrary.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand
+05-17 23:45:31.284   546  2165 I AppsFilter: interaction: PackageSetting{566908e com.mirafactory.layers/10195} -> PackageSetting{eac75fa com.google.android.overlay.googlewebview/10062} BLOCKED
+05-17 23:45:31.302  6545  6571 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.mirafactory.layers/app_webview/variations_seed_new"
+05-17 23:45:31.354   546   574 I ActivityManager: Start proc 6575:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0i4 for  {com.mirafactory.layers/org.chromium.content.app.SandboxedProcessService0:0}
+05-17 23:45:31.372  6545  6587 W chromium: [WARNING:dns_config_service_android.cc(115)] Failed to read DnsConfig.
+05-17 23:45:31.406  6545  6582 E chromium: [ERROR:simple_file_enumerator.cc(21)] opendir /data/user/0/com.mirafactory.layers/cache/WebView/Default/HTTP Cache/Code Cache/wasm: No such file or directory (2)
+05-17 23:45:31.406  6545  6582 E chromium: [ERROR:simple_index_file.cc(614)] Could not reconstruct index from disk
+05-17 23:45:31.406  6545  6581 E chromium: [ERROR:simple_file_enumerator.cc(21)] opendir /data/user/0/com.mirafactory.layers/cache/WebView/Default/HTTP Cache/Code Cache/js: No such file or directory (2)
+05-17 23:45:31.406  6545  6581 E chromium: [ERROR:simple_index_file.cc(614)] Could not reconstruct index from disk
+05-17 23:45:31.407  6575  6575 I cr_WebViewApkApp: Launched version=113.0.5672.136 minSdkVersion=29 isBundle=false processName=com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0
+05-17 23:45:31.425   546  2146 D ActivityManager: sync unfroze 4374 com.google.android.webview:webview_service for 6
+05-17 23:45:31.456   546   574 I ActivityManager: Start proc 6613:com.google.android.webview:webview_apk/u0a135 for service {com.google.android.webview/org.chromium.android_webview.nonembedded.AwComponentUpdateService}
+05-17 23:45:31.460  6613  6613 I iew:webview_apk: Using CollectorTypeCC GC.
+05-17 23:45:31.465  6613  6613 E iew:webview_apk: Not starting debugger since process cannot load the jdwp agent.
+05-17 23:45:31.470  6545  6545 D Capacitor: Starting BridgeActivity
+05-17 23:45:31.477  6613  6613 W iew:webview_apk: Entry not found
+05-17 23:45:31.478  6545  6545 D Capacitor: Registering plugin instance: CapacitorCookies
+05-17 23:45:31.478  6613  6613 D nativeloader: Configuring clns-6 for other apk /data/app/~~ZACK1VE6yujk3edFsxQ86A==/com.google.android.trichromelibrary_567263634-79-fijAQUBSg_tDlvI98Wg==/TrichromeLibrary.apk. target_sdk_version=34, uses_libraries=ALL, library_path=/data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/lib/arm64:/data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/WebViewGoogle.apk!/lib/arm64-v8a:/data/app/~~ZACK1VE6yujk3edFsxQ86A==/com.google.android.trichromelibrary_567263634-79-fijAQUBSg_tDlvI98Wg==/TrichromeLibrary.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.webview
+05-17 23:45:31.480  6545  6545 D Capacitor: Registering plugin instance: WebView
+05-17 23:45:31.483  6613  6613 D nativeloader: Configuring clns-7 for other apk /data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/WebViewGoogle.apk. target_sdk_version=34, uses_libraries=, library_path=/data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/lib/arm64:/data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/WebViewGoogle.apk!/lib/arm64-v8a:/data/app/~~ZACK1VE6yujk3edFsxQ86A==/com.google.android.trichromelibrary_567263634-79-fijAQUBSg_tDlvI98Wg==/TrichromeLibrary.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.webview
+05-17 23:45:31.484  6545  6545 D Capacitor: Registering plugin instance: CapacitorHttp
+05-17 23:45:31.486  6545  6545 D Capacitor: Registering plugin instance: SystemBars
+05-17 23:45:31.487  6545  6545 D Capacitor: Registering plugin instance: App
+05-17 23:45:31.488  6545  6545 D Capacitor: Registering plugin instance: Browser
+05-17 23:45:31.488  6545  6545 D Capacitor: Registering plugin instance: LocalNotifications
+05-17 23:45:31.491  6545  6545 D Capacitor: Registering plugin instance: StatusBar
+05-17 23:45:31.493  6545  6545 V Capacitor/StatusBarPlugin: Notifying listeners for event statusBarOverlayChanged
+05-17 23:45:31.493  6545  6545 D Capacitor/StatusBarPlugin: No listeners found for event statusBarOverlayChanged
+05-17 23:45:31.493  6545  6545 V Capacitor/StatusBarPlugin: Notifying listeners for event statusBarOverlayChanged
+05-17 23:45:31.494  6545  6545 D Capacitor/StatusBarPlugin: No listeners found for event statusBarOverlayChanged
+05-17 23:45:31.506  6613  6613 V GraphicsEnvironment: ANGLE GameManagerService for com.google.android.webview: false
+05-17 23:45:31.506  6613  6613 V GraphicsEnvironment: com.google.android.webview is not listed in per-application setting
+05-17 23:45:31.508  6613  6613 I cr_WebViewApkApp: Launched version=113.0.5672.136 minSdkVersion=29 isBundle=false processName=com.google.android.webview:webview_apk
+05-17 23:45:31.509  6545  6545 W Capacitor: Unable to read file at path public/plugins
+05-17 23:45:31.512  6545  6545 D Capacitor: Loading app at https://layers.mirrorfactory.ai
+05-17 23:45:31.534  6545  6545 D Capacitor: App started
+05-17 23:45:31.537  6545  6545 D Capacitor/AppPlugin: Firing change: true
+05-17 23:45:31.537  6545  6545 V Capacitor/AppPlugin: Notifying listeners for event appStateChange
+05-17 23:45:31.537  6545  6545 D Capacitor/AppPlugin: No listeners found for event appStateChange
+05-17 23:45:31.542  6545  6545 V Capacitor/BrowserPlugin: Notifying listeners for event browserFinished
+05-17 23:45:31.542  6545  6545 D Capacitor/BrowserPlugin: No listeners found for event browserFinished
+05-17 23:45:31.542  6545  6545 D Capacitor: App resumed
+05-17 23:45:43.073   546   626 D ActivityManager: freezing 6613 com.google.android.webview:webview_apk
+05-17 23:45:43.074   546   626 D ActivityManager: freezing 4374 com.google.android.webview:webview_service
+05-17 23:46:13.174  6735  6735 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+05-17 23:46:15.504   546   870 I ActivityManager: Killing 6575:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0a195i4 (adj 0): isolated not needed
+05-17 23:46:16.370  6882  6882 I WebViewFactory: Loading com.google.android.webview version 113.0.5672.136 (code 567263634)
+05-17 23:46:16.375  6882  6882 D nativeloader: Configuring clns-7 for other apk /data/app/~~ZACK1VE6yujk3edFsxQ86A==/com.google.android.trichromelibrary_567263634-79-fijAQUBSg_tDlvI98Wg==/TrichromeLibrary.apk. target_sdk_version=34, uses_libraries=ALL, library_path=/data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/lib/arm64:/data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/WebViewGoogle.apk!/lib/arm64-v8a:/data/app/~~ZACK1VE6yujk3edFsxQ86A==/com.google.android.trichromelibrary_567263634-79-fijAQUBSg_tDlvI98Wg==/TrichromeLibrary.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand
+05-17 23:46:16.378  6882  6882 D nativeloader: Configuring clns-8 for other apk /data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/WebViewGoogle.apk. target_sdk_version=34, uses_libraries=, library_path=/data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/lib/arm64:/data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/WebViewGoogle.apk!/lib/arm64-v8a:/data/app/~~ZACK1VE6yujk3edFsxQ86A==/com.google.android.trichromelibrary_567263634-79-fijAQUBSg_tDlvI98Wg==/TrichromeLibrary.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand
+05-17 23:46:16.378   546   559 I AppsFilter: interaction: PackageSetting{b06d280 com.mirafactory.layers/10195} -> PackageSetting{eac75fa com.google.android.overlay.googlewebview/10062} BLOCKED
+05-17 23:46:16.429  6882  6914 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.mirafactory.layers/app_webview/variations_seed_new"
+05-17 23:46:16.526   546   574 I ActivityManager: Start proc 6918:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0i5 for  {com.mirafactory.layers/org.chromium.content.app.SandboxedProcessService0:0}
+05-17 23:46:16.583  6882  6932 W chromium: [WARNING:dns_config_service_android.cc(115)] Failed to read DnsConfig.
+05-17 23:46:16.586  6918  6918 I cr_WebViewApkApp: Launched version=113.0.5672.136 minSdkVersion=29 isBundle=false processName=com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0
+05-17 23:46:16.607  6882  6933 E chromium: [ERROR:simple_file_enumerator.cc(21)] opendir /data/user/0/com.mirafactory.layers/cache/WebView/Default/HTTP Cache/Code Cache/js: No such file or directory (2)
+05-17 23:46:16.607  6882  6933 E chromium: [ERROR:simple_index_file.cc(614)] Could not reconstruct index from disk
+05-17 23:46:16.610   546   559 D ActivityManager: sync unfroze 4374 com.google.android.webview:webview_service for 6
+05-17 23:46:16.642  6882  6882 D Capacitor: Starting BridgeActivity
+05-17 23:46:16.659  6882  6882 D Capacitor: Registering plugin instance: CapacitorCookies
+05-17 23:46:16.664  6882  6882 D Capacitor: Registering plugin instance: WebView
+05-17 23:46:16.666  6882  6882 D Capacitor: Registering plugin instance: CapacitorHttp
+05-17 23:46:16.670  6882  6882 D Capacitor: Registering plugin instance: SystemBars
+05-17 23:46:16.674  6882  6882 D Capacitor: Registering plugin instance: App
+05-17 23:46:16.675  6882  6882 D Capacitor: Registering plugin instance: Browser
+05-17 23:46:16.677  6882  6882 D Capacitor: Registering plugin instance: LocalNotifications
+05-17 23:46:16.680  6882  6882 D Capacitor: Registering plugin instance: StatusBar
+05-17 23:46:16.688  6882  6882 V Capacitor/StatusBarPlugin: Notifying listeners for event statusBarOverlayChanged
+05-17 23:46:16.688  6882  6882 D Capacitor/StatusBarPlugin: No listeners found for event statusBarOverlayChanged
+05-17 23:46:16.690  6882  6882 V Capacitor/StatusBarPlugin: Notifying listeners for event statusBarOverlayChanged
+05-17 23:46:16.690  6882  6882 D Capacitor/StatusBarPlugin: No listeners found for event statusBarOverlayChanged
+05-17 23:46:16.708  6882  6882 W Capacitor: Unable to read file at path public/plugins
+05-17 23:46:16.711  6882  6882 D Capacitor: Loading app at https://layers.mirrorfactory.ai
+05-17 23:46:16.737  6882  6882 D Capacitor/LN: LocalNotification received: null
+05-17 23:46:16.737  6882  6882 D Capacitor/LN: Activity started without notification attached
+05-17 23:46:16.746  6882  6882 D Capacitor: App started
+05-17 23:46:16.749  6882  6882 D Capacitor/AppPlugin: Firing change: true
+05-17 23:46:16.757  6882  6882 V Capacitor/AppPlugin: Notifying listeners for event appStateChange
+05-17 23:46:16.757  6882  6882 D Capacitor/AppPlugin: No listeners found for event appStateChange
+05-17 23:46:16.759  6882  6882 V Capacitor/BrowserPlugin: Notifying listeners for event browserFinished
+05-17 23:46:16.759  6882  6882 D Capacitor/BrowserPlugin: No listeners found for event browserFinished
+05-17 23:46:16.760  6882  6882 D Capacitor: App resumed
+05-17 23:46:26.963   546   626 D ActivityManager: freezing 4374 com.google.android.webview:webview_service
+05-17 23:47:03.913  7140  7140 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+05-17 23:47:12.474  7311  7311 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+05-17 23:47:42.249  7500  7500 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+05-17 23:48:00.705  7672  7672 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+05-17 23:48:01.537   546  2148 I ActivityManager: Killing 6918:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0a195i5 (adj 0): isolated not needed
+05-17 23:48:01.909  7808  7808 I WebViewFactory: Loading com.google.android.webview version 113.0.5672.136 (code 567263634)
+05-17 23:48:01.917  7808  7808 D nativeloader: Configuring clns-7 for other apk /data/app/~~ZACK1VE6yujk3edFsxQ86A==/com.google.android.trichromelibrary_567263634-79-fijAQUBSg_tDlvI98Wg==/TrichromeLibrary.apk. target_sdk_version=34, uses_libraries=ALL, library_path=/data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/lib/arm64:/data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/WebViewGoogle.apk!/lib/arm64-v8a:/data/app/~~ZACK1VE6yujk3edFsxQ86A==/com.google.android.trichromelibrary_567263634-79-fijAQUBSg_tDlvI98Wg==/TrichromeLibrary.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand
+05-17 23:48:01.920  7808  7808 D nativeloader: Configuring clns-8 for other apk /data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/WebViewGoogle.apk. target_sdk_version=34, uses_libraries=, library_path=/data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/lib/arm64:/data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/WebViewGoogle.apk!/lib/arm64-v8a:/data/app/~~ZACK1VE6yujk3edFsxQ86A==/com.google.android.trichromelibrary_567263634-79-fijAQUBSg_tDlvI98Wg==/TrichromeLibrary.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand
+05-17 23:48:01.920   546  2145 I AppsFilter: interaction: PackageSetting{b853582 com.mirafactory.layers/10195} -> PackageSetting{eac75fa com.google.android.overlay.googlewebview/10062} BLOCKED
+05-17 23:48:01.953  7808  7837 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.mirafactory.layers/app_webview/variations_seed_new"
+05-17 23:48:02.003   546  1092 I ActivityManager: Start proc 7841:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0i6 for  {com.mirafactory.layers/org.chromium.content.app.SandboxedProcessService0:0}
+05-17 23:48:02.022  7808  7854 W chromium: [WARNING:dns_config_service_android.cc(115)] Failed to read DnsConfig.
+05-17 23:48:02.038  7841  7841 I cr_WebViewApkApp: Launched version=113.0.5672.136 minSdkVersion=29 isBundle=false processName=com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0
+05-17 23:48:02.045  7808  7854 E chromium: [ERROR:simple_file_enumerator.cc(21)] opendir /data/user/0/com.mirafactory.layers/cache/WebView/Default/HTTP Cache/Code Cache/wasm: No such file or directory (2)
+05-17 23:48:02.045  7808  7854 E chromium: [ERROR:simple_index_file.cc(614)] Could not reconstruct index from disk
+05-17 23:48:02.085   546  2087 D ActivityManager: sync unfroze 4374 com.google.android.webview:webview_service for 6
+05-17 23:48:02.108  7808  7808 D Capacitor: Starting BridgeActivity
+05-17 23:48:02.117  7808  7808 D Capacitor: Registering plugin instance: CapacitorCookies
+05-17 23:48:02.118  7808  7808 D Capacitor: Registering plugin instance: WebView
+05-17 23:48:02.119  7808  7808 D Capacitor: Registering plugin instance: CapacitorHttp
+05-17 23:48:02.119  7808  7808 D Capacitor: Registering plugin instance: SystemBars
+05-17 23:48:02.121  7808  7808 D Capacitor: Registering plugin instance: App
+05-17 23:48:02.121  7808  7808 D Capacitor: Registering plugin instance: Browser
+05-17 23:48:02.122  7808  7808 D Capacitor: Registering plugin instance: LocalNotifications
+05-17 23:48:02.124  7808  7808 D Capacitor: Registering plugin instance: StatusBar
+05-17 23:48:02.125  7808  7808 V Capacitor/StatusBarPlugin: Notifying listeners for event statusBarOverlayChanged
+05-17 23:48:02.126  7808  7808 D Capacitor/StatusBarPlugin: No listeners found for event statusBarOverlayChanged
+05-17 23:48:02.126  7808  7808 V Capacitor/StatusBarPlugin: Notifying listeners for event statusBarOverlayChanged
+05-17 23:48:02.126  7808  7808 D Capacitor/StatusBarPlugin: No listeners found for event statusBarOverlayChanged
+05-17 23:48:02.137  7808  7808 W Capacitor: Unable to read file at path public/plugins
+05-17 23:48:02.139  7808  7808 D Capacitor: Loading app at https://layers.mirrorfactory.ai
+05-17 23:48:02.146  7808  7808 D Capacitor/LN: LocalNotification received: null
+05-17 23:48:02.146  7808  7808 D Capacitor/LN: Activity started without notification attached
+05-17 23:48:02.155  7808  7808 D Capacitor: App started
+05-17 23:48:02.158  7808  7808 D Capacitor/AppPlugin: Firing change: true
+05-17 23:48:02.158  7808  7808 V Capacitor/AppPlugin: Notifying listeners for event appStateChange
+05-17 23:48:02.158  7808  7808 D Capacitor/AppPlugin: No listeners found for event appStateChange
+05-17 23:48:02.160  7808  7808 V Capacitor/BrowserPlugin: Notifying listeners for event browserFinished
+05-17 23:48:02.160  7808  7808 D Capacitor/BrowserPlugin: No listeners found for event browserFinished
+05-17 23:48:02.160  7808  7808 D Capacitor: App resumed
+05-17 23:48:12.241   546   626 D ActivityManager: freezing 4374 com.google.android.webview:webview_service
+05-17 23:48:15.260  7808  7808 D InputMethodManager: showSoftInput() view=com.getcapacitor.CapacitorWebView{5f3514a VFEDHVC.. .F...... 0,136-1080,2337 #7f0800c7 app:id/webview aid=1073741824} flags=0 reason=SHOW_SOFT_INPUT
+05-17 23:53:10.637   546  2145 I ActivityManager: Killing 7841:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0a195i6 (adj 0): isolated not needed
+05-17 23:53:14.921  8152  8152 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+05-17 23:53:16.183  8278  8278 I WebViewFactory: Loading com.google.android.webview version 113.0.5672.136 (code 567263634)
+05-17 23:53:16.187  8278  8278 D nativeloader: Configuring clns-7 for other apk /data/app/~~ZACK1VE6yujk3edFsxQ86A==/com.google.android.trichromelibrary_567263634-79-fijAQUBSg_tDlvI98Wg==/TrichromeLibrary.apk. target_sdk_version=34, uses_libraries=ALL, library_path=/data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/lib/arm64:/data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/WebViewGoogle.apk!/lib/arm64-v8a:/data/app/~~ZACK1VE6yujk3edFsxQ86A==/com.google.android.trichromelibrary_567263634-79-fijAQUBSg_tDlvI98Wg==/TrichromeLibrary.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand
+05-17 23:53:16.189  8278  8278 D nativeloader: Configuring clns-8 for other apk /data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/WebViewGoogle.apk. target_sdk_version=34, uses_libraries=, library_path=/data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/lib/arm64:/data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/WebViewGoogle.apk!/lib/arm64-v8a:/data/app/~~ZACK1VE6yujk3edFsxQ86A==/com.google.android.trichromelibrary_567263634-79-fijAQUBSg_tDlvI98Wg==/TrichromeLibrary.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand
+05-17 23:53:16.190   546   870 I AppsFilter: interaction: PackageSetting{eaf963a com.mirafactory.layers/10195} -> PackageSetting{eac75fa com.google.android.overlay.googlewebview/10062} BLOCKED
+05-17 23:53:16.210  8278  8308 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.mirafactory.layers/app_webview/variations_seed_new"
+05-17 23:53:16.246   546   870 I ActivityManager: Start proc 8312:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0i7 for  {com.mirafactory.layers/org.chromium.content.app.SandboxedProcessService0:0}
+05-17 23:53:16.268  8278  8327 W chromium: [WARNING:dns_config_service_android.cc(115)] Failed to read DnsConfig.
+05-17 23:53:16.277  8312  8312 I cr_WebViewApkApp: Launched version=113.0.5672.136 minSdkVersion=29 isBundle=false processName=com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0
+05-17 23:53:16.290   546   870 D ActivityManager: sync unfroze 4374 com.google.android.webview:webview_service for 6
+05-17 23:53:16.312  8278  8278 D Capacitor: Starting BridgeActivity
+05-17 23:53:16.336  8278  8278 D Capacitor: Registering plugin instance: CapacitorCookies
+05-17 23:53:16.338  8278  8278 D Capacitor: Registering plugin instance: WebView
+05-17 23:53:16.339  8278  8278 D Capacitor: Registering plugin instance: CapacitorHttp
+05-17 23:53:16.340  8278  8278 D Capacitor: Registering plugin instance: SystemBars
+05-17 23:53:16.340  8278  8278 D Capacitor: Registering plugin instance: App
+05-17 23:53:16.341  8278  8278 D Capacitor: Registering plugin instance: Browser
+05-17 23:53:16.342  8278  8278 D Capacitor: Registering plugin instance: LocalNotifications
+05-17 23:53:16.344  8278  8278 D Capacitor: Registering plugin instance: StatusBar
+05-17 23:53:16.348  8278  8278 V Capacitor/StatusBarPlugin: Notifying listeners for event statusBarOverlayChanged
+05-17 23:53:16.348  8278  8278 D Capacitor/StatusBarPlugin: No listeners found for event statusBarOverlayChanged
+05-17 23:53:16.349  8278  8278 V Capacitor/StatusBarPlugin: Notifying listeners for event statusBarOverlayChanged
+05-17 23:53:16.349  8278  8278 D Capacitor/StatusBarPlugin: No listeners found for event statusBarOverlayChanged
+05-17 23:53:16.361  8278  8278 W Capacitor: Unable to read file at path public/plugins
+05-17 23:53:16.363  8278  8278 D Capacitor: Loading app at https://layers.mirrorfactory.ai
+05-17 23:53:16.377  8278  8278 D Capacitor/LN: LocalNotification received: null
+05-17 23:53:16.377  8278  8278 D Capacitor/LN: Activity started without notification attached
+05-17 23:53:16.390  8278  8278 D Capacitor: App started
+05-17 23:53:16.392  8278  8278 D Capacitor/AppPlugin: Firing change: true
+05-17 23:53:16.392  8278  8278 V Capacitor/AppPlugin: Notifying listeners for event appStateChange
+05-17 23:53:16.392  8278  8278 D Capacitor/AppPlugin: No listeners found for event appStateChange
+05-17 23:53:16.394  8278  8278 V Capacitor/BrowserPlugin: Notifying listeners for event browserFinished
+05-17 23:53:16.394  8278  8278 D Capacitor/BrowserPlugin: No listeners found for event browserFinished
+05-17 23:53:16.394  8278  8278 D Capacitor: App resumed
+05-17 23:53:26.496   546   626 D ActivityManager: freezing 4374 com.google.android.webview:webview_service
+05-17 23:53:28.727  8278  8278 D InputMethodManager: showSoftInput() view=com.getcapacitor.CapacitorWebView{ce0f931 VFEDHVC.. .F...... 0,136-1080,2337 #7f0800c7 app:id/webview aid=1073741824} flags=0 reason=SHOW_SOFT_INPUT
+05-17 23:54:09.437  8537  8537 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+05-17 23:54:26.778   546  2148 I ActivityManager: Killing 8312:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0a195i7 (adj 0): isolated not needed
+05-17 23:54:30.400  8714  8714 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+05-17 23:54:31.411  8834  8834 I WebViewFactory: Loading com.google.android.webview version 113.0.5672.136 (code 567263634)
+05-17 23:54:31.417  8834  8834 D nativeloader: Configuring clns-7 for other apk /data/app/~~ZACK1VE6yujk3edFsxQ86A==/com.google.android.trichromelibrary_567263634-79-fijAQUBSg_tDlvI98Wg==/TrichromeLibrary.apk. target_sdk_version=34, uses_libraries=ALL, library_path=/data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/lib/arm64:/data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/WebViewGoogle.apk!/lib/arm64-v8a:/data/app/~~ZACK1VE6yujk3edFsxQ86A==/com.google.android.trichromelibrary_567263634-79-fijAQUBSg_tDlvI98Wg==/TrichromeLibrary.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand
+05-17 23:54:31.418  8834  8834 D nativeloader: Configuring clns-8 for other apk /data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/WebViewGoogle.apk. target_sdk_version=34, uses_libraries=, library_path=/data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/lib/arm64:/data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/WebViewGoogle.apk!/lib/arm64-v8a:/data/app/~~ZACK1VE6yujk3edFsxQ86A==/com.google.android.trichromelibrary_567263634-79-fijAQUBSg_tDlvI98Wg==/TrichromeLibrary.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand
+05-17 23:54:31.418   546   744 I AppsFilter: interaction: PackageSetting{b659977 com.mirafactory.layers/10195} -> PackageSetting{eac75fa com.google.android.overlay.googlewebview/10062} BLOCKED
+05-17 23:54:31.437  8834  8863 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.mirafactory.layers/app_webview/variations_seed_new"
+05-17 23:54:31.469   546   744 I ActivityManager: Start proc 8867:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0i8 for  {com.mirafactory.layers/org.chromium.content.app.SandboxedProcessService0:0}
+05-17 23:54:31.489  8834  8884 W chromium: [WARNING:dns_config_service_android.cc(115)] Failed to read DnsConfig.
+05-17 23:54:31.495  8867  8867 I cr_WebViewApkApp: Launched version=113.0.5672.136 minSdkVersion=29 isBundle=false processName=com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0
+05-17 23:54:31.503  8834  8882 E chromium: [ERROR:simple_file_enumerator.cc(21)] opendir /data/user/0/com.mirafactory.layers/cache/WebView/Default/HTTP Cache/Code Cache/wasm: No such file or directory (2)
+05-17 23:54:31.503  8834  8882 E chromium: [ERROR:simple_index_file.cc(614)] Could not reconstruct index from disk
+05-17 23:54:31.503  8834  8882 E chromium: [ERROR:simple_file_enumerator.cc(21)] opendir /data/user/0/com.mirafactory.layers/cache/WebView/Default/HTTP Cache/Code Cache/js: No such file or directory (2)
+05-17 23:54:31.503  8834  8882 E chromium: [ERROR:simple_index_file.cc(614)] Could not reconstruct index from disk
+05-17 23:54:31.537   546   744 D ActivityManager: sync unfroze 4374 com.google.android.webview:webview_service for 6
+05-17 23:54:31.559  8834  8834 D Capacitor: Starting BridgeActivity
+05-17 23:54:31.567  8834  8834 D Capacitor: Registering plugin instance: CapacitorCookies
+05-17 23:54:31.568  8834  8834 D Capacitor: Registering plugin instance: WebView
+05-17 23:54:31.569  8834  8834 D Capacitor: Registering plugin instance: CapacitorHttp
+05-17 23:54:31.569  8834  8834 D Capacitor: Registering plugin instance: SystemBars
+05-17 23:54:31.570  8834  8834 D Capacitor: Registering plugin instance: App
+05-17 23:54:31.571  8834  8834 D Capacitor: Registering plugin instance: Browser
+05-17 23:54:31.571  8834  8834 D Capacitor: Registering plugin instance: LocalNotifications
+05-17 23:54:31.573  8834  8834 D Capacitor: Registering plugin instance: StatusBar
+05-17 23:54:31.575  8834  8834 V Capacitor/StatusBarPlugin: Notifying listeners for event statusBarOverlayChanged
+05-17 23:54:31.575  8834  8834 D Capacitor/StatusBarPlugin: No listeners found for event statusBarOverlayChanged
+05-17 23:54:31.575  8834  8834 V Capacitor/StatusBarPlugin: Notifying listeners for event statusBarOverlayChanged
+05-17 23:54:31.575  8834  8834 D Capacitor/StatusBarPlugin: No listeners found for event statusBarOverlayChanged
+05-17 23:54:31.585  8834  8834 W Capacitor: Unable to read file at path public/plugins
+05-17 23:54:31.586  8834  8834 D Capacitor: Loading app at https://layers.mirrorfactory.ai
+05-17 23:54:31.594  8834  8834 D Capacitor/LN: LocalNotification received: null
+05-17 23:54:31.594  8834  8834 D Capacitor/LN: Activity started without notification attached
+05-17 23:54:31.599  8834  8834 D Capacitor: App started
+05-17 23:54:31.601  8834  8834 D Capacitor/AppPlugin: Firing change: true
+05-17 23:54:31.601  8834  8834 V Capacitor/AppPlugin: Notifying listeners for event appStateChange
+05-17 23:54:31.601  8834  8834 D Capacitor/AppPlugin: No listeners found for event appStateChange
+05-17 23:54:31.605  8834  8834 V Capacitor/BrowserPlugin: Notifying listeners for event browserFinished
+05-17 23:54:31.605  8834  8834 D Capacitor/BrowserPlugin: No listeners found for event browserFinished
+05-17 23:54:31.605  8834  8834 D Capacitor: App resumed
+05-17 23:54:41.694   546   626 D ActivityManager: freezing 4374 com.google.android.webview:webview_service
+05-17 23:54:45.259  8834  8834 D InputMethodManager: showSoftInput() view=com.getcapacitor.CapacitorWebView{49a58bb VFEDHVC.. .F...... 0,136-1080,2337 #7f0800c7 app:id/webview aid=1073741824} flags=0 reason=SHOW_SOFT_INPUT
+05-17 23:54:55.042  8834  8834 D InputMethodManager: showSoftInput() view=com.getcapacitor.CapacitorWebView{49a58bb VFEDHVC.. .F...... 0,136-1080,2337 #7f0800c7 app:id/webview aid=1073741824} flags=0 reason=SHOW_SOFT_INPUT
+05-17 23:55:31.301  9110  9110 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+05-17 23:55:40.294  9438  9438 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+05-17 23:56:02.010  9588  9588 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+05-17 23:56:32.931  9797  9797 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+05-17 23:57:01.596 10007 10007 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+05-17 23:57:11.537 10170 10170 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+05-17 23:57:19.919 10346 10346 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+05-17 23:57:32.125 10493 10493 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+05-17 23:59:00.514 10756 10756 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+05-17 23:59:05.682  8867  8898 I chromium: [INFO:audio_latency.cc(179)] audioHardwareBufferSize = 4360
+05-17 23:59:35.896  8867 10847 W chromium: [WARNING:push_pull_fifo.cc(237)] PushPullFIFO::PullAndUpdateEarmarkunderflow while pulling (underflowCount=1, availableFrames=1352, requestedFrames=4360, fifoLength=12288)
+05-17 23:59:42.018 11001 11001 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+05-17 23:59:48.513  8834  8834 E Capacitor/Console: File: https://layers.mirrorfactory.ai/_next/static/chunks/8175-ee8272bb726523d4.js - Line 1 - Msg: Error: An error occurred in the Server Components render. The specific message is omitted in production builds to avoid leaking sensitive details. A digest property is included on this error instance which may provide additional details about the nature of the error.
+05-17 23:59:48.521  8834  8834 E Capacitor/Console: File: https://layers.mirrorfactory.ai/_next/static/chunks/app/error-34a2ed2330668a2a.js - Line 1 - Msg: [route-error] [object Object]
+05-18 00:00:11.205 11259 11259 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+05-18 00:00:13.638  8834  8834 E Capacitor/Console: File: https://layers.mirrorfactory.ai/_next/static/chunks/8175-ee8272bb726523d4.js - Line 1 - Msg: Error: An error occurred in the Server Components render. The specific message is omitted in production builds to avoid leaking sensitive details. A digest property is included on this error instance which may provide additional details about the nature of the error.
+05-18 00:00:13.638  8834  8834 E Capacitor/Console: File: https://layers.mirrorfactory.ai/_next/static/chunks/app/error-34a2ed2330668a2a.js - Line 1 - Msg: [route-error] [object Object]

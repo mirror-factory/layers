@@ -146,8 +146,8 @@ export default function DocsIndexPage() {
           Plug Layers into the{" "}
           <em
             style={{
-              fontStyle: "italic",
-              fontWeight: 500,
+              fontStyle: "normal",
+              fontWeight: 650,
               color: "var(--layers-mint)",
             }}
           >

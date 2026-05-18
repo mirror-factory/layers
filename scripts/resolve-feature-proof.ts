@@ -119,7 +119,7 @@ function readRegistry(root: string): FeatureProofRegistry {
 }
 
 function escapeRegex(value: string): string {
-  return value.replace(/[|\\{}()[\]^$+?.]/g, "\\$&");
+  return value.replace(/[|\\{}()[\]^$+?.*]/g, "\\$&");
 }
 
 function normalizePath(value: string): string {

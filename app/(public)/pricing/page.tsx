@@ -23,9 +23,8 @@
  * existing CSS custom properties (no raw hex, OKLCH only via tokens).
  */
 
-import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Loader2 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 type PaidTierId = "core" | "pro";
 
@@ -77,7 +76,7 @@ const TIERS: Tier[] = [
       "AI summaries, decisions, actions, intake",
       "Calendar context",
       "AI tool-ready meeting memory",
-      "Priority email support",
+      "Priority response",
     ],
   },
   {
@@ -94,12 +93,15 @@ const TIERS: Tier[] = [
       "Advanced model routing",
       "Team library and sharing",
       "Admin controls",
-      "Priority support",
+      "Priority onboarding",
     ],
   },
 ];
 
-const ACCENT: Record<Tier["accent"], { tint: string; soft: string; ink: string }> = {
+const ACCENT: Record<
+  Tier["accent"],
+  { tint: string; soft: string; ink: string }
+> = {
   mint: {
     tint: "var(--layers-mint-tint)",
     soft: "var(--layers-mint-soft)",
@@ -117,7 +119,12 @@ const ACCENT: Record<Tier["accent"], { tint: string; soft: string; ink: string }
   },
 };
 
-const LEDGER: Array<{ label: string; free: string; core: string; pro: string }> = [
+const LEDGER: Array<{
+  label: string;
+  free: string;
+  core: string;
+  pro: string;
+}> = [
   {
     label: "Meetings captured",
     free: "25, lifetime",
@@ -174,35 +181,6 @@ const FAQ: Array<{ q: string; a: string }> = [
 ];
 
 export default function PricingPage() {
-  const [loadingTier, setLoadingTier] = useState<PaidTierId | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleCheckout = async (tier: PaidTierId) => {
-    setLoadingTier(tier);
-    setError(null);
-
-    try {
-      const res = await fetch("/api/stripe/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tier }),
-      });
-
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        throw new Error(body.error ?? "Checkout failed");
-      }
-
-      const { url } = await res.json();
-      if (url) {
-        globalThis.location.assign(url);
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Checkout failed");
-      setLoadingTier(null);
-    }
-  };
-
   return (
     <div
       className="pricing-public-page min-h-screen-safe"
@@ -214,7 +192,7 @@ export default function PricingPage() {
       }}
     >
       <Hero />
-      <Tiers tiers={TIERS} loadingTier={loadingTier} onCheckout={handleCheckout} />
+      <Tiers tiers={TIERS} />
 
       {/* Responsive overrides — keep desktop layout untouched, fix mobile + tablet. */}
       <style jsx global>{`
@@ -276,24 +254,6 @@ export default function PricingPage() {
         }
       `}</style>
 
-      {error ? (
-        <p
-          role="alert"
-          style={{
-            margin: "var(--space-6) auto 0",
-            maxWidth: "min(100% - 40px, 720px)",
-            padding: "var(--space-3) var(--space-4)",
-            borderRadius: "var(--radius-md)",
-            background: "color-mix(in oklch, var(--signal-live) 10%, transparent)",
-            color: "var(--signal-live)",
-            fontSize: "var(--text-sm)",
-            textAlign: "center",
-          }}
-        >
-          {error}
-        </p>
-      ) : null}
-
       <Ledger />
       <Faq />
       <FinalCta />
@@ -326,7 +286,8 @@ function Hero() {
             padding: "6px 12px",
             borderRadius: "var(--radius-pill)",
             border: "1px solid var(--border-subtle)",
-            background: "color-mix(in oklch, var(--bg-surface) 86%, transparent)",
+            background:
+              "color-mix(in oklch, var(--bg-surface) 86%, transparent)",
             color: "var(--fg-muted)",
             fontSize: "var(--text-xs)",
             letterSpacing: "var(--tracking-uppercase)",
@@ -359,8 +320,8 @@ function Hero() {
           Pay for the meeting memory{" "}
           <em
             style={{
-              fontStyle: "italic",
-              fontWeight: 500,
+              fontStyle: "normal",
+              fontWeight: 650,
               color: "var(--layers-mint)",
             }}
           >
@@ -386,15 +347,7 @@ function Hero() {
   );
 }
 
-function Tiers({
-  tiers,
-  loadingTier,
-  onCheckout,
-}: {
-  tiers: Tier[];
-  loadingTier: PaidTierId | null;
-  onCheckout: (tier: PaidTierId) => void;
-}) {
+function Tiers({ tiers }: { tiers: Tier[] }) {
   return (
     <section
       aria-label="Plans"
@@ -411,30 +364,15 @@ function Tiers({
       className="pricing-tiers-row"
     >
       {tiers.map((tier) => (
-        <TierCard
-          key={tier.name}
-          tier={tier}
-          loadingTier={loadingTier}
-          onCheckout={onCheckout}
-        />
+        <TierCard key={tier.name} tier={tier} />
       ))}
     </section>
   );
 }
 
-function TierCard({
-  tier,
-  loadingTier,
-  onCheckout,
-}: {
-  tier: Tier;
-  loadingTier: PaidTierId | null;
-  onCheckout: (tier: PaidTierId) => void;
-}) {
+function TierCard({ tier }: { tier: Tier }) {
   const accent = ACCENT[tier.accent];
   const isFeatured = tier.highlight;
-  const isBusy = tier.tier !== null && loadingTier === tier.tier;
-  const anyBusy = loadingTier !== null;
 
   return (
     <article
@@ -486,7 +424,13 @@ function TierCard({
         </span>
       ) : null}
 
-      <header style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}>
+      <header
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "var(--space-3)",
+        }}
+      >
         <div
           style={{
             display: "flex",
@@ -733,72 +677,77 @@ function Ledger() {
       </header>
 
       <div className="pricing-ledger-table-scroll">
-      <div role="table" aria-label="Plan comparison">
-        <div
-          role="row"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "minmax(0, 1.2fr) repeat(3, minmax(0, 1fr))",
-            gap: "var(--space-4)",
-            paddingBottom: "var(--space-3)",
-            borderBottom: "1px solid var(--border-default)",
-          }}
-        >
-          <span role="columnheader" style={headerStyle}>
-            Capability
-          </span>
-          <span role="columnheader" style={headerStyle}>
-            Free
-          </span>
-          <span
-            role="columnheader"
-            style={{ ...headerStyle, color: "var(--brand-accent-muted)" }}
-          >
-            Core
-          </span>
-          <span role="columnheader" style={headerStyle}>
-            Pro
-          </span>
-        </div>
-
-        {LEDGER.map((row, i) => (
+        <div role="table" aria-label="Plan comparison">
           <div
             role="row"
-            key={row.label}
             style={{
               display: "grid",
               gridTemplateColumns: "minmax(0, 1.2fr) repeat(3, minmax(0, 1fr))",
               gap: "var(--space-4)",
-              padding: "var(--space-4) 0",
-              borderBottom:
-                i === LEDGER.length - 1
-                  ? "none"
-                  : "1px solid var(--border-subtle)",
-              fontSize: "var(--text-sm)",
-              alignItems: "baseline",
+              paddingBottom: "var(--space-3)",
+              borderBottom: "1px solid var(--border-default)",
             }}
           >
-            <span
-              role="rowheader"
-              style={{ color: "var(--fg-default)", fontWeight: 500 }}
-            >
-              {row.label}
+            <span role="columnheader" style={headerStyle}>
+              Capability
             </span>
-            <span role="cell" style={cellStyle}>
-              {row.free}
+            <span role="columnheader" style={headerStyle}>
+              Free
             </span>
             <span
-              role="cell"
-              style={{ ...cellStyle, color: "var(--layers-ink)", fontWeight: 500 }}
+              role="columnheader"
+              style={{ ...headerStyle, color: "var(--brand-accent-muted)" }}
             >
-              {row.core}
+              Core
             </span>
-            <span role="cell" style={cellStyle}>
-              {row.pro}
+            <span role="columnheader" style={headerStyle}>
+              Pro
             </span>
           </div>
-        ))}
-      </div>
+
+          {LEDGER.map((row, i) => (
+            <div
+              role="row"
+              key={row.label}
+              style={{
+                display: "grid",
+                gridTemplateColumns:
+                  "minmax(0, 1.2fr) repeat(3, minmax(0, 1fr))",
+                gap: "var(--space-4)",
+                padding: "var(--space-4) 0",
+                borderBottom:
+                  i === LEDGER.length - 1
+                    ? "none"
+                    : "1px solid var(--border-subtle)",
+                fontSize: "var(--text-sm)",
+                alignItems: "baseline",
+              }}
+            >
+              <span
+                role="rowheader"
+                style={{ color: "var(--fg-default)", fontWeight: 500 }}
+              >
+                {row.label}
+              </span>
+              <span role="cell" style={cellStyle}>
+                {row.free}
+              </span>
+              <span
+                role="cell"
+                style={{
+                  ...cellStyle,
+                  color: "var(--layers-ink)",
+                  fontWeight: 500,
+                }}
+              >
+                {row.core}
+              </span>
+              <span role="cell" style={cellStyle}>
+                {row.pro}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -964,8 +913,8 @@ function FinalCta() {
             Start with twenty-five free meetings.{" "}
             <em
               style={{
-                fontStyle: "italic",
-                fontWeight: 500,
+                fontStyle: "normal",
+                fontWeight: 650,
                 color: "var(--brand-accent-muted)",
               }}
             >
@@ -1007,7 +956,8 @@ function FinalCta() {
               gap: "var(--space-2)",
               padding: "16px 22px",
               borderRadius: "var(--radius-pill)",
-              border: "1px solid color-mix(in oklch, var(--layers-mint) 50%, var(--layers-ink) 14%)",
+              border:
+                "1px solid color-mix(in oklch, var(--layers-mint) 50%, var(--layers-ink) 14%)",
               background: "var(--layers-mint-soft)",
               color: "var(--layers-ink)",
               fontSize: "var(--text-md)",
@@ -1029,7 +979,8 @@ function FinalCta() {
               padding: "14px 22px",
               borderRadius: "var(--radius-pill)",
               border: "1px solid var(--border-default)",
-              background: "color-mix(in oklch, var(--bg-surface) 86%, transparent)",
+              background:
+                "color-mix(in oklch, var(--bg-surface) 86%, transparent)",
               color: "var(--layers-ink)",
               fontSize: "var(--text-sm)",
               fontWeight: 600,

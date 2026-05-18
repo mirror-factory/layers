@@ -144,7 +144,7 @@ function createInMemoryStore(): SlidingWindowStore {
   };
 }
 
-let store: SlidingWindowStore = createInMemoryStore();
+const store: SlidingWindowStore = createInMemoryStore();
 
 /**
  * Test hook -- clears the in-memory window so each test starts fresh.

@@ -36,6 +36,8 @@ const BREAKPOINTS = [
   { name: 'desktop', width: 1440, height: 900 },   // Standard desktop
 ];
 
+const VISUAL_PROJECTS = new Set(['desktop-light', 'desktop-dark']);
+
 /** Maximum pixel difference ratio before test fails (1% = 0.01) */
 const MAX_DIFF_RATIO = 0.01;
 
@@ -66,6 +68,11 @@ for (const bp of BREAKPOINTS) {
 
     for (const { path, name } of PAGES) {
       test(`${name} matches baseline`, async ({ page }, testInfo) => {
+        test.skip(
+          !VISUAL_PROJECTS.has(testInfo.project.name),
+          'manual visual breakpoints run once per theme via desktop-light and desktop-dark',
+        );
+
         await page.goto(path, { waitUntil: 'networkidle' });
 
         // Wait for animations to settle

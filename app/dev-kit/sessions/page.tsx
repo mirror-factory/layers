@@ -15,7 +15,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
-import { useRealtimeData, RealtimeIndicator } from "../use-realtime";
+import { useRealtimeData } from "../use-realtime";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -72,14 +72,14 @@ function formatDate(iso: string): string {
 export default function SessionsPage() {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [loading, setLoading] = useState(true);
-  const realtime = useRealtimeData({ tables: ['traces'] });
+  const realtime = useRealtimeData({ tables: ["traces"] });
 
   // Re-fetch when new traces arrive via realtime
   useEffect(() => {
     if (realtime.eventCount > 0) {
-      fetch('/api/dev-kit/sessions')
-        .then(r => r.json())
-        .then(d => setSessions(Array.isArray(d) ? d : d.sessions ?? []))
+      fetch("/api/dev-kit/sessions")
+        .then((r) => r.json())
+        .then((d) => setSessions(Array.isArray(d) ? d : (d.sessions ?? [])))
         .catch(() => {});
     }
   }, [realtime.eventCount]);
@@ -89,10 +89,15 @@ export default function SessionsPage() {
   const [modelFilter, setModelFilter] = useState<string>("all");
 
   useEffect(() => {
-    fetch('/api/dev-kit/sessions')
-      .then(r => r.json())
-      .then(d => { setSessions(Array.isArray(d) ? d : d.sessions ?? []); setLoading(false); })
-      .catch(() => { setLoading(false); });
+    fetch("/api/dev-kit/sessions")
+      .then((r) => r.json())
+      .then((d) => {
+        setSessions(Array.isArray(d) ? d : (d.sessions ?? []));
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
   }, []);
 
   const models = useMemo(
@@ -116,14 +121,24 @@ export default function SessionsPage() {
     );
   }
 
-  if (sessions.length === 0) return (
-    <div className="p-8">
-      <h1 className="text-2xl font-semibold mb-4">Sessions</h1>
-      <div className="border border-layers-mint/20 rounded p-6 text-center" style={{ background: "color-mix(in oklch, var(--layers-mint) 5%, transparent)" }}>
-        <p className="text-ink-200/60 text-sm">No sessions recorded yet. Sessions appear automatically when your app makes AI SDK calls with the Langfuse instrumentation active.</p>
+  if (sessions.length === 0)
+    return (
+      <div className="p-8">
+        <h1 className="text-2xl font-semibold mb-4">Sessions</h1>
+        <div
+          className="border border-layers-mint/20 rounded p-6 text-center"
+          style={{
+            background:
+              "color-mix(in oklch, var(--layers-mint) 5%, transparent)",
+          }}
+        >
+          <p className="text-ink-200/60 text-sm">
+            No sessions recorded yet. Sessions appear automatically when your
+            app makes AI SDK calls with the Langfuse instrumentation active.
+          </p>
+        </div>
       </div>
-    </div>
-  );
+    );
 
   return (
     <div className="space-y-6">

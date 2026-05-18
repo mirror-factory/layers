@@ -1,0 +1,16 @@
+[nav] https://layers.mirrorfactory.ai/record
+[nav] https://layers.mirrorfactory.ai/record
+[req] GET https://layers.mirrorfactory.ai/api/transcribe/stream/preflight
+[resp 200] https://layers.mirrorfactory.ai/api/transcribe/stream/preflight
+[req] GET https://layers.mirrorfactory.ai/api/meetings?limit=5
+[req] GET https://layers.mirrorfactory.ai/api/calendar/upcoming?limit=3
+[resp 200] https://layers.mirrorfactory.ai/api/calendar/upcoming?limit=3
+[resp 200] https://layers.mirrorfactory.ai/api/meetings?limit=5
+[req] GET https://layers.mirrorfactory.ai/api/transcribe/stream/preflight
+[req] POST https://layers.mirrorfactory.ai/api/transcribe/stream/token
+[resp 200] https://layers.mirrorfactory.ai/api/transcribe/stream/preflight
+[resp 200] https://layers.mirrorfactory.ai/api/transcribe/stream/token
+[req] POST https://layers.mirrorfactory.ai/api/transcribe/stream/finalize
+[resp 200] https://layers.mirrorfactory.ai/api/transcribe/stream/finalize
+[console.error] Error: An error occurred in the Server Components render. The specific message is omitted in production builds to avoid leaking sensitive details. A digest property is included on this error instance which may provide additional details about the nature of the error.
+[console.error] [route-error] {name: Error, message: An error occurred in the Server Components render.…additional details about the nature of the error., digest: 3452159959, stack: Error: An error occurred in the Server Components …additional details about the nature of the error.}

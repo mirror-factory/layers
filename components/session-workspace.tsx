@@ -1,6 +1,13 @@
 "use client";
 
-import { useId, useState, type FormEvent, type ReactNode } from "react";
+import {
+  useCallback,
+  useId,
+  useRef,
+  useState,
+  type FormEvent,
+  type ReactNode,
+} from "react";
 import {
   ArrowDown,
   AudioLines,
@@ -10,10 +17,12 @@ import {
   Link2,
   ListChecks,
   MessageCircle,
+  NotebookPen,
   SendHorizontal,
   Sparkles,
   Square,
 } from "lucide-react";
+import { MeetingChat } from "@/components/meeting-chat";
 import { useStickToBottom } from "@/lib/hooks/use-stick-to-bottom";
 
 export interface SessionWorkspaceStats {
@@ -39,7 +48,7 @@ export interface SessionActionRow {
 }
 
 interface SessionCaptureCardProps {
-  date: Date;
+  date: string | Date;
   durationLabel: string;
   statusLabel: string;
   badgeLabel: string;
@@ -53,6 +62,16 @@ interface SessionCaptureCardProps {
   controlSlot?: ReactNode;
 }
 
+/**
+ * Render-prop bag passed to `askPanel` when it is supplied as a function.
+ * Consumers (typically `MeetingChat`) use `onCitationClick` so chat citation
+ * pills can seek + highlight the transcript pane that lives inside this
+ * canvas. See PROD-464.
+ */
+export interface SessionAskPanelRenderProps {
+  onCitationClick: (segmentNumber: number) => void;
+}
+
 interface SessionIntelligenceCanvasProps {
   mode: "live" | "summary";
   summaryText: string;
@@ -62,12 +81,38 @@ interface SessionIntelligenceCanvasProps {
   actions: SessionActionRow[];
   decisions?: string[];
   stats?: SessionWorkspaceStats;
-  askPanel?: ReactNode;
+  /**
+   * Either a static panel node or a render-prop function that receives a
+   * citation-click callback. When supplied as a function, citation pills in
+   * chat messages can seek + highlight the matching transcript segment.
+   */
+  askPanel?: ReactNode | ((props: SessionAskPanelRenderProps) => ReactNode);
+  /**
+   * Serializable meeting-chat config for server-component callers. `askPanel`
+   * still wins for existing client-only callers that need a custom panel.
+   */
+  meetingChat?: {
+    meetingId: string;
+    participantName?: string | null;
+  };
   askTimestampLabel?: string;
   footerStatus?: string;
+  /**
+   * Notes panel (PROD-465 raw ↔ enhanced toggle). Renders inside the Notes
+   * tab on the summary view. If omitted, the Notes tab still mounts but
+   * shows an empty placeholder. Typical consumer passes a
+   * `<MeetingNotesEditor />` here that auto-saves to /api/meetings/[id].
+   */
+  notesPanel?: ReactNode;
 }
 
-type SessionTab = "summary" | "transcript" | "key-points" | "ask" | "actions";
+type SessionTab =
+  | "summary"
+  | "notes"
+  | "transcript"
+  | "key-points"
+  | "ask"
+  | "actions";
 
 const LIVE_SESSION_TABS: Array<{
   id: SessionTab;
@@ -86,6 +131,7 @@ const SUMMARY_SESSION_TABS: Array<{
   icon: typeof AudioLines;
 }> = [
   { id: "summary", label: "Summary", icon: Sparkles },
+  { id: "notes", label: "Notes", icon: NotebookPen },
   { id: "transcript", label: "Transcript", icon: AudioLines },
   { id: "ask", label: "Ask", icon: MessageCircle },
   { id: "actions", label: "Actions", icon: ListChecks },
@@ -116,17 +162,18 @@ export function SessionCaptureCard({
   waveSlot,
   controlSlot,
 }: SessionCaptureCardProps) {
+  const sessionDate = typeof date === "string" ? new Date(date) : date;
   const fullDate = new Intl.DateTimeFormat(undefined, {
     weekday: "long",
     month: "long",
     day: "numeric",
-  }).format(date);
+  }).format(sessionDate);
   const tileMonth = new Intl.DateTimeFormat(undefined, {
     weekday: "short",
-  }).format(date);
+  }).format(sessionDate);
   const tileDay = new Intl.DateTimeFormat(undefined, {
     day: "2-digit",
-  }).format(date);
+  }).format(sessionDate);
 
   return (
     <section className="session-capture-card" aria-label="Recording session">
@@ -151,7 +198,7 @@ export function SessionCaptureCard({
       </div>
 
       <div className="session-capture-context">
-        <time className="session-date-tile" dateTime={date.toISOString()}>
+        <time className="session-date-tile" dateTime={sessionDate.toISOString()}>
           <span>{tileMonth}</span>
           <strong>{tileDay}</strong>
         </time>
@@ -196,6 +243,13 @@ function SessionStat({ value, label }: { value: number; label: string }) {
   );
 }
 
+/**
+ * Highlight duration must match the `.citation-flash` keyframe in
+ * `app/globals.css` (PROD-464). Kept as a constant so tests can wait on a
+ * deterministic value without re-reading the CSS.
+ */
+export const CITATION_FLASH_DURATION_MS = 1500;
+
 export function SessionIntelligenceCanvas({
   mode,
   summaryText,
@@ -206,8 +260,10 @@ export function SessionIntelligenceCanvas({
   decisions = [],
   stats,
   askPanel,
+  meetingChat,
   askTimestampLabel = "Now",
   footerStatus,
+  notesPanel,
 }: SessionIntelligenceCanvasProps) {
   const [activeTab, setActiveTab] = useState<SessionTab>(
     mode === "summary" ? "summary" : "transcript",
@@ -217,12 +273,84 @@ export function SessionIntelligenceCanvas({
   const pointCount = keyPoints.length;
   const decisionCount = decisions.length;
   const tabs = mode === "summary" ? SUMMARY_SESSION_TABS : LIVE_SESSION_TABS;
+  const transcriptPanelRef = useRef<HTMLElement | null>(null);
+  const flashTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  /**
+   * Citation seek + highlight handler (PROD-464). Chat citation pills like
+   * `[S12]` call this with the 1-indexed segment number. We:
+   *   1. Switch to the transcript tab if not already active so the row is
+   *      mounted before we try to scroll to it (this also "expands" the
+   *      transcript section in the summary view where it is otherwise
+   *      collapsed behind another tab).
+   *   2. Locate the row via `[data-segment="<n>"]` and scroll it into view.
+   *   3. Add a transient `.citation-flash` class for a brief mint-glow pulse
+   *      matching the onboarding glow ring (PROD-389) style.
+   *
+   * We defer the DOM lookup with rAF so the tab swap can mount the
+   * transcript list before we query for the segment.
+   */
+  const handleCitationClick = useCallback(
+    (segmentNumber: number) => {
+      setActiveTab("transcript");
+
+      if (flashTimeoutRef.current) {
+        clearTimeout(flashTimeoutRef.current);
+        flashTimeoutRef.current = null;
+      }
+
+      const seekAndFlash = () => {
+        const panel = transcriptPanelRef.current;
+        if (!panel) return;
+        const target = panel.querySelector<HTMLElement>(
+          `[data-segment="${segmentNumber}"]`,
+        );
+        if (!target) return;
+
+        target.scrollIntoView({ behavior: "smooth", block: "center" });
+        target.classList.remove("citation-flash");
+        // Force a reflow so re-adding the class restarts the animation
+        // even if the same segment is clicked twice in a row.
+        void target.offsetWidth;
+        target.classList.add("citation-flash");
+        flashTimeoutRef.current = setTimeout(() => {
+          target.classList.remove("citation-flash");
+          flashTimeoutRef.current = null;
+        }, CITATION_FLASH_DURATION_MS);
+      };
+
+      if (typeof window !== "undefined") {
+        // Two rAFs: first to let React flush the tab-state update, second to
+        // ensure the new tab's content has painted before we query for it.
+        window.requestAnimationFrame(() => {
+          window.requestAnimationFrame(seekAndFlash);
+        });
+      } else {
+        seekAndFlash();
+      }
+    },
+    [],
+  );
 
   function tabCount(tab: SessionTab) {
     if (tab === "key-points") return pointCount;
     if (tab === "actions") return actionCount;
     return null;
   }
+
+  const renderedAskPanel =
+    typeof askPanel === "function"
+      ? askPanel({ onCitationClick: handleCitationClick })
+      : meetingChat
+        ? (
+            <MeetingChat
+              meetingId={meetingChat.meetingId}
+              variant="workspace"
+              participantName={meetingChat.participantName ?? null}
+              onCitationClick={handleCitationClick}
+            />
+          )
+        : askPanel;
 
   return (
     <section className="session-intelligence-canvas" aria-label="Meeting notes">
@@ -314,7 +442,10 @@ export function SessionIntelligenceCanvas({
               </article>
             )}
 
-            <article className="session-panel session-transcript-panel">
+            <article
+              ref={transcriptPanelRef}
+              className="session-panel session-transcript-panel"
+            >
               <header>
                 <div>
                   <h2>{mode === "live" ? "Live transcript" : "Transcript"}</h2>
@@ -342,7 +473,7 @@ export function SessionIntelligenceCanvas({
         )}
 
         {activeTab === "ask" &&
-          (askPanel ?? (
+          (renderedAskPanel ?? (
             <LiveAskChat
               decisions={decisions}
               actions={actions}
@@ -351,6 +482,26 @@ export function SessionIntelligenceCanvas({
               timestampLabel={askTimestampLabel}
             />
           ))}
+
+        {activeTab === "notes" && (
+          notesPanel ?? (
+            <article
+              className="session-panel session-notes-panel"
+              aria-label="Your notes — empty placeholder"
+            >
+              <header>
+                <div>
+                  <NotebookPen size={18} aria-hidden="true" />
+                  <h3>Your notes</h3>
+                </div>
+              </header>
+              <p className="session-summary-empty">
+                Notes will appear here. Open this meeting&apos;s detail page to
+                start writing.
+              </p>
+            </article>
+          )
+        )}
 
         {activeTab === "actions" && <ActionListCard actions={actions} />}
       </div>
@@ -393,8 +544,14 @@ function SessionTranscriptList({
         onScroll={onScroll}
         className="session-transcript-list"
       >
-        {rows.map((row) => (
-          <article className="session-transcript-row" key={row.id}>
+        {rows.map((row, index) => (
+          // `data-segment` is 1-indexed to match the `[S<n>]` citation tokens
+          // emitted by the chat backend (see PROD-464 / chat-message.tsx).
+          <article
+            className="session-transcript-row"
+            key={row.id}
+            data-segment={index + 1}
+          >
             <time>{row.timestamp}</time>
             <span
               className={`session-transcript-dot is-${row.tone ?? "blue"} ${

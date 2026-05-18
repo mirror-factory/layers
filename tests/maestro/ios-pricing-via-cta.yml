@@ -1,0 +1,14 @@
+# Force kill + relaunch each page through hamburger + open URL.
+appId: com.mirafactory.layers
+---
+# Open /pricing via deep link first; if that opens browser, fall back to nav.
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 6000
+
+# Tap "See what's new" link if on /download to test /changelog routing
+- tapOn: "See what's new in v0.1.115"
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: ios-walk-D6-changelog

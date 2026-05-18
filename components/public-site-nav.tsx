@@ -8,18 +8,33 @@ import { LayersLogo } from "@/components/layers-logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 
-const NAV_LINKS = [
+const ANON_NAV_LINKS = [
   { href: "/download", label: "Download" },
   { href: "/pricing", label: "Pricing" },
   { href: "/sign-in", label: "Sign in" },
 ] as const;
 
-export function PublicSiteNav() {
+const ANON_SECONDARY_LINKS = [
+  { href: "/changelog", label: "Changelog" },
+  { href: "/docs", label: "Docs" },
+  { href: "/privacy", label: "Privacy" },
+  { href: "/terms", label: "Terms" },
+] as const;
+
+const AUTHED_NAV_LINKS = [
+  { href: "/meetings", label: "Meetings" },
+  { href: "/chat", label: "Chat" },
+  { href: "/settings", label: "Settings" },
+  { href: "/profile", label: "Profile" },
+] as const;
+
+export function PublicSiteNav({ isAuthed = false }: { isAuthed?: boolean }) {
   const pathname = usePathname() ?? "/";
   const [open, setOpen] = useState(false);
+  const NAV_LINKS = isAuthed ? AUTHED_NAV_LINKS : ANON_NAV_LINKS;
 
   return (
-    <header className="sticky top-0 z-40 border-b border-[var(--border-subtle,oklch(0.84_0.024_168/0.5))] bg-[var(--bg-page,oklch(0.982_0.012_168))]/85 backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-[var(--border-subtle,oklch(0.84_0.024_168/0.5))] bg-[var(--bg-page,oklch(0.982_0.012_168))] supports-[backdrop-filter]:md:bg-[var(--bg-page,oklch(0.982_0.012_168))]/85 supports-[backdrop-filter]:md:backdrop-blur-md">
       <nav
         aria-label="Primary navigation"
         className="mx-auto flex max-w-[1180px] items-center justify-between px-6 py-4 md:px-10"
@@ -53,15 +68,6 @@ export function PublicSiteNav() {
             );
           })}
           <ThemeToggle />
-          <button
-            type="button"
-            disabled
-            aria-disabled="true"
-            title="Public sign-ups coming soon — invite-only alpha"
-            className="cursor-not-allowed rounded-[10px] bg-[var(--layers-mint-soft,oklch(0.82_0.10_168))] px-4 py-2 text-[14px] font-medium text-[var(--layers-ink,oklch(0.22_0.035_256))] opacity-80 shadow-[0_1px_0_oklch(0.22_0.035_256/0.06)]"
-          >
-            Coming soon
-          </button>
         </div>
 
         <div className="flex items-center gap-1 md:hidden">
@@ -104,15 +110,33 @@ export function PublicSiteNav() {
                 </Link>
               );
             })}
-            <button
-              type="button"
-              disabled
-              aria-disabled="true"
-              title="Public sign-ups coming soon — invite-only alpha"
-              className="mt-2 inline-flex cursor-not-allowed items-center justify-center rounded-[10px] bg-[var(--layers-mint-soft,oklch(0.82_0.10_168))] px-4 py-3 text-[15px] font-medium text-[var(--layers-ink,oklch(0.22_0.035_256))] opacity-80"
-            >
-              Coming soon
-            </button>
+
+            {!isAuthed ? (
+              <div className="mt-3 border-t border-[var(--border-subtle,oklch(0.84_0.024_168/0.4))] pt-3">
+                <div className="grid grid-cols-2 gap-1">
+                  {ANON_SECONDARY_LINKS.map(({ href, label }) => {
+                    const isActive =
+                      pathname === href || pathname.startsWith(`${href}/`);
+                    return (
+                      <Link
+                        key={href}
+                        href={href}
+                        onClick={() => setOpen(false)}
+                        aria-current={isActive ? "page" : undefined}
+                        className={cn(
+                          "rounded-md px-3 py-3 text-[14px]",
+                          isActive
+                            ? "bg-[var(--bg-surface,oklch(0.997_0.004_168))] text-[var(--text-primary,oklch(0.22_0.035_256))]"
+                            : "text-[var(--text-secondary,oklch(0.46_0.025_256))] hover:bg-[var(--bg-surface,oklch(0.997_0.004_168))]",
+                        )}
+                      >
+                        {label}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : null}
           </div>
         </div>
       ) : null}

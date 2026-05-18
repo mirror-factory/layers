@@ -97,7 +97,6 @@ export function assertValidModel(
     );
   }
   if (match.deprecated) {
-    // eslint-disable-next-line no-console
     console.warn(`[registry] ${vendor} model "${id}" is deprecated. Migrate.`);
   }
 }

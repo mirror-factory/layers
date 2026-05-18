@@ -1,11 +1,17 @@
 {
   "version": 1,
-  "generatedAt": "2026-05-10T11:04:53.317Z",
+  "generatedAt": "2026-05-18T13:08:21.588Z",
   "docs": [
+    {
+      "id": "activity-log",
+      "localPath": "docs/ACTIVITY_LOG.md",
+      "contentHash": "f5ae736424e332b2242d48bf442f6e65a4d1a95593a1bfaebcfb0a04e3b37a5a",
+      "priority": "cold"
+    },
     {
       "id": "ai-harness-tiers",
       "localPath": "docs/AI_HARNESS_TIERS.md",
-      "contentHash": "c88f0503f4fda22d96adcc24fbc9be4c8fa0bc48423496837ddbeac1ce33f983",
+      "contentHash": "01f4947a6193e4d72bb11d7aba1e3977587fedc33860410b5e84be216dc51a2b",
       "priority": "cold"
     },
     {
@@ -495,9 +501,111 @@
       "priority": "warm"
     },
     {
+      "id": "cross-platform-qa",
+      "localPath": "docs/CROSS_PLATFORM_QA.md",
+      "contentHash": "bd067a8bbf7d33ce0eb898cc22cd4c30de64ea1af223114cf507402c1891a4b3",
+      "priority": "cold"
+    },
+    {
       "id": "embeddings-and-search",
       "localPath": "docs/EMBEDDINGS_AND_SEARCH.md",
       "contentHash": "50eb980843649e4df6df9db4159244381b47d41e8d91fc97730be30010842b4d",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-12-brand-kit-browser-verification",
+      "localPath": "docs/evidence/2026-05-12-brand-kit/BROWSER_VERIFICATION.md",
+      "contentHash": "1f61726d42304c59346a7e98016e6ee39aa1f62be1bf1044dedbc78738113ee7",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-13-web-pass-g7-mcp-initialize",
+      "localPath": "docs/evidence/2026-05-13-web-pass/G7_mcp_initialize.json",
+      "contentHash": "a75da7463664b11289d0a6c0967dc95450bbf7b79c225ee4aad0f5c7220ed168",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-claude-cross-platform-qa-android-android-qa-report",
+      "localPath": "docs/evidence/2026-05-18-claude-cross-platform-qa/android/ANDROID_QA_REPORT.md",
+      "contentHash": "7b847008eed233899df04907cb8f62b61bf285ee08d1d293ea819b6ef4efec86",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-claude-cross-platform-qa-ios-retest-ios-retest-report",
+      "localPath": "docs/evidence/2026-05-18-claude-cross-platform-qa/ios-retest/IOS_RETEST_REPORT.md",
+      "contentHash": "37819a16b59aa865ec7471dd644c280bb5591b67c82cfb89801d94f5dabd6221",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-claude-cross-platform-qa-ios-ios-qa-report",
+      "localPath": "docs/evidence/2026-05-18-claude-cross-platform-qa/ios/IOS_QA_REPORT.md",
+      "contentHash": "f130ecb63e48171b5b2da8b0f61b6d3fe7b0c3d3098f0ca5263f45f4d6ab429a",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-claude-cross-platform-qa-macos-macos-qa-report",
+      "localPath": "docs/evidence/2026-05-18-claude-cross-platform-qa/macos/MACOS_QA_REPORT.md",
+      "contentHash": "2e6b7111f8b0c05eb12bf4899c055936e69313959d2f8a42d4c883b5d95b6937",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-claude-cross-platform-qa-web-web-qa-report",
+      "localPath": "docs/evidence/2026-05-18-claude-cross-platform-qa/web/WEB_QA_REPORT.md",
+      "contentHash": "f3a3f4cf1b126e03af260d0f58f67097bbdc0834fc276f95f54b0482317353c3",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-claude-main-features-qa-ios-ios-focused-auth-report",
+      "localPath": "docs/evidence/2026-05-18-claude-main-features-qa/ios/IOS_FOCUSED_AUTH_REPORT.md",
+      "contentHash": "f64ed10178f50c021593f9143a20af92c1e28ed4d272f72d4ab6696f68af023d",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-claude-main-features-qa-web-web-main-features-report",
+      "localPath": "docs/evidence/2026-05-18-claude-main-features-qa/web/WEB_MAIN_FEATURES_REPORT.md",
+      "contentHash": "1893120664c3d004d5cea2a0f1fd03387048438cf5d132e22760cd0b598f3c11",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-homepage-auth-polish-browser-qa-results",
+      "localPath": "docs/evidence/2026-05-18-homepage-auth-polish/browser-qa-results.json",
+      "contentHash": "582ed9e5a36dc4a0118e7a309e9336f94af821f73de1f943da0fc87385edd74b",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-release-test-matrix-android-worker-report",
+      "localPath": "docs/evidence/2026-05-18-release-test-matrix/android-worker-report.md",
+      "contentHash": "1b74f9d0a309fcefeafffeb697f740facdb416c440eb525b78c1d9afc19ac620",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-release-test-matrix-command-summary",
+      "localPath": "docs/evidence/2026-05-18-release-test-matrix/command-summary.md",
+      "contentHash": "26a79274f26a0c915e6f4a3879cf09588669fdfc858ae193d7d42b3864221cab",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-release-test-matrix-electron-worker-report",
+      "localPath": "docs/evidence/2026-05-18-release-test-matrix/electron-worker-report.md",
+      "contentHash": "a18039335a12104344e43405222ea8a290d58a80426e8297b6b64d0f0993030b",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-release-test-matrix-ios-worker-report",
+      "localPath": "docs/evidence/2026-05-18-release-test-matrix/ios-worker-report.md",
+      "contentHash": "15137ed739071eaa58b7026196a359c64e198a36fcb8ffc5c9b030f53821fb0d",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-release-test-matrix-release-test-run-summary",
+      "localPath": "docs/evidence/2026-05-18-release-test-matrix/release-test-run-summary.md",
+      "contentHash": "ab9c6a6e6e5e9dad57f8e06b6fe365b9864ea28520c7fbdfb60e7d6b91508269",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-release-test-matrix-web-worker-report",
+      "localPath": "docs/evidence/2026-05-18-release-test-matrix/web-worker-report.md",
+      "contentHash": "e44abe973b359d1c5226df4f6883a6e72ec5c1a550d951c5bd214e547ddf553d",
       "priority": "cold"
     },
     {
@@ -833,7 +941,7 @@
     {
       "id": "getting-started",
       "localPath": "docs/GETTING_STARTED.md",
-      "contentHash": "a2582b2834b7a4e25e7783048bb171590d374fd9610bb26bdd487cdf5c7d8d45",
+      "contentHash": "a0ecd4389e07eadf33dcd00e5b40336bc2dbd1996024d9eaa9df4f8c80d6de49",
       "priority": "hot"
     },
     {
@@ -869,13 +977,19 @@
     {
       "id": "incident-runbook",
       "localPath": "docs/INCIDENT_RUNBOOK.md",
-      "contentHash": "662c205318bd177b20f110ebbbed1b480293ea43aa33366552cacbd0e0c37956",
+      "contentHash": "6a3a2c6f1edce4b2de8ad4993ebfa46904a25df8d9e4c9fb72da6f514405771e",
       "priority": "hot"
+    },
+    {
+      "id": "key-rotation",
+      "localPath": "docs/KEY_ROTATION.md",
+      "contentHash": "7befcba8da8ccadacdf3adfe993d95df1fd50af84f82386d9fe98d378046bb30",
+      "priority": "cold"
     },
     {
       "id": "launch-checklist",
       "localPath": "docs/LAUNCH_CHECKLIST.md",
-      "contentHash": "55755a5e7b25e62368dd873e20cf3ba25f2eb9d901b17cdf91892d98e2eddb61",
+      "contentHash": "a209469fb8b18c56015b6cc0f7f2b3ac06acd1223ddd0dfb823fbebae5317044",
       "priority": "hot"
     },
     {
@@ -897,9 +1011,15 @@
       "priority": "cold"
     },
     {
+      "id": "mobile-visual-qa",
+      "localPath": "docs/MOBILE_VISUAL_QA.md",
+      "contentHash": "6a57caf22f47c0ae9f0a57742972a5b37aca6bd22b3957fd74509c36837a9b7a",
+      "priority": "cold"
+    },
+    {
       "id": "native-release-readiness",
       "localPath": "docs/NATIVE_RELEASE_READINESS.md",
-      "contentHash": "c0ab1a81fa01a16ef6ae1513f86d62c50c0f307cbd462c6881b92eb9947cfa2b",
+      "contentHash": "a767d746bb0c7df303fd2ba2b50892d9f672ae688b0c04d6da0e9def7dfaf624",
       "priority": "cold"
     },
     {
@@ -911,7 +1031,7 @@
     {
       "id": "post-launch-monitoring",
       "localPath": "docs/POST_LAUNCH_MONITORING.md",
-      "contentHash": "958b65b6b891d84a6c3eb43a164e5e5392fc21d580eee29dbbe7383a29fe44e1",
+      "contentHash": "d04240b3585a828e363c3efb4219bd070d48ac50d55d417d4d21f52f70ff0a40",
       "priority": "cold"
     },
     {
@@ -929,13 +1049,19 @@
     {
       "id": "production-quality-system",
       "localPath": "docs/PRODUCTION_QUALITY_SYSTEM.md",
-      "contentHash": "fcee48c4e9d464866f68d71beee6eb371431079c53e4ee62f682b658638101fd",
+      "contentHash": "41ae71755e7146545c3b3d97efe42984471fa12f79764b00b0ca8f131b254cae",
+      "priority": "cold"
+    },
+    {
+      "id": "recording-manual-qa",
+      "localPath": "docs/RECORDING_MANUAL_QA.md",
+      "contentHash": "3e848d4fc3eb5b664bb0ce4b8d5c1c174f374e7a39fafac0f202c2ff5eae971b",
       "priority": "cold"
     },
     {
       "id": "recording-reliability",
       "localPath": "docs/RECORDING_RELIABILITY.md",
-      "contentHash": "d0fb9a248d9be135bb052faa85d0e97673d5c8ea1cc8eed09a749e2e1b5d16b6",
+      "contentHash": "53910ba4d4e1ca1b0da4433ae44783494770b92e0949e933211b7dd677a1bec9",
       "priority": "hot"
     },
     {
@@ -953,14 +1079,26 @@
     {
       "id": "release-pipeline",
       "localPath": "docs/RELEASE_PIPELINE.md",
-      "contentHash": "1e051975b899544f90ebb920effef400f41a44ca3735deb6b670f606383dab27",
+      "contentHash": "9c6519f3a771e97590802d65d2947c3612bdcb72507388d2ad45e7a402f53cd6",
+      "priority": "cold"
+    },
+    {
+      "id": "release-test-matrix",
+      "localPath": "docs/RELEASE_TEST_MATRIX.md",
+      "contentHash": "703c116b45a00e7d67232bc39e5591efceaca9f3b26b19a841663abefe9b5047",
       "priority": "cold"
     },
     {
       "id": "release",
       "localPath": "docs/RELEASE.md",
-      "contentHash": "60cb87f6187f77ddaeb948b69331d4471e36eecc45094d9c98035d6ce7087f7e",
+      "contentHash": "34e8c848b928413fe802b5ca81db1f29f9d81a6dce5f34982d604b9b436c0779",
       "priority": "hot"
+    },
+    {
+      "id": "remotion",
+      "localPath": "docs/REMOTION.md",
+      "contentHash": "e5e10cc3dca7b0695204975f866b1cda6b67141e93d545132bfae2c01d180adc",
+      "priority": "cold"
     },
     {
       "id": "roadmap",
@@ -981,9 +1119,15 @@
       "priority": "cold"
     },
     {
+      "id": "session-2026-05-12",
+      "localPath": "docs/SESSION_2026-05-12.md",
+      "contentHash": "1fdbac1773974c714df30714ffebe12a376bef88504e0d8b009956112c5e1cf4",
+      "priority": "cold"
+    },
+    {
       "id": "signing",
       "localPath": "docs/SIGNING.md",
-      "contentHash": "40667457639587123085e2559492e8a3cbf041f101b7c3d4c4245656b2583f2c",
+      "contentHash": "47e97cc95e611c2c29ed635c539e5a303e53d775337e42917c177f733b8ae9e2",
       "priority": "cold"
     },
     {
@@ -995,7 +1139,7 @@
     {
       "id": "spend-caps",
       "localPath": "docs/SPEND_CAPS.md",
-      "contentHash": "ff3ce22da157052b7449e6d774656e77273d8939af4fb5e70dbfa56ab00a8dfb",
+      "contentHash": "5e0371d7a9258418b3d7d3b05fb3ce903fa969c754475af7027ef35fbd758649",
       "priority": "cold"
     },
     {
@@ -1008,6 +1152,12 @@
       "id": "supabase-mcp-oauth-setup",
       "localPath": "docs/SUPABASE_MCP_OAUTH_SETUP.md",
       "contentHash": "083c57e283da4af6a9d458851c48a9bf884d442c29b7718e7a9d0d6587ce8f0a",
+      "priority": "cold"
+    },
+    {
+      "id": "supabase-prod-migration",
+      "localPath": "docs/SUPABASE_PROD_MIGRATION.md",
+      "contentHash": "e28987b56b3137b352d1cd1ba362f945409bde7e163455532ae74900c31fc5e1",
       "priority": "cold"
     },
     {

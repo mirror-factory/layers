@@ -40,6 +40,7 @@ export const fixtureMeetings: Record<"ownerPlanning", Meeting & { userId: string
     summary: null,
     intakeForm: null,
     costBreakdown: null,
+  userNotes: null,
     error: null,
     updatedAt: "2026-05-01T15:30:00.000Z",
   },

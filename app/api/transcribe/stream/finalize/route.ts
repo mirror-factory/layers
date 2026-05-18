@@ -147,18 +147,23 @@ export const POST = withRoute(async (req, ctx) => {
     costBreakdown,
   });
 
+  if (!completedMeeting) {
+    return NextResponse.json(
+      { error: "Meeting not found" },
+      { status: 404 },
+    );
+  }
+
   // Fire webhooks + auto-embed in background so it doesn't block the response
   after(async () => {
     try {
       const userId = await getCurrentUserId();
       if (userId) {
-        const notesPackage = completedMeeting
-          ? buildNotesPushPackage(completedMeeting, {
-              destination: "webhook",
-              trigger: "meeting_completed",
-              include_transcript: false,
-            })
-          : null;
+        const notesPackage = buildNotesPushPackage(completedMeeting, {
+          destination: "webhook",
+          trigger: "meeting_completed",
+          include_transcript: false,
+        });
 
         // Fire meeting.completed webhooks
         await fireWebhooks(userId, "meeting.completed", meetingId, {

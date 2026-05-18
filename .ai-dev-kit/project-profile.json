@@ -126,10 +126,10 @@
     "maxAgentTurns": 5
   },
   "nativePolicy": {
-    "mobileAppId": "com.mirrorfactory.layers",
-    "deepLinkScheme": "com.mirrorfactory.layers",
+    "mobileAppId": "com.mirafactory.layers",
+    "deepLinkScheme": "com.mirafactory.layers",
     "oauthCallbackPath": "/callback",
-    "electronAppId": "com.mirrorfactory.audiolayer",
+    "electronAppId": "com.mirafactory.layers",
     "artifactRoots": [
       "dist-electron",
       "release-assets",

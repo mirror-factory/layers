@@ -131,12 +131,18 @@ describe("PROD-321 -- /api/transcribe batch behavior", () => {
     );
   });
 
-  it("returns 400 when the request body is not valid multipart form data", async () => {
+  it("returns 400 when a JSON body is missing storagePath (storage-backed path, PROD-473)", async () => {
     const res = await transcribeRoute.POST(jsonRequest({ not: "form" }), undefined);
     const body = await res.json();
 
+    // PROD-473 added a JSON-body branch (storage-backed upload). When the
+    // content-type is JSON we route into that handler, which requires a
+    // storagePath. Missing it → 400 "Missing storagePath" rather than the
+    // legacy "Missing audio file" message.
     expect(res.status).toBe(400);
-    expect(body).toMatchObject({ error: expect.stringMatching(/form|audio/i) });
+    expect(body).toMatchObject({
+      error: expect.stringMatching(/storagePath|audio|form/i),
+    });
     expect(mocks.getAssemblyAI).not.toHaveBeenCalled();
   });
 

@@ -8,16 +8,38 @@ interface MeetingCostPanelProps {
   costBreakdown: MeetingCostBreakdown | null;
 }
 
+type SafeMeetingCostBreakdown = MeetingCostBreakdown & {
+  llm: MeetingCostBreakdown["llm"] & {
+    calls: MeetingCostBreakdown["llm"]["calls"];
+  };
+};
+
 function formatUsd(amount: number): string {
+  if (!Number.isFinite(amount)) return "$0.00";
   if (amount === 0) return "$0.00";
   if (amount < 0.01) return `$${amount.toFixed(4)}`;
   return `$${amount.toFixed(2)}`;
 }
 
+function isCostBreakdownRenderable(
+  costBreakdown: MeetingCostBreakdown | null,
+): costBreakdown is SafeMeetingCostBreakdown {
+  return Boolean(
+    costBreakdown &&
+      Number.isFinite(costBreakdown.totalCostUsd) &&
+      costBreakdown.stt &&
+      Number.isFinite(costBreakdown.stt.totalCostUsd) &&
+      typeof costBreakdown.stt.model === "string" &&
+      costBreakdown.llm &&
+      Number.isFinite(costBreakdown.llm.totalCostUsd) &&
+      Array.isArray(costBreakdown.llm.calls),
+  );
+}
+
 export function MeetingCostPanel({ costBreakdown }: MeetingCostPanelProps) {
   const [open, setOpen] = useState(false);
 
-  if (!costBreakdown) return null;
+  if (!isCostBreakdownRenderable(costBreakdown)) return null;
 
   return (
     <div className="bg-[var(--bg-card)] rounded-xl overflow-hidden">
