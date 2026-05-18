@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.160] — 2026-05-18
+
+### Other
+- chore: restore story registry state (`d336ea1`)
+
+
 ## [0.1.159] — 2026-05-18
 
 ### Other
