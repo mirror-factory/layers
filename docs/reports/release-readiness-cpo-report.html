@@ -289,10 +289,9 @@
           <p>
             TLDR: the release-readiness branch is in materially better shape.
             Web, brand, smoke, native configuration, Expect coverage, and CI
-            release gates have been pushed and verified. The latest full proof
-            head at report time had Tier 0-1, Tier 2, Tier 3, and Vercel
-            passing; report-only and version-bump commits may sit after that
-            head while rerunning the same checks. A targeted PROD-500
+            release gates have been pushed and verified. Latest live check:
+            PR #88 at d1fa116 has Tier 0-1, Tier 2, Tier 3, Vercel, and Vercel
+            Preview Comments passing. A targeted PROD-500
             render-crash hardening fix was pushed and locally verified. It is
             not yet a
             production-safe release because review, signing secrets, Android
@@ -306,7 +305,7 @@
           <div class="meta" role="list" aria-label="Report metadata">
             <div role="listitem">
               <span class="label">Updated</span>
-              <span class="value">2026-05-17 20:27 EDT</span>
+              <span class="value">2026-05-17 20:42 EDT</span>
             </div>
             <div role="listitem">
               <span class="label">Branch</span>
@@ -318,7 +317,7 @@
             </div>
             <div role="listitem">
               <span class="label">QA Evidence Head</span>
-              <span class="value">Latest full proof: Tier 0-1, Tier 2, Tier 3, Vercel pass</span>
+              <span class="value">d1fa116: Tier 0-1, Tier 2, Tier 3, Vercel pass</span>
             </div>
           </div>
         </header>
@@ -402,7 +401,7 @@
               <tr>
                 <td>Remote release CI</td>
                 <td><span class="stamp pass">Passed Full Proof</span></td>
-                <td>Latest full proof run has Tier 0-1, Tier 2 Focused Browser Proof, Tier 3 Broad Browser Matrix, and Vercel green. Server/native proof was attempted and blocked by missing self-hosted runners.</td>
+                <td>Latest live check at d1fa116 has Tier 0-1, Tier 2 Focused Browser Proof, Tier 3 Broad Browser Matrix, Vercel, and Vercel Preview Comments green. Server/native proof was attempted and blocked by missing self-hosted runners.</td>
               </tr>
               <tr>
                 <td>Compliance</td>
