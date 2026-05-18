@@ -11,8 +11,11 @@ test("app/account-deletion/page.tsx route smoke proof", async ({ page }) => {
       name: "Delete your Layers account and data",
     }),
   ).toBeVisible();
+  await expect(page.getByText("Draft, counsel pending")).toBeVisible();
   await expect(
-    page.getByText("Launch draft - self-serve deletion follow-up"),
+    page.getByRole("heading", {
+      name: "Self-serve deletion is available from Profile",
+    }),
   ).toBeVisible();
   await expect(
     page.getByRole("link", { name: "Email deletion request" }),

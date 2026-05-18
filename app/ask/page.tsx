@@ -172,7 +172,7 @@ export default function AskPage() {
                 key={suggestion}
                 type="button"
                 onClick={() => handleSearch(suggestion)}
-                className="w-full rounded-md border border-[var(--border-card)] px-3 py-3 text-left text-sm text-[var(--text-secondary)] transition-colors hover:border-[#14b8a6]/35 hover:bg-[var(--surface-control-hover)] hover:text-[var(--text-primary)]"
+                className="w-full rounded-md border border-[var(--border-card)] px-3 py-3 text-left text-sm text-[var(--text-secondary)] transition-colors hover:border-layers-mint/35 hover:bg-[var(--surface-control-hover)] hover:text-[var(--text-primary)]"
               >
                 {suggestion}
               </button>
@@ -187,7 +187,7 @@ export default function AskPage() {
 function EmptyAskState({ onPrompt }: { onPrompt: (prompt: string) => void }) {
   return (
     <div className="flex h-full min-h-[360px] flex-col items-center justify-center text-center">
-      <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg border border-[#14b8a6]/25 bg-[#14b8a6]/10 text-[#14b8a6]">
+      <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg border border-layers-mint/25 bg-layers-mint/10 text-layers-mint">
         <MessageSquare size={18} />
       </div>
       <p className="text-sm font-medium text-[var(--text-secondary)]">
@@ -202,7 +202,7 @@ function EmptyAskState({ onPrompt }: { onPrompt: (prompt: string) => void }) {
             key={prompt}
             type="button"
             onClick={() => onPrompt(prompt)}
-            className="signal-chip signal-chip-neutral transition-colors hover:border-[#14b8a6]/35 hover:text-[var(--text-primary)]"
+            className="signal-chip signal-chip-neutral transition-colors hover:border-layers-mint/35 hover:text-[var(--text-primary)]"
           >
             {prompt}
           </button>
@@ -254,7 +254,7 @@ function FindPanel({
           type="button"
           onClick={() => onSearch()}
           disabled={loading || !query.trim()}
-          className="search-submit flex min-h-[44px] items-center justify-center rounded-md bg-[#14b8a6] px-5 text-sm font-semibold text-[#042f2e] transition-colors hover:bg-[#2dd4bf] disabled:cursor-not-allowed disabled:bg-[var(--surface-control)] disabled:text-[var(--text-muted)] disabled:opacity-100"
+          className="search-submit flex min-h-[44px] items-center justify-center rounded-md bg-layers-mint px-5 text-sm font-semibold text-layers-ink transition-colors hover:bg-layers-mint-soft disabled:cursor-not-allowed disabled:bg-[var(--surface-control)] disabled:text-[var(--text-muted)] disabled:opacity-100"
         >
           {loading ? <Loader2 size={18} className="animate-spin" /> : "Search"}
         </button>
@@ -263,7 +263,7 @@ function FindPanel({
       <div className="min-h-0 flex-1 overflow-y-auto" style={{ scrollbarWidth: "none" }}>
         {loading && (
           <div className="flex items-center justify-center py-12">
-            <Loader2 size={24} className="animate-spin text-[#14b8a6]" />
+            <Loader2 size={24} className="animate-spin text-layers-mint" />
           </div>
         )}
 
@@ -293,7 +293,7 @@ function FindPanel({
         {!searched && (
           <div className="signal-panel-subtle rounded-lg px-2 py-8">
             <div className="flex items-start gap-3">
-              <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#14b8a6]/10 text-[#14b8a6]">
+              <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-layers-mint/10 text-layers-mint">
                 <Search size={17} />
               </div>
               <div className="min-w-0">
@@ -311,7 +311,7 @@ function FindPanel({
                   key={suggestion}
                   type="button"
                   onClick={() => onSearch(suggestion)}
-                  className="min-h-[36px] rounded-md border border-[var(--border-card)] px-3 text-xs text-[var(--text-secondary)] transition-colors hover:border-[#14b8a6]/35 hover:bg-[var(--bg-card-hover)] hover:text-[var(--text-primary)]"
+                  className="min-h-[36px] rounded-md border border-[var(--border-card)] px-3 text-xs text-[var(--text-secondary)] transition-colors hover:border-layers-mint/35 hover:bg-[var(--bg-card-hover)] hover:text-[var(--text-primary)]"
                 >
                   {suggestion}
                 </button>
@@ -362,7 +362,7 @@ function SearchResult({
             </span>
           </div>
         </div>
-        <span className="whitespace-nowrap text-xs font-medium text-[#14b8a6]">
+        <span className="whitespace-nowrap text-xs font-medium text-layers-mint">
           {Math.round(result.similarity * 100)}%
         </span>
       </div>

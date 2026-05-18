@@ -5,8 +5,10 @@ import { NextResponse } from "next/server";
 import { withRoute } from "@/lib/with-route";
 import { encryptCalendarToken, hasCalendarTokenKey } from "@/lib/calendar/crypto";
 import {
+  calendarScopesFromToken,
   exchangeCalendarCode,
   fetchCalendarProfile,
+  hasRequiredCalendarScope,
   parseCalendarProvider,
 } from "@/lib/calendar/providers";
 import { getSupabaseServer } from "@/lib/supabase/server";
@@ -60,6 +62,9 @@ export const GET = withRoute(async (req, ctx) => {
 
   try {
     tokenSet = await exchangeCalendarCode(provider, url.origin, code);
+    if (!hasRequiredCalendarScope(provider, tokenSet.scope)) {
+      return redirectAndClearState(req, "missing_scope", provider);
+    }
     profile = await fetchCalendarProfile(provider, tokenSet.accessToken);
   } catch {
     return redirectAndClearState(req, "provider_error", provider);
@@ -71,10 +76,9 @@ export const GET = withRoute(async (req, ctx) => {
       {
         user_id: userId,
         provider,
-        provider_account_id: profile.id,
         provider_account_email: profile.email,
         status: "connected",
-        scopes: tokenSet.scope,
+        scopes: calendarScopesFromToken(tokenSet.scope),
         access_token_enc: encryptCalendarToken(tokenSet.accessToken),
         refresh_token_enc: encryptCalendarToken(tokenSet.refreshToken),
         token_expires_at: tokenSet.expiresAt,

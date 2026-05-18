@@ -1,0 +1,42 @@
+appId: com.mirafactory.layers
+---
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 6000
+
+# Navigate via in-page Coming Soon button? Actually drawer-disabled. Use the
+# "See how it works" / "Coming soon" CTAs on landing — they likely scroll/route.
+
+# Open hamburger and tap one of the authed items to enter shell, then back to
+# /privacy via direct route.
+
+# Try setting location.href via JS evaluation through a tap on a known link.
+# Instead simpler: scroll landing page to find footer links.
+
+- swipe:
+    start: 50%, 80%
+    end: 50%, 20%
+- waitForAnimationToEnd:
+    timeout: 1500
+- swipe:
+    start: 50%, 80%
+    end: 50%, 20%
+- waitForAnimationToEnd:
+    timeout: 1500
+- swipe:
+    start: 50%, 80%
+    end: 50%, 20%
+- waitForAnimationToEnd:
+    timeout: 1500
+- swipe:
+    start: 50%, 80%
+    end: 50%, 20%
+- waitForAnimationToEnd:
+    timeout: 1500
+- swipe:
+    start: 50%, 80%
+    end: 50%, 20%
+- waitForAnimationToEnd:
+    timeout: 1500
+- takeScreenshot: ios-walk-landing-scrolled

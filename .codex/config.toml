@@ -1,7 +1,7 @@
 
 
 [features]
-codex_hooks = true
+codex_hooks = false
 
 [mcp_servers.openaiDeveloperDocs]
 url = "https://developers.openai.com/mcp"

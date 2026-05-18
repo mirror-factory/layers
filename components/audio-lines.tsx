@@ -9,15 +9,18 @@ interface AudioLinesProps {
   className?: string;
 }
 
+const LAYERS_MINT = "var(--layers-mint)";
+const LAYERS_WARNING = "var(--signal-warning)";
+
 export function AudioLines({ state, className = "" }: AudioLinesProps) {
   const lines = useMemo(() => {
     if (state === "processing" || state === "completed") {
-      return [{ color: state === "completed" ? "#14b8a6" : "#ffffff", delay: 0 }];
+      return [{ color: state === "completed" ? LAYERS_MINT : "#ffffff", delay: 0 }];
     }
     return [
-      { color: "#14b8a6", delay: 0 },
+      { color: LAYERS_MINT, delay: 0 },
       { color: "#ffffff", delay: 0.4 },
-      { color: "#f59e0b", delay: 0.8 },
+      { color: LAYERS_WARNING, delay: 0.8 },
     ];
   }, [state]);
 
@@ -36,7 +39,7 @@ export function AudioLines({ state, className = "" }: AudioLinesProps) {
             key={`${state}-${i}`}
             className={`audio-line audio-line--${state}`}
             stroke={line.color}
-            strokeOpacity={state === "completed" ? 0.6 : line.color === "#f59e0b" ? 0.35 : 0.8}
+            strokeOpacity={state === "completed" ? 0.6 : line.color === LAYERS_WARNING ? 0.35 : 0.8}
             fill="none"
             style={{ animationDelay: `${line.delay}s` }}
           />

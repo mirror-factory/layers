@@ -33,7 +33,7 @@ function NoteList({
   return (
     <div className="meeting-note-card rounded-lg border border-[var(--border-card)] bg-[var(--bg-card)] p-4">
       <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-[var(--text-primary)]">
-        <Icon size={16} className="text-[#14b8a6]" aria-hidden="true" />
+        <Icon size={16} className="text-layers-mint" aria-hidden="true" />
         <h3>{title}</h3>
       </div>
 
@@ -44,7 +44,7 @@ function NoteList({
               key={`${title}-${index}-${item}`}
               className="flex gap-2 text-sm leading-6 text-[var(--text-secondary)]"
             >
-              <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#14b8a6]" />
+              <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-layers-mint" />
               <span>{item}</span>
             </li>
           ))}
@@ -83,7 +83,7 @@ export function MeetingIntelligencePanel({
           </h2>
         </div>
         <div className="inline-flex w-fit items-center gap-2 rounded-md border border-[var(--border-card)] bg-[var(--surface-control)] px-2.5 py-1.5 text-xs font-medium text-[var(--text-secondary)]">
-          <FileText size={13} className="text-[#14b8a6]" aria-hidden="true" />
+          <FileText size={13} className="text-layers-mint" aria-hidden="true" />
           Extracted from transcript
         </div>
       </div>

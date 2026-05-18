@@ -14,10 +14,10 @@ export function ToolCard({ toolName, args, state, result }: ToolCardProps) {
   const [expanded, setExpanded] = useState(false);
 
   const stateIcon = {
-    call: <Loader2 size={14} className="animate-spin text-[#14b8a6]" />,
-    "partial-call": <Loader2 size={14} className="animate-spin text-[#14b8a6]" />,
-    result: <CheckCircle2 size={14} className="text-[#22c55e]" />,
-    error: <XCircle size={14} className="text-[#ef4444]" />,
+    call: <Loader2 size={14} className="animate-spin text-layers-mint" />,
+    "partial-call": <Loader2 size={14} className="animate-spin text-layers-mint" />,
+    result: <CheckCircle2 size={14} className="text-signal-success" />,
+    error: <XCircle size={14} className="text-signal-live" />,
   }[state] ?? <Wrench size={14} className="text-[var(--text-muted)]" />;
 
   const stateLabel = {
@@ -34,7 +34,7 @@ export function ToolCard({ toolName, args, state, result }: ToolCardProps) {
         className="w-full flex items-center gap-2 px-3 py-2 text-xs text-[var(--text-secondary)] hover:bg-[var(--bg-card)] transition-colors duration-200"
       >
         {expanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
-        <Wrench size={12} className="text-[#14b8a6]" />
+        <Wrench size={12} className="text-layers-mint" />
         <span className="font-medium text-[var(--text-primary)]">{toolName}</span>
         <span className="ml-auto flex items-center gap-1.5">
           {stateIcon}

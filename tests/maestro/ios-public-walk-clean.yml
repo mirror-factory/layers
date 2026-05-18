@@ -1,0 +1,52 @@
+# Walk all public pages after fresh install (user signed out).
+appId: com.mirafactory.layers
+---
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 8000
+- takeScreenshot: ios-walk-D1-landing-clean
+
+# Hamburger drawer (should show public labels now)
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 2000
+- takeScreenshot: ios-walk-D-drawer-public
+
+# Pricing
+- tapOn: "Pricing"
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: ios-walk-D2-pricing
+
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 1500
+- tapOn: "Sign in"
+- waitForAnimationToEnd:
+    timeout: 4000
+- takeScreenshot: ios-walk-D3-signin
+
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 1500
+- tapOn: "Download"
+- waitForAnimationToEnd:
+    timeout: 4000
+- takeScreenshot: ios-walk-D5-download-clean
+
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 1500
+- tapOn: "Changelog"
+- waitForAnimationToEnd:
+    timeout: 4000
+- takeScreenshot: ios-walk-D6-changelog
+
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 1500
+- tapOn: "Docs"
+- waitForAnimationToEnd:
+    timeout: 4000
+- takeScreenshot: ios-walk-D7-docs

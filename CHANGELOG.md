@@ -7,6 +7,720 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.162] — 2026-05-18
+
+### Documentation
+- docs: update release test coverage report (`2f7fd26`)
+
+
+## [0.1.161] — 2026-05-18
+
+### Other
+- chore: align release proof with feature registry (`f00d3d9`)
+
+
+## [0.1.160] — 2026-05-18
+
+### Other
+- chore: restore story registry state (`d336ea1`)
+
+
+## [0.1.159] — 2026-05-18
+
+### Other
+- fix native auth and capture release evidence (`312686e`)
+
+
+## [0.1.158] — 2026-05-18
+
+### Documentation
+- docs: correct cpo report ci status (`cf43d4b`)
+
+
+## [0.1.157] — 2026-05-18
+
+### Documentation
+- docs: refresh cpo release status report (`1d85f51`)
+
+
+## [0.1.156] — 2026-05-18
+
+### Documentation
+- docs: refresh manifest for release test evidence (`002afba`)
+
+
+## [0.1.155] — 2026-05-18
+
+### Documentation
+- docs: add all-platform release test matrix evidence (`92434d1`)
+
+
+## [0.1.154] — 2026-05-18
+
+### Other
+- chore: refresh docs manifest (`d69fff9`)
+
+
+## [0.1.153] — 2026-05-18
+
+### Other
+- chore: register public surfaces for feature proof (`5450d2e`)
+
+
+## [0.1.152] — 2026-05-18
+
+### Other
+- polish homepage and alpha auth surfaces (`164cfad`)
+
+
+## [0.1.151] — 2026-05-18
+
+### Documentation
+- docs: refresh release readiness report (`c4cd876`)
+
+
+## [0.1.150] — 2026-05-18
+
+### Other
+- chore: bump to 0.1.149 (`4bd8eb4`)
+
+
+## [0.1.149] — 2026-05-18
+
+### Fixed
+- fix: harden release QA blockers (`bb2537d`)
+
+
+## [0.1.148] — 2026-05-18
+
+### Fixed
+- fix: restore iOS shell scroll and keyboard resize (`5da9baa`)
+
+
+## [0.1.147] — 2026-05-18
+
+### Other
+- ci: slim default release proof harness (`5159f81`)
+
+
+## [0.1.146] — 2026-05-18
+
+### Documentation
+- docs: update release blocker audit (`280ec6d`)
+
+
+## [0.1.145] — 2026-05-18
+
+### Documentation
+- docs: refresh stop flow proof status (`87de8e9`)
+
+
+## [0.1.144] — 2026-05-18
+
+### Testing
+- test: prove recording stop flow (`1fa9508`)
+
+
+## [0.1.143] — 2026-05-18
+
+### Documentation
+- docs: clarify cpo proof head wording (`3de1c24`)
+
+
+## [0.1.142] — 2026-05-18
+
+### Documentation
+- docs: refresh cpo release checkpoint (`a84afe6`)
+
+
+## [0.1.141] — 2026-05-18
+
+### Documentation
+- docs: refresh release readiness status (`ab96361`)
+
+
+## [0.1.140] — 2026-05-18
+
+### Fixed
+- fix: fail closed on missing meeting finalize (`ff856cd`)
+
+
+## [0.1.139] — 2026-05-18
+
+### Documentation
+- docs: update cpo release status (`ccdcb7d`)
+
+
+## [0.1.138] — 2026-05-18
+
+### Documentation
+- docs: stabilize release report head wording (`dd674d0`)
+
+
+## [0.1.137] — 2026-05-18
+
+### Documentation
+- docs: refresh release readiness report (`8cb642f`)
+
+
+## [0.1.136] — 2026-05-18
+
+### Fixed
+- fix: tolerate natural language meeting due dates (`1280532`)
+
+
+## [0.1.135] — 2026-05-18
+
+### Documentation
+- docs: avoid brittle report head wording (`78381ec`)
+
+
+## [0.1.134] — 2026-05-18
+
+### Documentation
+- docs: refresh release blocker report (`ae88e3b`)
+
+
+## [0.1.133] — 2026-05-17
+
+### Documentation
+- docs: update release domain setup status (`00ac1ec`)
+
+
+## [0.1.132] — 2026-05-17
+
+### Documentation
+- docs: add release readiness cpo report (`24fa998`)
+
+
+## [0.1.131] — 2026-05-17
+
+### Other
+- ci: harden native release gates (`0b1866c`)
+
+
+## [0.1.130] — 2026-05-17
+
+### Other
+- fix native oauth and mobile legal nav (`540bdae`)
+
+
+## [0.1.129] — 2026-05-17
+
+### Other
+- remove vulnerable icon builder dependency (`7491a91`)
+
+
+## [0.1.128] — 2026-05-17
+
+### Other
+- clear release compliance warnings (`c93329c`)
+
+
+## [0.1.127] — 2026-05-17
+
+### Other
+- refresh docs manifest (`5809d02`)
+
+
+## [0.1.126] — 2026-05-17
+
+### Other
+- fix feature proof registry matching (`65e2e8c`)
+
+
+## [0.1.125] — 2026-05-17
+
+### Other
+- merge development into release readiness branch (`c63a0f4`)
+
+
+## [0.1.96] — 2026-05-10
+
+### Other
+- Refine feature proof resolver tests (`f54ecdf`)
+
+
+## [0.1.95] — 2026-05-10
+
+### Other
+- Fix feature proof lane artifact state (`1a3ca94`)
+
+
+## [0.1.94] — 2026-05-10
+
+### Other
+- Fix Expect fallback dev server startup (`15d7006`)
+
+
+## [0.1.93] — 2026-05-10
+
+### Other
+- Improve Expect fallback URL discovery (`1703cfc`)
+
+
+## [0.1.92] — 2026-05-10
+
+### Other
+- Fix Expect TUI timeout fallback (`b4bba00`)
+
+
+## [0.1.91] — 2026-05-10
+
+### Other
+- Fix Expect fallback URL resolution (`0a808bc`)
+
+
+## [0.1.90] — 2026-05-10
+
+### Fixed
+- fix: fallback on expect tui infra failures (`bfc6200`)
+
+
+## [0.1.89] — 2026-05-10
+
+### Added
+- feat: harden devkit proof harness (`f24a4eb`)
+
+
+## [0.1.88] — 2026-05-10
+
+### Fixed
+- fix: complete devkit dashboard proof harness (`f512ecc`)
+
+
+## [0.1.87] — 2026-05-10
+
+### Other
+- chore: refresh docs manifest (`726eab2`)
+
+
+## [0.1.86] — 2026-05-10
+
+### Other
+- chore: route smoke harness proof selection (`0873455`)
+
+
+## [0.1.85] — 2026-05-10
+
+### Fixed
+- fix: scope feature proof artifact enforcement (`d35153c`)
+
+
+## [0.1.84] — 2026-05-10
+
+### Other
+- chore: refresh docs manifest (`bd91863`)
+
+
+## [0.1.83] — 2026-05-10
+
+### Fixed
+- fix: gate expect proof on explicit runner (`e3bc819`)
+
+
+## [0.1.82] — 2026-05-10
+
+### Added
+- feat: add registry-driven feature proof (`ae01416`)
+
+
+## [0.1.81] — 2026-05-09
+
+### Fixed
+- fix: preserve tier 3 video artifacts (`8718c48`)
+
+
+## [0.1.80] — 2026-05-09
+
+### Documentation
+- docs: refresh docs manifest (`e746896`)
+
+
+## [0.1.79] — 2026-05-09
+
+### Fixed
+- fix: allow tier 3 media proof video (`9af5439`)
+
+
+## [0.1.78] — 2026-05-09
+
+### Other
+- ci: preserve proof evidence artifacts (`98ad6da`)
+
+
+## [0.1.77] — 2026-05-09
+
+### Added
+- feat: wire native proof and OAuth bridge (`1a462aa`)
+
+
+## [0.1.76] — 2026-05-09
+
+### Other
+- ci: run dev-kit gates on staging (`6514072`)
+
+
+## [0.1.75] — 2026-05-09
+
+### Added
+- feat: add project quality operating system (`0790630`)
+
+
+## [0.1.74] — 2026-05-09
+
+### Other
+- chore: sync docs manifest (`1ba6cd9`)
+
+
+## [0.1.73] — 2026-05-09
+
+### Other
+- chore: lazily install playwright for ticket proof (`bdb9f95`)
+
+
+## [0.1.72] — 2026-05-09
+
+### Other
+- chore: tier production quality gates (`e48e785`)
+
+
+## [0.1.71] — 2026-05-07
+
+### Other
+- fix(ci): inject DEVELOPMENT_TEAM in iOS archive + gate on API key (`f4368db`)
+
+
+## [0.1.70] — 2026-05-07
+
+### Fixed
+- fix: restore webDir in capacitor.config.ts so cap sync android works (`c36ba0f`)
+
+
+## [0.1.69] — 2026-05-07
+
+### Documentation
+- docs: release pipeline reference (cost, triggers, OAuth follow-up) (`71867ab`)
+
+
+## [0.1.68] — 2026-05-07
+
+### Other
+- PROD-366: tag-based release pipeline + iOS TestFlight automation (`10e564f`)
+
+
+## [0.1.67] — 2026-05-07
+
+### Other
+- PROD-364: switch iOS Capacitor bundle ID to com.mirrorfactory.layers + add OAuth scheme (`3090f25`)
+
+
+## [0.1.66] — 2026-05-07
+
+### Other
+- PROD-380: fix Mac DMG icon path + enable notarization (`a4116b3`)
+
+
+## [0.1.65] — 2026-05-07
+
+### Other
+- PROD-367: fix download page repo name (audio-layer → layers) (`c9ee05a`)
+
+
+## [0.1.64] — 2026-05-07
+
+### Other
+- chore: refresh dependency audit (73 packages, 0 vulns) (`54bb206`)
+
+
+## [0.1.63] — 2026-05-07
+
+### Testing
+- test: stabilize home page visual test (`0d9b777`)
+
+
+## [0.1.62] — 2026-05-07
+
+### Other
+- chore: bump to 0.1.61 (`7a0b04e`)
+
+
+## [0.1.61] — 2026-05-07
+
+### Testing
+- test: refresh visual baselines (`faff8a1`)
+
+
+## [0.1.60] — 2026-05-07
+
+### Fixed
+- fix: rename app/docs → app/docs-internal to resolve parallel route conflict (`18517cd`)
+
+
+## [0.1.59] — 2026-05-01
+
+### Other
+- PROD-371: in-process health + alert dispatcher for alpha visibility (`84e355c`)
+
+
+## [0.1.58] — 2026-05-01
+
+### Other
+- M2(PROD-402): MCP per-request auth hardening tests (`600fc66`)
+
+
+## [0.1.57] — 2026-05-01
+
+### Other
+- Speed: vitest pool=threads — full suite from 10min to 2s (`b98e43c`)
+
+
+## [0.1.56] — 2026-05-01
+
+### Other
+- M2(PROD-384): public /changelog page from CHANGELOG.md (`b954d60`)
+
+
+## [0.1.55] — 2026-05-01
+
+### Other
+- M2(PROD-406): public /docs pages — index, MCP, REST API, errors (`9ab0ab9`)
+
+
+## [0.1.54] — 2026-05-01
+
+### Other
+- M1(PROD-320,322,321): API behavior + cross-tenant probe tests (`8fd8d27`)
+
+
+## [0.1.53] — 2026-05-01
+
+### Other
+- M2(PROD-405,404): structured errors + rate limits on MCP surface (`5f818c2`)
+
+
+## [0.1.52] — 2026-05-01
+
+### Other
+- Polish: normalize hero H1 weight + tracking to 600 / -0.022em (pricing spec) (`e861441`)
+
+
+## [0.1.51] — 2026-05-01
+
+### Other
+- Polish: home hero accent uses Geist italic mint, matching pricing (`7d759cf`)
+
+
+## [0.1.50] — 2026-05-01
+
+### Other
+- Fix(PROD-385): hook-tester syncStarterSystem now opt-in via HOOK_TESTER_SYNC=1 (`e60d441`)
+
+
+## [0.1.49] — 2026-05-01
+
+### Other
+- Polish(PROD-398/399/400/401): chat auto-scroll + markdown + radii + transcript pill (`61032b9`)
+
+
+## [0.1.48] — 2026-05-01
+
+### Other
+- Docs(PROD-396): SPEND_CAPS.md + INCIDENT_RUNBOOK.md + RELEASE preflight link (`c05fc31`)
+
+
+## [0.1.47] — 2026-05-01
+
+### Other
+- Wire(PROD-380): macOS DMG signing + notarization config (no creds yet) (`91a5192`)
+
+
+## [0.1.46] — 2026-05-01
+
+### Other
+- Fix(PROD-385): hook-tester runaway — per-hook 15s SIGKILL timeout (`797d289`)
+
+
+## [0.1.45] — 2026-05-01
+
+### Other
+- Fix(PROD-395): Settings → AssemblyAI default not honored at runtime (`35fd6ac`)
+
+
+## [0.1.44] — 2026-05-01
+
+### Other
+- /record right column: split Calendar + MCP cards 50/50, never overflow (`83ae8aa`)
+
+
+## [0.1.43] — 2026-05-01
+
+### Other
+- Gradient: paint on body root + rebrand MCP dashboard UI to Paper Calm (`6384d7c`)
+
+
+## [0.1.42] — 2026-05-01
+
+### Other
+- /record: rework MCP card sizing + paint gradient on document root (`fe2a2a6`)
+
+
+## [0.1.41] — 2026-05-01
+
+### Other
+- Fix OAuth consent redirect: 303 not 307 (Method Not Allowed at claude.ai) (`9c4bd2f`)
+
+
+## [0.1.40] — 2026-05-01
+
+### Other
+- /record polish: clean MCP card + fix page gradient cutoff at scroll (`4522dd4`)
+
+
+## [0.1.39] — 2026-05-01
+
+### Other
+- MCP: implement Dynamic Client Registration (RFC 7591) (`a286d6d`)
+
+
+## [0.1.38] — 2026-05-01
+
+### Other
+- Inner pages: Calendar + Settings sync as "Coming soon", MCP stays live (`5c4d54e`)
+
+
+## [0.1.37] — 2026-05-01
+
+### Other
+- PROD-386: native app icon pipeline (iOS / Android / macOS / Windows) (`85768e3`)
+
+
+## [0.1.36] — 2026-05-01
+
+### Other
+- MCP section: connection cycle animation + Anthropic orange + tagline (`944a102`)
+
+
+## [0.1.35] — 2026-05-01
+
+### Other
+- Homepage: drop orphan stats, drop trust bar, flip MCP, center pricing (`26764ce`)
+
+
+## [0.1.34] — 2026-05-01
+
+### Other
+- Web favicon: replace stock favicon.ico with the Layers aperture (`a17ff92`)
+
+
+## [0.1.33] — 2026-05-01
+
+### Other
+- Fix(PROD-379): pass `next` to /auth/callback so Google OAuth lands on /record (`97d128b`)
+
+
+## [0.1.32] — 2026-05-01
+
+### Other
+- Homepage v3: animated hero, real-time search/memory, restacked sections (`078ed32`)
+
+
+## [0.1.31] — 2026-05-01
+
+### Other
+- chore: sync ai-starter manifests and test report outputs (`2044002`)
+
+
+## [0.1.30] — 2026-05-01
+
+### Documentation
+- docs: add GETTING_STARTED entry point + platform brand SVGs on /download (`cbf0666`)
+
+
+## [0.1.29] — 2026-05-01
+
+### Other
+- Document the dev → staging → main release flow (`abdad06`)
+
+
+## [0.1.28] — 2026-05-01
+
+### Other
+- download: relabel all platforms to "Stable alpha" (`80fc31e`)
+
+
+## [0.1.27] — 2026-05-01
+
+### Other
+- Homepage polish: ink banner, tighter hero, MCP-as-note (`fd51b30`)
+
+
+## [0.1.26] — 2026-05-01
+
+### Other
+- Homepage: add MCP section with real brand logos, drop chip row + book a demo (`8f7abc4`)
+
+
+## [0.1.25] — 2026-05-01
+
+### Other
+- Polish: disable Coming-soon CTAs, violet banner, lighter mint, hero rhythm (`970e2ce`)
+
+
+## [0.1.24] — 2026-05-01
+
+### Other
+- Redesign public site with Paper Calm v1 + dark mode (`da8d4aa`)
+
+
+## [0.1.23] — 2026-05-01
+
+### Other
+- Refresh public download and homepage routing (`cafa1c9`)
+
+
+## [0.1.22] — 2026-05-01
+
+### Other
+- Hide calendar OAuth setup for now (`8d3e527`)
+
+
+## [0.1.21] — 2026-05-01
+
+### Other
+- Regenerate iOS project in release workflow (`2652fed`)
+
+
+## [0.1.20] — 2026-05-01
+
+### Other
+- Fix iOS release workflow sync (`6af9202`)
+
+
+## [0.1.19] — 2026-05-01
+
+### Other
+- Update homepage and download release links (`19b162c`)
+
+
+## [0.1.18] — 2026-05-01
+
+### Fixed
+- fix: handle read-only pricing config in serverless (`e07bfa6`)
+
+
+## [0.1.17] — 2026-05-01
+
+### Fixed
+- fix: disable million compiler for production (`539ff1c`)
+
+
+## [0.1.16] — 2026-05-01
+
+### Other
+- Polish Layers UI and live recording flows (`f694536`)
+
+
 ## [0.1.15] — 2026-04-30
 
 ### Testing

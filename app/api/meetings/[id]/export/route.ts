@@ -45,13 +45,18 @@ export const GET = withRoute(async (req, ctx) => {
 <head>
   <meta charset="utf-8" />
   <style>
-    body { font-family: ui-monospace, SFMono-Regular, monospace; padding: 40px; max-width: 800px; margin: 0 auto; color: #333; }
-    h1 { font-size: 24px; border-bottom: 2px solid #14b8a6; padding-bottom: 8px; }
-    h2 { font-size: 18px; margin-top: 24px; color: #555; }
+    :root {
+      --layers-mint: oklch(0.68 0.13 166);
+      --layers-ink: oklch(0.22 0.035 256);
+      --layers-muted: oklch(0.46 0.025 256);
+    }
+    body { font-family: ui-monospace, SFMono-Regular, monospace; padding: 40px; max-width: 800px; margin: 0 auto; color: var(--layers-ink); }
+    h1 { font-size: 24px; border-bottom: 2px solid var(--layers-mint); padding-bottom: 8px; }
+    h2 { font-size: 18px; margin-top: 24px; color: var(--layers-muted); }
     ul { padding-left: 20px; }
     li { margin-bottom: 4px; }
     p { line-height: 1.6; }
-    strong { color: #222; }
+    strong { color: var(--layers-ink); }
   </style>
 </head>
 <body>

@@ -32,6 +32,7 @@ describe('API route smoke', () => {
       }
 
       it(`${method} ${contract.smokePath} returns a sensible status`, async () => {
+        const expectsRedirect = spec.expectStatuses.some((status) => status >= 300 && status < 400);
         const headers = {
           'content-type': 'application/json',
           ...spec.headers,
@@ -41,6 +42,7 @@ describe('API route smoke', () => {
           method,
           headers,
           body: spec.body === undefined ? undefined : JSON.stringify(spec.body),
+          redirect: expectsRedirect ? 'manual' : 'follow',
         });
 
         const text = await res.text();

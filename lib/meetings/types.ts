@@ -16,6 +16,8 @@ export interface Meeting {
   summary: MeetingSummary | null;
   intakeForm: IntakeForm | null;
   costBreakdown: MeetingCostBreakdown | null;
+  /** User-authored free-form notes (PROD-465 raw ↔ enhanced toggle). */
+  userNotes: string | null;
   error: string | null;
   createdAt: string;
   updatedAt: string;
@@ -44,5 +46,7 @@ export interface MeetingUpdate {
   summary?: MeetingSummary | null;
   intakeForm?: IntakeForm | null;
   costBreakdown?: MeetingCostBreakdown | null;
+  /** User-authored notes (PROD-465). */
+  userNotes?: string | null;
   error?: string | null;
 }

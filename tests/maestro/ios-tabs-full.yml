@@ -1,0 +1,43 @@
+# Single chained flow: land → meetings → record tab → ask tab → settings via avatar.
+appId: com.mirafactory.layers
+---
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 6000
+
+# Enter authed shell via hamburger → Meetings
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 1500
+- tapOn: "Meetings"
+- waitForAnimationToEnd:
+    timeout: 6000
+
+# Tap Record tab (now visible in bottom nav)
+- tapOn: "Record"
+- waitForAnimationToEnd:
+    timeout: 6000
+
+# Skip tour modal
+- runFlow:
+    when:
+      visible: "Skip tour"
+    commands:
+      - tapOn: "Skip tour"
+      - waitForAnimationToEnd:
+          timeout: 2500
+
+- takeScreenshot: ios-walk-F1b-record-clean
+
+# Tap Ask tab
+- tapOn: "Ask"
+- waitForAnimationToEnd:
+    timeout: 6000
+- takeScreenshot: ios-walk-G2-ask-tab
+
+# Back to Library tab
+- tapOn: "Library"
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: ios-walk-E1c-library-tab

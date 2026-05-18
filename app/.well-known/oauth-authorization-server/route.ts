@@ -15,6 +15,10 @@ export function GET(req: Request) {
     authorization_endpoint: `${baseUrl}/api/oauth/authorize`,
     revocation_endpoint: `${baseUrl}/api/oauth/revoke`,
     token_endpoint: `${baseUrl}/api/oauth/token`,
+    // RFC 7591 — Dynamic Client Registration. Required for MCP clients
+    // (Claude Desktop, Cursor, Continue) that self-register before
+    // starting OAuth. Without this they silently fail.
+    registration_endpoint: `${baseUrl}/api/oauth/register`,
     response_types_supported: ["code"],
     grant_types_supported: ["authorization_code", "refresh_token"],
     code_challenge_methods_supported: ["S256"],

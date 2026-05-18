@@ -226,17 +226,50 @@ function createFixture(options: {
   return root;
 }
 
+/**
+ * Per-hook timeout in milliseconds. If a python hook hangs (waiting on
+ * stdin past what we feed it, hitting a network call, etc.) the runner
+ * used to freeze indefinitely until the outer gate runner SIGTERMed at
+ * 120s. Now we kill the individual hook after this timeout and treat
+ * the hang as a `pass: false` result with a clear "TIMEOUT" message,
+ * so the rest of the suite still completes and the bad hook is
+ * identifiable. (PROD-385)
+ */
+const HOOK_RUN_TIMEOUT_MS = 15_000;
+
 function runHook(root: string, hook: string, payload: unknown = {}): HookRun {
   const hookPath = join(root, '.claude/hooks', hook);
   const result = spawnSync('python3', [hookPath], {
     cwd: root,
     input: JSON.stringify(payload),
     encoding: 'utf-8',
+    timeout: HOOK_RUN_TIMEOUT_MS,
+    killSignal: 'SIGKILL',
     env: {
       ...process.env,
       CLAUDE_PROJECT_DIR: root,
     },
   });
+
+  // node sets `result.error.code === "ETIMEDOUT"` and `result.signal === "SIGKILL"`
+  // when the timeout hit. Surface that as an explicit non-zero exit and
+  // a synthetic stderr line so downstream `assert(...)` sees the failure
+  // and the hook name shows up in the report.
+  const timedOut =
+    (result.error as NodeJS.ErrnoException | undefined)?.code === 'ETIMEDOUT' ||
+    result.signal === 'SIGKILL';
+  if (timedOut) {
+    return {
+      hook,
+      exitCode: 124, // conventional "command timed out"
+      stdout: result.stdout ?? '',
+      stderr:
+        (result.stderr ?? '') +
+        `\n[hook-tester] TIMEOUT after ${HOOK_RUN_TIMEOUT_MS}ms — killed with SIGKILL. ` +
+        `Hook ${hook} likely hangs on stdin, network, or an infinite loop.`,
+    };
+  }
+
   return {
     hook,
     exitCode: result.status ?? 1,
@@ -508,7 +541,13 @@ writeFileSync(
   'utf-8',
 );
 
-if (existsSync(resolve(cwd, '.ai-starter-kit.json'))) {
+// Manifest regeneration belongs to `pnpm sync`, not the hook-test runner.
+// PROD-385: this used to call syncStarterSystem({ cwd }) after every test
+// pass, but on repos with many `.ai-starter/runs/` entries (this one had
+// ~270) it took >120s to walk and made the pre-push gate timeout. The
+// gate's job is to test hooks; manifest regen is a separate concern.
+// Opt back in with `HOOK_TESTER_SYNC=1` if you need the legacy behavior.
+if (process.env.HOOK_TESTER_SYNC === '1' && existsSync(resolve(cwd, '.ai-starter-kit.json'))) {
   syncStarterSystem({ cwd });
 }
 

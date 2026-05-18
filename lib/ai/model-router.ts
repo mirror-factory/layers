@@ -126,24 +126,18 @@ export async function resolveModel(modelId: string): Promise<{ model: LanguageMo
 }
 
 /**
- * Semantic model aliases. Mode-aware: when LOCAL_TEST=1 is set, cheap
- * models resolve to Claude Haiku (free via subscription) instead of
- * Gemini (which would cost real money even in local test).
+ * Semantic model aliases. Cheap aliases use the current app default LLM.
  *
- * Calibrated against claude-opus-4-6 / claude-sonnet-4-5 / claude-haiku-4-5
- * and gemini-3-flash as of 2026-04-19.
+ * Calibrated against GPT-5.4 Nano, claude-opus-4-6,
+ * claude-sonnet-4-5, and gemini-3-flash as of 2026-04-30.
  */
 export const models = {
   planner: 'anthropic/claude-opus-4.6',
   generator: 'anthropic/claude-sonnet-4.5',
   evaluator: 'anthropic/claude-sonnet-4.5',
-  // Cheap-tier aliases prefer Claude Haiku in LOCAL_TEST so subscription
-  // picks up the cost instead of Gemini billable.
-  judge: wantLocalTest() ? 'anthropic/claude-haiku-4.5' : 'anthropic/claude-haiku-4.5',
-  classifier: wantLocalTest() ? 'anthropic/claude-haiku-4.5' : 'anthropic/claude-haiku-4.5',
-  // For pure-cost-sensitive bulk work, swap this to 'google/gemini-3-flash'
-  // in prod if you accept the cost. In LOCAL_TEST it stays on Claude Haiku.
-  bulk: wantLocalTest() ? 'anthropic/claude-haiku-4.5' : 'google/gemini-3-flash',
+  judge: 'openai/gpt-5.4-nano',
+  classifier: 'openai/gpt-5.4-nano',
+  bulk: wantLocalTest() ? 'openai/gpt-5.4-nano' : 'google/gemini-3-flash',
 } as const;
 
 export type ChatMode = 'fast' | 'smart';

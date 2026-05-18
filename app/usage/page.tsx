@@ -62,7 +62,7 @@ export default async function UsagePage() {
               </div>
               <div
                 className={`text-xl font-semibold ${
-                  tile.accent ? "text-[#14b8a6]" : "text-[#e5e5e5]"
+                  tile.accent ? "text-layers-mint" : "text-[#e5e5e5]"
                 }`}
               >
                 {tile.value}
@@ -87,7 +87,7 @@ export default async function UsagePage() {
                 : "Free"}
             </span>
             {usage.quotaBypass && (
-              <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-md bg-[#14b8a6]/10 text-[#14b8a6]">
+              <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-md bg-layers-mint/10 text-layers-mint">
                 unlimited
               </span>
             )}
@@ -95,8 +95,8 @@ export default async function UsagePage() {
               <span
                 className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-md ${
                   usage.subscription.status === "active"
-                    ? "bg-[#22c55e]/10 text-[#22c55e]"
-                    : "bg-[#eab308]/10 text-[#eab308]"
+                    ? "bg-signal-success/10 text-signal-success"
+                    : "bg-signal-warning/10 text-signal-warning"
                 }`}
               >
                 {usage.subscription.status}
@@ -127,7 +127,7 @@ export default async function UsagePage() {
             </div>
             <div className="h-2 bg-[#262626] rounded-full overflow-hidden">
               <div
-                className="h-full bg-[#14b8a6] rounded-full transition-all duration-300"
+                className="h-full bg-layers-mint rounded-full transition-all duration-300"
                 style={{
                   width: `${Math.min(
                     (usage.minutes.thisMonth / usage.minutes.monthlyLimit) * 100,
@@ -159,7 +159,7 @@ export default async function UsagePage() {
             </div>
             <div className="h-2 bg-[#262626] rounded-full overflow-hidden">
               <div
-                className="h-full bg-[#14b8a6] rounded-full transition-all duration-300"
+                className="h-full bg-layers-mint rounded-full transition-all duration-300"
                 style={{
                   width: usage.quotaBypass
                     ? "100%"

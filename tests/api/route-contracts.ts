@@ -39,6 +39,10 @@ export const apiRouteContracts = [
   route("/api/ai-logs", "app/api/ai-logs/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
   route("/api/ai-logs/stats", "app/api/ai-logs/stats/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
   route("/api/control-plane/evidence-export", "app/api/control-plane/evidence-export/route.ts", ["GET"], "dev-kit", false, [200, 403, 404, 503], undefined, "/api/control-plane/evidence-export", false, "Successful response is a gzip evidence archive."),
+  route("/api/cron/watchlist-tick", "app/api/cron/watchlist-tick/route.ts", ["GET", "POST"], "service", true, [200, 400, 401], {
+    GET: { expectStatuses: [200, 401] },
+    POST: { expectStatuses: [200, 401] },
+  }, "/api/cron/watchlist-tick", true, "Vercel-Cron-friendly tick: bearer matches CRON_SECRET or INTERNAL_ADMIN_TOKEN; runs every 5 min in prod."),
   route("/api/control-plane", "app/api/control-plane/route.ts", ["GET", "POST"], "dev-kit", false, [200, 403, 404, 503], {
     GET: { expectStatuses: okOrUnavailable },
     POST: { body: {}, expectStatuses: [200, 400, 403, 404, 503] },
@@ -60,8 +64,20 @@ export const apiRouteContracts = [
   route("/api/account/delete", "app/api/account/delete/route.ts", ["POST"], "user", true, [200, 400, 401, 403, 503], {
     POST: { body: { confirmation: "DELETE" }, expectStatuses: [200, 401, 403, 503], skipReason: "permanently deletes the caller account" },
   }),
-  route("/api/calendar/callback/[provider]", "app/api/calendar/callback/[provider]/route.ts", ["GET"], "oauth", false, [302, 307, 308], undefined, "/api/calendar/callback/google"),
-  route("/api/calendar/connect/[provider]", "app/api/calendar/connect/[provider]/route.ts", ["GET"], "user", false, [302, 307, 308], undefined, "/api/calendar/connect/google"),
+  // PROD-403: OAuth client + API key lifecycle.
+  route("/api/account/oauth-clients", "app/api/account/oauth-clients/route.ts", ["GET"], "user", true, [200, 401, 403, 503]),
+  route("/api/account/oauth-clients/[id]", "app/api/account/oauth-clients/[id]/route.ts", ["DELETE"], "user", true, [200, 400, 401, 403, 404, 503], {
+    DELETE: { expectStatuses: [200, 400, 401, 403, 404, 503], skipReason: "revokes a caller-owned OAuth client" },
+  }, "/api/account/oauth-clients/sample"),
+  route("/api/account/api-keys", "app/api/account/api-keys/route.ts", ["GET", "POST"], "user", true, [200, 400, 401, 403, 500, 503], {
+    GET: { expectStatuses: [200, 401, 403, 503] },
+    POST: { body: { name: "test" }, expectStatuses: [200, 401, 403, 503], skipReason: "mints a caller-owned API key" },
+  }),
+  route("/api/account/api-keys/[id]", "app/api/account/api-keys/[id]/route.ts", ["DELETE"], "user", true, [200, 400, 401, 403, 404, 503], {
+    DELETE: { expectStatuses: [200, 400, 401, 403, 404, 503], skipReason: "revokes a caller-owned API key" },
+  }, "/api/account/api-keys/sample"),
+  route("/api/calendar/callback/[provider]", "app/api/calendar/callback/[provider]/route.ts", ["GET"], "oauth", false, [302, 307, 308], undefined, "/api/calendar/callback/google", false),
+  route("/api/calendar/connect/[provider]", "app/api/calendar/connect/[provider]/route.ts", ["GET"], "user", false, [302, 307, 308], undefined, "/api/calendar/connect/google", false),
   route("/api/calendar/disconnect/[provider]", "app/api/calendar/disconnect/[provider]/route.ts", ["POST"], "user", true, [200, 400, 401, 403, 500, 503], {
     POST: { expectStatuses: [400, 401, 403, 503], skipReason: "disconnects a user calendar connection" },
   }, "/api/calendar/disconnect/google"),
@@ -69,6 +85,11 @@ export const apiRouteContracts = [
   route("/api/chat", "app/api/chat/route.ts", ["POST"], "user", true, badRequestOrUnavailable, {
     POST: { body: { messages: [] }, expectStatuses: [200, 400, 401, 503] },
   }),
+  // PROD-390: Daily onboarding-email cron. Auth via `x-vercel-cron` header
+  // (Vercel Cron) or `Authorization: Bearer ${CRON_SECRET}` (manual/scheduled).
+  // Smoke runs unauthorized → 401, which is the expected contract response.
+  route("/api/cron/onboarding-emails", "app/api/cron/onboarding-emails/route.ts", ["GET"], "service", true, [200, 401, 503]),
+  route("/api/dev-kit/config", "app/api/dev-kit/config/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
   route("/api/dev-kit/config/[name]", "app/api/dev-kit/config/[name]/route.ts", ["POST"], "dev-kit", false, badRequestOrUnavailable, {
     POST: { body: { yaml: "colors: {}\n" }, expectStatuses: [200, 400, 401, 403, 404] },
   }, "/api/dev-kit/config/design-tokens"),
@@ -85,6 +106,8 @@ export const apiRouteContracts = [
   route("/api/dev-kit/index", "app/api/dev-kit/index/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
   route("/api/dev-kit/logs/unified", "app/api/dev-kit/logs/unified/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
   route("/api/dev-kit/overview", "app/api/dev-kit/overview/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
+  route("/api/dev-kit/project-profile", "app/api/dev-kit/project-profile/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
+  route("/api/dev-kit/proof", "app/api/dev-kit/proof/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
   route("/api/dev-kit/registries", "app/api/dev-kit/registries/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
   route("/api/dev-kit/regressions", "app/api/dev-kit/regressions/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
   route("/api/dev-kit/runs/[run_id]", "app/api/dev-kit/runs/[run_id]/route.ts", ["GET"], "dev-kit", false, [200, 403, 404], undefined, "/api/dev-kit/runs/sample"),
@@ -95,6 +118,11 @@ export const apiRouteContracts = [
   route("/api/dev-kit/tools", "app/api/dev-kit/tools/route.ts", ["GET"], "dev-kit", false, okOrUnavailable),
   route("/api/embeddings/backfill", "app/api/embeddings/backfill/route.ts", ["POST"], "service", true, badRequestOrUnavailable),
   route("/api/health", "app/api/health/route.ts", ["GET"], "public", true, [200, 503]),
+  route("/api/internal/alerts", "app/api/internal/alerts/route.ts", ["GET", "POST"], "service", true, [200, 401], {
+    GET: { expectStatuses: [200, 401] },
+    POST: { expectStatuses: [200, 401] },
+  }),
+  route("/api/internal/health", "app/api/internal/health/route.ts", ["GET"], "service", true, [200, 401]),
   route("/api/mcp/[transport]", "app/api/mcp/[transport]/route.ts", ["GET", "POST", "DELETE"], "mcp-bearer", false, [200, 400, 401, 404, 405], {
     POST: {
       body: { jsonrpc: "2.0", id: 1, method: "initialize", params: {} },
@@ -108,7 +136,8 @@ export const apiRouteContracts = [
   route("/api/meetings/[id]/notes-package", "app/api/meetings/[id]/notes-package/route.ts", ["POST"], "user", true, badRequestOrUnavailable, {
     POST: { body: { destination: "agent_clipboard", trigger: "manual_push", include_transcript: false }, expectStatuses: [200, 400, 401, 404, 503] },
   }, "/api/meetings/sample/notes-package"),
-  route("/api/meetings/[id]", "app/api/meetings/[id]/route.ts", ["GET", "DELETE"], "user", true, [200, 401, 404, 503], {
+  route("/api/meetings/[id]", "app/api/meetings/[id]/route.ts", ["GET", "PATCH", "DELETE"], "user", true, [200, 400, 401, 404, 503], {
+    PATCH: { body: { userNotes: "Meeting notes" }, expectStatuses: [200, 400, 401, 404, 503], skipReason: "mutates caller's meeting notes" },
     DELETE: { expectStatuses: [200, 400, 401, 404, 409, 503], skipReason: "deletes empty local draft recordings" },
   }, "/api/meetings/sample"),
   route("/api/meetings", "app/api/meetings/route.ts", ["GET"], "user", true, okOrUnavailable),
@@ -118,19 +147,34 @@ export const apiRouteContracts = [
   route("/api/oauth/consent", "app/api/oauth/consent/route.ts", ["POST"], "oauth", false, [302, 400, 401, 503], {
     POST: { body: {}, expectStatuses: [400, 401, 503] },
   }),
+  route("/api/oauth/register", "app/api/oauth/register/route.ts", ["POST"], "oauth", false, [201, 400], {
+    POST: { body: {}, expectStatuses: [400] },
+  }),
   route("/api/oauth/revoke", "app/api/oauth/revoke/route.ts", ["POST"], "oauth", false, [200, 400, 503], {
     POST: { body: {}, expectStatuses: [400, 503] },
   }),
   route("/api/oauth/token", "app/api/oauth/token/route.ts", ["POST"], "oauth", false, badRequestOrUnavailable),
   route("/api/observability/health", "app/api/observability/health/route.ts", ["GET"], "public", true, [200]),
+  route("/api/observability/watchlist", "app/api/observability/watchlist/route.ts", ["GET"], "public", true, [200]),
   route("/api/search", "app/api/search/route.ts", ["POST"], "user", true, badRequestOrUnavailable, {
     POST: { body: { query: "", limit: 5 }, expectStatuses: [400, 401, 503] },
   }),
   route("/api/settings", "app/api/settings/route.ts", ["GET", "PUT"], "public", true, badRequestOrUnavailable),
   route("/api/stripe/checkout", "app/api/stripe/checkout/route.ts", ["POST"], "user", true, badRequestOrUnavailable),
   route("/api/stripe/webhook", "app/api/stripe/webhook/route.ts", ["POST"], "webhook", true, [200, 400, 503]),
+  route("/api/account/recipes/[id]", "app/api/account/recipes/[id]/route.ts", ["PATCH", "DELETE"], "user", true, [200, 400, 401, 404, 502, 503], {
+    PATCH: { body: { name: "Updated" }, expectStatuses: [200, 401, 404, 503], skipReason: "mutates caller's recipe" },
+    DELETE: { expectStatuses: [200, 401, 404, 503], skipReason: "deletes caller's recipe" },
+  }, "/api/account/recipes/sample"),
+  route("/api/account/recipes", "app/api/account/recipes/route.ts", ["GET", "POST"], "user", true, [200, 201, 400, 401, 502, 503], {
+    GET: { expectStatuses: [200, 401, 503] },
+    POST: { body: { name: "Test recipe", prompt: "Summarize this meeting" }, expectStatuses: [201, 401, 503], skipReason: "creates a recipe in caller's account" },
+  }),
+  route("/api/recordings/sign-upload", "app/api/recordings/sign-upload/route.ts", ["POST"], "user", true, [200, 400, 401, 502, 503], {
+    POST: { body: { contentType: "audio/webm", sizeBytes: 1024 }, expectStatuses: [200, 401, 503] },
+  }),
   route("/api/transcribe/[id]", "app/api/transcribe/[id]/route.ts", ["GET"], "user", true, [200, 202, 401, 404, 502, 503], undefined, "/api/transcribe/sample"),
-  route("/api/transcribe", "app/api/transcribe/route.ts", ["POST"], "user", true, [202, 400, 401, 402, 413, 502, 503]),
+  route("/api/transcribe", "app/api/transcribe/route.ts", ["POST"], "user", true, [202, 400, 401, 402, 403, 413, 502, 503]),
   route("/api/transcribe/stream/autosave", "app/api/transcribe/stream/autosave/route.ts", ["POST"], "user", true, badRequestOrUnavailable),
   route("/api/transcribe/stream/finalize", "app/api/transcribe/stream/finalize/route.ts", ["POST"], "user", true, badRequestOrUnavailable),
   route("/api/transcribe/stream/preflight", "app/api/transcribe/stream/preflight/route.ts", ["GET"], "user", true, [200, 401, 403, 503]),

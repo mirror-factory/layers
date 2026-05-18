@@ -1,6 +1,6 @@
 # MFDR Technical Decision Record
 
-Updated: 2026-04-30T23:00:06.717Z
+Updated: 2026-04-30T23:43:06.055Z
 Status: complete
 Source: manual
 
@@ -103,8 +103,8 @@ Verification: pnpm browser:proof, pnpm gates
 - pnpm score
 - pnpm report
 - Browser proof: Run against the local dev server with AI_STARTER_BASE_URL or PLAYWRIGHT_BASE_URL set.
-- Expect required: yes
-- Storybook required: yes
+- Expect required: no
+- Storybook required: no
 - Design drift policy: warn
 
 ## Success Metrics

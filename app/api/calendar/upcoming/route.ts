@@ -12,6 +12,7 @@ import {
 } from "@/lib/calendar/crypto";
 import {
   CalendarProviderError,
+  calendarScopesFromToken,
   fetchUpcomingCalendarEvents,
   isCalendarProviderConfigured,
   parseCalendarProvider,
@@ -30,11 +31,6 @@ interface CalendarConnectionRow {
   token_expires_at: string | null;
 }
 
-interface SupabaseGoogleSessionAccess {
-  accessToken: string;
-  accountEmail: string | null;
-}
-
 interface CalendarFetchState {
   items: CalendarEventItem[];
   reauthRequired: boolean;
@@ -47,34 +43,6 @@ function limitFromUrl(req: Request): number {
   const parsed = value ? Number.parseInt(value, 10) : 3;
   if (!Number.isFinite(parsed) || parsed < 1) return 3;
   return Math.min(parsed, 10);
-}
-
-async function getSupabaseGoogleSessionAccess(
-  supabase: Awaited<ReturnType<typeof getSupabaseUser>>,
-): Promise<SupabaseGoogleSessionAccess | null> {
-  if (!supabase) return null;
-  if (!("auth" in supabase) || !supabase.auth?.getSession) return null;
-
-  const result = await supabase.auth.getSession().catch(() => null);
-  const session = result?.data?.session as
-    | {
-        provider_token?: unknown;
-        user?: { email?: unknown };
-      }
-    | null
-    | undefined;
-  const accessToken =
-    typeof session?.provider_token === "string" && session.provider_token.trim()
-      ? session.provider_token
-      : null;
-
-  if (!accessToken) return null;
-
-  return {
-    accessToken,
-    accountEmail:
-      typeof session?.user?.email === "string" ? session.user.email : null,
-  };
 }
 
 async function fetchCalendarItemsForResponse(args: {
@@ -160,8 +128,6 @@ export const GET = withRoute(async (req, ctx) => {
     });
   }
 
-  const sessionGoogleAccess = await getSupabaseGoogleSessionAccess(supabase);
-
   const { data, error } = await supabase
     .from("calendar_connections")
     .select(
@@ -173,27 +139,17 @@ export const GET = withRoute(async (req, ctx) => {
     .limit(1);
 
   if (error) {
-    const sessionFetchState = sessionGoogleAccess
-      ? await fetchCalendarItemsForResponse({
-          provider: "google",
-          accessToken: sessionGoogleAccess.accessToken,
-          limit,
-          requestId: ctx.requestId,
-          userId,
-        })
-      : null;
-
     return NextResponse.json({
-      connected: Boolean(sessionGoogleAccess),
-      provider: sessionGoogleAccess ? "google" : null,
-      accountEmail: sessionGoogleAccess?.accountEmail ?? null,
-      items: sessionFetchState?.items ?? [],
+      connected: false,
+      provider: null,
+      accountEmail: null,
+      items: [],
       limit,
       setupRequired: error.code === "42P01",
       providerSetupRequired: false,
-      reauthRequired: sessionFetchState?.reauthRequired ?? true,
-      calendarFetchFailed: sessionFetchState?.calendarFetchFailed ?? false,
-      calendarRateLimited: sessionFetchState?.calendarRateLimited ?? false,
+      reauthRequired: false,
+      calendarFetchFailed: false,
+      calendarRateLimited: false,
     });
   }
 
@@ -210,16 +166,7 @@ export const GET = withRoute(async (req, ctx) => {
   if (connection && provider) {
     providerSetupRequired = !isCalendarProviderConfigured(provider);
 
-    if (providerSetupRequired && provider === "google" && sessionGoogleAccess) {
-      providerSetupRequired = false;
-      fetchState = await fetchCalendarItemsForResponse({
-        provider: "google",
-        accessToken: sessionGoogleAccess.accessToken,
-        limit,
-        requestId: ctx.requestId,
-        userId,
-      });
-    } else if (!providerSetupRequired) {
+    if (!providerSetupRequired) {
       let accessToken = decryptCalendarToken(connection.access_token_enc);
       const refreshToken = decryptCalendarToken(connection.refresh_token_enc);
       const expiresAt = connection.token_expires_at
@@ -240,7 +187,7 @@ export const GET = withRoute(async (req, ctx) => {
               refresh_token_enc: encryptCalendarToken(
                 refreshed.refreshToken ?? refreshToken,
               ),
-              scopes: refreshed.scope,
+              scopes: calendarScopesFromToken(refreshed.scope),
               token_expires_at: refreshed.expiresAt,
               updated_at: new Date().toISOString(),
             })
@@ -249,15 +196,6 @@ export const GET = withRoute(async (req, ctx) => {
         } catch {
           fetchState.reauthRequired = true;
         }
-      }
-
-      if (
-        (!accessToken || fetchState.reauthRequired) &&
-        provider === "google" &&
-        sessionGoogleAccess
-      ) {
-        accessToken = sessionGoogleAccess.accessToken;
-        fetchState.reauthRequired = false;
       }
 
       if (accessToken && !fetchState.reauthRequired) {
@@ -272,25 +210,14 @@ export const GET = withRoute(async (req, ctx) => {
         fetchState.reauthRequired = true;
       }
     }
-  } else if (sessionGoogleAccess) {
-    fetchState = await fetchCalendarItemsForResponse({
-      provider: "google",
-      accessToken: sessionGoogleAccess.accessToken,
-      limit,
-      requestId: ctx.requestId,
-      userId,
-    });
   } else {
-    fetchState.reauthRequired = true;
+    fetchState.reauthRequired = false;
   }
 
   return NextResponse.json({
-    connected: Boolean(connection) || Boolean(sessionGoogleAccess),
-    provider: connection?.provider ?? (sessionGoogleAccess ? "google" : null),
-    accountEmail:
-      connection?.provider_account_email ??
-      sessionGoogleAccess?.accountEmail ??
-      null,
+    connected: Boolean(connection),
+    provider: connection?.provider ?? null,
+    accountEmail: connection?.provider_account_email ?? null,
     items: fetchState.items,
     limit,
     setupRequired: false,

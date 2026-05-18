@@ -1,23 +1,17 @@
 "use client";
 
-import {
-  useState,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-} from "react";
+import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  Bot,
   CalendarDays,
   Clock3,
-  Link2,
+  Loader2,
   Search,
   SlidersHorizontal,
   Sparkles,
+  Square,
   Trash2,
   UsersRound,
 } from "lucide-react";
@@ -30,7 +24,6 @@ import {
 } from "@/components/live-recorder";
 import {
   SessionIntelligenceCanvas,
-  SessionStopButton,
   formatWorkspaceTimestamp,
   type SessionActionRow,
   type SessionTranscriptRow,
@@ -43,6 +36,12 @@ import {
   deriveLiveMeetingSignals,
   type LiveMeetingSignals,
 } from "@/lib/recording/live-signals";
+import { OnboardingProvider } from "@/components/onboarding/onboarding-provider";
+import { OnboardingWalkthrough } from "@/components/onboarding/onboarding-walkthrough";
+import {
+  ONBOARDING_ANCHOR_ATTR,
+  ONBOARDING_ANCHORS,
+} from "@/lib/onboarding/copy";
 
 interface Turn {
   speaker: string | null;
@@ -82,7 +81,7 @@ interface CalendarOverview {
   calendarRateLimited?: boolean;
 }
 
-type CaptureState = "idle" | "recording" | "saving" | "done";
+type CaptureState = "idle" | "arming" | "recording" | "saving" | "done";
 
 const EMPTY_CALENDAR_OVERVIEW: CalendarOverview = {
   connected: false,
@@ -91,13 +90,6 @@ const EMPTY_CALENDAR_OVERVIEW: CalendarOverview = {
   items: [],
 };
 const EMPTY_RECORDING_SECONDS_THRESHOLD = 30;
-const MCP_PROVIDER_MARKS = [
-  { name: "ChatGPT", mark: "GPT", tone: "mint" },
-  { name: "Claude", mark: "Cl", tone: "amber" },
-  { name: "Gemini", mark: "G", tone: "blue" },
-  { name: "Grok", mark: "xAI", tone: "slate" },
-];
-
 export function RecorderHome() {
   const router = useRouter();
   const recorderRef = useRef<LiveRecorderHandle | null>(null);
@@ -112,8 +104,9 @@ export function RecorderHome() {
   const [audioLevel, setAudioLevel] = useState(0);
   const [recorderSnapshot, setRecorderSnapshot] =
     useState<LiveRecorderSnapshot | null>(null);
-  const [selectedCalendarEventId, setSelectedCalendarEventId] =
-    useState<string | null>(null);
+  const [selectedCalendarEventId, setSelectedCalendarEventId] = useState<
+    string | null
+  >(null);
   const queuedCalendarStartIdRef = useRef<string | null>(null);
 
   useEffect(() => {
@@ -173,9 +166,11 @@ export function RecorderHome() {
   const handleStateChange = useCallback(
     (recState: "idle" | "connecting" | "recording" | "finalizing") => {
       if (recState === "connecting") {
+        setCaptureState("arming");
         setMeetingsFading(true);
       } else if (recState === "recording") {
         setCaptureState("recording");
+        setMeetingsFading(false);
       } else if (recState === "finalizing") {
         setCaptureState("saving");
       } else {
@@ -204,7 +199,9 @@ export function RecorderHome() {
   const selectedCalendarItem = useMemo(
     () =>
       selectedCalendarEventId
-        ? calendarOverview.items.find((item) => item.id === selectedCalendarEventId) ?? null
+        ? (calendarOverview.items.find(
+            (item) => item.id === selectedCalendarEventId,
+          ) ?? null)
         : null,
     [calendarOverview.items, selectedCalendarEventId],
   );
@@ -231,17 +228,36 @@ export function RecorderHome() {
   );
   const workspaceKeyPoints = liveSignals.keyPoints.map((item) => item.text);
   const workspaceDecisions = liveSignals.decisions.map((item) => item.text);
+  const workspaceStats = {
+    segments: turns.length,
+    words: liveSignals.words,
+    points: workspaceKeyPoints.length,
+    actions: workspaceActions.length,
+  };
   const workspaceTitle =
     meetingContext?.meetingTitle ?? "Product planning session";
   const workspaceSubtitle =
     meetingContext?.source === "calendar"
-      ? meetingContext.location ?? "Calendar context"
+      ? (meetingContext.location ?? "Calendar context")
       : "Layers roadmap";
   const workspaceDate = meetingContext
     ? new Date(meetingContext.startsAt)
     : new Date();
   const durationLabel = recorderSnapshot?.durationLabel ?? "00:00";
-  const isFinalizing = recorderSnapshot?.state === "finalizing";
+  const isArming =
+    captureState === "arming" || recorderSnapshot?.state === "connecting";
+  const isFinalizing =
+    captureState === "saving" || recorderSnapshot?.state === "finalizing";
+  const captureStatusLabel = isFinalizing
+    ? "Saving notes"
+    : isArming
+      ? "Starting notes"
+      : "Writing notes";
+  const captureBadgeLabel = isFinalizing ? "SAVE" : isArming ? "START" : "LIVE";
+  const waveActive =
+    captureState === "arming" ||
+    captureState === "recording" ||
+    captureState === "saving";
   const handleDeleteRecentMeeting = useCallback((meetingId: string) => {
     setRecentMeetings((items) => items.filter((item) => item.id !== meetingId));
   }, []);
@@ -265,175 +281,216 @@ export function RecorderHome() {
   }, [captureState, meetingContext]);
 
   return (
-    <div className="paper-calm-page recorder-page session-workspace-page min-h-screen-safe flex flex-col">
-      <TopBar title="Layers" />
+    <OnboardingProvider>
+      <div className="paper-calm-page recorder-page session-workspace-page min-h-screen-safe flex flex-col">
+        <TopBar title="Layers" />
+        <OnboardingWalkthrough />
 
-      <main className="home-app-shell mx-auto flex w-full flex-col px-4 pb-4 pt-3 sm:pt-5">
-        <div
-          className={`home-desktop-grid ${
-            isLiveWorkspace ? "is-recording" : ""
-          } ${meetingsFading && !isLiveWorkspace ? "is-arming" : ""}`}
-        >
+        <main className="home-app-shell mx-auto flex w-full flex-col px-4 pb-4 pt-3 sm:pt-5">
+          <div
+            className={`home-desktop-grid ${
+              isLiveWorkspace ? "is-recording" : ""
+            } ${meetingsFading && !isLiveWorkspace ? "is-arming" : ""}`}
+          >
+            {!isLiveWorkspace && (
+              <div className="home-desktop-sidebar home-left-column">
+                <RecentMeetings
+                  meetings={recentMeetings}
+                  meetingsFading={meetingsFading}
+                  compact
+                  onDeleteMeeting={handleDeleteRecentMeeting}
+                />
+              </div>
+            )}
+
+            <div className="home-center-column">
+              <section
+                className={`home-record-dock w-full flex-shrink-0 rounded-lg px-4 py-4 sm:px-6 sm:py-5 ${
+                  isLiveWorkspace ? "is-live" : ""
+                }`}
+              >
+                {!isLiveWorkspace && <HomeGreeting />}
+
+                {isLiveWorkspace && (
+                  <>
+                    <div className="session-capture-date">
+                      <CalendarDays size={18} aria-hidden="true" />
+                      <span>{formatFullSessionDate(workspaceDate)}</span>
+                    </div>
+
+                    <div className="session-capture-timer">
+                      <strong>{durationLabel}</strong>
+                      <div className="session-capture-state">
+                        <span>{captureStatusLabel}</span>
+                        <em className="session-live-badge is-live">
+                          <span aria-hidden="true" />
+                          {captureBadgeLabel}
+                        </em>
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                <div
+                  className={`home-record-shell ${
+                    isLiveWorkspace ? "is-session-shell" : ""
+                  }`}
+                >
+                  <div
+                    className={`home-recorder-control-slot ${
+                      isLiveWorkspace ? "is-managed" : ""
+                    }`}
+                    {...{ [ONBOARDING_ANCHOR_ATTR]: ONBOARDING_ANCHORS.record }}
+                  >
+                    <LiveRecorder
+                      ref={recorderRef}
+                      onTranscriptUpdate={handleTranscriptUpdate}
+                      onSessionEnd={handleSessionEnd}
+                      meetingContext={meetingContext}
+                      onAudioLevel={handleAudioLevel}
+                      onStateChange={handleStateChange}
+                      onSnapshot={setRecorderSnapshot}
+                      presentation={isLiveWorkspace ? "managed" : "default"}
+                    />
+                  </div>
+                  <div className="home-animated-lines" aria-hidden="true">
+                    <AudioWaveRibbon
+                      active={waveActive}
+                      audioLevel={audioLevel}
+                      height={118}
+                      sensitivity={1.16}
+                      motion={1.28}
+                      texture="clean"
+                      className="w-full"
+                    />
+                  </div>
+                </div>
+
+                {!isLiveWorkspace && (
+                  <div className="home-capture-brief">
+                    <p>
+                      Start the note when the conversation begins. Layers will
+                      organize the transcript, key points, and follow-ups as it
+                      listens.
+                    </p>
+                  </div>
+                )}
+
+                {isLiveWorkspace && (
+                  <LiveRecordingContextCard
+                    meetingContext={meetingContext}
+                    title={workspaceTitle}
+                    subtitle={workspaceSubtitle}
+                    date={workspaceDate}
+                  />
+                )}
+
+                {isLiveWorkspace && (
+                  <RecordingStopControl
+                    label={captureStatusLabel}
+                    busy={isArming || isFinalizing}
+                    onClick={() => void recorderRef.current?.stop()}
+                    disabled={isArming || isFinalizing}
+                  />
+                )}
+              </section>
+            </div>
+
+            {isLiveWorkspace && (
+              <SessionIntelligenceCanvas
+                mode="live"
+                summaryText={liveWorkspaceSummary(liveSignals)}
+                updatedLabel="Updated just now"
+                transcriptRows={workspaceRows}
+                keyPoints={workspaceKeyPoints}
+                actions={workspaceActions}
+                decisions={workspaceDecisions}
+                stats={workspaceStats}
+                footerStatus={
+                  isFinalizing ? "Saving notes" : "Live - new content arriving"
+                }
+              />
+            )}
+
+            {!isLiveWorkspace && (
+              <div className="home-desktop-sidebar home-right-column">
+                <UpcomingMeetingsPanel
+                  overview={calendarOverview}
+                  meetingsFading={meetingsFading}
+                  selectedEventId={selectedCalendarEventId}
+                  onRecordMeeting={handleRecordCalendarMeeting}
+                />
+                <HomeInsightTip />
+              </div>
+            )}
+          </div>
+
           {!isLiveWorkspace && (
-            <div className="home-desktop-sidebar home-left-column">
+            <div className="home-mobile-recent">
               <RecentMeetings
                 meetings={recentMeetings}
                 meetingsFading={meetingsFading}
-                compact
                 onDeleteMeeting={handleDeleteRecentMeeting}
               />
             </div>
           )}
 
-          <div className="home-center-column">
-            <section
-              className={`home-record-dock w-full flex-shrink-0 rounded-lg px-4 py-4 sm:px-6 sm:py-5 ${
-                isLiveWorkspace ? "is-live" : ""
-              }`}
-            >
-              {!isLiveWorkspace && (
-                <HomeGreeting />
-              )}
-
-              {isLiveWorkspace && (
-                <>
-                  <div className="session-capture-date">
-                    <CalendarDays size={18} aria-hidden="true" />
-                    <span>{formatFullSessionDate(workspaceDate)}</span>
-                  </div>
-
-                  <div className="session-capture-timer">
-                    <strong>{durationLabel}</strong>
-                    <div className="session-capture-state">
-                      <span>
-                        {isFinalizing ? "Saving notes" : "Writing notes"}
-                      </span>
-                      <em className="session-live-badge is-live">
-                        <span aria-hidden="true" />
-                        {isFinalizing ? "SAVE" : "LIVE"}
-                      </em>
-                    </div>
-                  </div>
-                </>
-              )}
-
-              <div
-                className={`home-record-shell ${
-                  isLiveWorkspace ? "is-session-shell" : ""
-                }`}
-              >
-                <div
-                  className={`home-recorder-control-slot ${
-                    isLiveWorkspace ? "is-managed" : ""
-                  }`}
-                >
-                  <LiveRecorder
-                    ref={recorderRef}
-                    onTranscriptUpdate={handleTranscriptUpdate}
-                    onSessionEnd={handleSessionEnd}
-                    meetingContext={meetingContext}
-                    onAudioLevel={handleAudioLevel}
-                    onStateChange={handleStateChange}
-                    onSnapshot={setRecorderSnapshot}
-                    presentation={isLiveWorkspace ? "managed" : "default"}
-                  />
-                </div>
-                <div className="home-animated-lines" aria-hidden="true">
-                  <AudioWaveRibbon
-                    active={captureState === "recording"}
-                    audioLevel={audioLevel}
-                    height={118}
-                    sensitivity={1.16}
-                    motion={1.28}
-                    texture="clean"
-                    className="w-full"
-                  />
-                </div>
-              </div>
-
-              {!isLiveWorkspace && (
-                <div className="home-capture-brief">
-                  <p>
-                    Start the note when the conversation begins. Layers will
-                    organize the transcript, key points, and follow-ups as it
-                    listens.
-                  </p>
-                </div>
-              )}
-
-              {isLiveWorkspace && (
-                <LiveRecordingContextCard
-                  meetingContext={meetingContext}
-                  signals={liveSignals}
-                  turns={turns}
-                  title={workspaceTitle}
-                  subtitle={workspaceSubtitle}
-                  date={workspaceDate}
-                />
-              )}
-
-              {isLiveWorkspace && (
-                <SessionStopButton
-                  label={isFinalizing ? "Saving notes" : "Stop recording"}
-                  onClick={() => void recorderRef.current?.stop()}
-                  disabled={isFinalizing}
-                />
-              )}
-            </section>
-
-          </div>
-
-          {isLiveWorkspace && (
-            <SessionIntelligenceCanvas
-              mode="live"
-              summaryText={liveWorkspaceSummary(liveSignals)}
-              updatedLabel="Updated just now"
-              transcriptRows={workspaceRows}
-              keyPoints={workspaceKeyPoints}
-              actions={workspaceActions}
-              decisions={workspaceDecisions}
-              footerStatus={
-                isFinalizing
-                  ? "Saving notes"
-                  : "Live - new content arriving"
-              }
-            />
-          )}
-
           {!isLiveWorkspace && (
-            <div className="home-desktop-sidebar home-right-column">
+            <div className="home-mobile-calendar">
               <UpcomingMeetingsPanel
                 overview={calendarOverview}
                 meetingsFading={meetingsFading}
                 selectedEventId={selectedCalendarEventId}
                 onRecordMeeting={handleRecordCalendarMeeting}
               />
-              <HomeInsightTip />
             </div>
           )}
+        </main>
+      </div>
+    </OnboardingProvider>
+  );
+}
+
+function RecordingStopControl({
+  label,
+  busy = false,
+  disabled = false,
+  onClick,
+}: {
+  label: string;
+  busy?: boolean;
+  disabled?: boolean;
+  onClick?: () => void;
+}) {
+  return (
+    <div className="session-capture-control">
+      <button
+        type="button"
+        className={`session-stop-button recording-stop-control ${
+          busy ? "is-busy" : ""
+        }`}
+        onClick={onClick}
+        disabled={disabled}
+        aria-busy={busy}
+      >
+        <span>
+          {busy ? (
+            <Loader2
+              size={16}
+              className="recording-control-spinner"
+              aria-hidden="true"
+            />
+          ) : (
+            <Square size={15} fill="currentColor" aria-hidden="true" />
+          )}
+        </span>
+        {busy ? label : "Stop recording"}
+      </button>
+      {busy && (
+        <div className="recording-transition-status" role="status">
+          {label}
         </div>
-
-        {!isLiveWorkspace && (
-          <div className="home-mobile-recent">
-            <RecentMeetings
-              meetings={recentMeetings}
-              meetingsFading={meetingsFading}
-              onDeleteMeeting={handleDeleteRecentMeeting}
-            />
-          </div>
-        )}
-
-        {!isLiveWorkspace && (
-          <div className="home-mobile-calendar">
-            <UpcomingMeetingsPanel
-              overview={calendarOverview}
-              meetingsFading={meetingsFading}
-              selectedEventId={selectedCalendarEventId}
-              onRecordMeeting={handleRecordCalendarMeeting}
-            />
-          </div>
-        )}
-      </main>
+      )}
     </div>
   );
 }
@@ -473,7 +530,10 @@ function HomeGreeting() {
 
   return (
     <div className="home-paper-heading home-session-heading">
-      <div className="home-session-meta" aria-label={`${dateLabel}, ${timeLabel}`}>
+      <div
+        className="home-session-meta"
+        aria-label={`${dateLabel}, ${timeLabel}`}
+      >
         <span className="home-session-date">
           <CalendarDays size={15} aria-hidden="true" />
           {dateLabel}
@@ -483,7 +543,9 @@ function HomeGreeting() {
             {hour}:{minute}
           </span>
           <span className="home-session-seconds">:{second}</span>
-          {dayPeriod && <span className="home-session-period">{dayPeriod}</span>}
+          {dayPeriod && (
+            <span className="home-session-period">{dayPeriod}</span>
+          )}
         </span>
       </div>
     </div>
@@ -492,15 +554,11 @@ function HomeGreeting() {
 
 function LiveRecordingContextCard({
   meetingContext,
-  signals,
-  turns,
   title,
   subtitle,
   date,
 }: {
   meetingContext: RecordingMeetingContext | null;
-  signals: LiveMeetingSignals;
-  turns: Turn[];
   title: string;
   subtitle: string;
   date: Date;
@@ -511,11 +569,16 @@ function LiveRecordingContextCard({
         month: new Intl.DateTimeFormat(undefined, { weekday: "short" }).format(
           date,
         ),
-        day: new Intl.DateTimeFormat(undefined, { day: "2-digit" }).format(date),
+        day: new Intl.DateTimeFormat(undefined, { day: "2-digit" }).format(
+          date,
+        ),
         accessibleLabel: formatFullSessionDate(date),
       };
   const timeLine = meetingContext
-    ? formatCalendarDateLine(meetingContext.startsAt, meetingContext.endsAt ?? null)
+    ? formatCalendarDateLine(
+        meetingContext.startsAt,
+        meetingContext.endsAt ?? null,
+      )
     : subtitle;
   const location = meetingContext?.location;
 
@@ -536,30 +599,13 @@ function LiveRecordingContextCard({
             {timeLine}
             {location ? ` - ${location}` : ""}
           </p>
-          <Link href="/settings#calendar" className="session-calendar-pill is-connected">
-            <Link2 size={13} aria-hidden="true" />
-            {meetingContext ? "Connected to calendar" : "Connect calendar"}
-          </Link>
+          <span className="session-calendar-pill is-connected is-disabled">
+            <CalendarDays size={13} aria-hidden="true" />
+            {meetingContext
+              ? "Calendar context attached"
+              : "Calendar sync coming soon"}
+          </span>
         </div>
-      </div>
-
-      <div className="session-stat-grid" aria-label="Live recording progress">
-        <span>
-          <strong>{turns.length}</strong>
-          <small>Segments</small>
-        </span>
-        <span>
-          <strong>{signals.words}</strong>
-          <small>Words</small>
-        </span>
-        <span>
-          <strong>{signals.keyPoints.length}</strong>
-          <small>Points</small>
-        </span>
-        <span>
-          <strong>{signals.actions.length}</strong>
-          <small>Actions</small>
-        </span>
       </div>
     </div>
   );
@@ -598,7 +644,11 @@ function buildWorkspaceTranscriptRows(
 }
 
 function buildWorkspaceActions(items: string[]): SessionActionRow[] {
-  const priorities: Array<SessionActionRow["priority"]> = ["High", "Med", "Low"];
+  const priorities: Array<SessionActionRow["priority"]> = [
+    "High",
+    "Med",
+    "Low",
+  ];
   return items.slice(0, 5).map((text, index) => ({
     id: `${index}-${text}`,
     text,
@@ -620,9 +670,7 @@ function liveWorkspaceSummary(signals: LiveMeetingSignals): string {
 
   const nextAction = signals.actions[0]?.text;
   const summary = signalText.slice(0, 3).join(" ");
-  return nextAction
-    ? `${summary} Next: ${nextAction}`
-    : summary;
+  return nextAction ? `${summary} Next: ${nextAction}` : summary;
 }
 
 function formatFullSessionDate(date: Date): string {
@@ -649,15 +697,13 @@ function UpcomingMeetingsPanel({
   const emptyCopy = overview.calendarRateLimited
     ? "Google Calendar is rate limited right now. You can still start recording manually."
     : overview.reauthRequired && overview.connected
-    ? "Reconnect your calendar to keep upcoming meetings available before recording."
-    : overview.providerSetupRequired || overview.setupRequired
-      ? "Calendar setup is ready in Settings once provider credentials are configured."
-      : "Connect your calendar to show the next meeting here before you hit record.";
+      ? "Reconnect your calendar to keep upcoming meetings available before recording."
+      : "Calendar sync is coming soon. You can still start recording manually.";
   const footnote = overview.connected
     ? overview.calendarFetchFailed
       ? "Connected, but events could not be fetched."
-      : overview.accountEmail ?? overview.provider ?? "Calendar connected"
-    : "Google Calendar and Outlook are available.";
+      : (overview.accountEmail ?? overview.provider ?? "Calendar connected")
+    : "Google Calendar and Outlook support is coming soon.";
 
   return (
     <aside
@@ -667,11 +713,18 @@ function UpcomingMeetingsPanel({
           : "translate-y-0 opacity-100"
       }`}
       aria-label="Upcoming meetings"
+      {...{ [ONBOARDING_ANCHOR_ATTR]: ONBOARDING_ANCHORS.calendar }}
     >
       <div className="home-calendar-heading">
-        <div>
+        <div className="flex items-center gap-2 flex-wrap">
           <p className="signal-eyebrow">Coming up</p>
-          <h2>Calendar context</h2>
+          <span
+            aria-label="Coming soon"
+            className="inline-flex items-center rounded-full bg-[color-mix(in_oklch,var(--layers-mint)_18%,transparent)] px-2 py-[2px] text-[9px] font-semibold uppercase tracking-[0.08em] text-[var(--layers-mint)]"
+          >
+            Coming soon
+          </span>
+          <h2 className="basis-full">Calendar context</h2>
         </div>
         <span className="home-calendar-icon" aria-hidden="true">
           <CalendarDays size={17} />
@@ -699,7 +752,9 @@ function UpcomingMeetingsPanel({
                 <div className="home-calendar-event-copy">
                   <div className="home-calendar-event-time">
                     <Clock3 size={13} aria-hidden="true" />
-                    <span>{formatCalendarDateLine(item.startsAt, item.endsAt)}</span>
+                    <span>
+                      {formatCalendarDateLine(item.startsAt, item.endsAt)}
+                    </span>
                   </div>
                   <p>{item.title}</p>
                   <div className="home-calendar-event-meta">
@@ -725,10 +780,13 @@ function UpcomingMeetingsPanel({
         <div className="home-calendar-empty">
           <p>{emptyCopy}</p>
           <CalendarConnectArt />
-          <Link href="/settings#calendar" className="home-calendar-connect">
-            <Link2 size={14} aria-hidden="true" />
-            <span>{overview.connected ? "Manage calendar" : "Connect calendar"}</span>
-          </Link>
+          <span
+            className="home-calendar-connect is-disabled"
+            aria-disabled="true"
+          >
+            <CalendarDays size={14} aria-hidden="true" />
+            <span>Calendar sync coming soon</span>
+          </span>
         </div>
       )}
 
@@ -739,42 +797,142 @@ function UpcomingMeetingsPanel({
 
 function HomeInsightTip() {
   return (
-    <aside className="home-insight-tip home-mcp-tip" aria-label="MCP connection">
-      <span className="home-mcp-art" aria-hidden="true">
-        <span className="home-mcp-hub">
-          <Bot size={18} />
-        </span>
-        {MCP_PROVIDER_MARKS.map((provider, index) => (
-          <span
-            className={`home-mcp-node home-mcp-node-${index + 1} is-${provider.tone}`}
-            key={provider.name}
-          >
-            {provider.mark}
-          </span>
-        ))}
-        <span className="home-mcp-flow-line home-mcp-flow-line-one" />
-        <span className="home-mcp-flow-line home-mcp-flow-line-two" />
-      </span>
-      <div className="home-insight-copy">
-        <p className="home-insight-kicker">MCP ready</p>
-        <h3>Connect your AI tools</h3>
-        <p>
-          Give Claude, ChatGPT, Gemini, and other clients permission to pull
-          meeting memory when you ask.
+    <aside
+      className="home-insight-tip home-mcp-tip home-mcp-tip-clean"
+      aria-label="MCP connection"
+      {...{ [ONBOARDING_ANCHOR_ATTR]: ONBOARDING_ANCHORS.mcp }}
+    >
+      <div className="home-mcp-clean-stack">
+        <p className="home-mcp-clean-kicker">
+          <span aria-hidden="true" className="home-mcp-kicker-dot" />
+          MCP ready
         </p>
-        <div className="home-mcp-provider-grid" aria-label="Supported MCP clients">
-          {MCP_PROVIDER_MARKS.slice(0, 3).map((provider) => (
-            <span className={`home-mcp-provider is-${provider.tone}`} key={provider.name}>
-              <span>{provider.mark}</span>
-              {provider.name}
-            </span>
-          ))}
-        </div>
-        <Link href="/profile" className="home-mcp-link">
-          <Sparkles size={13} aria-hidden="true" />
-          Set up MCP
+        <h3 className="home-mcp-clean-headline">Connect your AI tools</h3>
+        <p className="home-mcp-clean-body">
+          Plug Layers into ChatGPT, Claude, Gemini, or any MCP-aware client.
+        </p>
+        <Link
+          href="/profile"
+          className="home-mcp-clean-cta"
+          aria-label="Set up the Layers MCP connection"
+        >
+          <Sparkles size={14} aria-hidden="true" />
+          <span>Set up MCP connection</span>
         </Link>
       </div>
+
+      <style jsx>{`
+        @keyframes mcpKickerPulse {
+          0%,
+          100% {
+            box-shadow: 0 0 0 0
+              color-mix(in oklch, var(--layers-mint) 50%, transparent);
+          }
+          70% {
+            box-shadow: 0 0 0 8px
+              color-mix(in oklch, var(--layers-mint) 0%, transparent);
+          }
+        }
+        @keyframes mcpCtaHalo {
+          0%,
+          100% {
+            box-shadow:
+              0 1px 0 color-mix(in oklch, var(--layers-mint) 30%, transparent),
+              0 0 0 0 color-mix(in oklch, var(--layers-mint) 36%, transparent);
+          }
+          50% {
+            box-shadow:
+              0 1px 0 color-mix(in oklch, var(--layers-mint) 30%, transparent),
+              0 0 0 8px color-mix(in oklch, var(--layers-mint) 0%, transparent);
+          }
+        }
+        :global(.home-mcp-tip-clean) {
+          padding: clamp(20px, 2.4vw, 28px);
+        }
+        :global(.home-mcp-clean-stack) {
+          display: grid;
+          gap: 10px;
+          justify-items: start;
+          text-align: left;
+          max-width: 38ch;
+        }
+        :global(.home-mcp-clean-kicker) {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          margin: 0;
+          font-size: 0.62rem;
+          font-weight: 700;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: var(--layers-mint, #0f766e);
+        }
+        :global(.home-mcp-kicker-dot) {
+          display: inline-block;
+          width: 7px;
+          height: 7px;
+          border-radius: 999px;
+          background: var(--layers-mint, #0f766e);
+          animation: mcpKickerPulse 2.2s ease-out infinite;
+        }
+        :global(.home-mcp-clean-headline) {
+          margin: 0;
+          font-size: clamp(1.05rem, 0.94rem + 0.4vw, 1.25rem) !important;
+          font-weight: 600;
+          line-height: 1.2;
+          letter-spacing: -0.012em;
+          color: var(--text-primary);
+        }
+        :global(.home-mcp-clean-body) {
+          margin: 0 !important;
+          font-size: 0.84rem !important;
+          line-height: 1.5 !important;
+          color: var(--text-secondary, var(--fg-muted));
+          max-width: 36ch !important;
+        }
+        :global(.home-mcp-clean-cta) {
+          display: inline-flex !important;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          margin-top: 6px !important;
+          padding: 9px 16px !important;
+          min-height: 38px !important;
+          width: auto !important;
+          border-radius: 999px !important;
+          background: var(--layers-mint-soft, #b6efd9) !important;
+          color: var(--layers-ink, #0f1f33) !important;
+          border: 1px solid
+            color-mix(in oklch, var(--layers-mint) 38%, var(--layers-ink) 8%) !important;
+          font-size: 0.82rem !important;
+          font-weight: 600 !important;
+          line-height: 1 !important;
+          letter-spacing: -0.005em !important;
+          text-decoration: none !important;
+          white-space: nowrap;
+          animation: mcpCtaHalo 2.6s ease-in-out infinite;
+          transition:
+            transform 160ms ease,
+            background-color 220ms ease;
+        }
+        :global(.home-mcp-clean-cta:hover) {
+          background: color-mix(
+            in oklch,
+            var(--layers-mint-soft) 86%,
+            var(--layers-mint) 14%
+          ) !important;
+          transform: translateY(-1px);
+        }
+        @media (prefers-reduced-motion: reduce) {
+          :global(.home-mcp-kicker-dot),
+          :global(.home-mcp-clean-cta) {
+            animation: none !important;
+          }
+          :global(.home-mcp-clean-cta:hover) {
+            transform: none;
+          }
+        }
+      `}</style>
     </aside>
   );
 }
@@ -886,7 +1044,7 @@ function RecentMeetings({
         </div>
         <Link
           href="/meetings"
-          className="text-xs font-medium text-[#5eead4] transition-colors hover:text-[#99f6e4]"
+          className="text-xs font-medium text-layers-mint-soft transition-colors hover:text-[#99f6e4]"
         >
           View all
         </Link>
@@ -922,9 +1080,9 @@ function RecentMeetings({
           </p>
           <Link
             href="/record/live"
-            className="mt-4 inline-flex min-h-[44px] items-center justify-center rounded-md bg-[#14b8a6] px-4 text-sm font-medium text-[#042f2e] transition-colors hover:bg-[#2dd4bf]"
+            className="recent-empty-start-button mt-4 inline-flex min-h-[44px] items-center justify-center rounded-md bg-layers-mint px-4 text-sm font-medium text-layers-ink transition-colors hover:bg-layers-mint-soft"
           >
-            Start live recording
+            Start recording
           </Link>
         </div>
       ) : filteredMeetings.length === 0 ? (
@@ -1124,7 +1282,10 @@ function formatCalendarTime(iso: string): string {
   }).format(date);
 }
 
-function formatCalendarDateLine(startsAt: string, endsAt: string | null): string {
+function formatCalendarDateLine(
+  startsAt: string,
+  endsAt: string | null,
+): string {
   const start = formatCalendarTime(startsAt);
   if (!endsAt) return start;
 

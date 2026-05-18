@@ -40,5 +40,12 @@ export function GET(req: NextRequest) {
     oauthParams.set("client_id", parsed.value.clientId);
   }
 
+  // PROD-403: forward `client_name` so the consent screen can label the
+  // approval request ("Allow Claude Desktop to use Layers MCP tools.")
+  // AND so `/api/oauth/consent` can persist it on the oauth_clients row.
+  if (parsed.value.clientName) {
+    oauthParams.set("client_name", parsed.value.clientName);
+  }
+
   return NextResponse.redirect(`${baseUrl}/oauth/consent?${oauthParams}`);
 }

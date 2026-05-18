@@ -17,33 +17,41 @@ import {
 } from "@react-pdf/renderer";
 import type { Meeting } from "./types";
 
+const PDF_COLORS = {
+  ink: "rgb(31, 49, 68)",
+  muted: "rgb(102, 102, 102)",
+  section: "rgb(13, 148, 136)",
+  divider: "rgb(229, 229, 229)",
+  speaker: "rgb(68, 68, 68)",
+} as const;
+
 const styles = StyleSheet.create({
   page: {
     padding: 40,
     fontFamily: "Courier",
     fontSize: 10,
-    color: "#1a1a1a",
+    color: PDF_COLORS.ink,
   },
   title: { fontSize: 18, fontWeight: "bold", marginBottom: 4 },
-  subtitle: { fontSize: 9, color: "#666", marginBottom: 16 },
+  subtitle: { fontSize: 9, color: PDF_COLORS.muted, marginBottom: 16 },
   sectionTitle: {
     fontSize: 12,
     fontWeight: "bold",
     marginTop: 16,
     marginBottom: 8,
-    color: "#0d9488",
+    color: PDF_COLORS.section,
   },
   text: { fontSize: 10, lineHeight: 1.5, marginBottom: 4 },
   bullet: { fontSize: 10, lineHeight: 1.5, marginBottom: 2, paddingLeft: 12 },
   utterance: { marginBottom: 6 },
-  speaker: { fontSize: 9, fontWeight: "bold", color: "#444" },
+  speaker: { fontSize: 9, fontWeight: "bold", color: PDF_COLORS.speaker },
   divider: {
     borderBottomWidth: 1,
-    borderBottomColor: "#e5e5e5",
+    borderBottomColor: PDF_COLORS.divider,
     marginVertical: 12,
   },
   field: { marginBottom: 6 },
-  fieldLabel: { fontSize: 9, fontWeight: "bold", color: "#666" },
+  fieldLabel: { fontSize: 9, fontWeight: "bold", color: PDF_COLORS.muted },
   fieldValue: { fontSize: 10 },
   costRow: { flexDirection: "row", justifyContent: "space-between", marginBottom: 2 },
 });

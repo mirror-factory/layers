@@ -1,0 +1,85 @@
+--------- beginning of main
+05-17 22:57:55.166  1746  5065 I BlockstoreStorage: Clearing all the Blockstore Data for 1 packages [CONTEXT service_id=258 ]
+05-17 22:57:55.172  1746  4265 I Icing   : Usage reports ok 1, Failed Usage reports 0, indexed 0, rejected 0
+05-17 22:57:55.178  1746  5057 W SQLiteLog: (28) double-quoted string literal: "dev.mobile.maestro.test"
+05-17 22:57:55.192  1746  5088 I ContentMaintenance: Internal cache bytes used: 0; limit: 100000000; download size: 0
+05-17 22:57:55.200  1746  2510 I PinnedContentDownloader: Finished downloading pinned content.
+05-17 22:57:55.206  1746  4265 I Icing   : doRemovePackageData dev.mobile.maestro.test
+05-17 22:57:55.218  1450  1473 I ogle.android.as: Background young concurrent copying GC freed 116735(4909KB) AllocSpace objects, 0(0B) LOS objects, 37% free, 6636KB/10MB, paused 48.233ms,48us total 235.106ms
+05-17 22:57:55.220  1746  5088 I RealtimeCacheCleanup: Beginning Realtime garbage collection.
+05-17 22:57:55.224  1746  4265 I Icing   : Indexing com.google.android.gms-apps from com.google.android.gms
+05-17 22:57:55.226  1746  4265 I Icing   : Indexing done com.google.android.gms-apps
+05-17 22:57:55.226  1746  3156 I Icing   : IndexChimeraService.getServiceInterface callingPackage=com.google.android.gms componentName=null serviceId=30
+05-17 22:57:55.227  1746  4265 I Icing   : Indexing com.google.android.gms-apps from com.google.android.gms
+05-17 22:57:55.228  1746  4265 I Icing   : Indexing done com.google.android.gms-apps
+05-17 22:57:55.231  1746  5088 I RealtimeCacheCleanup: Finished Realtime garbage collection.
+05-17 22:57:55.233  1746  4265 I Icing   : Usage reports ok 0, Failed Usage reports 0, indexed 0, rejected 0
+05-17 22:57:55.350   759   759 D TileServices: Couldn't find tile for ComponentInfo{com.google.android.apps.wellbeing/com.google.android.apps.wellbeing.focusmode.quicksettings.FocusModeTileService}(0)
+05-17 22:57:55.383   759   759 D TileServices: Couldn't find tile for ComponentInfo{com.google.android.apps.wellbeing/com.google.android.apps.wellbeing.focusmode.quicksettings.FocusModeTileService}(0)
+05-17 22:57:58.445  5009  5010 I AidlLazyServiceRegistrar: Process has 0 (of 1 available) client(s) in use after notification artd has clients: 0
+05-17 22:57:58.445  5009  5010 I AidlLazyServiceRegistrar: Trying to shut down the service. No clients in use for any service in process.
+05-17 22:57:58.446  5009  5010 I AidlLazyServiceRegistrar: Unregistered all clients and exiting
+--------- beginning of kernel
+05-17 22:57:58.885   159   159 I servicemanager: Notifying artd they don't (previously: do) have clients when we now have no record of a client
+05-17 22:57:58.885   159   159 I servicemanager: Unregistering artd
+05-17 22:57:58.885   159   159 I BpBinder: onLastStrongRef automatically unlinking death recipients:
+05-17 22:57:58.886     1     1 I init    : Service 'artd' (pid 5009) exited with status 0 oneshot service took 4.229000 seconds in background
+05-17 22:57:58.886     1     1 I init    : Sending signal 9 to service 'artd' (pid 5009) process group...
+05-17 22:57:58.887     1     1 I libprocessgroup: Successfully killed process cgroup uid 1082 pid 5009 in 0ms
+05-17 22:58:00.038  1450  1797 I AiAiEcho: Predicting[0]: 
+05-17 22:58:00.038  1450  1797 I AiAiEcho: EchoTargets: 
+05-17 22:58:00.038  1450  1797 I AiAiEcho: Filtered by AiAi flag check: 
+05-17 22:58:00.038  1450  1797 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata: 
+05-17 22:58:00.038  1450  1797 I AiAiEcho: Predicting[0]: 
+05-17 22:58:00.038  1450  1797 I AiAiEcho: EchoTargets: 
+05-17 22:58:00.038  1450  1797 I AiAiEcho: Filtered by AiAi flag check: 
+05-17 22:58:00.038  1450  1797 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata: 
+05-17 22:58:00.038  1450  1797 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0 (types=[])
+05-17 22:58:00.039  1450  1797 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0 (types=[])
+05-17 22:58:00.047   759   880 D EGL_emulation: app_time_stats: avg=16907.19ms min=16907.19ms max=16907.19ms count=1
+05-17 22:58:00.050   759   759 W PageIndicator: Total number of pages invalid: 0. Assuming 1 page.
+05-17 22:58:00.050   759   759 W PageIndicator: Total number of pages invalid: 0. Assuming 1 page.
+05-17 22:58:01.785   747   747 I wpa_supplicant: wlan0: CTRL-EVENT-BEACON-LOSS 
+05-17 22:58:03.116   759   759 D StatusBarIconController: ignoring old pipeline callbacks, because the new mobile icons are enabled
+05-17 22:58:04.849  4060  4060 I logd    : start watching /data/system/packages.list ...
+05-17 22:58:04.849  4060  4060 I logd    : ReadPackageList, total packages: 202
+--------- beginning of system
+05-17 22:58:04.615   546  1631 D OomAdjuster: Not killing cached processes
+05-17 22:58:04.719   546   749 W FileUtils: Failed to chmod(AtomicFile[/data/system_de/0/system/game-manager-service.xml]): android.system.ErrnoException: chmod failed: ENOENT (No such file or directory)
+05-17 22:58:04.879   546   626 D ActivityManager: freezing 3083 android.process.media
+05-17 22:58:04.880   546   626 D ActivityManager: freezing 4176 com.google.android.documentsui
+05-17 22:58:05.133  1581  2384 I WorkerManager: dispose()
+05-17 22:58:05.253   177  5011 I keystore2: system/security/keystore2/src/watchdog.rs:319 - Watchdog thread idle -> terminating. Have a great day.
+05-17 22:58:05.374   546   626 D ActivityManager: freezing 1399 com.google.android.apps.wellbeing
+05-17 22:58:05.812  1026  1026 D TaplEvents: TIS / TouchInteractionService.onInputEvent: MotionEvent { action=ACTION_DOWN, actionButton=0, id[0]=0, x[0]=1000.0, y[0]=324.0, toolType[0]=TOOL_TYPE_FINGER, buttonState=0, classification=NONE, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=167830, downTime=167830, deviceId=-1, source=0x1002, displayId=0, eventId=-1022079375 }
+05-17 22:58:05.814  1026  1026 D TaplEvents: TIS / TouchInteractionService.onInputEvent: MotionEvent { action=ACTION_UP, actionButton=0, id[0]=0, x[0]=1000.0, y[0]=324.0, toolType[0]=TOOL_TYPE_FINGER, buttonState=0, classification=NONE, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=167830, downTime=167830, deviceId=-1, source=0x1002, displayId=0, eventId=-666052426 }
+05-17 22:58:05.886  4820  4845 D EGL_emulation: app_time_stats: avg=1391.18ms min=1.57ms max=26303.57ms count=19
+05-17 22:58:06.841  1026  1026 D TaplEvents: TIS / TouchInteractionService.onInputEvent: MotionEvent { action=ACTION_DOWN, actionButton=0, id[0]=0, x[0]=1000.0, y[0]=324.0, toolType[0]=TOOL_TYPE_FINGER, buttonState=0, classification=NONE, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=168860, downTime=168860, deviceId=-1, source=0x1002, displayId=0, eventId=-871544761 }
+05-17 22:58:06.842  1026  1026 D TaplEvents: TIS / TouchInteractionService.onInputEvent: MotionEvent { action=ACTION_UP, actionButton=0, id[0]=0, x[0]=1000.0, y[0]=324.0, toolType[0]=TOOL_TYPE_FINGER, buttonState=0, classification=NONE, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=168860, downTime=168860, deviceId=-1, source=0x1002, displayId=0, eventId=-223614226 }
+05-17 22:58:08.952  5112  5112 W BpBinder: Linking to death on android.gui.ISurfaceComposer but there are no threads (yet?) listening to incoming transactions. See ProcessState::startThreadPool and ProcessState::setThreadPoolMaxThreadCount. Generally you should setup the binder threadpool before other initialization steps.
+05-17 22:58:08.952  5112  5112 W ProcessState: Extra binder thread started, but 0 threads requested. Do not use *startThreadPool when zero threads are requested.
+05-17 22:58:08.962   160   160 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@4.0::IMapper/default in either framework or device VINTF manifest.
+05-17 22:58:08.962  5112  5113 I Gralloc4: mapper 4.x is not supported
+05-17 22:58:09.401   159   159 I servicemanager: Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest.
+05-17 22:58:09.147  1026  1026 D TaplEvents: TIS / TouchInteractionService.onInputEvent: MotionEvent { action=ACTION_DOWN, actionButton=0, id[0]=0, x[0]=200.0, y[0]=861.0, toolType[0]=TOOL_TYPE_FINGER, buttonState=0, classification=NONE, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=171166, downTime=171166, deviceId=-1, source=0x1002, displayId=0, eventId=-289435132 }
+05-17 22:58:09.148  1026  1026 D TaplEvents: TIS / TouchInteractionService.onInputEvent: MotionEvent { action=ACTION_UP, actionButton=0, id[0]=0, x[0]=200.0, y[0]=861.0, toolType[0]=TOOL_TYPE_FINGER, buttonState=0, classification=NONE, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=171166, downTime=171166, deviceId=-1, source=0x1002, displayId=0, eventId=-289453790 }
+05-17 22:58:09.165   759   759 D StatusBarIconController: ignoring old pipeline callback because the new wifi icon is enabled
+05-17 22:58:09.190  4820  4845 D EGL_emulation: app_time_stats: avg=290.22ms min=1.77ms max=2304.96ms count=11
+05-17 22:58:09.530   546  2163 W ProcessStats: Tracking association SourceState{7eb0bce com.google.android.gms.persistent/10128 BFgs #3964} whose proc state 4 is better than process ProcessState{b34b2e6 com.google.android.gms/10128 pkg=com.google.android.gms} proc state 8 (217 skipped)
+05-17 22:58:09.760   359  5119 I resolv  : GetAddrInfoHandler::run: {101 101 101 983141 10195 0}
+05-17 22:58:09.761   359  5120 I resolv  : res_nmkquery: (QUERY, IN, AAAA)
+05-17 22:58:09.761   359  5121 I resolv  : res_nmkquery: (QUERY, IN, A)
+05-17 22:58:09.978   747   747 I wpa_supplicant: wlan0: CTRL-EVENT-BEACON-LOSS 
+05-17 22:58:10.091   359  5121 I resolv  : res_nsend: used send_dg 241 terrno: 0
+05-17 22:58:10.091   359  5120 I resolv  : res_nsend: used send_dg 161 terrno: 0
+05-17 22:58:10.091   359  5120 I resolv  : doQuery: rcode=0, ancount=4, return value=161
+05-17 22:58:10.092   359  5121 I resolv  : doQuery: rcode=0, ancount=12, return value=241
+05-17 22:58:10.131   546  2042 D OomAdjuster: Not killing cached processes
+05-17 22:58:10.389   546   870 D WifiNl80211Manager: Scan result ready event
+05-17 22:58:10.389   546   870 D WifiNative: Scan result ready event
+05-17 22:58:13.116   759   759 D StatusBarIconController: ignoring old pipeline callbacks, because the new mobile icons are enabled
+05-17 22:58:13.214  5125  5125 W BpBinder: Linking to death on android.gui.ISurfaceComposer but there are no threads (yet?) listening to incoming transactions. See ProcessState::startThreadPool and ProcessState::setThreadPoolMaxThreadCount. Generally you should setup the binder threadpool before other initialization steps.
+05-17 22:58:13.215  5125  5125 W ProcessState: Extra binder thread started, but 0 threads requested. Do not use *startThreadPool when zero threads are requested.
+05-17 22:58:13.226   160   160 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@4.0::IMapper/default in either framework or device VINTF manifest.
+05-17 22:58:13.226  5125  5126 I Gralloc4: mapper 4.x is not supported
+05-17 22:58:13.666   159   159 I servicemanager: Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest.

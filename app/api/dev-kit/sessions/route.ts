@@ -11,6 +11,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { getTraces } from '@/lib/ai-dev-kit/supabase-queries';
+import { hasSupabaseEnv, localSessions } from '../local-fallbacks';
 
 export async function GET(request: NextRequest) {
   try {
@@ -44,6 +45,8 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    if (!hasSupabaseEnv()) return NextResponse.json(localSessions());
+
     const supabase = createClient(
       process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '',
       process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
@@ -59,9 +62,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(traces);
   } catch (err) {
     console.error('[api/dev-kit/sessions] Error:', err);
-    return NextResponse.json(
-      { error: 'Failed to fetch sessions' },
-      { status: 500 },
-    );
+    return NextResponse.json(localSessions());
   }
 }

@@ -8,22 +8,22 @@
  * on every render would be wasteful and the file only changes at build time.
  *
  * Fallback strategy:
- *   - Missing file          -> full default theme (dark-mint matching CLI banner).
+ *   - Missing file          -> full default theme (Layers Paper Calm).
  *   - File present, empty   -> full default theme.
  *   - Some tokens declared  -> declared values override defaults; the rest
  *                              fall back so the dashboard never renders with
  *                              undefined colors.
  *
  * Token name mapping (YAML key -> theme slot):
- *   colors.brand.primary   -> colors.primary
- *   colors.text.primary    -> colors.text
- *   colors.text.muted      -> colors.textMuted
- *   colors.bg.default      -> colors.bg
- *   colors.surface.default -> colors.surface
- *   colors.border.default  -> colors.border
- *   colors.state.success   -> colors.success
- *   colors.state.warn      -> colors.warn
- *   colors.state.error     -> colors.error
+ *   colors.brand.accent / colors.layers.mint -> colors.primary
+ *   colors.fg.default / colors.ink.950       -> colors.text
+ *   colors.fg.muted / colors.ink.600         -> colors.textMuted
+ *   colors.bg.page                           -> colors.bg
+ *   colors.bg.surface                        -> colors.surface
+ *   colors.border.default                    -> colors.border
+ *   colors.signal.success                    -> colors.success
+ *   colors.signal.warning                    -> colors.warn
+ *   colors.signal.live                       -> colors.error
  *   typography.font.sans   -> font.sans
  *   typography.font.mono   -> font.mono
  *   spacing.space.1..8     -> space(n)
@@ -53,18 +53,18 @@ export interface DevKitTheme {
   radius: (size: 'sm' | 'md' | 'lg') => string;
 }
 
-// Dark-mint defaults. Match the CLI banner so the unconfigured dashboard
-// still feels like part of the kit rather than a generic admin page.
+// Layers Paper Calm defaults. These mirror `.ai-dev-kit/registries/design-tokens.yaml`
+// so fallback dashboard surfaces still honor the product brand.
 const DEFAULT_COLORS: DevKitTheme['colors'] = {
-  primary: '#34d399',
-  text: '#e5e7eb',
-  textMuted: '#9ca3af',
-  bg: '#0b0f14',
-  surface: '#111827',
-  border: '#1f2937',
-  success: '#22c55e',
-  warn: '#f59e0b',
-  error: '#ef4444',
+  primary: 'oklch(0.68 0.13 166)',
+  text: 'oklch(0.22 0.035 256)',
+  textMuted: 'oklch(0.46 0.025 256)',
+  bg: 'oklch(0.982 0.012 168)',
+  surface: 'oklch(0.997 0.004 168)',
+  border: 'oklch(0.84 0.024 168 / 0.74)',
+  success: 'oklch(0.68 0.13 166)',
+  warn: 'oklch(0.74 0.14 74)',
+  error: 'oklch(0.64 0.20 26)',
 };
 
 const DEFAULT_FONTS: DevKitTheme['font'] = {
@@ -92,14 +92,25 @@ const DEFAULT_RADII: Record<'sm' | 'md' | 'lg', string> = {
 const themeCache = new Map<string, DevKitTheme>();
 
 const TOKEN_KEY_MAP: Record<string, keyof DevKitTheme['colors']> = {
+  'layers.mint': 'primary',
+  'brand.accent': 'primary',
   'brand.primary': 'primary',
+  'fg.default': 'text',
+  'ink.950': 'text',
   'text.primary': 'text',
+  'fg.muted': 'textMuted',
+  'ink.600': 'textMuted',
   'text.muted': 'textMuted',
+  'bg.page': 'bg',
   'bg.default': 'bg',
+  'bg.surface': 'surface',
   'surface.default': 'surface',
   'border.default': 'border',
+  'signal.success': 'success',
   'state.success': 'success',
+  'signal.warning': 'warn',
   'state.warn': 'warn',
+  'signal.live': 'error',
   'state.error': 'error',
 };
 

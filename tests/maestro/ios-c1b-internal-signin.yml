@@ -1,0 +1,15 @@
+# C1b verification: drive Capacitor in-app routing via the drawer.
+appId: com.mirafactory.layers
+---
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 6000
+
+# Authed drawer shouldn't expose Sign in — verifies C1a indirectly.
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 1500
+- assertNotVisible: "Sign in"
+- assertNotVisible: "Sign up"
+- takeScreenshot: ios-walk-C1b-authed-drawer-no-signin

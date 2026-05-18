@@ -48,6 +48,19 @@ function safeStringify(value: unknown): string {
 }
 
 function emit(level: LogLevel, event: string, ctx?: LogContext) {
+  // Always push into the in-memory ring buffer so /api/internal/health and
+  // /api/internal/alerts can observe events even when stdout is redirected
+  // (PROD-371). Buffer recording must not throw -- it's a Map/array push.
+  try {
+    // Lazy require avoids any chance of circular import while keeping the
+    // call synchronous.
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { recordEvent } = require('./observability/event-buffer') as typeof import('./observability/event-buffer');
+    recordEvent(level, event, (ctx as Record<string, unknown> | undefined) ?? {});
+  } catch {
+    // Buffer not loadable (e.g. during certain edge runtimes) -- continue.
+  }
+
   if (!shouldEmit(level)) return;
   try {
     const line = safeStringify({

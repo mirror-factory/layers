@@ -5,7 +5,7 @@
  * a route-owned test plan so coverage cannot drift as pages are added.
  *
  * Run:
- *   pnpm exec expect tui -u http://localhost:3001/control-plane \
+ *   pnpm exec expect tui -u http://localhost:3002/control-plane \
  *     --browser-mode headless \
  *     -m "Use tests/expect/control-plane.expect.ts as the route plan. Verify the page loads, the primary action is discoverable, empty/loading/error states are readable, and mobile layout has no horizontal overflow." \
  *     -y

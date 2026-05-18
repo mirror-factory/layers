@@ -1,4 +1,4 @@
-appId: com.mirrorfactory.audiolayer
+appId: com.mirafactory.layers
 productName: Layers
 directories:
   output: dist-electron
@@ -11,12 +11,35 @@ mac:
       arch:
         - arm64
         - x64
-  icon: public/icon.png
+  icon: electron/build/icon.icns
   darkModeSupport: true
   hardenedRuntime: true
   gatekeeperAssess: false
   entitlements: electron/entitlements.mac.plist
   entitlementsInherit: electron/entitlements.mac.plist
+  # PROD-476: macOS shows this string in the system microphone permission
+  # prompt the first time Layers calls getUserMedia. Without it macOS denies
+  # the request outright (TCC requires a usage description) and the app
+  # never sees the prompt. Keep the copy aligned with the iOS Info.plist
+  # patched by scripts/patch-native-oauth.mjs.
+  extendInfo:
+    NSMicrophoneUsageDescription: >-
+      Layers needs your microphone to record meetings and transcribe what's
+      said. Audio is captured only while you're recording.
+  # Code signing + notarization (PROD-380 / PROD-512).
+  # electron-builder only runs notarization when the required Apple notary env
+  # vars are present. CI fails closed for signed builds when those credentials
+  # are incomplete, then verifies with stapler + spctl before upload.
+  # See .github/workflows/build-release.yml + docs/SIGNING.md.
+  # Reference: https://www.electron.build/code-signing-mac.html
+  # Reference: https://www.electron.build/configuration/mac.html
+  notarize: true
+  # Pin identity to the Developer ID Application cert. When CSC_LINK is unset
+  # in CI we explicitly skip signing instead of letting electron-builder
+  # silently produce an unsigned dmg. The literal string below is interpreted
+  # as a prefix match against the cert CN; CI overrides to `null` when no cert
+  # is provided so the unsigned-fallback path stays clean.
+  identity: "Developer ID Application"
 dmg:
   background: null
   contents:
@@ -32,6 +55,18 @@ win:
     - target: nsis
       arch:
         - x64
+  # Windows code signing placeholder (PROD-356 / PROD-366).
+  # We do not yet have an EV (or OV) Authenticode cert. Once acquired, populate
+  # the following GitHub secrets and uncomment the signtoolOptions block:
+  #   WINDOWS_CSC_LINK            -> base64-encoded .pfx
+  #   WINDOWS_CSC_KEY_PASSWORD    -> .pfx password
+  # Reference: https://www.electron.build/configuration/win.html
+  # signtoolOptions:
+  #   sign: ./build/sign-windows.js   # or use built-in signing via env vars
+  #   signingHashAlgorithms:
+  #     - sha256
+  #   publisherName: "Mirror Factory, Inc."
+  #   rfc3161TimeStampServer: http://timestamp.digicert.com
 linux:
   target:
     - target: AppImage

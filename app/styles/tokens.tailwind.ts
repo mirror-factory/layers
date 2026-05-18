@@ -7,36 +7,68 @@
 
 export const tokens = {
   colors: {
-    "brand": {
-      "accent": "#14b8a6",
-      "accent-subtle": "#0d9488",
-      "accent-muted": "#134e4a",
-      "accent-light": "#2dd4bf"
+    "layers": {
+      "violet": "oklch(0.66 0.16 282)",
+      "mint": "oklch(0.68 0.13 166)",
+      "blue": "oklch(0.66 0.13 240)",
+      "violet-soft": "oklch(0.78 0.13 282)",
+      "mint-soft": "oklch(0.82 0.10 168)",
+      "blue-soft": "oklch(0.80 0.09 240)",
+      "violet-tint": "oklch(0.95 0.03 284)",
+      "mint-tint": "oklch(0.95 0.04 168)",
+      "blue-tint": "oklch(0.94 0.03 240)",
+      "ink": "oklch(0.22 0.035 256)",
+      "paper": "oklch(0.985 0.012 168)"
     },
-    "neutral": {
-      "50": "#fafafa",
-      "100": "#f5f5f5",
-      "200": "#e5e5e5",
-      "300": "#d4d4d4",
-      "400": "#a3a3a3",
-      "500": "#737373",
-      "600": "#525252",
-      "700": "#404040",
-      "800": "#262626",
-      "900": "#171717",
-      "950": "#0a0a0a"
+    "brand": {
+      "accent": "var(--layers-mint)",
+      "accent-subtle": "oklch(0.56 0.12 170)",
+      "accent-muted": "oklch(0.32 0.07 170)",
+      "accent-light": "var(--layers-mint-soft)"
+    },
+    "ink": {
+      "50": "oklch(0.985 0.008 256)",
+      "200": "oklch(0.84 0.014 256)",
+      "400": "oklch(0.63 0.018 256)",
+      "600": "oklch(0.44 0.025 256)",
+      "800": "oklch(0.28 0.03 256)",
+      "950": "oklch(0.18 0.035 256)"
+    },
+    "signal": {
+      "live": "oklch(0.64 0.20 26)",
+      "success": "oklch(0.68 0.13 166)",
+      "warning": "oklch(0.74 0.14 74)",
+      "info": "oklch(0.66 0.13 240)"
     },
     "semantic": {
-      "success": "#22c55e",
-      "error": "#ef4444",
-      "warning": "#eab308",
-      "info": "#3b82f6"
+      "success": "var(--signal-success)",
+      "error": "var(--signal-live)",
+      "warning": "var(--signal-warning)",
+      "info": "var(--signal-info)"
+    },
+    "bg": {
+      "page": "oklch(0.982 0.012 168)",
+      "surface": "oklch(0.997 0.004 168)",
+      "surface-muted": "oklch(0.957 0.018 168)",
+      "surface-2": "oklch(0.935 0.018 168)",
+      "page-tint-1": "oklch(0.95 0.03 284 / 0.72)",
+      "page-tint-2": "oklch(0.95 0.04 168 / 0.62)"
+    },
+    "fg": {
+      "default": "var(--layers-ink)",
+      "muted": "oklch(0.46 0.025 256)",
+      "subtle": "oklch(0.58 0.02 256)",
+      "faint": "oklch(0.67 0.018 256)"
+    },
+    "border": {
+      "default": "oklch(0.84 0.024 168 / 0.74)",
+      "subtle": "oklch(0.84 0.024 168 / 0.46)"
     },
     "light": {
-      "bg-primary": "#fafafa",
-      "bg-secondary": "#f5f5f5",
-      "text-primary": "#171717",
-      "text-secondary": "#525252"
+      "bg-primary": "var(--bg-page)",
+      "bg-secondary": "var(--bg-surface-muted)",
+      "text-primary": "var(--fg-default)",
+      "text-secondary": "var(--fg-muted)"
     }
   },
   spacing: {
@@ -49,20 +81,26 @@ export const tokens = {
     "space-8": "32px",
     "space-10": "40px",
     "space-12": "48px",
-    "space-16": "64px"
+    "space-16": "64px",
+    "space-20": "80px",
+    "space-24": "96px"
   },
   borderRadius: {
+    "xs": "4px",
     "sm": "6px",
-    "md": "8px",
-    "lg": "12px",
-    "xl": "16px",
-    "2xl": "24px",
+    "md": "10px",
+    "lg": "14px",
+    "xl": "20px",
+    "2xl": "28px",
+    "pill": "9999px",
     "full": "9999px"
   },
   boxShadow: {
-    "sm": "0 1px 2px 0 rgb(0 0 0 / 0.2)",
-    "md": "0 4px 6px -1px rgb(0 0 0 / 0.3)",
-    "glow-mint": "0 0 20px rgb(20 184 166 / 0.15)"
+    "xs": "0 1px 2px oklch(0.22 0.035 256 / 0.05)",
+    "sm": "0 8px 24px oklch(0.22 0.035 256 / 0.07)",
+    "md": "0 18px 50px oklch(0.22 0.035 256 / 0.10)",
+    "lg": "0 28px 80px oklch(0.22 0.035 256 / 0.14)",
+    "glow-mint": "0 0 28px oklch(0.68 0.13 166 / 0.20)"
   },
   screens: {
     "mobile": "0px",

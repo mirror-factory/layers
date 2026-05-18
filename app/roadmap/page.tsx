@@ -41,19 +41,19 @@ export default function RoadmapPage() {
           title="Now"
           subtitle="Shipped and available"
           items={ROADMAP.now}
-          accentColor="#14b8a6"
+          accentColor="var(--layers-mint)"
         />
         <RoadmapSection
           title="Next"
           subtitle="In development"
           items={ROADMAP.next}
-          accentColor="#f59e0b"
+          accentColor="var(--signal-warning)"
         />
         <RoadmapSection
           title="Later"
           subtitle="Planned"
           items={ROADMAP.later}
-          accentColor="#6366f1"
+          accentColor="var(--layers-violet)"
         />
       </main>
     </div>

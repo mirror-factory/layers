@@ -76,13 +76,13 @@ export function MeetingSearch() {
         <div className="mt-3 space-y-2">
           {searching ? (
             <div className="flex items-center gap-2 py-4 justify-center">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#14b8a6] animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-layers-mint animate-pulse" />
               <span
-                className="w-1.5 h-1.5 rounded-full bg-[#14b8a6] animate-pulse"
+                className="w-1.5 h-1.5 rounded-full bg-layers-mint animate-pulse"
                 style={{ animationDelay: "200ms" }}
               />
               <span
-                className="w-1.5 h-1.5 rounded-full bg-[#14b8a6] animate-pulse"
+                className="w-1.5 h-1.5 rounded-full bg-layers-mint animate-pulse"
                 style={{ animationDelay: "400ms" }}
               />
             </div>
@@ -101,7 +101,7 @@ export function MeetingSearch() {
                   <span className="text-xs font-medium text-[var(--text-primary)]">
                     {r.meetingTitle ?? "Untitled"}
                   </span>
-                  <span className="text-[10px] text-[#14b8a6]">
+                  <span className="text-[10px] text-layers-mint">
                     {Math.round(r.similarity * 100)}% match
                   </span>
                 </div>

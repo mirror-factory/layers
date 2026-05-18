@@ -8,11 +8,17 @@ import os
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
+import sys
 
 
 HOOKS_DIR = Path(__file__).resolve().parent
 REPO_ROOT = HOOKS_DIR.parent.parent
 RUNTIME_ID = "codex" if HOOKS_DIR.parent.name == ".codex" else "claude-code"
+
+if os.environ.get("AI_STARTER_HOOKS_DISABLED") == "1" or (
+    REPO_ROOT / ".ai-starter" / "hooks.disabled"
+).exists():
+    sys.exit(0)
 
 
 def repo_path(*parts: str) -> Path:

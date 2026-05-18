@@ -3,7 +3,7 @@ import { DEFAULTS, MODEL_OPTIONS } from "@/lib/settings-shared";
 
 describe("DEFAULTS", () => {
   it("has correct summaryModel", () => {
-    expect(DEFAULTS.summaryModel).toBe("anthropic/claude-haiku-4-5");
+    expect(DEFAULTS.summaryModel).toBe("openai/gpt-5.4-nano");
   });
 
   it("has correct batchSpeechModel", () => {
@@ -11,7 +11,11 @@ describe("DEFAULTS", () => {
   });
 
   it("has correct streamingSpeechModel", () => {
-    expect(DEFAULTS.streamingSpeechModel).toBe("universal-streaming-multilingual");
+    // 2026-05-01 — flipped from "nova-3" (Deepgram) to AssemblyAI's
+    // universal-streaming-english per PROD-395. UI promises AssemblyAI
+    // as the system-wide default; the previous Deepgram value made
+    // every cookie-less request silently route through Deepgram.
+    expect(DEFAULTS.streamingSpeechModel).toBe("universal-streaming-english");
   });
 });
 
@@ -78,5 +82,15 @@ describe("MODEL_OPTIONS", () => {
   it("default streamingSpeechModel exists in streaming speech options", () => {
     const values = MODEL_OPTIONS.streamingSpeech.map((o) => o.value);
     expect(values).toContain(DEFAULTS.streamingSpeechModel);
+  });
+
+  it("default streamingSpeechModel uses AssemblyAI", () => {
+    // PROD-395 — system default is AssemblyAI; users can opt into
+    // Deepgram (or any other implemented option) via Settings.
+    const defaultStreamingOption = MODEL_OPTIONS.streamingSpeech.find(
+      (option) => option.value === DEFAULTS.streamingSpeechModel,
+    );
+
+    expect(defaultStreamingOption?.provider).toBe("assemblyai");
   });
 });

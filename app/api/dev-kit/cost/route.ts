@@ -10,9 +10,12 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { getCostSummary, getCostByModel } from '@/lib/ai-dev-kit/supabase-queries';
+import { hasSupabaseEnv, localCost } from '../local-fallbacks';
 
 export async function GET(request: NextRequest) {
   try {
+    if (!hasSupabaseEnv()) return NextResponse.json(localCost());
+
     const supabase = createClient(
       process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '',
       process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
@@ -29,9 +32,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ summary, byModel });
   } catch (err) {
     console.error('[api/dev-kit/cost] Error:', err);
-    return NextResponse.json(
-      { error: 'Failed to fetch cost data' },
-      { status: 500 },
-    );
+    return NextResponse.json(localCost());
   }
 }

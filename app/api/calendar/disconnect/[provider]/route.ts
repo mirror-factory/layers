@@ -26,7 +26,7 @@ export const POST = withRoute(async (_req, ctx) => {
   const { error } = await supabase
     .from("calendar_connections")
     .update({
-      status: "disconnected",
+      status: "revoked",
       access_token_enc: null,
       refresh_token_enc: null,
       token_expires_at: null,

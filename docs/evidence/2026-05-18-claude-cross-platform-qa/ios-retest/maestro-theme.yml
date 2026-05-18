@@ -1,0 +1,13 @@
+appId: com.mirafactory.layers
+---
+- launchApp:
+    clearState: true
+- waitForAnimationToEnd:
+    timeout: 8000
+- takeScreenshot:
+    path: /Users/alfonso/Documents/GitHub/layers/docs/evidence/2026-05-18-claude-cross-platform-qa/ios-retest/60-theme-light-baseline
+- tapOn: "Switch to dark mode"
+- waitForAnimationToEnd:
+    timeout: 2000
+- takeScreenshot:
+    path: /Users/alfonso/Documents/GitHub/layers/docs/evidence/2026-05-18-claude-cross-platform-qa/ios-retest/61-theme-dark-applied

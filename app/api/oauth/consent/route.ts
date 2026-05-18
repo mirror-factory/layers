@@ -9,6 +9,9 @@ import {
   appendOAuthError,
   parseOAuthAuthorizeParams,
 } from "@/lib/oauth/mcp-oauth";
+import { upsertOauthClient } from "@/lib/oauth/clients";
+import { respondWithError } from "@/lib/errors/respond";
+import { ERROR_CODES } from "@/lib/errors/codes";
 
 export async function POST(req: NextRequest) {
   const form = await req.formData().catch(() => null);
@@ -40,6 +43,9 @@ export async function POST(req: NextRequest) {
   }
 
   if (decision !== "allow") {
+    // 303 See Other forces the OAuth callback to be hit as GET regardless
+    // of the original POST. Default 307 would preserve POST and trigger
+    // "Method Not Allowed" on the upstream client (e.g., claude.ai).
     return NextResponse.redirect(
       appendOAuthError(
         parsed.value.redirectUri,
@@ -47,25 +53,33 @@ export async function POST(req: NextRequest) {
         "access_denied",
         "The user denied Layers MCP access.",
       ),
+      303,
     );
   }
 
   const userSupabase = await getSupabaseUser();
   if (!userSupabase) {
-    return NextResponse.json({ error: "Auth not configured" }, { status: 503 });
+    return respondWithError(
+      req,
+      ERROR_CODES.VENDOR_UNAVAILABLE,
+      "Auth provider not configured",
+      { status: 503 },
+    );
   }
 
   const {
     data: { user },
   } = await userSupabase.auth.getUser();
   if (!user || user.is_anonymous) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    return respondWithError(req, ERROR_CODES.UNAUTHORIZED, "Not authenticated");
   }
 
   const serviceSupabase = getSupabaseServer();
   if (!serviceSupabase) {
-    return NextResponse.json(
-      { error: "server_error", error_description: "Database not configured" },
+    return respondWithError(
+      req,
+      ERROR_CODES.VENDOR_UNAVAILABLE,
+      "Database not configured",
       { status: 503 },
     );
   }
@@ -84,16 +98,43 @@ export async function POST(req: NextRequest) {
   });
 
   if (error) {
-    return NextResponse.json(
-      {
-        error: "server_error",
-        error_description: "Failed to create authorization code",
-      },
-      { status: 500 },
+    return respondWithError(
+      req,
+      ERROR_CODES.INTERNAL_ERROR,
+      "Failed to create authorization code",
     );
   }
 
+  // PROD-403: persist the OAuth client on FIRST successful authorization.
+  // We deliberately do not write on register POST -- thousands of MCP clients
+  // register and abandon the flow. Reaching consent + decision="allow" is
+  // the strongest signal that this user actually wants this client.
+  if (parsed.value.clientId) {
+    const clientName = readClientName(form);
+    await upsertOauthClient(serviceSupabase, {
+      userId: user.id,
+      clientId: parsed.value.clientId,
+      clientName,
+      redirectUris: [parsed.value.redirectUri],
+    });
+  }
+
+  // 303 See Other — the consent page POSTs here, but the upstream OAuth
+  // callback (claude.ai/api/mcp/auth_callback, etc.) only accepts GET.
+  // The default 307 preserves the POST method and triggers "Method Not
+  // Allowed" on the client. 303 explicitly switches the redirect to GET.
   return NextResponse.redirect(
     appendOAuthCode(parsed.value.redirectUri, code, parsed.value.state),
+    303,
   );
+}
+
+function readClientName(form: FormData): string | null {
+  // The consent screen passes through the `client_name` we got from the
+  // register call so the persisted row shows the human label the user
+  // saw on the approval screen (e.g. "Claude Desktop", "Cursor").
+  const raw = form.get("client_name");
+  if (typeof raw !== "string") return null;
+  const trimmed = raw.trim();
+  return trimmed.length > 0 ? trimmed : null;
 }

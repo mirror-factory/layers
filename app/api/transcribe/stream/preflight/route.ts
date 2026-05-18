@@ -7,6 +7,7 @@ import { getDeepgramClient } from "@/lib/deepgram/client";
 import { checkQuota } from "@/lib/billing/quota";
 import { getActivePricingConfig } from "@/lib/billing/pricing-config";
 import { buildRecordingPreflight } from "@/lib/recording/preflight";
+import { isE2eFakeRecordingEnabled } from "@/lib/recording/e2e-fake-recording";
 import { getSettings } from "@/lib/settings";
 import { withRoute } from "@/lib/with-route";
 
@@ -23,8 +24,8 @@ export const GET = withRoute(async () => {
       pricing,
       settings,
       providerConfigured: {
-        assemblyai: Boolean(getAssemblyAI()),
-        deepgram: Boolean(getDeepgramClient()),
+        assemblyai: isE2eFakeRecordingEnabled() || Boolean(getAssemblyAI()),
+        deepgram: isE2eFakeRecordingEnabled() || Boolean(getDeepgramClient()),
       },
     }),
   );

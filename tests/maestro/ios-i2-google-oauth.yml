@@ -1,0 +1,27 @@
+appId: com.mirafactory.layers
+---
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 6000
+
+# Dismiss any lingering "Open in Layers?" dialog
+- runFlow:
+    when:
+      visible: "Open in"
+    commands:
+      - tapOn: "Cancel"
+      - waitForAnimationToEnd:
+          timeout: 2000
+
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 1500
+- tapOn: "Sign in"
+- waitForAnimationToEnd:
+    timeout: 5000
+
+- tapOn: "Continue with Google"
+- waitForAnimationToEnd:
+    timeout: 8000
+- takeScreenshot: ios-walk-I2-google-oauth-screen

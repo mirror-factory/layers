@@ -1,6 +1,12 @@
 /**
- * MCP API key authentication.
- * Validates a Bearer token against the profiles.api_key column.
+ * MCP bearer authentication.
+ * OAuth access tokens are the primary path for remote MCP clients; legacy
+ * profile tokens are accepted only for older manual configurations.
+ *
+ * PROD-403: validation now also checks `oauth_clients.revoked_at` for OAuth
+ * tokens whose `client_id` claim resolves to a known client. Revoked clients
+ * surface as `{ kind: "revoked" }` so the route can return a distinguishable
+ * `error: "client_revoked"` instead of the generic `invalid_token`.
  */
 
 import { getSupabaseServer } from "@/lib/supabase/server";
@@ -12,13 +18,20 @@ import {
   MCP_OAUTH_ISSUER,
   MCP_OAUTH_SCOPE,
 } from "@/lib/oauth/mcp-oauth";
+import { getOauthClientByClientId, touchOauthClient } from "@/lib/oauth/clients";
 
 export interface McpAuthResult {
   userId: string;
+  clientId?: string | null;
 }
 
+export type McpAuthOutcome =
+  | { kind: "ok"; userId: string; clientId: string | null }
+  | { kind: "invalid" }
+  | { kind: "revoked" };
+
 /**
- * Validate an API key from the Authorization header.
+ * Validate a legacy profile token from the Authorization header.
  * Returns the user_id if valid, null otherwise.
  */
 export async function validateApiKey(
@@ -42,12 +55,12 @@ export async function validateApiKey(
     return null;
   }
 
-  return { userId: data.user_id as string };
+  return { userId: data.user_id as string, clientId: null };
 }
 
 async function validateOAuthAccessToken(
   token: string,
-): Promise<McpAuthResult | null> {
+): Promise<{ userId: string; clientId: string | null } | null> {
   try {
     const { payload } = await jwtVerify(token, getMcpJwtSecret(), {
       audience: MCP_OAUTH_AUDIENCE,
@@ -56,7 +69,11 @@ async function validateOAuthAccessToken(
     const scope = typeof payload.scope === "string" ? payload.scope : "";
     if (!scope.split(/\s+/).includes(MCP_OAUTH_SCOPE)) return null;
     if (typeof payload.sub !== "string" || !payload.sub) return null;
-    return { userId: payload.sub };
+    const clientId =
+      typeof payload.client_id === "string" && payload.client_id
+        ? payload.client_id
+        : null;
+    return { userId: payload.sub, clientId };
   } catch {
     return null;
   }
@@ -65,23 +82,68 @@ async function validateOAuthAccessToken(
 /**
  * Validate an MCP Bearer token.
  *
- * Supports both profile API keys (`lo1_...`) and OAuth access tokens issued by
- * `/api/oauth/token`. This keeps manual MCP client config working while also
- * matching the OAuth discovery metadata used by modern MCP clients.
+ * Supports both OAuth access tokens issued by `/api/oauth/token` and legacy
+ * profile tokens (`lo1_...`). This keeps old manual MCP client config working
+ * while matching the OAuth discovery metadata used by modern MCP clients.
+ *
+ * Returns `null` for any invalid / unknown token, mirroring the original
+ * contract used by callers that don't care about the revocation distinction.
+ * Prefer `validateMcpBearerOutcome` for new code that needs to distinguish
+ * "revoked" from "invalid" (PROD-403).
  */
 export async function validateMcpBearerToken(
   token: string,
 ): Promise<McpAuthResult | null> {
-  if (!token || token.length < 16) return null;
+  const outcome = await validateMcpBearerOutcome(token);
+  if (outcome.kind !== "ok") return null;
+  return { userId: outcome.userId, clientId: outcome.clientId };
+}
+
+/**
+ * Same validation as `validateMcpBearerToken` but returns a discriminated
+ * outcome so callers can produce a distinct `client_revoked` response.
+ */
+export async function validateMcpBearerOutcome(
+  token: string,
+): Promise<McpAuthOutcome> {
+  if (!token || token.length < 16) return { kind: "invalid" };
 
   if (token.startsWith("lo1_")) {
-    return validateApiKey(token);
+    const result = await validateApiKey(token);
+    return result
+      ? { kind: "ok", userId: result.userId, clientId: null }
+      : { kind: "invalid" };
   }
 
   if (token.split(".").length === 3) {
     const oauth = await validateOAuthAccessToken(token);
-    if (oauth) return oauth;
+    if (!oauth) return { kind: "invalid" };
+
+    // PROD-403: cross-check the oauth_clients table. A user-revoked client
+    // must fail validation IMMEDIATELY even though the access JWT itself
+    // still has time left on `exp`.
+    if (oauth.clientId) {
+      const supabase = getSupabaseServer();
+      if (supabase) {
+        const client = await getOauthClientByClientId(supabase, oauth.clientId);
+        if (client?.revoked_at) {
+          return { kind: "revoked" };
+        }
+        // Best-effort: bump last_used_at so the UI's "Last used" column
+        // reflects active connections without waiting for a refresh.
+        // Swallow errors -- if the row doesn't exist yet (legacy tokens),
+        // the touch is a harmless no-op.
+        if (client) {
+          await touchOauthClient(supabase, {
+            userId: oauth.userId,
+            clientId: oauth.clientId,
+          }).catch(() => undefined);
+        }
+      }
+    }
+
+    return { kind: "ok", userId: oauth.userId, clientId: oauth.clientId };
   }
 
-  return null;
+  return { kind: "invalid" };
 }

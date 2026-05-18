@@ -8,16 +8,38 @@ interface MeetingCostPanelProps {
   costBreakdown: MeetingCostBreakdown | null;
 }
 
+type SafeMeetingCostBreakdown = MeetingCostBreakdown & {
+  llm: MeetingCostBreakdown["llm"] & {
+    calls: MeetingCostBreakdown["llm"]["calls"];
+  };
+};
+
 function formatUsd(amount: number): string {
+  if (!Number.isFinite(amount)) return "$0.00";
   if (amount === 0) return "$0.00";
   if (amount < 0.01) return `$${amount.toFixed(4)}`;
   return `$${amount.toFixed(2)}`;
 }
 
+function isCostBreakdownRenderable(
+  costBreakdown: MeetingCostBreakdown | null,
+): costBreakdown is SafeMeetingCostBreakdown {
+  return Boolean(
+    costBreakdown &&
+      Number.isFinite(costBreakdown.totalCostUsd) &&
+      costBreakdown.stt &&
+      Number.isFinite(costBreakdown.stt.totalCostUsd) &&
+      typeof costBreakdown.stt.model === "string" &&
+      costBreakdown.llm &&
+      Number.isFinite(costBreakdown.llm.totalCostUsd) &&
+      Array.isArray(costBreakdown.llm.calls),
+  );
+}
+
 export function MeetingCostPanel({ costBreakdown }: MeetingCostPanelProps) {
   const [open, setOpen] = useState(false);
 
-  if (!costBreakdown) return null;
+  if (!isCostBreakdownRenderable(costBreakdown)) return null;
 
   return (
     <div className="bg-[var(--bg-card)] rounded-xl overflow-hidden">
@@ -29,7 +51,7 @@ export function MeetingCostPanel({ costBreakdown }: MeetingCostPanelProps) {
           <h3 className="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider">
             Cost
           </h3>
-          <span className="text-xs text-[#14b8a6] tabular-nums font-medium">
+          <span className="text-xs text-layers-mint tabular-nums font-medium">
             {formatUsd(costBreakdown.totalCostUsd)}
           </span>
         </div>
@@ -48,7 +70,7 @@ export function MeetingCostPanel({ costBreakdown }: MeetingCostPanelProps) {
               <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">
                 STT
               </div>
-              <div className="text-sm font-semibold text-[#14b8a6] tabular-nums">
+              <div className="text-sm font-semibold text-layers-mint tabular-nums">
                 {formatUsd(costBreakdown.stt.totalCostUsd)}
               </div>
               <div className="text-[10px] text-[var(--text-muted)] mt-0.5 truncate">
@@ -60,7 +82,7 @@ export function MeetingCostPanel({ costBreakdown }: MeetingCostPanelProps) {
               <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">
                 LLM
               </div>
-              <div className="text-sm font-semibold text-[#14b8a6] tabular-nums">
+              <div className="text-sm font-semibold text-layers-mint tabular-nums">
                 {formatUsd(costBreakdown.llm.totalCostUsd)}
               </div>
               <div className="text-[10px] text-[var(--text-muted)] mt-0.5">
@@ -73,7 +95,7 @@ export function MeetingCostPanel({ costBreakdown }: MeetingCostPanelProps) {
                 <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">
                   Embed
                 </div>
-                <div className="text-sm font-semibold text-[#14b8a6] tabular-nums">
+                <div className="text-sm font-semibold text-layers-mint tabular-nums">
                   {formatUsd(costBreakdown.embedding.totalCostUsd)}
                 </div>
                 <div className="text-[10px] text-[var(--text-muted)] mt-0.5 truncate">
@@ -108,7 +130,7 @@ export function MeetingCostPanel({ costBreakdown }: MeetingCostPanelProps) {
                       <td className="py-1.5 pr-3 text-right text-[var(--text-muted)] tabular-nums">
                         {call.outputTokens.toLocaleString()}
                       </td>
-                      <td className="py-1.5 text-right text-[#14b8a6] tabular-nums">
+                      <td className="py-1.5 text-right text-layers-mint tabular-nums">
                         {formatUsd(call.costUsd)}
                       </td>
                     </tr>

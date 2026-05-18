@@ -1,0 +1,99 @@
+[1A[2K[2m[WebServer] [22m(node:37800) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[2m[WebServer] [22m(node:37803) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[2m[WebServer] [22m(node:37813) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[2m[WebServer] [22m ⚠ Webpack is configured while Turbopack is not, which may cause problems.
+[2m[WebServer] [22m ⚠ See instructions if you need to configure Turbopack:
+[2m[WebServer] [22m  https://nextjs.org/docs/app/api-reference/next-config-js/turbopack
+[2m[WebServer] [22m
+
+[1A[2K[2m[WebServer] [22m(node:37823) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+Running 12 tests using 1 worker
+
+[1A[2K(node:37844) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1A[2K(node:37844) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1A[2K[1/12] [mobile-light] › tests/e2e/recording-stop-flow.spec.ts:149:7 › Recording Stop flow › finalizes a live recording and renders the completed meeting detail page
+[1A[2K[2m[WebServer] [22m(node:37895) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[2/12] [mobile-light] › tests/e2e/recording-stop-flow.spec.ts:177:7 › Recording Stop flow › keeps the local draft and stays on the recorder when finalize fails
+[1A[2K(node:37927) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1A[2K(node:37927) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1A[2K[3/12] [mobile-dark] › tests/e2e/recording-stop-flow.spec.ts:149:7 › Recording Stop flow › finalizes a live recording and renders the completed meeting detail page
+[1A[2K[2m[WebServer] [22m(node:37949) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[4/12] [mobile-dark] › tests/e2e/recording-stop-flow.spec.ts:177:7 › Recording Stop flow › keeps the local draft and stays on the recorder when finalize fails
+[1A[2K(node:37953) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1A[2K(node:37953) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1A[2K[5/12] [tablet-light] › tests/e2e/recording-stop-flow.spec.ts:149:7 › Recording Stop flow › finalizes a live recording and renders the completed meeting detail page
+[1A[2K[2m[WebServer] [22m(node:37969) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[6/12] [tablet-light] › tests/e2e/recording-stop-flow.spec.ts:177:7 › Recording Stop flow › keeps the local draft and stays on the recorder when finalize fails
+[1A[2K(node:37977) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1A[2K(node:37977) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1A[2K[7/12] [tablet-dark] › tests/e2e/recording-stop-flow.spec.ts:149:7 › Recording Stop flow › finalizes a live recording and renders the completed meeting detail page
+[1A[2K[2m[WebServer] [22m(node:37993) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[8/12] [tablet-dark] › tests/e2e/recording-stop-flow.spec.ts:177:7 › Recording Stop flow › keeps the local draft and stays on the recorder when finalize fails
+[1A[2K(node:38005) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1A[2K(node:38005) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1A[2K[9/12] [desktop-light] › tests/e2e/recording-stop-flow.spec.ts:149:7 › Recording Stop flow › finalizes a live recording and renders the completed meeting detail page
+[1A[2K[2m[WebServer] [22m(node:38010) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[10/12] [desktop-light] › tests/e2e/recording-stop-flow.spec.ts:177:7 › Recording Stop flow › keeps the local draft and stays on the recorder when finalize fails
+[1A[2K(node:38016) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1A[2K(node:38016) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1A[2K[11/12] [desktop-dark] › tests/e2e/recording-stop-flow.spec.ts:149:7 › Recording Stop flow › finalizes a live recording and renders the completed meeting detail page
+[1A[2K[2m[WebServer] [22m(node:38025) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[12/12] [desktop-dark] › tests/e2e/recording-stop-flow.spec.ts:177:7 › Recording Stop flow › keeps the local draft and stays on the recorder when finalize fails
+[1A[2K  12 passed (43.9s)

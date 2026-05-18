@@ -50,6 +50,27 @@ These checks require account access, production dashboards, customer inboxes, or
 | Mobile visual regression  | Real device smoke on iPhone, iPad, Android, and small browser width                       | Daily for first week and after landing/download/pricing changes | Screenshot, route, device/browser, viewport, issue class, and whether Playwright caught it.                                         |
 | Funnel requests           | Support inbox, waitlist form, DMs, sales calls, launch comments, Linear                   | Twice daily for first week                                      | Requester, company, source, desired integration/workflow, urgency, willingness to pay, and follow-up owner.                         |
 
+## Automated Watchlist Tick (PROD-371)
+
+`/api/cron/watchlist-tick` runs every 5 minutes (Vercel Cron, see `vercel.json`) and posts to `ALERT_WEBHOOK_URL` whenever any of the watched conditions trips. Pure-function evaluator lives in `lib/monitoring/watchlist.ts`; cooldowns live in `lib/monitoring/cooldowns.ts` (15-min default, in-memory). The live state is rendered in the `/observability` page on the **Watchlist** tab and served by `GET /api/observability/watchlist`.
+
+| Condition | Threshold | Window | Severity | Notes |
+| --- | --- | --- | --- | --- |
+| `spend_over_cap` | 80% of `monthlySpendCapUsd` ($425 default) | month-to-date | warning (critical at 100%) | Today the spend feed is a placeholder — the tick reads whatever `monthlySpendUsd` value the caller injects. Wire a real source (Vercel AI Gateway balance + AssemblyAI usage + Supabase usage) before relying on this. |
+| `error_rate_over_threshold` | > 1% 5xx on `route.*` events | last 5 min (min 20 samples) | warning | Sourced from the in-memory event buffer. |
+| `p95_latency_over_threshold` | > 3000 ms on `/api/transcribe`, `/api/chat`, `/api/recordings/sign-upload` | last 5 min (min 10 samples) | warning | Derived from `route.end` `durationMs` in the buffer. |
+| `transcript_failure_rate_over_threshold` | > 5% of `/api/transcribe` outcomes failing (plus `funnel.upload_failure`) | last 15 min (min 5 samples) | critical | Transcription is the core product — page on this even at low sample sizes. |
+
+Operational details:
+
+- **Auth.** The cron route accepts `Authorization: Bearer <CRON_SECRET>` (the value Vercel Cron sends) or `Authorization: Bearer <INTERNAL_ADMIN_TOKEN>` (the founder's curl token). When neither env var is set in production, the route returns 401.
+- **Dry run.** `GET /api/cron/watchlist-tick?dryRun=1` returns the current pass/fail state without dispatching or marking cooldowns.
+- **Cooldown.** Each condition has its own 15-minute cooldown keyed on `cooldownKey`. A condition tripping continuously will only page once per 15 min until it recovers.
+- **Slack format.** Same Slack-Block-Kit payload as `/api/internal/alerts` so downstream Slack rules and message routing already work.
+- **Dashboard.** `/observability` → "Watchlist" tab shows the live pass/fail badges plus the rolling 24h alert log. The same data is available at `GET /api/observability/watchlist`.
+
+Vercel cron config Alfonso must apply once: `vercel.json` is already committed; just ensure `CRON_SECRET`, `INTERNAL_ADMIN_TOKEN`, and `ALERT_WEBHOOK_URL` are set in Production + Preview (Vercel → Project → Settings → Environment Variables).
+
 ## Launch Watchlist
 
 ### Stripe Webhook Failures

@@ -10,6 +10,15 @@
 
 import { useEffect, useState } from 'react';
 
+const REGISTRY_COLORS = {
+  success: 'var(--signal-success)',
+  warning: 'var(--signal-warning)',
+  live: 'var(--signal-live)',
+} as const;
+
+const tint = (color: string, amount = 18) =>
+  `color-mix(in oklch, ${color} ${amount}%, transparent)`;
+
 interface ModelEntry {
   id: string;
   label?: string;
@@ -29,7 +38,7 @@ interface Registry {
   docs_root?: string;
   console_url?: string;
   validated_on: string;
-  ageDays: number;
+  ageDays: number | null;
   stale: boolean;
   required_env?: string[];
   deprecations?: Array<{ pattern: string; deprecated_on: string; replacement: string; notes?: string }>;
@@ -44,6 +53,11 @@ function priceCell(m: ModelEntry): string {
   }
   if (m.price_per_million_chars_usd != null) return `$${m.price_per_million_chars_usd.toFixed(2)} per 1M chars`;
   return '—';
+}
+
+function freshnessLabel(reg: Registry): string {
+  if (reg.ageDays == null) return reg.stale ? 'stale (unvalidated)' : 'fresh (unvalidated)';
+  return reg.stale ? `stale (${reg.ageDays}d)` : `fresh (${reg.ageDays}d)`;
 }
 
 export default function RegistriesPage() {
@@ -65,7 +79,7 @@ export default function RegistriesPage() {
       <div style={{ padding: 24, fontFamily: 'system-ui', maxWidth: 900 }}>
         <h1 style={{ fontSize: 22 }}>Vendor Registries</h1>
         <p>No vendor registries yet. Add one for each external API your project calls:</p>
-        <pre style={{ background: '#111', color: '#3dffc0', padding: 14, borderRadius: 4, overflowX: 'auto' }}>
+        <pre style={{ background: 'color-mix(in oklch, var(--layers-ink) 92%, var(--layers-mint) 8%)', color: REGISTRY_COLORS.success, padding: 14, borderRadius: 4, overflowX: 'auto' }}>
 {`ai-dev-kit registry add assemblyai
 # in Claude Code:
 @spec-enricher populate the assemblyai registry`}
@@ -89,14 +103,14 @@ export default function RegistriesPage() {
             <span style={{
               fontFamily: 'monospace', fontSize: 11,
               padding: '2px 8px', borderRadius: 3,
-              background: reg.stale ? '#f59e0b22' : '#22c55e22',
-              color: reg.stale ? '#f59e0b' : '#22c55e',
-            }}>{reg.stale ? `stale (${reg.ageDays}d)` : `fresh (${reg.ageDays}d)`}</span>
+              background: reg.stale ? tint(REGISTRY_COLORS.warning) : tint(REGISTRY_COLORS.success),
+              color: reg.stale ? REGISTRY_COLORS.warning : REGISTRY_COLORS.success,
+            }}>{freshnessLabel(reg)}</span>
           </div>
           <div style={{ fontSize: 13, color: '#666', marginBottom: 14 }}>
             {reg.docs_root && <>docs: <a href={reg.docs_root} target="_blank" rel="noreferrer">{reg.docs_root}</a> · </>}
             {reg.console_url && <>console: <a href={reg.console_url} target="_blank" rel="noreferrer">{reg.console_url}</a> · </>}
-            validated {reg.validated_on}
+            validated {reg.validated_on || 'not recorded'}
           </div>
           {reg.required_env && reg.required_env.length > 0 && (
             <div style={{ fontSize: 12, marginBottom: 14 }}>
@@ -121,8 +135,8 @@ export default function RegistriesPage() {
                       <td><span style={{
                         fontFamily: 'monospace', fontSize: 11,
                         padding: '2px 6px', borderRadius: 3,
-                        background: m.deprecated ? '#ef444422' : '#22c55e22',
-                        color: m.deprecated ? '#ef4444' : '#22c55e',
+                        background: m.deprecated ? tint(REGISTRY_COLORS.live) : tint(REGISTRY_COLORS.success),
+                        color: m.deprecated ? REGISTRY_COLORS.live : REGISTRY_COLORS.success,
                       }}>{m.deprecated ? 'deprecated' : 'active'}</span></td>
                     </tr>
                   ))}

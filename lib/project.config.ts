@@ -22,10 +22,11 @@ export default defineConfig({
 
   ai: {
     gateway: true,
-    defaultModel: 'anthropic/claude-sonnet-4-6',
+    defaultModel: 'openai/gpt-5.4-nano',
     fallbackChain: [
+      'openai/gpt-5.4-nano',
+      'openai/gpt-5.4-mini',
       'anthropic/claude-sonnet-4-6',
-      'anthropic/claude-haiku-4-5',
       'google/gemini-2.5-flash',
     ],
     providers: ['anthropic', 'openai', 'google'],
@@ -48,8 +49,9 @@ export default defineConfig({
       maxTokensPerMinute: 100000,
     },
     fallbackOrder: [
+      'openai/gpt-5.4-nano',
+      'openai/gpt-5.4-mini',
       'anthropic/claude-sonnet-4-6',
-      'anthropic/claude-haiku-4-5',
       'google/gemini-2.5-flash',
     ],
   },
@@ -65,10 +67,10 @@ export default defineConfig({
     enabled: true,
     basePath: '/dev-kit',
     colorScheme: {
-      bg: '#050505',
-      fg: '#f0f0f0',
-      accent: '#3dffc0',
-      error: '#ef4444',
+      bg: 'oklch(0.982 0.012 168)',
+      fg: 'oklch(0.22 0.035 256)',
+      accent: 'oklch(0.68 0.13 166)',
+      error: 'oklch(0.64 0.20 26)',
     },
   },
 

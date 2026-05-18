@@ -3,10 +3,12 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import {
+  CalendarDays,
   Check,
-  ExternalLink,
+  Link2,
   Loader2,
   PlugZap,
+  Settings,
   Trash2,
   Webhook,
 } from "lucide-react";
@@ -182,6 +184,7 @@ export function IntegrationsSettingsPanel() {
       </div>
 
       <div className="mt-4 grid gap-3">
+        {/* Agent access (MCP) — fully functional */}
         <div className="settings-integration-card rounded-lg border border-[var(--border-card)] bg-[var(--surface-control)] p-3">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
@@ -189,36 +192,44 @@ export function IntegrationsSettingsPanel() {
                 Agent access
               </p>
               <p className="mt-1 text-xs leading-5 text-[var(--text-muted)]">
-                Use MCP or an API key to let trusted tools pull meeting context
-                on demand.
+                Add the MCP server URL to trusted AI tools. They will redirect
+                you to Layers sign-in and consent.
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
               <Link
                 href="/profile"
-                className="inline-flex min-h-[36px] items-center justify-center rounded-md border border-[var(--border-card)] bg-[var(--bg-card)] px-3 text-xs font-semibold text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface-control-hover)] hover:text-[var(--text-primary)]"
-              >
-                API key
-              </Link>
-              <Link
-                href="/docs"
                 className="inline-flex min-h-[36px] items-center gap-1.5 rounded-md border border-[var(--border-card)] bg-[var(--bg-card)] px-3 text-xs font-semibold text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface-control-hover)] hover:text-[var(--text-primary)]"
               >
-                Docs
-                <ExternalLink size={12} aria-hidden="true" />
+                <Link2 size={12} aria-hidden="true" />
+                MCP URL
               </Link>
             </div>
           </div>
         </div>
 
+        {/* Calendar connector — Coming soon */}
+        <ComingSoonConnectorCard
+          icon={<CalendarDays size={15} aria-hidden="true" />}
+          title="Calendar"
+          body="Sync upcoming meetings from Google Calendar and Outlook so Layers can pre-fill titles, attendees, and start recording on schedule."
+        />
+
+        {/* Settings / preferences sync — Coming soon */}
+        <ComingSoonConnectorCard
+          icon={<Settings size={15} aria-hidden="true" />}
+          title="Settings sync"
+          body="Carry your Layers preferences (default model, recording mode, summary template) across devices and the desktop apps."
+        />
+
         <div className="settings-integration-card rounded-lg border border-[var(--border-card)] bg-[var(--surface-control)] p-3">
           <div className="mb-3 flex items-center gap-2">
-            <Webhook size={15} className="text-[#14b8a6]" aria-hidden="true" />
+            <Webhook size={15} className="text-layers-mint" aria-hidden="true" />
             <p className="text-sm font-semibold text-[var(--text-primary)]">
               Webhooks
             </p>
             {loading && (
-              <Loader2 size={13} className="animate-spin text-[#14b8a6]" />
+              <Loader2 size={13} className="animate-spin text-layers-mint" />
             )}
           </div>
 
@@ -252,7 +263,7 @@ export function IntegrationsSettingsPanel() {
                     onClick={() => toggleEvent(option.value)}
                     className={`inline-flex min-h-[34px] items-center gap-1.5 rounded-md border px-2.5 text-xs font-semibold transition-colors ${
                       events.includes(option.value)
-                        ? "border-[#14b8a6]/40 bg-[#14b8a6]/10 text-[#14b8a6]"
+                        ? "border-layers-mint/40 bg-layers-mint/10 text-layers-mint"
                         : "border-[var(--border-card)] bg-[var(--bg-card)] text-[var(--text-secondary)]"
                     }`}
                   >
@@ -273,7 +284,7 @@ export function IntegrationsSettingsPanel() {
                 type="button"
                 onClick={createWebhook}
                 disabled={!canSave}
-                className="mt-3 inline-flex min-h-[40px] items-center justify-center gap-2 rounded-lg bg-[var(--paper-calm-ink)] px-4 text-sm font-semibold text-white transition-colors hover:opacity-90 disabled:opacity-50 dark:text-[#042f2e]"
+                className="mt-3 inline-flex min-h-[40px] items-center justify-center gap-2 rounded-lg bg-[var(--paper-calm-ink)] px-4 text-sm font-semibold text-white transition-colors hover:opacity-90 disabled:opacity-50 dark:text-layers-ink"
               >
                 {saving && <Loader2 size={14} className="animate-spin" />}
                 Add webhook
@@ -308,7 +319,7 @@ export function IntegrationsSettingsPanel() {
                     type="button"
                     onClick={() => deleteWebhook(hook.id)}
                     disabled={deletingId === hook.id}
-                    className="inline-flex min-h-[32px] min-w-[32px] items-center justify-center rounded-md text-[var(--text-muted)] transition-colors hover:bg-[var(--surface-control-hover)] hover:text-[#ef4444] disabled:opacity-60"
+                    className="inline-flex min-h-[32px] min-w-[32px] items-center justify-center rounded-md text-[var(--text-muted)] transition-colors hover:bg-[var(--surface-control-hover)] hover:text-signal-live disabled:opacity-60"
                     aria-label="Remove webhook"
                   >
                     {deletingId === hook.id ? (
@@ -352,8 +363,8 @@ export function IntegrationsSettingsPanel() {
                     <span
                       className={`shrink-0 rounded-full px-2 py-1 text-[11px] font-semibold ${
                         delivery.success
-                          ? "bg-[#14b8a6]/10 text-[#0f766e]"
-                          : "bg-[#ef4444]/10 text-[#dc2626]"
+                          ? "bg-layers-mint/10 text-[#0f766e]"
+                          : "bg-signal-live/10 text-[#dc2626]"
                       }`}
                     >
                       {delivery.success
@@ -368,5 +379,56 @@ export function IntegrationsSettingsPanel() {
         </div>
       </div>
     </section>
+  );
+}
+
+function ComingSoonConnectorCard({
+  icon,
+  title,
+  body,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  body: string;
+}) {
+  return (
+    <div
+      className="settings-integration-card relative rounded-lg border border-[var(--border-card)] bg-[var(--surface-control)] p-3 opacity-80"
+      aria-disabled="true"
+    >
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-start gap-2.5">
+          <span
+            className="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-md border border-[var(--border-card)] bg-[var(--bg-card)] text-[var(--text-muted)]"
+            aria-hidden="true"
+          >
+            {icon}
+          </span>
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <p className="text-sm font-semibold text-[var(--text-primary)]">
+                {title}
+              </p>
+              <span className="inline-flex items-center rounded-full bg-[color-mix(in_oklch,var(--layers-mint)_18%,transparent)] px-2 py-[2px] text-[10px] font-semibold uppercase tracking-[0.08em] text-[var(--layers-mint)]">
+                Coming soon
+              </span>
+            </div>
+            <p className="mt-1 text-xs leading-5 text-[var(--text-muted)]">
+              {body}
+            </p>
+          </div>
+        </div>
+        <button
+          type="button"
+          disabled
+          aria-disabled="true"
+          title="Coming soon — invite-only alpha"
+          className="inline-flex min-h-[36px] cursor-not-allowed items-center gap-1.5 rounded-md border border-[var(--border-card)] bg-[var(--bg-card)] px-3 text-xs font-semibold text-[var(--text-muted)] opacity-70"
+        >
+          <Link2 size={12} aria-hidden="true" />
+          Connect
+        </button>
+      </div>
+    </div>
   );
 }

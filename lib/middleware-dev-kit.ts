@@ -54,7 +54,6 @@ export function devKitAuthGuard(request: NextRequest): NextResponse | null {
     if (!warnedAboutMissingSecret) {
       warnedAboutMissingSecret = true;
       // Single warn line per process so dev logs stay clean.
-      // eslint-disable-next-line no-console
       console.warn('[dev-kit] DEV_KIT_DASHBOARD_SECRET unset -- dashboard is open in dev only. Set it before deploying.');
     }
     return null;

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
+import { LayersLogoMark } from "./layers-logo";
 import { MobilePrimaryNav } from "./mobile-primary-nav";
 import { SlideMenu } from "./slide-menu";
 import { ThemeToggle } from "./theme-toggle";
@@ -52,9 +53,7 @@ export function TopBar({
               <ArrowLeft size={20} />
             </button>
           ) : (
-            <span className="layers-brand-mark" aria-hidden="true">
-              <span />
-            </span>
+            <LayersLogoMark className="top-bar-logo" size={30} />
           )}
         </div>
 

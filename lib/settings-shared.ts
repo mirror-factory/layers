@@ -11,14 +11,20 @@ export interface ModelSettings {
   summaryModel: string;
   /** AssemblyAI batch (pre-recorded) speech model. */
   batchSpeechModel: string;
-  /** AssemblyAI streaming (real-time) speech model. */
+  /** Streaming (real-time) speech model. */
   streamingSpeechModel: string;
 }
 
 export const DEFAULTS: ModelSettings = {
-  summaryModel: "anthropic/claude-haiku-4-5",
+  summaryModel: "openai/gpt-5.4-nano",
   batchSpeechModel: "universal-2",
-  streamingSpeechModel: "universal-streaming-multilingual",
+  // 2026-05-01 — flipped from "nova-3" (Deepgram) to AssemblyAI's
+  // universal-streaming-english as the system-wide default. The UI
+  // promises "AssemblyAI is the default" but the previous Deepgram
+  // value here, combined with the DEEPGRAM_STREAMING_MODEL env-var
+  // fallback, silently routed every cookie-less request through
+  // Deepgram. See PROD-395.
+  streamingSpeechModel: "universal-streaming-english",
 };
 
 export interface ModelOption {

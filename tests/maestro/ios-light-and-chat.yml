@@ -1,0 +1,20 @@
+appId: com.mirafactory.layers
+---
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 6000
+
+# Back to light
+- tapOn: "Switch to light mode"
+- waitForAnimationToEnd:
+    timeout: 3000
+
+# Navigate to /chat via hamburger
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 1500
+- tapOn: "Chat"
+- waitForAnimationToEnd:
+    timeout: 6000
+- takeScreenshot: ios-walk-G1-chat

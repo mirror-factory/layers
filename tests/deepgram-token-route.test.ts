@@ -118,11 +118,39 @@ describe("Deepgram stream token route", () => {
       sampleRate: 16000,
       speechModel: "nova-3-multilingual",
       listenVersion: "v1",
-      protocols: ["token", "dg_access"],
+      protocols: ["bearer", "dg_access"],
     });
     expect(wsUrl.pathname).toBe("/v1/listen");
     expect(wsUrl.searchParams.get("model")).toBe("nova-3");
     expect(wsUrl.searchParams.get("language")).toBe("multi");
     expect(mocks.createDeepgramStreamingToken).toHaveBeenCalledWith(600);
+  });
+
+  it("returns an actionable error when the Deepgram key cannot mint temporary tokens", async () => {
+    mocks.getSettings.mockResolvedValue({
+      summaryModel: "openai/gpt-5.4-nano",
+      batchSpeechModel: "universal-2",
+      streamingSpeechModel: "nova-3",
+    });
+    mocks.getDeepgramClient.mockReturnValue({});
+    mocks.createDeepgramStreamingToken.mockRejectedValue({
+      statusCode: 403,
+      body: {
+        err_code: "FORBIDDEN",
+        err_msg: "Insufficient permissions.",
+      },
+      message: "Status code: 403",
+    });
+
+    const res = await tokenRoute.POST(request({ meetingTitle: "Launch sync" }));
+    const body = await res.json();
+
+    expect(res.status).toBe(502);
+    expect(body).toMatchObject({
+      code: "stt_token_permission_denied",
+      provider: "deepgram",
+      envVar: "DEEPGRAM_API_KEY",
+    });
+    expect(body.error).toContain("Member or higher");
   });
 });

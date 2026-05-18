@@ -9,15 +9,15 @@
  *   const { traces, costLogs } = useRealtimeData();
  */
 
-'use client';
+"use client";
 
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef } from "react";
 
 // ── Types ─────────────────────────────────────────────────────────────
 
 interface RealtimeEvent {
   table: string;
-  eventType: 'INSERT' | 'UPDATE' | 'DELETE';
+  eventType: "INSERT" | "UPDATE" | "DELETE";
   new: Record<string, unknown>;
   old: Record<string, unknown>;
 }
@@ -41,12 +41,12 @@ interface RealtimeState {
 // ── Default config ────────────────────────────────────────────────────
 
 const DEFAULT_TABLES = [
-  'traces',
-  'spans',
-  'cost_logs',
-  'eval_runs',
-  'connector_status',
-  'regression_tests',
+  "traces",
+  "spans",
+  "cost_logs",
+  "eval_runs",
+  "connector_status",
+  "regression_tests",
 ];
 
 // ── Hook ──────────────────────────────────────────────────────────────
@@ -67,12 +67,13 @@ export function useRealtimeData(config?: RealtimeConfig): RealtimeState & {
 
   const refresh = useCallback(() => {
     // Trigger re-fetch of dashboard data
-    setState(prev => ({ ...prev, eventCount: prev.eventCount + 1 }));
+    setState((prev) => ({ ...prev, eventCount: prev.eventCount + 1 }));
   }, []);
 
   useEffect(() => {
     const url = config?.supabaseUrl || process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = config?.supabaseAnonKey || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    const key =
+      config?.supabaseAnonKey || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
     if (!url || !key) {
       // No Supabase configured -- realtime not available
@@ -84,31 +85,34 @@ export function useRealtimeData(config?: RealtimeConfig): RealtimeState & {
     async function setupRealtime() {
       try {
         // Dynamic import to avoid bundling Supabase when not needed
-        const { createClient } = await import('@supabase/supabase-js');
+        const { createClient } = await import("@supabase/supabase-js");
         const supabase = createClient(url!, key!);
 
         const tables = config?.tables ?? DEFAULT_TABLES;
 
         const channel = supabase
-          .channel('ai-dev-kit-dashboard')
+          .channel("ai-dev-kit-dashboard")
           .on(
-            'postgres_changes' as any,
-            { event: '*', schema: 'public', table: tables[0] },
+            "postgres_changes" as any,
+            { event: "*", schema: "public", table: tables[0] },
             (payload: any) => handleEvent(payload, tables[0]),
           );
 
         // Subscribe to additional tables
         for (let i = 1; i < tables.length; i++) {
           channel.on(
-            'postgres_changes' as any,
-            { event: '*', schema: 'public', table: tables[i] },
+            "postgres_changes" as any,
+            { event: "*", schema: "public", table: tables[i] },
             (payload: any) => handleEvent(payload, tables[i]),
           );
         }
 
         channel.subscribe((status: string) => {
           if (!cleanup) {
-            setState(prev => ({ ...prev, connected: status === 'SUBSCRIBED' }));
+            setState((prev) => ({
+              ...prev,
+              connected: status === "SUBSCRIBED",
+            }));
           }
         });
 
@@ -128,15 +132,19 @@ export function useRealtimeData(config?: RealtimeConfig): RealtimeState & {
         old: payload.old ?? {},
       };
 
-      setState(prev => {
-        const updated = { ...prev, lastEvent: event, eventCount: prev.eventCount + 1 };
+      setState((prev) => {
+        const updated = {
+          ...prev,
+          lastEvent: event,
+          eventCount: prev.eventCount + 1,
+        };
 
         // Accumulate recent events by table
-        if (table === 'traces') {
+        if (table === "traces") {
           updated.traces = [event.new, ...prev.traces].slice(0, 50);
-        } else if (table === 'cost_logs') {
+        } else if (table === "cost_logs") {
           updated.costLogs = [event.new, ...prev.costLogs].slice(0, 50);
-        } else if (table === 'eval_runs') {
+        } else if (table === "eval_runs") {
           updated.evalRuns = [event.new, ...prev.evalRuns].slice(0, 50);
         }
 
@@ -156,7 +164,7 @@ export function useRealtimeData(config?: RealtimeConfig): RealtimeState & {
         supabase.removeChannel(channel);
       }
     };
-  }, [config?.supabaseUrl, config?.supabaseAnonKey]);
+  }, [config]);
 
   return { ...state, refresh };
 }
@@ -164,17 +172,25 @@ export function useRealtimeData(config?: RealtimeConfig): RealtimeState & {
 // ── Realtime indicator component ──────────────────────────────────────
 
 export function RealtimeIndicator({ connected }: { connected: boolean }) {
+  const liveColor = "var(--layers-mint)";
+  const offlineColor = "var(--fg-faint)";
+
   return (
-    <div className="flex items-center gap-2 text-xs" style={{ fontFamily: 'var(--mono, monospace)' }}>
+    <div
+      className="flex items-center gap-2 text-xs"
+      style={{ fontFamily: "var(--mono, monospace)" }}
+    >
       <div
         className="w-2 h-2 rounded-full"
         style={{
-          background: connected ? '#3dffc0' : '#555',
-          boxShadow: connected ? '0 0 6px rgba(61,255,192,.5)' : 'none',
+          background: connected ? liveColor : offlineColor,
+          boxShadow: connected
+            ? "0 0 6px color-mix(in oklch, var(--layers-mint) 50%, transparent)"
+            : "none",
         }}
       />
-      <span style={{ color: connected ? '#3dffc0' : '#555' }}>
-        {connected ? 'Live' : 'Offline'}
+      <span style={{ color: connected ? liveColor : offlineColor }}>
+        {connected ? "Live" : "Offline"}
       </span>
     </div>
   );

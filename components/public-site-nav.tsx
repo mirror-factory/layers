@@ -1,0 +1,145 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Menu, X } from "lucide-react";
+import { LayersLogo } from "@/components/layers-logo";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { cn } from "@/lib/utils";
+
+const ANON_NAV_LINKS = [
+  { href: "/download", label: "Download" },
+  { href: "/pricing", label: "Pricing" },
+  { href: "/sign-in", label: "Sign in" },
+] as const;
+
+const ANON_SECONDARY_LINKS = [
+  { href: "/changelog", label: "Changelog" },
+  { href: "/docs", label: "Docs" },
+  { href: "/privacy", label: "Privacy" },
+  { href: "/terms", label: "Terms" },
+] as const;
+
+const AUTHED_NAV_LINKS = [
+  { href: "/meetings", label: "Meetings" },
+  { href: "/chat", label: "Chat" },
+  { href: "/settings", label: "Settings" },
+  { href: "/profile", label: "Profile" },
+] as const;
+
+export function PublicSiteNav({ isAuthed = false }: { isAuthed?: boolean }) {
+  const pathname = usePathname() ?? "/";
+  const [open, setOpen] = useState(false);
+  const NAV_LINKS = isAuthed ? AUTHED_NAV_LINKS : ANON_NAV_LINKS;
+
+  return (
+    <header className="sticky top-0 z-40 border-b border-[var(--border-subtle,oklch(0.84_0.024_168/0.5))] bg-[var(--bg-page,oklch(0.982_0.012_168))] supports-[backdrop-filter]:md:bg-[var(--bg-page,oklch(0.982_0.012_168))]/85 supports-[backdrop-filter]:md:backdrop-blur-md">
+      <nav
+        aria-label="Primary navigation"
+        className="mx-auto flex max-w-[1180px] items-center justify-between px-6 py-4 md:px-10"
+      >
+        <Link
+          href="/"
+          className="inline-flex items-center"
+          aria-label="Layers home"
+          onClick={() => setOpen(false)}
+        >
+          <LayersLogo />
+        </Link>
+
+        <div className="hidden items-center gap-8 md:flex">
+          {NAV_LINKS.map(({ href, label }) => {
+            const isActive = pathname === href || pathname.startsWith(`${href}/`);
+            return (
+              <Link
+                key={href}
+                href={href}
+                aria-current={isActive ? "page" : undefined}
+                className={cn(
+                  "text-[14px] transition-colors",
+                  isActive
+                    ? "text-[var(--text-primary,oklch(0.22_0.035_256))]"
+                    : "text-[var(--text-secondary,oklch(0.46_0.025_256))] hover:text-[var(--text-primary,oklch(0.22_0.035_256))]"
+                )}
+              >
+                {label}
+              </Link>
+            );
+          })}
+          <ThemeToggle />
+        </div>
+
+        <div className="flex items-center gap-1 md:hidden">
+          <ThemeToggle />
+          <button
+            type="button"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            aria-controls="mobile-nav-panel"
+            onClick={() => setOpen((v) => !v)}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-md text-[var(--text-primary,oklch(0.22_0.035_256))] transition-colors hover:bg-[var(--bg-surface,oklch(0.997_0.004_168))]"
+          >
+            {open ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}
+          </button>
+        </div>
+      </nav>
+
+      {open ? (
+        <div
+          id="mobile-nav-panel"
+          className="border-t border-[var(--border-subtle,oklch(0.84_0.024_168/0.4))] bg-[var(--bg-page,oklch(0.982_0.012_168))] md:hidden"
+        >
+          <div className="mx-auto flex max-w-[1180px] flex-col gap-1 px-6 py-4">
+            {NAV_LINKS.map(({ href, label }) => {
+              const isActive = pathname === href || pathname.startsWith(`${href}/`);
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={() => setOpen(false)}
+                  aria-current={isActive ? "page" : undefined}
+                  className={cn(
+                    "rounded-md px-3 py-3 text-[15px]",
+                    isActive
+                      ? "bg-[var(--bg-surface,oklch(0.997_0.004_168))] text-[var(--text-primary,oklch(0.22_0.035_256))]"
+                      : "text-[var(--text-secondary,oklch(0.46_0.025_256))] hover:bg-[var(--bg-surface,oklch(0.997_0.004_168))]"
+                  )}
+                >
+                  {label}
+                </Link>
+              );
+            })}
+
+            {!isAuthed ? (
+              <div className="mt-3 border-t border-[var(--border-subtle,oklch(0.84_0.024_168/0.4))] pt-3">
+                <div className="grid grid-cols-2 gap-1">
+                  {ANON_SECONDARY_LINKS.map(({ href, label }) => {
+                    const isActive =
+                      pathname === href || pathname.startsWith(`${href}/`);
+                    return (
+                      <Link
+                        key={href}
+                        href={href}
+                        onClick={() => setOpen(false)}
+                        aria-current={isActive ? "page" : undefined}
+                        className={cn(
+                          "rounded-md px-3 py-3 text-[14px]",
+                          isActive
+                            ? "bg-[var(--bg-surface,oklch(0.997_0.004_168))] text-[var(--text-primary,oklch(0.22_0.035_256))]"
+                            : "text-[var(--text-secondary,oklch(0.46_0.025_256))] hover:bg-[var(--bg-surface,oklch(0.997_0.004_168))]",
+                        )}
+                      >
+                        {label}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : null}
+          </div>
+        </div>
+      ) : null}
+    </header>
+  );
+}

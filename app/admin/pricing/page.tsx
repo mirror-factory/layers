@@ -282,7 +282,7 @@ export default function AdminPricingPage() {
       <main className="mx-auto flex w-full max-w-6xl flex-col gap-5 px-4 py-6 pb-safe">
         <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-medium uppercase tracking-widest text-[#14b8a6]">
+            <p className="text-xs font-medium uppercase tracking-widest text-layers-mint">
               Operations
             </p>
             <h1 className="mt-1 text-2xl font-semibold tracking-tight">
@@ -306,7 +306,7 @@ export default function AdminPricingPage() {
               type="button"
               onClick={() => saveDraft(true)}
               disabled={configStatus === "saving"}
-              className="inline-flex min-h-[40px] items-center justify-center rounded-md bg-[#14b8a6] px-3 text-sm font-medium text-[#042f2e] transition-colors hover:bg-[#2dd4bf] disabled:opacity-60"
+              className="inline-flex min-h-[40px] items-center justify-center rounded-md bg-layers-mint px-3 text-sm font-medium text-layers-ink transition-colors hover:bg-layers-mint-soft disabled:opacity-60"
             >
               Save & activate
             </button>
@@ -334,7 +334,7 @@ export default function AdminPricingPage() {
               className={`rounded-md px-2.5 py-1 text-xs font-medium ${
                 configStatus === "error"
                   ? "bg-[var(--status-error-bg)] text-[var(--status-error)]"
-                  : "bg-[#14b8a6]/10 text-[#14b8a6]"
+                  : "bg-layers-mint/10 text-layers-mint"
               }`}
             >
               {configMessage}
@@ -473,7 +473,7 @@ export default function AdminPricingPage() {
                   setSelectedOptionId(next.id);
                   setAddonIds(defaultAddonsFor(next));
                 }}
-                className="mt-2 min-h-[44px] w-full rounded-md border border-[var(--border-card)] bg-[var(--surface-control)] px-3 text-sm text-[var(--text-primary)] outline-none transition-colors focus:border-[#14b8a6]"
+                className="mt-2 min-h-[44px] w-full rounded-md border border-[var(--border-card)] bg-[var(--surface-control)] px-3 text-sm text-[var(--text-primary)] outline-none transition-colors focus:border-layers-mint"
               >
                 {STT_PRICING_OPTIONS.map((option) => (
                   <option key={option.id} value={option.id}>
@@ -490,7 +490,7 @@ export default function AdminPricingPage() {
                       {selectedOption.notes}
                     </p>
                   </div>
-                  <span className="rounded bg-[#14b8a6]/10 px-2 py-1 text-[10px] font-medium uppercase tracking-wider text-[#14b8a6]">
+                  <span className="rounded bg-layers-mint/10 px-2 py-1 text-[10px] font-medium uppercase tracking-wider text-layers-mint">
                     {selectedOption.mode}
                   </span>
                 </div>
@@ -528,7 +528,7 @@ export default function AdminPricingPage() {
                   href={selectedOption.sourceUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-[#14b8a6] hover:text-[#2dd4bf]"
+                  className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-layers-mint hover:text-layers-mint-soft"
                 >
                   Provider pricing source
                   <ExternalLink size={12} />
@@ -564,7 +564,7 @@ export default function AdminPricingPage() {
                                   : current.filter((id) => id !== addon.id),
                               )
                             }
-                            className="h-4 w-4 accent-[#14b8a6]"
+                            className="h-4 w-4 accent-layers-mint"
                           />
                         </span>
                       </label>
@@ -768,7 +768,7 @@ export default function AdminPricingPage() {
                         <tr
                           key={option.id}
                           className={`border-b border-[var(--border-subtle)] last:border-0 ${
-                            isSelected ? "bg-[#14b8a6]/[0.06]" : ""
+                            isSelected ? "bg-layers-mint/[0.06]" : ""
                           }`}
                         >
                           <td className="py-3 pr-3 font-medium">{option.providerLabel}</td>
@@ -798,7 +798,7 @@ export default function AdminPricingPage() {
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
                     <p className="text-sm font-medium">{version.name}</p>
-                    <span className="rounded bg-[#14b8a6]/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-[#14b8a6]">
+                    <span className="rounded bg-layers-mint/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-layers-mint">
                       {version.status}
                     </span>
                   </div>
@@ -818,7 +818,7 @@ export default function AdminPricingPage() {
                     type="button"
                     onClick={() => activateVersion(version.id)}
                     disabled={version.status === "active" || configStatus === "saving"}
-                    className="min-h-[36px] rounded-md bg-[#14b8a6] px-3 text-xs font-medium text-[#042f2e] transition-colors hover:bg-[#2dd4bf] disabled:opacity-50"
+                    className="min-h-[36px] rounded-md bg-layers-mint px-3 text-xs font-medium text-layers-ink transition-colors hover:bg-layers-mint-soft disabled:opacity-50"
                   >
                     Activate
                   </button>
@@ -891,7 +891,7 @@ function MetricCard({
         <span className="text-xs font-medium uppercase tracking-wider text-[var(--text-muted)]">
           {label}
         </span>
-        <Icon size={16} className="text-[#14b8a6]" />
+        <Icon size={16} className="text-layers-mint" />
       </div>
       <p className="mt-3 text-2xl font-semibold tracking-tight">{value}</p>
       <p className="mt-1 text-xs text-[var(--text-muted)]">{detail}</p>
@@ -913,7 +913,7 @@ function ScenarioMetric({
   return (
     <div className="min-w-0">
       <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-[var(--text-muted)]">
-        <Icon size={14} className="text-[#14b8a6]" />
+        <Icon size={14} className="text-layers-mint" />
         {label}
       </div>
       <p className="mt-2 text-2xl font-semibold tracking-tight">{value}</p>

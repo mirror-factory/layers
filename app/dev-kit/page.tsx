@@ -45,19 +45,19 @@ function trendIndicator(trend: number): string {
 }
 
 function trendColor(trend: number): string {
-  if (trend > 0) return "text-[#3dffc0]";
-  if (trend < 0) return "text-[#ef4444]";
-  return "text-[#f0f0f0]/40";
+  if (trend > 0) return "text-layers-mint";
+  if (trend < 0) return "text-signal-live";
+  return "text-ink-200/40";
 }
 
 function statusDot(status: ModuleStatus["status"]): string {
   switch (status) {
     case "healthy":
-      return "bg-[#3dffc0]";
+      return "bg-layers-mint";
     case "degraded":
       return "bg-yellow-400";
     case "down":
-      return "bg-[#ef4444]";
+      return "bg-signal-live";
   }
 }
 
@@ -102,7 +102,7 @@ export default function OverviewPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64 text-[#f0f0f0]/40">
+      <div className="flex items-center justify-center h-64 text-ink-200/40">
         Loading overview...
       </div>
     );
@@ -111,8 +111,8 @@ export default function OverviewPage() {
   if (!data) return (
     <div className="p-8">
       <h1 className="text-2xl font-semibold mb-4">Overview</h1>
-      <div className="border border-[#3dffc0]/20 rounded p-6 text-center" style={{background:'rgba(61,255,192,.03)'}}>
-        <p className="text-[#f0f0f0]/60 text-sm">No data yet. AI call traces will appear here as your application makes generateText/streamText calls with TelemetryIntegration wired.</p>
+      <div className="border border-layers-mint/20 rounded p-6 text-center" style={{ background: "color-mix(in oklch, var(--layers-mint) 5%, transparent)" }}>
+        <p className="text-ink-200/60 text-sm">No data yet. AI call traces will appear here as your application makes generateText/streamText calls with TelemetryIntegration wired.</p>
       </div>
     </div>
   );
@@ -125,7 +125,7 @@ export default function OverviewPage() {
           <h1 className="text-2xl font-semibold">Overview</h1>
           <RealtimeIndicator connected={realtime.connected} />
         </div>
-        <p className="mt-1 text-sm text-[#f0f0f0]/50">
+        <p className="mt-1 text-sm text-ink-200/50">
           High-level metrics and system health at a glance.
         </p>
       </div>
@@ -137,7 +137,7 @@ export default function OverviewPage() {
             key={kpi.label}
             className="rounded-lg border border-white/10 bg-white/[0.02] px-5 py-4"
           >
-            <p className="text-xs uppercase tracking-wider text-[#f0f0f0]/50">
+            <p className="text-xs uppercase tracking-wider text-ink-200/50">
               {kpi.label}
             </p>
             <p className="mt-2 text-2xl font-semibold">{kpi.value}</p>
@@ -162,7 +162,7 @@ export default function OverviewPage() {
               />
               <div>
                 <p className="text-sm font-medium">{mod.name}</p>
-                <p className="text-xs text-[#f0f0f0]/50">
+                <p className="text-xs text-ink-200/50">
                   {statusLabel(mod.status)}
                 </p>
               </div>

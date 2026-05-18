@@ -1,18 +1,18 @@
 import { notFound } from "next/navigation";
 import { TopBar } from "@/components/top-bar";
-import { TranscriptView } from "@/components/transcript-view";
 import { MeetingCostPanel } from "@/components/meeting-cost-panel";
-import { MeetingChat } from "@/components/meeting-chat";
-import { MeetingIntelligencePanel } from "@/components/meeting-intelligence-panel";
+import { MeetingNotesEditor } from "@/components/meeting-notes-editor";
 import { MeetingNotesPushPanel } from "@/components/meeting-notes-push-panel";
+import { OnboardingProvider } from "@/components/onboarding/onboarding-provider";
+import { FirstMeetingToast } from "@/components/onboarding/first-meeting-toast";
+import { ONBOARDING_ANCHOR_ATTR } from "@/lib/onboarding/copy";
 import { MeetingDetailPollerWrapper } from "./poller-wrapper";
+import { formatCompletedActionDueLabel } from "@/lib/meetings/format";
 import { getMeetingsStore } from "@/lib/meetings/store";
 import { AudioWaveRibbon } from "@/components/audio-wave-ribbon";
 import {
   SessionCaptureCard,
   SessionIntelligenceCanvas,
-  countWorkspaceWords,
-  formatWorkspaceTimestamp,
   type SessionActionRow,
   type SessionTranscriptRow,
 } from "@/components/session-workspace";
@@ -38,6 +38,7 @@ export default async function MeetingDetailPage({
   const isCompleted = meeting.status === "completed";
 
   return (
+    <OnboardingProvider>
     <div className="paper-calm-page recorder-page session-workspace-page min-h-screen-safe flex flex-col">
       <TopBar
         title={meeting.title ?? "Meeting Detail"}
@@ -45,6 +46,11 @@ export default async function MeetingDetailPage({
       />
 
       <main className="meeting-detail-main session-detail-main flex-1 px-4 pb-safe py-6 mx-auto w-full space-y-6">
+        {isCompleted && (
+          <div className="mx-auto w-full max-w-5xl">
+            <FirstMeetingToast />
+          </div>
+        )}
         {!isCompleted && meeting.status !== "error" && (
           <div className="mx-auto max-w-5xl space-y-6">
             <div className="meeting-detail-header flex items-center justify-between rounded-xl border border-[var(--border-card)] bg-[var(--surface-panel)] p-4">
@@ -85,8 +91,8 @@ export default async function MeetingDetailPage({
               </div>
               <StatusChip status={meeting.status} />
             </div>
-            <div className="bg-[var(--bg-card)] rounded-xl p-4 border border-[#ef4444]/20">
-              <div className="text-sm text-[#ef4444] font-medium">
+            <div className="bg-[var(--bg-card)] rounded-xl p-4 border border-signal-live/20">
+              <div className="text-sm text-signal-live font-medium">
                 Processing Error
               </div>
               <p className="text-xs text-[var(--text-secondary)] mt-1">
@@ -101,26 +107,37 @@ export default async function MeetingDetailPage({
         )}
       </main>
     </div>
+    </OnboardingProvider>
   );
 }
 
 type CompletedMeeting = Meeting;
+type CompletedActionItem = NonNullable<CompletedMeeting["summary"]>["actionItems"][number];
+
+interface CompletedSummaryViewModel {
+  title: string | null;
+  summary: string | null;
+  keyPoints: string[];
+  actionItems: CompletedActionItem[];
+  decisions: string[];
+  participants: string[];
+}
 
 function CompletedMeetingWorkspace({ meeting }: { meeting: CompletedMeeting }) {
-  const meetingDate = new Date(meeting.createdAt);
+  const summary = normalizeCompletedSummary(meeting.summary);
   const summaryText =
-    meeting.summary?.summary ??
+    summary.summary ??
     "Layers did not generate a summary for this recording yet.";
   const transcriptRows = buildCompletedTranscriptRows(meeting.utterances);
-  const actionRows = buildCompletedActions(meeting.summary?.actionItems ?? []);
-  const keyPoints = meeting.summary?.keyPoints ?? [];
+  const actionRows = buildCompletedActions(summary.actionItems);
+  const keyPoints = summary.keyPoints;
   const subtitle =
-    meeting.summary?.participants.length
-      ? meeting.summary.participants.join(", ")
+    summary.participants.length
+      ? summary.participants.join(", ")
       : keyPoints[0] ?? "Recorded session";
   const stats = {
     segments: meeting.utterances.length,
-    words: countWorkspaceWords(
+    words: countMeetingWords(
       meeting.text ?? meeting.utterances.map((utterance) => utterance.text).join(" "),
     ),
     points: keyPoints.length,
@@ -131,12 +148,12 @@ function CompletedMeetingWorkspace({ meeting }: { meeting: CompletedMeeting }) {
     <>
       <div className="session-detail-workspace">
         <SessionCaptureCard
-          date={meetingDate}
+          date={meeting.createdAt}
           durationLabel={formatMeetingDuration(meeting.durationSeconds)}
           statusLabel="Summary ready"
           badgeLabel="DONE"
           badgeTone="done"
-          title={meeting.title ?? meeting.summary?.title ?? "Untitled recording"}
+          title={meeting.title ?? summary.title ?? "Untitled recording"}
           subtitle={subtitle}
           calendarConnected={false}
           stats={stats}
@@ -152,12 +169,16 @@ function CompletedMeetingWorkspace({ meeting }: { meeting: CompletedMeeting }) {
             />
           }
           controlSlot={
-            <div className="session-detail-status">
-              <StatusChip status={meeting.status} />
+            <div className="session-detail-control-stack">
+              <div className="session-detail-status">
+                <StatusChip status={meeting.status} />
+              </div>
+              <MeetingNotesPushPanel meetingId={meeting.id} variant="compact" />
             </div>
           }
         />
 
+        <div {...{ [ONBOARDING_ANCHOR_ATTR]: "summary" }}>
         <SessionIntelligenceCanvas
           mode="summary"
           summaryText={summaryText}
@@ -165,27 +186,88 @@ function CompletedMeetingWorkspace({ meeting }: { meeting: CompletedMeeting }) {
           transcriptRows={transcriptRows}
           keyPoints={keyPoints}
           actions={actionRows}
-          decisions={meeting.summary?.decisions ?? []}
-          askPanel={<MeetingChat meetingId={meeting.id} variant="workspace" />}
+          decisions={summary.decisions}
+          stats={stats}
+          meetingChat={{
+            meetingId: meeting.id,
+            participantName: summary.participants[0] ?? null,
+          }}
+          notesPanel={
+            <MeetingNotesEditor
+              meetingId={meeting.id}
+              initialValue={meeting.userNotes}
+            />
+          }
           footerStatus="Summary - transcript ready"
         />
+        </div>
       </div>
 
       <div className="session-detail-utilities">
-        <MeetingNotesPushPanel meetingId={meeting.id} />
-        <MeetingIntelligencePanel
-          summary={meeting.summary}
-          intakeForm={meeting.intakeForm}
-        />
-        <TranscriptView
-          utterances={meeting.utterances}
-          meetingId={meeting.id}
-          defaultOpen={!meeting.summary}
-        />
         <MeetingCostPanel costBreakdown={meeting.costBreakdown} />
       </div>
     </>
   );
+}
+
+function normalizeCompletedSummary(
+  summary: CompletedMeeting["summary"],
+): CompletedSummaryViewModel {
+  if (!summary || typeof summary !== "object") {
+    return {
+      title: null,
+      summary: null,
+      keyPoints: [],
+      actionItems: [],
+      decisions: [],
+      participants: [],
+    };
+  }
+
+  const raw = summary as Record<string, unknown>;
+
+  return {
+    title: normalizeOptionalString(raw.title),
+    summary: normalizeOptionalString(raw.summary),
+    keyPoints: normalizeStringArray(raw.keyPoints),
+    actionItems: normalizeActionItems(raw.actionItems),
+    decisions: normalizeStringArray(raw.decisions),
+    participants: normalizeStringArray(raw.participants),
+  };
+}
+
+function normalizeOptionalString(value: unknown): string | null {
+  return typeof value === "string" && value.trim().length > 0 ? value : null;
+}
+
+function normalizeStringArray(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+
+  return value.filter(
+    (item): item is string =>
+      typeof item === "string" && item.trim().length > 0,
+  );
+}
+
+function normalizeActionItems(value: unknown): CompletedActionItem[] {
+  if (!Array.isArray(value)) return [];
+
+  return value.flatMap((item) => {
+    if (!item || typeof item !== "object") return [];
+
+    const raw = item as Record<string, unknown>;
+    if (typeof raw.task !== "string" || raw.task.trim().length === 0) {
+      return [];
+    }
+
+    return [
+      {
+        task: raw.task,
+        assignee: typeof raw.assignee === "string" ? raw.assignee : null,
+        dueDate: typeof raw.dueDate === "string" ? raw.dueDate : null,
+      },
+    ];
+  });
 }
 
 function buildCompletedTranscriptRows(
@@ -193,7 +275,7 @@ function buildCompletedTranscriptRows(
 ): SessionTranscriptRow[] {
   return utterances.slice(0, 12).map((utterance, index) => ({
     id: `${utterance.start}-${index}`,
-    timestamp: formatWorkspaceTimestamp(utterance.start),
+    timestamp: formatMeetingTimestamp(utterance.start),
     text: utterance.text,
     tone:
       index % 5 === 3
@@ -204,19 +286,25 @@ function buildCompletedTranscriptRows(
   }));
 }
 
+function formatMeetingTimestamp(ms: number): string {
+  const totalSec = Math.max(0, Math.floor(ms / 1000));
+  const minutes = Math.floor(totalSec / 60);
+  const seconds = totalSec % 60;
+  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+}
+
+function countMeetingWords(text: string): number {
+  return text.split(/\s+/).filter(Boolean).length;
+}
+
 function buildCompletedActions(
-  actionItems: NonNullable<CompletedMeeting["summary"]>["actionItems"],
+  actionItems: CompletedActionItem[],
 ): SessionActionRow[] {
   const priorities: Array<SessionActionRow["priority"]> = ["High", "Med", "Low"];
   return actionItems.map((action, index) => ({
     id: `${action.task}-${index}`,
     text: formatMeetingActionItem(action),
-    due: action.dueDate
-      ? new Intl.DateTimeFormat(undefined, {
-          month: "short",
-          day: "numeric",
-        }).format(new Date(action.dueDate))
-      : null,
+    due: formatCompletedActionDueLabel(action.dueDate),
     priority: priorities[index % priorities.length],
   }));
 }
@@ -232,10 +320,10 @@ function formatMeetingDuration(seconds: number | null): string {
 
 function StatusChip({ status }: { status: string }) {
   const config: Record<string, { bg: string; text: string }> = {
-    completed: { bg: "bg-[#22c55e]/10", text: "text-[#22c55e]" },
-    processing: { bg: "bg-[#14b8a6]/10", text: "text-[#14b8a6]" },
-    queued: { bg: "bg-[#eab308]/10", text: "text-[#eab308]" },
-    error: { bg: "bg-[#ef4444]/10", text: "text-[#ef4444]" },
+    completed: { bg: "bg-signal-success/10", text: "text-signal-success" },
+    processing: { bg: "bg-layers-mint/10", text: "text-layers-mint" },
+    queued: { bg: "bg-signal-warning/10", text: "text-signal-warning" },
+    error: { bg: "bg-signal-live/10", text: "text-signal-live" },
   };
   const c = config[status] ?? config.processing;
 

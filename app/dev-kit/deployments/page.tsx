@@ -54,9 +54,9 @@ function statusIndicator(status: Deployment["status"]): {
 } {
   switch (status) {
     case "success":
-      return { color: "text-[#3dffc0]", label: "DEPLOYED" };
+      return { color: "text-layers-mint", label: "DEPLOYED" };
     case "failed":
-      return { color: "text-[#ef4444]", label: "BLOCKED" };
+      return { color: "text-signal-live", label: "BLOCKED" };
     case "pending":
       return { color: "text-yellow-400", label: "PENDING" };
   }
@@ -79,7 +79,7 @@ export default function DeploymentsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64 text-[#f0f0f0]/40">
+      <div className="flex items-center justify-center h-64 text-ink-200/40">
         Loading deployments...
       </div>
     );
@@ -88,8 +88,8 @@ export default function DeploymentsPage() {
   if (deployments.length === 0) return (
     <div className="p-8">
       <h1 className="text-2xl font-semibold mb-4">Deployments</h1>
-      <div className="border border-[#3dffc0]/20 rounded p-6 text-center" style={{background:'rgba(61,255,192,.03)'}}>
-        <p className="text-[#f0f0f0]/60 text-sm">No deployments recorded. Run ai-dev-kit deploy validate to capture your first deployment snapshot.</p>
+      <div className="border border-layers-mint/20 rounded p-6 text-center" style={{ background: "color-mix(in oklch, var(--layers-mint) 5%, transparent)" }}>
+        <p className="text-ink-200/60 text-sm">No deployments recorded. Run ai-dev-kit deploy validate to capture your first deployment snapshot.</p>
       </div>
     </div>
   );
@@ -99,7 +99,7 @@ export default function DeploymentsPage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-semibold">Deployments</h1>
-        <p className="mt-1 text-sm text-[#f0f0f0]/50">
+        <p className="mt-1 text-sm text-ink-200/50">
           Deployment history with gate results and eval snapshots.
         </p>
       </div>
@@ -120,31 +120,31 @@ export default function DeploymentsPage() {
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-3">
-                      <span className="font-mono text-sm text-[#3dffc0]">
+                      <span className="font-mono text-sm text-layers-mint">
                         {deploy.commitHash}
                       </span>
                       <span className={`text-xs font-medium ${si.color}`}>
                         {si.label}
                       </span>
                     </div>
-                    <p className="text-sm text-[#f0f0f0]/70 mt-1 truncate">
+                    <p className="text-sm text-ink-200/70 mt-1 truncate">
                       {deploy.commitMessage}
                     </p>
-                    <p className="text-xs text-[#f0f0f0]/40 mt-1">
+                    <p className="text-xs text-ink-200/40 mt-1">
                       {formatDate(deploy.date)}
                     </p>
                   </div>
 
                   {/* Eval snapshot */}
                   <div className="text-right shrink-0">
-                    <p className="text-xs text-[#f0f0f0]/50">Eval Pass Rate</p>
+                    <p className="text-xs text-ink-200/50">Eval Pass Rate</p>
                     <p
                       className={`font-mono text-lg font-semibold ${
                         deploy.evalPassRate >= 90
-                          ? "text-[#3dffc0]"
+                          ? "text-layers-mint"
                           : deploy.evalPassRate >= 70
                             ? "text-yellow-400"
-                            : "text-[#ef4444]"
+                            : "text-signal-live"
                       }`}
                     >
                       {deploy.evalPassRate}%
@@ -159,8 +159,8 @@ export default function DeploymentsPage() {
                       key={gate.name}
                       className={`inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-mono ${
                         gate.passed
-                          ? "bg-[#3dffc0]/10 text-[#3dffc0]"
-                          : "bg-[#ef4444]/10 text-[#ef4444]"
+                          ? "bg-layers-mint/10 text-layers-mint"
+                          : "bg-signal-live/10 text-signal-live"
                       }`}
                     >
                       {gate.passed ? "[ok]" : "[x]"} {gate.name}
@@ -171,7 +171,7 @@ export default function DeploymentsPage() {
 
               {/* Bottom indicator bar */}
               <div
-                className={`h-1 ${allPassed ? "bg-[#3dffc0]" : "bg-[#ef4444]"}`}
+                className={`h-1 ${allPassed ? "bg-layers-mint" : "bg-signal-live"}`}
               />
             </div>
           );

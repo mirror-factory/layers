@@ -1,0 +1,97 @@
+[1A[2K[2m[WebServer] [22m(node:98853) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[2m[WebServer] [22m(node:98856) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[2m[WebServer] [22m(node:98864) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+
+[1A[2K[2m[WebServer] [22m ⚠ Webpack is configured while Turbopack is not, which may cause problems.
+
+[1A[2K[2m[WebServer] [22m ⚠ See instructions if you need to configure Turbopack:
+[2m[WebServer] [22m  https://nextjs.org/docs/app/api-reference/next-config-js/turbopack
+[2m[WebServer] [22m
+
+[1A[2K[2m[WebServer] [22m(node:98870) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+Running 51 tests using 1 worker
+
+[1A[2K(node:98911) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1A[2K(node:98911) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1A[2K[1/51] [mobile-light] › tests/e2e/smoke.spec.ts:31:7 › Home (/) loads with 200 and renders
+[1A[2K[2/51] [mobile-light] › tests/e2e/smoke.spec.ts:31:7 › Record (/record) loads with 200 and renders
+[1A[2K[3/51] [mobile-light] › tests/e2e/smoke.spec.ts:31:7 › Live Recording (/record/live) loads with 200 and renders
+[1A[2K[4/51] [mobile-light] › tests/e2e/smoke.spec.ts:31:7 › Meetings (/meetings) loads with 200 and renders
+[1A[2K[5/51] [mobile-light] › tests/e2e/smoke.spec.ts:31:7 › Chat (/chat) loads with 200 and renders
+[1A[2K[6/51] [mobile-light] › tests/e2e/smoke.spec.ts:31:7 › Settings (/settings) loads with 200 and renders
+[1A[2K[7/51] [mobile-light] › tests/e2e/smoke.spec.ts:31:7 › Download (/download) loads with 200 and renders
+[1A[2K[8/51] [mobile-light] › tests/e2e/smoke.spec.ts:31:7 › Pricing (/pricing) loads with 200 and renders
+[1A[2K[9/51] [mobile-light] › tests/e2e/smoke.spec.ts:31:7 › Privacy (/privacy) loads with 200 and renders
+[1A[2K[10/51] [mobile-light] › tests/e2e/smoke.spec.ts:31:7 › Terms (/terms) loads with 200 and renders
+[1A[2K[11/51] [mobile-light] › tests/e2e/smoke.spec.ts:31:7 › Account Deletion (/account-deletion) loads with 200 and renders
+[1A[2K[12/51] [mobile-light] › tests/e2e/smoke.spec.ts:31:7 › Usage (/usage) loads with 200 and renders
+[1A[2K[13/51] [mobile-light] › tests/e2e/smoke.spec.ts:31:7 › Profile (/profile) loads with 200 and renders
+[1A[2K[14/51] [mobile-light] › tests/e2e/smoke.spec.ts:31:7 › Sign In (/sign-in) loads with 200 and renders
+[1A[2K[15/51] [mobile-light] › tests/e2e/smoke.spec.ts:31:7 › Sign Up (/sign-up) loads with 200 and renders
+[1A[2K[16/51] [mobile-light] › tests/e2e/smoke.spec.ts:31:7 › Docs (/docs) loads with 200 and renders
+[1A[2K[17/51] [mobile-light] › tests/e2e/smoke.spec.ts:31:7 › Observability (/observability) loads with 200 and renders
+[1A[2K(node:99182) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1A[2K(node:99182) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1A[2K[18/51] [tablet-light] › tests/e2e/smoke.spec.ts:31:7 › Home (/) loads with 200 and renders
+[1A[2K[19/51] [tablet-light] › tests/e2e/smoke.spec.ts:31:7 › Record (/record) loads with 200 and renders
+[1A[2K[20/51] [tablet-light] › tests/e2e/smoke.spec.ts:31:7 › Live Recording (/record/live) loads with 200 and renders
+[1A[2K[21/51] [tablet-light] › tests/e2e/smoke.spec.ts:31:7 › Meetings (/meetings) loads with 200 and renders
+[1A[2K[22/51] [tablet-light] › tests/e2e/smoke.spec.ts:31:7 › Chat (/chat) loads with 200 and renders
+[1A[2K[23/51] [tablet-light] › tests/e2e/smoke.spec.ts:31:7 › Settings (/settings) loads with 200 and renders
+[1A[2K[24/51] [tablet-light] › tests/e2e/smoke.spec.ts:31:7 › Download (/download) loads with 200 and renders
+[1A[2K[25/51] [tablet-light] › tests/e2e/smoke.spec.ts:31:7 › Pricing (/pricing) loads with 200 and renders
+[1A[2K[26/51] [tablet-light] › tests/e2e/smoke.spec.ts:31:7 › Privacy (/privacy) loads with 200 and renders
+[1A[2K[27/51] [tablet-light] › tests/e2e/smoke.spec.ts:31:7 › Terms (/terms) loads with 200 and renders
+[1A[2K[28/51] [tablet-light] › tests/e2e/smoke.spec.ts:31:7 › Account Deletion (/account-deletion) loads with 200 and renders
+[1A[2K[29/51] [tablet-light] › tests/e2e/smoke.spec.ts:31:7 › Usage (/usage) loads with 200 and renders
+[1A[2K[30/51] [tablet-light] › tests/e2e/smoke.spec.ts:31:7 › Profile (/profile) loads with 200 and renders
+[1A[2K[31/51] [tablet-light] › tests/e2e/smoke.spec.ts:31:7 › Sign In (/sign-in) loads with 200 and renders
+[1A[2K[32/51] [tablet-light] › tests/e2e/smoke.spec.ts:31:7 › Sign Up (/sign-up) loads with 200 and renders
+[1A[2K[33/51] [tablet-light] › tests/e2e/smoke.spec.ts:31:7 › Docs (/docs) loads with 200 and renders
+[1A[2K[34/51] [tablet-light] › tests/e2e/smoke.spec.ts:31:7 › Observability (/observability) loads with 200 and renders
+[1A[2K(node:193) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1A[2K(node:193) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1A[2K[35/51] [desktop-dark] › tests/e2e/smoke.spec.ts:31:7 › Home (/) loads with 200 and renders
+[1A[2K[36/51] [desktop-dark] › tests/e2e/smoke.spec.ts:31:7 › Record (/record) loads with 200 and renders
+[1A[2K[37/51] [desktop-dark] › tests/e2e/smoke.spec.ts:31:7 › Live Recording (/record/live) loads with 200 and renders
+[1A[2K[38/51] [desktop-dark] › tests/e2e/smoke.spec.ts:31:7 › Meetings (/meetings) loads with 200 and renders
+[1A[2K[39/51] [desktop-dark] › tests/e2e/smoke.spec.ts:31:7 › Chat (/chat) loads with 200 and renders
+[1A[2K[40/51] [desktop-dark] › tests/e2e/smoke.spec.ts:31:7 › Settings (/settings) loads with 200 and renders
+[1A[2K[41/51] [desktop-dark] › tests/e2e/smoke.spec.ts:31:7 › Download (/download) loads with 200 and renders
+[1A[2K[42/51] [desktop-dark] › tests/e2e/smoke.spec.ts:31:7 › Pricing (/pricing) loads with 200 and renders
+[1A[2K[43/51] [desktop-dark] › tests/e2e/smoke.spec.ts:31:7 › Privacy (/privacy) loads with 200 and renders
+[1A[2K[44/51] [desktop-dark] › tests/e2e/smoke.spec.ts:31:7 › Terms (/terms) loads with 200 and renders
+[1A[2K[45/51] [desktop-dark] › tests/e2e/smoke.spec.ts:31:7 › Account Deletion (/account-deletion) loads with 200 and renders
+[1A[2K[46/51] [desktop-dark] › tests/e2e/smoke.spec.ts:31:7 › Usage (/usage) loads with 200 and renders
+[1A[2K[47/51] [desktop-dark] › tests/e2e/smoke.spec.ts:31:7 › Profile (/profile) loads with 200 and renders
+[1A[2K[48/51] [desktop-dark] › tests/e2e/smoke.spec.ts:31:7 › Sign In (/sign-in) loads with 200 and renders
+[1A[2K[49/51] [desktop-dark] › tests/e2e/smoke.spec.ts:31:7 › Sign Up (/sign-up) loads with 200 and renders
+[1A[2K[50/51] [desktop-dark] › tests/e2e/smoke.spec.ts:31:7 › Docs (/docs) loads with 200 and renders
+[1A[2K[51/51] [desktop-dark] › tests/e2e/smoke.spec.ts:31:7 › Observability (/observability) loads with 200 and renders
+[1A[2K  51 passed (1.0m)

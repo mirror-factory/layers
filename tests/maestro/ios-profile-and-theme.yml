@@ -1,0 +1,35 @@
+appId: com.mirafactory.layers
+---
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 6000
+
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 1500
+- tapOn: "Meetings"
+- waitForAnimationToEnd:
+    timeout: 6000
+
+# Open account menu → Profile
+- tapOn: "Open account menu"
+- waitForAnimationToEnd:
+    timeout: 3000
+- tapOn: "Profile"
+- waitForAnimationToEnd:
+    timeout: 6000
+- takeScreenshot: ios-walk-H6-profile
+
+# Back to Meetings via back arrow
+- tapOn:
+    id: "back"
+- waitForAnimationToEnd:
+    timeout: 3000
+
+# Try theme toggle (icon button — moon/sun in header)
+- tapOn:
+    point: "320,86"
+- waitForAnimationToEnd:
+    timeout: 2500
+- takeScreenshot: ios-walk-C2-after-theme-tap

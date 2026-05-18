@@ -1,0 +1,76 @@
+# Maestro flow: sign in then record a meeting end-to-end on iOS Capacitor.
+# Self-contained — doesn't depend on prior session state.
+#
+# Run:
+#   PATH=/opt/homebrew/opt/openjdk@21/bin:$PATH maestro --device \
+#     CD658077-5378-49B2-8A17-7068111DD447 test \
+#     tests/maestro/ios-record-meeting.yml
+
+appId: com.mirafactory.layers
+---
+# --- Sign in (mirrors ios-signin-test-user.yml) ---
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 8000
+
+# Authed users land on public landing (marketing). Navigate to /meetings
+# via the authed hamburger menu — that page has "New recording".
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 1500
+- tapOn: "Meetings"
+- waitForAnimationToEnd:
+    timeout: 5000
+
+- takeScreenshot: ios-rec-00-meetings-page
+
+# --- Recording flow ---
+# "New recording" on /meetings navigates to /record (still READY state)
+- tapOn: "New recording"
+- waitForAnimationToEnd:
+    timeout: 5000
+- assertVisible: "READY TO RECORD"
+- takeScreenshot: ios-rec-00b-record-ready
+
+# Now actually start the recording
+- tapOn: "Start recording"
+- waitForAnimationToEnd:
+    timeout: 4000
+
+# Native mic permission alert — Maestro auto-handles, but explicit fallback.
+- runFlow:
+    when:
+      visible: "Allow"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd:
+          timeout: 2000
+
+- takeScreenshot: ios-rec-01-recording-started
+
+# Run 12s
+- waitForAnimationToEnd:
+    timeout: 12000
+- takeScreenshot: ios-rec-02-recording-12s
+
+# Stop
+- runFlow:
+    when:
+      visible: "Stop"
+    commands:
+      - tapOn: "Stop"
+- runFlow:
+    when:
+      visible: "Stop recording"
+    commands:
+      - tapOn: "Stop recording"
+
+- waitForAnimationToEnd:
+    timeout: 8000
+- takeScreenshot: ios-rec-03-after-stop
+
+# Up to 30s for processing
+- waitForAnimationToEnd:
+    timeout: 30000
+- takeScreenshot: ios-rec-04-post-process

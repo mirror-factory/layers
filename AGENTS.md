@@ -9,6 +9,8 @@ The agent failed to invoke skills 56% of the time. With AGENTS.md, there's no de
 
 Source: https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals
 
+> **First time here?** Read [`docs/GETTING_STARTED.md`](./docs/GETTING_STARTED.md) before anything else. It maps every load-bearing document and lists the four non-negotiables (release flow, design tokens, AI SDK v6 patterns, sacred wiring).
+
 ---
 
 ## Tech Stack
@@ -90,6 +92,17 @@ Available runtime skills. Claude Code skills live in `.claude/skills/`; Codex sh
 | product-validation | name: product-validation | .claude/skills/product-validation/SKILL.md |
 | visual-qa | Verify UI changes didn't break layout, styling, or functionality on desktop and  | .claude/skills/visual-qa/SKILL.md |
 | wire-telemetry | Ensure every AI call has proper observability. Use when writing or modifying cod | .claude/skills/wire-telemetry/SKILL.md |
+| layers-brand-remotion | Layers-branded video / motion / Remotion / HTML-in-Canvas / organic wave / design kit | .claude/skills/layers-brand-remotion/SKILL.md |
+
+### Brand kit
+
+When working on visual / video / branded-asset surfaces, read these **before** writing code:
+
+- [`branding/BRAND_NARRATIVE.md`](./branding/BRAND_NARRATIVE.md) — voice + visual + narrative source of truth (the 11-section "who Layers is for / wedge / end state / mark / colors / motion / voice / real-logo policy" doc).
+- [`branding/design-kit.html`](./branding/design-kit.html) — shareable kit. Anchored on a faithful `SessionCaptureCard` replica. Tokens, typography, the three signature wave colors, motion, current vs. proposed organic-arc logo, buttons / pills / forms / chat / data / icons / loading.
+- [`branding/htmlcanvas-playground.html`](./branding/htmlcanvas-playground.html) — six live brand-narrative demos: Atrium (Three.js GPGPU particles), magnifier, paper-grain stat card, CRT terminal, organic wave generator, context flow with real LLM logos.
+- [`branding/icons/`](./branding/icons/) + [`public/brand-icons/`](./public/brand-icons/) — cached real vendor SVGs (Claude, OpenAI, Gemini, Cursor, Anthropic, MCP from LobeHub; Linear, Notion from SimpleIcons). **Never approximate** — use these or fetch via the context.dev MCP.
+- [`remotion/scenes/brand-template/`](./remotion/scenes/brand-template/) — six-beat brand template (`BrandTemplate` composition). Reuse via fork; mirror sub-folder structure for new videos.
 
 ---
 
@@ -104,8 +117,96 @@ Available runtime skills. Claude Code skills live in `.claude/skills/`; Codex sh
 - **Context**: read `.ai-starter/manifests/*`, existing source patterns, and local docs before generating or editing
 - **Runtime state**: Codex uses `.codex/config.toml` + `.codex/hooks.json`; Claude Code uses `.claude/settings.json`; both share `.ai-starter/*`
 - **Research**: check `.ai-starter/research/` for cached library docs before dependency, framework, provider, or browser automation work
-- **Verification**: run `pnpm sync`, `pnpm score`, typecheck/tests, and browser proof before handoff
+- **Verification**: run `pnpm verify:tier 0`, `pnpm verify:tier 1`, and `pnpm verify:tier 2` before review; use Tier 3 for UI/mobile/staging-sensitive work
 - **Errors**: Check server logs for `CHAT ROUTE ERROR:` stack traces first
+- **Activity log**: append every PR merge, Linear status change, prod migration, prod incident, or session checkpoint to [`docs/ACTIVITY_LOG.md`](./docs/ACTIVITY_LOG.md) — see [Activity Log contract](#activity-log-contract) below. Non-negotiable.
+
+---
+
+## Activity Log Contract
+
+The repo keeps a single append-only chronological log at [`docs/ACTIVITY_LOG.md`](./docs/ACTIVITY_LOG.md). It exists so that **whoever asks "where are we at?"** gets a complete state by reading one file — no `git log` sweep, no Linear digging, no chat-history scrolling.
+
+**Required of every agent and human** working on this repo, regardless of provider (Claude Code, Codex CLI, Cursor, Sourcegraph, JetBrains AI, copy-paste from a hosted chat — all of them).
+
+### What triggers an entry
+
+Append a row when any of these happen during your session:
+
+| Trigger | Event type |
+|---------|------------|
+| You merge a PR | `pr-merged` |
+| You open a PR you expect to land same session | `pr-opened` |
+| You file a Linear ticket | `linear-filed` |
+| You move a Linear ticket between states (Backlog → In Progress → Done) | `linear-status-change` |
+| You comment substantively on a Linear ticket (root-cause analysis, decision) | `linear-comment` |
+| You run a production migration / DDL / config change | `prod-migration` |
+| You identify a production incident in progress | `prod-incident` |
+| You ship a hotfix to resolve a production incident | `prod-hotfix` |
+| You start a multi-hour session (e.g. "comprehensive QA walk") | `session-start` |
+| You hit a meaningful checkpoint (e.g. half-way through a checklist) | `session-checkpoint` |
+| You end a session | `session-end` |
+| You ship a doc the team should know about | `doc-shipped` |
+| You change `.claude/settings.json`, `.codex/config.toml`, hooks, or AGENTS.md | `config-change` |
+| You add or modify a hook | `hook-added` |
+
+If unsure, append. Over-logging is forgivable; missing a prod incident is not.
+
+### Required fields per entry
+
+Every row must include:
+
+1. **Timestamp** — `YYYY-MM-DD HH:MM TZ` (don't fudge — use the current wall clock)
+2. **Provider/Model** — the exact model + context window if relevant. Examples:
+   - `Claude Opus 4.7 (1M context)`
+   - `Claude Sonnet 4.6`
+   - `Claude Haiku 4.5`
+   - `Codex CLI / GPT-5`
+   - `Cursor / Claude 4.5 Sonnet`
+   - `Human` (when a person edits without an agent)
+3. **Event type** — from the table above
+4. **One-line summary** — what changed, in active voice
+5. **Links** — PR (GitHub) or Linear (https://linear.app/mirror-factory/issue/PROD-NNN) where applicable
+6. **Why it matters** — one or two sentences on user impact, blast radius, or follow-up
+
+Use the template at the top of `docs/ACTIVITY_LOG.md`.
+
+### Don't edit prior entries
+
+The log is append-only. If a previous row turns out to be wrong, append a new row prefixed `correction:` that explains what was wrong and what the correct state is. Past mistakes are part of the record.
+
+### Don't bury entries inside other commits
+
+Either:
+- Append to the log in the same PR that did the work (preferred — keeps the history coherent), or
+- Commit the log entry separately on the same branch right after merge (acceptable when the original PR is already approved/locked).
+
+Never amend or rebase the log into oblivion.
+
+### When the user asks "give me a rundown" / "what's the state?"
+
+Default action: read the tail of `docs/ACTIVITY_LOG.md`, summarize. If the request says "report to my NTFY", also invoke the `notify` skill or `curl -d '...' ntfy.sh/<topic>` with the same summary.
+
+---
+
+## Release Flow (READ BEFORE PUSHING)
+
+**Never push directly to `main`.** Every change reaches `main` via a PR from `staging`, which itself received the change via a PR from `development` (or a feature branch). Single exception: a tagged hotfix from a `hotfix/*` branch with an explicit incident write-up linked in the PR.
+
+Order of promotion:
+
+```
+feature/* → development → staging → main
+```
+
+| Branch        | Domain                            | Vercel env       | Stripe    |
+| ------------- | --------------------------------- | ---------------- | --------- |
+| `main`        | `layers.mirrorfactory.ai`         | Production       | Live      |
+| `staging`     | `staging.layers.mirrorfactory.ai` | Preview (pinned) | Test      |
+| `development` | `dev.layers.mirrorfactory.ai`     | Preview (pinned) | Test      |
+| feature/\*    | per-PR Vercel preview             | Preview          | Test      |
+
+Full setup, env-var checklist, GitHub branch protection, Vercel domain pinning, OAuth/webhook allow-lists, and native release behavior live in [`docs/RELEASE.md`](./docs/RELEASE.md), [`docs/RELEASE_PIPELINE.md`](./docs/RELEASE_PIPELINE.md), and [`docs/PRODUCTION_QUALITY_SYSTEM.md`](./docs/PRODUCTION_QUALITY_SYSTEM.md).
 
 ---
 
@@ -156,15 +257,17 @@ Fast unit test runner compatible with Jest API. Use vi.hoisted() for mock vars i
 ## Development Commands
 
 ```bash
-pnpm typecheck          # TypeScript check (MUST PASS before commit)
-pnpm test               # Unit tests
-pnpm test:e2e           # Playwright E2E
+pnpm verify:tier 0      # Fast syntax/structure gate (pre-commit)
+pnpm verify:tier 1      # Fast deterministic test gate (pre-push/CI)
+pnpm verify:tier 2      # Focused ticket proof before review
+pnpm verify:tier 3      # Visual/mobile/usability/staging proof
+pnpm test:e2e           # Full Playwright E2E when explicitly needed
 pnpm product:spec       # Update the YC-style product spec and alignment anchors
 pnpm product:validate   # Update product validation and technical feasibility
 pnpm sync               # Regenerate .ai-starter manifests
 pnpm mfdr               # Update technical decision/spec record
 pnpm score              # Generate readiness scorecard
-pnpm gates              # Run required/recommended starter gates
+pnpm gates              # Run full starter gates when explicitly needed
 pnpm test:codex-runtime # Prove Codex runtime wiring and optional live codex exec
 pnpm research:agents-md # Regenerate this file
 pnpm research:refresh   # Refresh research cache from live docs

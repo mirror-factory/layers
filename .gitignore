@@ -50,6 +50,8 @@ storybook-static/
 coverage/
 !app/api/dev-kit/coverage/
 !app/api/dev-kit/coverage/route.ts
+!app/dev-kit/coverage/
+!app/dev-kit/coverage/page.tsx
 .ai-logs/
 .evidence/
 .artifacts/
@@ -70,6 +72,16 @@ output/
 .claude/worktrees/
 supabase/.temp/
 .ai-starter/runs/telemetry.jsonl
+.ai-starter/evidence/
 .ai-dev-kit/state/
 .claude/hooks/state.json
+.claude/*.lock
 .codex/hooks/state.json
+.codex/hooks/observer-state.json
+.claude/hooks/__pycache__/
+.codex/hooks/__pycache__/
+**/__pycache__/
+tmp/
+src-tauri/target/
+src-tauri/Cargo.lock
+docs/evidence/**/*.mp4

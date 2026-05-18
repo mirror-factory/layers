@@ -7,9 +7,9 @@ import { DEFAULT_PRICING_PLANS } from "@/lib/billing/stt-pricing";
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 
 const PRICING_COPY_FILES = [
-  "app/pricing/page.tsx",
-  "app/landing.tsx",
-  "app/docs/page.tsx",
+  "app/(public)/pricing/page.tsx",
+  "app/(public)/landing.tsx",
+  "app/docs-internal/page.tsx",
   "docs/PRICING_AND_BILLING.md",
   "docs/BUILD_SPEC.md",
 ] as const;
@@ -28,7 +28,7 @@ describe("launch pricing consistency", () => {
   });
 
   it("keeps pricing page cards on the launch prices", () => {
-    const pricingPage = source("app/pricing/page.tsx");
+    const pricingPage = source("app/(public)/pricing/page.tsx");
 
     expect(pricingPage).toMatch(/name: "Free"[\s\S]*?price: "\$0"/);
     expect(pricingPage).toMatch(/name: "Core"[\s\S]*?price: "\$20"/);
@@ -36,8 +36,8 @@ describe("launch pricing consistency", () => {
   });
 
   it("keeps landing and docs billing copy on the launch prices", () => {
-    const landingPage = source("app/landing.tsx");
-    const docsPage = source("app/docs/page.tsx");
+    const landingPage = source("app/(public)/landing.tsx");
+    const docsPage = source("app/docs-internal/page.tsx");
 
     expect(landingPage).toMatch(/name: "Free"[\s\S]*?price: "\$0"/);
     expect(landingPage).toMatch(/name: "Core"[\s\S]*?price: "\$20"/);

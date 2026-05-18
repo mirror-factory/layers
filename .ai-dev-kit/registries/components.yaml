@@ -5,182 +5,182 @@ entries:
   - name: ai-debug-panel
     path: components/ai-debug-panel.tsx
     stories_path: components/ai-debug-panel.stories.tsx
-    visual_path: tests/visual/ai-debug-panel.spec.ts
+    visual_path: tests/e2e/ai-debug-panel.spec.ts
     owner: null
     status: stable
     created_on: "2026-04-27T02:51:32.338Z"
   - name: audio-lines
     path: components/audio-lines.tsx
     stories_path: null
-    visual_path: tests/visual/audio-lines.spec.ts
+    visual_path: tests/e2e/audio-lines.spec.ts
     owner: null
     status: stable
     created_on: "2026-04-21T03:08:52.788Z"
   - name: audio-recorder
     path: components/audio-recorder.tsx
     stories_path: null
-    visual_path: tests/visual/audio-recorder.spec.ts
+    visual_path: tests/e2e/audio-recorder.spec.ts
     owner: null
     status: stable
     created_on: "2026-04-21T03:08:52.788Z"
   - name: chat-input
     path: components/chat-input.tsx
     stories_path: null
-    visual_path: tests/visual/chat-input.spec.ts
+    visual_path: tests/e2e/chat-input.spec.ts
     owner: null
     status: stable
     created_on: "2026-04-21T03:08:52.788Z"
   - name: chat-message
     path: components/chat-message.tsx
     stories_path: null
-    visual_path: tests/visual/chat-message.spec.ts
+    visual_path: tests/e2e/chat-message.spec.ts
     owner: null
     status: stable
     created_on: "2026-04-21T03:08:52.788Z"
   - name: intake-form-view
     path: components/intake-form-view.tsx
     stories_path: null
-    visual_path: tests/visual/intake-form-view.spec.ts
+    visual_path: tests/e2e/intake-form-view.spec.ts
     owner: null
     status: stable
     created_on: "2026-04-21T03:08:52.788Z"
   - name: integrations-settings-panel
     path: components/integrations-settings-panel.tsx
     stories_path: null
-    visual_path: tests/visual/integrations-settings-panel.spec.ts
+    visual_path: tests/e2e/integrations-settings-panel.spec.ts
     owner: null
     status: stable
     created_on: "2026-04-27T04:20:48.848Z"
   - name: live-recorder
     path: components/live-recorder.tsx
     stories_path: null
-    visual_path: tests/visual/live-recorder.spec.ts
+    visual_path: tests/e2e/live-recorder.spec.ts
     owner: null
     status: stable
     created_on: "2026-04-21T03:08:52.788Z"
   - name: session-workspace
     path: components/session-workspace.tsx
     stories_path: null
-    visual_path: tests/visual/session-workspace.spec.ts
+    visual_path: tests/e2e/session-workspace.spec.ts
     owner: null
     status: stable
     created_on: "2026-04-29T19:40:00.000Z"
   - name: live-transcript-view
     path: components/live-transcript-view.tsx
     stories_path: null
-    visual_path: tests/visual/live-transcript-view.spec.ts
+    visual_path: tests/e2e/live-transcript-view.spec.ts
     owner: null
     status: stable
     created_on: "2026-04-21T03:08:52.788Z"
   - name: meeting-chat
     path: components/meeting-chat.tsx
     stories_path: null
-    visual_path: tests/visual/meeting-chat.spec.ts
+    visual_path: tests/e2e/meeting-chat.spec.ts
     owner: null
     status: stable
     created_on: "2026-04-24T23:08:00.000Z"
   - name: meeting-cost-panel
     path: components/meeting-cost-panel.tsx
     stories_path: null
-    visual_path: tests/visual/meeting-cost-panel.spec.ts
+    visual_path: tests/e2e/meeting-cost-panel.spec.ts
     owner: null
     status: stable
     created_on: "2026-04-21T03:08:52.788Z"
   - name: meeting-detail-poller
     path: components/meeting-detail-poller.tsx
     stories_path: null
-    visual_path: tests/visual/meeting-detail-poller.spec.ts
+    visual_path: tests/e2e/meeting-detail-poller.spec.ts
     owner: null
     status: stable
     created_on: "2026-04-21T03:08:52.788Z"
   - name: meeting-intelligence-panel
     path: components/meeting-intelligence-panel.tsx
     stories_path: null
-    visual_path: tests/visual/meeting-intelligence-panel.spec.ts
+    visual_path: tests/e2e/meeting-intelligence-panel.spec.ts
     owner: null
     status: stable
     created_on: "2026-04-27T02:51:32.338Z"
   - name: meeting-notes-push-panel
     path: components/meeting-notes-push-panel.tsx
     stories_path: null
-    visual_path: tests/visual/meeting-notes-push-panel.spec.ts
+    visual_path: tests/e2e/meeting-notes-push-panel.spec.ts
     owner: null
     status: stable
     created_on: "2026-04-27T04:20:48.848Z"
   - name: meeting-search
     path: components/meeting-search.tsx
     stories_path: null
-    visual_path: tests/visual/meeting-search.spec.ts
+    visual_path: tests/e2e/meeting-search.spec.ts
     owner: null
     status: stable
     created_on: "2026-04-27T02:51:32.338Z"
   - name: mobile-primary-nav
     path: components/mobile-primary-nav.tsx
     stories_path: null
-    visual_path: tests/visual/mobile-primary-nav.spec.ts
+    visual_path: tests/e2e/mobile-primary-nav.spec.ts
     owner: null
     status: stable
     created_on: "2026-04-27T04:20:48.848Z"
   - name: recording-reminder
     path: components/recording-reminder.tsx
     stories_path: null
-    visual_path: tests/visual/recording-reminder.spec.ts
+    visual_path: tests/e2e/recording-reminder.spec.ts
     owner: null
     status: stable
     created_on: "2026-04-27T02:51:32.338Z"
   - name: slide-menu
     path: components/slide-menu.tsx
     stories_path: null
-    visual_path: tests/visual/slide-menu.spec.ts
+    visual_path: tests/e2e/slide-menu.spec.ts
     owner: null
     status: stable
     created_on: "2026-04-21T03:08:52.788Z"
   - name: theme-toggle
     path: components/theme-toggle.tsx
     stories_path: null
-    visual_path: tests/visual/theme-toggle.spec.ts
+    visual_path: tests/e2e/theme-toggle.spec.ts
     owner: null
     status: stable
     created_on: "2026-04-21T03:08:52.788Z"
   - name: tool-card
     path: components/tool-card.tsx
     stories_path: null
-    visual_path: tests/visual/tool-card.spec.ts
+    visual_path: tests/e2e/tool-card.spec.ts
     owner: null
     status: stable
     created_on: "2026-04-21T03:08:52.788Z"
   - name: top-bar
     path: components/top-bar.tsx
     stories_path: null
-    visual_path: tests/visual/top-bar.spec.ts
+    visual_path: tests/e2e/top-bar.spec.ts
     owner: null
     status: stable
     created_on: "2026-04-21T03:08:52.788Z"
   - name: transcript-view
     path: components/transcript-view.tsx
     stories_path: null
-    visual_path: tests/visual/transcript-view.spec.ts
+    visual_path: tests/e2e/transcript-view.spec.ts
     owner: null
     status: stable
     created_on: "2026-04-21T03:08:52.788Z"
   - name: button
     path: components/ui/button.tsx
     stories_path: null
-    visual_path: tests/visual/button.spec.ts
+    visual_path: tests/e2e/button.spec.ts
     owner: null
     status: stable
     created_on: "2026-04-21T03:08:52.788Z"
   - name: liquid-glass-button
     path: components/ui/liquid-glass-button.tsx
     stories_path: null
-    visual_path: tests/visual/liquid-glass-button.spec.ts
+    visual_path: tests/e2e/liquid-glass-button.spec.ts
     owner: null
     status: stable
     created_on: "2026-04-21T03:08:52.788Z"
   - name: web-gl-shader
     path: components/ui/web-gl-shader.tsx
     stories_path: null
-    visual_path: tests/visual/web-gl-shader.spec.ts
+    visual_path: tests/e2e/web-gl-shader.spec.ts
     owner: null
     status: stable
     created_on: "2026-04-21T03:08:52.788Z"

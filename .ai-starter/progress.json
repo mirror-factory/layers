@@ -1,6 +1,8 @@
 {
   "currentPlanId": "2026-04-30T15-26-11-478Z-create-launch-checklist-and-agen",
-  "openTasks": [],
+  "openTasks": [
+    "Add companions for app/page.tsx: playwright-smoke, screenshot, documentation"
+  ],
   "closedTasks": [
     "Companions satisfied for app/dev-kit/runs/[run_id]/page.tsx",
     "Companions satisfied for app/dev-kit/sessions/page.tsx",
@@ -26,15 +28,11 @@
     "Companions satisfied for app/terms/page.tsx",
     "Companions satisfied for app/usage/page.tsx",
     "Companions satisfied for app/.well-known/oauth-authorization-server/route.ts",
-    "Companions satisfied for app/.well-known/oauth-protected-resource/route.ts",
-    "Add companions for app/page.tsx: playwright-smoke, screenshot, documentation",
-    "The new behavior is described in a machine-readable plan.",
-    "The affected surface has verification assets and updated manifests.",
-    "Typecheck and required tests pass."
+    "Companions satisfied for app/.well-known/oauth-protected-resource/route.ts"
   ],
   "filesInFlight": [],
   "evidenceStatus": [
     "companions: 1 pending / 141 satisfied"
   ],
-  "updatedAt": "2026-04-30T23:01:26.715924Z"
+  "updatedAt": "2026-05-01T00:26:18.227122Z"
 }

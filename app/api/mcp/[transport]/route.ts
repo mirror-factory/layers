@@ -7,13 +7,17 @@ import {
 import { z } from "zod";
 import { getSupabaseServer } from "@/lib/supabase/server";
 import { searchMeetings } from "@/lib/embeddings/search";
-import { validateMcpBearerToken } from "@/lib/mcp/auth";
+import { validateMcpBearerOutcome } from "@/lib/mcp/auth";
 import {
   buildMeetingDashboardPayload,
   getLayersMeetingDashboardHtml,
   LAYERS_MCP_DASHBOARD_RESOURCE_CONFIG,
   LAYERS_MCP_DASHBOARD_RESOURCE_URI,
 } from "@/lib/mcp/ui";
+import {
+  applyRateLimit,
+  type RateLimitedTool,
+} from "@/lib/middleware/rate-limit";
 
 // ---------------------------------------------------------------------------
 // Query helpers (service role, scoped by user_id)
@@ -23,8 +27,11 @@ async function getMeeting(id: string, userId: string | null) {
   const supabase = getSupabaseServer();
   if (!supabase || !userId) return null;
   const { data } = await supabase
-    .from("meetings").select("*")
-    .eq("id", id).eq("user_id", userId).single();
+    .from("meetings")
+    .select("*")
+    .eq("id", id)
+    .eq("user_id", userId)
+    .single();
   return data;
 }
 
@@ -62,19 +69,26 @@ function buildNotesPushPayload(
     include_transcript?: boolean;
   },
 ) {
-  const summary = meeting.summary && typeof meeting.summary === "object"
-    ? meeting.summary as {
-        title?: unknown;
-        summary?: unknown;
-        actionItems?: unknown;
-        decisions?: unknown;
-      }
-    : null;
+  const summary =
+    meeting.summary && typeof meeting.summary === "object"
+      ? (meeting.summary as {
+          title?: unknown;
+          summary?: unknown;
+          actionItems?: unknown;
+          decisions?: unknown;
+        })
+      : null;
   const actionItems = Array.isArray(summary?.actionItems)
-    ? summary.actionItems as Array<{ assignee?: string | null; task?: string; dueDate?: string | null }>
+    ? (summary.actionItems as Array<{
+        assignee?: string | null;
+        task?: string;
+        dueDate?: string | null;
+      }>)
     : [];
   const decisions = Array.isArray(summary?.decisions)
-    ? summary.decisions.filter((item): item is string => typeof item === "string")
+    ? summary.decisions.filter(
+        (item): item is string => typeof item === "string",
+      )
     : [];
   const title =
     typeof meeting.title === "string" && meeting.title
@@ -98,8 +112,12 @@ function buildNotesPushPayload(
     decisions.length
       ? `\n## Decisions\n${decisions.map((decision) => `- ${decision}`).join("\n")}`
       : null,
-    input.include_transcript && transcript ? `\n## Transcript\n${transcript}` : null,
-  ].filter(Boolean).join("\n");
+    input.include_transcript && transcript
+      ? `\n## Transcript\n${transcript}`
+      : null,
+  ]
+    .filter(Boolean)
+    .join("\n");
 
   return {
     ready: true,
@@ -382,21 +400,24 @@ function createLayersMcpHandler(userId: string | null) {
 }
 
 // ---------------------------------------------------------------------------
-// Auth wrapper — validates API key, sets userId for tool queries
+// Auth wrapper - validates OAuth bearer tokens, sets userId for tool queries
 // ---------------------------------------------------------------------------
 
 // Auth wrapper that allows initialize/notifications without auth
 // but requires auth for tools/list and tools/call
 async function handler(req: Request) {
-  // Clone request to peek at the body for method routing
+  // Clone request to peek at the body for method routing + tool detection
   const cloned = req.clone();
   let isProtocolHandshake = false;
+  let parsedBody: unknown = null;
 
   if (req.method === "POST") {
     try {
-      const body = await cloned.json();
-      const method = body?.method as string;
-      isProtocolHandshake = method === "initialize" || method?.startsWith("notifications/");
+      parsedBody = await cloned.json();
+      const method = (parsedBody as { method?: string } | null)?.method;
+      isProtocolHandshake =
+        method === "initialize" ||
+        (method?.startsWith("notifications/") ?? false);
     } catch {
       // not JSON — let mcp-handler deal with it
     }
@@ -407,12 +428,20 @@ async function handler(req: Request) {
     return createLayersMcpHandler(null)(req);
   }
 
-  // Everything else (tools/list, tools/call, GET for SSE) requires auth
+  // Everything else (tools/list, tools/call, GET for SSE) requires auth.
+  // The 401 responses below MUST follow RFC 6750 (`{error: "invalid_token"}`)
+  // so MCP clients (Claude / Cursor / Continue) recognize the bearer error
+  // and trigger the OAuth flow. The new structured-error shape is reserved
+  // for non-OAuth errors (rate-limit 429, validation 400, etc.).
   const auth = req.headers.get("authorization");
   if (!auth?.startsWith("Bearer ")) {
     const origin = new URL(req.url).origin;
     return new Response(
-      JSON.stringify({ error: "invalid_token", error_description: "Bearer token required. Get your API key from the Layers profile page." }),
+      JSON.stringify({
+        error: "invalid_token",
+        error_description:
+          "Bearer token required. Add the MCP server URL to your client so it can discover Layers OAuth and redirect you to sign in.",
+      }),
       {
         status: 401,
         headers: {
@@ -424,15 +453,61 @@ async function handler(req: Request) {
   }
 
   const key = auth.slice(7);
-  const result = await validateMcpBearerToken(key);
-  if (!result) {
+  // PROD-403: use the richer `outcome` so we can distinguish a revoked
+  // client from a generally-invalid token and surface that to the client.
+  // Claude / Cursor surface `client_revoked` to the user as "you revoked
+  // this app -- reconnect to continue", which is a much better UX than the
+  // generic "invalid token, please re-auth" loop.
+  const outcome = await validateMcpBearerOutcome(key);
+  if (outcome.kind === "revoked") {
     return new Response(
-      JSON.stringify({ error: "invalid_token", error_description: "Invalid bearer token" }),
+      JSON.stringify({
+        error: "client_revoked",
+        error_description:
+          "This MCP client has been revoked. The user must re-approve it from Layers /settings/integrations.",
+      }),
+      { status: 401, headers: { "Content-Type": "application/json" } },
+    );
+  }
+  if (outcome.kind !== "ok") {
+    return new Response(
+      JSON.stringify({
+        error: "invalid_token",
+        error_description: "Invalid bearer token",
+      }),
       { status: 401, headers: { "Content-Type": "application/json" } },
     );
   }
 
-  return createLayersMcpHandler(result.userId)(req);
+  // Rate-limit per-tool / per-user (PROD-404).
+  const rateLimitResult = await applyRateLimit({
+    userId: outcome.userId,
+    clientId: outcome.clientId ?? extractClientId(auth),
+    tool: detectToolFromBody(parsedBody),
+    req,
+  });
+  if (rateLimitResult) {
+    return rateLimitResult;
+  }
+
+  return createLayersMcpHandler(outcome.userId)(req);
+}
+
+function extractClientId(authHeader: string): string {
+  // Best-effort: hash of the bearer suffices as a stable client identifier
+  // when the JWT itself doesn't include a `client_id` claim. The middleware
+  // re-hashes anyway, so this just has to be deterministic per token.
+  return authHeader.slice(7, 39);
+}
+
+function detectToolFromBody(body: unknown): RateLimitedTool | null {
+  if (!body || typeof body !== "object") return null;
+  const maybeMethod = (body as { method?: unknown }).method;
+  if (maybeMethod !== "tools/call") return null;
+  const params = (body as { params?: { name?: unknown } }).params;
+  const toolName = params?.name;
+  if (typeof toolName !== "string") return null;
+  return toolName as RateLimitedTool;
 }
 
 export { handler as GET, handler as POST, handler as DELETE };

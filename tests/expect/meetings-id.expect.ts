@@ -5,7 +5,7 @@
  * a route-owned test plan so coverage cannot drift as pages are added.
  *
  * Run:
- *   pnpm exec expect tui -u http://localhost:3001/meetings/sample \
+ *   pnpm exec expect tui -u http://localhost:3002/meetings/sample \
  *     --browser-mode headless \
  *     -m "Use tests/expect/meetings-id.expect.ts as the route plan. Verify the page loads, the primary action is discoverable, empty/loading/error states are readable, and mobile layout has no horizontal overflow." \
  *     -y

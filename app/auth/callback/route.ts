@@ -3,13 +3,58 @@ export const dynamic = "force-dynamic";
 
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
+import { sendWelcomeEmailOnce } from "@/lib/email/onboarding";
+import { log } from "@/lib/logger";
 
+const NATIVE_OAUTH_REDIRECT_URL = "com.mirafactory.layers://auth/callback";
+
+function safeInternalPath(value: string | null): string {
+  if (!value?.startsWith("/")) return "/record";
+  if (value.startsWith("//")) return "/record";
+  return value;
+}
+
+function nativeRedirectResponse(request: NextRequest): Response {
+  const { searchParams } = new URL(request.url);
+  const callbackUrl = new URL(NATIVE_OAUTH_REDIRECT_URL);
+  const next = safeInternalPath(searchParams.get("next"));
+
+  for (const key of ["code", "state", "error", "error_description"]) {
+    const value = searchParams.get(key);
+    if (value) callbackUrl.searchParams.set(key, value);
+  }
+
+  callbackUrl.searchParams.set("next", next);
+
+  return new Response(null, {
+    status: 302,
+    headers: {
+      Location: callbackUrl.toString(),
+      "Cache-Control": "no-store",
+    },
+  });
+}
+
+/**
+ * Web OAuth + magic-link callback.
+ *
+ * Native (Capacitor) Google OAuth first returns here as an HTTPS URL because
+ * OAuth providers and hosted auth allowlists are more reliable with normal web
+ * callbacks. If `native=1` is present, this route immediately redirects to the
+ * custom scheme so SFSafariViewController / Chrome Custom Tab hands control
+ * back to the app. The PKCE code is still exchanged inside the WebView by
+ * `lib/auth/native-oauth.ts`. See PROD-408.
+ */
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
   const tokenHash = searchParams.get("token_hash");
   const type = searchParams.get("type") ?? "magiclink";
   const next = searchParams.get("next") ?? "/";
+
+  if (searchParams.get("native") === "1") {
+    return nativeRedirectResponse(request);
+  }
 
   const url =
     process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -62,6 +107,32 @@ export async function GET(request: NextRequest) {
     if (error) {
       return NextResponse.redirect(`${origin}/sign-in?error=verify_failed`);
     }
+  }
+
+  // Fire welcome email on first sign-in. Idempotent — guarded by
+  // `profiles.welcome_email_sent_at` (PROD-390). Best-effort: never block
+  // the redirect on a Resend / Supabase hiccup.
+  try {
+    const { data: userResult } = await supabase.auth.getUser();
+    const user = userResult?.user;
+    if (user?.id && user.email) {
+      // Fire-and-forget — Next.js will hold the route open until the
+      // promise resolves (no `waitUntil` available in this runtime) but
+      // any failure is swallowed so the redirect always wins.
+      await sendWelcomeEmailOnce({
+        userId: user.id,
+        email: user.email,
+      }).catch((err) => {
+        log.warn("auth.callback.welcome-email-failed", {
+          userId: user.id,
+          err: { message: err instanceof Error ? err.message : String(err) },
+        });
+      });
+    }
+  } catch (err) {
+    log.warn("auth.callback.welcome-email-error", {
+      err: { message: err instanceof Error ? err.message : String(err) },
+    });
   }
 
   return response;
