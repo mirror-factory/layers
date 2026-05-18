@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generatedAt": "2026-05-18T05:12:44.964Z",
+  "generatedAt": "2026-05-18T12:13:03.818Z",
   "docs": [
     {
       "id": "activity-log",
       "localPath": "docs/ACTIVITY_LOG.md",
-      "contentHash": "40f8cdecbc59dfcd9dd9886d1454118f8a03a51a14f8beed1b3bc13fdd9ab0dc",
+      "contentHash": "f5ae736424e332b2242d48bf442f6e65a4d1a95593a1bfaebcfb0a04e3b37a5a",
       "priority": "cold"
     },
     {
@@ -573,6 +573,42 @@
       "priority": "cold"
     },
     {
+      "id": "evidence-2026-05-18-release-test-matrix-android-worker-report",
+      "localPath": "docs/evidence/2026-05-18-release-test-matrix/android-worker-report.md",
+      "contentHash": "1b74f9d0a309fcefeafffeb697f740facdb416c440eb525b78c1d9afc19ac620",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-release-test-matrix-command-summary",
+      "localPath": "docs/evidence/2026-05-18-release-test-matrix/command-summary.md",
+      "contentHash": "26a79274f26a0c915e6f4a3879cf09588669fdfc858ae193d7d42b3864221cab",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-release-test-matrix-electron-worker-report",
+      "localPath": "docs/evidence/2026-05-18-release-test-matrix/electron-worker-report.md",
+      "contentHash": "a18039335a12104344e43405222ea8a290d58a80426e8297b6b64d0f0993030b",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-release-test-matrix-ios-worker-report",
+      "localPath": "docs/evidence/2026-05-18-release-test-matrix/ios-worker-report.md",
+      "contentHash": "15137ed739071eaa58b7026196a359c64e198a36fcb8ffc5c9b030f53821fb0d",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-release-test-matrix-release-test-run-summary",
+      "localPath": "docs/evidence/2026-05-18-release-test-matrix/release-test-run-summary.md",
+      "contentHash": "ab9c6a6e6e5e9dad57f8e06b6fe365b9864ea28520c7fbdfb60e7d6b91508269",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-release-test-matrix-web-worker-report",
+      "localPath": "docs/evidence/2026-05-18-release-test-matrix/web-worker-report.md",
+      "contentHash": "e44abe973b359d1c5226df4f6883a6e72ec5c1a550d951c5bd214e547ddf553d",
+      "priority": "cold"
+    },
+    {
       "id": "feature-test-marketing-matrix",
       "localPath": "docs/FEATURE_TEST_MARKETING_MATRIX.md",
       "contentHash": "f30bbbcc8e9000770a7178984e761586c165d3ef07ada09db222e5490bf9212e",
@@ -1044,6 +1080,12 @@
       "id": "release-pipeline",
       "localPath": "docs/RELEASE_PIPELINE.md",
       "contentHash": "9c6519f3a771e97590802d65d2947c3612bdcb72507388d2ad45e7a402f53cd6",
+      "priority": "cold"
+    },
+    {
+      "id": "release-test-matrix",
+      "localPath": "docs/RELEASE_TEST_MATRIX.md",
+      "contentHash": "703c116b45a00e7d67232bc39e5591efceaca9f3b26b19a841663abefe9b5047",
       "priority": "cold"
     },
     {
