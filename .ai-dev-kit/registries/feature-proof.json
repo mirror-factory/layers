@@ -114,13 +114,17 @@
       "status": "active",
       "userFacing": true,
       "surfaces": ["web"],
-      "routes": ["/pricing", "/docs", "/docs/api", "/docs/mcp", "/changelog", "/privacy", "/terms"],
+      "routes": ["/pricing", "/download", "/docs", "/docs/api", "/docs/mcp", "/changelog", "/privacy", "/terms", "/account-deletion"],
       "paths": [
         "app/(public)/pricing/page.tsx",
+        "app/(public)/download/page.tsx",
         "app/(public)/docs/page.tsx",
         "app/(public)/docs/api/page.tsx",
         "app/(public)/docs/mcp/page.tsx",
         "app/(public)/changelog/page.tsx",
+        "app/(public)/privacy/page.tsx",
+        "app/(public)/terms/page.tsx",
+        "app/(public)/account-deletion/page.tsx",
         "components/legal-page-shell.tsx"
       ],
       "proof": ["fast", "playwright", "expect"],
