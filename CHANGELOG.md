@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.147] — 2026-05-18
+
+### Other
+- ci: slim default release proof harness (`5159f81`)
+
+
 ## [0.1.146] — 2026-05-18
 
 ### Documentation
