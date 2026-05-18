@@ -289,8 +289,10 @@
           <p>
             TLDR: the release-readiness branch is in materially better shape.
             Web, brand, smoke, native configuration, Expect coverage, and CI
-            release gates have been pushed and verified. Current PR head
-            2dd0f6d has Tier 0-1, Tier 2, Tier 3, and Vercel green. It is not yet a
+            release gates have been pushed and verified. The PR has Tier 0-1,
+            Tier 2, Tier 3, and Vercel green on the latest full proof run; this
+            report may be followed by docs-only/version-bump commits that rerun
+            the same checks. It is not yet a
             production-safe release because review, signing secrets, Android
             release signing, self-hosted runner infrastructure, Cloudflare DNS
             verification, the unresolved recording Stop crash, and
@@ -314,7 +316,7 @@
             </div>
             <div role="listitem">
               <span class="label">QA Evidence Head</span>
-              <span class="value">2dd0f6d current PR head; full AI Dev Kit green</span>
+              <span class="value">PR #88 full AI Dev Kit proof green; exact head checked live</span>
             </div>
           </div>
         </header>
@@ -325,9 +327,9 @@
             <div class="card good">
               <h3>What Is Good</h3>
               <ul>
-                <li>Tier 0-1 Fast Gates passed remotely on the current PR head.</li>
-                <li>Tier 2 Focused Browser Proof passed remotely on the current PR head.</li>
-                <li>Tier 3 Broad Browser Matrix passed remotely on the current PR head.</li>
+                <li>Tier 0-1 Fast Gates passed remotely on the latest full proof run.</li>
+                <li>Tier 2 Focused Browser Proof passed remotely on the latest full proof run.</li>
+                <li>Tier 3 Broad Browser Matrix passed remotely on the latest full proof run.</li>
                 <li>Vercel preview deployment completed successfully.</li>
                 <li>Main branch protection now requires the current gate names and 1 approval.</li>
                 <li>GitHub default branch now points at `development`, not stale unprotected `dev`.</li>
@@ -396,7 +398,7 @@
               <tr>
                 <td>Remote latest-head CI</td>
                 <td><span class="stamp pass">Passed</span></td>
-                <td>Commit 2dd0f6d has Tier 0-1, Tier 2 Focused Browser Proof, Tier 3 Broad Browser Matrix, and Vercel green. Server/native proof was attempted and blocked by missing self-hosted runners.</td>
+                <td>PR #88 has Tier 0-1, Tier 2 Focused Browser Proof, Tier 3 Broad Browser Matrix, and Vercel green on the latest full proof run. Server/native proof was attempted and blocked by missing self-hosted runners.</td>
               </tr>
               <tr>
                 <td>Compliance</td>
@@ -638,7 +640,7 @@
             <li>PROD-383 follow-up: GitHub default branch is now `development`; Vercel branch-domain pinning is done for dev and staging.</li>
             <li>PROD-383 follow-up: stale `origin/dev` still exists at 0.1.75 and should be retired only after #88 advances protected `development`.</li>
             <li>PROD-500 remains open and blocks broad external tester recording rollout until current-branch repro/fix evidence exists.</li>
-            <li>PROD-524 created for GitHub Actions Node 24 runner transition cleanup; workflows now use current action majors plus Node 24 opt-in. Current PR head 2dd0f6d has Tier 0-1, Tier 2, Tier 3, and Vercel green.</li>
+            <li>PROD-524 created for GitHub Actions Node 24 runner transition cleanup; workflows now use current action majors plus Node 24 opt-in. PR #88 has Tier 0-1, Tier 2, Tier 3, and Vercel green on the latest full proof run.</li>
             <li>PROD-383 still needs Cloudflare DNS setup, Vercel domain verification, env var separation, and a promotion proof chain.</li>
           </ul>
         </section>
