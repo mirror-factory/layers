@@ -1,0 +1,95 @@
+--------- beginning of main
+05-17 23:05:52.706  5992  5992 I afactory.layers: Late-enabling -Xcheck:jni
+05-17 23:05:52.717  5992  5992 I afactory.layers: Using CollectorTypeCC GC.
+05-17 23:05:52.775  5992  5992 D CompatibilityChangeReporter: Compat change id reported: 171979766; UID 10195; state: ENABLED
+05-17 23:05:52.775  5992  5992 D CompatibilityChangeReporter: Compat change id reported: 242716250; UID 10195; state: ENABLED
+05-17 23:05:52.786  5992  5992 W ziparchive: Unable to open '/data/app/~~l7raIahVxefcvK54wRzjXg==/com.mirafactory.layers-XemCQyj_sh4QTtyegBUwFQ==/base.dm': No such file or directory
+05-17 23:05:52.786  5992  5992 W ziparchive: Unable to open '/data/app/~~l7raIahVxefcvK54wRzjXg==/com.mirafactory.layers-XemCQyj_sh4QTtyegBUwFQ==/base.dm': No such file or directory
+05-17 23:05:52.837  5992  5992 D nativeloader: Configuring clns-6 for other apk /data/app/~~l7raIahVxefcvK54wRzjXg==/com.mirafactory.layers-XemCQyj_sh4QTtyegBUwFQ==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~l7raIahVxefcvK54wRzjXg==/com.mirafactory.layers-XemCQyj_sh4QTtyegBUwFQ==/lib/arm64, permitted_path=/data:/mnt/expand:/data/user/0/com.mirafactory.layers
+05-17 23:05:52.846  5992  5992 V GraphicsEnvironment: Currently set values for:
+05-17 23:05:52.846  5992  5992 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+05-17 23:05:52.846  5992  5992 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+05-17 23:05:52.846  5992  5992 V GraphicsEnvironment: ANGLE GameManagerService for com.mirafactory.layers: false
+05-17 23:05:52.847  5992  5992 V GraphicsEnvironment: com.mirafactory.layers is not listed in per-application setting
+05-17 23:05:52.847  5992  5992 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+05-17 23:05:52.860  5992  6013 D libEGL  : loaded /vendor/lib64/egl/libEGL_emulation.so
+05-17 23:05:52.861  5992  6013 D libEGL  : loaded /vendor/lib64/egl/libGLESv1_CM_emulation.so
+05-17 23:05:52.861  5992  6013 D libEGL  : loaded /vendor/lib64/egl/libGLESv2_emulation.so
+05-17 23:05:52.872  5992  5992 D AppCompatDelegate: Checking for metadata for AppLocalesMetadataHolderService : Service not found
+05-17 23:05:52.896  5992  5992 W afactory.layers: Accessing hidden method Landroid/view/ViewGroup;->makeOptionalFitsSystemWindows()V (unsupported, reflection, allowed)
+05-17 23:05:52.910  5992  5992 I WebViewFactory: Loading com.google.android.webview version 113.0.5672.136 (code 567263634)
+05-17 23:05:52.913  5992  5992 W ziparchive: Unable to open '/data/app/~~ZACK1VE6yujk3edFsxQ86A==/com.google.android.trichromelibrary_567263634-79-fijAQUBSg_tDlvI98Wg==/TrichromeLibrary.dm': No such file or directory
+05-17 23:05:52.913  5992  5992 W ziparchive: Unable to open '/data/app/~~ZACK1VE6yujk3edFsxQ86A==/com.google.android.trichromelibrary_567263634-79-fijAQUBSg_tDlvI98Wg==/TrichromeLibrary.dm': No such file or directory
+05-17 23:05:52.913  5992  5992 W afactory.layers: Entry not found
+05-17 23:05:52.920  5992  5992 D nativeloader: Configuring clns-7 for other apk /data/app/~~ZACK1VE6yujk3edFsxQ86A==/com.google.android.trichromelibrary_567263634-79-fijAQUBSg_tDlvI98Wg==/TrichromeLibrary.apk. target_sdk_version=34, uses_libraries=ALL, library_path=/data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/lib/arm64:/data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/WebViewGoogle.apk!/lib/arm64-v8a:/data/app/~~ZACK1VE6yujk3edFsxQ86A==/com.google.android.trichromelibrary_567263634-79-fijAQUBSg_tDlvI98Wg==/TrichromeLibrary.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand
+05-17 23:05:52.922  5992  5992 D nativeloader: Configuring clns-8 for other apk /data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/WebViewGoogle.apk. target_sdk_version=34, uses_libraries=, library_path=/data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/lib/arm64:/data/app/~~XYuf0YcyA7uqdD_0pxKg1A==/com.google.android.webview-T863QfLgI-Os4PPIFwxseg==/WebViewGoogle.apk!/lib/arm64-v8a:/data/app/~~ZACK1VE6yujk3edFsxQ86A==/com.google.android.trichromelibrary_567263634-79-fijAQUBSg_tDlvI98Wg==/TrichromeLibrary.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand
+05-17 23:05:52.954  5992  5992 W afactory.layers: Accessing hidden method Landroid/os/Trace;->isTagEnabled(J)Z (unsupported, reflection, allowed)
+05-17 23:05:52.954  5992  5992 W afactory.layers: Accessing hidden method Landroid/os/Trace;->traceBegin(JLjava/lang/String;)V (unsupported, reflection, allowed)
+05-17 23:05:52.954  5992  5992 W afactory.layers: Accessing hidden method Landroid/os/Trace;->traceEnd(J)V (unsupported, reflection, allowed)
+05-17 23:05:52.954  5992  5992 W afactory.layers: Accessing hidden method Landroid/os/Trace;->asyncTraceBegin(JLjava/lang/String;I)V (unsupported, reflection, allowed)
+05-17 23:05:52.954  5992  5992 W afactory.layers: Accessing hidden method Landroid/os/Trace;->asyncTraceEnd(JLjava/lang/String;I)V (unsupported, reflection, allowed)
+05-17 23:05:52.957  5992  5992 I cr_WVCFactoryProvider: Loaded version=113.0.5672.136 minSdkVersion=29 isBundle=false multiprocess=true packageId=2
+05-17 23:05:52.971  5992  6018 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.mirafactory.layers/app_webview/variations_seed_new"
+05-17 23:05:52.982  5992  5992 I cr_LibraryLoader: Successfully loaded native library
+05-17 23:05:52.983  5992  5992 I cr_CachingUmaRecorder: Flushed 8 samples from 8 histograms.
+05-17 23:05:52.984  5992  5992 I cr_VariationsUtils: Loaded seed with age 16852s
+05-17 23:05:53.006  5992  5992 D CompatibilityChangeReporter: Compat change id reported: 183155436; UID 10195; state: ENABLED
+05-17 23:05:53.071  5992  6036 W chromium: [WARNING:dns_config_service_android.cc(115)] Failed to read DnsConfig.
+05-17 23:05:53.107  5992  6042 E chromium: [ERROR:simple_backend_impl.cc(749)] Simple Cache Backend: cache directory inaccessible right after creation; path: /data/user/0/com.mirafactory.layers/cache/WebView/Default/HTTP Cache/Code Cache/wasm
+05-17 23:05:53.109  5992  6052 E chromium: [ERROR:disk_cache.cc(205)] Unable to create cache
+05-17 23:05:53.145  5992  5992 D CompatibilityChangeReporter: Compat change id reported: 214741472; UID 10195; state: ENABLED
+05-17 23:05:53.146  5992  5992 D CompatibilityChangeReporter: Compat change id reported: 171228096; UID 10195; state: ENABLED
+05-17 23:05:53.160  5992  5992 D AutofillManager: Fill dialog is enabled:false, hints=[password, passwordAuto, creditCardNumber, creditCardSecurityCode, creditCardExpirationDate]
+05-17 23:05:53.172  5992  5992 D Capacitor: Starting BridgeActivity
+05-17 23:05:53.187  5992  5992 D Capacitor: Registering plugin instance: CapacitorCookies
+05-17 23:05:53.189  5992  5992 D Capacitor: Registering plugin instance: WebView
+05-17 23:05:53.190  5992  5992 D Capacitor: Registering plugin instance: CapacitorHttp
+05-17 23:05:53.191  5992  5992 D Capacitor: Registering plugin instance: SystemBars
+05-17 23:05:53.192  5992  5992 D Capacitor: Registering plugin instance: App
+05-17 23:05:53.193  5992  5992 D Capacitor: Registering plugin instance: Browser
+05-17 23:05:53.194  5992  5992 D Capacitor: Registering plugin instance: LocalNotifications
+05-17 23:05:53.197  5992  5992 D Capacitor: Registering plugin instance: StatusBar
+05-17 23:05:53.200  5992  5992 V Capacitor/StatusBarPlugin: Notifying listeners for event statusBarOverlayChanged
+05-17 23:05:53.200  5992  5992 D Capacitor/StatusBarPlugin: No listeners found for event statusBarOverlayChanged
+05-17 23:05:53.200  5992  5992 V Capacitor/StatusBarPlugin: Notifying listeners for event statusBarOverlayChanged
+05-17 23:05:53.200  5992  5992 D Capacitor/StatusBarPlugin: No listeners found for event statusBarOverlayChanged
+05-17 23:05:53.211  5992  5992 W Capacitor: Unable to read file at path public/plugins
+05-17 23:05:53.213  5992  5992 D Capacitor: Loading app at https://layers.mirrorfactory.ai
+05-17 23:05:53.220  5992  6043 W cr_media: BLUETOOTH_CONNECT permission is missing.
+05-17 23:05:53.221  5992  6043 W cr_media: registerBluetoothIntentsIfNeeded: Requires BLUETOOTH permission
+05-17 23:05:53.234  5992  5992 D Capacitor: App started
+05-17 23:05:53.235  5992  5992 W WindowOnBackDispatcher: OnBackInvokedCallback is not enabled for the application.
+05-17 23:05:53.235  5992  5992 W WindowOnBackDispatcher: Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+05-17 23:05:53.236  5992  5992 D Capacitor/AppPlugin: Firing change: true
+05-17 23:05:53.236  5992  5992 V Capacitor/AppPlugin: Notifying listeners for event appStateChange
+05-17 23:05:53.236  5992  5992 D Capacitor/AppPlugin: No listeners found for event appStateChange
+05-17 23:05:53.239  5992  5992 V Capacitor/BrowserPlugin: Notifying listeners for event browserFinished
+05-17 23:05:53.239  5992  5992 D Capacitor/BrowserPlugin: No listeners found for event browserFinished
+05-17 23:05:53.239  5992  5992 D Capacitor: App resumed
+05-17 23:05:53.243  5992  5992 D CompatibilityChangeReporter: Compat change id reported: 237531167; UID 10195; state: DISABLED
+05-17 23:05:53.244  5992  5992 W OpenGLRenderer: Unknown dataspace 0
+05-17 23:05:53.275  5992  5992 D CompatibilityChangeReporter: Compat change id reported: 193247900; UID 10195; state: ENABLED
+05-17 23:05:53.289  5992  6011 W OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+05-17 23:05:53.289  5992  6011 W OpenGLRenderer: Failed to initialize 101010-2 format, error = EGL_SUCCESS
+05-17 23:05:53.295  5992  6011 I Gralloc4: mapper 4.x is not supported
+05-17 23:05:53.302  5992  6011 E OpenGLRenderer: Unable to match the desired swap behavior.
+05-17 23:05:54.872  5992  6011 D EGL_emulation: app_time_stats: avg=517.88ms min=6.37ms max=1519.86ms count=3
+05-17 23:05:55.873  5992  6011 D EGL_emulation: app_time_stats: avg=20.42ms min=0.70ms max=408.39ms count=32
+05-17 23:05:56.877  5992  6011 D EGL_emulation: app_time_stats: avg=5.35ms min=2.86ms max=28.04ms count=59
+05-17 23:05:57.887  5992  6011 D EGL_emulation: app_time_stats: avg=3.62ms min=2.62ms max=7.56ms count=61
+05-17 23:05:58.903  5992  6011 D EGL_emulation: app_time_stats: avg=3.68ms min=2.56ms max=10.91ms count=61
+05-17 23:05:59.151  5992  6100 D ProfileInstaller: Installing profile for com.mirafactory.layers
+05-17 23:05:59.904  5992  6011 D EGL_emulation: app_time_stats: avg=3.68ms min=3.11ms max=6.45ms count=60
+05-17 23:06:00.923  5992  6011 D EGL_emulation: app_time_stats: avg=3.89ms min=3.11ms max=9.49ms count=61
+05-17 23:06:01.923  5992  6011 D EGL_emulation: app_time_stats: avg=3.60ms min=2.90ms max=6.45ms count=60
+05-17 23:06:02.923  5992  6011 D EGL_emulation: app_time_stats: avg=3.71ms min=2.91ms max=8.02ms count=60
+05-17 23:06:03.937  5992  6011 D EGL_emulation: app_time_stats: avg=3.59ms min=2.61ms max=7.35ms count=61
+05-17 23:06:04.952  5992  6011 D EGL_emulation: app_time_stats: avg=3.57ms min=3.06ms max=4.61ms count=61
+05-17 23:06:05.952  5992  6011 D EGL_emulation: app_time_stats: avg=3.84ms min=3.05ms max=9.66ms count=60
+05-17 23:06:06.956  5992  6011 D EGL_emulation: app_time_stats: avg=3.63ms min=2.93ms max=4.75ms count=60
+05-17 23:06:07.970  5992  6011 D EGL_emulation: app_time_stats: avg=3.66ms min=3.00ms max=5.06ms count=61
+05-17 23:06:08.986  5992  6011 D EGL_emulation: app_time_stats: avg=3.58ms min=2.99ms max=4.86ms count=61
+05-17 23:06:09.987  5992  6011 D EGL_emulation: app_time_stats: avg=3.58ms min=2.89ms max=5.56ms count=60
+05-17 23:06:11.006  5992  6011 D EGL_emulation: app_time_stats: avg=3.60ms min=2.85ms max=4.64ms count=61
+05-17 23:06:12.006  5992  6011 D EGL_emulation: app_time_stats: avg=3.55ms min=2.98ms max=5.88ms count=60
+05-17 23:06:13.007  5992  6011 D EGL_emulation: app_time_stats: avg=4.20ms min=2.38ms max=16.79ms count=60

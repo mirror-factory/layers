@@ -1,0 +1,46 @@
+appId: com.mirafactory.layers
+---
+- launchApp:
+    clearState: true
+- waitForAnimationToEnd:
+    timeout: 8000
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 2000
+- tapOn: "Sign in"
+- waitForAnimationToEnd:
+    timeout: 4000
+- assertVisible: "Sign in to Layers"
+# Focus email and type
+- tapOn:
+    text: "you@example.com"
+- waitForAnimationToEnd:
+    timeout: 1500
+- inputText: "qa-walkthrough-2026-05-12@mirrorfactory.ai"
+- waitForAnimationToEnd:
+    timeout: 1500
+# Dismiss keyboard via Done accessory
+- tapOn:
+    text: "Done"
+- waitForAnimationToEnd:
+    timeout: 2000
+- takeScreenshot:
+    path: /Users/alfonso/Documents/GitHub/layers/docs/evidence/2026-05-18-claude-cross-platform-qa/ios-retest/50-keyboard-dismissed
+# Now tap password input (placeholder visible, no keyboard occluding)
+- tapOn:
+    text: "Your password"
+- waitForAnimationToEnd:
+    timeout: 2000
+- takeScreenshot:
+    path: /Users/alfonso/Documents/GitHub/layers/docs/evidence/2026-05-18-claude-cross-platform-qa/ios-retest/51-password-focused
+- inputText: "MyPassword123!"
+- waitForAnimationToEnd:
+    timeout: 1500
+- takeScreenshot:
+    path: /Users/alfonso/Documents/GitHub/layers/docs/evidence/2026-05-18-claude-cross-platform-qa/ios-retest/52-password-typed
+- tapOn:
+    text: "Done"
+- waitForAnimationToEnd:
+    timeout: 2000
+- takeScreenshot:
+    path: /Users/alfonso/Documents/GitHub/layers/docs/evidence/2026-05-18-claude-cross-platform-qa/ios-retest/53-form-final-no-keyboard

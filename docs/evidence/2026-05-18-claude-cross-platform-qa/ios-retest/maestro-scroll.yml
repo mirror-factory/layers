@@ -1,0 +1,42 @@
+appId: com.mirafactory.layers
+---
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 8000
+- takeScreenshot:
+    path: /Users/alfonso/Documents/GitHub/layers/docs/evidence/2026-05-18-claude-cross-platform-qa/ios-retest/02-landing-top-before-swipe
+- swipe:
+    start: 50%, 85%
+    end: 50%, 15%
+    duration: 800
+- waitForAnimationToEnd:
+    timeout: 800
+- swipe:
+    start: 50%, 85%
+    end: 50%, 15%
+    duration: 800
+- waitForAnimationToEnd:
+    timeout: 800
+- swipe:
+    start: 50%, 85%
+    end: 50%, 15%
+    duration: 800
+- waitForAnimationToEnd:
+    timeout: 1200
+- takeScreenshot:
+    path: /Users/alfonso/Documents/GitHub/layers/docs/evidence/2026-05-18-claude-cross-platform-qa/ios-retest/03-landing-after-three-swipes
+- swipe:
+    start: 50%, 85%
+    end: 50%, 15%
+    duration: 800
+- waitForAnimationToEnd:
+    timeout: 800
+- swipe:
+    start: 50%, 85%
+    end: 50%, 15%
+    duration: 800
+- waitForAnimationToEnd:
+    timeout: 1200
+- takeScreenshot:
+    path: /Users/alfonso/Documents/GitHub/layers/docs/evidence/2026-05-18-claude-cross-platform-qa/ios-retest/04-landing-after-five-swipes

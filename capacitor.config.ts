@@ -21,7 +21,7 @@ const config: CapacitorConfig = {
   },
   ios: {
     backgroundColor: "#0a0a0a",
-    scrollEnabled: false,
+    scrollEnabled: true,
     preferredContentMode: "mobile",
     scheme: "com.mirafactory.layers",
   },
@@ -34,7 +34,7 @@ const config: CapacitorConfig = {
       style: "LIGHT", // light text on dark background
     },
     Keyboard: {
-      resize: "body", // resizes body only, preserves viewport units
+      resize: "native",
       style: "DARK",
       resizeOnFullScreen: true,
     },
