@@ -301,7 +301,7 @@
           <div class="meta" role="list" aria-label="Report metadata">
             <div role="listitem">
               <span class="label">Updated</span>
-              <span class="value">2026-05-18 00:50 EDT</span>
+              <span class="value">2026-05-18 00:55 EDT</span>
             </div>
             <div role="listitem">
               <span class="label">Branch</span>
@@ -313,7 +313,7 @@
             </div>
             <div role="listitem">
               <span class="label">Current Local State</span>
-              <span class="value">Local gates passed; dirty with intentional QA fixes</span>
+              <span class="value">Pushed to PR branch; hosted CI pending</span>
             </div>
           </div>
         </header>
@@ -351,7 +351,7 @@
               <ul>
                 <li>iOS Google auth is not proven. Production simulator testing stayed on the Google button/loading state instead of completing the in-app OAuth path.</li>
                 <li>iOS email/password auth is not proven. Maestro exposed a keyboard/focus bug where password entry was appended into the email field.</li>
-                <li>The current local fixes are not committed, pushed, or hosted in CI yet, so remote green status still belongs to the previous PR head.</li>
+                <li>The fixes are now committed and pushed to the PR branch. Hosted CI for the new head is pending.</li>
                 <li>GitHub required review is still missing on PR #88.</li>
                 <li>Apple notarization/TestFlight secrets and Android upload-key secrets are still needed for public native distribution artifacts.</li>
                 <li>Default-branch Dependabot alerts remain until the fixed dependency branch lands through development, staging, and main.</li>
@@ -390,7 +390,7 @@
               <tr>
                 <td>Remote CI</td>
                 <td><span class="stamp waiting">Previous head green</span></td>
-                <td>PR #88 remote head 1dda53c is green for Tier 0-1, Tier 2, Vercel, and Vercel Preview Comments. New local fixes still need commit and hosted CI.</td>
+                <td>Previous PR head 1dda53c was green for Tier 0-1, Tier 2, Vercel, and Vercel Preview Comments. Current pushed head 1c4e47e has local/pre-push Tier 1 green and needs hosted CI completion.</td>
               </tr>
               <tr>
                 <td>Local slim gate</td>
@@ -550,7 +550,7 @@
           <p class="ticker">
             CPO READ: Do not send to broad external testers yet. Continue
             internal QA and patch validation. The current branch has local
-            gates green, but still needs commit/push/CI, iOS auth proof,
+            gates green and is pushed, but still needs hosted CI, iOS auth proof,
             Android/menu rerun, PR review, and native distribution setup
             before release.
           </p>
