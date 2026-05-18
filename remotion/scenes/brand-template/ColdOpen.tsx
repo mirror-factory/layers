@@ -14,8 +14,7 @@ import { OrganicLayersMark } from "./OrganicRing";
  * BEAT 1 — Cold open (~4s).
  *
  * Warm paper, the audio-wave ribbon settling in beneath the title, the
- * organic Layers mark drawing itself, and the wordmark with the brand's
- * canonical italic-serif emphasis.
+ * organic Layers mark drawing itself, and the wordmark with sans emphasis.
  */
 export const ColdOpen: React.FC = () => {
   const frame = useCurrentFrame();

@@ -7,18 +7,13 @@ import {
 import { z } from "zod";
 import { getSupabaseServer } from "@/lib/supabase/server";
 import { searchMeetings } from "@/lib/embeddings/search";
-import {
-  validateMcpBearerOutcome,
-  validateMcpBearerToken,
-} from "@/lib/mcp/auth";
+import { validateMcpBearerOutcome } from "@/lib/mcp/auth";
 import {
   buildMeetingDashboardPayload,
   getLayersMeetingDashboardHtml,
   LAYERS_MCP_DASHBOARD_RESOURCE_CONFIG,
   LAYERS_MCP_DASHBOARD_RESOURCE_URI,
 } from "@/lib/mcp/ui";
-import { respondWithError } from "@/lib/errors/respond";
-import { ERROR_CODES } from "@/lib/errors/codes";
 import {
   applyRateLimit,
   type RateLimitedTool,
@@ -32,8 +27,11 @@ async function getMeeting(id: string, userId: string | null) {
   const supabase = getSupabaseServer();
   if (!supabase || !userId) return null;
   const { data } = await supabase
-    .from("meetings").select("*")
-    .eq("id", id).eq("user_id", userId).single();
+    .from("meetings")
+    .select("*")
+    .eq("id", id)
+    .eq("user_id", userId)
+    .single();
   return data;
 }
 
@@ -71,19 +69,26 @@ function buildNotesPushPayload(
     include_transcript?: boolean;
   },
 ) {
-  const summary = meeting.summary && typeof meeting.summary === "object"
-    ? meeting.summary as {
-        title?: unknown;
-        summary?: unknown;
-        actionItems?: unknown;
-        decisions?: unknown;
-      }
-    : null;
+  const summary =
+    meeting.summary && typeof meeting.summary === "object"
+      ? (meeting.summary as {
+          title?: unknown;
+          summary?: unknown;
+          actionItems?: unknown;
+          decisions?: unknown;
+        })
+      : null;
   const actionItems = Array.isArray(summary?.actionItems)
-    ? summary.actionItems as Array<{ assignee?: string | null; task?: string; dueDate?: string | null }>
+    ? (summary.actionItems as Array<{
+        assignee?: string | null;
+        task?: string;
+        dueDate?: string | null;
+      }>)
     : [];
   const decisions = Array.isArray(summary?.decisions)
-    ? summary.decisions.filter((item): item is string => typeof item === "string")
+    ? summary.decisions.filter(
+        (item): item is string => typeof item === "string",
+      )
     : [];
   const title =
     typeof meeting.title === "string" && meeting.title
@@ -107,8 +112,12 @@ function buildNotesPushPayload(
     decisions.length
       ? `\n## Decisions\n${decisions.map((decision) => `- ${decision}`).join("\n")}`
       : null,
-    input.include_transcript && transcript ? `\n## Transcript\n${transcript}` : null,
-  ].filter(Boolean).join("\n");
+    input.include_transcript && transcript
+      ? `\n## Transcript\n${transcript}`
+      : null,
+  ]
+    .filter(Boolean)
+    .join("\n");
 
   return {
     ready: true,
@@ -407,7 +416,8 @@ async function handler(req: Request) {
       parsedBody = await cloned.json();
       const method = (parsedBody as { method?: string } | null)?.method;
       isProtocolHandshake =
-        method === "initialize" || (method?.startsWith("notifications/") ?? false);
+        method === "initialize" ||
+        (method?.startsWith("notifications/") ?? false);
     } catch {
       // not JSON — let mcp-handler deal with it
     }
@@ -461,7 +471,10 @@ async function handler(req: Request) {
   }
   if (outcome.kind !== "ok") {
     return new Response(
-      JSON.stringify({ error: "invalid_token", error_description: "Invalid bearer token" }),
+      JSON.stringify({
+        error: "invalid_token",
+        error_description: "Invalid bearer token",
+      }),
       { status: 401, headers: { "Content-Type": "application/json" } },
     );
   }

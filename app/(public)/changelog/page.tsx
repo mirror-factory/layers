@@ -546,8 +546,8 @@ function FinalCta() {
             Ship faster.{" "}
             <em
               style={{
-                fontStyle: "italic",
-                fontWeight: 500,
+                fontStyle: "normal",
+                fontWeight: 650,
                 color: "var(--brand-accent-muted)",
               }}
             >

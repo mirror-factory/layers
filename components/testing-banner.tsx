@@ -10,7 +10,7 @@ export function TestingBanner() {
     >
       <div className="mx-auto flex max-w-[1180px] items-center justify-center gap-2 px-6 py-2 text-[12px] font-medium tracking-[0.08em] uppercase md:px-10">
         <Sparkles size={13} aria-hidden="true" />
-        We're in invite-only alpha — public sign-ups coming soon
+        We&apos;re in invite-only alpha — public sign-ups coming soon
       </div>
     </div>
   );

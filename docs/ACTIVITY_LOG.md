@@ -47,7 +47,7 @@ Event types: `pr-merged`, `pr-opened`, `linear-filed`, `linear-resolved`, `linea
 
 ### 2026-05-12  ~15:32 ET  —  Claude Opus 4.7 (1M)  —  pr-merged  —  #74 fix(sign-in): use canonical support email
 
-- **What:** Sign-in footnote linked users to `hello@layers.app` (orphan inbox) instead of `support@mirrorfactory.ai`.
+- **What:** Sign-in footnote linked users to `hello@layers.app` (orphan inbox) instead of `admin@mirafactory.ai`.
 - **PR / Linear:** [PR #74](https://github.com/mirror-factory/layers/pull/74)
 - **Why it matters:** Anyone hitting a sign-in error and following the help link got a bounce.
 
@@ -249,3 +249,39 @@ Event types: `pr-merged`, `pr-opened`, `linear-filed`, `linear-resolved`, `linea
 - **PR / Linear:** [PR #87](https://github.com/mirror-factory/layers/pull/87) / [PROD-496](https://linear.app/mirror-factory/issue/PROD-496) (+ [PROD-497](https://linear.app/mirror-factory/issue/PROD-497), [PROD-498](https://linear.app/mirror-factory/issue/PROD-498), [PROD-499](https://linear.app/mirror-factory/issue/PROD-499))
 - **Logo swap status:** approved-in-principle but **not** applied to app code per user. `components/layers-logo.tsx` and `components/top-bar.tsx` remain unchanged. New organic semi-circle mark lives in `branding/design-kit.html` §07 + `remotion/scenes/brand-template/OrganicRing.tsx::OrganicLayersMark` only. Follow-up PR pending user's "swap it" go-ahead.
 - **Why it matters:** The brand surfaces (narrative, design kit, playground, video template, skill) are now in one shareable bundle on main. The `branding/` folder is zip-and-send-to-designer ready. The combined skill auto-triggers on any future branded-asset work.
+
+### 2026-05-17  20:53 EDT  —  Codex CLI / GPT-5  —  session-checkpoint  —  PROD-500 Stop/finalize route hardened before external tester release
+
+- **What:** Added a fail-closed guard to `/api/transcribe/stream/finalize` so a missing meeting row returns `404` instead of a false-success Stop response, replaced the finalize-route `describe.todo` with integration coverage, refreshed the CPO release-readiness report, and verified the patch locally.
+- **PR / Linear / artifact:** [PR #88](https://github.com/mirror-factory/layers/pull/88) / [PROD-500](https://linear.app/mirror-factory/issue/PROD-500) / `docs/reports/release-readiness-cpo-report.html`
+- **Why it matters:** This reduces the risk that a tester stops a recording, loses the local draft, and lands on a missing or broken meeting detail page. Browser/native Stop-flow proof is still required before calling the recording path release-ready.
+
+### 2026-05-17  21:34 EDT  —  Codex CLI / GPT-5  —  release-readiness  —  PROD-500 Stop-flow browser proof locally green
+
+- **What:** Added a deterministic non-production E2E fake-recording harness and focused Playwright proof for Start recording → Stop → finalize → completed meeting detail render, plus the finalize-failure path that keeps a local draft visible to the user.
+- **Fixes found during proof:** moved the fake token path before vendor API-key checks, shared the in-memory meeting store through `globalThis` for Next route/page module boundaries, rendered managed-recorder finalize errors visibly on `/record/live`, and moved meeting-chat wiring fully client-side to avoid a server-component function prop crash on `/meetings/[id]`.
+- **Local evidence:** `PLAYWRIGHT_DISABLE_VIDEO=1 pnpm exec playwright test tests/e2e/recording-stop-flow.spec.ts --workers=1` passed all 12 tests across mobile-light, mobile-dark, tablet-light, tablet-dark, desktop-light, and desktop-dark. `pnpm exec vitest run tests/recording-e2e-fake-recording.test.ts`, `pnpm typecheck`, `pnpm compliance`, `pnpm lint`, `pnpm test:fast`, and `git diff --check` passed locally.
+- **PR / Linear / artifact:** [PR #88](https://github.com/mirror-factory/layers/pull/88) / [PROD-500](https://linear.app/mirror-factory/issue/PROD-500) / `docs/reports/release-readiness-cpo-report.html`
+- **Why it matters:** The web Stop-flow blocker now has focused browser proof instead of route-only confidence. This still needs commit/push plus hosted CI and native follow-up before external tester release is called safe.
+
+### 2026-05-17  22:01 EDT  —  Codex CLI / GPT-5  —  release-readiness  —  Native/security/domain blocker audit
+
+- **What:** Rechecked PR #88 after the Stop-flow patch: branch clean at `5eb6200`, hosted Tier 0-1/Tier 2/Tier 3/Vercel green, required review still missing, Android Native Proof and Self-hosted Web Proof still skipped because repo-level runners/secrets are absent.
+- **Security evidence:** `pnpm audit --audit-level high --json` reports 0 vulnerabilities on the release branch. GitHub still reports 41 open Dependabot alerts on the default branch because `development` has not received the patched dependency set from #88 yet.
+- **Native evidence:** `pnpm test:native:config`, `plutil` checks, `xcodebuild -project ios/App/App.xcodeproj -list`, iOS simulator Debug build, `xmllint`, and Android `:app:assembleDebug` with explicit JDK/SDK paths all passed locally. Store/TestFlight distribution remains blocked by Apple notarization/App Store Connect secrets and Android upload-key secrets.
+- **Promotion path evidence:** GitHub default branch is `development`; `main`, `staging`, and `development` protections are enabled; stale unprotected `origin/dev` still exists. Local Vercel was relinked to the real `audio-layer` Next.js project (`prj_QUjIKb0gKB5KxDI0lulFnKfgAZhP`). `dev.layers.mirrorfactory.ai` and `staging.layers.mirrorfactory.ai` are branch-pinned in Vercel but unverified because Cloudflare DNS records are missing and no DNS-management CLI/API credentials are available in this shell.
+- **Why it matters:** Web QA is in reviewer-handoff shape, but release is still blocked by approval, native distribution secrets/runners, Cloudflare DNS verification, default-branch alert closure, and promotion proof.
+
+### 2026-05-18  02:55 EDT  —  Codex CLI / GPT-5 + Claude Opus 4.7 workers  —  release-readiness  —  Cross-platform QA worker pass
+
+- **What:** Ran bounded Claude Code workers for Web, macOS Electron, iOS Simulator, and Android Emulator against PR #88 using the shared `docs/CROSS_PLATFORM_QA.md` checklist plus platform-specific checks. Evidence lives under `docs/evidence/2026-05-18-claude-cross-platform-qa/`.
+- **Results:** Web passed 70/70 automated smoke/recording checks. Android emulator passed public/native shell QA and debug APK build. macOS Electron passed public/window/native shortcut QA but remains blocked for external distribution until notarization is wired. Initial iOS simulator pass found two TestFlight blockers: `ios.scrollEnabled: false` disabled page scroll, and `Keyboard.resize: "body"` made the password field hard to reach under the soft keyboard.
+- **Fix + retest:** Changed `capacitor.config.ts` to `ios.scrollEnabled: true` and `Keyboard.resize: "native"`, ran `pnpm cap:sync`, `pnpm test:native:config`, `pnpm typecheck`, iOS Debug build, Android `:app:assembleDebug`, and a Claude iOS retest. Retest proved native scroll reaches below-the-fold sections and email/password fields no longer concatenate credentials.
+- **Remaining release blockers:** PR #88 still needs required review before merge to `development`. macOS external tester builds need notarization/App Store Connect secrets. Store/TestFlight/Play upload paths still need signing/upload credentials and native CI runner/secrets. Authenticated native walks, native OAuth, and real-device microphone recording remain separate pre-wide-release checks.
+
+### 2026-05-18  08:11 EDT  —  Codex CLI / GPT-5 + Claude Sonnet workers  —  session-checkpoint  —  30-gate all-platform release matrix run documented
+
+- **What:** Added `docs/RELEASE_TEST_MATRIX.md`, launched four bounded Claude Sonnet workers for Web, iOS, Android, and Electron/macOS, and aggregated their results under `docs/evidence/2026-05-18-release-test-matrix/`.
+- **Results:** The 30-gate matrix currently has 7 green gates, 19 partial gates, and 4 blocked/not-proven gates. Automated checks, iOS simulator build/install/launch, Android debug build, unsigned Android AAB build, and Electron pack/sign/launch all have fresh evidence.
+- **Remaining release blockers:** Google OAuth callback/return proof, real microphone permission, live recording/transcript/finalize, iOS signing/archive/upload readiness, Android emulator disk space plus signing env, Electron notarization, and local API smoke env/port cleanup.
+- **Why it matters:** This converts the all-platform QA request into a concrete release-gate artifact with per-platform evidence, and prevents TestFlight/Play/Electron distribution from being treated as ready before the core auth and recording paths are proven on real shells.

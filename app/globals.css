@@ -266,8 +266,8 @@
   --font-mono:
     ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
     monospace;
-  --font-heading: var(--font-sans);
-  --font-sans: var(--font-sans);
+  --font-heading: var(--font-brand-sans);
+  --font-sans: var(--font-brand-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -315,13 +315,24 @@ body {
   );
   color: var(--text-primary);
   font-family:
-    var(--font-sans), var(--font-brand-sans);
+    var(--font-brand-sans), Geist, Inter, ui-sans-serif, system-ui,
+    -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* Safe areas handled per-component: TopBar (top), chat-input (bottom), etc.
      Body padding would double-count on full-height pages like the recorder. */
   padding-left: var(--safe-left);
   padding-right: var(--safe-right);
+}
+
+:where(button, input, textarea, select) {
+  font: inherit;
+}
+
+:where(h1, h2, h3, h4, h5, h6, p, a, span, label, small, strong, em, li) {
+  font-family:
+    var(--font-brand-sans), Geist, Inter, ui-sans-serif, system-ui,
+    -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 .light body {
@@ -1521,7 +1532,9 @@ body {
   overflow: hidden;
   border: 1px solid var(--border-card) !important;
   border-radius: var(--radius-lg);
-  background: color-mix(in oklch, var(--surface-panel) 94%, var(--bg-primary) 6%) !important;
+  background: var(--bg-surface, var(--bg-primary)) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
   box-shadow:
     0 22px 58px color-mix(in oklch, var(--text-primary) 16%, transparent),
     inset 0 1px 0 color-mix(in oklch, white 44%, transparent);
@@ -1533,6 +1546,10 @@ body {
   transition:
     opacity var(--duration-fast) var(--ease-out),
     transform var(--duration-fast) var(--ease-out);
+}
+
+.dark .paper-calm-page .slide-menu-panel {
+  background: var(--bg-primary) !important;
 }
 
 .paper-calm-page .slide-menu-panel.translate-x-full,
@@ -4419,6 +4436,32 @@ body.dark:has(.paper-calm-page) {
   display: inline;
 }
 
+.paper-calm-page.recorder-page .recorder-error-alert {
+  width: min(100%, 340px);
+  border-radius: 18px !important;
+  padding: 0.78rem 0.9rem !important;
+  font-size: 0.82rem !important;
+  font-weight: 720;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  box-shadow: 0 14px 30px
+    color-mix(in oklch, var(--status-error) 10%, transparent);
+}
+
+.paper-calm-page.recorder-page .recorder-error-alert p {
+  min-width: 0;
+}
+
+.paper-calm-page.recorder-page
+  .recorder-has-error
+  .recorder-primary-control {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.24), transparent 42%),
+    linear-gradient(180deg, #15203a 0%, var(--layers-ink) 100%) !important;
+  color: white !important;
+  opacity: 1 !important;
+}
+
 .recorder-command-status {
   color: #0f9f8a;
   font-weight: 720;
@@ -6005,15 +6048,50 @@ body.dark:has(.paper-calm-page) {
   .recorder-control:not(:has(.recorder-live-indicator))
   .recorder-primary-control,
 .dark .paper-calm-page.recorder-page .home-calendar-connect {
-  background: #f8fafc !important;
-  color: #0b1220 !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.24), transparent 42%),
+    linear-gradient(180deg, #15203a 0%, var(--layers-ink) 100%) !important;
+  color: white !important;
 }
 
 .dark .paper-calm-page.recorder-page
   .recorder-control:not(:has(.recorder-live-indicator))
   .recorder-primary-control:hover,
 .dark .paper-calm-page.recorder-page .home-calendar-connect:hover {
-  background: #e2e8f0 !important;
+  background: #111b2d !important;
+}
+
+.dark .paper-calm-page.recorder-page
+  .recorder-has-error
+  .recorder-control:not(:has(.recorder-live-indicator))
+  .recorder-primary-control,
+.paper-calm-page.recorder-page
+  .recorder-has-error
+  .recorder-control:not(:has(.recorder-live-indicator))
+  .recorder-primary-control {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.24), transparent 42%),
+    linear-gradient(180deg, #15203a 0%, var(--layers-ink) 100%) !important;
+  color: white !important;
+  opacity: 1 !important;
+}
+
+.paper-calm-page.recorder-page .recent-empty-start-button {
+  width: min(100%, 312px);
+  min-height: 58px;
+  border-radius: 999px !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.24), transparent 42%),
+    linear-gradient(180deg, #15203a 0%, var(--layers-ink) 100%) !important;
+  color: white !important;
+  font-weight: 760 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 18px 34px rgba(11, 18, 32, 0.16) !important;
+}
+
+.paper-calm-page.recorder-page .recent-empty-start-button:hover {
+  background: #111b2d !important;
 }
 
 @media (min-width: 1024px) {
@@ -6557,8 +6635,13 @@ body.dark:has(.paper-calm-page) {
   .paper-calm-page.recorder-page
     .recorder-control:not(:has(.recorder-live-indicator))
     .recorder-primary-control {
-    width: min(100%, 286px) !important;
+    width: min(100%, 312px) !important;
     height: 60px !important;
+  }
+
+  .paper-calm-page.recorder-page .recorder-error-alert {
+    width: min(100%, 312px);
+    margin-top: 0.7rem !important;
   }
 
   .paper-calm-page.recorder-page .recorder-readiness .sm\:grid {
@@ -7120,6 +7203,20 @@ body.dark:has(.paper-calm-page) {
   box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.24);
   content: "";
   animation: recording-status-pulse 1.15s ease-in-out infinite;
+}
+
+.recording-managed-error {
+  width: min(100%, 426px);
+  margin: 0;
+  border: 1px solid var(--status-error-border);
+  border-radius: 0.85rem;
+  background: var(--status-error-bg);
+  color: var(--status-error);
+  padding: 0.85rem 1rem;
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: left;
 }
 
 .recording-record-ring {
@@ -13418,9 +13515,10 @@ body.dark:has(.paper-calm-page) {
 .reference-script {
   margin-top: var(--space-2);
   color: color-mix(in oklch, var(--layers-mint) 78%, var(--layers-ink));
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-brand-sans);
   font-size: clamp(1.45rem, 2.1vw, 2.2rem) !important;
-  font-style: italic;
+  font-style: normal;
+  font-weight: 650;
   line-height: 1.14 !important;
 }
 
@@ -14960,4 +15058,3 @@ body.dark:has(.paper-calm-page) {
     );
   }
 }
-

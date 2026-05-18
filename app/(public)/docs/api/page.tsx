@@ -220,8 +220,8 @@ export default function ApiDocsPage() {
           A small, sturdy{" "}
           <em
             style={{
-              fontStyle: "italic",
-              fontWeight: 500,
+              fontStyle: "normal",
+              fontWeight: 650,
               color: "var(--layers-mint)",
             }}
           >

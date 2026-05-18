@@ -1,0 +1,306 @@
+--------- beginning of system
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{8905231 com.android.systemui.auto_generated_rro_product__/10027} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{bf42ede com.google.android.apps.messaging/10130} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{af3c8bf com.google.android.soundpicker/10143} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{3574084 com.google.android.marvin.talkbackoverlay/10080} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{3b0db8c com.google.android.configupdater/10118} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{afcf4a2 com.android.internal.emulation.pixel_3a_xl/10044} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{789b533 com.android.internal.emulation.pixel_6_pro/10000} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{349e0f0 com.android.internal.emulation.pixel_7_pro/10033} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{29e1669 com.android.internal.emulation.pixel_8_pro/10052} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{659b8ee com.android.internal.emulation.pixel_3a/10073} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{a0718f com.android.internal.emulation.pixel_4a/10070} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{a841c1c com.android.internal.emulation.pixel_6a/10023} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{478b025 com.android.internal.emulation.pixel_7a/10074} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{eac75fa com.google.android.overlay.googlewebview/10062} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{f7a52d5 com.google.android.hotspot2.osulogin/10189} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{2105aea com.android.simappdialog/10112} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{8a929a1 com.android.internal.display.cutout.emulation.hole/10051} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{e3bf7c6 com.android.internal.display.cutout.emulation.tall/10066} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{e2b0387 com.android.internal.systemui.navbar.threebutton/10003} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{7a631db com.android.camera2/10139} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{d0dbedd com.android.systemui.auto_generated_rro_vendor__/10076} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{f562478 com.google.android.deskclock/10145} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{52a5123 com.android.internal.systemui.navbar.twobutton/10054} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{39a4751 com.google.android.as/10131} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{4113bb6 com.google.android.gm/10146} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{f9c399e com.android.internal.systemui.navbar.gestural_extra_wide_back/10071} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{d46dc7f com.android.systemui.emulation.pixel_3/10049} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{794c44c com.android.systemui.emulation.pixel_4/10009} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{ceeec95 com.android.systemui.emulation.pixel_5/10064} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{e0e51aa com.android.systemui.emulation.pixel_6/10004} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{c76c19b com.android.systemui.emulation.pixel_7/10067} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{66fd938 com.android.systemui.emulation.pixel_8/10034} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{b1ebd11 com.android.nfc.auto_generated_rro_product__/10015} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{4c10b7 com.android.printspooler/10107} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{7f5dc77 com.android.emergency.auto_generated_rro_product__/10032} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{7e550e4 com.google.android.connectivity.resources.goldfish.overlay/10075} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{2051024 com.android.dreams.basic/10111} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{bdb6c02 com.google.android.networkstack.tethering.emulator/10010} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{2e1c913 com.android.providers.settings.auto_generated_rro_product__/10037} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{6eb078d com.google.android.as.oss/10126} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{972fd49 com.android.traceur.auto_generated_rro_product__/10045} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{26d5d42 com.google.android.devicelockcontroller/10175} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{e070153 com.google.android.dialer/10124} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{3f7d87c com.android.internal.emulation.pixel_3/10035} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{652505 com.android.internal.emulation.pixel_4/10055} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{336795a com.android.internal.emulation.pixel_5/10063} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{cc7478b com.android.internal.emulation.pixel_6/10007} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{9280068 com.android.internal.emulation.pixel_7/10048} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{e980c81 com.android.internal.emulation.pixel_8/10025} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{4950a90 com.google.android.captiveportallogin/10113} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{80d8f89 com.android.musicfx/10084} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{c780b8e com.google.android.apps.docs/10140} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{ef958a6 com.google.android.apps.maps/10144} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{765faf com.google.android.modulemetadata/10134} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{3e83fbc com.google.android.markup/10147} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{21f1d03 com.android.providers.settings.auto_generated_rro_vendor__/10077} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{4b69b45 com.google.android.rkpdapp/10178} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{16d529a com.google.android.contacts/10153} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{ac8defe com.android.server.telecom.auto_generated_rro_product__/10028} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{1ec865f com.google.android.overlay.googleconfig/10030} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{f2058ac com.android.bips.auto_generated_rro_product__/10005} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{7d347cb com.google.android.apps.customization.pixel/10136} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{6d79ba8 com.google.android.tag/10094} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{5fd297b com.google.android.overlay.permissioncontroller/10008} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{72aa6c1 com.google.android.partnersetup/10120} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{63dfe66 com.google.android.apps.wallpaper.nexus/10133} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{4cc95a7 com.google.android.apps.nexuslauncher/10162} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{6deca54 com.google.android.nearby.halfsheet/10185} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{e031144 com.android.theme.font.notoserifsource/10026} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{f79edfd com.google.android.safetycenter.resources/10176} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{891362 com.android.internal.display.cutout.emulation.waterfall/10057} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{e114cf3 com.android.internal.systemui.navbar.transparent/10016} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{c1b9af2 com.google.android.connectivity.resources/10184} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{904d429 com.android.providers.contacts.auto_generated_rro_product__/10013} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{a22e543 com.google.android.feedback/10159} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{78837c0 com.google.android.printservice.recommendation/10100} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{47c6cf9 com.google.android.apps.photos/10142} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{db88da com.google.android.calendar/10154} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{3c4743e com.google.android.documentsui/10099} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{45acba com.android.systemui.emulation.pixel_3a_xl/10017} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{a27676b com.android.systemui.emulation.pixel_6_pro/10059} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{c0bd2c8 com.android.systemui.emulation.pixel_7_pro/10061} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{9f1df61 com.android.systemui.emulation.pixel_8_pro/10068} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{c04929f com.google.mainline.telemetry/10150} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{5d30f47 com.android.carrierconfig.auto_generated_rro_product__/10012} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{8990fec com.android.providers.partnerbookmarks/10103} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{88ddfb5 com.android.wallpaper.livepicker/10098} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{a211912 com.android.providers.telephony.auto_generated_rro_product__/10022} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{ba758e3 com.android.phone.auto_generated_rro_vendor__/10079} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{98f964a com.google.mainline.adservices/10137} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{929b9bb com.android.imsserviceentitlement/10129} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{efd3ed8 com.google.android.healthconnect.controller/10171} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{eca03f com.android.internal.emulation.pixel_2_xl/10011} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{d4d9d0c com.android.internal.emulation.pixel_3_xl/10029} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{32db655 com.android.internal.emulation.pixel_4_xl/10002} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{2c2b86a com.android.internal.emulation.pixel_fold/10065} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{e09c231 com.android.bookmarkprovider/10115} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{fbd7df8 com.google.android.overlay.pixelconfigcommon/10019} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{5e062d1 com.android.systemui.accessibility.accessibilitymenu.auto_generated_rro_product__/10069} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{d4bf136 com.android.systemui.emulation.pixel_3a/10020} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{2985837 com.android.systemui.emulation.pixel_4a/10047} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{74881a4 com.android.systemui.emulation.pixel_6a/10043} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{a375b0d com.android.systemui.emulation.pixel_7a/10060} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{638cd16 com.google.android.settings.intelligence/10127} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{e3e765 com.google.android.projection.gearhead/10123} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{9b03697 com.google.android.uwb.resources/10179} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{ea87c3a com.android.cts.ctsshim/10183} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{737084 com.google.android.wifi.resources/10188} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{787506d com.google.android.wifi.dialog/10190} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{6ca4a2 com.google.android.apps.wallpaper/10168} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{fb7a533 com.google.android.odad/10119} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{cf8613c com.android.settings.auto_generated_rro_product__/10050} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{3c9dec5 com.android.internal.systemui.navbar.gestural/10056} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{df910f0 com.google.android.apps.youtube.music/10155} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{fd58669 com.android.bluetoothmidiservice/10108} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{a885528 com.android.storagemanager.auto_generated_rro_product__/10040} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{b1468ee com.google.android.cellbroadcastreceiver/10173} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{c5113e6 com.android.phone.auto_generated_rro_product__/10072} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{c79bd27 android.auto_generated_rro_product__/10039} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{aa19bd4 com.android.internal.systemui.navbar.gestural_narrow_back/10018} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{5bd618f com.google.android.inputmethod.latin/10151} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{c0a8872 android.auto_generated_rro_vendor__/10078} BLOCKED
+05-17 23:05:52.922   546  2085 I AppsFilter: interaction: PackageSetting{cac8327 com.mirafactory.layers/10195} -> PackageSetting{8f64c1c com.google.android.apps.restore/10122} BLOCKED
+05-17 23:05:52.948   759   825 V WindowManagerShell: Transition animation finished (aborted=false), notifying core (#14)android.os.BinderProxy@55e3e1e@0
+05-17 23:05:52.949   546   563 V WindowManager: Finish Transition #14: created at 05-17 23:05:52.627 collect-started=0.034ms request-sent=7.933ms started=10.545ms ready=29.121ms sent=30.229ms finished=321.461ms
+05-17 23:05:52.949   759   825 V WindowManagerShell: Track 0 became idle
+05-17 23:05:52.949   759   825 V WindowManagerShell: All active transition animations finished
+--------- beginning of main
+05-17 23:05:52.954  5992  5992 W afactory.layers: Accessing hidden method Landroid/os/Trace;->isTagEnabled(J)Z (unsupported, reflection, allowed)
+05-17 23:05:52.954  5992  5992 W afactory.layers: Accessing hidden method Landroid/os/Trace;->traceBegin(JLjava/lang/String;)V (unsupported, reflection, allowed)
+05-17 23:05:52.954  5992  5992 W afactory.layers: Accessing hidden method Landroid/os/Trace;->traceEnd(J)V (unsupported, reflection, allowed)
+05-17 23:05:52.954  5992  5992 W afactory.layers: Accessing hidden method Landroid/os/Trace;->asyncTraceBegin(JLjava/lang/String;I)V (unsupported, reflection, allowed)
+05-17 23:05:52.954  5992  5992 W afactory.layers: Accessing hidden method Landroid/os/Trace;->asyncTraceEnd(JLjava/lang/String;I)V (unsupported, reflection, allowed)
+05-17 23:05:52.957  5992  5992 I cr_WVCFactoryProvider: Loaded version=113.0.5672.136 minSdkVersion=29 isBundle=false multiprocess=true packageId=2
+05-17 23:05:52.971  5992  6018 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.mirafactory.layers/app_webview/variations_seed_new"
+05-17 23:05:52.982  5992  5992 I cr_LibraryLoader: Successfully loaded native library
+05-17 23:05:52.983  5992  5992 I cr_CachingUmaRecorder: Flushed 8 samples from 8 histograms.
+05-17 23:05:52.983   759   880 D EGL_emulation: app_time_stats: avg=107.58ms min=14.12ms max=564.64ms count=11
+05-17 23:05:52.984  5992  5992 I cr_VariationsUtils: Loaded seed with age 16852s
+05-17 23:05:52.986   546  2085 D CompatibilityChangeReporter: Compat change id reported: 161145287; UID 10195; state: ENABLED
+05-17 23:05:52.991   546  2085 D CompatibilityChangeReporter: Compat change id reported: 135634846; UID 99002; state: DISABLED
+05-17 23:05:52.991   546  2085 D CompatibilityChangeReporter: Compat change id reported: 177438394; UID 99002; state: DISABLED
+05-17 23:05:52.991   546  2085 D CompatibilityChangeReporter: Compat change id reported: 135772972; UID 99002; state: DISABLED
+05-17 23:05:52.991   546  2085 D CompatibilityChangeReporter: Compat change id reported: 135754954; UID 99002; state: ENABLED
+05-17 23:05:52.991   546   574 D CompatibilityChangeReporter: Compat change id reported: 143937733; UID 10195; state: ENABLED
+05-17 23:05:52.993   826   826 D Zygote  : Forked child process 6022
+05-17 23:05:52.996  6022  6022 E libc    : SetHeapTaggingLevel: re-enabling tagging after it was disabled is not supported
+05-17 23:05:52.998  6022  6022 I ocessService0:0: Using CollectorTypeCC GC.
+05-17 23:05:53.003  6022  6022 E ocessService0:0: Not starting debugger since process cannot load the jdwp agent.
+05-17 23:05:53.006  5992  5992 D CompatibilityChangeReporter: Compat change id reported: 183155436; UID 10195; state: ENABLED
+05-17 23:05:53.049   546  1874 D ActivityManager: sync unfroze 1746 com.google.android.gms for 6
+05-17 23:05:53.052   546  2167 W ActivityManager: Slow operation: 61ms so far, now at startProcess: done updating battery stats
+05-17 23:05:53.052   546  2167 W ActivityManager: Slow operation: 61ms so far, now at startProcess: building log message
+05-17 23:05:53.052   546  2167 I ActivityManager: Start proc 6022:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0i2 for  {com.mirafactory.layers/org.chromium.content.app.SandboxedProcessService0:0}
+05-17 23:05:53.052   546  2167 W ActivityManager: Slow operation: 61ms so far, now at startProcess: starting to update pids map
+05-17 23:05:53.052   546  2167 W ActivityManager: Slow operation: 61ms so far, now at startProcess: done updating pids map
+05-17 23:05:53.054  1746  3156 I PhenotypeProcessReaper: Memory state is: 100
+05-17 23:05:53.056  1746  1746 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.safetynet.service.START pkg=com.google.android.gms }
+05-17 23:05:53.056  1746  1746 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.safetynet.service.START pkg=com.google.android.gms }
+05-17 23:05:53.071  5992  6036 W chromium: [WARNING:dns_config_service_android.cc(115)] Failed to read DnsConfig.
+05-17 23:05:53.074  6022  6022 D CompatibilityChangeReporter: Compat change id reported: 171979766; UID 99002; state: ENABLED
+05-17 23:05:53.074  6022  6022 D CompatibilityChangeReporter: Compat change id reported: 242716250; UID 99002; state: ENABLED
+05-17 23:05:53.079  6022  6022 I LoadedApk: No resource references to update in package com.google.android.trichromelibrary
+05-17 23:05:53.081  6022  6022 I cr_WebViewApkApp: Launched version=113.0.5672.136 minSdkVersion=29 isBundle=false processName=com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0
+05-17 23:05:53.081   546  2085 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 99002. pid: 6022
+05-17 23:05:53.082  6022  6022 W SystemServiceRegistry: No service published for: virtualdevice
+05-17 23:05:53.082  6022  6022 I cr_ChildProcessService: Creating new ChildProcessService pid=6022
+05-17 23:05:53.107  5992  6042 E chromium: [ERROR:simple_backend_impl.cc(749)] Simple Cache Backend: cache directory inaccessible right after creation; path: /data/user/0/com.mirafactory.layers/cache/WebView/Default/HTTP Cache/Code Cache/wasm
+05-17 23:05:53.109  5992  6052 E chromium: [ERROR:disk_cache.cc(205)] Unable to create cache
+05-17 23:05:53.141   546  2085 D ActivityManager: sync unfroze 4374 com.google.android.webview:webview_service for 6
+05-17 23:05:53.145  5992  5992 D CompatibilityChangeReporter: Compat change id reported: 214741472; UID 10195; state: ENABLED
+05-17 23:05:53.146  5992  5992 D CompatibilityChangeReporter: Compat change id reported: 171228096; UID 10195; state: ENABLED
+05-17 23:05:53.160  5992  5992 D AutofillManager: Fill dialog is enabled:false, hints=[password, passwordAuto, creditCardNumber, creditCardSecurityCode, creditCardExpirationDate]
+05-17 23:05:53.172  5992  5992 D Capacitor: Starting BridgeActivity
+05-17 23:05:53.187  5992  5992 D Capacitor: Registering plugin instance: CapacitorCookies
+05-17 23:05:53.189  5992  5992 D Capacitor: Registering plugin instance: WebView
+05-17 23:05:53.190  5992  5992 D Capacitor: Registering plugin instance: CapacitorHttp
+05-17 23:05:53.191  5992  5992 D Capacitor: Registering plugin instance: SystemBars
+05-17 23:05:53.192  5992  5992 D Capacitor: Registering plugin instance: App
+05-17 23:05:53.193  5992  5992 D Capacitor: Registering plugin instance: Browser
+05-17 23:05:53.194  5992  5992 D Capacitor: Registering plugin instance: LocalNotifications
+05-17 23:05:53.197  5992  5992 D Capacitor: Registering plugin instance: StatusBar
+05-17 23:05:53.200  5992  5992 V Capacitor/StatusBarPlugin: Notifying listeners for event statusBarOverlayChanged
+05-17 23:05:53.200  5992  5992 D Capacitor/StatusBarPlugin: No listeners found for event statusBarOverlayChanged
+05-17 23:05:53.200  5992  5992 V Capacitor/StatusBarPlugin: Notifying listeners for event statusBarOverlayChanged
+05-17 23:05:53.200  5992  5992 D Capacitor/StatusBarPlugin: No listeners found for event statusBarOverlayChanged
+05-17 23:05:53.211  5992  5992 W Capacitor: Unable to read file at path public/plugins
+05-17 23:05:53.213  5992  5992 D Capacitor: Loading app at https://layers.mirrorfactory.ai
+05-17 23:05:53.220  5992  6043 W cr_media: BLUETOOTH_CONNECT permission is missing.
+05-17 23:05:53.221  5992  6043 W cr_media: registerBluetoothIntentsIfNeeded: Requires BLUETOOTH permission
+05-17 23:05:53.225  6022  6048 I cr_LibraryLoader: Successfully loaded native library
+05-17 23:05:53.225  6022  6048 I cr_CachingUmaRecorder: Flushed 2 samples from 2 histograms.
+05-17 23:05:53.230  6022  6048 W SystemServiceRegistry: No service published for: uimode
+05-17 23:05:53.234  5992  5992 D Capacitor: App started
+05-17 23:05:53.235  5992  5992 W WindowOnBackDispatcher: OnBackInvokedCallback is not enabled for the application.
+05-17 23:05:53.235  5992  5992 W WindowOnBackDispatcher: Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+05-17 23:05:53.236  5992  5992 D Capacitor/AppPlugin: Firing change: true
+05-17 23:05:53.236  5992  5992 V Capacitor/AppPlugin: Notifying listeners for event appStateChange
+05-17 23:05:53.236  5992  5992 D Capacitor/AppPlugin: No listeners found for event appStateChange
+05-17 23:05:53.239   546  2085 D ActivityManager: sync unfroze 2875 com.android.chrome for 4
+05-17 23:05:53.239  5992  5992 V Capacitor/BrowserPlugin: Notifying listeners for event browserFinished
+05-17 23:05:53.239  5992  5992 D Capacitor/BrowserPlugin: No listeners found for event browserFinished
+05-17 23:05:53.239  5992  5992 D Capacitor: App resumed
+05-17 23:05:53.243  5992  5992 D CompatibilityChangeReporter: Compat change id reported: 237531167; UID 10195; state: DISABLED
+05-17 23:05:53.243  1252  1276 I FontLog : Received query name=Google Sans&weight=700&besteffort=false, URI content://com.google.android.gms.fonts [CONTEXT service_id=132 ]
+05-17 23:05:53.243  1252  1276 I FontLog : Query [name=Google Sans&weight=700&besteffort=false] resolved to {Google Sans, wdth 100.0, wght 700, ital 0.0, bestEffort false} [CONTEXT service_id=132 ]
+05-17 23:05:53.244  5992  5992 W OpenGLRenderer: Unknown dataspace 0
+05-17 23:05:53.244  1252  1276 I FontLog : Fetch {Google Sans, wdth 100.0, wght 700, ital 0.0, bestEffort false} end status Status{statusCode=SUCCESS, resolution=null} [CONTEXT service_id=132 ]
+05-17 23:05:53.253  1252  1276 I FontLog : Pulling font file for id = 24, cache size = 6 [CONTEXT service_id=132 ]
+05-17 23:05:53.259  1252  1276 I FontLog : Received query name=Noto Color Emoji Compat&weight=400&besteffort=false, URI content://com.google.android.gms.fonts [CONTEXT service_id=132 ]
+05-17 23:05:53.259  1252  1276 I FontLog : Query [name=Noto Color Emoji Compat&weight=400&besteffort=false] resolved to {Noto Color Emoji Compat, wdth 100.0, wght 400, ital 0.0, bestEffort false} [CONTEXT service_id=132 ]
+05-17 23:05:53.259  1252  1276 I FontLog : Fetch {Noto Color Emoji Compat, wdth 100.0, wght 400, ital 0.0, bestEffort false} end status Status{statusCode=SUCCESS, resolution=null} [CONTEXT service_id=132 ]
+05-17 23:05:53.261  1252  1276 I FontLog : Pulling font file for id = 25, cache size = 6 [CONTEXT service_id=132 ]
+05-17 23:05:53.263  1252  1276 I FontLog : Received query name=Google Sans&weight=400&besteffort=false, URI content://com.google.android.gms.fonts [CONTEXT service_id=132 ]
+05-17 23:05:53.263  1252  1276 I FontLog : Query [name=Google Sans&weight=400&besteffort=false] resolved to {Google Sans, wdth 100.0, wght 400, ital 0.0, bestEffort false} [CONTEXT service_id=132 ]
+05-17 23:05:53.263  1252  1276 I FontLog : Font PFD returned from cache for {Google Sans, wdth 100.0, wght 400, ital 0.0, bestEffort false} [CONTEXT service_id=132 ]
+05-17 23:05:53.263  1252  1276 I FontLog : Fetch {Google Sans, wdth 100.0, wght 400, ital 0.0, bestEffort false} end status Status{statusCode=SUCCESS, resolution=null} [CONTEXT service_id=132 ]
+05-17 23:05:53.264  1252  1276 I FontLog : Pulling font file for id = 26, cache size = 7 [CONTEXT service_id=132 ]
+05-17 23:05:53.267  1252  1276 I FontLog : Received query name=Google Sans&weight=500&besteffort=false, URI content://com.google.android.gms.fonts [CONTEXT service_id=132 ]
+05-17 23:05:53.267  1252  1276 I FontLog : Query [name=Google Sans&weight=500&besteffort=false] resolved to {Google Sans, wdth 100.0, wght 500, ital 0.0, bestEffort false} [CONTEXT service_id=132 ]
+05-17 23:05:53.268  1252  1276 I FontLog : Font PFD returned from cache for {Google Sans, wdth 100.0, wght 500, ital 0.0, bestEffort false} [CONTEXT service_id=132 ]
+05-17 23:05:53.268  1252  1276 I FontLog : Fetch {Google Sans, wdth 100.0, wght 500, ital 0.0, bestEffort false} end status Status{statusCode=SUCCESS, resolution=null} [CONTEXT service_id=132 ]
+05-17 23:05:53.269  1252  1276 I FontLog : Pulling font file for id = 27, cache size = 8 [CONTEXT service_id=132 ]
+05-17 23:05:53.270   359  6076 I resolv  : GetAddrInfoHandler::run: {101 101 101 983141 10195 0}
+05-17 23:05:53.271   359  6077 I resolv  : res_nmkquery: (QUERY, IN, AAAA)
+05-17 23:05:53.273   359  6078 I resolv  : res_nmkquery: (QUERY, IN, A)
+05-17 23:05:53.275  5992  5992 D CompatibilityChangeReporter: Compat change id reported: 193247900; UID 10195; state: ENABLED
+05-17 23:05:53.281   546   560 D CoreBackPreview: Window{9200b18 u0 com.mirafactory.layers/com.mirafactory.layers.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@3b2b2cf, mPriority=0, mIsAnimationCallback=false}
+05-17 23:05:53.289  5992  6011 W OpenGLRenderer: Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+05-17 23:05:53.289  5992  6011 W OpenGLRenderer: Failed to initialize 101010-2 format, error = EGL_SUCCESS
+05-17 23:05:53.292  1252  1273 W System  : A resource failed to call close. 
+05-17 23:05:53.293  1252  1273 W System  : A resource failed to call close. 
+05-17 23:05:53.295   160   160 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@4.0::IMapper/default in either framework or device VINTF manifest.
+05-17 23:05:53.295  5992  6011 I Gralloc4: mapper 4.x is not supported
+--------- beginning of kernel
+05-17 23:05:53.297   159   159 I servicemanager: Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest.
+05-17 23:05:53.302  5992  6011 E OpenGLRenderer: Unable to match the desired swap behavior.
+05-17 23:05:53.320   546   563 W ziparchive: Unable to open '/data/app/~~l7raIahVxefcvK54wRzjXg==/com.mirafactory.layers-XemCQyj_sh4QTtyegBUwFQ==/base.dm': No such file or directory
+05-17 23:05:53.321   546   563 I ActivityTaskManager: Displayed com.mirafactory.layers/.MainActivity for user 0: +692ms
+05-17 23:05:53.333   759   759 D StatusBarIconController: ignoring old pipeline callbacks, because the new mobile icons are enabled
+05-17 23:05:53.338  1026  1758 D OneSearchSuggestProvider: Shut down the binder channel
+05-17 23:05:53.338  1026  1110 I ImeTracker: com.google.android.apps.nexuslauncher:67f0cae: onRequestHide at ORIGIN_CLIENT_HIDE_SOFT_INPUT reason HIDE_SOFT_INPUT
+05-17 23:05:53.339   546   560 I ImeTracker: com.google.android.apps.nexuslauncher:67f0cae: onCancelled at PHASE_SERVER_SHOULD_HIDE
+05-17 23:05:53.339  1026  5969 I IPCThreadState: oneway function results for code 2 on binder at 0xb40000762ed8c0e0 will be dropped but finished with status UNKNOWN_TRANSACTION
+05-17 23:05:53.341   546  2167 D CompatibilityChangeReporter: Compat change id reported: 214016041; UID 10195; state: ENABLED
+05-17 23:05:53.341   546  2167 I ImeTracker: com.mirafactory.layers:2f643e94: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
+05-17 23:05:53.341   546  2167 I ImeTracker: com.mirafactory.layers:2f643e94: onCancelled at PHASE_SERVER_SHOULD_HIDE
+05-17 23:05:53.342  1387  1387 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():3227 
+05-17 23:05:53.342  1387  1387 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2087 repeatCheckTimes = 0, unlocked = true
+05-17 23:05:53.342  1387  1387 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x12000000 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.mirafactory.layers fieldId=0 fieldName=null extras=null}, false)
+05-17 23:05:53.342  1387  1387 I GoogleInputMethodService: GoogleInputMethodService.shouldHideHeaderOnInitialState():4008 ShouldHideHeaderOnInitialState = false
+05-17 23:05:53.342  1387  1387 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2087 repeatCheckTimes = 2, unlocked = true
+05-17 23:05:53.669   359  6078 I resolv  : res_nsend: used send_dg 122 terrno: 0
+05-17 23:05:53.669   359  6077 I resolv  : res_nsend: used send_dg 41 terrno: 0
+05-17 23:05:53.669   359  6077 I resolv  : doQuery: rcode=0, ancount=0, return value=41
+05-17 23:05:53.670   359  6078 I resolv  : doQuery: rcode=0, ancount=3, return value=122
+05-17 23:05:53.684   759   858 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=falsecallback=android.view.ViewRootImpl$$ExternalSyntheticLambda17@5246ace
+05-17 23:05:53.685   546   604 W InputManager-JNI: Input channel object '181e75b Splash Screen com.mirafactory.layers (client)' was disposed without first being removed with the input manager!
+05-17 23:05:53.685   546  2085 D CoreBackPreview: Window{181e75b u0 Splash Screen com.mirafactory.layers EXITING}: Setting back callback null
+05-17 23:05:53.745  1252  1276 I FontLog : Received query Noto Color Emoji Compat, URI content://com.google.android.gms.fonts [CONTEXT service_id=132 ]
+05-17 23:05:53.745  1252  1276 I FontLog : Query [emojicompat-emoji-font] resolved to {Noto Color Emoji Compat, wdth 100.0, wght 400, ital 0.0, bestEffort false} [CONTEXT service_id=132 ]
+05-17 23:05:53.746  1252  1276 I FontLog : Fetch {Noto Color Emoji Compat, wdth 100.0, wght 400, ital 0.0, bestEffort false} end status Status{statusCode=SUCCESS, resolution=null} [CONTEXT service_id=132 ]
+05-17 23:05:53.747  1252  1276 I FontLog : Pulling font file for id = 28, cache size = 9 [CONTEXT service_id=132 ]
+05-17 23:05:53.750  1252  1276 I FontLog : Pulling font file for id = 28, cache size = 9 [CONTEXT service_id=132 ]
+05-17 23:05:53.853   747   747 I wpa_supplicant: wlan0: CTRL-EVENT-BEACON-LOSS 
+05-17 23:05:53.870   759   880 D EGL_emulation: app_time_stats: avg=63.06ms min=13.46ms max=554.57ms count=19
+05-17 23:05:53.984   759   880 D EGL_emulation: app_time_stats: avg=16.87ms min=12.55ms max=31.86ms count=59
+05-17 23:05:54.872  5992  6011 D EGL_emulation: app_time_stats: avg=517.88ms min=6.37ms max=1519.86ms count=3
+05-17 23:05:54.952   546  1535 E TaskPersister: File error accessing recents directory (directory doesn't exist?).
+05-17 23:05:55.017   759   880 D EGL_emulation: app_time_stats: avg=21.91ms min=13.83ms max=63.82ms count=47
+05-17 23:05:55.477   546   618 D CompatibilityChangeReporter: Compat change id reported: 218533173; UID 10195; state: ENABLED
+05-17 23:05:55.477   546   618 D CompatibilityChangeReporter: Compat change id reported: 262645982; UID 10195; state: ENABLED
+05-17 23:05:55.873  5992  6011 D EGL_emulation: app_time_stats: avg=20.42ms min=0.70ms max=408.39ms count=32
+05-17 23:05:56.877  5992  6011 D EGL_emulation: app_time_stats: avg=5.35ms min=2.86ms max=28.04ms count=59
+05-17 23:05:57.887  5992  6011 D EGL_emulation: app_time_stats: avg=3.62ms min=2.62ms max=7.56ms count=61
+05-17 23:05:58.703  6098  6098 W BpBinder: Linking to death on android.gui.ISurfaceComposer but there are no threads (yet?) listening to incoming transactions. See ProcessState::startThreadPool and ProcessState::setThreadPoolMaxThreadCount. Generally you should setup the binder threadpool before other initialization steps.
+05-17 23:05:58.704  6098  6098 W ProcessState: Extra binder thread started, but 0 threads requested. Do not use *startThreadPool when zero threads are requested.
+05-17 23:05:58.710   159   159 I servicemanager: Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest.
+05-17 23:05:58.708   160   160 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@4.0::IMapper/default in either framework or device VINTF manifest.
+05-17 23:05:58.708  6098  6099 I Gralloc4: mapper 4.x is not supported
+05-17 23:05:58.903  5992  6011 D EGL_emulation: app_time_stats: avg=3.68ms min=2.56ms max=10.91ms count=61
+05-17 23:05:59.151  5992  6100 D ProfileInstaller: Installing profile for com.mirafactory.layers
+05-17 23:05:59.904  5992  6011 D EGL_emulation: app_time_stats: avg=3.68ms min=3.11ms max=6.45ms count=60
+05-17 23:06:00.017  1450  1797 I AiAiEcho: Predicting[0]: 
+05-17 23:06:00.017  1450  1797 I AiAiEcho: EchoTargets: 
+05-17 23:06:00.017  1450  1797 I AiAiEcho: Filtered by AiAi flag check: 
+05-17 23:06:00.017  1450  1797 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata: 
+05-17 23:06:00.018  1450  1797 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0 (types=[])
+05-17 23:06:00.034   759   759 W PageIndicator: Total number of pages invalid: 0. Assuming 1 page.
+05-17 23:06:00.035   759   880 D EGL_emulation: app_time_stats: avg=616.39ms min=12.74ms max=6017.39ms count=10
+05-17 23:06:00.035  1450  1797 I AiAiEcho: Predicting[0]: 
+05-17 23:06:00.035  1450  1797 I AiAiEcho: EchoTargets: 
+05-17 23:06:00.035  1450  1797 I AiAiEcho: Filtered by AiAi flag check: 
+05-17 23:06:00.035  1450  1797 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata: 
+05-17 23:06:00.035  1450  1797 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0 (types=[])
+05-17 23:06:00.049   759   759 W PageIndicator: Total number of pages invalid: 0. Assuming 1 page.
+05-17 23:06:00.923  5992  6011 D EGL_emulation: app_time_stats: avg=3.89ms min=3.11ms max=9.49ms count=61
+05-17 23:06:01.785   747   747 I wpa_supplicant: wlan0: CTRL-EVENT-BEACON-LOSS 
+05-17 23:06:01.923  5992  6011 D EGL_emulation: app_time_stats: avg=3.60ms min=2.90ms max=6.45ms count=60
+05-17 23:06:02.923  5992  6011 D EGL_emulation: app_time_stats: avg=3.71ms min=2.91ms max=8.02ms count=60
+05-17 23:06:03.137  6103  6103 W BpBinder: Linking to death on android.gui.ISurfaceComposer but there are no threads (yet?) listening to incoming transactions. See ProcessState::startThreadPool and ProcessState::setThreadPoolMaxThreadCount. Generally you should setup the binder threadpool before other initialization steps.
+05-17 23:06:03.137  6103  6103 W ProcessState: Extra binder thread started, but 0 threads requested. Do not use *startThreadPool when zero threads are requested.
+05-17 23:06:03.142   160   160 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@4.0::IMapper/default in either framework or device VINTF manifest.
+05-17 23:06:03.142  6103  6104 I Gralloc4: mapper 4.x is not supported
+05-17 23:06:03.144   159   159 I servicemanager: Could not find android.hardware.graphics.allocator.IAllocator/default in the VINTF manifest.

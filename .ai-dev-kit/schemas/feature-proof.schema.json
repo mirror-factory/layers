@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mirror-factory.dev/ai-dev-kit.feature-proof.schema.json",
+  "title": "AI Dev Kit Feature Proof Registry",
+  "type": "object",
+  "required": ["kind", "schema_version", "policy", "proofLanes", "features"],
+  "properties": {
+    "kind": {
+      "const": "feature-proof-registry"
+    },
+    "schema_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "policy": {
+      "type": "object",
+      "required": ["requireRegistryForUserFacingChanges", "expectPolicy"],
+      "properties": {
+        "requireRegistryForUserFacingChanges": {
+          "type": "boolean"
+        },
+        "expectPolicy": {
+          "type": "string"
+        },
+        "defaultUserFacingProof": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "defaultNativeProof": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": true
+    },
+    "ignoredPaths": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "proofLanes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["label", "command"],
+        "properties": {
+          "label": { "type": "string" },
+          "command": { "type": "string" },
+          "evidence": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "description": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "userFacing", "surfaces", "paths", "proof"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "category": { "type": "string" },
+          "status": { "type": "string" },
+          "userFacing": { "type": "boolean" },
+          "surfaces": {
+            "type": "array",
+            "items": {
+              "enum": ["web", "ios", "android", "macos", "windows", "api", "worker"]
+            }
+          },
+          "routes": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "paths": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "proof": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "tests": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          "notes": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

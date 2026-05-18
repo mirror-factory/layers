@@ -13,6 +13,7 @@ interface ChatMessageProps {
 }
 
 const CITATION_PATTERN = /\[S(\d+)\]/g;
+const REASONING_PART_TYPE = "reasoning";
 
 function renderWithCitations(
   text: string,
@@ -215,6 +216,24 @@ export function ChatMessage({ message, onCitationClick }: ChatMessageProps) {
                   onCitationClick={onCitationClick}
                 />
               </div>
+            );
+          }
+
+          if (part.type === REASONING_PART_TYPE) {
+            return (
+              <details
+                key={i}
+                className="mt-2 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-secondary)]/60 px-3 py-2 text-xs text-[var(--text-secondary)]"
+              >
+                <summary className="cursor-pointer select-none font-medium text-[var(--text-primary)]">
+                  Reasoning
+                </summary>
+                <p className="mt-1 whitespace-pre-wrap">
+                  {typeof part.text === "string" && part.text.trim().length > 0
+                    ? part.text
+                    : "Reasoning completed."}
+                </p>
+              </details>
             );
           }
 

@@ -22,6 +22,7 @@ import {
   Sparkles,
   Square,
 } from "lucide-react";
+import { MeetingChat } from "@/components/meeting-chat";
 import { useStickToBottom } from "@/lib/hooks/use-stick-to-bottom";
 
 export interface SessionWorkspaceStats {
@@ -47,7 +48,7 @@ export interface SessionActionRow {
 }
 
 interface SessionCaptureCardProps {
-  date: Date;
+  date: string | Date;
   durationLabel: string;
   statusLabel: string;
   badgeLabel: string;
@@ -86,6 +87,14 @@ interface SessionIntelligenceCanvasProps {
    * chat messages can seek + highlight the matching transcript segment.
    */
   askPanel?: ReactNode | ((props: SessionAskPanelRenderProps) => ReactNode);
+  /**
+   * Serializable meeting-chat config for server-component callers. `askPanel`
+   * still wins for existing client-only callers that need a custom panel.
+   */
+  meetingChat?: {
+    meetingId: string;
+    participantName?: string | null;
+  };
   askTimestampLabel?: string;
   footerStatus?: string;
   /**
@@ -153,17 +162,18 @@ export function SessionCaptureCard({
   waveSlot,
   controlSlot,
 }: SessionCaptureCardProps) {
+  const sessionDate = typeof date === "string" ? new Date(date) : date;
   const fullDate = new Intl.DateTimeFormat(undefined, {
     weekday: "long",
     month: "long",
     day: "numeric",
-  }).format(date);
+  }).format(sessionDate);
   const tileMonth = new Intl.DateTimeFormat(undefined, {
     weekday: "short",
-  }).format(date);
+  }).format(sessionDate);
   const tileDay = new Intl.DateTimeFormat(undefined, {
     day: "2-digit",
-  }).format(date);
+  }).format(sessionDate);
 
   return (
     <section className="session-capture-card" aria-label="Recording session">
@@ -188,7 +198,7 @@ export function SessionCaptureCard({
       </div>
 
       <div className="session-capture-context">
-        <time className="session-date-tile" dateTime={date.toISOString()}>
+        <time className="session-date-tile" dateTime={sessionDate.toISOString()}>
           <span>{tileMonth}</span>
           <strong>{tileDay}</strong>
         </time>
@@ -250,6 +260,7 @@ export function SessionIntelligenceCanvas({
   decisions = [],
   stats,
   askPanel,
+  meetingChat,
   askTimestampLabel = "Now",
   footerStatus,
   notesPanel,
@@ -330,7 +341,16 @@ export function SessionIntelligenceCanvas({
   const renderedAskPanel =
     typeof askPanel === "function"
       ? askPanel({ onCitationClick: handleCitationClick })
-      : askPanel;
+      : meetingChat
+        ? (
+            <MeetingChat
+              meetingId={meetingChat.meetingId}
+              variant="workspace"
+              participantName={meetingChat.participantName ?? null}
+              onCitationClick={handleCitationClick}
+            />
+          )
+        : askPanel;
 
   return (
     <section className="session-intelligence-canvas" aria-label="Meeting notes">
@@ -476,7 +496,7 @@ export function SessionIntelligenceCanvas({
                 </div>
               </header>
               <p className="session-summary-empty">
-                Notes will appear here. Open this meeting's detail page to
+                Notes will appear here. Open this meeting&apos;s detail page to
                 start writing.
               </p>
             </article>

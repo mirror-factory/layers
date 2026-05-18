@@ -1,0 +1,52 @@
+appId: com.mirafactory.layers
+---
+- launchApp:
+    clearState: true
+- waitForAnimationToEnd:
+    timeout: 8000
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 2000
+- tapOn: "Sign in"
+- waitForAnimationToEnd:
+    timeout: 4000
+- assertVisible: "Sign in to Layers"
+- takeScreenshot:
+    path: /Users/alfonso/Documents/GitHub/layers/docs/evidence/2026-05-18-claude-cross-platform-qa/ios-retest/20-signin-form-empty-v2
+# Try scrolling the form before any focus to see if password input is visible
+- swipe:
+    start: 50%, 70%
+    end: 50%, 30%
+    duration: 600
+- waitForAnimationToEnd:
+    timeout: 1000
+- takeScreenshot:
+    path: /Users/alfonso/Documents/GitHub/layers/docs/evidence/2026-05-18-claude-cross-platform-qa/ios-retest/21-signin-form-scrolled-no-keyboard
+# Focus email
+- tapOn:
+    text: "you@example.com"
+- waitForAnimationToEnd:
+    timeout: 1500
+- takeScreenshot:
+    path: /Users/alfonso/Documents/GitHub/layers/docs/evidence/2026-05-18-claude-cross-platform-qa/ios-retest/22-email-focused-keyboard-up
+- inputText: "qa-walkthrough-2026-05-12@mirrorfactory.ai"
+- waitForAnimationToEnd:
+    timeout: 1000
+- takeScreenshot:
+    path: /Users/alfonso/Documents/GitHub/layers/docs/evidence/2026-05-18-claude-cross-platform-qa/ios-retest/23-email-typed-keyboard-up
+# Dismiss keyboard by tapping the "Done" accessory button (top-right of keyboard accessory)
+- tapOn:
+    text: "Done"
+- waitForAnimationToEnd:
+    timeout: 1500
+- takeScreenshot:
+    path: /Users/alfonso/Documents/GitHub/layers/docs/evidence/2026-05-18-claude-cross-platform-qa/ios-retest/24-after-done-button
+# Now password field should be visible without keyboard. Scroll form into view if needed.
+- swipe:
+    start: 50%, 60%
+    end: 50%, 30%
+    duration: 600
+- waitForAnimationToEnd:
+    timeout: 1000
+- takeScreenshot:
+    path: /Users/alfonso/Documents/GitHub/layers/docs/evidence/2026-05-18-claude-cross-platform-qa/ios-retest/25-after-scroll-no-keyboard

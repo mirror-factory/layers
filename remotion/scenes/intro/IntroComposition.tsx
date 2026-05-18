@@ -1,8 +1,6 @@
 import React from "react";
 import { AbsoluteFill, Sequence, useVideoConfig } from "remotion";
-import { loadFont as loadBricolage } from "@remotion/google-fonts/BricolageGrotesque";
 import { loadFont as loadInter } from "@remotion/google-fonts/Inter";
-import { loadFont as loadCaveat } from "@remotion/google-fonts/Caveat";
 
 import { PaperBackground } from "../../components/PaperBackground";
 import { Phrase } from "./Phrase";
@@ -13,19 +11,12 @@ import { Aperture } from "./Aperture";
 import { INTRO_SCENES } from "../../lib/intro-timing";
 
 // Fonts. Mirrors the loading pattern in Composition.tsx so the first rendered
-// frames don't flash a system fallback. We keep the same font families across
-// both compositions so the intro and product explainer feel like one piece.
-const bricolage = loadBricolage("normal", {
-  weights: ["400", "500", "600"],
-  subsets: ["latin"],
-});
+// frames don't flash a system fallback.
 const inter = loadInter("normal", {
   weights: ["400", "500", "600", "700"],
   subsets: ["latin"],
 });
-loadCaveat("normal", { weights: ["600"], subsets: ["latin"] });
 
-const DISPLAY = bricolage.fontFamily;
 const BODY = inter.fontFamily;
 
 /**
@@ -53,7 +44,7 @@ export const IntroComposition: React.FC = () => {
       <style>
         {`
           h1, h2, h3 {
-            font-family: ${DISPLAY}, "Geist Sans", system-ui, sans-serif;
+            font-family: ${BODY}, "Geist Sans", system-ui, sans-serif;
           }
         `}
       </style>

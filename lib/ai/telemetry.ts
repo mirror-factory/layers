@@ -31,9 +31,15 @@
  *   }
  */
 
-import { type LanguageModel, wrapLanguageModel } from 'ai';
-import { existsSync, mkdirSync, readFileSync, writeFileSync, readdirSync } from 'fs';
-import { join } from 'path';
+import { type LanguageModel, wrapLanguageModel } from "ai";
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  writeFileSync,
+  readdirSync,
+} from "fs";
+import { join } from "path";
 
 // ── Types ─────────────────────────────────────────────────────────────
 
@@ -100,22 +106,26 @@ export interface HTTPLogRecord {
 // ── Cost Table ────────────────────────────────────────────────────────
 
 const MODEL_COSTS: Record<string, [number, number]> = {
-  'gemini-3-flash': [0.50, 3.00],
-  'gemini-3.1-flash-lite': [0.25, 1.50],
-  'gemini-3-pro': [2.00, 12.00],
-  'gemini-3.1-pro-preview': [2.00, 12.00],
-  'gemini-2.5-flash': [0.15, 0.60],
-  'claude-opus-4-6': [15.00, 75.00],
-  'claude-sonnet-4-6': [3.00, 15.00],
-  'claude-haiku-4-5': [0.80, 4.00],
-  'gpt-4.1': [2.00, 8.00],
-  'gpt-4.1-mini': [0.40, 1.60],
-  'gpt-4.1-nano': [0.10, 0.40],
-  'o4-mini': [1.10, 4.40],
+  "gemini-3-flash": [0.5, 3.0],
+  "gemini-3.1-flash-lite": [0.25, 1.5],
+  "gemini-3-pro": [2.0, 12.0],
+  "gemini-3.1-pro-preview": [2.0, 12.0],
+  "gemini-2.5-flash": [0.15, 0.6],
+  "claude-opus-4-6": [15.0, 75.0],
+  "claude-sonnet-4-6": [3.0, 15.0],
+  "claude-haiku-4-5": [0.8, 4.0],
+  "gpt-4.1": [2.0, 8.0],
+  "gpt-4.1-mini": [0.4, 1.6],
+  "gpt-4.1-nano": [0.1, 0.4],
+  "o4-mini": [1.1, 4.4],
 };
 
-function calculateCost(modelId: string, inputTokens: number, outputTokens: number): number {
-  const key = Object.keys(MODEL_COSTS).find(k => modelId.includes(k));
+function calculateCost(
+  modelId: string,
+  inputTokens: number,
+  outputTokens: number,
+): number {
+  const key = Object.keys(MODEL_COSTS).find((k) => modelId.includes(k));
   if (!key) return 0;
   const [inputCost, outputCost] = MODEL_COSTS[key];
   return (inputTokens * inputCost + outputTokens * outputCost) / 1_000_000;
@@ -123,8 +133,8 @@ function calculateCost(modelId: string, inputTokens: number, outputTokens: numbe
 
 // ── Storage Backend ───────────────────────────────────────────────────
 
-const BACKEND = process.env.AI_LOG_BACKEND ?? 'file';
-const LOG_DIR = process.env.AI_LOG_DIR ?? '.ai-logs';
+const BACKEND = process.env.AI_LOG_BACKEND ?? "file";
+const LOG_DIR = process.env.AI_LOG_DIR ?? ".ai-logs";
 const MAX_MEMORY_LOGS = 1000;
 
 // In-memory fallback (also used as write-through cache for file backend)
@@ -133,12 +143,12 @@ const memoryErrors: ErrorRecord[] = [];
 const memoryHTTP: HTTPLogRecord[] = [];
 
 function todayFile(prefix: string): string {
-  const date = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+  const date = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
   return join(LOG_DIR, `${prefix}-${date}.json`);
 }
 
 function ensureLogDir() {
-  if (BACKEND === 'file' && !existsSync(LOG_DIR)) {
+  if (BACKEND === "file" && !existsSync(LOG_DIR)) {
     mkdirSync(LOG_DIR, { recursive: true });
   }
 }
@@ -146,17 +156,22 @@ function ensureLogDir() {
 function appendToFile<T>(prefix: string, record: T) {
   ensureLogDir();
   const file = todayFile(prefix);
-  const existing: T[] = existsSync(file) ? JSON.parse(readFileSync(file, 'utf-8')) : [];
+  const existing: T[] = existsSync(file)
+    ? JSON.parse(readFileSync(file, "utf-8"))
+    : [];
   existing.push(record);
   writeFileSync(file, JSON.stringify(existing, null, 2));
 }
 
-function readFromFiles<T>(prefix: string, options?: { limit?: number; since?: string }): T[] {
+function readFromFiles<T>(
+  prefix: string,
+  options?: { limit?: number; since?: string },
+): T[] {
   ensureLogDir();
   if (!existsSync(LOG_DIR)) return [];
 
   const files = readdirSync(LOG_DIR)
-    .filter(f => f.startsWith(prefix) && f.endsWith('.json'))
+    .filter((f) => f.startsWith(prefix) && f.endsWith(".json"))
     .sort()
     .reverse(); // newest first
 
@@ -164,11 +179,11 @@ function readFromFiles<T>(prefix: string, options?: { limit?: number; since?: st
   for (const file of files) {
     // Skip files older than 'since' date based on filename
     if (options?.since) {
-      const fileDate = file.replace(`${prefix}-`, '').replace('.json', '');
-      if (fileDate < options.since.split('T')[0]) break;
+      const fileDate = file.replace(`${prefix}-`, "").replace(".json", "");
+      if (fileDate < options.since.split("T")[0]) break;
     }
 
-    const records: T[] = JSON.parse(readFileSync(join(LOG_DIR, file), 'utf-8'));
+    const records: T[] = JSON.parse(readFileSync(join(LOG_DIR, file), "utf-8"));
     results.push(...records.reverse()); // newest first within file
 
     if (options?.limit && results.length >= options.limit) break;
@@ -179,20 +194,24 @@ function readFromFiles<T>(prefix: string, options?: { limit?: number; since?: st
 
 // ── Supabase Backend ──────────────────────────────────────────────────
 
-let supabaseClient: ReturnType<typeof import('@supabase/supabase-js').createClient> | null = null;
+let supabaseClient: ReturnType<
+  typeof import("@supabase/supabase-js").createClient
+> | null = null;
 
 async function getSupabase() {
   if (supabaseClient) return supabaseClient;
-  if (BACKEND !== 'supabase') return null;
+  if (BACKEND !== "supabase") return null;
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) {
-    console.warn('[telemetry] Supabase backend selected but missing env vars, falling back to file');
+    console.warn(
+      "[telemetry] Supabase backend selected but missing env vars, falling back to file",
+    );
     return null;
   }
 
-  const { createClient } = await import('@supabase/supabase-js');
+  const { createClient } = await import("@supabase/supabase-js");
   supabaseClient = createClient(url, key);
   return supabaseClient;
 }
@@ -204,15 +223,18 @@ async function persistAILog(record: AILogRecord) {
   memoryLogs.unshift(record);
   if (memoryLogs.length > MAX_MEMORY_LOGS) memoryLogs.pop();
 
-  if (BACKEND === 'supabase') {
+  if (BACKEND === "supabase") {
     const sb = await getSupabase();
     if (sb) {
-      const { error } = await sb.from('ai_logs').insert(record);
-      if (error) console.error('[telemetry] Supabase insert error:', error.message);
+      const { error } = await sb.from("ai_logs").insert(record);
+      if (error)
+        console.error("[telemetry] Supabase insert error:", error.message);
     }
-  } else if (BACKEND === 'file') {
-    try { appendToFile('ai-logs', record); } catch (e) {
-      console.error('[telemetry] File write error:', e);
+  } else if (BACKEND === "file") {
+    try {
+      appendToFile("ai-logs", record);
+    } catch (e) {
+      console.error("[telemetry] File write error:", e);
     }
   }
 }
@@ -221,15 +243,18 @@ async function persistError(record: ErrorRecord) {
   memoryErrors.unshift(record);
   if (memoryErrors.length > MAX_MEMORY_LOGS) memoryErrors.pop();
 
-  if (BACKEND === 'supabase') {
+  if (BACKEND === "supabase") {
     const sb = await getSupabase();
     if (sb) {
-      const { error } = await sb.from('ai_errors').insert(record);
-      if (error) console.error('[telemetry] Supabase error insert:', error.message);
+      const { error } = await sb.from("ai_errors").insert(record);
+      if (error)
+        console.error("[telemetry] Supabase error insert:", error.message);
     }
-  } else if (BACKEND === 'file') {
-    try { appendToFile('ai-errors', record); } catch (e) {
-      console.error('[telemetry] File write error:', e);
+  } else if (BACKEND === "file") {
+    try {
+      appendToFile("ai-errors", record);
+    } catch (e) {
+      console.error("[telemetry] File write error:", e);
     }
   }
 }
@@ -238,13 +263,15 @@ async function persistHTTPLog(record: HTTPLogRecord) {
   memoryHTTP.unshift(record);
   if (memoryHTTP.length > MAX_MEMORY_LOGS) memoryHTTP.pop();
 
-  if (BACKEND === 'supabase') {
+  if (BACKEND === "supabase") {
     const sb = await getSupabase();
     if (sb) {
-      await sb.from('http_logs').insert(record);
+      await sb.from("http_logs").insert(record);
     }
-  } else if (BACKEND === 'file') {
-    try { appendToFile('http-logs', record); } catch (e) {
+  } else if (BACKEND === "file") {
+    try {
+      appendToFile("http-logs", record);
+    } catch {
       // HTTP logs are high-volume, silently fail
     }
   }
@@ -262,35 +289,48 @@ export async function getLogs(options?: {
 }): Promise<AILogRecord[]> {
   const limit = options?.limit ?? 100;
 
-  if (BACKEND === 'supabase') {
+  if (BACKEND === "supabase") {
     const sb = await getSupabase();
     if (sb) {
-      let query = sb.from('ai_logs').select('*').order('timestamp', { ascending: false }).limit(limit);
-      if (options?.userId) query = query.eq('userId', options.userId);
-      if (options?.chatId) query = query.eq('chatId', options.chatId);
-      if (options?.label) query = query.eq('label', options.label);
-      if (options?.since) query = query.gte('timestamp', options.since);
-      if (options?.errorsOnly) query = query.not('error', 'is', null);
+      let query = sb
+        .from("ai_logs")
+        .select("*")
+        .order("timestamp", { ascending: false })
+        .limit(limit);
+      if (options?.userId) query = query.eq("userId", options.userId);
+      if (options?.chatId) query = query.eq("chatId", options.chatId);
+      if (options?.label) query = query.eq("label", options.label);
+      if (options?.since) query = query.gte("timestamp", options.since);
+      if (options?.errorsOnly) query = query.not("error", "is", null);
       const { data } = await query;
       return (data as AILogRecord[]) ?? [];
     }
   }
 
-  if (BACKEND === 'file') {
-    let records = readFromFiles<AILogRecord>('ai-logs', { limit: limit * 2, since: options?.since });
-    if (options?.userId) records = records.filter(l => l.userId === options.userId);
-    if (options?.chatId) records = records.filter(l => l.chatId === options.chatId);
-    if (options?.label) records = records.filter(l => l.label === options.label);
-    if (options?.errorsOnly) records = records.filter(l => l.error !== null);
+  if (BACKEND === "file") {
+    let records = readFromFiles<AILogRecord>("ai-logs", {
+      limit: limit * 2,
+      since: options?.since,
+    });
+    if (options?.userId)
+      records = records.filter((l) => l.userId === options.userId);
+    if (options?.chatId)
+      records = records.filter((l) => l.chatId === options.chatId);
+    if (options?.label)
+      records = records.filter((l) => l.label === options.label);
+    if (options?.errorsOnly) records = records.filter((l) => l.error !== null);
     return records.slice(0, limit);
   }
 
   // Memory fallback
   let records = memoryLogs;
-  if (options?.userId) records = records.filter(l => l.userId === options.userId);
-  if (options?.chatId) records = records.filter(l => l.chatId === options.chatId);
-  if (options?.label) records = records.filter(l => l.label === options.label);
-  if (options?.errorsOnly) records = records.filter(l => l.error !== null);
+  if (options?.userId)
+    records = records.filter((l) => l.userId === options.userId);
+  if (options?.chatId)
+    records = records.filter((l) => l.chatId === options.chatId);
+  if (options?.label)
+    records = records.filter((l) => l.label === options.label);
+  if (options?.errorsOnly) records = records.filter((l) => l.error !== null);
   return records.slice(0, limit);
 }
 
@@ -302,28 +342,39 @@ export async function getErrors(options?: {
 }): Promise<ErrorRecord[]> {
   const limit = options?.limit ?? 50;
 
-  if (BACKEND === 'supabase') {
+  if (BACKEND === "supabase") {
     const sb = await getSupabase();
     if (sb) {
-      let query = sb.from('ai_errors').select('*').order('timestamp', { ascending: false }).limit(limit);
-      if (options?.userId) query = query.eq('userId', options.userId);
-      if (options?.source) query = query.eq('source', options.source);
-      if (options?.since) query = query.gte('timestamp', options.since);
+      let query = sb
+        .from("ai_errors")
+        .select("*")
+        .order("timestamp", { ascending: false })
+        .limit(limit);
+      if (options?.userId) query = query.eq("userId", options.userId);
+      if (options?.source) query = query.eq("source", options.source);
+      if (options?.since) query = query.gte("timestamp", options.since);
       const { data } = await query;
       return (data as ErrorRecord[]) ?? [];
     }
   }
 
-  if (BACKEND === 'file') {
-    let records = readFromFiles<ErrorRecord>('ai-errors', { limit: limit * 2, since: options?.since });
-    if (options?.userId) records = records.filter(e => e.userId === options.userId);
-    if (options?.source) records = records.filter(e => e.source === options.source);
+  if (BACKEND === "file") {
+    let records = readFromFiles<ErrorRecord>("ai-errors", {
+      limit: limit * 2,
+      since: options?.since,
+    });
+    if (options?.userId)
+      records = records.filter((e) => e.userId === options.userId);
+    if (options?.source)
+      records = records.filter((e) => e.source === options.source);
     return records.slice(0, limit);
   }
 
   let records = memoryErrors;
-  if (options?.userId) records = records.filter(e => e.userId === options.userId);
-  if (options?.source) records = records.filter(e => e.source === options.source);
+  if (options?.userId)
+    records = records.filter((e) => e.userId === options.userId);
+  if (options?.source)
+    records = records.filter((e) => e.source === options.source);
   return records.slice(0, limit);
 }
 
@@ -334,9 +385,13 @@ export async function getHTTPLogs(options?: {
 }): Promise<HTTPLogRecord[]> {
   const limit = options?.limit ?? 100;
 
-  if (BACKEND === 'file') {
-    let records = readFromFiles<HTTPLogRecord>('http-logs', { limit: limit * 2, since: options?.since });
-    if (options?.status) records = records.filter(r => r.status === options.status);
+  if (BACKEND === "file") {
+    let records = readFromFiles<HTTPLogRecord>("http-logs", {
+      limit: limit * 2,
+      since: options?.since,
+    });
+    if (options?.status)
+      records = records.filter((r) => r.status === options.status);
     return records.slice(0, limit);
   }
 
@@ -344,26 +399,53 @@ export async function getHTTPLogs(options?: {
 }
 
 export async function getStats(options?: { userId?: string; since?: string }) {
-  const logs = await getLogs({ userId: options?.userId, since: options?.since, limit: 10000 });
-  const errors = await getErrors({ userId: options?.userId, since: options?.since, limit: 10000 });
+  const logs = await getLogs({
+    userId: options?.userId,
+    since: options?.since,
+    limit: 10000,
+  });
+  const errors = await getErrors({
+    userId: options?.userId,
+    since: options?.since,
+    limit: 10000,
+  });
 
   const totalCost = logs.reduce((s, l) => s + l.cost, 0);
   const totalTokens = logs.reduce((s, l) => s + l.totalTokens, 0);
-  const ttftValues = logs.filter(l => l.ttftMs !== null).map(l => l.ttftMs!);
-  const avgTTFT = ttftValues.length > 0 ? ttftValues.reduce((a, b) => a + b, 0) / ttftValues.length : 0;
-  const p95TTFT = ttftValues.length > 0 ? ttftValues.sort((a, b) => a - b)[Math.floor(ttftValues.length * 0.95)] : 0;
+  const ttftValues = logs
+    .filter((l) => l.ttftMs !== null)
+    .map((l) => l.ttftMs!);
+  const avgTTFT =
+    ttftValues.length > 0
+      ? ttftValues.reduce((a, b) => a + b, 0) / ttftValues.length
+      : 0;
+  const p95TTFT =
+    ttftValues.length > 0
+      ? ttftValues.sort((a, b) => a - b)[Math.floor(ttftValues.length * 0.95)]
+      : 0;
 
-  const errorRate = logs.length > 0 ? (logs.filter(l => l.error !== null).length / logs.length) * 100 : 0;
-  const abortRate = logs.length > 0 ? (logs.filter(l => l.aborted).length / logs.length) * 100 : 0;
+  const errorRate =
+    logs.length > 0
+      ? (logs.filter((l) => l.error !== null).length / logs.length) * 100
+      : 0;
+  const abortRate =
+    logs.length > 0
+      ? (logs.filter((l) => l.aborted).length / logs.length) * 100
+      : 0;
 
-  const modelBreakdown: Record<string, { calls: number; cost: number; tokens: number; avgTTFT: number }> = {};
+  const modelBreakdown: Record<
+    string,
+    { calls: number; cost: number; tokens: number; avgTTFT: number }
+  > = {};
   for (const l of logs) {
-    if (!modelBreakdown[l.modelId]) modelBreakdown[l.modelId] = { calls: 0, cost: 0, tokens: 0, avgTTFT: 0 };
+    if (!modelBreakdown[l.modelId])
+      modelBreakdown[l.modelId] = { calls: 0, cost: 0, tokens: 0, avgTTFT: 0 };
     const m = modelBreakdown[l.modelId];
     m.calls++;
     m.cost += l.cost;
     m.tokens += l.totalTokens;
-    if (l.ttftMs !== null) m.avgTTFT = (m.avgTTFT * (m.calls - 1) + l.ttftMs) / m.calls;
+    if (l.ttftMs !== null)
+      m.avgTTFT = (m.avgTTFT * (m.calls - 1) + l.ttftMs) / m.calls;
   }
 
   // Cost per day (for charts)
@@ -371,12 +453,12 @@ export async function getStats(options?: { userId?: string; since?: string }) {
   const callsByDay: Record<string, number> = {};
   const errorsByDay: Record<string, number> = {};
   for (const l of logs) {
-    const day = l.timestamp.split('T')[0];
+    const day = l.timestamp.split("T")[0];
     costByDay[day] = (costByDay[day] ?? 0) + l.cost;
     callsByDay[day] = (callsByDay[day] ?? 0) + 1;
   }
   for (const e of errors) {
-    const day = e.timestamp.split('T')[0];
+    const day = e.timestamp.split("T")[0];
     errorsByDay[day] = (errorsByDay[day] ?? 0) + 1;
   }
 
@@ -389,16 +471,32 @@ export async function getStats(options?: { userId?: string; since?: string }) {
   }
 
   // Session summaries (group by chatId)
-  const sessions: Record<string, {
-    chatId: string; userId: string; firstSeen: string; lastSeen: string;
-    calls: number; cost: number; tokens: number; tools: string[]; errors: number;
-  }> = {};
+  const sessions: Record<
+    string,
+    {
+      chatId: string;
+      userId: string;
+      firstSeen: string;
+      lastSeen: string;
+      calls: number;
+      cost: number;
+      tokens: number;
+      tools: string[];
+      errors: number;
+    }
+  > = {};
   for (const l of logs) {
     if (!sessions[l.chatId]) {
       sessions[l.chatId] = {
-        chatId: l.chatId, userId: l.userId,
-        firstSeen: l.timestamp, lastSeen: l.timestamp,
-        calls: 0, cost: 0, tokens: 0, tools: [], errors: 0,
+        chatId: l.chatId,
+        userId: l.userId,
+        firstSeen: l.timestamp,
+        lastSeen: l.timestamp,
+        calls: 0,
+        cost: 0,
+        tokens: 0,
+        tools: [],
+        errors: 0,
       };
     }
     const s = sessions[l.chatId];
@@ -429,7 +527,9 @@ export async function getStats(options?: { userId?: string; since?: string }) {
     callsByDay,
     errorsByDay,
     toolFrequency,
-    sessions: Object.values(sessions).sort((a, b) => b.lastSeen.localeCompare(a.lastSeen)),
+    sessions: Object.values(sessions).sort((a, b) =>
+      b.lastSeen.localeCompare(a.lastSeen),
+    ),
     backend: BACKEND,
   };
 }
@@ -441,17 +541,17 @@ export function withTelemetry(
   context: TelemetryContext = {},
 ): LanguageModel {
   const metadata = {
-    userId: context.userId ?? 'anonymous',
-    sessionId: context.sessionId ?? 'unknown',
-    chatId: context.chatId ?? 'unknown',
-    label: context.label ?? 'unknown',
+    userId: context.userId ?? "anonymous",
+    sessionId: context.sessionId ?? "unknown",
+    chatId: context.chatId ?? "unknown",
+    label: context.label ?? "unknown",
     ...(context.metadata ?? {}),
   };
 
   return wrapLanguageModel({
     model,
     middleware: {
-      specificationVersion: 'v3',
+      specificationVersion: "v3",
       transformParams: ({ params }) => {
         void metadata;
         return params;
@@ -483,11 +583,11 @@ export async function logAICall(params: {
   const record: AILogRecord = {
     id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     timestamp: new Date().toISOString(),
-    userId: params.context.userId ?? 'anonymous',
-    sessionId: params.context.sessionId ?? 'unknown',
-    chatId: params.context.chatId ?? 'unknown',
-    label: params.context.label ?? 'unknown',
-    provider: params.modelId.split('/')[0] ?? 'unknown',
+    userId: params.context.userId ?? "anonymous",
+    sessionId: params.context.sessionId ?? "unknown",
+    chatId: params.context.chatId ?? "unknown",
+    label: params.context.label ?? "unknown",
+    provider: params.modelId.split("/")[0] ?? "unknown",
     modelId: params.modelId,
     inputTokens,
     outputTokens,
@@ -514,19 +614,28 @@ export async function logAICall(params: {
 export async function logError(params: {
   context?: TelemetryContext;
   error: unknown;
-  source: 'chat-route' | 'tool-execute' | 'stream-drop' | 'middleware' | 'client' | string;
+  source:
+    | "chat-route"
+    | "tool-execute"
+    | "stream-drop"
+    | "middleware"
+    | "client"
+    | string;
   modelId?: string;
   toolName?: string;
   metadata?: Record<string, string>;
 }): Promise<ErrorRecord> {
-  const err = params.error instanceof Error ? params.error : new Error(String(params.error));
+  const err =
+    params.error instanceof Error
+      ? params.error
+      : new Error(String(params.error));
 
   const record: ErrorRecord = {
     id: `err-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     timestamp: new Date().toISOString(),
-    userId: params.context?.userId ?? 'anonymous',
-    chatId: params.context?.chatId ?? 'unknown',
-    label: params.context?.label ?? 'unknown',
+    userId: params.context?.userId ?? "anonymous",
+    chatId: params.context?.chatId ?? "unknown",
+    label: params.context?.label ?? "unknown",
     source: params.source,
     message: err.message,
     stack: err.stack ?? null,

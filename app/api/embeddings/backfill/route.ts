@@ -12,7 +12,7 @@ import { embedMeeting } from "@/lib/embeddings/embed-meeting";
  * Embeds all completed meetings that don't have embeddings yet.
  * Requires service-role access. Run once to backfill existing meetings.
  */
-export const POST = withRoute(async (_req, ctx) => {
+export const POST = withRoute(async (_req) => {
   const backfillSecret = process.env.EMBEDDINGS_BACKFILL_SECRET;
   if (!backfillSecret) {
     return NextResponse.json(
@@ -33,7 +33,10 @@ export const POST = withRoute(async (_req, ctx) => {
 
   const supabase = getSupabaseServer();
   if (!supabase) {
-    return NextResponse.json({ error: "Supabase not configured" }, { status: 503 });
+    return NextResponse.json(
+      { error: "Supabase not configured" },
+      { status: 503 },
+    );
   }
 
   // Find completed meetings without embeddings
@@ -53,12 +56,25 @@ export const POST = withRoute(async (_req, ctx) => {
   const { data: existing } = await supabase
     .from("meeting_embeddings")
     .select("meeting_id")
-    .in("meeting_id", (meetings ?? []).map((m: { id: string }) => m.id));
+    .in(
+      "meeting_id",
+      (meetings ?? []).map((m: { id: string }) => m.id),
+    );
 
-  const existingIds = new Set((existing ?? []).map((e: { meeting_id: string }) => e.meeting_id));
-  const toEmbed = (meetings ?? []).filter((m: { id: string }) => !existingIds.has(m.id));
+  const existingIds = new Set(
+    (existing ?? []).map((e: { meeting_id: string }) => e.meeting_id),
+  );
+  const toEmbed = (meetings ?? []).filter(
+    (m: { id: string }) => !existingIds.has(m.id),
+  );
 
-  const results: { id: string; title: string; chunks: number; cost: number; error?: string }[] = [];
+  const results: {
+    id: string;
+    title: string;
+    chunks: number;
+    cost: number;
+    error?: string;
+  }[] = [];
 
   for (const meeting of toEmbed) {
     try {

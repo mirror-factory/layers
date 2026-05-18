@@ -1,0 +1,14 @@
+# C1b — authed user visiting /sign-in should redirect.
+# We poke /sign-in via the drawer "Sign in" link — but in authed mode the drawer
+# only shows authed labels. Instead, drive a JS evaluation via runScript to push
+# the route directly.
+appId: com.mirafactory.layers
+---
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 5000
+- evalScript: ${output.location = (function(){ window.location.href='/sign-in'; return 'ok'; })()}
+- waitForAnimationToEnd:
+    timeout: 4000
+- takeScreenshot: ios-c1b-after-signin-attempt

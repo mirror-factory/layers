@@ -19,7 +19,14 @@ import { Outro } from "./Outro";
  */
 export const BrandTemplateComposition: React.FC = () => {
   return (
-    <AbsoluteFill style={{ background: "oklch(0.982 0.012 168)" }}>
+    <AbsoluteFill
+      style={{
+        background: "oklch(0.982 0.012 168)",
+        fontFamily:
+          '"Geist Sans", Inter, ui-sans-serif, system-ui, sans-serif',
+        WebkitFontSmoothing: "antialiased",
+      }}
+    >
       <Sequence from={BEATS.coldOpen.from} durationInFrames={BEATS.coldOpen.duration} name="cold-open">
         <ColdOpen />
       </Sequence>

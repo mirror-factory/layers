@@ -1,0 +1,40 @@
+appId: com.mirafactory.layers
+---
+- launchApp:
+    clearState: true
+- waitForAnimationToEnd:
+    timeout: 8000
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 2000
+- tapOn: "Sign in"
+- waitForAnimationToEnd:
+    timeout: 4000
+- assertVisible: "Sign in to Layers"
+- takeScreenshot:
+    path: /Users/alfonso/Documents/GitHub/layers/docs/evidence/2026-05-18-claude-cross-platform-qa/ios-retest/10-signin-form-empty
+- tapOn:
+    text: "you@example.com"
+- waitForAnimationToEnd:
+    timeout: 1500
+- inputText: "qa-walkthrough-2026-05-12@mirrorfactory.ai"
+- waitForAnimationToEnd:
+    timeout: 1000
+- takeScreenshot:
+    path: /Users/alfonso/Documents/GitHub/layers/docs/evidence/2026-05-18-claude-cross-platform-qa/ios-retest/11-signin-email-typed-keyboard-up
+- tapOn:
+    text: "Your password"
+- waitForAnimationToEnd:
+    timeout: 1500
+- takeScreenshot:
+    path: /Users/alfonso/Documents/GitHub/layers/docs/evidence/2026-05-18-claude-cross-platform-qa/ios-retest/12-signin-password-focused
+- inputText: "LayersQA2026!Walkthrough"
+- waitForAnimationToEnd:
+    timeout: 1500
+- takeScreenshot:
+    path: /Users/alfonso/Documents/GitHub/layers/docs/evidence/2026-05-18-claude-cross-platform-qa/ios-retest/13-signin-password-typed
+- pressKey: Enter
+- waitForAnimationToEnd:
+    timeout: 10000
+- takeScreenshot:
+    path: /Users/alfonso/Documents/GitHub/layers/docs/evidence/2026-05-18-claude-cross-platform-qa/ios-retest/14-signin-after-submit

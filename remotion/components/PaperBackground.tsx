@@ -32,10 +32,9 @@ export const PaperBackground: React.FC<{ children?: React.ReactNode }> = ({
 };
 
 /**
- * Hand-drawn flourish — used exactly once across the video for emphasis.
- * Granola's homepage uses a single scribble; we don't want three. Renders as
- * a stroke-dash animated SVG so it can "draw itself" if a `progress` (0-1) is
- * passed.
+ * Accent flourish — used exactly once across the video for emphasis. Renders
+ * as a stroke-dash animated SVG so it can "draw itself" if a `progress` (0-1)
+ * is passed.
  */
 export const HandwrittenAccent: React.FC<{
   label: string;
@@ -52,10 +51,10 @@ export const HandwrittenAccent: React.FC<{
         alignItems: "center",
         gap: 12,
         color,
-        fontFamily: `"Caveat", "Bradley Hand", "Marker Felt", cursive`,
-        fontSize: 36,
+        fontFamily: `"Geist Sans", Inter, ui-sans-serif, system-ui, sans-serif`,
+        fontSize: 28,
         fontWeight: 600,
-        letterSpacing: "0.005em",
+        letterSpacing: "0",
         opacity: progress > 0.05 ? 1 : 0,
       }}
     >

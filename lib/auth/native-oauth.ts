@@ -30,7 +30,26 @@ import type { SupabaseClient } from "@supabase/supabase-js";
  */
 
 export const NATIVE_OAUTH_REDIRECT_URL =
-  "com.mirrorfactory.layers://auth/callback";
+  "com.mirafactory.layers://auth/callback";
+export const NATIVE_OAUTH_WEB_CALLBACK_PATH = "/auth/callback";
+export const CANONICAL_NATIVE_OAUTH_ORIGIN = "https://layers.mirrorfactory.ai";
+
+function safeInternalPath(value: string | undefined): string {
+  if (!value?.startsWith("/")) return "/record";
+  if (value.startsWith("//")) return "/record";
+  return value;
+}
+
+export function nativeOAuthRedirectTo(next = "/record"): string {
+  const origin =
+    typeof window !== "undefined" && window.location.protocol === "https:"
+      ? window.location.origin
+      : CANONICAL_NATIVE_OAUTH_ORIGIN;
+  const callbackUrl = new URL(NATIVE_OAUTH_WEB_CALLBACK_PATH, origin);
+  callbackUrl.searchParams.set("native", "1");
+  callbackUrl.searchParams.set("next", safeInternalPath(next));
+  return callbackUrl.toString();
+}
 
 /**
  * Detect whether we're running inside Capacitor (iOS or Android).
@@ -46,7 +65,7 @@ export function isNativePlatform(): boolean {
 
 /**
  * Extract the OAuth `code` (or error) from a deep-link URL like
- * `com.mirrorfactory.layers://auth/callback?code=abc&state=...`.
+ * `com.mirafactory.layers://auth/callback?code=abc&state=...`.
  *
  * URL parsing of custom schemes is unreliable on some engines, so we
  * pull the query string by hand.
@@ -80,6 +99,8 @@ type SignInOptions = {
   next?: string;
 };
 
+type NativeListenerHandle = { remove: () => Promise<void> | void };
+
 type SignInDeps = {
   supabase: SupabaseClient;
   /**
@@ -89,18 +110,18 @@ type SignInDeps = {
   loadBrowser?: () => Promise<{
     open: (options: { url: string; presentationStyle?: "popover" | "fullscreen" }) => Promise<void>;
     close?: () => Promise<void>;
-  }>;
-  loadApp?: () => Promise<{
-    addListener: (
-      event: "appUrlOpen",
-      handler: (event: { url: string }) => void | Promise<void>,
-    ) => Promise<{ remove: () => Promise<void> }> | { remove: () => Promise<void> | void };
+    addListener?: (
+      event: "browserFinished",
+      handler: () => void | Promise<void>,
+    ) => Promise<NativeListenerHandle> | NativeListenerHandle;
   }>;
   /**
    * Override for tests. Defaults to `window.location.assign`.
    */
   navigate?: (url: string) => void;
 };
+
+const BROWSER_OPEN_SETTLE_MS = 750;
 
 /**
  * Native-platform Google sign-in. Returns the registered listener
@@ -121,19 +142,18 @@ export async function signInWithGoogleNative(
   }
 
   const { supabase } = deps;
-  const next = options.next ?? "/record";
+  const next = safeInternalPath(options.next);
 
   const loadBrowser =
     deps.loadBrowser ??
     (async () => {
       const mod = await import("@capacitor/browser");
-      return mod.Browser;
-    });
-  const loadApp =
-    deps.loadApp ??
-    (async () => {
-      const mod = await import("@capacitor/app");
-      return mod.App;
+      const Browser = mod.Browser;
+      return {
+        open: Browser.open.bind(Browser),
+        close: Browser.close?.bind(Browser),
+        addListener: Browser.addListener?.bind(Browser),
+      };
     });
   const navigate =
     deps.navigate ??
@@ -148,7 +168,7 @@ export async function signInWithGoogleNative(
     provider: "google",
     options: {
       skipBrowserRedirect: true,
-      redirectTo: NATIVE_OAUTH_REDIRECT_URL,
+      redirectTo: nativeOAuthRedirectTo(next),
       ...(options.scopes ? { scopes: options.scopes } : {}),
     },
   });
@@ -156,13 +176,17 @@ export async function signInWithGoogleNative(
   if (error) throw error;
   if (!data?.url) throw new Error("Supabase did not return an OAuth URL");
 
-  // 2. Register the deep-link listener BEFORE opening the browser so
-  //    we never miss the redirect on a fast network.
-  const App = await loadApp();
+  // 2. Open the provider in the native browser surface. The app-wide
+  //    NativeAuthBridge owns `appUrlOpen` and performs the one-time PKCE code
+  //    exchange. Keeping the exchange in one place avoids double-consuming the
+  //    callback code when the app returns from SFSafariViewController /
+  //    Chrome Custom Tab.
   const Browser = await loadBrowser();
 
   let disposed = false;
-  const handleRef: { current: { remove: () => Promise<void> | void } | undefined } = {
+  const browserFinishedRef: {
+    current: { remove: () => Promise<void> | void } | undefined;
+  } = {
     current: undefined,
   };
 
@@ -170,7 +194,7 @@ export async function signInWithGoogleNative(
     if (disposed) return;
     disposed = true;
     try {
-      await handleRef.current?.remove();
+      await browserFinishedRef.current?.remove();
     } catch {
       // ignore
     }
@@ -181,42 +205,61 @@ export async function signInWithGoogleNative(
     }
   };
 
-  const handleUrl = async (event: { url: string }) => {
-    // Only react to our own callback scheme; the App listener fires
-    // for every deep-link the OS hands us.
-    if (!event?.url || !event.url.startsWith(NATIVE_OAUTH_REDIRECT_URL)) {
-      return;
-    }
-
-    const { code, error: oauthError, errorDescription } =
-      parseAuthCallbackUrl(event.url);
-
-    try {
-      if (oauthError) {
-        throw new Error(errorDescription ?? oauthError);
-      }
-      if (!code) {
-        throw new Error("Missing OAuth code in callback URL");
-      }
-      const { error: exchangeError } =
-        await supabase.auth.exchangeCodeForSession(code);
-      if (exchangeError) throw exchangeError;
-
-      navigate(next);
-    } finally {
-      await dispose();
-    }
+  const handleFinishedBrowser = async () => {
+    await dispose();
   };
 
-  const registration = await App.addListener("appUrlOpen", handleUrl);
-  handleRef.current = registration;
+  if (Browser.addListener) {
+    browserFinishedRef.current = await Browser.addListener(
+      "browserFinished",
+      handleFinishedBrowser,
+    );
+  }
 
-  // 3. Open Google's consent screen as an in-app overlay.
-  await Browser.open({ url: data.url, presentationStyle: "popover" });
+  // 3. Open Google's consent screen as an in-app overlay. Capacitor Browser
+  // implementations differ on whether the Promise resolves as soon as the
+  // controller opens or when it closes. Do not keep the sign-in button pinned
+  // in a loading state while the native browser owns the flow.
+  await beginBrowserOpen(
+    Browser.open({ url: data.url, presentationStyle: "fullscreen" }),
+    async () => {
+      await dispose();
+      navigate("/sign-in?error=native_browser_open_failed");
+    },
+  );
 
   return {
     get disposed() {
       return disposed;
     },
   };
+}
+
+async function beginBrowserOpen(
+  promise: Promise<unknown>,
+  onLateFailure: () => Promise<void>,
+): Promise<void> {
+  let settled = false;
+  let immediateError: unknown;
+
+  promise
+    .then(() => {
+      settled = true;
+    })
+    .catch((error) => {
+      settled = true;
+      immediateError = error;
+    });
+
+  await new Promise((resolve) => setTimeout(resolve, BROWSER_OPEN_SETTLE_MS));
+
+  if (immediateError) {
+    throw immediateError;
+  }
+
+  if (!settled) {
+    promise.catch(() => {
+      void onLateFailure();
+    });
+  }
 }

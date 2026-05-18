@@ -57,7 +57,7 @@ function findCoveringTests(contractFile: string, smokePath: string): string[] {
   // For dynamic-segment routes, also accept a smoke-path prefix that ignores
   // the trailing path segment (e.g. /api/meetings/sample matches references
   // to /api/meetings/<id>).
-  const smokePrefix = smokePath.replace(/\/[^/]+$/, "");
+  const smokePrefix = contractFile.includes("[") ? smokePath.replace(/\/[^/]+$/, "") : "";
   const matches: string[] = [];
   for (const [file, source] of testFileSources) {
     if (file === "tests/route-coverage.test.ts") continue;
@@ -109,10 +109,8 @@ describe("API route coverage", () => {
     "app/api/control-plane/route.ts",
     "app/api/admin/pricing/activate/route.ts",
     "app/api/admin/pricing/route.ts",
-    "app/api/dev-kit/config/[name]/route.ts",
     "app/api/dev-kit/connectors/route.ts",
     "app/api/dev-kit/cost/route.ts",
-    "app/api/dev-kit/coverage/route.ts",
     "app/api/dev-kit/dependencies/route.ts",
     "app/api/dev-kit/deployments/route.ts",
     "app/api/dev-kit/design-system/route.ts",
@@ -123,7 +121,6 @@ describe("API route coverage", () => {
     "app/api/dev-kit/index/route.ts",
     "app/api/dev-kit/logs/unified/route.ts",
     "app/api/dev-kit/overview/route.ts",
-    "app/api/dev-kit/registries/route.ts",
     "app/api/dev-kit/regressions/route.ts",
     "app/api/dev-kit/runs/[run_id]/route.ts",
     "app/api/dev-kit/runs/route.ts",
@@ -133,6 +130,13 @@ describe("API route coverage", () => {
     "app/api/dev-kit/tools/route.ts",
     "app/api/embeddings/backfill/route.ts",
     "app/api/models/route.ts",
+    "app/api/observability/health/route.ts",
+    "app/api/oauth/authorize/route.ts",
+    "app/api/oauth/callback/route.ts",
+    "app/api/oauth/register/route.ts",
+    "app/api/oauth/revoke/route.ts",
+    "app/api/transcribe/stream/autosave/route.ts",
+    "app/api/transcribe/stream/preflight/route.ts",
   ]);
 
   it("no NEW route has only describe.todo() stub coverage", () => {

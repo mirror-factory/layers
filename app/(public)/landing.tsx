@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Bricolage_Grotesque } from "next/font/google";
 import AudioWaveRibbon from "@/components/audio-wave-ribbon";
 import { LayersLogoMark } from "@/components/layers-logo";
 
@@ -31,14 +30,6 @@ function useTypewriter(text: string, charsPerSecond = 28, startDelay = 200) {
   return out;
 }
 
-const HERO_TRANSCRIPT_FEED: ReadonlyArray<readonly [string, string]> = [
-  ["00:11", "Commit to ship onboarding first."],
-  ["00:14", "Jamie owns first-run copy by Friday."],
-  ["00:18", "Owen reviews Monday before the demo."],
-  ["00:22", "Pricing tier unchanged for now — agreed."],
-  ["00:27", "Customer concern logged for next sync."],
-  ["00:31", "Decision: launch staging next week."],
-];
 import {
   ChatGPTLogo,
   ClaudeLogo,
@@ -48,21 +39,9 @@ import {
 /*
  * Layers homepage — Paper Calm v1.0
  *
- * Display face: Bricolage Grotesque (variable, optical-size aware).
- *   Picked for "settled · attentive · purposeful". Optical-size axis lets
- *   headlines breathe at large sizes. Italic moments via system serif fallback
- *   so the mission line gets a true italic-serif inflection.
- *
- * Body face: Geist Sans (already loaded globally via app/layout.tsx as
- *   --font-sans), kept to maintain product-wide UI/marketing parity.
+ * Type: Geist Sans only. Marketing and product surfaces share the same family
+ * so public pages do not drift into editorial/display typography.
  */
-
-const display = Bricolage_Grotesque({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-display-marketing",
-  display: "swap",
-});
 
 // Pricing — `name: "Free" / price: "$0"`, etc. literal strings are enforced
 // by tests/pricing-consistency.test.ts. Keep them verbatim.
@@ -98,38 +77,21 @@ const PRICING = [
     name: "Pro",
     price: "$30",
     cadence: "per user · per month",
-    blurb: "Team memory, advanced privacy, priority support.",
+    blurb: "Team memory, advanced privacy, priority onboarding.",
     features: [
       "Shared team memory",
       "Advanced privacy & SSO",
-      "Priority support",
+      "Priority onboarding",
     ],
     href: "/pricing",
     cta: "See Pro",
   },
 ];
 
-// Real underlying tech, not fake "customer logos". We're in invite-only alpha
-// — claiming "Trusted by Linear / Notion / Lattice" would be a lie. These are
-// the vendors Layers is actually built on.
-const BUILT_ON = [
-  "Vercel AI SDK",
-  "AssemblyAI",
-  "Supabase",
-  "Stripe",
-  "Inngest",
-  "Model Context Protocol",
-];
-
-
 export function LandingPage() {
   return (
-    <div className={`${display.variable} layers-home`}>
+    <div className="layers-home" style={{ overflowX: "hidden" }}>
       <Hero />
-      {/* "Built on" trust bar removed 2026-05-01: in invite-only
-          alpha we don't have customer logos to show, and the vendor
-          list felt like padding. Kept the function below in case we
-          re-introduce. */}
       <SectionMemory />
       <SectionSearch />
       <SectionConnect />
@@ -144,18 +106,17 @@ export function LandingPage() {
         }
 
         .layers-home :global(.home-display) {
-          font-family: var(--font-display-marketing), var(--font-brand-sans);
+          font-family: var(--font-brand-sans);
           letter-spacing: -0.022em;
-          font-weight: 500;
+          font-weight: 620;
           font-feature-settings: "ss01", "ss02";
         }
 
-        .layers-home :global(.home-italic-serif) {
-          font-family: "Iowan Old Style", "Charter", "Georgia", serif;
-          font-style: italic;
-          font-weight: 400;
+        .layers-home :global(.home-emphasis) {
+          font-family: var(--font-brand-sans);
+          font-weight: 650;
           color: var(--brand-accent-subtle, var(--layers-mint));
-          letter-spacing: -0.012em;
+          letter-spacing: -0.018em;
         }
 
         .layers-home :global(.home-eyebrow) {
@@ -286,40 +247,45 @@ function Hero() {
     <section
       aria-labelledby="home-hero-heading"
       className="section-shell"
-      style={{ paddingBlock: "clamp(48px, 7vw, 96px)" }}
+      style={{ paddingBlock: "clamp(36px, 6vw, 84px)" }}
     >
       <div
         className="home-hero-grid"
         style={{
           display: "grid",
-          gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1.05fr)",
+          gridTemplateColumns: "minmax(0, 1fr)",
           gap: "clamp(32px, 5vw, 80px)",
           alignItems: "center",
         }}
       >
         <div style={{ display: "grid", gap: 24 }}>
+          <div className="home-pill" style={{ width: "fit-content" }}>
+            <span className="home-pill-dot" aria-hidden />
+            Built for bot-free meeting memory
+          </div>
+
           <h1
             id="home-hero-heading"
             className="home-display"
             style={{
-              fontSize: "clamp(2.5rem, 5vw + 0.5rem, 4.6rem)",
+              fontSize: "clamp(2.45rem, 4.5vw + 0.55rem, 4.35rem)",
               lineHeight: 1.04,
               margin: 0,
               color: "var(--fg-default)",
               fontWeight: 600,
               letterSpacing: "-0.022em",
-              maxWidth: "13ch",
+              maxWidth: "12.5ch",
             }}
           >
-            AI memory for your meetings.
+            The meeting layer for your AI stack.
             <br />
             <em
               style={{
                 fontSize: "0.78em",
                 display: "inline-block",
                 marginTop: 6,
-                fontStyle: "italic",
-                fontWeight: 500,
+                fontStyle: "normal",
+                fontWeight: 650,
                 color: "var(--layers-mint)",
                 letterSpacing: "-0.012em",
               }}
@@ -336,8 +302,9 @@ function Hero() {
               maxWidth: "44ch",
             }}
           >
-            Layers remembers what matters from every conversation so your team
-            can make better decisions and ship faster.
+            Record the conversation, extract decisions and action items, search
+            across every meeting, and hand clean context to the tools your team
+            already uses.
           </p>
 
           <div
@@ -349,29 +316,48 @@ function Hero() {
               marginTop: 4,
             }}
           >
-            <button
-              type="button"
+            <a
+              href="mailto:admin@mirafactory.ai?subject=Layers%20alpha%20access"
               className="btn-primary"
-              disabled
-              aria-disabled="true"
-              title="Public sign-ups coming soon — invite-only alpha"
             >
-              Coming soon
-            </button>
+              Request alpha access
+            </a>
             <Link href="/download" className="btn-ghost">
-              See how it works
+              View downloads
             </Link>
           </div>
 
+          <ul
+            aria-label="Layers product strengths"
+            style={{
+              listStyle: "none",
+              margin: 0,
+              padding: 0,
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 10,
+            }}
+          >
+            {[
+              "Cross-meeting search",
+              "Structured decisions",
+              "MCP-ready context",
+              "Privacy-first notes",
+            ].map((item) => (
+              <li key={item} className="home-pill">
+                {item}
+              </li>
+            ))}
+          </ul>
         </div>
 
         <HeroComposition />
       </div>
 
       <style jsx>{`
-        @media (max-width: 920px) {
+        @media (min-width: 921px) {
           :global(.home-hero-grid) {
-            grid-template-columns: minmax(0, 1fr) !important;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr) !important;
           }
         }
       `}</style>
@@ -385,41 +371,36 @@ function HeroComposition() {
       aria-hidden
       style={{
         position: "relative",
-        minHeight: "clamp(360px, 40vw, 440px)",
+        maxWidth: "100%",
+        minHeight: "clamp(520px, 44vw, 610px)",
         isolation: "isolate",
-        // Decorative halos and offset cards inside this composition use
-        // negative insets and percentage offsets that can extend past the
-        // mobile viewport. Clip overflow at the composition boundary so the
-        // landing page never produces a horizontal scrollbar.
         overflow: "hidden",
       }}
     >
-      {/* Soft mint halo behind composition */}
       <div
         style={{
           position: "absolute",
-          inset: "10% -10% 10% -5%",
+          inset: "10% 2% 4%",
           background:
-            "radial-gradient(ellipse at 60% 50%, color-mix(in oklch, var(--layers-mint-tint) 65%, transparent) 0%, transparent 65%)",
-          filter: "blur(2px)",
+            "radial-gradient(ellipse at 58% 32%, color-mix(in oklch, var(--layers-mint-tint) 70%, transparent) 0%, transparent 64%)",
           zIndex: 0,
         }}
       />
 
-      {/* Main recording workspace card */}
       <div
         style={{
-          position: "absolute",
-          left: "8%",
-          top: "10%",
-          right: "8%",
-          background: "var(--bg-surface)",
+          position: "relative",
+          zIndex: 1,
+          display: "grid",
+          gap: 14,
+          height: "100%",
+          padding: "clamp(14px, 2vw, 18px)",
+          borderRadius: "var(--radius-2xl, 22px)",
+          background:
+            "color-mix(in oklch, var(--bg-surface) 88%, var(--layers-mint-tint) 12%)",
           border: "1px solid var(--border-default)",
-          borderRadius: "var(--radius-2xl, 20px)",
-          padding: "20px 22px 22px",
           boxShadow:
-            "0 30px 60px -30px color-mix(in oklch, var(--layers-violet) 22%, transparent), 0 6px 18px -10px color-mix(in oklch, var(--fg-default) 12%, transparent)",
-          zIndex: 2,
+            "0 30px 70px -36px color-mix(in oklch, var(--layers-violet) 26%, transparent), 0 12px 32px -24px color-mix(in oklch, var(--fg-default) 18%, transparent)",
         }}
       >
         <div
@@ -428,35 +409,41 @@ function HeroComposition() {
             alignItems: "center",
             justifyContent: "space-between",
             gap: 12,
-            marginBottom: 14,
+            flexWrap: "wrap",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              minWidth: 0,
+            }}
+          >
             <LayersLogoMark size={22} animated />
-            <span
-              style={{
-                fontSize: "0.78rem",
-                color: "var(--fg-muted)",
-                letterSpacing: "0.04em",
-              }}
-            >
-              Recording workspace
-            </span>
+            <div style={{ display: "grid", gap: 1, minWidth: 0 }}>
+              <span style={{ fontSize: "0.82rem", fontWeight: 650 }}>
+                Today in Layers
+              </span>
+              <span style={{ fontSize: "0.72rem", color: "var(--fg-muted)" }}>
+                Recording, memory, and follow-up in one place
+              </span>
+            </div>
           </div>
           <span
             style={{
               display: "inline-flex",
               alignItems: "center",
               gap: 6,
-              fontSize: "0.7rem",
+              fontSize: "0.68rem",
               fontWeight: 600,
               letterSpacing: "0.14em",
               textTransform: "uppercase",
-              color: "var(--danger, oklch(0.64 0.20 26))",
-              padding: "3px 10px",
+              color: "var(--fg-default)",
+              padding: "5px 10px",
               borderRadius: "var(--radius-pill)",
-              background:
-                "color-mix(in oklch, var(--danger, oklch(0.64 0.20 26)) 8%, transparent)",
+              background: "var(--bg-page)",
+              border: "1px solid var(--border-subtle)",
             }}
           >
             <span
@@ -464,481 +451,247 @@ function HeroComposition() {
                 width: 6,
                 height: 6,
                 borderRadius: 999,
-                background: "var(--danger, oklch(0.64 0.20 26))",
+                background: "var(--layers-mint)",
                 animation: "homePulse 1.6s ease-in-out infinite",
               }}
             />
-            00:13 LIVE
+            live ready
           </span>
         </div>
 
         <div
           style={{
-            borderRadius: "var(--radius-lg, 14px)",
-            padding: "10px 8px 4px",
-            background:
-              "linear-gradient(180deg, color-mix(in oklch, var(--layers-mint-tint) 40%, var(--bg-page)) 0%, var(--bg-surface) 100%)",
-            border: "1px solid var(--border-subtle)",
-          }}
-        >
-          <AudioWaveRibbon
-            active
-            audioLevel={0.62}
-            height={96}
-            motion={1.05}
-            sensitivity={0.82}
-            texture="clean"
-          />
-        </div>
-
-        <div
-          style={{
             display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
-            gap: 8,
-            marginTop: 16,
-            paddingTop: 14,
-            borderTop: "1px solid var(--border-subtle)",
+            gridTemplateColumns: "minmax(0, 1.05fr) minmax(0, 0.95fr)",
+            gap: 14,
           }}
+          className="hero-preview-grid"
         >
-          {[
-            ["Decisions", "2"],
-            ["Actions", "3"],
-            ["Intake", "3"],
-            ["Follow-up", "2"],
-          ].map(([label, count]) => (
-            <div key={label} style={{ display: "grid", gap: 2 }}>
-              <span
+          <section
+            aria-label="Current meeting"
+            style={{
+              display: "grid",
+              gap: 14,
+              alignContent: "start",
+              borderRadius: "var(--radius-xl, 18px)",
+              background: "var(--bg-page)",
+              border: "1px solid var(--border-subtle)",
+              padding: "clamp(14px, 2vw, 18px)",
+            }}
+          >
+            <div style={{ display: "grid", gap: 8 }}>
+              <span className="home-eyebrow">Recording now</span>
+              <h2
                 className="home-display"
                 style={{
-                  fontSize: "1.1rem",
-                  lineHeight: 1,
-                  color: "var(--fg-default)",
-                  fontVariantNumeric: "tabular-nums",
+                  margin: 0,
+                  fontSize: "clamp(1.35rem, 1.8vw, 1.85rem)",
+                  lineHeight: 1.08,
                 }}
               >
-                {count}
-              </span>
+                Product sync: launch readiness
+              </h2>
               <span
                 style={{
-                  fontSize: "0.66rem",
+                  fontSize: "0.82rem",
                   color: "var(--fg-muted)",
-                  letterSpacing: "0.04em",
                 }}
               >
-                {label}
+                10:30 AM · 6 people · calendar context attached
               </span>
             </div>
-          ))}
-        </div>
-      </div>
 
-      {/* Floating: AI memory · Always learning */}
-      <FloatingChip
-        style={{ top: "0%", left: "-2%", zIndex: 3 }}
-        accent="var(--layers-violet)"
-        label="AI memory"
-        sub="Always learning"
-      />
+            <div
+              style={{
+                borderRadius: "var(--radius-lg, 14px)",
+                padding: "10px 8px 4px",
+                background:
+                  "color-mix(in oklch, var(--layers-mint-tint) 42%, var(--bg-surface))",
+                border: "1px solid var(--border-subtle)",
+              }}
+            >
+              <AudioWaveRibbon
+                active
+                audioLevel={0.62}
+                height={92}
+                motion={1.05}
+                sensitivity={0.82}
+                texture="clean"
+              />
+            </div>
 
-      {/* Floating: today's agenda — sets the upcoming-meeting context */}
-      <FloatingChip
-        style={{ top: "-3%", left: "32%", zIndex: 3 }}
-        accent="var(--layers-blue)"
-        label="Today"
-        sub="3 meetings · 1 live"
-      />
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+                gap: 8,
+              }}
+            >
+              {[
+                ["2", "Decisions"],
+                ["4", "Actions"],
+                ["8", "Moments"],
+                ["3", "Follow-ups"],
+              ].map(([value, label]) => (
+                <div
+                  key={label}
+                  style={{
+                    display: "grid",
+                    gap: 3,
+                    padding: "10px 12px",
+                    borderRadius: "var(--radius-md, 10px)",
+                    background: "var(--bg-surface)",
+                    border: "1px solid var(--border-subtle)",
+                  }}
+                >
+                  <span
+                    className="home-display"
+                    style={{
+                      fontSize: "1.35rem",
+                      lineHeight: 1,
+                      fontVariantNumeric: "tabular-nums",
+                    }}
+                  >
+                    {value}
+                  </span>
+                  <span
+                    style={{ fontSize: "0.72rem", color: "var(--fg-muted)" }}
+                  >
+                    {label}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </section>
 
-      {/* Floating: Decisions 2 Captured */}
-      <FloatingStat
-        style={{ top: "2%", right: "-4%", zIndex: 3 }}
-        value="2"
-        label="Decisions"
-        sub="Captured"
-        accent="var(--layers-mint)"
-      />
-
-      {/* Floating: Live transcript card — animated feed */}
-      <LiveTranscriptCard />
-
-
-      {/* Floating: Meeting memory · Updating */}
-      <div
-        style={{
-          position: "absolute",
-          right: "-2%",
-          top: "52%",
-          width: "52%",
-          background: "var(--bg-surface)",
-          border: "1px solid var(--border-default)",
-          borderRadius: "var(--radius-lg, 14px)",
-          padding: "12px 14px",
-          boxShadow:
-            "0 14px 28px -16px color-mix(in oklch, var(--layers-violet) 22%, transparent)",
-          zIndex: 4,
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: 8,
-            marginBottom: 8,
-          }}
-        >
-          <span
+          <section
+            aria-label="Meeting memory"
             style={{
-              fontSize: "0.7rem",
-              fontWeight: 600,
-              color: "var(--fg-default)",
+              display: "grid",
+              gap: 12,
+              alignContent: "start",
+              borderRadius: "var(--radius-xl, 18px)",
+              background: "var(--bg-page)",
+              border: "1px solid var(--border-subtle)",
+              padding: "clamp(14px, 2vw, 18px)",
             }}
           >
-            Meeting memory
-          </span>
-          <span
-            style={{
-              fontSize: "0.66rem",
-              color: "var(--brand-accent-subtle, var(--layers-mint))",
-              letterSpacing: "0.04em",
-            }}
-          >
-            Updating…
-          </span>
+            <div style={{ display: "grid", gap: 8 }}>
+              <span className="home-eyebrow">Ask meeting memory</span>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  minHeight: 42,
+                  padding: "0 12px",
+                  borderRadius: "var(--radius-pill)",
+                  background: "var(--bg-surface)",
+                  border: "1px solid var(--border-subtle)",
+                  color: "var(--fg-muted)",
+                  fontSize: "0.82rem",
+                }}
+              >
+                What changed before launch?
+              </div>
+            </div>
+
+            <div style={{ display: "grid", gap: 8 }}>
+              {[
+                ["Decision", "Keep the Core tier at $20 for alpha feedback."],
+                ["Action", "Maya owns native sign-in QA before Friday."],
+                ["Risk", "Android SDK path still blocks release builds."],
+              ].map(([label, copy]) => (
+                <div
+                  key={`${label}-${copy}`}
+                  style={{
+                    display: "grid",
+                    gap: 4,
+                    padding: "10px 12px",
+                    borderRadius: "var(--radius-md, 10px)",
+                    background: "var(--bg-surface)",
+                    border: "1px solid var(--border-subtle)",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: "0.68rem",
+                      letterSpacing: "0.12em",
+                      textTransform: "uppercase",
+                      color: "var(--fg-faint)",
+                      fontWeight: 650,
+                    }}
+                  >
+                    {label}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: "0.82rem",
+                      lineHeight: 1.45,
+                      color: "var(--fg-default)",
+                    }}
+                  >
+                    {copy}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </section>
         </div>
+
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 6,
-            fontSize: "0.7rem",
+            gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+            gap: 10,
           }}
+          className="hero-connect-grid"
         >
           {[
-            ["Decisions", "2"],
-            ["Actions", "3"],
-            ["Intake", "3"],
-            ["Follow-up", "2"],
-          ].map(([k, v]) => (
+            ["Claude", "MCP server"],
+            ["ChatGPT", "meeting context"],
+            ["Cursor", "decision history"],
+          ].map(([tool, detail]) => (
             <div
-              key={k as string}
+              key={tool}
               style={{
-                display: "flex",
-                justifyContent: "space-between",
-                padding: "4px 8px",
-                borderRadius: 6,
-                background:
-                  "color-mix(in oklch, var(--layers-mint-tint) 35%, transparent)",
+                display: "grid",
+                gap: 2,
+                padding: "11px 12px",
+                borderRadius: "var(--radius-md, 10px)",
+                background: "var(--bg-page)",
+                border: "1px solid var(--border-subtle)",
               }}
             >
-              <span style={{ color: "var(--fg-muted)" }}>{k}</span>
-              <span style={{ color: "var(--fg-default)", fontWeight: 600 }}>
-                {v}
+              <span style={{ fontSize: "0.82rem", fontWeight: 650 }}>
+                {tool}
+              </span>
+              <span style={{ fontSize: "0.72rem", color: "var(--fg-muted)" }}>
+                {detail}
               </span>
             </div>
           ))}
         </div>
       </div>
-
-      {/* Actions / Follow-ups stat cards removed 2026-05-01: they
-          duplicated the bottom stat row inside the recording panel
-          and read as orphaned chips no matter where we placed them. */}
 
       <style jsx>{`
         @keyframes homePulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.4; }
-        }
-      `}</style>
-    </div>
-  );
-}
-
-function LiveTranscriptCard() {
-  // Show 3 lines at a time. Append a new line every ~3.4s; oldest scrolls off.
-  const VISIBLE = 3;
-  const [feed, setFeed] = useState<ReadonlyArray<readonly [string, string]>>(
-    () => HERO_TRANSCRIPT_FEED.slice(0, VISIBLE),
-  );
-  useEffect(() => {
-    let cursor = VISIBLE;
-    const id = window.setInterval(() => {
-      setFeed((prev) => {
-        const next = HERO_TRANSCRIPT_FEED[cursor % HERO_TRANSCRIPT_FEED.length];
-        cursor += 1;
-        return [...prev.slice(1), next];
-      });
-    }, 3400);
-    return () => window.clearInterval(id);
-  }, []);
-
-  return (
-    <div
-      style={{
-        position: "absolute",
-        left: "-4%",
-        top: "44%",
-        width: "62%",
-        background: "var(--bg-surface)",
-        border: "1px solid var(--border-default)",
-        borderRadius: "var(--radius-lg, 14px)",
-        padding: "12px 14px",
-        boxShadow:
-          "0 12px 28px -16px color-mix(in oklch, var(--fg-default) 22%, transparent)",
-        zIndex: 4,
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-          marginBottom: 8,
-        }}
-      >
-        <span
-          style={{
-            width: 6,
-            height: 6,
-            borderRadius: 999,
-            background: "var(--layers-blue)",
-            animation: "homePulse 1.6s ease-in-out infinite",
-          }}
-        />
-        <span
-          style={{
-            fontSize: "0.7rem",
-            color: "var(--fg-default)",
-            fontWeight: 600,
-            letterSpacing: "0.02em",
-          }}
-        >
-          Live transcript
-        </span>
-        <span style={{ fontSize: "0.66rem", color: "var(--fg-muted)" }}>
-          · Captured live
-        </span>
-      </div>
-      <ul
-        style={{
-          listStyle: "none",
-          margin: 0,
-          padding: 0,
-          display: "grid",
-          gap: 6,
-          fontSize: "0.74rem",
-          maxHeight: 78,
-          overflow: "hidden",
-        }}
-      >
-        {feed.map(([t, line]) => (
-          <li
-            key={`${t}-${line}`}
-            className="hero-transcript-line"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "auto 1fr",
-              gap: 10,
-              alignItems: "baseline",
-              color: "var(--fg-default)",
-            }}
-          >
-            <span
-              style={{
-                fontFamily: "var(--font-mono, ui-monospace)",
-                color: "var(--fg-faint)",
-              }}
-            >
-              {t}
-            </span>
-            <span>{line}</span>
-          </li>
-        ))}
-      </ul>
-      <style jsx>{`
-        @keyframes heroTranscriptIn {
-          0% {
-            opacity: 0;
-            transform: translateY(8px);
-          }
+          0%,
           100% {
             opacity: 1;
-            transform: translateY(0);
+          }
+          50% {
+            opacity: 0.4;
           }
         }
-        :global(.hero-transcript-line:last-child) {
-          animation: heroTranscriptIn 480ms cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        @media (prefers-reduced-motion: reduce) {
-          :global(.hero-transcript-line:last-child) {
-            animation: none;
+        @media (max-width: 720px) {
+          :global(.hero-preview-grid),
+          :global(.hero-connect-grid) {
+            grid-template-columns: 1fr !important;
           }
         }
       `}</style>
     </div>
-  );
-}
-
-function FloatingChip({
-  style,
-  accent,
-  label,
-  sub,
-}: {
-  style?: React.CSSProperties;
-  accent: string;
-  label: string;
-  sub: string;
-}) {
-  return (
-    <div
-      style={{
-        position: "absolute",
-        background: "var(--bg-surface)",
-        border: "1px solid var(--border-default)",
-        borderRadius: "var(--radius-pill, 9999px)",
-        padding: "8px 14px",
-        display: "inline-flex",
-        alignItems: "center",
-        gap: 8,
-        boxShadow:
-          "0 10px 24px -14px color-mix(in oklch, var(--fg-default) 18%, transparent)",
-        ...style,
-      }}
-    >
-      <span
-        style={{
-          width: 8,
-          height: 8,
-          borderRadius: 999,
-          background: accent,
-          boxShadow: `0 0 0 4px color-mix(in oklch, ${accent} 18%, transparent)`,
-        }}
-      />
-      <span
-        style={{
-          fontSize: "0.78rem",
-          fontWeight: 600,
-          color: "var(--fg-default)",
-        }}
-      >
-        {label}
-      </span>
-      <span
-        style={{
-          fontSize: "0.74rem",
-          color: "var(--fg-muted)",
-        }}
-      >
-        · {sub}
-      </span>
-    </div>
-  );
-}
-
-function FloatingStat({
-  style,
-  value,
-  label,
-  sub,
-  accent,
-}: {
-  style?: React.CSSProperties;
-  value: string;
-  label: string;
-  sub: string;
-  accent: string;
-}) {
-  return (
-    <div
-      style={{
-        position: "absolute",
-        background: "var(--bg-surface)",
-        border: "1px solid var(--border-default)",
-        borderRadius: "var(--radius-lg, 14px)",
-        padding: "10px 14px",
-        display: "inline-flex",
-        alignItems: "center",
-        gap: 10,
-        boxShadow:
-          "0 14px 28px -16px color-mix(in oklch, var(--fg-default) 18%, transparent)",
-        ...style,
-      }}
-    >
-      <span
-        className="home-display"
-        style={{
-          fontSize: "1.5rem",
-          lineHeight: 1,
-          color: accent,
-          fontVariantNumeric: "tabular-nums",
-          fontWeight: 600,
-        }}
-      >
-        {value}
-      </span>
-      <span style={{ display: "grid", lineHeight: 1.1 }}>
-        <span
-          style={{
-            fontSize: "0.78rem",
-            fontWeight: 600,
-            color: "var(--fg-default)",
-          }}
-        >
-          {label}
-        </span>
-        <span style={{ fontSize: "0.7rem", color: "var(--fg-muted)" }}>
-          {sub}
-        </span>
-      </span>
-    </div>
-  );
-}
-
-/* ───────────────────────────── Trust bar ───────────────────────────── */
-
-function TrustBar() {
-  return (
-    <section
-      aria-label="Teams using Layers"
-      className="section-shell"
-      style={{
-        paddingBlock: "clamp(32px, 4vw, 56px)",
-        display: "grid",
-        gap: 20,
-        justifyItems: "center",
-        textAlign: "center",
-      }}
-    >
-      <span className="home-eyebrow">Built on</span>
-      <ul
-        style={{
-          listStyle: "none",
-          margin: 0,
-          padding: 0,
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "clamp(14px, 3vw, 40px)",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        {BUILT_ON.map((name) => (
-          <li
-            key={name}
-            style={{
-              fontSize: "clamp(0.85rem, 0.6vw + 0.7rem, 1.05rem)",
-              fontWeight: 500,
-              letterSpacing: "-0.005em",
-              color: "var(--fg-muted)",
-              opacity: 0.78,
-            }}
-          >
-            {name}
-          </li>
-        ))}
-      </ul>
-    </section>
   );
 }
 
@@ -946,17 +699,14 @@ function TrustBar() {
 
 function SectionMemory() {
   return (
-    <section
-      aria-labelledby="home-memory-heading"
-      className="section-shell"
-    >
+    <section aria-labelledby="home-memory-heading" className="section-shell">
       <NumberedSection
         index="01"
         eyebrow="AI memory that works for you"
         heading={
           <>
             Your AI copilots learn from{" "}
-            <span className="home-italic-serif">every meeting.</span>
+            <span className="home-emphasis">every meeting.</span>
           </>
         }
         lede="Layers builds a structured record of what your team decided, owns, and said — and keeps it in one searchable memory you can act on."
@@ -1017,7 +767,10 @@ function MemoryMediaCard() {
         </span>
       </div>
 
-      <div className="memory-rows" style={{ display: "grid", gap: 10, marginBottom: 16 }}>
+      <div
+        className="memory-rows"
+        style={{ display: "grid", gap: 10, marginBottom: 16 }}
+      >
         {[
           {
             tag: "What happened",
@@ -1118,17 +871,14 @@ function MemoryMediaCard() {
 
 function SectionSearch() {
   return (
-    <section
-      aria-labelledby="home-search-heading"
-      className="section-shell"
-    >
+    <section aria-labelledby="home-search-heading" className="section-shell">
       <NumberedSection
         index="02"
         eyebrow="Search that finds answers"
         heading={
           <>
             Find the decision without{" "}
-            <span className="home-italic-serif">reopening every transcript.</span>
+            <span className="home-emphasis">reopening every transcript.</span>
           </>
         }
         lede="Ask in your own words. Layers jumps to the moment — across every meeting your team has had."
@@ -1147,7 +897,8 @@ function SectionSearch() {
 function SearchMediaCard() {
   const QUERY = "What did we decide about pricing?";
   const typed = useTypewriter(QUERY, 26, 800);
-  const isDone = typed.length >= QUERY.length;
+  const typedText = typed || QUERY;
+  const isDone = typedText.length >= QUERY.length;
 
   return (
     <div
@@ -1217,7 +968,7 @@ function SearchMediaCard() {
               minWidth: 0,
             }}
           >
-            {typed}
+            {typedText}
             <span
               aria-hidden
               style={{
@@ -1269,7 +1020,8 @@ function SearchMediaCard() {
             borderRadius: "var(--radius-pill)",
             background:
               "color-mix(in oklch, var(--layers-mint) 30%, var(--bg-surface) 70%)",
-            border: "1px solid color-mix(in oklch, var(--layers-mint) 50%, transparent)",
+            border:
+              "1px solid color-mix(in oklch, var(--layers-mint) 50%, transparent)",
             whiteSpace: "nowrap",
             opacity: isDone ? 1 : 0,
             transform: isDone ? "translateY(0)" : "translateY(-4px)",
@@ -1291,10 +1043,26 @@ function SearchMediaCard() {
         }}
       >
         {[
-          ["00:35", "Product planning", "“Tier at $20 hits the sweet spot — agreed.”"],
-          ["12:08", "Customer feedback", "“They expected higher pricing for the pro tier.”"],
-          ["27:42", "GTM sync", "“Free 25-meeting cap — anchor on usage, not seats.”"],
-          ["41:09", "Pricing review", "“Keep Pro at $30. Revisit after first 100 users.”"],
+          [
+            "00:35",
+            "Product planning",
+            "“Tier at $20 hits the sweet spot — agreed.”",
+          ],
+          [
+            "12:08",
+            "Customer feedback",
+            "“They expected higher pricing for the pro tier.”",
+          ],
+          [
+            "27:42",
+            "GTM sync",
+            "“Free 25-meeting cap — anchor on usage, not seats.”",
+          ],
+          [
+            "41:09",
+            "Pricing review",
+            "“Keep Pro at $30. Revisit after first 100 users.”",
+          ],
         ].map(([time, ctx, quote], i) => (
           <li
             key={time as string}
@@ -1358,8 +1126,14 @@ function SearchMediaCard() {
       </ul>
       <style jsx>{`
         @keyframes searchCaretBlink {
-          0%, 50% { opacity: 1; }
-          51%, 100% { opacity: 0; }
+          0%,
+          50% {
+            opacity: 1;
+          }
+          51%,
+          100% {
+            opacity: 0;
+          }
         }
         @media (prefers-reduced-motion: reduce) {
           :global(.search-result) {
@@ -1377,214 +1151,18 @@ function SearchMediaCard() {
   );
 }
 
-/* ─────────────── (Section 03 "Reuse what matters" was removed
-   on 2026-05-01 — Layers doesn't position as outputs/templates/
-   integrations. The dead component below is kept temporarily;
-   delete after one more product review.) ─────────────── */
-
-function SectionReuse() {
-  return (
-    <section
-      aria-labelledby="home-reuse-heading"
-      className="section-shell"
-    >
-      <NumberedSection
-        index="03"
-        eyebrow="Reuse what matters"
-        heading={
-          <>
-            Turn conversations into{" "}
-            <span className="home-italic-serif">reusable assets.</span>
-          </>
-        }
-        lede="Decision logs, action trackers, customer updates — generated from every meeting and routed where your team already works."
-        bullets={[
-          "One-click summaries, decision logs, and action trackers",
-          "Templates per meeting type — customer, planning, 1:1",
-          "Send to Slack, Notion, Drive, or email automatically",
-        ]}
-        media={<ReuseMediaCard />}
-        mediaSide="right"
-      />
-    </section>
-  );
-}
-
-function ReuseMediaCard() {
-  const tabs = ["Outputs", "Templates", "Integrations"];
-  const outputs = [
-    { name: "Summary doc", icon: "W", color: "var(--layers-blue)" },
-    { name: "Decision log", icon: "S", color: "var(--layers-mint)" },
-    { name: "Action tracker", icon: "D", color: "var(--layers-violet)" },
-    { name: "Customer update", icon: "M", color: "var(--warning, oklch(0.74 0.14 74))" },
-  ];
-
-  return (
-    <div
-      aria-hidden
-      style={{
-        background: "var(--bg-surface)",
-        border: "1px solid var(--border-default)",
-        borderRadius: "var(--radius-2xl, 20px)",
-        padding: "20px 22px 22px",
-        boxShadow:
-          "0 28px 60px -32px color-mix(in oklch, var(--layers-mint) 22%, transparent)",
-        display: "grid",
-        gap: 16,
-      }}
-    >
-      <div
-        role="tablist"
-        style={{
-          display: "inline-flex",
-          padding: 4,
-          borderRadius: "var(--radius-pill)",
-          background: "var(--bg-page)",
-          border: "1px solid var(--border-subtle)",
-          width: "fit-content",
-          gap: 2,
-        }}
-      >
-        {tabs.map((t, i) => (
-          <span
-            key={t}
-            role="tab"
-            aria-selected={i === 0}
-            style={{
-              fontSize: "0.78rem",
-              padding: "6px 14px",
-              borderRadius: "var(--radius-pill)",
-              fontWeight: 500,
-              color: i === 0 ? "var(--fg-default)" : "var(--fg-muted)",
-              background: i === 0 ? "var(--bg-surface)" : "transparent",
-              boxShadow:
-                i === 0
-                  ? "0 1px 0 color-mix(in oklch, var(--fg-default) 8%, transparent)"
-                  : "none",
-            }}
-          >
-            {t}
-          </span>
-        ))}
-      </div>
-
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-          gap: 10,
-        }}
-      >
-        {outputs.map((o) => (
-          <div
-            key={o.name}
-            style={{
-              display: "grid",
-              gridTemplateColumns: "auto 1fr",
-              gap: 10,
-              alignItems: "center",
-              padding: "12px 14px",
-              borderRadius: "var(--radius-md, 10px)",
-              border: "1px solid var(--border-subtle)",
-              background: "var(--bg-page)",
-            }}
-          >
-            <span
-              style={{
-                width: 30,
-                height: 30,
-                borderRadius: 6,
-                background: `color-mix(in oklch, ${o.color} 22%, var(--bg-surface) 78%)`,
-                color: o.color,
-                fontWeight: 700,
-                fontSize: "0.78rem",
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontFamily: "var(--font-display-marketing), var(--font-brand-sans)",
-              }}
-            >
-              {o.icon}
-            </span>
-            <span
-              style={{
-                fontSize: "0.82rem",
-                fontWeight: 500,
-                color: "var(--fg-default)",
-              }}
-            >
-              {o.name}
-            </span>
-          </div>
-        ))}
-      </div>
-
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: 12,
-          paddingTop: 12,
-          borderTop: "1px solid var(--border-subtle)",
-        }}
-      >
-        <span
-          style={{
-            fontSize: "0.74rem",
-            color: "var(--fg-muted)",
-            letterSpacing: "0.04em",
-          }}
-        >
-          Share to
-        </span>
-        <div style={{ display: "flex", gap: 8 }}>
-          {[
-            ["Notion", "var(--fg-default)"],
-            ["Slack", "var(--layers-violet)"],
-            ["Drive", "var(--layers-blue)"],
-          ].map(([name, color]) => (
-            <span
-              key={name}
-              title={name}
-              style={{
-                width: 28,
-                height: 28,
-                borderRadius: 6,
-                background: `color-mix(in oklch, ${color} 14%, var(--bg-surface) 86%)`,
-                color,
-                fontSize: "0.7rem",
-                fontWeight: 700,
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                border: "1px solid var(--border-subtle)",
-              }}
-            >
-              {(name as string).slice(0, 1)}
-            </span>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 /* ─────────────── Connect / MCP ─────────────── */
 
 function SectionConnect() {
   return (
-    <section
-      aria-labelledby="home-connect-heading"
-      className="section-shell"
-    >
+    <section aria-labelledby="home-connect-heading" className="section-shell">
       <NumberedSection
         index="03"
         eyebrow="Connect to your AI tools"
         heading={
           <>
             Bring meeting memory into{" "}
-            <span className="home-italic-serif">the AI you already use.</span>
+            <span className="home-emphasis">the AI you already use.</span>
           </>
         }
         lede="Layers ships an MCP server. Any Model Context Protocol client — ChatGPT, Claude, Gemini, or your own — can search and reason across your meetings without copying transcripts around."
@@ -1743,7 +1321,8 @@ function ConnectMediaCard() {
                 boxShadow: isActive
                   ? `0 0 0 4px color-mix(in oklch, ${brand} 12%, transparent)`
                   : "none",
-                transition: "background 320ms ease, border-color 320ms ease, box-shadow 320ms ease",
+                transition:
+                  "background 320ms ease, border-color 320ms ease, box-shadow 320ms ease",
               }}
             >
               <span
@@ -1850,7 +1429,7 @@ function ConnectMediaCard() {
         }}
       >
         <span style={{ color: "var(--fg-muted)" }}>
-          // call from your AI client
+          {"// call from your AI client"}
         </span>
         <span>
           layers.search
@@ -1869,9 +1448,9 @@ function ConnectMediaCard() {
         aria-live="polite"
         style={{
           position: "relative",
-          height: 22,
+          minHeight: 32,
           textAlign: "center",
-          overflow: "hidden",
+          overflow: "visible",
         }}
       >
         {CONNECT_TAGLINES.map((line, i) => {
@@ -1884,6 +1463,7 @@ function ConnectMediaCard() {
                 position: "absolute",
                 inset: 0,
                 fontSize: "0.78rem",
+                lineHeight: 1.4,
                 fontWeight: 500,
                 color: "var(--fg-default)",
                 letterSpacing: "-0.005em",
@@ -1901,13 +1481,16 @@ function ConnectMediaCard() {
       <style jsx>{`
         @keyframes mcpDotPulse {
           0% {
-            box-shadow: 0 0 0 0 color-mix(in oklch, currentColor 50%, transparent);
+            box-shadow: 0 0 0 0
+              color-mix(in oklch, currentColor 50%, transparent);
           }
           70% {
-            box-shadow: 0 0 0 8px color-mix(in oklch, currentColor 0%, transparent);
+            box-shadow: 0 0 0 8px
+              color-mix(in oklch, currentColor 0%, transparent);
           }
           100% {
-            box-shadow: 0 0 0 0 color-mix(in oklch, currentColor 0%, transparent);
+            box-shadow: 0 0 0 0
+              color-mix(in oklch, currentColor 0%, transparent);
           }
         }
         @media (prefers-reduced-motion: reduce) {
@@ -2068,10 +1651,7 @@ function NumberedSection({
 
 function SectionPricing() {
   return (
-    <section
-      aria-labelledby="home-pricing-heading"
-      className="section-shell"
-    >
+    <section aria-labelledby="home-pricing-heading" className="section-shell">
       <div
         className="pricing-row"
         style={{
@@ -2102,7 +1682,14 @@ function SectionPricing() {
             >
               04
             </span>
-            <span aria-hidden style={{ height: 1, width: 28, background: "var(--border-default)" }} />
+            <span
+              aria-hidden
+              style={{
+                height: 1,
+                width: 28,
+                background: "var(--border-default)",
+              }}
+            />
             <span className="home-eyebrow">Built for teams at every stage</span>
           </div>
           <h2
@@ -2117,11 +1704,11 @@ function SectionPricing() {
             }}
           >
             Simple pricing.{" "}
-            <span className="home-italic-serif">Serious value.</span>
+            <span className="home-emphasis">Serious value.</span>
           </h2>
           <p className="home-prose" style={{ margin: 0, fontSize: "1.02rem" }}>
             Start free with 25 meetings. Upgrade when memory becomes a habit
-            your team can't work without.
+            your team can&apos;t work without.
           </p>
         </div>
 
@@ -2186,7 +1773,9 @@ function SectionPricing() {
                 >
                   {tier.name}
                 </span>
-                <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
+                <div
+                  style={{ display: "flex", alignItems: "baseline", gap: 6 }}
+                >
                   <span
                     className="home-display"
                     style={{
@@ -2332,7 +1921,8 @@ function FinalCta() {
           background:
             "linear-gradient(135deg, color-mix(in oklch, var(--layers-mint-tint) 35%, var(--bg-surface) 65%) 0%, color-mix(in oklch, var(--layers-violet-tint) 28%, var(--bg-surface) 72%) 60%, color-mix(in oklch, var(--layers-blue-tint) 20%, var(--bg-surface) 80%) 100%)",
           backgroundSize: "200% 200%",
-          border: "1px solid color-mix(in oklch, var(--layers-mint) 24%, var(--border-default))",
+          border:
+            "1px solid color-mix(in oklch, var(--layers-mint) 24%, var(--border-default))",
           padding: "clamp(40px, 5vw, 80px) clamp(28px, 4vw, 72px)",
           overflow: "hidden",
           display: "grid",
@@ -2342,7 +1932,9 @@ function FinalCta() {
           animation: "ctaShimmer 14s ease-in-out infinite",
         }}
       >
-        <div style={{ display: "grid", gap: 16, position: "relative", zIndex: 2 }}>
+        <div
+          style={{ display: "grid", gap: 16, position: "relative", zIndex: 2 }}
+        >
           <div
             style={{
               display: "inline-flex",
@@ -2352,7 +1944,8 @@ function FinalCta() {
               borderRadius: "var(--radius-pill)",
               background:
                 "color-mix(in oklch, var(--bg-surface) 70%, transparent)",
-              border: "1px solid color-mix(in oklch, var(--layers-mint) 30%, transparent)",
+              border:
+                "1px solid color-mix(in oklch, var(--layers-mint) 30%, transparent)",
               width: "fit-content",
             }}
           >
@@ -2392,10 +1985,11 @@ function FinalCta() {
             }}
           >
             Ready to make every meeting{" "}
-            <span className="home-italic-serif">count?</span>
+            <span className="home-emphasis">count?</span>
           </h2>
           <p className="home-prose" style={{ margin: 0, maxWidth: "44ch" }}>
-            Join teams that ship faster because the meeting actually went somewhere.
+            Join teams that ship faster because the meeting actually went
+            somewhere.
           </p>
         </div>
 
@@ -2411,18 +2005,15 @@ function FinalCta() {
             zIndex: 2,
           }}
         >
-          <button
-            type="button"
+          <a
+            href="mailto:admin@mirafactory.ai?subject=Layers%20alpha%20access"
             className="btn-primary cta-pulse"
-            disabled
-            aria-disabled="true"
-            title="Public sign-ups coming soon — invite-only alpha"
             style={{ padding: "16px 26px", fontSize: "1rem" }}
           >
-            Coming soon
-          </button>
+            Request alpha access
+          </a>
           <a
-            href="mailto:support@mirrorfactory.ai?subject=Layers%20alpha%20access"
+            href="mailto:admin@mirafactory.ai?subject=Layers%20alpha%20access"
             style={{
               fontSize: "0.78rem",
               color: "var(--fg-muted)",
@@ -2433,7 +2024,7 @@ function FinalCta() {
           >
             Want in early?{" "}
             <span style={{ color: "var(--fg-default)", fontWeight: 600 }}>
-              Email support →
+              Email admin →
             </span>
           </a>
         </div>
@@ -2444,9 +2035,9 @@ function FinalCta() {
           className="cta-wave"
           style={{
             position: "absolute",
-            right: -40,
-            bottom: -30,
-            width: "55%",
+            right: 0,
+            bottom: 0,
+            width: "42%",
             opacity: 0.42,
             pointerEvents: "none",
             zIndex: 1,
@@ -2465,12 +2056,13 @@ function FinalCta() {
         {/* Soft corner halo */}
         <div
           aria-hidden
+          className="cta-halo"
           style={{
             position: "absolute",
-            right: -160,
-            top: -100,
-            width: 400,
-            height: 400,
+            right: 0,
+            top: 0,
+            width: 180,
+            height: 180,
             borderRadius: "50%",
             background:
               "radial-gradient(circle, color-mix(in oklch, var(--layers-mint) 22%, transparent) 0%, transparent 65%)",
@@ -2482,28 +2074,39 @@ function FinalCta() {
 
       <style jsx>{`
         @keyframes ctaShimmer {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
+          0%,
+          100% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
         }
         @keyframes ctaPulseDot {
           0% {
-            box-shadow: 0 0 0 0 color-mix(in oklch, var(--layers-mint) 60%, transparent);
+            box-shadow: 0 0 0 0
+              color-mix(in oklch, var(--layers-mint) 60%, transparent);
           }
           70% {
-            box-shadow: 0 0 0 10px color-mix(in oklch, var(--layers-mint) 0%, transparent);
+            box-shadow: 0 0 0 10px
+              color-mix(in oklch, var(--layers-mint) 0%, transparent);
           }
           100% {
-            box-shadow: 0 0 0 0 color-mix(in oklch, var(--layers-mint) 0%, transparent);
+            box-shadow: 0 0 0 0
+              color-mix(in oklch, var(--layers-mint) 0%, transparent);
           }
         }
         @keyframes ctaButtonPulse {
-          0%, 100% {
-            box-shadow: 0 1px 0 color-mix(in oklch, var(--layers-mint) 28%, transparent),
-                        0 0 0 0 color-mix(in oklch, var(--layers-mint) 35%, transparent);
+          0%,
+          100% {
+            box-shadow:
+              0 1px 0 color-mix(in oklch, var(--layers-mint) 28%, transparent),
+              0 0 0 0 color-mix(in oklch, var(--layers-mint) 35%, transparent);
           }
           50% {
-            box-shadow: 0 1px 0 color-mix(in oklch, var(--layers-mint) 28%, transparent),
-                        0 0 0 8px color-mix(in oklch, var(--layers-mint) 0%, transparent);
+            box-shadow:
+              0 1px 0 color-mix(in oklch, var(--layers-mint) 28%, transparent),
+              0 0 0 8px color-mix(in oklch, var(--layers-mint) 0%, transparent);
           }
         }
         :global(.cta-pulse) {
@@ -2520,6 +2123,9 @@ function FinalCta() {
             grid-template-columns: minmax(0, 1fr) !important;
           }
           :global(.cta-wave) {
+            display: none !important;
+          }
+          :global(.cta-halo) {
             display: none !important;
           }
         }

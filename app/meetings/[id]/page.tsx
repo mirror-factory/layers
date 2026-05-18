@@ -1,13 +1,13 @@
 import { notFound } from "next/navigation";
 import { TopBar } from "@/components/top-bar";
 import { MeetingCostPanel } from "@/components/meeting-cost-panel";
-import { MeetingChat } from "@/components/meeting-chat";
 import { MeetingNotesEditor } from "@/components/meeting-notes-editor";
 import { MeetingNotesPushPanel } from "@/components/meeting-notes-push-panel";
 import { OnboardingProvider } from "@/components/onboarding/onboarding-provider";
 import { FirstMeetingToast } from "@/components/onboarding/first-meeting-toast";
 import { ONBOARDING_ANCHOR_ATTR } from "@/lib/onboarding/copy";
 import { MeetingDetailPollerWrapper } from "./poller-wrapper";
+import { formatCompletedActionDueLabel } from "@/lib/meetings/format";
 import { getMeetingsStore } from "@/lib/meetings/store";
 import { AudioWaveRibbon } from "@/components/audio-wave-ribbon";
 import {
@@ -124,7 +124,6 @@ interface CompletedSummaryViewModel {
 }
 
 function CompletedMeetingWorkspace({ meeting }: { meeting: CompletedMeeting }) {
-  const meetingDate = new Date(meeting.createdAt);
   const summary = normalizeCompletedSummary(meeting.summary);
   const summaryText =
     summary.summary ??
@@ -149,7 +148,7 @@ function CompletedMeetingWorkspace({ meeting }: { meeting: CompletedMeeting }) {
     <>
       <div className="session-detail-workspace">
         <SessionCaptureCard
-          date={meetingDate}
+          date={meeting.createdAt}
           durationLabel={formatMeetingDuration(meeting.durationSeconds)}
           statusLabel="Summary ready"
           badgeLabel="DONE"
@@ -189,18 +188,10 @@ function CompletedMeetingWorkspace({ meeting }: { meeting: CompletedMeeting }) {
           actions={actionRows}
           decisions={summary.decisions}
           stats={stats}
-          // Render-prop form so the canvas can hand a citation seek+highlight
-          // handler down to MeetingChat. Without this, citation pills render
-          // but don't navigate anywhere (PROD-464).
-          askPanel={({ onCitationClick }) => (
-            <MeetingChat
-              key="ask-panel"
-              meetingId={meeting.id}
-              variant="workspace"
-              participantName={summary.participants[0] ?? null}
-              onCitationClick={onCitationClick}
-            />
-          )}
+          meetingChat={{
+            meetingId: meeting.id,
+            participantName: summary.participants[0] ?? null,
+          }}
           notesPanel={
             <MeetingNotesEditor
               meetingId={meeting.id}
@@ -313,12 +304,7 @@ function buildCompletedActions(
   return actionItems.map((action, index) => ({
     id: `${action.task}-${index}`,
     text: formatMeetingActionItem(action),
-    due: action.dueDate
-      ? new Intl.DateTimeFormat(undefined, {
-          month: "short",
-          day: "numeric",
-        }).format(new Date(action.dueDate))
-      : null,
+    due: formatCompletedActionDueLabel(action.dueDate),
     priority: priorities[index % priorities.length],
   }));
 }

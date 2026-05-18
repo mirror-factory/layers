@@ -9,7 +9,7 @@ test("app/privacy/page.tsx route smoke proof", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Privacy Policy" })).toBeVisible();
   await expect(page.getByText("Launch draft - legal review pending")).toBeVisible();
   await expect(
-    page.getByLabel("Legal navigation").getByRole("link", {
+    page.getByLabel("Related actions").getByRole("link", {
       name: "Delete account",
     }),
   ).toBeVisible();

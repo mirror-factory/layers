@@ -73,13 +73,13 @@ describe("firstMeetingNudgeEmail", () => {
 });
 
 describe("weekOneFollowupEmail", () => {
-  it("renders the day-7 follow-up with a support@ link", () => {
+  it("renders the day-7 follow-up with an admin contact link", () => {
     const { subject, html } = weekOneFollowupEmail(APP_URL);
 
     expect(subject).toBe("What's worked? What hasn't?");
     assertPaperCalmVoice(subject, html);
 
-    expect(html).toContain("mailto:support@mirrorfactory.ai");
+    expect(html).toContain("mailto:admin@mirafactory.ai");
     expect(html).toContain("read every reply");
     expect(html).toContain(`${APP_URL}/settings/notifications`);
   });

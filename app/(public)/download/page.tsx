@@ -230,7 +230,7 @@ const DOWNLOAD_CHANNELS: Record<DownloadPlatformKey, DownloadChannel> = {
           {
             cta: "TestFlight invite — opening soon",
             pendingNote:
-              "We're finalising App Store Connect signing. Email support@mirrorfactory.ai for early access.",
+              "We're finalising App Store Connect signing. Email admin@mirafactory.ai for early access.",
           },
         ],
   },
@@ -871,7 +871,7 @@ export default function DownloadPage() {
                 fontSize: "clamp(1.3rem, 1rem + 0.9vw, 1.7rem)",
               }}
             >
-              We answer install email faster than support tickets.
+              We answer install email faster than ticket queues.
             </h2>
             <p
               className="max-w-[52ch] text-pretty"
@@ -888,7 +888,7 @@ export default function DownloadPage() {
           </div>
           <div className="flex flex-col items-start gap-3 sm:items-end sm:justify-center">
             <a
-              href="mailto:support@mirrorfactory.ai?subject=Layers%20install%20help"
+              href="mailto:admin@mirafactory.ai?subject=Layers%20install%20help"
               className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-[0.92rem] font-medium tracking-tight transition-colors duration-150"
               style={{
                 backgroundColor: "var(--bg-surface)",
@@ -896,7 +896,7 @@ export default function DownloadPage() {
                 border: "1px solid var(--border-default)",
               }}
             >
-              support@mirrorfactory.ai
+              admin@mirafactory.ai
               <ArrowUpRight size={14} aria-hidden="true" />
             </a>
             <Link

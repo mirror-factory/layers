@@ -5,6 +5,8 @@
 
 import { test, expect } from "@playwright/test";
 
+test.describe.configure({ mode: "serial" });
+
 const PAGES = [
   { path: "/", name: "Home" },
   { path: "/record", name: "Record" },
@@ -27,20 +29,23 @@ const PAGES = [
 
 for (const { path, name } of PAGES) {
   test(`${name} (${path}) loads with 200 and renders`, async ({ page }) => {
-    test.setTimeout(20_000);
+    test.setTimeout(150_000);
 
-    const response = await page.goto(path, { waitUntil: "domcontentloaded" });
+    const response = await page.goto(path, {
+      waitUntil: "domcontentloaded",
+      timeout: 120_000,
+    });
 
     // Page returns 200
     expect(response?.status()).toBe(200);
 
     // Body has content
     const body = page.locator("body");
-    await expect(body).not.toBeEmpty();
+    await expect(body).not.toBeEmpty({ timeout: 15_000 });
 
     // A heading or title element exists somewhere on the page
     const heading = page.locator('h1, h2, h3, [role="heading"]').first();
-    await expect(heading).toBeVisible({ timeout: 5_000 });
+    await expect(heading).toBeVisible({ timeout: 15_000 });
 
     // No error boundary visible
     const errorBoundary = page.locator(

@@ -161,12 +161,31 @@ export function WelcomeModal({ open, onDismiss }: WelcomeModalProps) {
 
       <style jsx>{`
         .onboarding-welcome-scrim {
-          position: fixed;
-          inset: 0;
+          position: fixed !important;
+          inset: 0 !important;
           z-index: 60;
           display: grid;
           place-items: center;
-          padding: clamp(16px, 4vw, 32px);
+          width: 100vw;
+          height: 100dvh;
+          overflow: auto;
+          overscroll-behavior: contain;
+          padding-block-start: max(
+            clamp(16px, 4vw, 32px),
+            calc(env(safe-area-inset-top, 0px) + 12px)
+          );
+          padding-block-end: max(
+            clamp(16px, 4vw, 32px),
+            calc(env(safe-area-inset-bottom, 0px) + 12px)
+          );
+          padding-inline-start: max(
+            clamp(16px, 4vw, 32px),
+            calc(env(safe-area-inset-left, 0px) + 12px)
+          );
+          padding-inline-end: max(
+            clamp(16px, 4vw, 32px),
+            calc(env(safe-area-inset-right, 0px) + 12px)
+          );
           background: color-mix(
             in oklch,
             var(--layers-ink) 32%,
@@ -177,6 +196,12 @@ export function WelcomeModal({ open, onDismiss }: WelcomeModalProps) {
         }
         .onboarding-welcome-card {
           width: min(100%, 480px);
+          max-height: calc(
+            100dvh - env(safe-area-inset-top, 0px) -
+              env(safe-area-inset-bottom, 0px) - 24px
+          );
+          overflow: auto;
+          overscroll-behavior: contain;
           background: var(--bg-surface, oklch(0.997 0.004 168));
           border: 1px solid var(--border-default);
           border-radius: 20px;
@@ -334,6 +359,20 @@ export function WelcomeModal({ open, onDismiss }: WelcomeModalProps) {
           }
           .onboarding-welcome-primary:active {
             transform: none;
+          }
+        }
+        @media (max-width: 420px) {
+          .onboarding-welcome-card {
+            border-radius: 16px;
+            padding: 20px;
+          }
+          .onboarding-welcome-actions {
+            align-items: stretch;
+            flex-direction: column;
+          }
+          .onboarding-welcome-primary,
+          .onboarding-welcome-secondary {
+            width: 100%;
           }
         }
       `}</style>

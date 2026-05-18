@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Layers Release Readiness CPO Report</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --paper: #fff;
+        --ink: #000;
+        --soft: #f3f3f3;
+        --line: #000;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        background:
+          linear-gradient(90deg, rgba(0, 0, 0, 0.045) 1px, transparent 1px),
+          linear-gradient(rgba(0, 0, 0, 0.045) 1px, transparent 1px),
+          var(--paper);
+        background-size: 18px 18px;
+        color: var(--ink);
+        font-family: Arial, Helvetica, sans-serif;
+        line-height: 1.45;
+      }
+
+      a { color: var(--ink); font-weight: 700; text-decoration: underline; }
+
+      .page { max-width: 1160px; margin: 0 auto; padding: 24px; }
+
+      .window {
+        border: 3px solid var(--line);
+        background: var(--paper);
+        box-shadow: 8px 8px 0 var(--ink);
+      }
+
+      .titlebar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 36px;
+        padding: 6px 10px;
+        border-bottom: 3px solid var(--line);
+        background: repeating-linear-gradient(45deg, #000, #000 4px, #fff 4px, #fff 8px);
+      }
+
+      .dot { width: 14px; height: 14px; border: 2px solid var(--line); background: var(--paper); }
+
+      .titlebar span:last-child {
+        margin-left: 8px;
+        padding: 2px 8px;
+        border: 2px solid var(--line);
+        background: var(--paper);
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      header, section, footer { padding: 24px 28px; border-bottom: 3px solid var(--line); }
+      footer { border-bottom: 0; font-size: 12px; }
+
+      h1, h2, h3, p { margin-top: 0; }
+      h1 {
+        margin-bottom: 12px;
+        font-size: clamp(34px, 6vw, 68px);
+        line-height: 0.95;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      h2 {
+        display: inline-block;
+        margin-bottom: 14px;
+        padding: 4px 8px;
+        border: 3px solid var(--line);
+        background: var(--ink);
+        color: var(--paper);
+        font-size: 17px;
+        text-transform: uppercase;
+      }
+
+      h3 { margin-bottom: 8px; font-size: 16px; text-transform: uppercase; }
+
+      .meta, .grid { display: grid; gap: 0; }
+      .meta {
+        grid-template-columns: repeat(4, 1fr);
+        margin-top: 20px;
+        border-top: 3px solid var(--line);
+        border-left: 3px solid var(--line);
+      }
+
+      .meta div {
+        min-height: 74px;
+        padding: 10px;
+        border-right: 3px solid var(--line);
+        border-bottom: 3px solid var(--line);
+      }
+
+      .label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      .value { display: block; font-size: 15px; font-weight: 700; overflow-wrap: anywhere; }
+      .grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+      .card {
+        min-height: 170px;
+        padding: 16px;
+        border: 3px solid var(--line);
+        background: var(--paper);
+      }
+
+      .card.good {
+        background: repeating-linear-gradient(-45deg, #fff, #fff 8px, #f0f0f0 8px, #f0f0f0 16px);
+      }
+
+      .card.warn {
+        background: repeating-linear-gradient(90deg, #fff, #fff 10px, #e8e8e8 10px, #e8e8e8 20px);
+      }
+
+      ul { margin: 0; padding-left: 20px; }
+      li + li { margin-top: 8px; }
+
+      table { width: 100%; border-collapse: collapse; border: 3px solid var(--line); }
+      th, td { padding: 10px; border: 2px solid var(--line); text-align: left; vertical-align: top; }
+      th { background: var(--ink); color: var(--paper); font-size: 12px; text-transform: uppercase; }
+
+      .stamp {
+        display: inline-block;
+        padding: 3px 8px;
+        border: 2px solid var(--line);
+        background: var(--paper);
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      .stamp.pass { background: var(--ink); color: var(--paper); }
+      .stamp.partial { background: var(--soft); }
+      .stamp.blocked { border-width: 3px; }
+
+      .ticker {
+        padding: 10px;
+        border: 3px solid var(--line);
+        background: var(--ink);
+        color: var(--paper);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 13px;
+        overflow-wrap: anywhere;
+      }
+
+      @media (max-width: 820px) {
+        .page { padding: 12px; }
+        header, section, footer { padding: 18px; }
+        .meta, .grid { grid-template-columns: 1fr; }
+        h1 { font-size: 40px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <div class="window">
+        <div class="titlebar">
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span>Layers Release Readiness</span>
+        </div>
+
+        <header>
+          <h1>CPO QA Report</h1>
+          <p><strong>TLDR:</strong> The app is safe for external tester debug QA, but not yet safe to call store/TestFlight/public release-ready. Web/API gates are green, onboarding popup cutoff and mobile recorder setup-state inconsistencies were caught and fixed with targeted mobile regressions, iOS and Android prove the Google button opens the correct native in-app auth surface, and Electron has a fresh packaged-app resmoke proving home/sign-in/privacy render from <code>layers.mirrorfactory.ai</code> with sans-only computed fonts. Android native OAuth cleanup was hardened after a local launch/resume quirk. Remaining blockers are review, full manual Google callback, real-device mic/background proof, real-device OAuth return polish, and distribution signing/notarization.</p>
+          <div class="meta">
+            <div><span class="label">Updated</span><span class="value">2026-05-18</span></div>
+            <div><span class="label">Branch</span><span class="value">release/external-tester-readiness-2026-05-17</span></div>
+            <div><span class="label">PR</span><span class="value">#88 to development</span></div>
+            <div><span class="label">Verdict</span><span class="value">External tester debug QA only</span></div>
+          </div>
+        </header>
+
+        <section>
+          <h2>Current Decision</h2>
+          <div class="grid">
+            <article class="card good">
+              <h3>What Is Green</h3>
+              <ul>
+                <li>Typecheck, lint, compliance, deprecations, unit, API, MCP, tools, contracts, evals.</li>
+                <li>Focused browser smoke across desktop/mobile and light/dark.</li>
+                <li>Feature checklist, mobile polish, visual regression, and onboarding safe-area regression after stale tests were fixed.</li>
+              </ul>
+            </article>
+            <article class="card good">
+              <h3>Native Proof</h3>
+              <ul>
+                <li>iOS simulator Google opens SFSafariViewController.</li>
+                <li>Android emulator Google opens Chrome Custom Tab.</li>
+                <li>Electron packaged app launches, reloads, opens Google, reaches recording flow, and now has a fresh home/sign-in/privacy resmoke.</li>
+              </ul>
+            </article>
+            <article class="card warn">
+              <h3>Not Done Yet</h3>
+              <ul>
+                <li>Full Google callback still needs manual password/2FA completion.</li>
+                <li>Real-device microphone/background behavior is unproven.</li>
+                <li>TestFlight, Play signing, and Electron notarization were not exercised.</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
+        <section>
+          <h2>Platform Matrix</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Platform</th>
+                <th>Status</th>
+                <th>Proof</th>
+                <th>Remaining Risk</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Web</td>
+                <td><span class="stamp pass">Pass</span></td>
+                <td>All low-risk gates passed. Smoke, feature checklist, mobile polish, visual regression, onboarding safe-area regression, and screenshots are captured under <code>docs/evidence/2026-05-18-full-platform-final/web/</code>.</td>
+                <td>Full production Google callback was not completed in this pass.</td>
+              </tr>
+              <tr>
+                <td>iOS simulator</td>
+                <td><span class="stamp partial">Partial</span></td>
+                <td><code>ios/18-after-native-oauth-cleanup-google.png</code> shows Google inside SFSafariViewController with a Done control after the shared native OAuth cleanup hardening. Plists lint and Xcode project scheme exists.</td>
+                <td>Full callback, real-device mic/background behavior, archive signing, and TestFlight remain unproven.</td>
+              </tr>
+              <tr>
+                <td>Android emulator</td>
+                <td><span class="stamp partial">Partial</span></td>
+                <td>Local debug APK built, installed, and launched. <code>android/31-narrowed-google-custom-tab-cdp-input.png</code> proves Google in Chrome Custom Tab after the native OAuth cleanup hardening. <code>android/28-cleanup-narrowed-cold-launch.png</code> proves cold launch is no longer black in the latest run.</td>
+                <td>Full callback needs manual login. Local WebView mic cannot be proven over <code>http://10.0.2.2:3101</code>. Real-device OAuth return should confirm the local dev repaint does not appear outside <code>next dev</code>. Play signing remains unproven.</td>
+              </tr>
+              <tr>
+                <td>Electron/macOS</td>
+                <td><span class="stamp partial">Partial</span></td>
+                <td>Packaged app opens home/sign-in/privacy from <code>layers.mirrorfactory.ai</code>, confirms sans-only computed fonts, reaches Google OAuth, exercises recording token/finalize path, and survives reload/reopen.</td>
+                <td>Full callback needs manual login. One post-finalize server-component digest should be investigated if reproducible. Notarization remains unproven.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section>
+          <h2>What Changed</h2>
+          <ul>
+            <li>Fixed stale sign-up copy that referenced creating an account or continuing with Google even though public sign-up is invite-only.</li>
+            <li>Fixed onboarding welcome modal and tour popovers so they stay inside mobile viewport and safe-area bounds instead of getting clipped by the viewport/top bars.</li>
+            <li>Fixed mobile recorder setup/error states: Android-style mic failures now show <code>Review setup</code>, wrap cleanly, keep button contrast, and avoid raw provider env-variable leakage.</li>
+            <li>Aligned the recent-recordings empty CTA to <code>Start recording</code> and the same dark primary button language as the main recorder.</li>
+            <li>Updated stale Playwright feature/mobile tests to match the current homepage and invite-only alpha sign-up state.</li>
+            <li>Added <code>tests/e2e/onboarding-safe-area.spec.ts</code>, which first caught the clipping bug and then passed after the fix.</li>
+            <li>Updated six homepage visual snapshots for the intentional homepage redesign.</li>
+            <li>Reran final slim gates after cleanup: typecheck, lint, mobile onboarding/mobile polish, desktop feature checklist, and native config are green.</li>
+            <li>Captured final evidence folders and per-platform markdown reports.</li>
+            <li>Confirmed source contact copy uses <code>admin@mirafactory.ai</code>; stale <code>support@</code> appeared only in old production/evidence, not current source.</li>
+            <li>Attempted to restart Claude Code Opus lanes; Claude is currently blocked by the org monthly usage limit, so Codex completed the final pass directly.</li>
+            <li>Hardened native OAuth cleanup: stale Capacitor Browser surfaces close on native startup, and native Google OAuth disposes browser/listener state when the browser is cancelled.</li>
+            <li>Added focused native OAuth coverage for browser cancel cleanup. Final native OAuth/onboarding-email rerun passed 14/14.</li>
+            <li>Rechecked iOS after the shared native OAuth hardening; launch and SFSafariViewController OAuth surface still pass.</li>
+            <li>Re-smoked the packaged Electron app after final fixes; fresh screenshots and computed-font proof were added to the evidence folder.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>CI And PR</h2>
+          <table>
+            <thead>
+              <tr><th>Item</th><th>Status</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>PR #88</td><td><span class="stamp blocked">Review required</span></td><td>Merge state is blocked by review requirement.</td></tr>
+              <tr><td>Vercel</td><td><span class="stamp pass">Pass</span></td><td>Preview deployment completed.</td></tr>
+              <tr><td>Tier 0-1 Fast Gates</td><td><span class="stamp pass">Pass</span></td><td>GitHub Actions check passed.</td></tr>
+              <tr><td>Tier 2 Focused Browser Proof</td><td><span class="stamp pass">Pass</span></td><td>GitHub Actions check passed.</td></tr>
+              <tr><td>Broad/native CI jobs</td><td><span class="stamp partial">Skipped</span></td><td>Skipped by current workflow selection; local proof was captured separately.</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section>
+          <h2>Evidence</h2>
+          <div class="ticker">docs/evidence/2026-05-18-full-platform-final/command-summary.md</div>
+          <p></p>
+          <table>
+            <tbody>
+              <tr><td>Web report</td><td><code>docs/evidence/2026-05-18-full-platform-final/web-final-report.md</code></td></tr>
+              <tr><td>iOS report</td><td><code>docs/evidence/2026-05-18-full-platform-final/ios-simulator-final-report.md</code></td></tr>
+              <tr><td>Android report</td><td><code>docs/evidence/2026-05-18-full-platform-final/android-emulator-final-report.md</code></td></tr>
+              <tr><td>Electron report</td><td><code>docs/evidence/2026-05-18-full-platform-final/electron-macos-final-report.md</code></td></tr>
+              <tr><td>Release verdict</td><td><code>docs/evidence/2026-05-18-full-platform-final/release-verdict.md</code></td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section>
+          <h2>Next Actions</h2>
+          <ol>
+            <li>Approve/review PR #88 when ready.</li>
+            <li>Complete one manual Google callback on iOS, Android, and Electron, or explicitly accept OAuth-surface-only proof for debug QA.</li>
+            <li>Run one real-device iPhone and Android mic/background/OAuth-return check before TestFlight or Play release.</li>
+            <li>Recheck Android OAuth return on a real device or HTTPS production/preview build; local Next dev briefly repainted after Custom Tab close before settling back into the styled page.</li>
+            <li>Investigate the Electron post-finalize server-component digest if it reproduces during a completed signed-in recording.</li>
+            <li>Promote using the documented flow: release branch to development, then staging, then main.</li>
+          </ol>
+        </section>
+
+        <footer>
+          Claude Code Opus lanes were attempted for the final worker pass, but the Claude CLI returned the org monthly usage limit. Codex completed the final verification, report, Linear updates, and cleanup directly.
+        </footer>
+      </div>
+    </main>
+  </body>
+</html>

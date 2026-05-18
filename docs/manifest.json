@@ -1,0 +1,1182 @@
+{
+  "version": 1,
+  "generatedAt": "2026-05-18T13:08:21.588Z",
+  "docs": [
+    {
+      "id": "activity-log",
+      "localPath": "docs/ACTIVITY_LOG.md",
+      "contentHash": "f5ae736424e332b2242d48bf442f6e65a4d1a95593a1bfaebcfb0a04e3b37a5a",
+      "priority": "cold"
+    },
+    {
+      "id": "ai-harness-tiers",
+      "localPath": "docs/AI_HARNESS_TIERS.md",
+      "contentHash": "01f4947a6193e4d72bb11d7aba1e3977587fedc33860410b5e84be216dc51a2b",
+      "priority": "cold"
+    },
+    {
+      "id": "ai-operating-system-implementation-plan",
+      "localPath": "docs/AI_OPERATING_SYSTEM_IMPLEMENTATION_PLAN.md",
+      "contentHash": "4ca5c1f2dc2a5ed4cbafefcdc8b80a2c5c1ac398879e0731d17343dc7c822acd",
+      "priority": "cold"
+    },
+    {
+      "id": "apis-api-ai-logs-errors",
+      "localPath": "docs/apis/api-ai-logs-errors.md",
+      "contentHash": "7c1817944691f3841bfe9c261d653421c766e95e12700eb105e53a9b8f8e71e7",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-api-ai-logs-stats",
+      "localPath": "docs/apis/api-ai-logs-stats.md",
+      "contentHash": "b45fbc6df9d2ba42132ee73ce1775991234e320eba33bb2f26bbcf5d7431b574",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-api-ai-logs",
+      "localPath": "docs/apis/api-ai-logs.md",
+      "contentHash": "fe3951e5072e76fb75429eb3a27f969f2d618294f27b0d0e40dc5be461668c33",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-api-control-plane",
+      "localPath": "docs/apis/api-control-plane.md",
+      "contentHash": "edf3669baacfda9021069f13656105b9a716b1dd6e0c6c56adeab902fd6b4bda",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-admin-pricing-activate-route",
+      "localPath": "docs/apis/app-api-admin-pricing-activate-route.md",
+      "contentHash": "dabce96252c5e304d886dcfabd0ea7212d587dcd8f7b31643e6710fcc0e21a51",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-admin-pricing-route",
+      "localPath": "docs/apis/app-api-admin-pricing-route.md",
+      "contentHash": "f8bcfc696acbbf914dce838a5d53c7734c171b1505c53d0d77f597dbbe1be8bb",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-ai-logs-errors-route",
+      "localPath": "docs/apis/app-api-ai-logs-errors-route.md",
+      "contentHash": "dfcbf9e0cac09ffd0b5548f207c89a0b9973a0e219e5da1779d37531fa7b6d8e",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-ai-logs-route",
+      "localPath": "docs/apis/app-api-ai-logs-route.md",
+      "contentHash": "6a31db7a9436e77442a05eb7ad56f3448e2ad05576c61d7e7e01a2e79bf15bc2",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-ai-logs-stats-route",
+      "localPath": "docs/apis/app-api-ai-logs-stats-route.md",
+      "contentHash": "65294b3312c47fb8ab89f37a4c12ebdc92bcb08ba7ba34f1e290215b62e50f81",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-auth-api-key-route",
+      "localPath": "docs/apis/app-api-auth-api-key-route.md",
+      "contentHash": "98a064d5723ced002bc8623987d9c07cd30186606bc568d752a539082da846ef",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-auth-send-email-route",
+      "localPath": "docs/apis/app-api-auth-send-email-route.md",
+      "contentHash": "973652a130dfaf99837c6f741d6c7c2e149ba2189fc99660fdcac199e29e157b",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-calendar-callback-provider-route",
+      "localPath": "docs/apis/app-api-calendar-callback-provider-route.md",
+      "contentHash": "a3f73c751376552b1757155da5bd09a1fc1700f0ec45548630006c65210fe6b1",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-calendar-connect-provider-route",
+      "localPath": "docs/apis/app-api-calendar-connect-provider-route.md",
+      "contentHash": "b3b26a2471c422fc6581049a90ba486839e33d1b6887283368cbee20904ab080",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-calendar-disconnect-provider-route",
+      "localPath": "docs/apis/app-api-calendar-disconnect-provider-route.md",
+      "contentHash": "b36cdf1d731c9df96a290109db273eac89d74eece522da1a64ac9e6aee506703",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-calendar-upcoming-route",
+      "localPath": "docs/apis/app-api-calendar-upcoming-route.md",
+      "contentHash": "b32065ae1e9b6b120f86d8583c16e1bcb5ab3944bcc483d454d3f94a52d07874",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-chat-route",
+      "localPath": "docs/apis/app-api-chat-route.md",
+      "contentHash": "c6c7d4ae8d2318df455bc5b8c8ecdb7797004d6bfae2b2eafda2110adafbcd03",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-control-plane-evidence-export-route",
+      "localPath": "docs/apis/app-api-control-plane-evidence-export-route.md",
+      "contentHash": "bad4f27f9f399e9daef1cc5ae4cf723e900653d7fc83fa61f582a6bb325baee8",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-control-plane-route",
+      "localPath": "docs/apis/app-api-control-plane-route.md",
+      "contentHash": "5f0edfb750f5a1c700e67122c152df383e24d95cd391c15b276abd8d55fbafcb",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-dev-kit-config-name-route",
+      "localPath": "docs/apis/app-api-dev-kit-config-name-route.md",
+      "contentHash": "65e7837e4855f4ed3ec51aab2e133a6ebbde61579d5238f8d19597eb567f49f7",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-dev-kit-connectors-route",
+      "localPath": "docs/apis/app-api-dev-kit-connectors-route.md",
+      "contentHash": "4a341a1edb70329efd18768e8c1e63e58698405d857f9635691d1f4bf8eb1196",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-dev-kit-cost-route",
+      "localPath": "docs/apis/app-api-dev-kit-cost-route.md",
+      "contentHash": "9dffc2ffd8a0806aaf207c368e3d331d1c483c551a5e9f3c420ae6d8c114f002",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-dev-kit-coverage-route",
+      "localPath": "docs/apis/app-api-dev-kit-coverage-route.md",
+      "contentHash": "3b115bc86f6b3c223c10044cf1ddbf31fdb304bf666f720dede947778b139a11",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-dev-kit-dependencies-route",
+      "localPath": "docs/apis/app-api-dev-kit-dependencies-route.md",
+      "contentHash": "92fa9852c228d619bf08307d5909028b1be911034d09e9e77a0aab492885e4b9",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-dev-kit-deployments-route",
+      "localPath": "docs/apis/app-api-dev-kit-deployments-route.md",
+      "contentHash": "9f8954ff5132eb81165b77e49fa1616ab4ce55abc736c1fe894c4ba1651b7e0a",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-dev-kit-design-system-route",
+      "localPath": "docs/apis/app-api-dev-kit-design-system-route.md",
+      "contentHash": "b16537882bfa523f942de0776a4138d631ccd4942b95cdceab8b62ae18271272",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-dev-kit-evals-id-route",
+      "localPath": "docs/apis/app-api-dev-kit-evals-id-route.md",
+      "contentHash": "08ca897eb33aea20be74f5c3881fa18266ab653b0130946560f0466020095859",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-dev-kit-evals-route",
+      "localPath": "docs/apis/app-api-dev-kit-evals-route.md",
+      "contentHash": "11f35188556ca477c3308de37ec6a2ea838d9ff7180d2759588c92952449ba96",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-dev-kit-features-name-route",
+      "localPath": "docs/apis/app-api-dev-kit-features-name-route.md",
+      "contentHash": "d2645280333e7adc1c03a867a53b1937ecabba57f20f7dfb3213b14fa40783e4",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-dev-kit-features-route",
+      "localPath": "docs/apis/app-api-dev-kit-features-route.md",
+      "contentHash": "86fc5d31316b7c0900977b8f7e851308e16024f64f422fab5f7e5c6e818b9a62",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-dev-kit-index-route",
+      "localPath": "docs/apis/app-api-dev-kit-index-route.md",
+      "contentHash": "1e0b7b7ad25ac4d537272d3cfd07c315ad4b5a427f5b7ee70389361a4e58c7c2",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-dev-kit-logs-unified-route",
+      "localPath": "docs/apis/app-api-dev-kit-logs-unified-route.md",
+      "contentHash": "b71090b70b77f5c0ec1cda7be71e95d7ee1a2f315c54e8672fdab32a53f3753e",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-dev-kit-overview-route",
+      "localPath": "docs/apis/app-api-dev-kit-overview-route.md",
+      "contentHash": "626aca533d9b7ac78f984b06e925623e17910e81d7499326bb4471ec32b1fba9",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-dev-kit-registries-route",
+      "localPath": "docs/apis/app-api-dev-kit-registries-route.md",
+      "contentHash": "c64ae3dd069d891c613b811f40925a7d849fd8de847f4f7b91c6a208dfab951d",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-dev-kit-regressions-route",
+      "localPath": "docs/apis/app-api-dev-kit-regressions-route.md",
+      "contentHash": "4cbdc1ad6b4d6d1a16e36874e6168a17746956066b50c015d1ce1f0416a5a286",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-dev-kit-runs-route",
+      "localPath": "docs/apis/app-api-dev-kit-runs-route.md",
+      "contentHash": "f7165ec4d81bf024aa0fe2ce73bb0520440f2ed1e42f029b0eb81a1804814041",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-dev-kit-runs-run-id-route",
+      "localPath": "docs/apis/app-api-dev-kit-runs-run-id-route.md",
+      "contentHash": "541c5fd91fbb2e944c86cb052dfca9513d2bdc03274c9305e7ed514a6159dc90",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-dev-kit-sessions-id-route",
+      "localPath": "docs/apis/app-api-dev-kit-sessions-id-route.md",
+      "contentHash": "f8792165642ab85dbb326a53388efdeb4d77859e03d2db411c5d2ae8e4c14466",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-dev-kit-sessions-route",
+      "localPath": "docs/apis/app-api-dev-kit-sessions-route.md",
+      "contentHash": "a335c87a5ce646b03f46c8ca98585af6cec9be3554798de90190e42b33ff3a8c",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-dev-kit-status-route",
+      "localPath": "docs/apis/app-api-dev-kit-status-route.md",
+      "contentHash": "c781506c1497622a128bb5c1ca1aad32adbb3fb86ee808601e8849e01f4c01e3",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-dev-kit-tools-route",
+      "localPath": "docs/apis/app-api-dev-kit-tools-route.md",
+      "contentHash": "11fc47e078806aa2f9f87dfdc20be6c379266b9e0bce5bb1157a1cffb8712470",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-embeddings-backfill-route",
+      "localPath": "docs/apis/app-api-embeddings-backfill-route.md",
+      "contentHash": "0e460809608186f4149925b8c489c859806b68dda1534893b0e946326110158c",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-health-route",
+      "localPath": "docs/apis/app-api-health-route.md",
+      "contentHash": "8d46458e6d3478085c26da49f26f01072f138a04592130110e8e1150179c6cd0",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-mcp-transport-route",
+      "localPath": "docs/apis/app-api-mcp-transport-route.md",
+      "contentHash": "29169574499c138e4145c1eb6f2b252857f3a4a1852eb25c2fc54dc25f53da78",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-meetings-id-export-route",
+      "localPath": "docs/apis/app-api-meetings-id-export-route.md",
+      "contentHash": "f422fb5d28ce8cd76213554e6fb675e83f0b2b84edb07df3c8896cfc4024a5ff",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-meetings-id-notes-package-route",
+      "localPath": "docs/apis/app-api-meetings-id-notes-package-route.md",
+      "contentHash": "5ff50adcc59ab68362e053f69b2ae569abcafbcb41cbe728daafd3c52cafd460",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-meetings-id-route",
+      "localPath": "docs/apis/app-api-meetings-id-route.md",
+      "contentHash": "e9bfaddf32cf0bbdd0cb8017f1c53132bd0b3b5cf61e9f12b3ff5828873100a3",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-meetings-route",
+      "localPath": "docs/apis/app-api-meetings-route.md",
+      "contentHash": "4ddc812da58910b38b169dfb7d58059af6daf3e24dcfb11ccf0c1bbf36f29b49",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-models-route",
+      "localPath": "docs/apis/app-api-models-route.md",
+      "contentHash": "8a3ef7961cb12e6dabe1c8c97baab4ce4f72529dde11fc45cfb458cdf29003a8",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-oauth-authorize-route",
+      "localPath": "docs/apis/app-api-oauth-authorize-route.md",
+      "contentHash": "cea5cdfce4ecb8ce78ec9c4f35b38daf0ee46e3b21a7bee7e55e4897e04eaf41",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-oauth-callback-route",
+      "localPath": "docs/apis/app-api-oauth-callback-route.md",
+      "contentHash": "0aa93d1b18b4eca8e72a0436708daaac5d5f15c75c248c9db10fb57693c38083",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-oauth-consent-route",
+      "localPath": "docs/apis/app-api-oauth-consent-route.md",
+      "contentHash": "ea6aa1c6c5b4403ea155e7089b3dc30c658c4ac89aef950cfa637f494eadbc04",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-oauth-revoke-route",
+      "localPath": "docs/apis/app-api-oauth-revoke-route.md",
+      "contentHash": "63f35e8aad491974834ca34933a3066f722bb275758e04c62c77fae815b7fd45",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-oauth-token-route",
+      "localPath": "docs/apis/app-api-oauth-token-route.md",
+      "contentHash": "7a36f78db55f8b9be1a3f96a2ed87b42b07cd5cf368bc3b1859ec3ba6a330ef8",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-observability-health-route",
+      "localPath": "docs/apis/app-api-observability-health-route.md",
+      "contentHash": "3b85b917bc059e3e83b351f9a65cda89ffd46fc2fa6e06221839519f8173dd8f",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-search-route",
+      "localPath": "docs/apis/app-api-search-route.md",
+      "contentHash": "64fcc06f4c43768fca47613f28789c89e27001545d262af6145a656644312179",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-settings-route",
+      "localPath": "docs/apis/app-api-settings-route.md",
+      "contentHash": "40e3b968c914b3163a0ae4175099915ca464d3ac1a983fa50814c389506ad629",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-stripe-checkout-route",
+      "localPath": "docs/apis/app-api-stripe-checkout-route.md",
+      "contentHash": "5b48a0db7723230b1b85b46f4fef5f485518db8ad5714283e265f74129333d92",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-stripe-webhook-route",
+      "localPath": "docs/apis/app-api-stripe-webhook-route.md",
+      "contentHash": "ffd99240b8777508b34afbfeb7ce81a0112ff49cb1bc2e48ffc35eb33f60765e",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-transcribe-id-route",
+      "localPath": "docs/apis/app-api-transcribe-id-route.md",
+      "contentHash": "f84e526a2481cc30fc4927b08027ada0a7bcb6071bd81056eaf9fa7012389df9",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-transcribe-route",
+      "localPath": "docs/apis/app-api-transcribe-route.md",
+      "contentHash": "5631a0decc6c27193c724a05a37e3b98f2ec21966a195901d32e32fd8f7e388b",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-transcribe-stream-autosave-route",
+      "localPath": "docs/apis/app-api-transcribe-stream-autosave-route.md",
+      "contentHash": "238a3465b3b419261bec2481b51f6cc47579bba4515d24883ee62bfc9d750791",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-transcribe-stream-finalize-route",
+      "localPath": "docs/apis/app-api-transcribe-stream-finalize-route.md",
+      "contentHash": "85bf11ed9ff85531c348ce93cfec383cf1cbb98134ec24937a36960c298269ab",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-transcribe-stream-preflight-route",
+      "localPath": "docs/apis/app-api-transcribe-stream-preflight-route.md",
+      "contentHash": "42315b5b57d3fe614fbd3b7b82a146f26033c76b2090787d77718aaac52fcf5f",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-transcribe-stream-token-route",
+      "localPath": "docs/apis/app-api-transcribe-stream-token-route.md",
+      "contentHash": "720998d3d6d0586887f3c45f0197af3f1326965a1c6ea7f5fa1eddf70387c505",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-webhooks-deliveries-route",
+      "localPath": "docs/apis/app-api-webhooks-deliveries-route.md",
+      "contentHash": "d181427565692f70005ceba119d2cd1d171c95b7574055370f19887be3c13474",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-app-api-webhooks-route",
+      "localPath": "docs/apis/app-api-webhooks-route.md",
+      "contentHash": "1ed7ba5c42812cde7e017aaacc624671ce24f4beeb423722c77135e8371303be",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-meetings-i-export",
+      "localPath": "docs/apis/meetings-i-export.md",
+      "contentHash": "6ec8b0e716472c53ce31e94d1bf8c89377dd195a6a383e25f0e67b55d3d84aaf",
+      "priority": "warm"
+    },
+    {
+      "id": "apis-meetings-i-notes-package",
+      "localPath": "docs/apis/meetings-i-notes-package.md",
+      "contentHash": "36eabddae24c5583135b0c92f5736e116ae70388c89cdae1a0a0bcb43ba2eaed",
+      "priority": "warm"
+    },
+    {
+      "id": "app-store-screenshots",
+      "localPath": "docs/APP_STORE_SCREENSHOTS.md",
+      "contentHash": "997063205062acf32f7f46045b9cf15b97b46b9c3a2aafd5e9e3e62bddda65cb",
+      "priority": "cold"
+    },
+    {
+      "id": "app-store-device-screenshots-2026-04-28-metadata",
+      "localPath": "docs/app-store/device-screenshots/2026-04-28/metadata.json",
+      "contentHash": "98c7d2b4d3deb08427cd60da3d5619f8e919708694a686c68c93318d9c9e7adc",
+      "priority": "cold"
+    },
+    {
+      "id": "app-store-device-screenshots-2026-04-29-release-metadata",
+      "localPath": "docs/app-store/device-screenshots/2026-04-29-release/metadata.json",
+      "contentHash": "f14194ad4515fbb75364eb0d79331e51be8622bafcd9dcb567216f41eea32cd1",
+      "priority": "cold"
+    },
+    {
+      "id": "app-store-marketing-screenshots-2026-04-29-release-metadata",
+      "localPath": "docs/app-store/marketing-screenshots/2026-04-29-release/metadata.json",
+      "contentHash": "911b5a33b65178f119f654ee1262ed835b0b6662aa86e7ab88b568a863fa9dda",
+      "priority": "cold"
+    },
+    {
+      "id": "brand-guide",
+      "localPath": "docs/brand-guide.md",
+      "contentHash": "b1c8ad51d39c4b3c1720e53725bffdfaac21722f962daab7b4d7af64a69dd0f8",
+      "priority": "cold"
+    },
+    {
+      "id": "build-spec",
+      "localPath": "docs/BUILD_SPEC.md",
+      "contentHash": "735877aa460bd91ac975a7e95cc5e3e80e5fe325d1ec7a848ba3a6aa15d3e37c",
+      "priority": "cold"
+    },
+    {
+      "id": "calendar-integration",
+      "localPath": "docs/CALENDAR_INTEGRATION.md",
+      "contentHash": "04a2a52a4be0790680ff88a6dabe712369ae9bbf01d55198593ad9b497d9f26f",
+      "priority": "cold"
+    },
+    {
+      "id": "claude-mcp-testing",
+      "localPath": "docs/CLAUDE_MCP_TESTING.md",
+      "contentHash": "5624437f38c1a18f7cd4d189fe384affde2bad48db2bab0f962b4a362659a5a5",
+      "priority": "cold"
+    },
+    {
+      "id": "competitive-landscape-and-gtm",
+      "localPath": "docs/COMPETITIVE_LANDSCAPE_AND_GTM.md",
+      "contentHash": "aec09c6307ae661006e1626c288cf7fd7b82ecb85550f77866ae2faed6d8fba3",
+      "priority": "cold"
+    },
+    {
+      "id": "components-agent-builder",
+      "localPath": "docs/components/agent-builder.md",
+      "contentHash": "8a0cd4405c95e5b47478958197df7582d49adf12507732add2bff4ac875f8f93",
+      "priority": "warm"
+    },
+    {
+      "id": "components-audio-wave-ribbon",
+      "localPath": "docs/components/audio-wave-ribbon.md",
+      "contentHash": "327a9e9b8f53a1a6d7eecac08829592d756530995c53ec770e869d3eb1ba7d27",
+      "priority": "warm"
+    },
+    {
+      "id": "components-session-workspace",
+      "localPath": "docs/components/session-workspace.md",
+      "contentHash": "ba43198fb891b219dcde1e0a992bf47e09216325be7c5f192f3365e0f6c90af8",
+      "priority": "warm"
+    },
+    {
+      "id": "cross-platform-qa",
+      "localPath": "docs/CROSS_PLATFORM_QA.md",
+      "contentHash": "bd067a8bbf7d33ce0eb898cc22cd4c30de64ea1af223114cf507402c1891a4b3",
+      "priority": "cold"
+    },
+    {
+      "id": "embeddings-and-search",
+      "localPath": "docs/EMBEDDINGS_AND_SEARCH.md",
+      "contentHash": "50eb980843649e4df6df9db4159244381b47d41e8d91fc97730be30010842b4d",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-12-brand-kit-browser-verification",
+      "localPath": "docs/evidence/2026-05-12-brand-kit/BROWSER_VERIFICATION.md",
+      "contentHash": "1f61726d42304c59346a7e98016e6ee39aa1f62be1bf1044dedbc78738113ee7",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-13-web-pass-g7-mcp-initialize",
+      "localPath": "docs/evidence/2026-05-13-web-pass/G7_mcp_initialize.json",
+      "contentHash": "a75da7463664b11289d0a6c0967dc95450bbf7b79c225ee4aad0f5c7220ed168",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-claude-cross-platform-qa-android-android-qa-report",
+      "localPath": "docs/evidence/2026-05-18-claude-cross-platform-qa/android/ANDROID_QA_REPORT.md",
+      "contentHash": "7b847008eed233899df04907cb8f62b61bf285ee08d1d293ea819b6ef4efec86",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-claude-cross-platform-qa-ios-retest-ios-retest-report",
+      "localPath": "docs/evidence/2026-05-18-claude-cross-platform-qa/ios-retest/IOS_RETEST_REPORT.md",
+      "contentHash": "37819a16b59aa865ec7471dd644c280bb5591b67c82cfb89801d94f5dabd6221",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-claude-cross-platform-qa-ios-ios-qa-report",
+      "localPath": "docs/evidence/2026-05-18-claude-cross-platform-qa/ios/IOS_QA_REPORT.md",
+      "contentHash": "f130ecb63e48171b5b2da8b0f61b6d3fe7b0c3d3098f0ca5263f45f4d6ab429a",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-claude-cross-platform-qa-macos-macos-qa-report",
+      "localPath": "docs/evidence/2026-05-18-claude-cross-platform-qa/macos/MACOS_QA_REPORT.md",
+      "contentHash": "2e6b7111f8b0c05eb12bf4899c055936e69313959d2f8a42d4c883b5d95b6937",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-claude-cross-platform-qa-web-web-qa-report",
+      "localPath": "docs/evidence/2026-05-18-claude-cross-platform-qa/web/WEB_QA_REPORT.md",
+      "contentHash": "f3a3f4cf1b126e03af260d0f58f67097bbdc0834fc276f95f54b0482317353c3",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-claude-main-features-qa-ios-ios-focused-auth-report",
+      "localPath": "docs/evidence/2026-05-18-claude-main-features-qa/ios/IOS_FOCUSED_AUTH_REPORT.md",
+      "contentHash": "f64ed10178f50c021593f9143a20af92c1e28ed4d272f72d4ab6696f68af023d",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-claude-main-features-qa-web-web-main-features-report",
+      "localPath": "docs/evidence/2026-05-18-claude-main-features-qa/web/WEB_MAIN_FEATURES_REPORT.md",
+      "contentHash": "1893120664c3d004d5cea2a0f1fd03387048438cf5d132e22760cd0b598f3c11",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-homepage-auth-polish-browser-qa-results",
+      "localPath": "docs/evidence/2026-05-18-homepage-auth-polish/browser-qa-results.json",
+      "contentHash": "582ed9e5a36dc4a0118e7a309e9336f94af821f73de1f943da0fc87385edd74b",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-release-test-matrix-android-worker-report",
+      "localPath": "docs/evidence/2026-05-18-release-test-matrix/android-worker-report.md",
+      "contentHash": "1b74f9d0a309fcefeafffeb697f740facdb416c440eb525b78c1d9afc19ac620",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-release-test-matrix-command-summary",
+      "localPath": "docs/evidence/2026-05-18-release-test-matrix/command-summary.md",
+      "contentHash": "26a79274f26a0c915e6f4a3879cf09588669fdfc858ae193d7d42b3864221cab",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-release-test-matrix-electron-worker-report",
+      "localPath": "docs/evidence/2026-05-18-release-test-matrix/electron-worker-report.md",
+      "contentHash": "a18039335a12104344e43405222ea8a290d58a80426e8297b6b64d0f0993030b",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-release-test-matrix-ios-worker-report",
+      "localPath": "docs/evidence/2026-05-18-release-test-matrix/ios-worker-report.md",
+      "contentHash": "15137ed739071eaa58b7026196a359c64e198a36fcb8ffc5c9b030f53821fb0d",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-release-test-matrix-release-test-run-summary",
+      "localPath": "docs/evidence/2026-05-18-release-test-matrix/release-test-run-summary.md",
+      "contentHash": "ab9c6a6e6e5e9dad57f8e06b6fe365b9864ea28520c7fbdfb60e7d6b91508269",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-release-test-matrix-web-worker-report",
+      "localPath": "docs/evidence/2026-05-18-release-test-matrix/web-worker-report.md",
+      "contentHash": "e44abe973b359d1c5226df4f6883a6e72ec5c1a550d951c5bd214e547ddf553d",
+      "priority": "cold"
+    },
+    {
+      "id": "feature-test-marketing-matrix",
+      "localPath": "docs/FEATURE_TEST_MARKETING_MATRIX.md",
+      "contentHash": "f30bbbcc8e9000770a7178984e761586c165d3ef07ada09db222e5490bf9212e",
+      "priority": "hot"
+    },
+    {
+      "id": "feature-test-plan",
+      "localPath": "docs/FEATURE_TEST_PLAN.md",
+      "contentHash": "2b897513259c80ef671c300988b622013eef92426ba026bc8ef7347bcbb8213b",
+      "priority": "hot"
+    },
+    {
+      "id": "features-app-account-deletion-page",
+      "localPath": "docs/features/app-account-deletion-page.md",
+      "contentHash": "55b5333ec7bdb18ba62ce82690d3579b229d5fb2b174809c6fe2435979c9de72",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-admin-pricing-page",
+      "localPath": "docs/features/app-admin-pricing-page.md",
+      "contentHash": "2006674d6812c907d4865b426df111f0afacd7f81d1fbb3ba791ffb32dc21340",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-agent-builder-page",
+      "localPath": "docs/features/app-agent-builder-page.md",
+      "contentHash": "8d77cd444ece90f251c85740778df2bb1048c6a2ae58c1b8e99b683433faca99",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-ai-starter-page",
+      "localPath": "docs/features/app-ai-starter-page.md",
+      "contentHash": "50962d48eec647f35403a025edf5f52cb11a3bff0cdbd380cbdba47568bbe363",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-ask-page",
+      "localPath": "docs/features/app-ask-page.md",
+      "contentHash": "7f1e5042bd2ee50d88aa3ce2c4abcd3dea8870f6dc46e76ca657c3fa9e0e79cd",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-auth-callback-route",
+      "localPath": "docs/features/app-auth-callback-route.md",
+      "contentHash": "67272696d84dbb000efc80fb191344cc65e5050bd7ce5b57d71cf0b15543b014",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-auth-confirm-page",
+      "localPath": "docs/features/app-auth-confirm-page.md",
+      "contentHash": "00702fadf345d02d7fd50c386a9f323bb2fe3633ba0f2075f102d573dbece91e",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-auth-sign-out-route",
+      "localPath": "docs/features/app-auth-sign-out-route.md",
+      "contentHash": "fd2b9c1775d4cbd06c972310458167f4701a4ac5a1f6e2f633b4f43465bda31a",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-chat-page",
+      "localPath": "docs/features/app-chat-page.md",
+      "contentHash": "b43edf54e46d3b5225f846f53eb5b4bb76a4a3cd72a1f0ed59e6bb9c7060baef",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-control-plane-page",
+      "localPath": "docs/features/app-control-plane-page.md",
+      "contentHash": "8cf0b7e75470780df97fd2e393e30445a73904d3eb464c5b7649a742e56f2728",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-dev-kit-config-page",
+      "localPath": "docs/features/app-dev-kit-config-page.md",
+      "contentHash": "0f815dbad44458e50168f606746ea311a24f6df8f25e9fd3c099b51e7bb1d546",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-dev-kit-connectors-page",
+      "localPath": "docs/features/app-dev-kit-connectors-page.md",
+      "contentHash": "b1d091f4e66cb1546bd3449679db18a17ea4fe243ded1f2f409184f9c1d882c2",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-dev-kit-cost-page",
+      "localPath": "docs/features/app-dev-kit-cost-page.md",
+      "contentHash": "84e608fcea9a5d557c6a02c2be210a22654c66e323e05b9c26560c361fcf85b2",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-dev-kit-coverage-page",
+      "localPath": "docs/features/app-dev-kit-coverage-page.md",
+      "contentHash": "ee495e1cdb5a760d5669d69e62f5bc3f6b1346775992aef8db489b7f9ee53d08",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-dev-kit-dependencies-page",
+      "localPath": "docs/features/app-dev-kit-dependencies-page.md",
+      "contentHash": "19aa178472fead62c3a85c4cf8c576000eb565d29394a43d8d99ff80ff18ac2e",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-dev-kit-deployments-page",
+      "localPath": "docs/features/app-dev-kit-deployments-page.md",
+      "contentHash": "bb2750128462157153e28733cc59c395e66e6370269e4083c195a9046ac2b7f7",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-dev-kit-design-system-page",
+      "localPath": "docs/features/app-dev-kit-design-system-page.md",
+      "contentHash": "c16bac080a247c311983464632db23f307d9eca24ad9ba89df4bdef9e607c52c",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-dev-kit-evals-id-page",
+      "localPath": "docs/features/app-dev-kit-evals-id-page.md",
+      "contentHash": "9ffa6d8d3b85ea3f4616665979b50607cc54e8bdabcefc774ada969294813767",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-dev-kit-evals-page",
+      "localPath": "docs/features/app-dev-kit-evals-page.md",
+      "contentHash": "53a63ca9091496ac83ff594c539185d7121ab328eda66530619894aff6218c28",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-dev-kit-features-name-page",
+      "localPath": "docs/features/app-dev-kit-features-name-page.md",
+      "contentHash": "d7e7936c939de9b471a032e7a40cf50868e18a9629e00522c176ea548d9d6d6f",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-dev-kit-features-page",
+      "localPath": "docs/features/app-dev-kit-features-page.md",
+      "contentHash": "adf7f8861c802a6cda3d6ae32f8df508ffc4de9c816783dae5f7a8b47373b948",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-dev-kit-index-page",
+      "localPath": "docs/features/app-dev-kit-index-page.md",
+      "contentHash": "4a32036f30b8f3bff6b5e3d6e5d9f343aa64942466534dd085dc52d1ff7c275a",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-dev-kit-page",
+      "localPath": "docs/features/app-dev-kit-page.md",
+      "contentHash": "8632e4258f8ea5e0687ac4d0695d78be4cc5ed521d03b5b08d5eb59510ef000b",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-dev-kit-registries-page",
+      "localPath": "docs/features/app-dev-kit-registries-page.md",
+      "contentHash": "edb1c3bc2a72115cff94614f2fddd32adc41b538bd7f73a7a8f5993145ca6114",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-dev-kit-regressions-page",
+      "localPath": "docs/features/app-dev-kit-regressions-page.md",
+      "contentHash": "6b6c34afe87b622178ba0092325bc9557a4f21fd8da798cd87aa2e27f39ee156",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-dev-kit-runs-page",
+      "localPath": "docs/features/app-dev-kit-runs-page.md",
+      "contentHash": "9f35830f55a8a6f844d11d580306748a89707d92997d77fb9ca4e5de70b6b2b6",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-dev-kit-runs-run-id-page",
+      "localPath": "docs/features/app-dev-kit-runs-run-id-page.md",
+      "contentHash": "bbde79f321b372c75c515941964fae3a18a8ac1304200a2240a21951882e5d24",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-dev-kit-sessions-id-page",
+      "localPath": "docs/features/app-dev-kit-sessions-id-page.md",
+      "contentHash": "4864b2ebea7ed2dc0ed0268f8f6573e90e5bd1f35a331d0b5feb19324a3398fc",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-dev-kit-sessions-page",
+      "localPath": "docs/features/app-dev-kit-sessions-page.md",
+      "contentHash": "1e1bcd215383ba5690ff1ed93107a2d5b0c5a22b4652ac5e00c272647b1bbfa7",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-dev-kit-status-page",
+      "localPath": "docs/features/app-dev-kit-status-page.md",
+      "contentHash": "13e72d182feec79d01bb483e97e071ac2f5c201cf0fe2ef3e69e50e779ed4a49",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-dev-kit-tools-page",
+      "localPath": "docs/features/app-dev-kit-tools-page.md",
+      "contentHash": "70bed7c765f53f9a5c44414be1ec9d4ea03d2eed631019671722b6fa4b8752ab",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-docs-page",
+      "localPath": "docs/features/app-docs-page.md",
+      "contentHash": "1721b05d5cc88cdb8e6fe4703da17b666714d0f018ec10afb1d014b0e4cbe7ed",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-download-page",
+      "localPath": "docs/features/app-download-page.md",
+      "contentHash": "dcae797025dc07132c7c6b827cff6d2c39c917bc0bb037f99d43b3ef2b451e71",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-meetings-id-page",
+      "localPath": "docs/features/app-meetings-id-page.md",
+      "contentHash": "bfb8a6765ce5b565279c5e8613f4f0897c6540d0aee9d52440cd20332ecba80c",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-meetings-page",
+      "localPath": "docs/features/app-meetings-page.md",
+      "contentHash": "dca0b8dc146e8a6caa64704c3563d29fa09d020ace45969b56b6f67c4204b192",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-oauth-consent-page",
+      "localPath": "docs/features/app-oauth-consent-page.md",
+      "contentHash": "48792746d674414661ec6e4ae491331d39215ad36004c92f46c29b649ab3dff9",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-observability-page",
+      "localPath": "docs/features/app-observability-page.md",
+      "contentHash": "83041cf52527925f0c1d1b465849ae72c833944799ab023f4215d2163d74bac8",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-page",
+      "localPath": "docs/features/app-page.md",
+      "contentHash": "ca9cd98bc56ee3725c6ef65a71d93e7b032fcb1bb8c8fa932c0c7305de9d2db6",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-pricing-page",
+      "localPath": "docs/features/app-pricing-page.md",
+      "contentHash": "018d9493a91611909dadbb395085a1f78b9611ded840abc108828232901d276a",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-privacy-page",
+      "localPath": "docs/features/app-privacy-page.md",
+      "contentHash": "cf519cb4e479b40eb30b4d33fbe1cc8125870b664c03b2ae6c14cd80e3f7d6e6",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-profile-page",
+      "localPath": "docs/features/app-profile-page.md",
+      "contentHash": "c9b7c3a8f0b1027b5006a511191483409c9501b36f91c36e30e566cc043111a2",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-record-live-page",
+      "localPath": "docs/features/app-record-live-page.md",
+      "contentHash": "8ac7548998f699558f807737c11ce8b8d6be23220b67d18283dd74d7063dd9bf",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-record-page",
+      "localPath": "docs/features/app-record-page.md",
+      "contentHash": "4573fefa5af6ee21812a6654fc8c3d24ae4769bfc979de6ab85c9b9337591e11",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-roadmap-page",
+      "localPath": "docs/features/app-roadmap-page.md",
+      "contentHash": "1d5ce0bf12a4d312ce88fd4f375480a318041d8d0be762829f8961aa367c7163",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-search-page",
+      "localPath": "docs/features/app-search-page.md",
+      "contentHash": "9aacbca759e3193c67780845d87ba611835099301b94a63327ae20b9a6e1248d",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-settings-page",
+      "localPath": "docs/features/app-settings-page.md",
+      "contentHash": "a24f148d6b8e5e22dae243d886a17d2e9275e76e3fcd81604450fdee370203d4",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-sign-in-page",
+      "localPath": "docs/features/app-sign-in-page.md",
+      "contentHash": "3082bf4b5c5a8ef76eb218215f5c88b0953131d4d6b4082f47e377a7906c4f31",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-sign-up-page",
+      "localPath": "docs/features/app-sign-up-page.md",
+      "contentHash": "6eb7ee2376cf3a6e81aea3ef8ba8e6f59787d06cf3f6a44b78117f6a976f313d",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-terms-page",
+      "localPath": "docs/features/app-terms-page.md",
+      "contentHash": "c1e15868903e056d9a80f1a1b5a87d3c7175e7ab419b83d26e3869699b922852",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-usage-page",
+      "localPath": "docs/features/app-usage-page.md",
+      "contentHash": "4ec351dd6e585d06e9f046c6d406f7a099204431cfee458363018bbba4f1f478",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-well-known-oauth-authorization-server-route",
+      "localPath": "docs/features/app-well-known-oauth-authorization-server-route.md",
+      "contentHash": "15da03d9def372acc256f820c3929781401d5ecde7fed34f5b69874294cf27d4",
+      "priority": "warm"
+    },
+    {
+      "id": "features-app-well-known-oauth-protected-resource-route",
+      "localPath": "docs/features/app-well-known-oauth-protected-resource-route.md",
+      "contentHash": "4d13f405984f93aa0403a4a6e4702efa91623f0692d94eb6670ac36e471af4a0",
+      "priority": "warm"
+    },
+    {
+      "id": "frontend-surface-audit",
+      "localPath": "docs/FRONTEND_SURFACE_AUDIT.md",
+      "contentHash": "e4507a7a1ee86e92fd7266fd068eb829a74db7594b7043d75508b34c88b1a177",
+      "priority": "cold"
+    },
+    {
+      "id": "getting-started",
+      "localPath": "docs/GETTING_STARTED.md",
+      "contentHash": "a0ecd4389e07eadf33dcd00e5b40336bc2dbd1996024d9eaa9df4f8c80d6de49",
+      "priority": "hot"
+    },
+    {
+      "id": "guides-ai-starter-hub",
+      "localPath": "docs/guides/AI-STARTER-HUB.md",
+      "contentHash": "46b7c88f4463298d89b8a3eb8635a1770e595dc2e30e8cdbc45cc414dc03ba14",
+      "priority": "hot"
+    },
+    {
+      "id": "guides-mfdr",
+      "localPath": "docs/guides/MFDR.md",
+      "contentHash": "68e788d21d7fb2771961cb45c9ce3acd840cf8a8083e407dc2712baee0701708",
+      "priority": "cold"
+    },
+    {
+      "id": "guides-product-spec",
+      "localPath": "docs/guides/PRODUCT_SPEC.md",
+      "contentHash": "2026e9fc135327ec77c7105d0b13768c5264d1a45e29da5402ba88d80f5ef0a8",
+      "priority": "cold"
+    },
+    {
+      "id": "guides-product-validation",
+      "localPath": "docs/guides/PRODUCT_VALIDATION.md",
+      "contentHash": "a7ba6e8373c2c89b43a3c95f14d79051e5f6f1e3a49b95d4eae0b891c53e2697",
+      "priority": "cold"
+    },
+    {
+      "id": "home-ui-polish",
+      "localPath": "docs/HOME_UI_POLISH.md",
+      "contentHash": "fa736b49f9a5640d720e490e35f45ddd704b41d00312668fa670149d7ab389a8",
+      "priority": "cold"
+    },
+    {
+      "id": "incident-runbook",
+      "localPath": "docs/INCIDENT_RUNBOOK.md",
+      "contentHash": "6a3a2c6f1edce4b2de8ad4993ebfa46904a25df8d9e4c9fb72da6f514405771e",
+      "priority": "hot"
+    },
+    {
+      "id": "key-rotation",
+      "localPath": "docs/KEY_ROTATION.md",
+      "contentHash": "7befcba8da8ccadacdf3adfe993d95df1fd50af84f82386d9fe98d378046bb30",
+      "priority": "cold"
+    },
+    {
+      "id": "launch-checklist",
+      "localPath": "docs/LAUNCH_CHECKLIST.md",
+      "contentHash": "a209469fb8b18c56015b6cc0f7f2b3ac06acd1223ddd0dfb823fbebae5317044",
+      "priority": "hot"
+    },
+    {
+      "id": "mcp-and-api",
+      "localPath": "docs/MCP_AND_API.md",
+      "contentHash": "f900cec80e6de1e810cc4a035a1962d00383155f4167626e4a65245b3111a5a8",
+      "priority": "cold"
+    },
+    {
+      "id": "mfdr-rate-limits",
+      "localPath": "docs/MFDR-rate-limits.md",
+      "contentHash": "ced522768a504d0bad3c7ffe132f9fe67201719cc4bef4fb6edb9bd2c5d5c2ca",
+      "priority": "cold"
+    },
+    {
+      "id": "mfdr-mfdr-001",
+      "localPath": "docs/mfdr/MFDR-001.md",
+      "contentHash": "a16ca1992476f8ea1d97d672595a8e723e0c95e202486455abfdd6c6a2ac9b7d",
+      "priority": "cold"
+    },
+    {
+      "id": "mobile-visual-qa",
+      "localPath": "docs/MOBILE_VISUAL_QA.md",
+      "contentHash": "6a57caf22f47c0ae9f0a57742972a5b37aca6bd22b3957fd74509c36837a9b7a",
+      "priority": "cold"
+    },
+    {
+      "id": "native-release-readiness",
+      "localPath": "docs/NATIVE_RELEASE_READINESS.md",
+      "contentHash": "a767d746bb0c7df303fd2ba2b50892d9f672ae688b0c04d6da0e9def7dfaf624",
+      "priority": "cold"
+    },
+    {
+      "id": "notes-push-workflow",
+      "localPath": "docs/NOTES_PUSH_WORKFLOW.md",
+      "contentHash": "ff77d3478303b2e2f134e2ffaa96dcf67697144b7c49e62c7e577a22f3c046f0",
+      "priority": "cold"
+    },
+    {
+      "id": "post-launch-monitoring",
+      "localPath": "docs/POST_LAUNCH_MONITORING.md",
+      "contentHash": "d04240b3585a828e363c3efb4219bd070d48ac50d55d417d4d21f52f70ff0a40",
+      "priority": "cold"
+    },
+    {
+      "id": "pricing-admin",
+      "localPath": "docs/PRICING_ADMIN.md",
+      "contentHash": "30123da00ed6111d618100596a39c4f5bff7a754e6b9493e872c85b413fb8b34",
+      "priority": "cold"
+    },
+    {
+      "id": "pricing-and-billing",
+      "localPath": "docs/PRICING_AND_BILLING.md",
+      "contentHash": "2518e39fbc3e0c752f0b35e350a7528d1af1114f5f66ab03d8c14771b916e9d8",
+      "priority": "hot"
+    },
+    {
+      "id": "production-quality-system",
+      "localPath": "docs/PRODUCTION_QUALITY_SYSTEM.md",
+      "contentHash": "41ae71755e7146545c3b3d97efe42984471fa12f79764b00b0ca8f131b254cae",
+      "priority": "cold"
+    },
+    {
+      "id": "recording-manual-qa",
+      "localPath": "docs/RECORDING_MANUAL_QA.md",
+      "contentHash": "3e848d4fc3eb5b664bb0ce4b8d5c1c174f374e7a39fafac0f202c2ff5eae971b",
+      "priority": "cold"
+    },
+    {
+      "id": "recording-reliability",
+      "localPath": "docs/RECORDING_RELIABILITY.md",
+      "contentHash": "53910ba4d4e1ca1b0da4433ae44783494770b92e0949e933211b7dd677a1bec9",
+      "priority": "hot"
+    },
+    {
+      "id": "recording-reminders",
+      "localPath": "docs/RECORDING_REMINDERS.md",
+      "contentHash": "a491bb1b680f9330b6de0b7782e4ca5bd73f36886f2882253e0d77da28fc2a60",
+      "priority": "cold"
+    },
+    {
+      "id": "reference-openai-codex-runtime",
+      "localPath": "docs/reference/openai-codex-runtime.md",
+      "contentHash": "86040a00e11cfbe0fb8b201fb41f2570a63ca017ec25dc6712d0a9ec7706389f",
+      "priority": "cold"
+    },
+    {
+      "id": "release-pipeline",
+      "localPath": "docs/RELEASE_PIPELINE.md",
+      "contentHash": "9c6519f3a771e97590802d65d2947c3612bdcb72507388d2ad45e7a402f53cd6",
+      "priority": "cold"
+    },
+    {
+      "id": "release-test-matrix",
+      "localPath": "docs/RELEASE_TEST_MATRIX.md",
+      "contentHash": "703c116b45a00e7d67232bc39e5591efceaca9f3b26b19a841663abefe9b5047",
+      "priority": "cold"
+    },
+    {
+      "id": "release",
+      "localPath": "docs/RELEASE.md",
+      "contentHash": "34e8c848b928413fe802b5ca81db1f29f9d81a6dce5f34982d604b9b436c0779",
+      "priority": "hot"
+    },
+    {
+      "id": "remotion",
+      "localPath": "docs/REMOTION.md",
+      "contentHash": "e5e10cc3dca7b0695204975f866b1cda6b67141e93d545132bfae2c01d180adc",
+      "priority": "cold"
+    },
+    {
+      "id": "roadmap",
+      "localPath": "docs/roadmap.md",
+      "contentHash": "792a5dbd0a68b2bf98e7a7176f28481a47475d3530c6dc36458390a3f31095c5",
+      "priority": "cold"
+    },
+    {
+      "id": "schemas-and-registries",
+      "localPath": "docs/SCHEMAS_AND_REGISTRIES.md",
+      "contentHash": "0391f1e9e7cb0f29f14d1d00190419400e467bfd7ea5632e7a0251fb62efde49",
+      "priority": "cold"
+    },
+    {
+      "id": "self-hosted-runners",
+      "localPath": "docs/SELF_HOSTED_RUNNERS.md",
+      "contentHash": "0f9890b9ca4c858d7f537e3f47965c03c5471363cc18e9d7548bf4cc046c7b26",
+      "priority": "cold"
+    },
+    {
+      "id": "session-2026-05-12",
+      "localPath": "docs/SESSION_2026-05-12.md",
+      "contentHash": "1fdbac1773974c714df30714ffebe12a376bef88504e0d8b009956112c5e1cf4",
+      "priority": "cold"
+    },
+    {
+      "id": "signing",
+      "localPath": "docs/SIGNING.md",
+      "contentHash": "47e97cc95e611c2c29ed635c539e5a303e53d775337e42917c177f733b8ae9e2",
+      "priority": "cold"
+    },
+    {
+      "id": "simple-ui-direction",
+      "localPath": "docs/SIMPLE_UI_DIRECTION.md",
+      "contentHash": "16c2ef1fb72bd03da7d0400c337da8b78c9acc3a95a6c78e09d28e829e9491d1",
+      "priority": "cold"
+    },
+    {
+      "id": "spend-caps",
+      "localPath": "docs/SPEND_CAPS.md",
+      "contentHash": "5e0371d7a9258418b3d7d3b05fb3ce903fa969c754475af7027ef35fbd758649",
+      "priority": "cold"
+    },
+    {
+      "id": "style-guide",
+      "localPath": "docs/style-guide.md",
+      "contentHash": "174a2dae1018803aeecaf63a61301d090e280c674ae09bc788b970e9fbb10111",
+      "priority": "cold"
+    },
+    {
+      "id": "supabase-mcp-oauth-setup",
+      "localPath": "docs/SUPABASE_MCP_OAUTH_SETUP.md",
+      "contentHash": "083c57e283da4af6a9d458851c48a9bf884d442c29b7718e7a9d0d6587ce8f0a",
+      "priority": "cold"
+    },
+    {
+      "id": "supabase-prod-migration",
+      "localPath": "docs/SUPABASE_PROD_MIGRATION.md",
+      "contentHash": "e28987b56b3137b352d1cd1ba362f945409bde7e163455532ae74900c31fc5e1",
+      "priority": "cold"
+    },
+    {
+      "id": "transcription-provider-matrix",
+      "localPath": "docs/TRANSCRIPTION_PROVIDER_MATRIX.md",
+      "contentHash": "32bc31bfb79b7dd66ac9f21252b5f437c84898de6f3d68175e0035d120b21a42",
+      "priority": "cold"
+    },
+    {
+      "id": "ui-style-variations",
+      "localPath": "docs/UI_STYLE_VARIATIONS.md",
+      "contentHash": "7d3cac1a07977a60985c1b57b1c86168b0ba9e5369a1dfc618ec4768abfa3328",
+      "priority": "cold"
+    },
+    {
+      "id": "v1-plan",
+      "localPath": "docs/V1_PLAN.md",
+      "contentHash": "88fb4914837aa7df0e9bc13f5d74b90574ef0df03f1f6264d33d4390c2ad5c85",
+      "priority": "cold"
+    }
+  ]
+}

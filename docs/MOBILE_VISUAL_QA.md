@@ -20,8 +20,8 @@ Per session: `docs/evidence/YYYY-MM-DD-<slug>/`
 - iOS: Xcode + iPhone 16 Pro sim (`xcrun simctl boot CD658077-5378-49B2-8A17-7068111DD447`)
 - Android: `openjdk@21` + `android-commandlinetools` + AVD `LayersPixel` (Pixel 7 profile, system-image `android-34;google_apis;arm64-v8a`)
 - Build + install:
-  - iOS: `pnpm cap:sync && xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Debug -destination "id=CD658077-..." CODE_SIGNING_ALLOWED=NO build && xcrun simctl install booted <App.app> && xcrun simctl launch booted com.mirrorfactory.audiolayer`
-  - Android: `(cd android && ./gradlew :app:assembleDebug) && adb install -r android/app/build/outputs/apk/debug/app-debug.apk && adb shell am start -n com.mirrorfactory.layers/.MainActivity`
+  - iOS: `pnpm cap:sync && xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Debug -destination "id=CD658077-..." CODE_SIGNING_ALLOWED=NO build && xcrun simctl install booted <App.app> && xcrun simctl launch booted com.mirafactory.layers`
+  - Android: `(cd android && ./gradlew :app:assembleDebug) && adb install -r android/app/build/outputs/apk/debug/app-debug.apk && adb shell am start -n com.mirafactory.layers/.MainActivity`
 
 ## Tap-coordinate cheatsheet (Pixel 7 emulator, 1080x2400 physical px)
 
@@ -44,13 +44,13 @@ iOS sim: `xcrun simctl io booted tap` does **not** exist. Use `xcrun simctl open
 | 3 | Hamburger menu open | Three links (Download / Pricing / Sign in) visible, no overlap with banner, X icon swaps in for hamburger. | `and-03-menu-open.png` | — |
 | 4 | Theme toggle (sun/moon) | Tapping switches `html.dark`/`html.light`; persists across reload. | `and-20-theme-attempt.png` | — |
 | 5 | /pricing | Hero copy + Core $20 / Pro $30 cards render; pricing values do not bleed through sticky header on scroll. | `and-pricing.png`, `ios-route-pricing.png` | — |
-| 6 | /sign-in | Google OAuth button + email/password form; support email link points to `support@mirrorfactory.ai`. | `and-signin.png` | PR #74 |
+| 6 | /sign-in | Google OAuth button + email/password form; support email link points to `admin@mirafactory.ai`. | `and-signin.png` | PR #74 |
 | 7 | /download | Platform recommendation card renders; download CTAs match the device. | `and-download.png`, `ios-route-download.png` | — |
 | 8 | /changelog | Latest release shows at top; release type labels visible. | `ios-route-changelog.png` | — |
 | 9 | /docs | TOC links render, no overflow. | `ios-route-docs.png` | — |
 | 10 | Privacy/Terms/Account-deletion | Render without overflow; support email correct. | (run on demand) | — |
 | 11 | Dark mode honors system pref | iOS sim with `xcrun simctl ui booted appearance dark` should auto-flip site to dark. **Currently does not** — site forces light default. | — | (file `kind:bug` if changing default policy) |
-| 12 | iOS Capacitor OAuth deep-link | After Google OAuth, callback `com.mirrorfactory.layers://auth/callback` returns user to Layers app, not Safari. | run manually with real Google account | PROD-408 |
+| 12 | iOS Capacitor OAuth deep-link | After Google OAuth, callback `com.mirafactory.layers://auth/callback` returns user to Layers app, not Safari. | run manually with real Google account | PROD-408 |
 
 ## Known limitations
 

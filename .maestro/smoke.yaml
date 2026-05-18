@@ -1,0 +1,5 @@
+appId: ${MAESTRO_APP_ID}
+---
+- launchApp
+- assertVisible:
+    text: ${MAESTRO_HOME_TEXT}

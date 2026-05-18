@@ -36,7 +36,7 @@ export const CAPTIONS: ReadonlyArray<CaptionItem> = [
   { from: 30 * 63.2, duration: 30 * 7, text: "layers.search(“pricing decisions”) returns structured JSON." },
   { from: 30 * 70.4, duration: 30 * 7.4, text: "Your meeting memory, in every AI tool you use." },
   // 05 cta (78-85s)
-  { from: 30 * 78, duration: 30 * 7, text: "Currently in invite-only alpha. Email support@mirrorfactory.ai for access." },
+  { from: 30 * 78, duration: 30 * 7, text: "Currently in invite-only alpha. Email admin@mirafactory.ai for access." },
 ];
 
 const CaptionLine: React.FC<{ text: string; duration: number }> = ({

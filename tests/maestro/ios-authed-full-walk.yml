@@ -1,0 +1,45 @@
+# Maestro flow: walk all authed pages for QA E/G/H/K sections.
+
+appId: com.mirafactory.layers
+---
+# Start clean — landing → drawer
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 6000
+
+# Meetings
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 1500
+- tapOn: "Meetings"
+- waitForAnimationToEnd:
+    timeout: 6000
+- takeScreenshot: ios-walk-E1-meetings
+
+# Chat
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 1500
+- tapOn: "Chat"
+- waitForAnimationToEnd:
+    timeout: 6000
+- takeScreenshot: ios-walk-G1-chat
+
+# Settings
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 1500
+- tapOn: "Settings"
+- waitForAnimationToEnd:
+    timeout: 6000
+- takeScreenshot: ios-walk-H1-settings
+
+# Profile
+- tapOn: "Open menu"
+- waitForAnimationToEnd:
+    timeout: 1500
+- tapOn: "Profile"
+- waitForAnimationToEnd:
+    timeout: 6000
+- takeScreenshot: ios-walk-H6-profile

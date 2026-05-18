@@ -203,7 +203,7 @@ export function weekOneFollowupEmail(appUrl: string): {
       </p>
       <p style="font-size:14px;line-height:1.7;color:${EMAIL_COLORS.text};margin:16px 0 0;">
         Reply to this email, or write to
-        <a href="mailto:support@mirrorfactory.ai" style="color:${EMAIL_COLORS.mint};text-decoration:underline;">support@mirrorfactory.ai</a>.
+        <a href="mailto:admin@mirafactory.ai" style="color:${EMAIL_COLORS.mint};text-decoration:underline;">admin@mirafactory.ai</a>.
       </p>
       ${SIGN_OFF}
       ${unsubscribeFooter(appUrl)}

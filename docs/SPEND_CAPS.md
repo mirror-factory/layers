@@ -8,7 +8,7 @@ Tracks: [PROD-396](https://linear.app/mirror-factory/issue/PROD-396)
 
 Layers is going to its first 10 alpha users on a paid SaaS. A leaked key, runaway loop, or single high-volume tester can drain the runway in a weekend if every external vendor is uncapped. This document is the operational ceiling: every vendor we pay or could pay has a hard cap, an alert path, and a written kill-switch.
 
-**Default alert mailbox:** `support@mirrorfactory.ai`
+**Default alert mailbox:** `admin@mirafactory.ai`
 **Default owner (until further notice):** founder (Alfonso)
 **Currency:** USD
 **Cycle:** monthly billing cycle unless noted
@@ -44,7 +44,7 @@ Each vendor below uses the same five-field structure: cap value, alerts, owner, 
 ### 1. Vercel (hosting, edge functions, bandwidth)
 
 - **Cap value:** $20/mo (Pro plan included usage covers most alpha traffic; this catches metered overage only).
-- **Alert thresholds:** 50% / 75% / 100% web + email to `support@mirrorfactory.ai`. (Vercel's own thresholds are 50/75/100; close enough to the 50/80/100 standard.) SMS at 100% optional.
+- **Alert thresholds:** 50% / 75% / 100% web + email to `admin@mirafactory.ai`. (Vercel's own thresholds are 50/75/100; close enough to the 50/80/100 standard.) SMS at 100% optional.
 - **Owner:** founder.
 - **Configuration steps** (verified against `vercel.com/docs/spend-management`, last fetched 2026-05-01):
   1. Vercel team dashboard → **Settings** → **Billing**.
@@ -79,7 +79,7 @@ Each vendor below uses the same five-field structure: cap value, alerts, owner, 
   1. Vercel dashboard → sidebar → **AI Gateway**.
   2. Top-right corner → click balance → **Top up** with $200.
   3. Click **Change** next to **Auto top-up** → **disable** (default is disabled — confirm).
-  4. Implement balance polling: cron `GET /v1/balance` (see `/docs/ai-gateway/capabilities/usage`), threshold alert into `support@mirrorfactory.ai`.
+  4. Implement balance polling: cron `GET /v1/balance` (see `/docs/ai-gateway/capabilities/usage`), threshold alert into `admin@mirafactory.ai`.
   5. Per-provider budgets: **not natively supported** as of 2026-05-01. Track per-provider spend in Langfuse cost dashboard; if a provider misbehaves, switch the model in `lib/ai/models.ts`.
 - **Kill-switch (in this order):**
   1. Set `AI_GATEWAY_API_KEY` to invalid value in Vercel → Project Settings → Environment Variables → Production. Redeploy.
@@ -141,7 +141,7 @@ Each vendor below uses the same five-field structure: cap value, alerts, owner, 
 - **Configuration steps:**
   1. Deepgram Console → **Settings** → **Billing** → **Spend Limits** (verify exact label in console).
   2. Set monthly cap = `$30`.
-  3. Enable email alerts to `support@mirrorfactory.ai`.
+  3. Enable email alerts to `admin@mirafactory.ai`.
 - **Kill-switch:** Console → **API Keys** → rotate. Set `DEEPGRAM_API_KEY` to empty in Vercel env; runtime provider switches back to AssemblyAI.
 
 ### 9. Stripe (billing customer)
@@ -175,7 +175,7 @@ Each vendor below uses the same five-field structure: cap value, alerts, owner, 
 - **Configuration steps:**
   1. Resend dashboard → **Settings** → **Usage & Billing**.
   2. Confirm plan = Free.
-  3. Enable email alerts to `support@mirrorfactory.ai` at 80% of free quota.
+  3. Enable email alerts to `admin@mirafactory.ai` at 80% of free quota.
   4. When upgrading to paid: Settings → Billing → set hard monthly cap.
 - **Kill-switch:** Dashboard → **API Keys** → rotate. Set `RESEND_API_KEY` to empty in Vercel env; redeploy. Onboarding emails fail closed (user can still sign in via Supabase magic link, which uses Supabase SMTP).
 
@@ -243,7 +243,7 @@ Assumptions for the **Core $20 tier** with 20 meetings/month per user, average 3
 This checklist runs before any promotion to `main` (i.e. before any user-facing release). Cross-referenced from `docs/RELEASE.md`.
 
 1. [ ] All 11 vendors above have a configured cap, verified by visiting the dashboard and screenshotting the cap value into `.ai-starter/evidence/spend-caps/<YYYY-MM-DD>/`.
-2. [ ] No alert email has fired in the last 24 hrs (search `support@mirrorfactory.ai` for `[Spend]`, `[Budget]`, `[Usage]`).
+2. [ ] No alert email has fired in the last 24 hrs (search `admin@mirafactory.ai` for `[Spend]`, `[Budget]`, `[Usage]`).
 3. [ ] AI Gateway balance > $80 (40% of cap). Top up if lower.
 4. [ ] Supabase Spend Cap toggle is **on**. Egress trend over last 7 days is < $5/day.
 5. [ ] AssemblyAI usage trend over last 7 days extrapolates to < $50 for the month.

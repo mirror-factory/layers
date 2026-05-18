@@ -50,6 +50,8 @@ storybook-static/
 coverage/
 !app/api/dev-kit/coverage/
 !app/api/dev-kit/coverage/route.ts
+!app/dev-kit/coverage/
+!app/dev-kit/coverage/page.tsx
 .ai-logs/
 .evidence/
 .artifacts/
@@ -73,6 +75,7 @@ supabase/.temp/
 .ai-starter/evidence/
 .ai-dev-kit/state/
 .claude/hooks/state.json
+.claude/*.lock
 .codex/hooks/state.json
 .codex/hooks/observer-state.json
 .claude/hooks/__pycache__/

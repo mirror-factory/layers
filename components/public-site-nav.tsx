@@ -14,6 +14,13 @@ const ANON_NAV_LINKS = [
   { href: "/sign-in", label: "Sign in" },
 ] as const;
 
+const ANON_SECONDARY_LINKS = [
+  { href: "/changelog", label: "Changelog" },
+  { href: "/docs", label: "Docs" },
+  { href: "/privacy", label: "Privacy" },
+  { href: "/terms", label: "Terms" },
+] as const;
+
 const AUTHED_NAV_LINKS = [
   { href: "/meetings", label: "Meetings" },
   { href: "/chat", label: "Chat" },
@@ -103,6 +110,33 @@ export function PublicSiteNav({ isAuthed = false }: { isAuthed?: boolean }) {
                 </Link>
               );
             })}
+
+            {!isAuthed ? (
+              <div className="mt-3 border-t border-[var(--border-subtle,oklch(0.84_0.024_168/0.4))] pt-3">
+                <div className="grid grid-cols-2 gap-1">
+                  {ANON_SECONDARY_LINKS.map(({ href, label }) => {
+                    const isActive =
+                      pathname === href || pathname.startsWith(`${href}/`);
+                    return (
+                      <Link
+                        key={href}
+                        href={href}
+                        onClick={() => setOpen(false)}
+                        aria-current={isActive ? "page" : undefined}
+                        className={cn(
+                          "rounded-md px-3 py-3 text-[14px]",
+                          isActive
+                            ? "bg-[var(--bg-surface,oklch(0.997_0.004_168))] text-[var(--text-primary,oklch(0.22_0.035_256))]"
+                            : "text-[var(--text-secondary,oklch(0.46_0.025_256))] hover:bg-[var(--bg-surface,oklch(0.997_0.004_168))]",
+                        )}
+                      >
+                        {label}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : null}
           </div>
         </div>
       ) : null}

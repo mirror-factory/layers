@@ -1,0 +1,20 @@
+appId: com.mirafactory.layers
+---
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 6000
+- takeScreenshot: ios-walk-C2-pre
+
+- tapOn: "Switch to dark mode"
+- waitForAnimationToEnd:
+    timeout: 2500
+- takeScreenshot: ios-walk-C2-post
+
+# Kill + relaunch and confirm dark stuck
+- killApp
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 6000
+- takeScreenshot: ios-walk-C2-relaunch

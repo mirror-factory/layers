@@ -6,7 +6,7 @@ import {
   interpolate,
   spring,
 } from "remotion";
-import { TOKENS, FONT_ITALIC_SERIF } from "../lib/tokens";
+import { TOKENS, FONT_EMPHASIS_SANS } from "../lib/tokens";
 import { AudioWave } from "../components/AudioWave";
 import { LayersMark } from "../components/LayersMark";
 
@@ -99,9 +99,9 @@ export const ColdOpen: React.FC = () => {
         AI memory for your{" "}
         <em
           style={{
-            fontFamily: FONT_ITALIC_SERIF,
-            fontStyle: "italic",
-            fontWeight: 400,
+            fontFamily: FONT_EMPHASIS_SANS,
+            fontStyle: "normal",
+            fontWeight: 650,
             color: TOKENS.layersMint,
             letterSpacing: "-0.012em",
           }}

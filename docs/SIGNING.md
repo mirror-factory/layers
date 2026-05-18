@@ -9,12 +9,14 @@ This document describes how the Layers Electron build pipeline produces signed a
 ## Status
 
 - macOS: config wiring is in place. Until the GitHub secrets below are populated, `electron-mac` builds emit **unsigned DMGs** with a `::warning::` log. Unsigned DMGs trigger a Gatekeeper "Apple could not verify Layers.app is free of malware" prompt on first launch.
+- macOS signed builds are now fail-closed: if `CSC_LINK` is present but notarization credentials are incomplete, CI stops instead of uploading a signed-but-unnotarized app.
 - Windows: placeholder only. We do not yet hold an EV/OV Authenticode certificate. See `electron-builder.yml` `win.signtoolOptions` comment.
 
 Rollout sequence for macOS:
 1. Merge config wiring (this PR).
 2. Populate GitHub secrets (below).
-3. Tag a release (`vX.Y.Z`) — the `electron-mac` job auto-detects `CSC_LINK`, decodes the `.p8` notarytool key, flips `notarize: true`, and produces a signed + notarized DMG.
+3. Tag a release (`vX.Y.Z`) — the `electron-mac` job auto-detects `CSC_LINK`, decodes the `.p8` notarytool key when using the API-key path, and produces a signed + notarized DMG.
+4. The workflow verifies the built `.app` with `codesign`, `xcrun stapler validate`, and `spctl --assess` before artifact upload.
 
 ---
 
@@ -71,8 +73,10 @@ The CI job decodes the base64 back into a real `.p8` file at `${RUNNER_TEMP}/pri
 
 1. Loads all secrets into the job env.
 2. Detects whether `CSC_LINK` + `CSC_KEY_PASSWORD` are populated. If not, sets `signing_enabled=false`, logs a `::warning::`, and runs the **unsigned fallback** build (still uploads the DMG so internal/dev consumers aren't blocked).
-3. If signing is enabled, decodes `APPLE_API_KEY` (base64) into a `.p8` file, points `APPLE_API_KEY` env var at that path, and rewrites `electron-builder.yml` to flip `notarize: true`, then runs `electron-builder`.
-4. `electron-builder` consumes the signing env vars (CSC_LINK, CSC_KEY_PASSWORD) and notarytool env vars (APPLE_API_KEY/_ID/_ISSUER, APPLE_TEAM_ID) automatically — no flags required at the CLI.
+3. If signing is enabled, requires either `APPLE_API_KEY` + `APPLE_API_KEY_ID` + `APPLE_API_ISSUER` + `APPLE_TEAM_ID`, or `APPLE_ID` + `APPLE_APP_SPECIFIC_PASSWORD` + `APPLE_TEAM_ID`. Missing notarization credentials fail the job.
+4. If using the API-key path, decodes `APPLE_API_KEY` (base64) into a `.p8` file and points the `APPLE_API_KEY` env var at that path before running `electron-builder`.
+5. `electron-builder` consumes the signing env vars (`CSC_LINK`, `CSC_KEY_PASSWORD`) and notarytool env vars automatically.
+6. The workflow verifies the result with `codesign --verify --deep --strict`, `xcrun stapler validate`, and `spctl --assess --type execute`. If Gatekeeper rejects the app, the artifact is not uploaded as a signed release candidate.
 
 References:
 - https://www.electron.build/code-signing-mac.html

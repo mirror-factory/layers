@@ -5,7 +5,7 @@ import {
   interpolate,
   Easing,
 } from "remotion";
-import { TOKENS, FONT_ITALIC_SERIF } from "../../lib/tokens";
+import { TOKENS, FONT_EMPHASIS_SANS } from "../../lib/tokens";
 
 /**
  * Scene 01 (0-4s) — "Wherever you are."
@@ -46,7 +46,6 @@ export const Phrase: React.FC = () => {
         style={{
           margin: 0,
           fontSize: 132,
-          fontWeight: 400,
           color: TOKENS.ink,
           letterSpacing: "-0.022em",
           textAlign: "center",
@@ -54,8 +53,9 @@ export const Phrase: React.FC = () => {
           transform: `translateY(${drift}px)`,
           maxWidth: 1500,
           lineHeight: 1.04,
-          fontFamily: FONT_ITALIC_SERIF,
-          fontStyle: "italic",
+          fontFamily: FONT_EMPHASIS_SANS,
+          fontStyle: "normal",
+          fontWeight: 650,
         }}
       >
         Wherever you are.

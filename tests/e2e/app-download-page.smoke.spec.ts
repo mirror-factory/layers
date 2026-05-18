@@ -7,17 +7,25 @@ test("app/download/page.tsx shows launch-ready channel states", async ({
 
   await expect(
     page.getByRole("heading", {
-      name: "Start with the website. Add native beta builds as they go live.",
+      name: /Wherever your meetings happen,\s*Layers is quietly listening\./,
     }),
   ).toBeVisible();
-  await expect(page.getByText("Website live").first()).toBeVisible();
-  await expect(page.getByText("Desktop beta").first()).toBeVisible();
-  await expect(page.getByText("TestFlight").first()).toBeVisible();
-  await expect(page.getByText("Play internal testing").first()).toBeVisible();
+  await expect(page.getByText("Stable alpha").first()).toBeVisible();
+  await expect(page.getByText("macOS").first()).toBeVisible();
+  await expect(page.getByText("Windows").first()).toBeVisible();
+  await expect(page.getByText("Web app").first()).toBeVisible();
+  await expect(page.getByText("Release line").first()).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Web app" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "macOS" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Windows" }).first()).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "iPhone & iPad", exact: true }).first(),
+  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Android" }).first()).toBeVisible();
 
   await expect(page.getByText("macOS 13 Ventura or later")).toBeVisible();
   await expect(
-    page.getByText("64-bit Windows 10 or Windows 11"),
+    page.getByText("Windows 10 (build 19041) or Windows 11").first(),
   ).toBeVisible();
 
   await expect(
@@ -27,7 +35,7 @@ test("app/download/page.tsx shows launch-ready channel states", async ({
     page.locator('a[href*="play.google.com/store/search"]'),
   ).toHaveCount(0);
   await expect(
-    page.getByRole("link", { name: /Open Website live/ }).first(),
+    page.getByRole("link", { name: /Open the web app/ }).first(),
   ).toBeVisible();
 });
 
@@ -36,12 +44,12 @@ test("app/download/page.tsx remains usable on mobile", async ({ page }) => {
   await page.goto("/download");
 
   await expect(
-    page.getByRole("link", { name: /Open Website live/ }).first(),
+    page.getByRole("link", { name: /Open the web app/ }).first(),
   ).toBeVisible();
   await expect(
-    page.getByRole("heading", { name: "iPhone and iPad" }),
+    page.getByRole("heading", { name: "iPhone & iPad", exact: true }),
   ).toBeVisible();
   await expect(
-    page.getByText("Requires Apple's TestFlight app"),
+    page.getByText("TestFlight invite — opening soon").first(),
   ).toBeVisible();
 });

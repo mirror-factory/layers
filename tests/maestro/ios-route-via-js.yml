@@ -1,0 +1,16 @@
+appId: com.mirafactory.layers
+---
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 6000
+
+- tapOn: "Coming soon"
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: ios-walk-D-after-coming-soon
+
+- tapOn: "See how it works"
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: ios-walk-D-after-how-it-works

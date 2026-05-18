@@ -27,7 +27,7 @@ const TRANSCRIPT_LINES = [
 
 export const Wedge: React.FC = () => {
   const frame = useCurrentFrame();
-  const { width, height, fps } = useVideoConfig();
+  const { fps } = useVideoConfig();
 
   const enter = interpolate(frame, [0, 18], [0, 1], {
     extrapolateLeft: "clamp",
@@ -61,9 +61,7 @@ export const Wedge: React.FC = () => {
   const baseLvl = recordingActive ? 0.4 : 0.08;
   const level =
     baseLvl +
-    (recordingActive
-      ? 0.25 * (0.5 + 0.5 * Math.sin(seconds * 6))
-      : 0);
+    (recordingActive ? 0.25 * (0.5 + 0.5 * Math.sin(seconds * 6)) : 0);
 
   // Transcript reveals — one line at a time, each fading in
   const transcriptBase = tapStart + 36;
@@ -74,7 +72,13 @@ export const Wedge: React.FC = () => {
       <PaperBackground />
 
       {/* Left: caption */}
-      <AbsoluteFill style={{ padding: 110, alignItems: "flex-start", justifyContent: "center" }}>
+      <AbsoluteFill
+        style={{
+          padding: 110,
+          alignItems: "flex-start",
+          justifyContent: "center",
+        }}
+      >
         <div style={{ maxWidth: 760 }}>
           <div
             style={{
@@ -121,7 +125,9 @@ export const Wedge: React.FC = () => {
               lineHeight: 1.45,
             }}
           >
-            Audio intake is the wedge. Phone tap at a Starbucks counter, in a Zoom, in a Slack huddle. Layers transcribes, structures, and layers it.
+            Audio intake is the wedge. Phone tap at a Starbucks counter, in a
+            Zoom, in a Slack huddle. Layers transcribes, structures, and layers
+            it.
           </div>
         </div>
       </AbsoluteFill>
@@ -158,7 +164,16 @@ const PhoneCard: React.FC<{
   transcriptBase: number;
   transcriptStride: number;
   frame: number;
-}> = ({ width, height, level, recordingActive, tapOpacity, transcriptBase, transcriptStride, frame }) => {
+}> = ({
+  width,
+  height,
+  level,
+  recordingActive,
+  tapOpacity,
+  transcriptBase,
+  transcriptStride,
+  frame,
+}) => {
   return (
     <div
       style={{
@@ -213,7 +228,12 @@ const PhoneCard: React.FC<{
           alignItems: "center",
         }}
       >
-        <AudioWave width={width - 80} height={140} level={level} motion={recordingActive ? 1.1 : 0.5} />
+        <AudioWave
+          width={width - 80}
+          height={140}
+          level={level}
+          motion={recordingActive ? 1.1 : 0.5}
+        />
       </div>
 
       {/* Transcript card */}
@@ -235,7 +255,14 @@ const PhoneCard: React.FC<{
           overflow: "hidden",
         }}
       >
-        <div style={{ fontFamily: `"JetBrains Mono", ui-monospace, monospace`, fontSize: 11, color: TOKENS.fgMuted, letterSpacing: "0.12em" }}>
+        <div
+          style={{
+            fontFamily: `"JetBrains Mono", ui-monospace, monospace`,
+            fontSize: 11,
+            color: TOKENS.fgMuted,
+            letterSpacing: "0.12em",
+          }}
+        >
           TRANSCRIPT · LIVE
         </div>
         {TRANSCRIPT_LINES.map((line, i) => {

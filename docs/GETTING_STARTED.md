@@ -34,6 +34,8 @@ Read in this order if you're new. Skim if you're returning.
 
 ### How we ship
 - [`docs/RELEASE.md`](./RELEASE.md) — three-tier flow (dev → staging → main), Vercel setup, GitHub branch protection, OAuth/webhook allow-lists, migration checklist.
+- [`docs/AI_HARNESS_TIERS.md`](./AI_HARNESS_TIERS.md) — verification levels for agents, humans, CI, Symphony, Playwright, Expect, evals, and release proof.
+- [`docs/PRODUCTION_QUALITY_SYSTEM.md`](./PRODUCTION_QUALITY_SYSTEM.md) — executive overview of branch tiers, starter-kit coverage, Symphony capacity, native platform testing, and release confidence.
 - [`AGENTS.md`](../AGENTS.md) — the "if you're an agent, read this first" file (Vercel's eval shows this beats skill-based context). Cross-references release rules and design rules.
 - [`CLAUDE.md`](../CLAUDE.md) — wraps `AGENTS.md` for Claude Code specifically, plus AI Starter Kit contract.
 - `.ai-starter/manifests/*.json` — machine-readable registries (features, hooks, evidence, runtimes, design, integrations). Run `pnpm sync` after changes.
@@ -85,11 +87,13 @@ Before writing or editing code, read in this order:
 
 After writing code:
 
-1. `pnpm typecheck` (must pass).
-2. `pnpm test` for unit; `pnpm test:e2e` for browser proof when relevant.
-3. `pnpm sync` to refresh manifests.
-4. `pnpm score` to update the readiness scorecard.
-5. Open a PR into **`development`** — never directly into `staging` or `main`.
+1. `pnpm verify:tier 0` for local syntax and structure.
+2. `pnpm verify:tier 1` for fast deterministic tests.
+3. `pnpm verify:tier 2` when a ticket is ready for review.
+4. `pnpm verify:tier 3` for UI, mobile, visual, or staging-sensitive work.
+5. `pnpm sync` to refresh manifests when starter-managed files change.
+6. `pnpm score` to update the readiness scorecard.
+7. Open a PR into **`development`** — never directly into `staging` or `main`.
 
 If you're about to bypass any of the above, write down why in the PR description. If you're about to push direct to main, stop — see [`docs/RELEASE.md`](./RELEASE.md).
 
@@ -114,7 +118,7 @@ If you're about to bypass any of the above, write down why in the PR description
 - Repo: <https://github.com/mirror-factory/audio-layer>
 - Linear: <https://linear.app/mirror-factory/project/layers-786bd350532f>
 - Vercel project: `layers` under the `mirror-factory` team
-- Support: <support@mirrorfactory.ai>
+- Support: <admin@mirafactory.ai>
 
 ---
 

@@ -35,7 +35,7 @@ export function SiteFooter() {
         <Link
           href="/"
           aria-label="Layers home"
-          className="inline-flex items-center"
+          className="inline-flex min-h-11 min-w-11 items-center"
         >
           <LayersLogo />
         </Link>
@@ -48,7 +48,7 @@ export function SiteFooter() {
             <Link
               key={href}
               href={href}
-              className="text-[var(--text-secondary,oklch(0.46_0.025_256))] transition-colors hover:text-[var(--text-primary,oklch(0.22_0.035_256))]"
+              className="inline-flex min-h-11 min-w-11 items-center justify-center text-[var(--text-secondary,oklch(0.46_0.025_256))] transition-colors hover:text-[var(--text-primary,oklch(0.22_0.035_256))]"
             >
               {label}
             </Link>
@@ -57,9 +57,9 @@ export function SiteFooter() {
 
         <div className="flex items-center gap-4">
           <a
-            href="mailto:support@mirrorfactory.ai"
-            aria-label="Email support"
-            className="text-[14px] text-[var(--text-secondary,oklch(0.46_0.025_256))] transition-colors hover:text-[var(--text-primary,oklch(0.22_0.035_256))]"
+            href="mailto:admin@mirafactory.ai"
+            aria-label="Email Layers"
+            className="inline-flex min-h-11 items-center text-[14px] text-[var(--text-secondary,oklch(0.46_0.025_256))] transition-colors hover:text-[var(--text-primary,oklch(0.22_0.035_256))]"
           >
             Contact
           </a>
@@ -68,7 +68,7 @@ export function SiteFooter() {
             target="_blank"
             rel="noreferrer"
             aria-label="Layers on X"
-            className="text-[var(--text-secondary,oklch(0.46_0.025_256))] transition-colors hover:text-[var(--text-primary,oklch(0.22_0.035_256))]"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center text-[var(--text-secondary,oklch(0.46_0.025_256))] transition-colors hover:text-[var(--text-primary,oklch(0.22_0.035_256))]"
           >
             <XIcon className="h-[16px] w-[16px]" />
           </a>

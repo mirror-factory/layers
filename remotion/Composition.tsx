@@ -1,7 +1,5 @@
 import React from "react";
 import { AbsoluteFill, Sequence, useVideoConfig } from "remotion";
-import { loadFont } from "@remotion/google-fonts/BricolageGrotesque";
-import { loadFont as loadCaveat } from "@remotion/google-fonts/Caveat";
 import { loadFont as loadInter } from "@remotion/google-fonts/Inter";
 import { loadFont as loadJetBrains } from "@remotion/google-fonts/JetBrainsMono";
 
@@ -15,22 +13,14 @@ import { Mcp } from "./scenes/Mcp";
 import { Cta } from "./scenes/Cta";
 import { SCENES } from "./lib/timing";
 
-// Brand display + body fonts. Loading happens at module scope so Remotion
-// blocks rendering until the font is on the page — otherwise the first
-// rendered frames flash in a system fallback.
-const bricolage = loadFont("normal", {
-  weights: ["400", "500", "600", "700"],
-  subsets: ["latin"],
-});
+// Brand type uses a single sans stack. Loading happens at module scope so
+// Remotion blocks rendering until the font is on the page.
 const inter = loadInter("normal", {
   weights: ["400", "500", "600", "700"],
   subsets: ["latin"],
 });
-// Caveat is used only for the single handwritten "your notes →" accent.
-loadCaveat("normal", { weights: ["600"], subsets: ["latin"] });
 loadJetBrains("normal", { weights: ["400", "500"], subsets: ["latin"] });
 
-const DISPLAY = bricolage.fontFamily;
 const BODY = inter.fontFamily;
 
 /**
@@ -54,7 +44,7 @@ export const ExplainerComposition: React.FC = () => {
       <style>
         {`
           h1, h2, h3 {
-            font-family: ${DISPLAY}, "Geist Sans", system-ui, sans-serif;
+            font-family: ${BODY}, "Geist Sans", system-ui, sans-serif;
           }
         `}
       </style>

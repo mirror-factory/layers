@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     "Launch draft privacy policy for Layers, the meeting memory app by Mirror Factory.",
 };
 
-const SUPPORT_EMAIL = "support@mirrorfactory.ai";
+const SUPPORT_EMAIL = "admin@mirafactory.ai";
 const LAST_UPDATED = "April 30, 2026";
 
 // ── Legal content (byte-identical to prior page; re-grouped for prose form) ─

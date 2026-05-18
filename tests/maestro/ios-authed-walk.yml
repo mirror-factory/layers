@@ -1,7 +1,7 @@
 # Maestro flow: walk authed surfaces inside the iOS Capacitor app.
 # Relaunches between each page — avoids brittle in-app back-arrow taps.
 
-appId: com.mirrorfactory.audiolayer
+appId: com.mirafactory.layers
 ---
 # /record (landing for signed-in users)
 - launchApp:
