@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.143] — 2026-05-18
+
+### Documentation
+- docs: clarify cpo proof head wording (`3de1c24`)
+
+
 ## [0.1.142] — 2026-05-18
 
 ### Documentation
