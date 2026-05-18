@@ -287,23 +287,25 @@
         <header>
           <h1>CPO Release Readiness Report</h1>
           <p>
-            TLDR: the release-readiness branch is moving forward, but it is
-            still not a production-safe release. PR #88 is open against
-            development. Latest completed code-proof head 07bde14 has Tier
-            0-1 Fast Gates, Tier 2 Focused Browser Proof, Tier 3 Broad Browser
-            Matrix, Vercel, and Vercel Preview Comments passing. This head
+            TLDR: the release-readiness branch is still in a solid QA posture,
+            but it is not production-safe yet. PR #88 is open against
+            development. Current pushed head 8f79029 has Tier 0-1 Fast Gates,
+            Tier 2 Focused Browser Proof, Tier 3 Broad Browser Matrix, Vercel,
+            and Vercel Preview Comments passing. This release branch
             includes the PROD-500 Stop/finalize reliability fix: the server
             now fails closed if the meeting row disappears before finalize, so
             the client should not clear the local recording draft and navigate
-            to a missing meeting. Local and pre-push proof also passed on
-            v0.1.140. If this report is followed by a docs/version-only commit,
-            CI still needs to be checked on that newer PR head before merge.
+            to a missing meeting. Local and pre-push proof passed on v0.1.140,
+            and hosted proof passed again after the v0.1.141 report/version
+            head. The active next QA task is a focused current-branch
+            browser/Expect Stop-flow proof from Start recording through Stop,
+            finalize, draft cleanup/failure handling, and meeting-detail render.
           </p>
 
           <div class="meta" role="list" aria-label="Report metadata">
             <div role="listitem">
               <span class="label">Updated</span>
-              <span class="value">2026-05-17 21:03 EDT</span>
+              <span class="value">2026-05-17 21:15 EDT</span>
             </div>
             <div role="listitem">
               <span class="label">Branch</span>
@@ -315,7 +317,7 @@
             </div>
             <div role="listitem">
               <span class="label">QA Evidence Head</span>
-              <span class="value">07bde14: Tier 0-1, Tier 2, Tier 3, Vercel pass</span>
+              <span class="value">8f79029: Tier 0-1, Tier 2, Tier 3, Vercel pass</span>
             </div>
           </div>
         </header>
@@ -327,9 +329,9 @@
               <h3>What Is Good</h3>
               <ul>
                 <li>Tier 0-1 Fast Gates passed remotely on the latest full proof run.</li>
-                <li>Tier 2 Focused Browser Proof passed remotely on latest completed code-proof head 07bde14.</li>
-                <li>Tier 3 Broad Browser Matrix passed remotely on latest completed code-proof head 07bde14.</li>
-                <li>Vercel preview deployment completed successfully on latest completed code-proof head 07bde14.</li>
+                <li>Tier 2 Focused Browser Proof passed remotely on current pushed head 8f79029.</li>
+                <li>Tier 3 Broad Browser Matrix passed remotely on current pushed head 8f79029.</li>
+                <li>Vercel preview deployment completed successfully on current pushed head 8f79029.</li>
                 <li>PROD-500 Stop/finalize fix passed targeted Vitest, typecheck, compliance, fast tests, pre-push Tier 1, and hosted proof.</li>
                 <li>Main branch protection now requires the current gate names and 1 approval.</li>
                 <li>GitHub default branch now points at `development`, not stale unprotected `dev`.</li>
@@ -352,7 +354,7 @@
                 <li>Main branch protection was fixed from legacy `Tests` / `Quality Gates` to the active AI Dev Kit and release gate names.</li>
                 <li>PROD-500 received a scoped hardening fix for invalid/natural-language action due dates on meeting detail render.</li>
                 <li>PROD-500 now has a server-side Stop/finalize contract fix and integration tests for happy path, malformed payload, natural-language due dates, and missing meeting rows.</li>
-                <li>Version bumped to 0.1.136 by the repo hook.</li>
+                <li>Version is now at 0.1.141 after the latest report/version hook bump.</li>
               </ul>
             </div>
 
@@ -402,7 +404,7 @@
               <tr>
                 <td>Remote release CI</td>
                 <td><span class="stamp pass">Green On Pushed Head</span></td>
-                <td>Latest completed code-proof head 07bde14 has Tier 0-1, Tier 2, Tier 3, Vercel, and Vercel Preview Comments green. Server/native proof is skipped because repo-level self-hosted runners are missing.</td>
+                <td>Current pushed head 8f79029 has Tier 0-1, Tier 2, Tier 3, Vercel, and Vercel Preview Comments green. Server/native proof is skipped because repo-level self-hosted runners are missing.</td>
               </tr>
               <tr>
                 <td>Compliance</td>
@@ -492,7 +494,7 @@
               <tr>
                 <td>Tier 3 browser matrix</td>
                 <td><span class="stamp pass">Passed</span></td>
-                <td>Enabled `tier3:run`; AI Dev Kit Gates run 26005507792 passed Tier 3 with artifacts uploaded.</td>
+                <td>Enabled `tier3:run`; AI Dev Kit Gates run 26008091341 passed Tier 3 with artifacts uploaded.</td>
               </tr>
               <tr>
                 <td>Self-hosted web/native CI</td>
