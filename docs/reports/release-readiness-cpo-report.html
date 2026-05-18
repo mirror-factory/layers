@@ -287,14 +287,16 @@
         <header>
           <h1>CPO Release Readiness Report</h1>
           <p>
-            TLDR: PR #88 is now pushed, clean, and hosted checks are green for
-            Tier 0-1, Tier 2, and Vercel. I added a 30-gate all-platform release
-            matrix and ran four Claude Sonnet workers across Web, iOS, Android,
-            and Electron/macOS. The product is much closer, but it is not ready
-            for broad external testing yet: 7 gates are green, 19 are partial,
-            and 4 remain not proven. The remaining risk is concentrated in live
-            OAuth callback/return, real microphone recording/finalize, store
-            signing/distribution, and Android emulator disk space.
+            TLDR: PR #88 is pushed and the repo is clean. The prior QA evidence
+            head was green for Tier 0-1, Tier 2, and Vercel; the latest
+            report-refresh head is rerunning hosted checks now. I added a
+            30-gate all-platform release matrix and ran four Claude Sonnet
+            workers across Web, iOS, Android, and Electron/macOS. The product is
+            much closer, but it is not ready for broad external testing yet: 7
+            gates are green, 19 are partial, and 4 remain not proven. The
+            remaining risk is concentrated in live OAuth callback/return, real
+            microphone recording/finalize, store signing/distribution, and
+            Android emulator disk space.
           </p>
 
           <div class="meta" role="list" aria-label="Report metadata">
@@ -312,7 +314,7 @@
             </div>
             <div role="listitem">
               <span class="label">Current Local State</span>
-              <span class="value">Clean and pushed at 53ffaab / v0.1.156</span>
+              <span class="value">Clean and pushed; v0.1.157; hosted checks rerunning</span>
             </div>
           </div>
         </header>
@@ -323,7 +325,7 @@
             <div class="card good">
               <h3>What Is Good</h3>
               <ul>
-                <li>PR #88 head 53ffaab is green for Tier 0-1 Fast Gates, Tier 2 Focused Browser Proof, Vercel, and Vercel Preview Comments.</li>
+                <li>Prior QA evidence head 53ffaab was green for Tier 0-1 Fast Gates, Tier 2 Focused Browser Proof, Vercel, and Vercel Preview Comments.</li>
                 <li>Repo is clean and pushed on release/external-tester-readiness-2026-05-17.</li>
                 <li>New 30-gate release matrix is committed at docs/RELEASE_TEST_MATRIX.md.</li>
                 <li>All-platform evidence is committed under docs/evidence/2026-05-18-release-test-matrix/.</li>
@@ -341,7 +343,7 @@
                 <li>Created the release-gate matrix Alfonso asked for across Web, iOS, Android, and Electron/macOS.</li>
                 <li>Used Claude Sonnet workers as platform operators, then aggregated their reports into one run summary.</li>
                 <li>Committed and pushed the matrix, reports, screenshots, and Activity Log checkpoint.</li>
-                <li>Auto-version hooks bumped the app from 0.1.154 to 0.1.156.</li>
+                <li>Auto-version hooks bumped the app from 0.1.154 to 0.1.157.</li>
                 <li>Refreshed docs/manifest.json so the compliance checker no longer warns about the new docs.</li>
                 <li>Stopped leftover worker-launched Next/Chrome/Electron processes to remove the local port-3000 conflict for the next API smoke pass.</li>
               </ul>
@@ -392,7 +394,7 @@
               <tr>
                 <td>Remote CI</td>
                 <td><span class="stamp pass">Green where required</span></td>
-                <td>PR #88 head 53ffaab has Tier 0-1, Tier 2, Vercel, and Vercel Preview Comments green. Android Native Proof, Self-hosted Web Proof, and Tier 3 Broad Browser Matrix are skipped.</td>
+                <td>The prior QA evidence head was green for Tier 0-1, Tier 2, Vercel, and Vercel Preview Comments. The latest report-refresh head is rerunning. Android Native Proof and Self-hosted Web Proof remain skipped.</td>
               </tr>
               <tr>
                 <td>Local slim gate</td>
