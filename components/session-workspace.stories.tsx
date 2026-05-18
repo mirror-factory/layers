@@ -33,9 +33,24 @@ const transcriptRows = [
 ];
 
 const actions = [
-  { id: "search", text: "Define search MVP", due: "May 2", priority: "High" as const },
-  { id: "calendar", text: "Prototype calendar context", due: "May 5", priority: "Med" as const },
-  { id: "test", text: "User test new flow", due: "May 8", priority: "Low" as const },
+  {
+    id: "search",
+    text: "Define search MVP",
+    due: "May 2",
+    priority: "High" as const,
+  },
+  {
+    id: "calendar",
+    text: "Prototype calendar context",
+    due: "May 5",
+    priority: "Med" as const,
+  },
+  {
+    id: "test",
+    text: "User test new flow",
+    due: "May 8",
+    priority: "Low" as const,
+  },
 ];
 
 export const Live = {

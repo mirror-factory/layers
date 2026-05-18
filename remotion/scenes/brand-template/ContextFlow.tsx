@@ -33,10 +33,10 @@ type Vendor = {
 };
 
 const VENDORS: Vendor[] = [
-  { name: "Claude",  x: 0.18, y: 0.30, delay: 12, Logo: ClaudeLogo },
-  { name: "ChatGPT", x: 0.82, y: 0.30, delay: 28, Logo: ChatGptLogo },
-  { name: "Gemini",  x: 0.18, y: 0.72, delay: 44, Logo: GeminiLogo },
-  { name: "Cursor",  x: 0.82, y: 0.72, delay: 60, Logo: CursorLogo },
+  { name: "Claude", x: 0.18, y: 0.3, delay: 12, Logo: ClaudeLogo },
+  { name: "ChatGPT", x: 0.82, y: 0.3, delay: 28, Logo: ChatGptLogo },
+  { name: "Gemini", x: 0.18, y: 0.72, delay: 44, Logo: GeminiLogo },
+  { name: "Cursor", x: 0.82, y: 0.72, delay: 60, Logo: CursorLogo },
 ];
 
 export const ContextFlow: React.FC = () => {
@@ -44,14 +44,23 @@ export const ContextFlow: React.FC = () => {
   const { width, height, fps } = useVideoConfig();
   const seconds = frame / fps;
 
-  const enter = interpolate(frame, [0, 18], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const out = interpolate(frame, [200, 240], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const enter = interpolate(frame, [0, 18], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const out = interpolate(frame, [200, 240], [1, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
 
   const cx = width * 0.5;
   const cy = height * 0.5;
 
   // Caption
-  const captionEnter = interpolate(frame, [4, 32], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const captionEnter = interpolate(frame, [4, 32], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
 
   // Center breathing rings
   const ringR1 = 56 + 3 * Math.sin(seconds * 1.1);
@@ -61,8 +70,8 @@ export const ContextFlow: React.FC = () => {
     <AbsoluteFill style={{ opacity: Math.min(enter, out) }}>
       <PaperBackground />
       {/* Quiet particle field — fills the space between center dot and the
-        * vendor cards so the flow curves don't feel lonely.
-        */}
+       * vendor cards so the flow curves don't feel lonely.
+       */}
       <ParticleField
         count={1100}
         cx={cx}
@@ -74,9 +83,23 @@ export const ContextFlow: React.FC = () => {
         seedOffset={1}
       />
 
-      <AbsoluteFill style={{ padding: 110, alignItems: "center", justifyContent: "flex-start" }}>
+      <AbsoluteFill
+        style={{
+          padding: 110,
+          alignItems: "center",
+          justifyContent: "flex-start",
+        }}
+      >
         <div style={{ textAlign: "center", opacity: captionEnter }}>
-          <div style={{ fontSize: 18, letterSpacing: "0.18em", textTransform: "uppercase", color: TOKENS.fgFaint, marginBottom: 10 }}>
+          <div
+            style={{
+              fontSize: 18,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: TOKENS.fgFaint,
+              marginBottom: 10,
+            }}
+          >
             04 — Context flows out
           </div>
           <div
@@ -171,15 +194,43 @@ export const ContextFlow: React.FC = () => {
         })}
 
         {/* Center: halo + rings + dot */}
-        <circle cx={cx} cy={cy} r={130} fill="url(#cf-halo)" filter="url(#cf-soft)" />
-        <circle cx={cx} cy={cy} r={ringR1} fill="none" stroke={TOKENS.layersBlue} strokeWidth={2.4} opacity={0.55} />
-        <circle cx={cx} cy={cy} r={ringR2} fill="none" stroke={TOKENS.layersViolet} strokeWidth={2.4} opacity={0.75} />
-        <circle cx={cx} cy={cy} r={36} fill={TOKENS.layersMint} opacity={0.22} />
+        <circle
+          cx={cx}
+          cy={cy}
+          r={130}
+          fill="url(#cf-halo)"
+          filter="url(#cf-soft)"
+        />
+        <circle
+          cx={cx}
+          cy={cy}
+          r={ringR1}
+          fill="none"
+          stroke={TOKENS.layersBlue}
+          strokeWidth={2.4}
+          opacity={0.55}
+        />
+        <circle
+          cx={cx}
+          cy={cy}
+          r={ringR2}
+          fill="none"
+          stroke={TOKENS.layersViolet}
+          strokeWidth={2.4}
+          opacity={0.75}
+        />
+        <circle
+          cx={cx}
+          cy={cy}
+          r={36}
+          fill={TOKENS.layersMint}
+          opacity={0.22}
+        />
         <circle cx={cx} cy={cy} r={18} fill={TOKENS.layersMint} />
       </svg>
 
       {/* Vendor cards — one per quadrant */}
-      {VENDORS.map((v, i) => {
+      {VENDORS.map((v) => {
         const vx = width * v.x;
         const vy = height * v.y;
         const age = frame - v.delay;

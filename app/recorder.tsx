@@ -1,17 +1,10 @@
 "use client";
 
-import {
-  useState,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-} from "react";
+import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  BriefcaseBusiness,
   CalendarDays,
   Clock3,
   Loader2,
@@ -43,10 +36,12 @@ import {
   deriveLiveMeetingSignals,
   type LiveMeetingSignals,
 } from "@/lib/recording/live-signals";
-import { ProductLogo, type ProductLogoId } from "@/components/product-logos";
 import { OnboardingProvider } from "@/components/onboarding/onboarding-provider";
 import { OnboardingWalkthrough } from "@/components/onboarding/onboarding-walkthrough";
-import { ONBOARDING_ANCHOR_ATTR, ONBOARDING_ANCHORS } from "@/lib/onboarding/copy";
+import {
+  ONBOARDING_ANCHOR_ATTR,
+  ONBOARDING_ANCHORS,
+} from "@/lib/onboarding/copy";
 
 interface Turn {
   speaker: string | null;
@@ -95,18 +90,6 @@ const EMPTY_CALENDAR_OVERVIEW: CalendarOverview = {
   items: [],
 };
 const EMPTY_RECORDING_SECONDS_THRESHOLD = 30;
-const MCP_PROVIDER_MARKS: Array<{
-  name: string;
-  mark?: string;
-  productId?: ProductLogoId;
-  tone: "mint" | "amber" | "blue" | "slate";
-}> = [
-  { name: "ChatGPT", productId: "chatgpt", tone: "mint" },
-  { name: "Claude", productId: "claude", tone: "amber" },
-  { name: "Gemini", productId: "gemini", tone: "blue" },
-  { name: "xAI", mark: "xAI", tone: "slate" },
-];
-
 export function RecorderHome() {
   const router = useRouter();
   const recorderRef = useRef<LiveRecorderHandle | null>(null);
@@ -121,8 +104,9 @@ export function RecorderHome() {
   const [audioLevel, setAudioLevel] = useState(0);
   const [recorderSnapshot, setRecorderSnapshot] =
     useState<LiveRecorderSnapshot | null>(null);
-  const [selectedCalendarEventId, setSelectedCalendarEventId] =
-    useState<string | null>(null);
+  const [selectedCalendarEventId, setSelectedCalendarEventId] = useState<
+    string | null
+  >(null);
   const queuedCalendarStartIdRef = useRef<string | null>(null);
 
   useEffect(() => {
@@ -215,7 +199,9 @@ export function RecorderHome() {
   const selectedCalendarItem = useMemo(
     () =>
       selectedCalendarEventId
-        ? calendarOverview.items.find((item) => item.id === selectedCalendarEventId) ?? null
+        ? (calendarOverview.items.find(
+            (item) => item.id === selectedCalendarEventId,
+          ) ?? null)
         : null,
     [calendarOverview.items, selectedCalendarEventId],
   );
@@ -252,7 +238,7 @@ export function RecorderHome() {
     meetingContext?.meetingTitle ?? "Product planning session";
   const workspaceSubtitle =
     meetingContext?.source === "calendar"
-      ? meetingContext.location ?? "Calendar context"
+      ? (meetingContext.location ?? "Calendar context")
       : "Layers roadmap";
   const workspaceDate = meetingContext
     ? new Date(meetingContext.startsAt)
@@ -296,176 +282,171 @@ export function RecorderHome() {
 
   return (
     <OnboardingProvider>
-    <div className="paper-calm-page recorder-page session-workspace-page min-h-screen-safe flex flex-col">
-      <TopBar title="Layers" />
-      <OnboardingWalkthrough />
+      <div className="paper-calm-page recorder-page session-workspace-page min-h-screen-safe flex flex-col">
+        <TopBar title="Layers" />
+        <OnboardingWalkthrough />
 
-      <main className="home-app-shell mx-auto flex w-full flex-col px-4 pb-4 pt-3 sm:pt-5">
-        <div
-          className={`home-desktop-grid ${
-            isLiveWorkspace ? "is-recording" : ""
-          } ${meetingsFading && !isLiveWorkspace ? "is-arming" : ""}`}
-        >
+        <main className="home-app-shell mx-auto flex w-full flex-col px-4 pb-4 pt-3 sm:pt-5">
+          <div
+            className={`home-desktop-grid ${
+              isLiveWorkspace ? "is-recording" : ""
+            } ${meetingsFading && !isLiveWorkspace ? "is-arming" : ""}`}
+          >
+            {!isLiveWorkspace && (
+              <div className="home-desktop-sidebar home-left-column">
+                <RecentMeetings
+                  meetings={recentMeetings}
+                  meetingsFading={meetingsFading}
+                  compact
+                  onDeleteMeeting={handleDeleteRecentMeeting}
+                />
+              </div>
+            )}
+
+            <div className="home-center-column">
+              <section
+                className={`home-record-dock w-full flex-shrink-0 rounded-lg px-4 py-4 sm:px-6 sm:py-5 ${
+                  isLiveWorkspace ? "is-live" : ""
+                }`}
+              >
+                {!isLiveWorkspace && <HomeGreeting />}
+
+                {isLiveWorkspace && (
+                  <>
+                    <div className="session-capture-date">
+                      <CalendarDays size={18} aria-hidden="true" />
+                      <span>{formatFullSessionDate(workspaceDate)}</span>
+                    </div>
+
+                    <div className="session-capture-timer">
+                      <strong>{durationLabel}</strong>
+                      <div className="session-capture-state">
+                        <span>{captureStatusLabel}</span>
+                        <em className="session-live-badge is-live">
+                          <span aria-hidden="true" />
+                          {captureBadgeLabel}
+                        </em>
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                <div
+                  className={`home-record-shell ${
+                    isLiveWorkspace ? "is-session-shell" : ""
+                  }`}
+                >
+                  <div
+                    className={`home-recorder-control-slot ${
+                      isLiveWorkspace ? "is-managed" : ""
+                    }`}
+                    {...{ [ONBOARDING_ANCHOR_ATTR]: ONBOARDING_ANCHORS.record }}
+                  >
+                    <LiveRecorder
+                      ref={recorderRef}
+                      onTranscriptUpdate={handleTranscriptUpdate}
+                      onSessionEnd={handleSessionEnd}
+                      meetingContext={meetingContext}
+                      onAudioLevel={handleAudioLevel}
+                      onStateChange={handleStateChange}
+                      onSnapshot={setRecorderSnapshot}
+                      presentation={isLiveWorkspace ? "managed" : "default"}
+                    />
+                  </div>
+                  <div className="home-animated-lines" aria-hidden="true">
+                    <AudioWaveRibbon
+                      active={waveActive}
+                      audioLevel={audioLevel}
+                      height={118}
+                      sensitivity={1.16}
+                      motion={1.28}
+                      texture="clean"
+                      className="w-full"
+                    />
+                  </div>
+                </div>
+
+                {!isLiveWorkspace && (
+                  <div className="home-capture-brief">
+                    <p>
+                      Start the note when the conversation begins. Layers will
+                      organize the transcript, key points, and follow-ups as it
+                      listens.
+                    </p>
+                  </div>
+                )}
+
+                {isLiveWorkspace && (
+                  <LiveRecordingContextCard
+                    meetingContext={meetingContext}
+                    title={workspaceTitle}
+                    subtitle={workspaceSubtitle}
+                    date={workspaceDate}
+                  />
+                )}
+
+                {isLiveWorkspace && (
+                  <RecordingStopControl
+                    label={captureStatusLabel}
+                    busy={isArming || isFinalizing}
+                    onClick={() => void recorderRef.current?.stop()}
+                    disabled={isArming || isFinalizing}
+                  />
+                )}
+              </section>
+            </div>
+
+            {isLiveWorkspace && (
+              <SessionIntelligenceCanvas
+                mode="live"
+                summaryText={liveWorkspaceSummary(liveSignals)}
+                updatedLabel="Updated just now"
+                transcriptRows={workspaceRows}
+                keyPoints={workspaceKeyPoints}
+                actions={workspaceActions}
+                decisions={workspaceDecisions}
+                stats={workspaceStats}
+                footerStatus={
+                  isFinalizing ? "Saving notes" : "Live - new content arriving"
+                }
+              />
+            )}
+
+            {!isLiveWorkspace && (
+              <div className="home-desktop-sidebar home-right-column">
+                <UpcomingMeetingsPanel
+                  overview={calendarOverview}
+                  meetingsFading={meetingsFading}
+                  selectedEventId={selectedCalendarEventId}
+                  onRecordMeeting={handleRecordCalendarMeeting}
+                />
+                <HomeInsightTip />
+              </div>
+            )}
+          </div>
+
           {!isLiveWorkspace && (
-            <div className="home-desktop-sidebar home-left-column">
+            <div className="home-mobile-recent">
               <RecentMeetings
                 meetings={recentMeetings}
                 meetingsFading={meetingsFading}
-                compact
                 onDeleteMeeting={handleDeleteRecentMeeting}
               />
             </div>
           )}
 
-          <div className="home-center-column">
-            <section
-              className={`home-record-dock w-full flex-shrink-0 rounded-lg px-4 py-4 sm:px-6 sm:py-5 ${
-                isLiveWorkspace ? "is-live" : ""
-              }`}
-            >
-              {!isLiveWorkspace && (
-                <HomeGreeting />
-              )}
-
-              {isLiveWorkspace && (
-                <>
-                  <div className="session-capture-date">
-                    <CalendarDays size={18} aria-hidden="true" />
-                    <span>{formatFullSessionDate(workspaceDate)}</span>
-                  </div>
-
-                  <div className="session-capture-timer">
-                    <strong>{durationLabel}</strong>
-                    <div className="session-capture-state">
-                      <span>{captureStatusLabel}</span>
-                      <em className="session-live-badge is-live">
-                        <span aria-hidden="true" />
-                        {captureBadgeLabel}
-                      </em>
-                    </div>
-                  </div>
-                </>
-              )}
-
-              <div
-                className={`home-record-shell ${
-                  isLiveWorkspace ? "is-session-shell" : ""
-                }`}
-              >
-                <div
-                  className={`home-recorder-control-slot ${
-                    isLiveWorkspace ? "is-managed" : ""
-                  }`}
-                  {...{ [ONBOARDING_ANCHOR_ATTR]: ONBOARDING_ANCHORS.record }}
-                >
-                  <LiveRecorder
-                    ref={recorderRef}
-                    onTranscriptUpdate={handleTranscriptUpdate}
-                    onSessionEnd={handleSessionEnd}
-                    meetingContext={meetingContext}
-                    onAudioLevel={handleAudioLevel}
-                    onStateChange={handleStateChange}
-                    onSnapshot={setRecorderSnapshot}
-                    presentation={isLiveWorkspace ? "managed" : "default"}
-                  />
-                </div>
-                <div className="home-animated-lines" aria-hidden="true">
-                  <AudioWaveRibbon
-                    active={waveActive}
-                    audioLevel={audioLevel}
-                    height={118}
-                    sensitivity={1.16}
-                    motion={1.28}
-                    texture="clean"
-                    className="w-full"
-                  />
-                </div>
-              </div>
-
-              {!isLiveWorkspace && (
-                <div className="home-capture-brief">
-                  <p>
-                    Start the note when the conversation begins. Layers will
-                    organize the transcript, key points, and follow-ups as it
-                    listens.
-                  </p>
-                </div>
-              )}
-
-              {isLiveWorkspace && (
-                <LiveRecordingContextCard
-                  meetingContext={meetingContext}
-                  title={workspaceTitle}
-                  subtitle={workspaceSubtitle}
-                  date={workspaceDate}
-                />
-              )}
-
-              {isLiveWorkspace && (
-                <RecordingStopControl
-                  label={captureStatusLabel}
-                  busy={isArming || isFinalizing}
-                  onClick={() => void recorderRef.current?.stop()}
-                  disabled={isArming || isFinalizing}
-                />
-              )}
-            </section>
-
-          </div>
-
-          {isLiveWorkspace && (
-            <SessionIntelligenceCanvas
-              mode="live"
-              summaryText={liveWorkspaceSummary(liveSignals)}
-              updatedLabel="Updated just now"
-              transcriptRows={workspaceRows}
-              keyPoints={workspaceKeyPoints}
-              actions={workspaceActions}
-              decisions={workspaceDecisions}
-              stats={workspaceStats}
-              footerStatus={
-                isFinalizing
-                  ? "Saving notes"
-                  : "Live - new content arriving"
-              }
-            />
-          )}
-
           {!isLiveWorkspace && (
-            <div className="home-desktop-sidebar home-right-column">
+            <div className="home-mobile-calendar">
               <UpcomingMeetingsPanel
                 overview={calendarOverview}
                 meetingsFading={meetingsFading}
                 selectedEventId={selectedCalendarEventId}
                 onRecordMeeting={handleRecordCalendarMeeting}
               />
-              <HomeInsightTip />
             </div>
           )}
-        </div>
-
-        {!isLiveWorkspace && (
-          <div className="home-mobile-recent">
-            <RecentMeetings
-              meetings={recentMeetings}
-              meetingsFading={meetingsFading}
-              onDeleteMeeting={handleDeleteRecentMeeting}
-            />
-          </div>
-        )}
-
-        {!isLiveWorkspace && (
-          <div className="home-mobile-calendar">
-            <UpcomingMeetingsPanel
-              overview={calendarOverview}
-              meetingsFading={meetingsFading}
-              selectedEventId={selectedCalendarEventId}
-              onRecordMeeting={handleRecordCalendarMeeting}
-            />
-          </div>
-        )}
-      </main>
-    </div>
+        </main>
+      </div>
     </OnboardingProvider>
   );
 }
@@ -549,7 +530,10 @@ function HomeGreeting() {
 
   return (
     <div className="home-paper-heading home-session-heading">
-      <div className="home-session-meta" aria-label={`${dateLabel}, ${timeLabel}`}>
+      <div
+        className="home-session-meta"
+        aria-label={`${dateLabel}, ${timeLabel}`}
+      >
         <span className="home-session-date">
           <CalendarDays size={15} aria-hidden="true" />
           {dateLabel}
@@ -559,7 +543,9 @@ function HomeGreeting() {
             {hour}:{minute}
           </span>
           <span className="home-session-seconds">:{second}</span>
-          {dayPeriod && <span className="home-session-period">{dayPeriod}</span>}
+          {dayPeriod && (
+            <span className="home-session-period">{dayPeriod}</span>
+          )}
         </span>
       </div>
     </div>
@@ -583,11 +569,16 @@ function LiveRecordingContextCard({
         month: new Intl.DateTimeFormat(undefined, { weekday: "short" }).format(
           date,
         ),
-        day: new Intl.DateTimeFormat(undefined, { day: "2-digit" }).format(date),
+        day: new Intl.DateTimeFormat(undefined, { day: "2-digit" }).format(
+          date,
+        ),
         accessibleLabel: formatFullSessionDate(date),
       };
   const timeLine = meetingContext
-    ? formatCalendarDateLine(meetingContext.startsAt, meetingContext.endsAt ?? null)
+    ? formatCalendarDateLine(
+        meetingContext.startsAt,
+        meetingContext.endsAt ?? null,
+      )
     : subtitle;
   const location = meetingContext?.location;
 
@@ -610,7 +601,9 @@ function LiveRecordingContextCard({
           </p>
           <span className="session-calendar-pill is-connected is-disabled">
             <CalendarDays size={13} aria-hidden="true" />
-            {meetingContext ? "Calendar context attached" : "Calendar sync coming soon"}
+            {meetingContext
+              ? "Calendar context attached"
+              : "Calendar sync coming soon"}
           </span>
         </div>
       </div>
@@ -651,7 +644,11 @@ function buildWorkspaceTranscriptRows(
 }
 
 function buildWorkspaceActions(items: string[]): SessionActionRow[] {
-  const priorities: Array<SessionActionRow["priority"]> = ["High", "Med", "Low"];
+  const priorities: Array<SessionActionRow["priority"]> = [
+    "High",
+    "Med",
+    "Low",
+  ];
   return items.slice(0, 5).map((text, index) => ({
     id: `${index}-${text}`,
     text,
@@ -673,9 +670,7 @@ function liveWorkspaceSummary(signals: LiveMeetingSignals): string {
 
   const nextAction = signals.actions[0]?.text;
   const summary = signalText.slice(0, 3).join(" ");
-  return nextAction
-    ? `${summary} Next: ${nextAction}`
-    : summary;
+  return nextAction ? `${summary} Next: ${nextAction}` : summary;
 }
 
 function formatFullSessionDate(date: Date): string {
@@ -702,12 +697,12 @@ function UpcomingMeetingsPanel({
   const emptyCopy = overview.calendarRateLimited
     ? "Google Calendar is rate limited right now. You can still start recording manually."
     : overview.reauthRequired && overview.connected
-    ? "Reconnect your calendar to keep upcoming meetings available before recording."
-    : "Calendar sync is coming soon. You can still start recording manually.";
+      ? "Reconnect your calendar to keep upcoming meetings available before recording."
+      : "Calendar sync is coming soon. You can still start recording manually.";
   const footnote = overview.connected
     ? overview.calendarFetchFailed
       ? "Connected, but events could not be fetched."
-      : overview.accountEmail ?? overview.provider ?? "Calendar connected"
+      : (overview.accountEmail ?? overview.provider ?? "Calendar connected")
     : "Google Calendar and Outlook support is coming soon.";
 
   return (
@@ -757,7 +752,9 @@ function UpcomingMeetingsPanel({
                 <div className="home-calendar-event-copy">
                   <div className="home-calendar-event-time">
                     <Clock3 size={13} aria-hidden="true" />
-                    <span>{formatCalendarDateLine(item.startsAt, item.endsAt)}</span>
+                    <span>
+                      {formatCalendarDateLine(item.startsAt, item.endsAt)}
+                    </span>
                   </div>
                   <p>{item.title}</p>
                   <div className="home-calendar-event-meta">
@@ -783,7 +780,10 @@ function UpcomingMeetingsPanel({
         <div className="home-calendar-empty">
           <p>{emptyCopy}</p>
           <CalendarConnectArt />
-          <span className="home-calendar-connect is-disabled" aria-disabled="true">
+          <span
+            className="home-calendar-connect is-disabled"
+            aria-disabled="true"
+          >
             <CalendarDays size={14} aria-hidden="true" />
             <span>Calendar sync coming soon</span>
           </span>
@@ -823,15 +823,19 @@ function HomeInsightTip() {
 
       <style jsx>{`
         @keyframes mcpKickerPulse {
-          0%, 100% {
-            box-shadow: 0 0 0 0 color-mix(in oklch, var(--layers-mint) 50%, transparent);
+          0%,
+          100% {
+            box-shadow: 0 0 0 0
+              color-mix(in oklch, var(--layers-mint) 50%, transparent);
           }
           70% {
-            box-shadow: 0 0 0 8px color-mix(in oklch, var(--layers-mint) 0%, transparent);
+            box-shadow: 0 0 0 8px
+              color-mix(in oklch, var(--layers-mint) 0%, transparent);
           }
         }
         @keyframes mcpCtaHalo {
-          0%, 100% {
+          0%,
+          100% {
             box-shadow:
               0 1px 0 color-mix(in oklch, var(--layers-mint) 30%, transparent),
               0 0 0 0 color-mix(in oklch, var(--layers-mint) 36%, transparent);
@@ -898,7 +902,8 @@ function HomeInsightTip() {
           border-radius: 999px !important;
           background: var(--layers-mint-soft, #b6efd9) !important;
           color: var(--layers-ink, #0f1f33) !important;
-          border: 1px solid color-mix(in oklch, var(--layers-mint) 38%, var(--layers-ink) 8%) !important;
+          border: 1px solid
+            color-mix(in oklch, var(--layers-mint) 38%, var(--layers-ink) 8%) !important;
           font-size: 0.82rem !important;
           font-weight: 600 !important;
           line-height: 1 !important;
@@ -906,10 +911,16 @@ function HomeInsightTip() {
           text-decoration: none !important;
           white-space: nowrap;
           animation: mcpCtaHalo 2.6s ease-in-out infinite;
-          transition: transform 160ms ease, background-color 220ms ease;
+          transition:
+            transform 160ms ease,
+            background-color 220ms ease;
         }
         :global(.home-mcp-clean-cta:hover) {
-          background: color-mix(in oklch, var(--layers-mint-soft) 86%, var(--layers-mint) 14%) !important;
+          background: color-mix(
+            in oklch,
+            var(--layers-mint-soft) 86%,
+            var(--layers-mint) 14%
+          ) !important;
           transform: translateY(-1px);
         }
         @media (prefers-reduced-motion: reduce) {
@@ -1271,7 +1282,10 @@ function formatCalendarTime(iso: string): string {
   }).format(date);
 }
 
-function formatCalendarDateLine(startsAt: string, endsAt: string | null): string {
+function formatCalendarDateLine(
+  startsAt: string,
+  endsAt: string | null,
+): string {
   const start = formatCalendarTime(startsAt);
   if (!endsAt) return start;
 

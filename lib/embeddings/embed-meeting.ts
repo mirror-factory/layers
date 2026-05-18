@@ -5,7 +5,7 @@
 
 import { getSupabaseServer } from "@/lib/supabase/server";
 import { getMeetingsStore } from "@/lib/meetings/store";
-import { embedText, EMBEDDING_MODEL } from "./client";
+import { embedText } from "./client";
 import { chunkText, estimateTokenCount } from "./chunk";
 import { estimateEmbeddingCost } from "@/lib/billing/llm-pricing";
 import { log } from "@/lib/logger";
@@ -34,7 +34,10 @@ export async function embedMeeting(
 ): Promise<EmbedResult> {
   const supabase = getSupabaseServer();
   if (!supabase) {
-    log.warn("embed-meeting.skip", { reason: "supabase not configured", meetingId });
+    log.warn("embed-meeting.skip", {
+      reason: "supabase not configured",
+      meetingId,
+    });
     return { chunksEmbedded: 0, totalTokens: 0, costUsd: 0 };
   }
 

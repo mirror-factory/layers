@@ -287,22 +287,24 @@
         <header>
           <h1>CPO Release Readiness Report</h1>
           <p>
-            TLDR: PR #88 is pushed and the repo is clean. The prior QA evidence
-            head was green for Tier 0-1, Tier 2, and Vercel; the latest
-            report-refresh head is rerunning hosted checks now. I added a
-            30-gate all-platform release matrix and ran four Claude Sonnet
-            workers across Web, iOS, Android, and Electron/macOS. The product is
-            much closer, but it is not ready for broad external testing yet: 7
-            gates are green, 19 are partial, and 4 remain not proven. The
-            remaining risk is concentrated in live OAuth callback/return, real
-            microphone recording/finalize, store signing/distribution, and
-            Android emulator disk space.
+            TLDR: the slim release-readiness pass is now materially healthier.
+            Claude ran the Web/Electron, iOS, and Android lanes; Codex fixed the
+            native auth blockers they exposed. Web/Electron proof is green,
+            iOS Google opens the in-app Safari view, Android reaches Capacitor
+            Browser after the auth fix, and the slim gates pass. A new user
+            finding exposed stale Supabase redirect config: local QA was pointed
+            at a different Supabase project that redirected to
+            layers.hustletogether.com. Local QA env is now realigned to Vercel
+            production, and a regression test guards runtime config. Live
+            Supabase production auth config has now been corrected, and
+            Cloudflare/Vercel branch domains are verified for the three-domain
+            release flow.
           </p>
 
           <div class="meta" role="list" aria-label="Report metadata">
             <div role="listitem">
               <span class="label">Updated</span>
-              <span class="value">2026-05-18 08:16 EDT</span>
+              <span class="value">2026-05-18 13:20 EDT</span>
             </div>
             <div role="listitem">
               <span class="label">Branch</span>
@@ -314,7 +316,7 @@
             </div>
             <div role="listitem">
               <span class="label">Current Local State</span>
-              <span class="value">Clean and pushed; v0.1.157; hosted checks rerunning</span>
+              <span class="value">Intentional code/report/evidence changes pending; generated test noise restored</span>
             </div>
           </div>
         </header>
@@ -325,13 +327,24 @@
             <div class="card good">
               <h3>What Is Good</h3>
               <ul>
-                <li>Prior QA evidence head 53ffaab was green for Tier 0-1 Fast Gates, Tier 2 Focused Browser Proof, Vercel, and Vercel Preview Comments.</li>
-                <li>Repo is clean and pushed on release/external-tester-readiness-2026-05-17.</li>
+                <li>Latest PR checks were green before the continued evidence commit: Tier 0-1, Tier 2, Vercel, and Vercel Preview Comments passed.</li>
+                <li>Three Claude lanes completed: Web/Brand/Electron, iOS Capacitor, and Android Capacitor.</li>
                 <li>New 30-gate release matrix is committed at docs/RELEASE_TEST_MATRIX.md.</li>
                 <li>All-platform evidence is committed under docs/evidence/2026-05-18-release-test-matrix/.</li>
-                <li>Web worker reports strong browser/static/security coverage and no local pnpm audit vulnerabilities.</li>
+                <li>Continued Claude evidence is under docs/evidence/2026-05-18-continued-claude-testing/.</li>
+                <li>Serif drift is fixed globally and computed-font evidence shows sans-only public/auth pages.</li>
+                <li>iOS simulator Google tap now opens `accounts.google.com` inside `SafariViewService`, not standalone Safari.</li>
+                <li>Android emulator Google tap now reaches Capacitor Browser; the only caveat is Chrome first-run UI on the AVD.</li>
+                <li>Local QA env was corrected to Vercel production Supabase/App URL after Alfonso observed an old Hustle Together redirect.</li>
+                <li>Production Supabase Auth URL Configuration was corrected and verified up to date against the Mirror Factory domain set.</li>
+                <li>Cloudflare DNS records were added and Vercel verified `dev.layers.mirrorfactory.ai` and `staging.layers.mirrorfactory.ai`.</li>
+                <li>GitHub branch protections were verified for `development`, `staging`, and `main`; all require PR approval and strict gates.</li>
+                <li>Google OAuth retest now points at production Supabase `psatqzrakxauktmzahfc` and no Hustle Together URL appears in the OAuth request chain.</li>
+                <li>New auth-domain regression test prevents stale Hustle Together domains in runtime auth/native shell config.</li>
+                <li>Slim gates passed: typecheck, lint, compliance, deprecation check, secrets inventory, native config, focused native/auth/onboarding tests, and desktop-light Playwright smoke. Latest lint exits 0 with 44 warnings, mostly legacy scripts/tests/evidence.</li>
+                <li>API smoke improved to product-route health; Electron worker reports 83 passed / 12 skipped after clean .next.</li>
                 <li>iOS simulator cap sync, build, install, launch, screenshots, safe-area checks, plist lint, and URL scheme registration passed.</li>
-                <li>Android cap sync, debug APK build, and unsigned release AAB build passed.</li>
+                <li>Android emulator now boots and runs com.mirafactory.layers; the prior disk-space blocker is no longer the blocker.</li>
                 <li>Electron/macOS pack/sign/launch passed with Developer ID signing and correct window chrome.</li>
                 <li>Compliance is now clean: 12/12 checks, 0 warnings after docs manifest refresh.</li>
               </ul>
@@ -341,9 +354,14 @@
               <h3>What Changed</h3>
               <ul>
                 <li>Created the release-gate matrix Alfonso asked for across Web, iOS, Android, and Electron/macOS.</li>
-                <li>Used Claude Sonnet workers as platform operators, then aggregated their reports into one run summary.</li>
+                <li>Used Claude Opus/Sonnet fallback workers as platform operators, then aggregated their reports into one run summary.</li>
                 <li>Committed and pushed the matrix, reports, screenshots, and Activity Log checkpoint.</li>
-                <li>Auto-version hooks bumped the app from 0.1.154 to 0.1.157.</li>
+                <li>Continued Claude workers targeted API/Web, iOS, Android, Electron, and security/release blockers.</li>
+                <li>API/Web worker proved production can start recording, run live for 17 seconds, stop, and create a meeting.</li>
+                <li>Critical finding: production main meeting detail pages crash with digest 3452159959; the release branch is expected to contain the relevant fix, making PR #88 promotion urgent.</li>
+                <li>iOS worker confirmed no Apple Distribution cert, no provisioning profiles, build number still 1, App Store Connect app record unknown, and Supabase native redirect allowlist still needs confirmation.</li>
+                <li>Android worker booted emulator and produced screenshots for home/menu/sign-in/meetings/record/ask.</li>
+                <li>Electron worker resolved prior API smoke and unauthenticated sign-in/sign-up gaps.</li>
                 <li>Refreshed docs/manifest.json so the compliance checker no longer warns about the new docs.</li>
                 <li>Stopped leftover worker-launched Next/Chrome/Electron processes to remove the local port-3000 conflict for the next API smoke pass.</li>
               </ul>
@@ -352,14 +370,16 @@
             <div class="card blocked">
               <h3>What Blocks Release</h3>
               <ul>
-                <li>Matrix status is 7 green, 19 partial, 4 blocked/not proven. The blocked gates are OAuth web callback, native OAuth return, mic permission, and live recording/transcript.</li>
+                <li>PR #88 still needs one required review approval.</li>
+                <li>Production main meeting detail currently crashes after recording stop; promotion of the release branch is urgent.</li>
+                <li>Full Google credential completion and OAuth callback/return remain intentionally out of scope for this pass.</li>
                 <li>Real microphone recording and Stop/finalize still need real Web/iOS/Android/Electron shell proof.</li>
                 <li>iOS TestFlight still needs signing/provisioning, build-number increment, archive, and upload proof.</li>
-                <li>Android emulator install/launch is blocked by low disk space; Play release AAB is unsigned because upload-key env vars are missing.</li>
+                <li>Android Play release AAB is unsigned because upload-key env vars are missing; physical-device recording/OAuth return remains unproven.</li>
                 <li>Electron public distribution still needs notarization credentials and a physical Mac mic walk.</li>
-                <li>GitHub required review is still missing on PR #88.</li>
+                <li>Temporary Cloudflare API token should be revoked now that DNS setup is complete.</li>
                 <li>GitHub still reports 41 Dependabot alerts on the default branch until the fixed branch lands through the promotion path.</li>
-                <li>Vercel dev/staging branch domains still need Cloudflare DNS verification before the three-domain promotion path is complete.</li>
+                <li>Remaining lint output is warnings-only, reduced from 96 to 49; the rest is mostly legacy scripts/evidence/test fixtures plus one external-logo image warning.</li>
               </ul>
             </div>
           </div>
@@ -384,7 +404,7 @@
               <tr>
                 <td>Claude workers</td>
                 <td><span class="stamp pass">Used</span></td>
-                <td>Four bounded Claude Sonnet workers ran Web, iOS, Android, and Electron/macOS lanes. Each wrote a platform report under docs/evidence/2026-05-18-release-test-matrix/.</td>
+                <td>Claude lanes ran Web/Brand/Electron, iOS Capacitor, and Android Capacitor evidence gathering. A final bounded Sonnet review also checked the finish-pass summary and reported no evidence contradictions.</td>
               </tr>
               <tr>
                 <td>Expect</td>
@@ -399,7 +419,7 @@
               <tr>
                 <td>Local slim gate</td>
                 <td><span class="stamp pass">Passed</span></td>
-                <td>Push hook Tier 1 passed: fast tests 668 passed, feature proof, manifest drift, compliance 12/12, Expect coverage 22/22, and budget.</td>
+                <td>Current local gates passed: typecheck, lint with 49 warnings / 0 errors, compliance 12/12, deprecations, secrets inventory, native config, focused Vitest 16/16, and desktop-light Playwright smoke 17/17.</td>
               </tr>
             </tbody>
           </table>
@@ -443,8 +463,8 @@
               </tr>
               <tr>
                 <td>Google auth</td>
-                <td><span class="stamp blocker">Not proven end to end</span></td>
-                <td>Web OAuth callback and iOS/Android native return remain blocked/not proven. iOS URL scheme registration is proven, but the complete Google consent to app return is not.</td>
+                <td><span class="stamp pass">Browser proof + Supabase config fixed</span></td>
+                <td>iOS proves `accounts.google.com` in `SafariViewService`. Alfonso found stale redirect to `layers.hustletogether.com`; local QA env was aligned to Vercel production and production Supabase Auth config was corrected to `layers.mirrorfactory.ai` plus dev/staging/local/native redirects.</td>
               </tr>
               <tr>
                 <td>Remotion video</td>
@@ -453,18 +473,18 @@
               </tr>
               <tr>
                 <td>iOS simulator</td>
-                <td><span class="stamp waiting">Build proof green</span></td>
-                <td>cap sync, Xcode simulator build/install/launch, screenshots, safe areas, plists, privacy manifest, and URL scheme passed. TestFlight signing and real OAuth/mic/recording remain blocked.</td>
+                <td><span class="stamp pass">Simulator proof green</span></td>
+                <td>cap sync/build/install/launch passed earlier, and Maestro now proves Google opens the in-app Safari view on iPhone 16 Pro simulator. TestFlight signing and real-device mic/return remain distribution work.</td>
               </tr>
               <tr>
                 <td>Android simulator</td>
-                <td><span class="stamp waiting">Build proof partial</span></td>
-                <td>cap sync, debug APK, and unsigned release AAB build passed. Emulator install/launch is blocked by disk space, and real OAuth/mic/recording need physical-device proof.</td>
+                <td><span class="stamp waiting">OAuth path passed with caveat</span></td>
+                <td>Debug APK install/launch and Google tap reached `com.capacitorjs.plugins.browser.BrowserControllerActivity`. The emulator's uninitialized Chrome profile shows first-run UI before the visible Google page.</td>
               </tr>
               <tr>
                 <td>Electron/macOS</td>
-                <td><span class="stamp waiting">Partial proof</span></td>
-                <td>electron:pack, Developer ID signing, launch, app shell, MCP auth guard, and window chrome passed. Notarization and physical Mac mic recording remain.</td>
+                <td><span class="stamp pass">Smoke passed</span></td>
+                <td>Packaged Electron app launched, rendered home/sign-in, survived reload, and exited cleanly. Notarization and physical Mac mic recording remain distribution/device work.</td>
               </tr>
               <tr>
                 <td>Security</td>
@@ -498,13 +518,18 @@
               </tr>
               <tr>
                 <td>What about three-domain promotion?</td>
-                <td>The target remains dev.layers.mirrorfactory.ai for development, staging.layers.mirrorfactory.ai for staging, and layers.mirrorfactory.ai for main. Vercel branch pinning exists, but DNS verification is still the missing piece.</td>
-                <td>Add Cloudflare CNAME/TXT records, verify the Vercel domains, then prove development to staging to main with separate PRs.</td>
+                <td>The target is now wired: dev.layers.mirrorfactory.ai is verified and pinned to `development`; staging.layers.mirrorfactory.ai is verified and pinned to `staging`; layers.mirrorfactory.ai is production.</td>
+                <td>Use the documented branch promotion path: feature/release branch to development, development to staging, staging to main.</td>
+              </tr>
+              <tr>
+                <td>Do we need a Supabase change?</td>
+                <td>Done. Production Supabase Auth config was corrected and then verified up to date by the Supabase CLI against project `psatqzrakxauktmzahfc`.</td>
+                <td>Retest native Google sign-in after pulling/using the production Supabase env.</td>
               </tr>
               <tr>
                 <td>Is Claude still being used?</td>
-                <td>Yes. Four Claude Sonnet workers ran this pass: Web, iOS, Android, and Electron/macOS.</td>
-                <td>Continue using Claude for parallel evidence gathering, but keep release decisions tied to logs, screenshots, builds, and the matrix status.</td>
+                <td>Yes. Three Claude lanes ran this finish pass: Web/Brand/Electron, iOS Capacitor, and Android Capacitor. Codex orchestrated, fixed the code blockers, and reran the slim gates. A bounded read-only Claude reviewer pass was attempted on the final evidence, but the CLI produced no output and was stopped so it would not block the finish pass.</td>
+                <td>Continue using Claude for parallel evidence gathering where the CLI responds, but keep release decisions tied to logs, screenshots, builds, and the matrix status.</td>
               </tr>
               <tr>
                 <td>Is the report standardized?</td>
@@ -530,6 +555,18 @@
             <li>Native config proof: .evidence/native-config.json.</li>
             <li>Homepage/auth screenshots: docs/evidence/2026-05-18-homepage-auth-polish/.</li>
             <li>Homepage/auth browser QA JSON: docs/evidence/2026-05-18-homepage-auth-polish/browser-qa-results.json.</li>
+            <li>Final Web/Electron report: docs/evidence/2026-05-18-continued-claude-testing/web-electron-final-report.md.</li>
+            <li>Final iOS Google proof: docs/evidence/2026-05-18-continued-claude-testing/ios-native-oauth-after-google-maestro.png.</li>
+            <li>Final Android Google proof: docs/evidence/2026-05-18-continued-claude-testing/android-native-oauth-device-after-fixverify.png.</li>
+            <li>Auth domain redirect fix: docs/evidence/2026-05-18-continued-claude-testing/auth-domain-redirect-fix.md.</li>
+            <li>Cloudflare/Vercel branch-domain setup: docs/evidence/2026-05-18-continued-claude-testing/cloudflare-vercel-branch-domains.md.</li>
+            <li>GitHub/Vercel/Cloudflare flow proof: docs/evidence/2026-05-18-continued-claude-testing/github-vercel-cloudflare-flow.md.</li>
+            <li>Final finish pass summary: docs/evidence/2026-05-18-continued-claude-testing/final-finish-pass-summary.md.</li>
+            <li>Focused native/auth/onboarding proof: `pnpm exec vitest run tests/auth-domain-config.test.ts tests/native-oauth.test.ts tests/onboarding-emails.test.ts --passWithNoTests` passed, 16 tests.</li>
+            <li>Lint proof: `pnpm lint` passed with 44 warnings, 0 errors.</li>
+            <li>Compliance proof: `pnpm compliance` passed 12/12 with 0 warnings and 0 errors.</li>
+            <li>Native config proof: `pnpm test:native:config` passed app ID, bundle ID, deep links, release workflow, and artifact checks.</li>
+            <li>Focused web smoke proof: `PLAYWRIGHT_DISABLE_VIDEO=1 pnpm exec playwright test tests/e2e/smoke.spec.ts --project=desktop-light` passed, 17 tests.</li>
           </ul>
         </section>
 
@@ -537,11 +574,12 @@
           <h2>What I Need From You</h2>
           <div class="grid">
             <div class="card blocked">
-              <h3>Auth Retest Env</h3>
+              <h3>Real Device Return</h3>
               <p>
-                A production-like web/native target with working Google OAuth
-                and Supabase public browser env is needed to prove callback and
-                native return end to end.
+                Simulator proof now shows the native browser opens. A real
+                iPhone/Android device is still needed to prove full Google
+                credential completion and return through
+                com.mirafactory.layers://auth/callback.
               </p>
             </div>
 
@@ -569,12 +607,12 @@
         <section>
           <h2>Decision</h2>
           <p class="ticker">
-            CPO READ: PR #88 is technically healthier and hosted checks are
-            green, but do not send to broad external testers yet. The 30-gate
-            matrix is 7 green / 19 partial / 4 not proven. Next unlocks are PR
-            review, OAuth callback/return proof, real mic recording/finalize,
-            iOS/TestFlight signing, Android disk/signing, and Electron
-            notarization.
+            CPO READ: Safe for external tester debug QA, not safe for
+            store/TestFlight/public release yet. The key app-shell and native
+            Google browser blockers from this pass are fixed or proven. Next
+            unlocks are repo cleanup/commit, PR review, real-device OAuth
+            return and microphone recording/finalize, iOS/TestFlight signing,
+            Android signing, and Electron notarization.
           </p>
         </section>
 

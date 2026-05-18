@@ -129,13 +129,20 @@ export async function signInWithGoogleNative(
     deps.loadBrowser ??
     (async () => {
       const mod = await import("@capacitor/browser");
-      return mod.Browser;
+      const Browser = mod.Browser;
+      return {
+        open: Browser.open.bind(Browser),
+        close: Browser.close?.bind(Browser),
+      };
     });
   const loadApp =
     deps.loadApp ??
     (async () => {
       const mod = await import("@capacitor/app");
-      return mod.App;
+      const App = mod.App;
+      return {
+        addListener: App.addListener.bind(App),
+      };
     });
   const navigate =
     deps.navigate ??
