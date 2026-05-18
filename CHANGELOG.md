@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.162] — 2026-05-18
+
+### Documentation
+- docs: update release test coverage report (`2f7fd26`)
+
+
 ## [0.1.161] — 2026-05-18
 
 ### Other
