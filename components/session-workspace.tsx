@@ -22,6 +22,7 @@ import {
   Sparkles,
   Square,
 } from "lucide-react";
+import { MeetingChat } from "@/components/meeting-chat";
 import { useStickToBottom } from "@/lib/hooks/use-stick-to-bottom";
 
 export interface SessionWorkspaceStats {
@@ -86,6 +87,14 @@ interface SessionIntelligenceCanvasProps {
    * chat messages can seek + highlight the matching transcript segment.
    */
   askPanel?: ReactNode | ((props: SessionAskPanelRenderProps) => ReactNode);
+  /**
+   * Serializable meeting-chat config for server-component callers. `askPanel`
+   * still wins for existing client-only callers that need a custom panel.
+   */
+  meetingChat?: {
+    meetingId: string;
+    participantName?: string | null;
+  };
   askTimestampLabel?: string;
   footerStatus?: string;
   /**
@@ -250,6 +259,7 @@ export function SessionIntelligenceCanvas({
   decisions = [],
   stats,
   askPanel,
+  meetingChat,
   askTimestampLabel = "Now",
   footerStatus,
   notesPanel,
@@ -330,7 +340,16 @@ export function SessionIntelligenceCanvas({
   const renderedAskPanel =
     typeof askPanel === "function"
       ? askPanel({ onCitationClick: handleCitationClick })
-      : askPanel;
+      : meetingChat
+        ? (
+            <MeetingChat
+              meetingId={meetingChat.meetingId}
+              variant="workspace"
+              participantName={meetingChat.participantName ?? null}
+              onCitationClick={handleCitationClick}
+            />
+          )
+        : askPanel;
 
   return (
     <section className="session-intelligence-canvas" aria-label="Meeting notes">

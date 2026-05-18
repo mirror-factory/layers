@@ -8,7 +8,12 @@ import type { MeetingsStore } from "./store";
 
 const MAX_ENTRIES = 500;
 
-const store = new Map<string, Meeting>();
+const globalStore = globalThis as typeof globalThis & {
+  __layersInMemoryMeetingsStore?: Map<string, Meeting>;
+};
+const store =
+  globalStore.__layersInMemoryMeetingsStore ??=
+    new Map<string, Meeting>();
 
 export class InMemoryMeetingsStore implements MeetingsStore {
   async insert(row: MeetingInsert): Promise<Meeting> {

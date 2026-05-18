@@ -7122,6 +7122,20 @@ body.dark:has(.paper-calm-page) {
   animation: recording-status-pulse 1.15s ease-in-out infinite;
 }
 
+.recording-managed-error {
+  width: min(100%, 426px);
+  margin: 0;
+  border: 1px solid var(--status-error-border);
+  border-radius: 0.85rem;
+  background: var(--status-error-bg);
+  color: var(--status-error);
+  padding: 0.85rem 1rem;
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: left;
+}
+
 .recording-record-ring {
   animation: recording-ring-pulse 1.3s ease-out infinite;
 }

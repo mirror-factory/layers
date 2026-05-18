@@ -127,6 +127,11 @@ export default defineConfig({
 
   webServer: process.env.TEST_BASE_URL ? undefined : {
     command: `pnpm exec next dev --turbopack -p ${devServerPort}`,
+    env: {
+      ...process.env,
+      PLAYWRIGHT: '1',
+      LAYERS_E2E_FAKE_RECORDING: '1',
+    },
     url: baseURL,
     reuseExistingServer: process.env.PLAYWRIGHT_REUSE_EXISTING_SERVER === '1',
     timeout: 120_000,

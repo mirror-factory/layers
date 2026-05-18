@@ -9,6 +9,7 @@ import type {
   MeetingListItem,
   MeetingUpdate,
 } from "./types";
+import { isE2eFakeRecordingEnabled } from "@/lib/recording/e2e-fake-recording";
 
 export interface MeetingsStore {
   insert(row: MeetingInsert): Promise<Meeting>;
@@ -19,6 +20,11 @@ export interface MeetingsStore {
 }
 
 export async function getMeetingsStore(): Promise<MeetingsStore> {
+  if (isE2eFakeRecordingEnabled()) {
+    const { InMemoryMeetingsStore } = await import("./store-in-memory");
+    return new InMemoryMeetingsStore();
+  }
+
   const url =
     process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anonKey =

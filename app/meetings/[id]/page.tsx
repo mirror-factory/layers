@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import { TopBar } from "@/components/top-bar";
 import { MeetingCostPanel } from "@/components/meeting-cost-panel";
-import { MeetingChat } from "@/components/meeting-chat";
 import { MeetingNotesEditor } from "@/components/meeting-notes-editor";
 import { MeetingNotesPushPanel } from "@/components/meeting-notes-push-panel";
 import { OnboardingProvider } from "@/components/onboarding/onboarding-provider";
@@ -190,18 +189,10 @@ function CompletedMeetingWorkspace({ meeting }: { meeting: CompletedMeeting }) {
           actions={actionRows}
           decisions={summary.decisions}
           stats={stats}
-          // Render-prop form so the canvas can hand a citation seek+highlight
-          // handler down to MeetingChat. Without this, citation pills render
-          // but don't navigate anywhere (PROD-464).
-          askPanel={({ onCitationClick }) => (
-            <MeetingChat
-              key="ask-panel"
-              meetingId={meeting.id}
-              variant="workspace"
-              participantName={summary.participants[0] ?? null}
-              onCitationClick={onCitationClick}
-            />
-          )}
+          meetingChat={{
+            meetingId: meeting.id,
+            participantName: summary.participants[0] ?? null,
+          }}
           notesPanel={
             <MeetingNotesEditor
               meetingId={meeting.id}
