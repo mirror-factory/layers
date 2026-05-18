@@ -289,13 +289,13 @@
           <p>
             TLDR: the release-readiness branch is in materially better shape.
             Web, brand, smoke, native configuration, Expect coverage, and CI
-            release gates have been pushed and verified. The PR has Tier 0-1,
-            Tier 2, Tier 3, and Vercel green on the latest full proof run; this
-            report may be followed by docs-only/version-bump commits that rerun
-            the same checks. It is not yet a
+            release gates have been pushed and verified. Current PR head
+            266ba76 has Tier 0-1, Tier 2, Tier 3, and Vercel passing. A targeted PROD-500
+            render-crash hardening fix was pushed and locally verified. It is
+            not yet a
             production-safe release because review, signing secrets, Android
             release signing, self-hosted runner infrastructure, Cloudflare DNS
-            verification, the unresolved recording Stop crash, and
+            verification, end-to-end recording Stop proof, and
             default-branch security cleanup remain open. Main branch protection
             and the GitHub default branch were corrected, but the old `dev`
             branch still exists and is ahead of the new `development` branch.
@@ -304,7 +304,7 @@
           <div class="meta" role="list" aria-label="Report metadata">
             <div role="listitem">
               <span class="label">Updated</span>
-              <span class="value">2026-05-17 20:04 EDT</span>
+              <span class="value">2026-05-17 20:27 EDT</span>
             </div>
             <div role="listitem">
               <span class="label">Branch</span>
@@ -316,7 +316,7 @@
             </div>
             <div role="listitem">
               <span class="label">QA Evidence Head</span>
-              <span class="value">PR #88 full AI Dev Kit proof green; exact head checked live</span>
+              <span class="value">Current head 266ba76: Tier 0-1, Tier 2, Tier 3, Vercel pass</span>
             </div>
           </div>
         </header>
@@ -327,14 +327,14 @@
             <div class="card good">
               <h3>What Is Good</h3>
               <ul>
-                <li>Tier 0-1 Fast Gates passed remotely on the latest full proof run.</li>
-                <li>Tier 2 Focused Browser Proof passed remotely on the latest full proof run.</li>
-                <li>Tier 3 Broad Browser Matrix passed remotely on the latest full proof run.</li>
-                <li>Vercel preview deployment completed successfully.</li>
+                <li>Tier 0-1 Fast Gates passed remotely on current head 266ba76.</li>
+                <li>Tier 2 Focused Browser Proof passed remotely on current head 266ba76.</li>
+                <li>Tier 3 Broad Browser Matrix passed remotely on current head 266ba76.</li>
+                <li>Vercel preview deployment completed successfully on current head 266ba76.</li>
                 <li>Main branch protection now requires the current gate names and 1 approval.</li>
                 <li>GitHub default branch now points at `development`, not stale unprotected `dev`.</li>
                 <li>Branch drift found: `origin/dev` still exists at 0.1.75 and is ahead of `origin/development`; #88 will advance `development` when reviewed/merged.</li>
-                <li>Vercel branch domains are now attached: dev → development, staging → staging.</li>
+                <li>Current branch `pnpm audit --audit-level high` reports no known vulnerabilities.</li>
                 <li>The working tree is clean and branch is pushed.</li>
               </ul>
             </div>
@@ -350,7 +350,8 @@
                 <li>Extended proof labels were tested; missing self-hosted runners are now a documented infra blocker.</li>
                 <li>A reusable Codex skill was created for this report workflow at ~/.codex/skills/layers-cpo-release-report.</li>
                 <li>Main branch protection was fixed from legacy `Tests` / `Quality Gates` to the active AI Dev Kit and release gate names.</li>
-                <li>Version bumped to 0.1.133 by the repo hook.</li>
+                <li>PROD-500 received a scoped hardening fix for invalid/natural-language action due dates on meeting detail render.</li>
+                <li>Version bumped to 0.1.136 by the repo hook.</li>
               </ul>
             </div>
 
@@ -363,8 +364,9 @@
                 <li>GitHub reports 41 default-branch Dependabot alerts: 24 high, 15 medium, 2 low.</li>
                 <li>Self-hosted `layers-web` and `layers-android` runners are not registered at repo scope.</li>
                 <li>Cloudflare DNS records are still missing for `dev.layers.mirrorfactory.ai` and `staging.layers.mirrorfactory.ai`.</li>
-                <li>Cloudflare CLI/API access is not present in this shell, so DNS records cannot be safely changed from here yet.</li>
-                <li>PROD-500 is still open: recording Stop can crash into render error 3452159959 and needs a fresh repro/fix before broad tester rollout.</li>
+                <li>Cloudflare tunnel access exists, but DNS-management access is not available from this shell yet.</li>
+                <li>Vercel project ownership needs reconciliation before domain mutation: CI deploys `audio-layer` under `mirror-factorys-projects-836be98a`, while local `.vercel/project.json` points to `mirror-factory/layers`.</li>
+                <li>PROD-500 has a targeted render hardening fix, but broad tester recording rollout still needs a current-branch Stop-flow repro/proof pass.</li>
               </ul>
             </div>
           </div>
@@ -393,12 +395,12 @@
               <tr>
                 <td>Tier 1 fast gate</td>
                 <td><span class="stamp pass">Passed</span></td>
-                <td>658 fast tests, feature-proof plan, manifest drift, compliance, Expect coverage, and budget passed pre-push.</td>
+                <td>661 fast tests, feature-proof plan, manifest drift, compliance, Expect coverage, and budget passed pre-push.</td>
               </tr>
               <tr>
                 <td>Remote latest-head CI</td>
-                <td><span class="stamp pass">Passed</span></td>
-                <td>PR #88 has Tier 0-1, Tier 2 Focused Browser Proof, Tier 3 Broad Browser Matrix, and Vercel green on the latest full proof run. Server/native proof was attempted and blocked by missing self-hosted runners.</td>
+                <td><span class="stamp pass">Passed Current Head</span></td>
+                <td>Current head 266ba76 has Tier 0-1, Tier 2 Focused Browser Proof, Tier 3 Broad Browser Matrix, and Vercel green. Server/native proof was attempted and blocked by missing self-hosted runners.</td>
               </tr>
               <tr>
                 <td>Compliance</td>
@@ -482,8 +484,8 @@
               </tr>
               <tr>
                 <td>Recording Stop flow</td>
-                <td><span class="stamp blocker">Open Blocker</span></td>
-                <td>Linear PROD-500 remains Backlog/P1 for Stop → render error 3452159959. PROD-507 is duplicate-canceled into PROD-500. Treat broad external tester recording rollout as blocked until a current-branch repro/fix pass closes this.</td>
+                <td><span class="stamp waiting">Fix Pushed; Proof Needed</span></td>
+                <td>Linear PROD-500 remains Backlog/P1 for Stop → render error 3452159959. A targeted meeting-detail render hardening fix landed in 1280532/266ba76. Treat broad external tester recording rollout as blocked until a current-branch Stop-flow proof pass closes this.</td>
               </tr>
               <tr>
                 <td>Tier 3 browser matrix</td>
@@ -522,13 +524,13 @@
               </tr>
               <tr>
                 <td>What about the three-domain promotion path?</td>
-                <td>The documented target remains dev.layers.mirrorfactory.ai, staging.layers.mirrorfactory.ai, and layers.mirrorfactory.ai. GitHub main protection and default branch are corrected, but stale `origin/dev` still needs retirement after #88 advances `development`. Vercel branch-domain pinning is now done on the live `audio-layer` project.</td>
-                <td>Next is #88 review/merge, stale `dev` retirement, Cloudflare DNS records, Vercel domain verification, staging/dev env var separation, then a development to staging to main proof PR chain.</td>
+                <td>The documented target remains dev.layers.mirrorfactory.ai, staging.layers.mirrorfactory.ai, and layers.mirrorfactory.ai. GitHub main/staging/development protections are configured, but stale `origin/dev` still needs retirement after #88 advances `development`. Vercel project context is split between the local linked `layers` project and CI's `audio-layer` project.</td>
+                <td>Next is #88 review/merge, stale `dev` retirement, Vercel project reconciliation, Cloudflare DNS records, Vercel domain verification, staging/dev env var separation, then a development to staging to main proof PR chain.</td>
               </tr>
               <tr>
                 <td>Can infra be configured from here?</td>
-                <td>GitHub branch protection/default branch and Vercel project domains can be configured and were updated. Cloudflare CLI/API access is absent.</td>
-                <td>Add the required Cloudflare CNAME/TXT records, then verify the two Vercel project domains.</td>
+                <td>GitHub branch protection/default branch can be configured from here and are now protected. Vercel CLI access exists, but project/domain ownership is ambiguous. Cloudflare tunnel access exists; DNS API/zone management is not available from this shell.</td>
+                <td>Confirm which Vercel project should own the final Layers domains, then add the required Cloudflare CNAME/TXT records and verify the domains in that project.</td>
               </tr>
               <tr>
                 <td>Is Claude still being used?</td>
@@ -577,8 +579,13 @@
               </tr>
               <tr>
                 <td>Remotion video</td>
-                <td>package.json, remotion/, branding/BRAND_NARRATIVE.md, docs/evidence/2026-05-12-brand-kit/BROWSER_VERIFICATION.md</td>
-                <td>`pnpm video:dev`, `pnpm video:render`, brand-template evidence, and current limitation that video output is visually reviewed rather than fully automated.</td>
+                <td>docs/REMOTION.md, package.json, remotion/, branding/BRAND_NARRATIVE.md, docs/evidence/2026-05-12-brand-kit/BROWSER_VERIFICATION.md</td>
+                <td>`pnpm video:dev`, `pnpm video:render`, brand-template evidence, no-serif rule, and current limitation that video output is visually reviewed rather than fully automated.</td>
+              </tr>
+              <tr>
+                <td>Remotion onboarding gap</td>
+                <td>docs/REMOTION.md and .claude/skills/layers-brand-remotion/SKILL.md</td>
+                <td>Gap closed with a non-Claude onboarding doc; the deeper authoring playbook still lives in the Claude skill.</td>
               </tr>
             </tbody>
           </table>
@@ -618,11 +625,12 @@
             <div class="card blocked">
               <h3>Vercel + Cloudflare Access</h3>
               <p>
-                Vercel setup is now attached to the live `audio-layer` project.
-                DNS setup still needs Cloudflare access. Add CNAME records for
-                `dev.layers` and `staging.layers` pointing to
-                `03e5eba20f4a886c.vercel-dns-017.com`, plus the Vercel TXT
-                verification records in docs/RELEASE.md.
+                Vercel CLI access exists, but the local project link and CI
+                deployment point at different Vercel projects. DNS setup still
+                needs Cloudflare zone-management access. Once the target Vercel
+                project is confirmed, add CNAME records for `dev.layers` and
+                `staging.layers` plus the Vercel TXT verification records in
+                docs/RELEASE.md.
               </p>
             </div>
           </div>
@@ -637,10 +645,10 @@
             <li>PROD-383 updated to keep the three-branch, three-domain release path visible.</li>
             <li>PROD-523 created for default-branch Dependabot vulnerability cleanup.</li>
             <li>PROD-383 follow-up: `main` branch protection was corrected to require `Tier 0-1 Fast Gates`, `Tier 2 Focused Browser Proof`, `Web (Vercel)`, and 1 approval.</li>
-            <li>PROD-383 follow-up: GitHub default branch is now `development`; Vercel branch-domain pinning is done for dev and staging.</li>
+            <li>PROD-383 follow-up: GitHub default branch is now `development`; Vercel project context needs reconciliation before domain ownership changes.</li>
             <li>PROD-383 follow-up: stale `origin/dev` still exists at 0.1.75 and should be retired only after #88 advances protected `development`.</li>
-            <li>PROD-500 remains open and blocks broad external tester recording rollout until current-branch repro/fix evidence exists.</li>
-            <li>PROD-524 created for GitHub Actions Node 24 runner transition cleanup; workflows now use current action majors plus Node 24 opt-in. PR #88 has Tier 0-1, Tier 2, Tier 3, and Vercel green on the latest full proof run.</li>
+            <li>PROD-500 has a targeted fix in 1280532/266ba76 and remains open until current-branch Stop-flow proof exists.</li>
+            <li>PROD-524 created for GitHub Actions Node 24 runner transition cleanup; workflows now use current action majors plus Node 24 opt-in. Current PR head has Tier 0-1, Tier 2, Tier 3, and Vercel green.</li>
             <li>PROD-383 still needs Cloudflare DNS setup, Vercel domain verification, env var separation, and a promotion proof chain.</li>
           </ul>
         </section>
@@ -650,7 +658,7 @@
           <p class="ticker">
             CPO READ: Safe to continue internal QA and reviewer handoff.
             Not safe to call production-ready until PR review, PROD-500
-            recording Stop crash closure, Apple notarization, Android signed
+            recording Stop-flow proof, Apple notarization, Android signed
             AAB, self-hosted runner proof, Dependabot remediation, and
             branch/domain promotion proof are closed.
           </p>

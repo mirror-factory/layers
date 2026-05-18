@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-05-18T00:07:15.430Z",
+  "generatedAt": "2026-05-18T00:30:28.934Z",
   "docs": [
     {
       "id": "activity-log",
@@ -1001,8 +1001,14 @@
     {
       "id": "release",
       "localPath": "docs/RELEASE.md",
-      "contentHash": "12639ad266f90cf3fcd065ec4b25855ae016cd56c1311ec19425f6aaddd5aec9",
+      "contentHash": "9dc6b6088cc3fff4b8df7d4f54b4e5a6401a2b25895e1443565689b10fa9c099",
       "priority": "hot"
+    },
+    {
+      "id": "remotion",
+      "localPath": "docs/REMOTION.md",
+      "contentHash": "e5e10cc3dca7b0695204975f866b1cda6b67141e93d545132bfae2c01d180adc",
+      "priority": "cold"
     },
     {
       "id": "roadmap",

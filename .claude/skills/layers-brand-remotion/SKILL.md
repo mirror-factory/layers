@@ -73,7 +73,7 @@ For an OpenGraph card: a single frame from `ContextFlow.tsx` or `Layers.tsx`.
 ### Token import
 
 ```tsx
-import { TOKENS, FONT_ITALIC_SERIF } from "../../lib/tokens";
+import { TOKENS, FONT_EMPHASIS_SANS } from "../../lib/tokens";
 ```
 
 Never import from `app/styles/tokens.css` or hard-code OKLCH/hex in Remotion code. The values in `remotion/lib/tokens.ts` are the single source.
@@ -100,7 +100,7 @@ Paper Calm is the brand. Don't ship a Layers scene on a flat color.
 | Organic logo (proposed) | `<OrganicLayersMark phase={seconds * 0.8} size={120} />` from `remotion/scenes/brand-template/OrganicRing.tsx` — only use after design approval |
 | Paper card chrome | `<Card>` + `<CardHeader>` from `remotion/components/Card.tsx` |
 | One handwritten flourish per video | `<HandwrittenAccent label="exactly." progress={0.4 + 0.6 * (frame/30)} />` from `PaperBackground.tsx` |
-| Italic emphasis | `style={{ fontFamily: FONT_ITALIC_SERIF, fontStyle: "italic", fontWeight: 400, color: TOKENS.layersMint }}` |
+| Sans emphasis | `style={{ fontFamily: FONT_EMPHASIS_SANS, fontWeight: 650, color: TOKENS.layersMint }}` |
 | Concentric organic rings | `<OrganicRing cx cy baseR amp lobesA lobesB phase stroke />` |
 
 ### Frame-deterministic motion only
@@ -152,8 +152,7 @@ Each scene clamps its own `enter` and `out` opacities so the crossover is smooth
 
 ### Fonts
 
-- Display italic emphasis: `FONT_ITALIC_SERIF` (Iowan Old Style → Charter → Georgia → Playfair Display).
-- UI sans: leave to system stack — Remotion's Chromium renders SF Pro / system stack natively.
+- Display/UI sans: use `FONT_EMPHASIS_SANS` or the system stack. Layers does not use serif display accents.
 - Mono: JetBrains Mono → SF Mono → ui-monospace for tool calls, transcripts, code reveals.
 
 ### Don't add background music to the template
@@ -342,7 +341,7 @@ For a branded still (OpenGraph / social card):
 
 - [ ] Tokens come from `remotion/lib/tokens.ts`, not raw hex/OKLCH.
 - [ ] `<PaperBackground>` is in the scene.
-- [ ] One italic-serif emphasis (or zero), not two.
+- [ ] No serif display accents; emphasis uses sans weight, color, and spacing.
 - [ ] One `<HandwrittenAccent>` (or zero), not two.
 - [ ] Voice matches `BRAND_NARRATIVE.md` §7 (specific verbs, named destinations).
 - [ ] Vendor logos use real canonical SVGs (or are marked as stand-ins).

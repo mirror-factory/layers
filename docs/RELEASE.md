@@ -47,12 +47,17 @@ team) → **Settings**.
 
 Current verified status as of 2026-05-17:
 
-- `layers.mirrorfactory.ai` is attached to `audio-layer` as the production domain.
-- `dev.layers.mirrorfactory.ai` is attached to `audio-layer` and pinned to `development`.
-- `staging.layers.mirrorfactory.ai` is attached to `audio-layer` and pinned to `staging`.
-- The dev/staging domains are not verified yet because DNS is hosted at Cloudflare
-  (`bowen.ns.cloudflare.com`, `cora.ns.cloudflare.com`) and the required records
-  are not present.
+- GitHub/Vercel CI is deploying PR #88 through the `audio-layer` project under
+  the `mirror-factorys-projects-836be98a` team.
+- The local `.vercel/project.json` in this checkout points at a different Vercel
+  project: `mirror-factory/layers` (`prj_sXKn0a66RmAsOG1mtid0ETrUiSsU`), which
+  appears to be older/stale and configured as a Vite project.
+- Do not mutate Vercel domains until the final owner project is reconciled. The
+  intended production project should be the one that runs the actual Next.js CI
+  deploys for this repo.
+- The dev/staging domains are not verified yet because DNS is hosted at
+  Cloudflare (`bowen.ns.cloudflare.com`, `cora.ns.cloudflare.com`) and the
+  required records are not present.
 - GitHub's default branch is `development`. Follow-up required: the old
   unprotected `dev` branch still exists at `0.1.75` and is ahead of the current
   protected `development` branch. Do not delete or retire `dev` until PR #88 has
