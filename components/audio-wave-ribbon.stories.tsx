@@ -1,10 +1,8 @@
 import { AudioWaveRibbon } from "./audio-wave-ribbon";
 
-const meta = {
+export default {
   title: "Components/audio-wave-ribbon",
 };
-
-export default meta;
 
 export const Idle = {
   render: () => <AudioWaveRibbon height={126} />,

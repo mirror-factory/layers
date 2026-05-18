@@ -1,11 +1,7 @@
-const meta = {
+export default {
   title: "Components/tool-card",
 };
 
-export default meta;
-
 export const Default = {
-  render: () => (
-    <div data-testid="tool-card-story">Wire tool-card story state.</div>
-  ),
+  render: () => <div data-testid="tool-card-story">Wire tool-card story state.</div>,
 };
