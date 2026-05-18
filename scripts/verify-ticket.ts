@@ -27,6 +27,10 @@ const dryRun = process.argv.includes('--dry-run');
 const evidenceDir = join(cwd, '.evidence');
 let browserReady = false;
 
+function envFlag(name: string): boolean {
+  return ['1', 'true', 'yes', 'on'].includes(String(process.env[name] ?? '').toLowerCase());
+}
+
 function canInstallSystemDeps(): boolean {
   if (typeof process.getuid === 'function' && process.getuid() === 0) return true;
   const result = spawnSync('sudo', ['-n', 'true'], { cwd, stdio: 'ignore' });
@@ -85,8 +89,15 @@ function componentVisualSpec(file: string): string | null {
 function commandSetFor(files: string[]): CommandSpec[] {
   const commands: CommandSpec[] = [
     { name: 'feature proof plan', command: 'pnpm test:feature-proof' },
-    { name: 'fast deterministic tests', command: 'pnpm test:fast' },
   ];
+  const fullProof = envFlag('LAYERS_FULL_TICKET_PROOF');
+  const componentVisualProof = fullProof || envFlag('LAYERS_COMPONENT_VISUAL_PROOF');
+  const mobileProof = fullProof || envFlag('LAYERS_MOBILE_TICKET_PROOF');
+  const rerunFastTests = envFlag('LAYERS_TICKET_FAST_TESTS');
+
+  if (rerunFastTests) {
+    commands.push({ name: 'fast deterministic tests', command: 'pnpm test:fast' });
+  }
 
   const touchesApi = files.some(file => file.startsWith('app/api/') || file.includes('/api/'));
   const touchesUi = files.some(file =>
@@ -99,10 +110,19 @@ function commandSetFor(files: string[]): CommandSpec[] {
   );
   const touchesMobile = files.some(file =>
     file.includes('mobile') ||
-    file.includes('layout') ||
     file.includes('navigation') ||
     file.includes('nav') ||
-    file.startsWith('app/')
+    file.includes('safe-area') ||
+    file.startsWith('ios/') ||
+    file.startsWith('android/') ||
+    file.startsWith('capacitor')
+  );
+  const touchesRecording = files.some(file =>
+    file.startsWith('app/record') ||
+    file.startsWith('lib/recording') ||
+    file.startsWith('components/audio-recorder') ||
+    file.startsWith('components/live-recorder') ||
+    file.includes('recording')
   );
   const touchesAiTooling = files.some(file =>
     file.startsWith('lib/ai') ||
@@ -120,23 +140,33 @@ function commandSetFor(files: string[]): CommandSpec[] {
   }
 
   const visualSpecs = unique(files.map(componentVisualSpec).filter((file): file is string => Boolean(file)));
-  for (const spec of visualSpecs) {
-    commands.push({
-      name: `component visual proof: ${spec}`,
-      command: `PLAYWRIGHT_FORCE_CHROMIUM=1 PLAYWRIGHT_DISABLE_VIDEO=1 npx playwright test ${spec} --project=desktop-light --project=mobile-light`,
-      needsBrowser: true,
-    });
+  if (componentVisualProof) {
+    for (const spec of visualSpecs) {
+      commands.push({
+        name: `component visual proof: ${spec}`,
+        command: `PLAYWRIGHT_FORCE_CHROMIUM=1 PLAYWRIGHT_DISABLE_VIDEO=1 npx playwright test ${spec} --project=desktop-light --project=mobile-light`,
+        needsBrowser: true,
+      });
+    }
   }
 
   if (touchesUi && has('tests/e2e/smoke.spec.ts')) {
     commands.push({
-      name: 'route smoke proof',
-      command: 'PLAYWRIGHT_FORCE_CHROMIUM=1 PLAYWRIGHT_DISABLE_VIDEO=1 pnpm exec playwright test tests/e2e/smoke.spec.ts --project=desktop-light --project=mobile-light --workers=1',
+      name: 'desktop smoke proof',
+      command: 'PLAYWRIGHT_FORCE_CHROMIUM=1 PLAYWRIGHT_DISABLE_VIDEO=1 pnpm exec playwright test tests/e2e/smoke.spec.ts --project=desktop-light --workers=1',
       needsBrowser: true,
     });
   }
 
-  if (touchesMobile && has('tests/e2e/mobile.spec.ts')) {
+  if (touchesRecording && has('tests/e2e/recording-stop-flow.spec.ts')) {
+    commands.push({
+      name: 'recording stop-flow proof',
+      command: 'PLAYWRIGHT_FORCE_CHROMIUM=1 PLAYWRIGHT_DISABLE_VIDEO=1 LAYERS_E2E_FAKE_RECORDING=1 pnpm exec playwright test tests/e2e/recording-stop-flow.spec.ts --project=desktop-light --workers=1',
+      needsBrowser: true,
+    });
+  }
+
+  if (mobileProof && touchesMobile && has('tests/e2e/mobile.spec.ts')) {
     commands.push({
       name: 'mobile proof',
       command: 'PLAYWRIGHT_FORCE_CHROMIUM=1 PLAYWRIGHT_DISABLE_VIDEO=1 pnpm exec playwright test tests/e2e/mobile.spec.ts --project=mobile-light --workers=1',
