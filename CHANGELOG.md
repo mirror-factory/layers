@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.135] — 2026-05-18
+
+### Documentation
+- docs: avoid brittle report head wording (`78381ec`)
+
+
 ## [0.1.134] — 2026-05-18
 
 ### Documentation
