@@ -8,6 +8,7 @@ import { OnboardingProvider } from "@/components/onboarding/onboarding-provider"
 import { FirstMeetingToast } from "@/components/onboarding/first-meeting-toast";
 import { ONBOARDING_ANCHOR_ATTR } from "@/lib/onboarding/copy";
 import { MeetingDetailPollerWrapper } from "./poller-wrapper";
+import { formatCompletedActionDueLabel } from "@/lib/meetings/format";
 import { getMeetingsStore } from "@/lib/meetings/store";
 import { AudioWaveRibbon } from "@/components/audio-wave-ribbon";
 import {
@@ -313,12 +314,7 @@ function buildCompletedActions(
   return actionItems.map((action, index) => ({
     id: `${action.task}-${index}`,
     text: formatMeetingActionItem(action),
-    due: action.dueDate
-      ? new Intl.DateTimeFormat(undefined, {
-          month: "short",
-          day: "numeric",
-        }).format(new Date(action.dueDate))
-      : null,
+    due: formatCompletedActionDueLabel(action.dueDate),
     priority: priorities[index % priorities.length],
   }));
 }
