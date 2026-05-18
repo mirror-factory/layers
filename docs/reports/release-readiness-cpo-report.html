@@ -341,7 +341,7 @@
                 <li>GitHub branch protections were verified for `development`, `staging`, and `main`; all require PR approval and strict gates.</li>
                 <li>Google OAuth retest now points at production Supabase `psatqzrakxauktmzahfc` and no Hustle Together URL appears in the OAuth request chain.</li>
                 <li>New auth-domain regression test prevents stale Hustle Together domains in runtime auth/native shell config.</li>
-                <li>Slim gates passed: typecheck, lint, compliance, deprecation check, secrets inventory, native config, focused native/auth/onboarding tests, and desktop-light Playwright smoke. Latest lint exits 0 with 44 warnings, mostly legacy scripts/tests/evidence.</li>
+                <li>Slim gates passed: typecheck, lint, compliance, deprecation check, secrets inventory, native config, focused native/auth/onboarding tests, and desktop-light Playwright smoke. Latest lint exits 0 with 70 warnings, mostly legacy story/script/test/evidence warnings.</li>
                 <li>API smoke improved to product-route health; Electron worker reports 83 passed / 12 skipped after clean .next.</li>
                 <li>iOS simulator cap sync, build, install, launch, screenshots, safe-area checks, plist lint, and URL scheme registration passed.</li>
                 <li>Android emulator now boots and runs com.mirafactory.layers; the prior disk-space blocker is no longer the blocker.</li>
@@ -379,7 +379,7 @@
                 <li>Electron public distribution still needs notarization credentials and a physical Mac mic walk.</li>
                 <li>Temporary Cloudflare API token should be revoked now that DNS setup is complete.</li>
                 <li>GitHub still reports 41 Dependabot alerts on the default branch until the fixed branch lands through the promotion path.</li>
-                <li>Remaining lint output is warnings-only, reduced from 96 to 49; the rest is mostly legacy scripts/evidence/test fixtures plus one external-logo image warning.</li>
+                <li>Remaining lint output is warnings-only, reduced from 96 to 70 after reverting low-value Storybook edits that tripped feature-proof registry gates.</li>
               </ul>
             </div>
           </div>
@@ -419,7 +419,7 @@
               <tr>
                 <td>Local slim gate</td>
                 <td><span class="stamp pass">Passed</span></td>
-                <td>Current local gates passed: typecheck, lint with 49 warnings / 0 errors, compliance 12/12, deprecations, secrets inventory, native config, focused Vitest 16/16, and desktop-light Playwright smoke 17/17.</td>
+                <td>Current local gates passed: typecheck, lint with 70 warnings / 0 errors, compliance 12/12, deprecations, secrets inventory, native config, focused Vitest 16/16, and desktop-light Playwright smoke 17/17. A first push attempt was blocked by feature-proof because Storybook warning cleanup touched unregistered story surfaces; those edits were reverted.</td>
               </tr>
             </tbody>
           </table>
@@ -563,7 +563,7 @@
             <li>GitHub/Vercel/Cloudflare flow proof: docs/evidence/2026-05-18-continued-claude-testing/github-vercel-cloudflare-flow.md.</li>
             <li>Final finish pass summary: docs/evidence/2026-05-18-continued-claude-testing/final-finish-pass-summary.md.</li>
             <li>Focused native/auth/onboarding proof: `pnpm exec vitest run tests/auth-domain-config.test.ts tests/native-oauth.test.ts tests/onboarding-emails.test.ts --passWithNoTests` passed, 16 tests.</li>
-            <li>Lint proof: `pnpm lint` passed with 44 warnings, 0 errors.</li>
+            <li>Lint proof: `pnpm lint` passed with 70 warnings, 0 errors.</li>
             <li>Compliance proof: `pnpm compliance` passed 12/12 with 0 warnings and 0 errors.</li>
             <li>Native config proof: `pnpm test:native:config` passed app ID, bundle ID, deep links, release workflow, and artifact checks.</li>
             <li>Focused web smoke proof: `PLAYWRIGHT_DISABLE_VIDEO=1 pnpm exec playwright test tests/e2e/smoke.spec.ts --project=desktop-light` passed, 17 tests.</li>

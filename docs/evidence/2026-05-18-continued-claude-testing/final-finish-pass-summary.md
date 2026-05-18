@@ -14,7 +14,7 @@ Safe for external tester debug QA, not safe for store/TestFlight/public release 
 | Web/Brand/Electron | Sans-only font proof, public/auth screenshots, Electron launch smoke | PASS |
 | iOS Capacitor | iPhone 16 Pro simulator, Google button native browser proof | PASS |
 | Android Capacitor | LayersPixel emulator, Google button native browser proof | PASS with emulator Chrome first-run caveat |
-| Final read-only Claude audit | Evidence/report consistency check | ATTEMPTED; CLI produced no output and was stopped to avoid blocking |
+| Final read-only Claude audit | Evidence/report consistency check | PASS; Sonnet review found no report/evidence contradictions |
 
 ## Fixes Made
 
@@ -24,8 +24,7 @@ Safe for external tester debug QA, not safe for store/TestFlight/public release 
 | `next.config.ts` | Maps existing `VITE_SUPABASE_*` env vars to `NEXT_PUBLIC_SUPABASE_*` | Lets Next.js browser bundle configure Supabase locally |
 | `lib/auth/native-oauth.ts` | Wraps Capacitor `App` and `Browser` plugin methods in plain objects | Prevents Android `"App.then()" is not implemented` runtime failure |
 | `tests/auth-domain-config.test.ts` | Adds regression coverage for runtime auth/native-shell domains | Prevents stale `layers.hustletogether.com` redirects from returning |
-| public/dev-kit/MCP/telemetry/Remotion files | Removed low-risk unused code/import warnings | Reduced lint warnings from 96 to 44 without changing product behavior |
-| Storybook stories | Converted anonymous default exports to named `meta` exports | Removes story lint noise and improves generated docs/debuggability |
+| public/dev-kit/MCP/telemetry/Remotion files | Removed low-risk unused code/import warnings | Reduced lint warnings while avoiding user-facing registry drift |
 | `docs/reports/release-readiness-cpo-report.html` | Updated CPO report with final pass/fail state | Keeps the standard update artifact current |
 
 ## Slim Gates
@@ -33,7 +32,7 @@ Safe for external tester debug QA, not safe for store/TestFlight/public release 
 | Command | Result |
 |---|---|
 | `pnpm typecheck` | PASS |
-| `pnpm lint` | PASS, 44 warnings, 0 errors |
+| `pnpm lint` | PASS, 70 warnings, 0 errors |
 | `pnpm compliance` | PASS, 12 checks, 0 warnings, 0 errors |
 | `pnpm check:deprecations` | PASS, no deprecated patterns found |
 | `pnpm secrets:check` | PASS, 5 vendors detected; timestamp-only generated doc change was restored |
