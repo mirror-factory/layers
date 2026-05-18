@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.157] — 2026-05-18
+
+### Documentation
+- docs: refresh cpo release status report (`1d85f51`)
+
+
 ## [0.1.156] — 2026-05-18
 
 ### Documentation
