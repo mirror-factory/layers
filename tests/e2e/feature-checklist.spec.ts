@@ -32,8 +32,11 @@ test.describe("Feature checklist", () => {
 
     await expect(
       page.getByRole("heading", {
-        name: /AI memory for your meetings/i,
+        name: /The meeting layer for your AI stack/i,
       }),
+    ).toBeVisible();
+    await expect(
+      page.getByText("Built for bot-free meeting memory").first(),
     ).toBeVisible();
     await expect(
       page.getByText("Meeting memory").first(),
@@ -152,8 +155,9 @@ test.describe("Feature checklist", () => {
 
     await page.goto("/sign-up", { waitUntil: "load" });
     await expect(
-      page.getByRole("button", { name: "Continue with Google" }),
+      page.getByRole("link", { name: "Request alpha access" }),
     ).toBeVisible();
+    await expect(page.getByRole("button", { name: "Coming soon" })).toBeVisible();
     await expect(page.locator('input[type="email"]')).toBeVisible();
     await expect(page.locator('input[type="password"]')).toBeVisible();
   });

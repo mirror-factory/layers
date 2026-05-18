@@ -35,12 +35,11 @@ test.describe("Sign-in page", () => {
 });
 
 test.describe("Sign-up page", () => {
-  test("renders Google OAuth button", async ({ page }) => {
+  test("renders invite-only alpha access CTA", async ({ page }) => {
     await page.goto("/sign-up", { waitUntil: "domcontentloaded" });
-    const googleBtn = page.locator("button", {
-      hasText: "Continue with Google",
-    });
-    await expect(googleBtn).toBeVisible({ timeout: 5000 });
+    await expect(
+      page.getByRole("link", { name: "Request alpha access" }),
+    ).toBeVisible({ timeout: 5000 });
   });
 
   // Public sign-ups are paused for the invite-only alpha; the form's submit
@@ -51,7 +50,7 @@ test.describe("Sign-up page", () => {
   test("renders the invite-only Coming soon state", async ({ page }) => {
     await page.goto("/sign-up", { waitUntil: "load" });
     await expect(
-      page.getByRole("button", { name: "Continue with Google" }),
+      page.getByRole("link", { name: "Request alpha access" }),
     ).toBeVisible();
     await expect(page.locator('input[type="email"]')).toBeVisible();
     await expect(page.locator('input[type="password"]')).toBeVisible();

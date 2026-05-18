@@ -1,0 +1,1 @@
+7:    topResumedActivity=ActivityRecord{4a51d0e u0 com.mirafactory.layers/.MainActivity t65}

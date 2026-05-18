@@ -44,6 +44,16 @@ interface AnchorBox {
   height: number;
 }
 
+function readCssPixelVar(name: string): number {
+  if (typeof window === "undefined") return 0;
+  const value = window
+    .getComputedStyle(document.documentElement)
+    .getPropertyValue(name)
+    .trim();
+  const parsed = Number.parseFloat(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
 function measureAnchor(anchor: Element | null): AnchorBox | null {
   if (!anchor) return null;
   const rect = anchor.getBoundingClientRect();
@@ -158,21 +168,37 @@ export function TourPopover({
 
   if (!anchorBox) return null;
 
-  const popoverWidth = 320;
+  const safeTop = readCssPixelVar("--safe-top");
+  const safeBottom = readCssPixelVar("--safe-bottom");
+  const safeLeft = readCssPixelVar("--safe-left");
+  const safeRight = readCssPixelVar("--safe-right");
   const margin = 12;
+  const viewport = window.visualViewport;
   const viewportWidth =
-    typeof window !== "undefined" ? window.innerWidth : 1024;
+    typeof window !== "undefined" ? (viewport?.width ?? window.innerWidth) : 1024;
+  const viewportHeight =
+    typeof window !== "undefined"
+      ? (viewport?.height ?? window.innerHeight)
+      : 768;
+  const popoverWidth = Math.min(
+    320,
+    Math.max(260, viewportWidth - safeLeft - safeRight - margin * 2),
+  );
+  const popoverHeight = popoverRef.current?.offsetHeight ?? 172;
   // Center horizontally on the anchor, but clamp to viewport.
   const rawLeft = anchorBox.left + anchorBox.width / 2 - popoverWidth / 2;
   const left = Math.max(
-    margin,
-    Math.min(rawLeft, viewportWidth - popoverWidth - margin),
+    safeLeft + margin,
+    Math.min(rawLeft, viewportWidth - safeRight - popoverWidth - margin),
   );
-  const top =
+  const rawTop =
     placement === "below"
       ? anchorBox.top + anchorBox.height + margin
-      : anchorBox.top - margin;
-  const translateY = placement === "above" ? "translateY(-100%)" : "none";
+      : anchorBox.top - popoverHeight - margin;
+  const top = Math.max(
+    safeTop + margin,
+    Math.min(rawTop, viewportHeight - safeBottom - popoverHeight - margin),
+  );
 
   const titleId = `onboarding-tour-${step}-title`;
   const descId = `onboarding-tour-${step}-body`;
@@ -190,7 +216,6 @@ export function TourPopover({
         top: `${top}px`,
         left: `${left}px`,
         width: `${popoverWidth}px`,
-        transform: translateY,
         zIndex: 60,
       }}
     >
@@ -306,11 +331,11 @@ export function TourPopover({
         @keyframes onboardingTourIn {
           from {
             opacity: 0;
-            transform: translateY(${placement === "above" ? "calc(-100% - 4px)" : "4px"});
+            transform: translateY(${placement === "above" ? "-4px" : "4px"});
           }
           to {
             opacity: 1;
-            transform: ${placement === "above" ? "translateY(-100%)" : "translateY(0)"};
+            transform: translateY(0);
           }
         }
         @media (prefers-reduced-motion: reduce) {

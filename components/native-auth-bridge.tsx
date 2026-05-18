@@ -61,10 +61,13 @@ export function NativeAuthBridge() {
     if (!Capacitor.isNativePlatform()) return;
 
     let active = true;
-    let removeListener: (() => void) | null = null;
+    const cleanup: Array<() => void> = [];
 
     void import("@capacitor/app")
       .then(async ({ App }) => {
+        const [{ Browser }] = await Promise.all([import("@capacitor/browser")]);
+        await Browser.close().catch(() => undefined);
+
         const launch = await App.getLaunchUrl();
         if (active && launch?.url) await handleNativeAuthUrl(launch.url);
 
@@ -77,15 +80,13 @@ export function NativeAuthBridge() {
           return;
         }
 
-        removeListener = () => {
-          void listener.remove();
-        };
+        cleanup.push(() => void listener.remove());
       })
       .catch(() => undefined);
 
     return () => {
       active = false;
-      removeListener?.();
+      for (const remove of cleanup) remove();
     };
   }, []);
 

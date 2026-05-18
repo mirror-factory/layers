@@ -206,7 +206,7 @@ export function SignUpPageClient() {
       {error ? <AuthError message={error} /> : null}
 
       <AuthFootnote>
-        By creating an account or continuing with Google, you agree to the{" "}
+        By requesting alpha access, you agree to the{" "}
         <Link href="/terms">Terms</Link> and acknowledge the{" "}
         <Link href="/privacy">Privacy Policy</Link>.
       </AuthFootnote>

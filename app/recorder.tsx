@@ -1080,9 +1080,9 @@ function RecentMeetings({
           </p>
           <Link
             href="/record/live"
-            className="mt-4 inline-flex min-h-[44px] items-center justify-center rounded-md bg-layers-mint px-4 text-sm font-medium text-layers-ink transition-colors hover:bg-layers-mint-soft"
+            className="recent-empty-start-button mt-4 inline-flex min-h-[44px] items-center justify-center rounded-md bg-layers-mint px-4 text-sm font-medium text-layers-ink transition-colors hover:bg-layers-mint-soft"
           >
-            Start live recording
+            Start recording
           </Link>
         </div>
       ) : filteredMeetings.length === 0 ? (

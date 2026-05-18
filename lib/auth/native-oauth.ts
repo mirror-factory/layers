@@ -80,6 +80,15 @@ type SignInOptions = {
   next?: string;
 };
 
+type NativeListenerHandle = { remove: () => Promise<void> | void };
+
+type NativeAppPlugin = {
+  addListener(
+    event: "appUrlOpen",
+    handler: (event: { url: string }) => void | Promise<void>,
+  ): Promise<NativeListenerHandle> | NativeListenerHandle;
+};
+
 type SignInDeps = {
   supabase: SupabaseClient;
   /**
@@ -89,13 +98,12 @@ type SignInDeps = {
   loadBrowser?: () => Promise<{
     open: (options: { url: string; presentationStyle?: "popover" | "fullscreen" }) => Promise<void>;
     close?: () => Promise<void>;
+    addListener?: (
+      event: "browserFinished",
+      handler: () => void | Promise<void>,
+    ) => Promise<NativeListenerHandle> | NativeListenerHandle;
   }>;
-  loadApp?: () => Promise<{
-    addListener: (
-      event: "appUrlOpen",
-      handler: (event: { url: string }) => void | Promise<void>,
-    ) => Promise<{ remove: () => Promise<void> }> | { remove: () => Promise<void> | void };
-  }>;
+  loadApp?: () => Promise<NativeAppPlugin>;
   /**
    * Override for tests. Defaults to `window.location.assign`.
    */
@@ -133,6 +141,7 @@ export async function signInWithGoogleNative(
       return {
         open: Browser.open.bind(Browser),
         close: Browser.close?.bind(Browser),
+        addListener: Browser.addListener?.bind(Browser),
       };
     });
   const loadApp =
@@ -174,12 +183,22 @@ export async function signInWithGoogleNative(
   const handleRef: { current: { remove: () => Promise<void> | void } | undefined } = {
     current: undefined,
   };
+  const browserFinishedRef: {
+    current: { remove: () => Promise<void> | void } | undefined;
+  } = {
+    current: undefined,
+  };
 
   const dispose = async () => {
     if (disposed) return;
     disposed = true;
     try {
       await handleRef.current?.remove();
+    } catch {
+      // ignore
+    }
+    try {
+      await browserFinishedRef.current?.remove();
     } catch {
       // ignore
     }
@@ -219,6 +238,18 @@ export async function signInWithGoogleNative(
 
   const registration = await App.addListener("appUrlOpen", handleUrl);
   handleRef.current = registration;
+
+  const handleCancelledBrowser = async () => {
+    await dispose();
+    navigate("/sign-in?error=native_browser_closed");
+  };
+
+  if (Browser.addListener) {
+    browserFinishedRef.current = await Browser.addListener(
+      "browserFinished",
+      handleCancelledBrowser,
+    );
+  }
 
   // 3. Open Google's consent screen as an in-app overlay. Capacitor Browser
   // implementations differ on whether the Promise resolves as soon as the

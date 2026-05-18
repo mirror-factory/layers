@@ -1,0 +1,23 @@
+[
+  {
+    "name": "home",
+    "url": "https://layers.mirrorfactory.ai/",
+    "title": "Layers",
+    "font": "Geist, \"Geist Fallback\", Geist, Inter, ui-sans-serif, system-ui, sans-serif",
+    "sample": "WE'RE IN INVITE-ONLY ALPHA — PUBLIC SIGN-UPS COMING SOON\nLayers\nDownload\nPricing\nSign in\nAI memory for your meetings.\nDecisions that move work forward.\n\nLayers remembers what matters from every conversation so your team can make better decisions and ship faster.\n\nComing soon\nSee how it works\nRecordi"
+  },
+  {
+    "name": "signin",
+    "url": "https://layers.mirrorfactory.ai/sign-in",
+    "title": "Layers",
+    "font": "Geist, \"Geist Fallback\", Geist, Inter, ui-sans-serif, system-ui, sans-serif",
+    "sample": "WE'RE IN INVITE-ONLY ALPHA — PUBLIC SIGN-UPS COMING SOON\nLayers\nDownload\nPricing\nSign in\nAI memory for your meetings.\nA calmer place to keep what was said, decided, and asked of you.\nEnd-to-end encrypted in transit\nYour meetings stay private\nCancel any time\n\nWELCOME BACK\n\nSign in to Layers\n\nPick up "
+  },
+  {
+    "name": "privacy",
+    "url": "https://layers.mirrorfactory.ai/privacy",
+    "title": "Privacy Policy | Layers",
+    "font": "Geist, \"Geist Fallback\", Geist, Inter, ui-sans-serif, system-ui, sans-serif",
+    "sample": "WE'RE IN INVITE-ONLY ALPHA — PUBLIC SIGN-UPS COMING SOON\nLayers\nDownload\nPricing\nSign in\nLAYERS BY MIRROR FACTORY\nPrivacy Policy\n\nLayers records meetings without a meeting bot and turns them into transcripts, summaries, decisions, actions, and searchable memory. This policy explains what data the ap"
+  }
+]

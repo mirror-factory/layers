@@ -20,28 +20,55 @@ vi.mock("@capacitor/core", () => ({
 }));
 
 type Listener = (event: { url: string }) => void | Promise<void>;
+type BrowserFinishedListener = () => void | Promise<void>;
 
 function makeFakes() {
   const browserOpen = vi.fn().mockResolvedValue(undefined);
   const browserClose = vi.fn().mockResolvedValue(undefined);
   const remove = vi.fn().mockResolvedValue(undefined);
+  const removeBrowserFinished = vi.fn().mockResolvedValue(undefined);
   let captured: Listener | undefined;
+  let capturedBrowserFinished: BrowserFinishedListener | undefined;
   const addListener = vi
     .fn()
-    .mockImplementation(async (_event: string, handler: Listener) => {
-      captured = handler;
-      return { remove };
+    .mockImplementation(async (event: string, handler: Listener) => {
+      if (event === "appUrlOpen") {
+        captured = handler;
+        return { remove };
+      }
+      throw new Error(`unexpected listener: ${event}`);
+    });
+  const addBrowserListener = vi
+    .fn()
+    .mockImplementation(async (event: string, handler: BrowserFinishedListener) => {
+      if (event !== "browserFinished") {
+        throw new Error(`unexpected browser listener: ${event}`);
+      }
+      capturedBrowserFinished = handler;
+      return { remove: removeBrowserFinished };
     });
 
   return {
-    Browser: { open: browserOpen, close: browserClose },
+    Browser: {
+      open: browserOpen,
+      close: browserClose,
+      addListener: addBrowserListener,
+    },
     App: { addListener },
     remove,
+    removeBrowserFinished,
     browserOpen,
     browserClose,
+    addBrowserListener,
     fireDeepLink: async (url: string) => {
       if (!captured) throw new Error("listener not registered");
       await captured({ url });
+    },
+    fireBrowserFinished: async () => {
+      if (!capturedBrowserFinished) {
+        throw new Error("browserFinished listener not registered");
+      }
+      await capturedBrowserFinished();
     },
   };
 }
@@ -143,6 +170,10 @@ describe("signInWithGoogleNative", () => {
       "appUrlOpen",
       expect.any(Function),
     );
+    expect(fakes.addBrowserListener).toHaveBeenCalledWith(
+      "browserFinished",
+      expect.any(Function),
+    );
     expect(fakes.browserOpen).toHaveBeenCalledWith({
       url: "https://accounts.google.com/o/oauth2/auth?foo=bar",
       presentationStyle: "fullscreen",
@@ -215,7 +246,32 @@ describe("signInWithGoogleNative", () => {
     expect(supabase.auth.exchangeCodeForSession).toHaveBeenCalledWith("the-code");
     expect(navigate).toHaveBeenCalledWith("/record");
     expect(fakes.remove).toHaveBeenCalled();
+    expect(fakes.removeBrowserFinished).toHaveBeenCalled();
     expect(fakes.browserClose).toHaveBeenCalled();
+  });
+
+  it("disposes and returns to sign-in when the native browser is cancelled", async () => {
+    mocks.isNativePlatform.mockReturnValue(true);
+    const supabase = makeSupabase();
+    const fakes = makeFakes();
+    const navigate = vi.fn();
+
+    await signInWithGoogleNative(
+      { next: "/record" },
+      {
+        supabase: asClient(supabase),
+        loadApp: async () => fakes.App,
+        loadBrowser: async () => fakes.Browser,
+        navigate,
+      },
+    );
+
+    await fakes.fireBrowserFinished();
+
+    expect(fakes.remove).toHaveBeenCalled();
+    expect(fakes.removeBrowserFinished).toHaveBeenCalled();
+    expect(fakes.browserClose).toHaveBeenCalled();
+    expect(navigate).toHaveBeenCalledWith("/sign-in?error=native_browser_closed");
   });
 
   it("ignores deep-link events for unrelated URL schemes", async () => {

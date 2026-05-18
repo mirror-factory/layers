@@ -4436,6 +4436,32 @@ body.dark:has(.paper-calm-page) {
   display: inline;
 }
 
+.paper-calm-page.recorder-page .recorder-error-alert {
+  width: min(100%, 340px);
+  border-radius: 18px !important;
+  padding: 0.78rem 0.9rem !important;
+  font-size: 0.82rem !important;
+  font-weight: 720;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  box-shadow: 0 14px 30px
+    color-mix(in oklch, var(--status-error) 10%, transparent);
+}
+
+.paper-calm-page.recorder-page .recorder-error-alert p {
+  min-width: 0;
+}
+
+.paper-calm-page.recorder-page
+  .recorder-has-error
+  .recorder-primary-control {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.24), transparent 42%),
+    linear-gradient(180deg, #15203a 0%, var(--layers-ink) 100%) !important;
+  color: white !important;
+  opacity: 1 !important;
+}
+
 .recorder-command-status {
   color: #0f9f8a;
   font-weight: 720;
@@ -6022,15 +6048,50 @@ body.dark:has(.paper-calm-page) {
   .recorder-control:not(:has(.recorder-live-indicator))
   .recorder-primary-control,
 .dark .paper-calm-page.recorder-page .home-calendar-connect {
-  background: #f8fafc !important;
-  color: #0b1220 !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.24), transparent 42%),
+    linear-gradient(180deg, #15203a 0%, var(--layers-ink) 100%) !important;
+  color: white !important;
 }
 
 .dark .paper-calm-page.recorder-page
   .recorder-control:not(:has(.recorder-live-indicator))
   .recorder-primary-control:hover,
 .dark .paper-calm-page.recorder-page .home-calendar-connect:hover {
-  background: #e2e8f0 !important;
+  background: #111b2d !important;
+}
+
+.dark .paper-calm-page.recorder-page
+  .recorder-has-error
+  .recorder-control:not(:has(.recorder-live-indicator))
+  .recorder-primary-control,
+.paper-calm-page.recorder-page
+  .recorder-has-error
+  .recorder-control:not(:has(.recorder-live-indicator))
+  .recorder-primary-control {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.24), transparent 42%),
+    linear-gradient(180deg, #15203a 0%, var(--layers-ink) 100%) !important;
+  color: white !important;
+  opacity: 1 !important;
+}
+
+.paper-calm-page.recorder-page .recent-empty-start-button {
+  width: min(100%, 312px);
+  min-height: 58px;
+  border-radius: 999px !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.24), transparent 42%),
+    linear-gradient(180deg, #15203a 0%, var(--layers-ink) 100%) !important;
+  color: white !important;
+  font-weight: 760 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 18px 34px rgba(11, 18, 32, 0.16) !important;
+}
+
+.paper-calm-page.recorder-page .recent-empty-start-button:hover {
+  background: #111b2d !important;
 }
 
 @media (min-width: 1024px) {
@@ -6574,8 +6635,13 @@ body.dark:has(.paper-calm-page) {
   .paper-calm-page.recorder-page
     .recorder-control:not(:has(.recorder-live-indicator))
     .recorder-primary-control {
-    width: min(100%, 286px) !important;
+    width: min(100%, 312px) !important;
     height: 60px !important;
+  }
+
+  .paper-calm-page.recorder-page .recorder-error-alert {
+    width: min(100%, 312px);
+    margin-top: 0.7rem !important;
   }
 
   .paper-calm-page.recorder-page .recorder-readiness .sm\:grid {

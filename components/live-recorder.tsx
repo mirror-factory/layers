@@ -1017,7 +1017,17 @@ function LiveRecorder(
     error?.toLowerCase().includes("limit reached") ||
     error?.toLowerCase().includes("free tier limit") ||
     false;
-  const errorCopy = isQuotaError ? error : error;
+  const hasMicrophoneError = Boolean(error && /microphone|browser/i.test(error));
+  const hasProviderConfigError = Boolean(
+    error && /api[_ -]?key|provider|not configured|missing/i.test(error),
+  );
+  const errorCopy = isQuotaError
+    ? error
+    : hasMicrophoneError
+      ? "Microphone setup needs attention. Check app permissions, then try again."
+      : hasProviderConfigError
+        ? "Recording setup needs attention. Speech service is not configured for this build."
+      : error;
   const readinessChecks: ReadinessCheck[] = [
     browserMic,
     ...(preflight?.checks ?? []),
@@ -1049,12 +1059,20 @@ function LiveRecorder(
     ? blockedByMic
       ? "Allow microphone"
       : "Review setup"
+    : hasMicrophoneError
+      ? "Review setup"
+    : hasProviderConfigError
+      ? "Review setup"
     : "Start recording";
   const recorderSubcopy =
     preflightLoading && !preflight
       ? "Checking recording setup..."
       : blockedByMic
         ? "Allow microphone access to begin"
+        : hasMicrophoneError
+          ? "Microphone setup needs attention"
+        : hasProviderConfigError
+          ? "Recording setup needs attention"
         : preflightBlocked
           ? "Recording setup needs attention"
         : "Tap to start taking notes";
@@ -1096,7 +1114,11 @@ function LiveRecorder(
   }
 
   return (
-    <div className="w-full">
+    <div
+      className={`w-full ${
+        hasMicrophoneError || hasProviderConfigError ? "recorder-has-error" : ""
+      }`}
+    >
       <div
         className={`signal-panel-subtle recorder-control flex items-center rounded-lg p-3 transition-all duration-700 ease-out sm:p-4 ${
           isActive ? "gap-4" : "flex-col gap-4"
@@ -1259,7 +1281,7 @@ function LiveRecorder(
       {error && (
         <div
           role="alert"
-          className="mx-auto mt-3 flex max-w-sm items-start gap-2 rounded-lg border border-[var(--status-error-border)] bg-[var(--status-error-bg)] px-3 py-2 text-left text-sm text-[var(--status-error)]"
+          className="recorder-error-alert mx-auto mt-3 flex max-w-sm items-start gap-2 rounded-lg border border-[var(--status-error-border)] bg-[var(--status-error-bg)] px-3 py-2 text-left text-sm text-[var(--status-error)]"
         >
           <AlertTriangle size={16} className="mt-0.5 shrink-0" />
           <p className="leading-5">
