@@ -53,7 +53,11 @@ Current verified status as of 2026-05-17:
 - The dev/staging domains are not verified yet because DNS is hosted at Cloudflare
   (`bowen.ns.cloudflare.com`, `cora.ns.cloudflare.com`) and the required records
   are not present.
-- GitHub's default branch is `development`, matching the integration branch.
+- GitHub's default branch is `development`. Follow-up required: the old
+  unprotected `dev` branch still exists at `0.1.75` and is ahead of the current
+  protected `development` branch. Do not delete or retire `dev` until PR #88 has
+  advanced `development` and a reviewer confirms there is no unique work left
+  there.
 
 Required Cloudflare records:
 
@@ -202,6 +206,8 @@ Then `pnpm dev:staging` boots the dev server pointed at staging-tier creds local
 - [ ] Stripe: create staging + dev webhook endpoints (test mode).
 - [x] GitHub: enable branch protection on `main`, `staging`, `development`.
 - [x] Update `AGENTS.md` to reference this doc and the "no direct push to main" rule.
+- [ ] Retire old `dev` branch after #88 lands on protected `development` and any
+  unique work is confirmed duplicated or intentionally superseded.
 - [ ] Open a soak PR `development` → `staging` → `main` to prove the pipeline before retiring the direct-push habit.
 - [ ] Confirm spend caps still configured (see [SPEND_CAPS.md](./SPEND_CAPS.md))
 - [ ] Confirm credentials are fresh per quarterly cadence (see [KEY_ROTATION.md](./KEY_ROTATION.md))

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-05-17T23:48:00.956Z",
+  "generatedAt": "2026-05-18T00:05:43.953Z",
   "docs": [
     {
       "id": "activity-log",
@@ -1001,7 +1001,7 @@
     {
       "id": "release",
       "localPath": "docs/RELEASE.md",
-      "contentHash": "4d1e50bb22c7223bcb19654de1ab7cbfb47a6aef9be9784f1329b783decb634b",
+      "contentHash": "12639ad266f90cf3fcd065ec4b25855ae016cd56c1311ec19425f6aaddd5aec9",
       "priority": "hot"
     },
     {

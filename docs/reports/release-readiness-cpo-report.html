@@ -289,19 +289,20 @@
           <p>
             TLDR: the release-readiness branch is in materially better shape.
             Web, brand, smoke, native configuration, Expect coverage, and CI
-            release gates have been pushed and verified. Current proof head
-            ef18882 has Tier 0-1, Tier 2, Tier 3, and Vercel green. This
-            report may have a newer docs-only commit after publication. It is not yet a
+            release gates have been pushed and verified. Current PR head
+            2dd0f6d has Tier 0-1, Tier 2, Tier 3, and Vercel green. It is not yet a
             production-safe release because review, signing secrets, Android
             release signing, self-hosted runner infrastructure, Cloudflare DNS
-            verification, and default-branch security cleanup remain open. Main
-            branch protection and the GitHub default branch were corrected.
+            verification, the unresolved recording Stop crash, and
+            default-branch security cleanup remain open. Main branch protection
+            and the GitHub default branch were corrected, but the old `dev`
+            branch still exists and is ahead of the new `development` branch.
           </p>
 
           <div class="meta" role="list" aria-label="Report metadata">
             <div role="listitem">
               <span class="label">Updated</span>
-              <span class="value">2026-05-17 19:45 EDT</span>
+              <span class="value">2026-05-17 20:04 EDT</span>
             </div>
             <div role="listitem">
               <span class="label">Branch</span>
@@ -313,7 +314,7 @@
             </div>
             <div role="listitem">
               <span class="label">QA Evidence Head</span>
-              <span class="value">ef18882 current proof head; full AI Dev Kit green</span>
+              <span class="value">2dd0f6d current PR head; full AI Dev Kit green</span>
             </div>
           </div>
         </header>
@@ -329,7 +330,8 @@
                 <li>Tier 3 Broad Browser Matrix passed remotely on the current PR head.</li>
                 <li>Vercel preview deployment completed successfully.</li>
                 <li>Main branch protection now requires the current gate names and 1 approval.</li>
-                <li>GitHub default branch now points at `development`, not stale `dev`.</li>
+                <li>GitHub default branch now points at `development`, not stale unprotected `dev`.</li>
+                <li>Branch drift found: `origin/dev` still exists at 0.1.75 and is ahead of `origin/development`; #88 will advance `development` when reviewed/merged.</li>
                 <li>Vercel branch domains are now attached: dev → development, staging → staging.</li>
                 <li>The working tree is clean and branch is pushed.</li>
               </ul>
@@ -346,7 +348,7 @@
                 <li>Extended proof labels were tested; missing self-hosted runners are now a documented infra blocker.</li>
                 <li>A reusable Codex skill was created for this report workflow at ~/.codex/skills/layers-cpo-release-report.</li>
                 <li>Main branch protection was fixed from legacy `Tests` / `Quality Gates` to the active AI Dev Kit and release gate names.</li>
-                <li>Version bumped to 0.1.132 by the repo hook.</li>
+                <li>Version bumped to 0.1.133 by the repo hook.</li>
               </ul>
             </div>
 
@@ -360,6 +362,7 @@
                 <li>Self-hosted `layers-web` and `layers-android` runners are not registered at repo scope.</li>
                 <li>Cloudflare DNS records are still missing for `dev.layers.mirrorfactory.ai` and `staging.layers.mirrorfactory.ai`.</li>
                 <li>Cloudflare CLI/API access is not present in this shell, so DNS records cannot be safely changed from here yet.</li>
+                <li>PROD-500 is still open: recording Stop can crash into render error 3452159959 and needs a fresh repro/fix before broad tester rollout.</li>
               </ul>
             </div>
           </div>
@@ -393,7 +396,7 @@
               <tr>
                 <td>Remote latest-head CI</td>
                 <td><span class="stamp pass">Passed</span></td>
-                <td>Commit ef18882 has Tier 0-1, Tier 2 Focused Browser Proof, Tier 3 Broad Browser Matrix, and Vercel green. Server/native proof was attempted and blocked by missing self-hosted runners.</td>
+                <td>Commit 2dd0f6d has Tier 0-1, Tier 2 Focused Browser Proof, Tier 3 Broad Browser Matrix, and Vercel green. Server/native proof was attempted and blocked by missing self-hosted runners.</td>
               </tr>
               <tr>
                 <td>Compliance</td>
@@ -476,6 +479,11 @@
                 <td>Full local `pnpm audit` is clean on this branch, but GitHub still reports 41 default-branch Dependabot alerts, mainly Next.js runtime advisories, until the patched dependency set reaches the default branch.</td>
               </tr>
               <tr>
+                <td>Recording Stop flow</td>
+                <td><span class="stamp blocker">Open Blocker</span></td>
+                <td>Linear PROD-500 remains Backlog/P1 for Stop → render error 3452159959. PROD-507 is duplicate-canceled into PROD-500. Treat broad external tester recording rollout as blocked until a current-branch repro/fix pass closes this.</td>
+              </tr>
+              <tr>
                 <td>Tier 3 browser matrix</td>
                 <td><span class="stamp pass">Passed</span></td>
                 <td>Enabled `tier3:run`; AI Dev Kit Gates run 26005507792 passed Tier 3 with artifacts uploaded.</td>
@@ -508,12 +516,12 @@
               <tr>
                 <td>What about default-branch Dependabot vulnerabilities?</td>
                 <td>Current branch local audit is clean, but GitHub still reports 41 open default-branch alerts: 24 high, 15 medium, 2 low. They are mostly Next.js, protobufjs, Hono, systeminformation, and OpenTelemetry advisories.</td>
-                <td>Promote the patched dependency set through development to the default branch, then verify Dependabot alert closure. Do not call production-ready until those alerts clear or are explicitly risk-accepted.</td>
+                <td>Merge #88 into `development`, promote through staging to main, then verify Dependabot alert closure. Do not call production-ready until those alerts clear or are explicitly risk-accepted.</td>
               </tr>
               <tr>
                 <td>What about the three-domain promotion path?</td>
-                <td>The documented target remains dev.layers.mirrorfactory.ai, staging.layers.mirrorfactory.ai, and layers.mirrorfactory.ai. GitHub main protection and the repo default branch are corrected. Vercel branch-domain pinning is now done on the live `audio-layer` project.</td>
-                <td>Next is Cloudflare DNS records, Vercel domain verification, staging/dev env var separation, then a development to staging to main proof PR chain.</td>
+                <td>The documented target remains dev.layers.mirrorfactory.ai, staging.layers.mirrorfactory.ai, and layers.mirrorfactory.ai. GitHub main protection and default branch are corrected, but stale `origin/dev` still needs retirement after #88 advances `development`. Vercel branch-domain pinning is now done on the live `audio-layer` project.</td>
+                <td>Next is #88 review/merge, stale `dev` retirement, Cloudflare DNS records, Vercel domain verification, staging/dev env var separation, then a development to staging to main proof PR chain.</td>
               </tr>
               <tr>
                 <td>Can infra be configured from here?</td>
@@ -626,9 +634,11 @@
             <li>PROD-365 updated for Android signed AAB gate and upload-key requirement.</li>
             <li>PROD-383 updated to keep the three-branch, three-domain release path visible.</li>
             <li>PROD-523 created for default-branch Dependabot vulnerability cleanup.</li>
-            <li>PROD-524 created for GitHub Actions Node 24 runner transition cleanup; workflows now use current action majors plus Node 24 opt-in. Current PR head 1488cf7 has Tier 0-1, Tier 2, Tier 3, and Vercel green.</li>
             <li>PROD-383 follow-up: `main` branch protection was corrected to require `Tier 0-1 Fast Gates`, `Tier 2 Focused Browser Proof`, `Web (Vercel)`, and 1 approval.</li>
             <li>PROD-383 follow-up: GitHub default branch is now `development`; Vercel branch-domain pinning is done for dev and staging.</li>
+            <li>PROD-383 follow-up: stale `origin/dev` still exists at 0.1.75 and should be retired only after #88 advances protected `development`.</li>
+            <li>PROD-500 remains open and blocks broad external tester recording rollout until current-branch repro/fix evidence exists.</li>
+            <li>PROD-524 created for GitHub Actions Node 24 runner transition cleanup; workflows now use current action majors plus Node 24 opt-in. Current PR head 2dd0f6d has Tier 0-1, Tier 2, Tier 3, and Vercel green.</li>
             <li>PROD-383 still needs Cloudflare DNS setup, Vercel domain verification, env var separation, and a promotion proof chain.</li>
           </ul>
         </section>
@@ -637,10 +647,10 @@
           <h2>Decision</h2>
           <p class="ticker">
             CPO READ: Safe to continue internal QA and reviewer handoff.
-            Not safe to call production-ready until PR review, Apple
-            notarization, Android signed AAB, self-hosted runner proof,
-            Dependabot remediation, and branch/domain promotion proof are
-            closed.
+            Not safe to call production-ready until PR review, PROD-500
+            recording Stop crash closure, Apple notarization, Android signed
+            AAB, self-hosted runner proof, Dependabot remediation, and
+            branch/domain promotion proof are closed.
           </p>
         </section>
 
