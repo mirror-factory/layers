@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.153] — 2026-05-18
+
+### Other
+- chore: register public surfaces for feature proof (`5450d2e`)
+
+
 ## [0.1.152] — 2026-05-18
 
 ### Other
