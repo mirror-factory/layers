@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.139] — 2026-05-18
+
+### Documentation
+- docs: update cpo release status (`ccdcb7d`)
+
+
 ## [0.1.138] — 2026-05-18
 
 ### Documentation

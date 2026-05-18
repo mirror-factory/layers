@@ -1,6 +1,6 @@
 {
   "name": "audio-layer",
-  "version": "0.1.138",
+  "version": "0.1.139",
   "private": true,
   "main": "electron/main.js",
   "scripts": {
