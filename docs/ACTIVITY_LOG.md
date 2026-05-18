@@ -249,3 +249,9 @@ Event types: `pr-merged`, `pr-opened`, `linear-filed`, `linear-resolved`, `linea
 - **PR / Linear:** [PR #87](https://github.com/mirror-factory/layers/pull/87) / [PROD-496](https://linear.app/mirror-factory/issue/PROD-496) (+ [PROD-497](https://linear.app/mirror-factory/issue/PROD-497), [PROD-498](https://linear.app/mirror-factory/issue/PROD-498), [PROD-499](https://linear.app/mirror-factory/issue/PROD-499))
 - **Logo swap status:** approved-in-principle but **not** applied to app code per user. `components/layers-logo.tsx` and `components/top-bar.tsx` remain unchanged. New organic semi-circle mark lives in `branding/design-kit.html` §07 + `remotion/scenes/brand-template/OrganicRing.tsx::OrganicLayersMark` only. Follow-up PR pending user's "swap it" go-ahead.
 - **Why it matters:** The brand surfaces (narrative, design kit, playground, video template, skill) are now in one shareable bundle on main. The `branding/` folder is zip-and-send-to-designer ready. The combined skill auto-triggers on any future branded-asset work.
+
+### 2026-05-17  20:53 EDT  —  Codex CLI / GPT-5  —  session-checkpoint  —  PROD-500 Stop/finalize route hardened before external tester release
+
+- **What:** Added a fail-closed guard to `/api/transcribe/stream/finalize` so a missing meeting row returns `404` instead of a false-success Stop response, replaced the finalize-route `describe.todo` with integration coverage, refreshed the CPO release-readiness report, and verified the patch locally.
+- **PR / Linear / artifact:** [PR #88](https://github.com/mirror-factory/layers/pull/88) / [PROD-500](https://linear.app/mirror-factory/issue/PROD-500) / `docs/reports/release-readiness-cpo-report.html`
+- **Why it matters:** This reduces the risk that a tester stops a recording, loses the local draft, and lands on a missing or broken meeting detail page. Browser/native Stop-flow proof is still required before calling the recording path release-ready.
