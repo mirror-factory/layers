@@ -289,8 +289,10 @@
           <p>
             TLDR: the release-readiness branch is in materially better shape.
             Web, brand, smoke, native configuration, Expect coverage, and CI
-            release gates have been pushed and verified. Current PR head
-            266ba76 has Tier 0-1, Tier 2, Tier 3, and Vercel passing. A targeted PROD-500
+            release gates have been pushed and verified. The latest full proof
+            head at report time had Tier 0-1, Tier 2, Tier 3, and Vercel
+            passing; report-only and version-bump commits may sit after that
+            head while rerunning the same checks. A targeted PROD-500
             render-crash hardening fix was pushed and locally verified. It is
             not yet a
             production-safe release because review, signing secrets, Android
@@ -316,7 +318,7 @@
             </div>
             <div role="listitem">
               <span class="label">QA Evidence Head</span>
-              <span class="value">Current head 266ba76: Tier 0-1, Tier 2, Tier 3, Vercel pass</span>
+              <span class="value">Latest full proof: Tier 0-1, Tier 2, Tier 3, Vercel pass</span>
             </div>
           </div>
         </header>
@@ -327,10 +329,10 @@
             <div class="card good">
               <h3>What Is Good</h3>
               <ul>
-                <li>Tier 0-1 Fast Gates passed remotely on current head 266ba76.</li>
-                <li>Tier 2 Focused Browser Proof passed remotely on current head 266ba76.</li>
-                <li>Tier 3 Broad Browser Matrix passed remotely on current head 266ba76.</li>
-                <li>Vercel preview deployment completed successfully on current head 266ba76.</li>
+                <li>Tier 0-1 Fast Gates passed remotely on the latest full proof run.</li>
+                <li>Tier 2 Focused Browser Proof passed remotely on the latest full proof run.</li>
+                <li>Tier 3 Broad Browser Matrix passed remotely on the latest full proof run.</li>
+                <li>Vercel preview deployment completed successfully on the latest full proof run.</li>
                 <li>Main branch protection now requires the current gate names and 1 approval.</li>
                 <li>GitHub default branch now points at `development`, not stale unprotected `dev`.</li>
                 <li>Branch drift found: `origin/dev` still exists at 0.1.75 and is ahead of `origin/development`; #88 will advance `development` when reviewed/merged.</li>
@@ -398,9 +400,9 @@
                 <td>661 fast tests, feature-proof plan, manifest drift, compliance, Expect coverage, and budget passed pre-push.</td>
               </tr>
               <tr>
-                <td>Remote latest-head CI</td>
-                <td><span class="stamp pass">Passed Current Head</span></td>
-                <td>Current head 266ba76 has Tier 0-1, Tier 2 Focused Browser Proof, Tier 3 Broad Browser Matrix, and Vercel green. Server/native proof was attempted and blocked by missing self-hosted runners.</td>
+                <td>Remote release CI</td>
+                <td><span class="stamp pass">Passed Full Proof</span></td>
+                <td>Latest full proof run has Tier 0-1, Tier 2 Focused Browser Proof, Tier 3 Broad Browser Matrix, and Vercel green. Server/native proof was attempted and blocked by missing self-hosted runners.</td>
               </tr>
               <tr>
                 <td>Compliance</td>
@@ -648,7 +650,7 @@
             <li>PROD-383 follow-up: GitHub default branch is now `development`; Vercel project context needs reconciliation before domain ownership changes.</li>
             <li>PROD-383 follow-up: stale `origin/dev` still exists at 0.1.75 and should be retired only after #88 advances protected `development`.</li>
             <li>PROD-500 has a targeted fix in 1280532/266ba76 and remains open until current-branch Stop-flow proof exists.</li>
-            <li>PROD-524 created for GitHub Actions Node 24 runner transition cleanup; workflows now use current action majors plus Node 24 opt-in. Current PR head has Tier 0-1, Tier 2, Tier 3, and Vercel green.</li>
+            <li>PROD-524 created for GitHub Actions Node 24 runner transition cleanup; workflows now use current action majors plus Node 24 opt-in. Latest full proof run has Tier 0-1, Tier 2, Tier 3, and Vercel green.</li>
             <li>PROD-383 still needs Cloudflare DNS setup, Vercel domain verification, env var separation, and a promotion proof chain.</li>
           </ul>
         </section>
