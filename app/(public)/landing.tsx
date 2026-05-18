@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Bricolage_Grotesque } from "next/font/google";
 import AudioWaveRibbon from "@/components/audio-wave-ribbon";
 import { LayersLogoMark } from "@/components/layers-logo";
 
@@ -48,21 +47,9 @@ import {
 /*
  * Layers homepage — Paper Calm v1.0
  *
- * Display face: Bricolage Grotesque (variable, optical-size aware).
- *   Picked for "settled · attentive · purposeful". Optical-size axis lets
- *   headlines breathe at large sizes. Emphasis stays in the same sans system:
- *   color, weight, and spacing carry the accent.
- *
- * Body face: Geist Sans (already loaded globally via app/layout.tsx as
- *   --font-sans), kept to maintain product-wide UI/marketing parity.
+ * Type: Geist Sans only. Marketing and product surfaces share the same family
+ * so public pages do not drift into editorial/display typography.
  */
-
-const display = Bricolage_Grotesque({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-display-marketing",
-  display: "swap",
-});
 
 // Pricing — `name: "Free" / price: "$0"`, etc. literal strings are enforced
 // by tests/pricing-consistency.test.ts. Keep them verbatim.
@@ -124,7 +111,7 @@ const BUILT_ON = [
 
 export function LandingPage() {
   return (
-    <div className={`${display.variable} layers-home`} style={{ overflowX: "hidden" }}>
+    <div className="layers-home" style={{ overflowX: "hidden" }}>
       <Hero />
       {/* "Built on" trust bar removed 2026-05-01: in invite-only
           alpha we don't have customer logos to show, and the vendor
@@ -144,14 +131,14 @@ export function LandingPage() {
         }
 
         .layers-home :global(.home-display) {
-          font-family: var(--font-display-marketing), var(--font-brand-sans);
+          font-family: var(--font-brand-sans);
           letter-spacing: -0.022em;
-          font-weight: 500;
+          font-weight: 620;
           font-feature-settings: "ss01", "ss02";
         }
 
         .layers-home :global(.home-emphasis) {
-          font-family: var(--font-display-marketing), var(--font-brand-sans);
+          font-family: var(--font-brand-sans);
           font-weight: 650;
           color: var(--brand-accent-subtle, var(--layers-mint));
           letter-spacing: -0.018em;
@@ -317,8 +304,8 @@ function Hero() {
                 fontSize: "0.78em",
                 display: "inline-block",
                 marginTop: 6,
-                fontStyle: "italic",
-                fontWeight: 500,
+                fontStyle: "normal",
+                fontWeight: 650,
                 color: "var(--layers-mint)",
                 letterSpacing: "-0.012em",
               }}
@@ -1515,7 +1502,7 @@ function ReuseMediaCard() {
                 display: "inline-flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontFamily: "var(--font-display-marketing), var(--font-brand-sans)",
+                fontFamily: "var(--font-brand-sans)",
               }}
             >
               {o.icon}

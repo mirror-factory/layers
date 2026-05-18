@@ -2,11 +2,10 @@
 
 import { useEffect } from "react";
 import { Capacitor } from "@capacitor/core";
+import { NATIVE_OAUTH_REDIRECT_URL } from "@/lib/auth/native-oauth";
 import { getSupabaseBrowser } from "@/lib/supabase/browser";
 
-const NATIVE_AUTH_SCHEME = "com.mirrorfactory.layers:";
-const NATIVE_AUTH_HOST = "auth";
-const NATIVE_AUTH_PATH = "/callback";
+const NATIVE_AUTH_CALLBACK = new URL(NATIVE_OAUTH_REDIRECT_URL);
 const DEFAULT_POST_LOGIN_PATH = "/record";
 
 function safeInternalPath(value: string | null): string {
@@ -24,9 +23,9 @@ async function handleNativeAuthUrl(url: string) {
   }
 
   if (
-    parsed.protocol !== NATIVE_AUTH_SCHEME ||
-    parsed.hostname !== NATIVE_AUTH_HOST ||
-    parsed.pathname !== NATIVE_AUTH_PATH
+    parsed.protocol !== NATIVE_AUTH_CALLBACK.protocol ||
+    parsed.hostname !== NATIVE_AUTH_CALLBACK.hostname ||
+    parsed.pathname !== NATIVE_AUTH_CALLBACK.pathname
   ) {
     return;
   }

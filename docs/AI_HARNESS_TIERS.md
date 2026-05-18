@@ -224,7 +224,7 @@ RELEASE_ARTIFACTS_REQUIRED=1 pnpm build:release
 ```
 
 The current native OAuth callback scheme is
-`com.mirrorfactory.layers://auth/callback`. Native Google sign-in uses the
+`com.mirafactory.layers://auth/callback`. Native Google sign-in uses the
 Capacitor Browser plugin plus the `appUrlOpen` bridge; it must not rely on a
 Google login page inside the embedded WebView.
 

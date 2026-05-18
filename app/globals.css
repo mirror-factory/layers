@@ -1521,7 +1521,9 @@ body {
   overflow: hidden;
   border: 1px solid var(--border-card) !important;
   border-radius: var(--radius-lg);
-  background: color-mix(in oklch, var(--surface-panel) 94%, var(--bg-primary) 6%) !important;
+  background: var(--bg-surface, var(--bg-primary)) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
   box-shadow:
     0 22px 58px color-mix(in oklch, var(--text-primary) 16%, transparent),
     inset 0 1px 0 color-mix(in oklch, white 44%, transparent);
@@ -1533,6 +1535,10 @@ body {
   transition:
     opacity var(--duration-fast) var(--ease-out),
     transform var(--duration-fast) var(--ease-out);
+}
+
+.dark .paper-calm-page .slide-menu-panel {
+  background: var(--bg-primary) !important;
 }
 
 .paper-calm-page .slide-menu-panel.translate-x-full,

@@ -149,7 +149,7 @@ describe("signInWithGoogleNative", () => {
     });
   });
 
-  it("fails fast if the native browser never opens", async () => {
+  it("does not block the caller if the native browser open promise stays pending", async () => {
     vi.useFakeTimers();
     mocks.isNativePlatform.mockReturnValue(true);
     const supabase = makeSupabase();
@@ -165,16 +165,33 @@ describe("signInWithGoogleNative", () => {
       },
     );
 
-    const expectation = expect(signIn).rejects.toThrow(
-      /Google sign-in did not open/,
-    );
-
-    await vi.advanceTimersByTimeAsync(8_000);
-    await expectation;
+    await vi.advanceTimersByTimeAsync(750);
+    await expect(signIn).resolves.toMatchObject({ disposed: false });
     expect(fakes.App.addListener).toHaveBeenCalledWith(
       "appUrlOpen",
       expect.any(Function),
     );
+  });
+
+  it("surfaces immediate native browser open failures", async () => {
+    vi.useFakeTimers();
+    mocks.isNativePlatform.mockReturnValue(true);
+    const supabase = makeSupabase();
+    const fakes = makeFakes();
+    fakes.browserOpen.mockRejectedValue(new Error("browser unavailable"));
+
+    const signIn = signInWithGoogleNative(
+      { next: "/record" },
+      {
+        supabase: asClient(supabase),
+        loadApp: async () => fakes.App,
+        loadBrowser: async () => fakes.Browser,
+      },
+    );
+    const expectation = expect(signIn).rejects.toThrow(/browser unavailable/);
+
+    await vi.advanceTimersByTimeAsync(750);
+    await expectation;
   });
 
   it("exchanges the deep-link code and navigates to next on success", async () => {

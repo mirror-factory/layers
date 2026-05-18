@@ -359,8 +359,8 @@ function Hero() {
           Pay for the meeting memory{" "}
           <em
             style={{
-              fontStyle: "italic",
-              fontWeight: 500,
+              fontStyle: "normal",
+              fontWeight: 650,
               color: "var(--layers-mint)",
             }}
           >
@@ -964,8 +964,8 @@ function FinalCta() {
             Start with twenty-five free meetings.{" "}
             <em
               style={{
-                fontStyle: "italic",
-                fontWeight: 500,
+                fontStyle: "normal",
+                fontWeight: 650,
                 color: "var(--brand-accent-muted)",
               }}
             >

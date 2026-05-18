@@ -234,8 +234,8 @@ export default function McpDocsPage() {
           Connect Layers to{" "}
           <em
             style={{
-              fontStyle: "italic",
-              fontWeight: 500,
+              fontStyle: "normal",
+              fontWeight: 650,
               color: "var(--layers-mint)",
             }}
           >

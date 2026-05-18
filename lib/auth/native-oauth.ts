@@ -102,7 +102,7 @@ type SignInDeps = {
   navigate?: (url: string) => void;
 };
 
-const BROWSER_OPEN_TIMEOUT_MS = 8_000;
+const BROWSER_OPEN_SETTLE_MS = 750;
 
 /**
  * Native-platform Google sign-in. Returns the registered listener
@@ -213,11 +213,16 @@ export async function signInWithGoogleNative(
   const registration = await App.addListener("appUrlOpen", handleUrl);
   handleRef.current = registration;
 
-  // 3. Open Google's consent screen as an in-app overlay.
-  await withTimeout(
+  // 3. Open Google's consent screen as an in-app overlay. Capacitor Browser
+  // implementations differ on whether the Promise resolves as soon as the
+  // controller opens or when it closes. Do not keep the sign-in button pinned
+  // in a loading state while the native browser owns the flow.
+  await beginBrowserOpen(
     Browser.open({ url: data.url, presentationStyle: "fullscreen" }),
-    BROWSER_OPEN_TIMEOUT_MS,
-    "Google sign-in did not open. Please try again.",
+    async () => {
+      await dispose();
+      navigate("/sign-in?error=native_browser_open_failed");
+    },
   );
 
   return {
@@ -227,21 +232,31 @@ export async function signInWithGoogleNative(
   };
 }
 
-async function withTimeout<T>(
-  promise: Promise<T>,
-  timeoutMs: number,
-  message: string,
-): Promise<T> {
-  let timeoutId: ReturnType<typeof setTimeout> | undefined;
+async function beginBrowserOpen(
+  promise: Promise<unknown>,
+  onLateFailure: () => Promise<void>,
+): Promise<void> {
+  let settled = false;
+  let immediateError: unknown;
 
-  try {
-    return await Promise.race([
-      promise,
-      new Promise<never>((_, reject) => {
-        timeoutId = setTimeout(() => reject(new Error(message)), timeoutMs);
-      }),
-    ]);
-  } finally {
-    if (timeoutId) clearTimeout(timeoutId);
+  promise
+    .then(() => {
+      settled = true;
+    })
+    .catch((error) => {
+      settled = true;
+      immediateError = error;
+    });
+
+  await new Promise((resolve) => setTimeout(resolve, BROWSER_OPEN_SETTLE_MS));
+
+  if (immediateError) {
+    throw immediateError;
+  }
+
+  if (!settled) {
+    promise.catch(() => {
+      void onLateFailure();
+    });
   }
 }

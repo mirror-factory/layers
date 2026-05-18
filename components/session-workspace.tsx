@@ -48,7 +48,7 @@ export interface SessionActionRow {
 }
 
 interface SessionCaptureCardProps {
-  date: Date;
+  date: string | Date;
   durationLabel: string;
   statusLabel: string;
   badgeLabel: string;
@@ -162,17 +162,18 @@ export function SessionCaptureCard({
   waveSlot,
   controlSlot,
 }: SessionCaptureCardProps) {
+  const sessionDate = typeof date === "string" ? new Date(date) : date;
   const fullDate = new Intl.DateTimeFormat(undefined, {
     weekday: "long",
     month: "long",
     day: "numeric",
-  }).format(date);
+  }).format(sessionDate);
   const tileMonth = new Intl.DateTimeFormat(undefined, {
     weekday: "short",
-  }).format(date);
+  }).format(sessionDate);
   const tileDay = new Intl.DateTimeFormat(undefined, {
     day: "2-digit",
-  }).format(date);
+  }).format(sessionDate);
 
   return (
     <section className="session-capture-card" aria-label="Recording session">
@@ -197,7 +198,7 @@ export function SessionCaptureCard({
       </div>
 
       <div className="session-capture-context">
-        <time className="session-date-tile" dateTime={date.toISOString()}>
+        <time className="session-date-tile" dateTime={sessionDate.toISOString()}>
           <span>{tileMonth}</span>
           <strong>{tileDay}</strong>
         </time>

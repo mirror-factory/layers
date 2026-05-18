@@ -124,7 +124,6 @@ interface CompletedSummaryViewModel {
 }
 
 function CompletedMeetingWorkspace({ meeting }: { meeting: CompletedMeeting }) {
-  const meetingDate = new Date(meeting.createdAt);
   const summary = normalizeCompletedSummary(meeting.summary);
   const summaryText =
     summary.summary ??
@@ -149,7 +148,7 @@ function CompletedMeetingWorkspace({ meeting }: { meeting: CompletedMeeting }) {
     <>
       <div className="session-detail-workspace">
         <SessionCaptureCard
-          date={meetingDate}
+          date={meeting.createdAt}
           durationLabel={formatMeetingDuration(meeting.durationSeconds)}
           statusLabel="Summary ready"
           badgeLabel="DONE"

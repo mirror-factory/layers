@@ -1,17 +1,17 @@
 {
   "version": 1,
-  "generatedAt": "2026-05-18T02:03:43.925Z",
+  "generatedAt": "2026-05-18T04:47:09.366Z",
   "docs": [
     {
       "id": "activity-log",
       "localPath": "docs/ACTIVITY_LOG.md",
-      "contentHash": "bb4f3b462a87e4b2a02548a2e39574b120991f4d869c6ccab45e827ebf50f028",
+      "contentHash": "1c1cecc80c75dce67e0abdf9268b122b1828400118fcfe77913ea26102df92f2",
       "priority": "cold"
     },
     {
       "id": "ai-harness-tiers",
       "localPath": "docs/AI_HARNESS_TIERS.md",
-      "contentHash": "c88f0503f4fda22d96adcc24fbc9be4c8fa0bc48423496837ddbeac1ce33f983",
+      "contentHash": "01f4947a6193e4d72bb11d7aba1e3977587fedc33860410b5e84be216dc51a2b",
       "priority": "cold"
     },
     {
@@ -525,6 +525,48 @@
       "priority": "cold"
     },
     {
+      "id": "evidence-2026-05-18-claude-cross-platform-qa-android-android-qa-report",
+      "localPath": "docs/evidence/2026-05-18-claude-cross-platform-qa/android/ANDROID_QA_REPORT.md",
+      "contentHash": "ce244294e39615317565d25818662868ff9c30e8a3723458bf661df99697f30f",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-claude-cross-platform-qa-ios-retest-ios-retest-report",
+      "localPath": "docs/evidence/2026-05-18-claude-cross-platform-qa/ios-retest/IOS_RETEST_REPORT.md",
+      "contentHash": "37819a16b59aa865ec7471dd644c280bb5591b67c82cfb89801d94f5dabd6221",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-claude-cross-platform-qa-ios-ios-qa-report",
+      "localPath": "docs/evidence/2026-05-18-claude-cross-platform-qa/ios/IOS_QA_REPORT.md",
+      "contentHash": "f130ecb63e48171b5b2da8b0f61b6d3fe7b0c3d3098f0ca5263f45f4d6ab429a",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-claude-cross-platform-qa-macos-macos-qa-report",
+      "localPath": "docs/evidence/2026-05-18-claude-cross-platform-qa/macos/MACOS_QA_REPORT.md",
+      "contentHash": "9e48e28e51030a883a7f8e1809343608aad7d040785d9faffccda305e4f0e5e8",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-claude-cross-platform-qa-web-web-qa-report",
+      "localPath": "docs/evidence/2026-05-18-claude-cross-platform-qa/web/WEB_QA_REPORT.md",
+      "contentHash": "be363effb1518122a52bfb1035c2730b161336bb22de93d42569498ac287a396",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-claude-main-features-qa-ios-ios-focused-auth-report",
+      "localPath": "docs/evidence/2026-05-18-claude-main-features-qa/ios/IOS_FOCUSED_AUTH_REPORT.md",
+      "contentHash": "f64ed10178f50c021593f9143a20af92c1e28ed4d272f72d4ab6696f68af023d",
+      "priority": "cold"
+    },
+    {
+      "id": "evidence-2026-05-18-claude-main-features-qa-web-web-main-features-report",
+      "localPath": "docs/evidence/2026-05-18-claude-main-features-qa/web/WEB_MAIN_FEATURES_REPORT.md",
+      "contentHash": "1893120664c3d004d5cea2a0f1fd03387048438cf5d132e22760cd0b598f3c11",
+      "priority": "cold"
+    },
+    {
       "id": "feature-test-marketing-matrix",
       "localPath": "docs/FEATURE_TEST_MARKETING_MATRIX.md",
       "contentHash": "f30bbbcc8e9000770a7178984e761586c165d3ef07ada09db222e5490bf9212e",
@@ -965,7 +1007,7 @@
     {
       "id": "production-quality-system",
       "localPath": "docs/PRODUCTION_QUALITY_SYSTEM.md",
-      "contentHash": "fcee48c4e9d464866f68d71beee6eb371431079c53e4ee62f682b658638101fd",
+      "contentHash": "41ae71755e7146545c3b3d97efe42984471fa12f79764b00b0ca8f131b254cae",
       "priority": "cold"
     },
     {
@@ -1001,7 +1043,7 @@
     {
       "id": "release",
       "localPath": "docs/RELEASE.md",
-      "contentHash": "498c504e9002aab60f34471a2f74e55f12aa8de269c98d2ed44be6a86e970fd7",
+      "contentHash": "34e8c848b928413fe802b5ca81db1f29f9d81a6dce5f34982d604b9b436c0779",
       "priority": "hot"
     },
     {

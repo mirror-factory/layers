@@ -287,23 +287,21 @@
         <header>
           <h1>CPO Release Readiness Report</h1>
           <p>
-            TLDR: the release-readiness branch is materially stronger, but it
-            is not production-safe yet. PR #88 is open against development.
-            Latest fully green hosted proof head 5eb6200 has Tier 0-1 Fast
-            Gates, Tier 2 Focused Browser Proof, Tier 3 Broad Browser Matrix,
-            Vercel, and Vercel Preview Comments passing. The Stop-flow
-            QA patch is now pushed and green in hosted CI: it adds a deterministic
-            non-production fake recording harness, proves Start recording
-            through Stop/finalize/meeting-detail render, proves the local-draft
-            failure path, and fixes release-risk bugs found during that proof.
-            The latest code-proof head is 9918ebc; the final report/version
-            head 5eb6200 is also green in hosted web CI.
+            TLDR: the branch is stronger than the last pushed head, but it is
+            not external-tester safe yet. I removed active serif/display font
+            usage, rendered the Remotion video with the sans-only stack, fixed
+            the meeting-detail crash path found by web/macOS QA, fixed the
+            Android account-menu visual bleed, and patched native OAuth wiring.
+            The iOS simulator still found the key blocker: production Google
+            sign-in did not complete in-app and email sign-in exposed a focus
+            bug, so native auth needs one more proof pass after deployment to a
+            production-like env.
           </p>
 
           <div class="meta" role="list" aria-label="Report metadata">
             <div role="listitem">
               <span class="label">Updated</span>
-              <span class="value">2026-05-17 22:01 EDT</span>
+              <span class="value">2026-05-18 00:50 EDT</span>
             </div>
             <div role="listitem">
               <span class="label">Branch</span>
@@ -311,11 +309,11 @@
             </div>
             <div role="listitem">
               <span class="label">PR</span>
-              <span class="value">#88 to development</span>
+              <span class="value">#88 to development; review required</span>
             </div>
             <div role="listitem">
-              <span class="label">Latest Green Proof Head</span>
-              <span class="value">5eb6200: Tier 0-1, Tier 2, Tier 3, Vercel pass</span>
+              <span class="label">Current Local State</span>
+              <span class="value">Local gates passed; dirty with intentional QA fixes</span>
             </div>
           </div>
         </header>
@@ -326,115 +324,85 @@
             <div class="card good">
               <h3>What Is Good</h3>
               <ul>
-                <li>Tier 0-1 Fast Gates passed remotely on the latest full proof run.</li>
-                <li>Tier 2 Focused Browser Proof passed remotely on latest fully green proof head 5eb6200.</li>
-                <li>Tier 3 Broad Browser Matrix passed remotely on latest fully green proof head 5eb6200.</li>
-                <li>Vercel preview deployment completed successfully on latest fully green proof head 5eb6200.</li>
-                <li>PROD-500 Stop/finalize fix passed targeted Vitest, typecheck, compliance, fast tests, pre-push Tier 1, and hosted proof.</li>
-                <li>New Stop-flow browser proof now passes locally across the full six-project matrix: mobile, tablet, desktop, light, and dark.</li>
-                <li>Main branch protection now requires the current gate names and 1 approval.</li>
-                <li>GitHub default branch now points at `development`, not stale unprotected `dev`.</li>
-                <li>Branch drift found: `origin/dev` still exists at 0.1.75 and is ahead of `origin/development`; #88 will advance `development` when reviewed/merged.</li>
-                <li>Current branch `pnpm audit --audit-level high` reports no known vulnerabilities.</li>
-                <li>The Stop-flow proof patch is pushed and green at 9918ebc, and the final report/version head 5eb6200 is green.</li>
-                <li>Native config, iOS simulator Debug build, and Android debug APK build pass locally.</li>
-                <li>Local Vercel CLI is now relinked to the real `audio-layer` Next.js project used by CI.</li>
+                <li>Remote PR head 1dda53c has Tier 0-1 Fast Gates, Tier 2 Focused Browser Proof, Vercel, and Vercel Preview Comments green.</li>
+                <li>Local Playwright smoke passed light and dark coverage: 58 light checks and 34 dark checks.</li>
+                <li>Expect route coverage passed for all 22 registered routes. The AI TUI run timed out, then deterministic fallback proof passed basic homepage, console, and network checks.</li>
+                <li>No active serif/display/handwritten font usage remains in app, public pages, legal shell, or Remotion source. Remaining scan hits are sans-serif stacks and no-serif documentation.</li>
+                <li>Remotion rendered successfully after the font cleanup: out/layers-explainer.mp4, 7.2 MB, sha256 2b4cd85b0de601c4386b80f5a124b2d9ca1673776e98df4de385c8d5809ea2f3.</li>
+                <li>Native config checks and iOS simulator debug build passed locally. Generated Capacitor configs were restored to the production server URL after the localhost iOS test.</li>
+                <li>Final slim local gate passed after the report update: typecheck, lint, native OAuth tests, fast tests, compliance, deprecations, native config, Expect coverage, and Next production build.</li>
               </ul>
             </div>
 
             <div class="card">
               <h3>What Changed</h3>
               <ul>
-                <li>Mobile legal navigation was fixed for anonymous users.</li>
-                <li>Native Google OAuth now opens fullscreen and exits loading state correctly.</li>
-                <li>macOS release CI now blocks signed-but-unnotarized apps.</li>
-                <li>Android CI can build a signed AAB when upload-key secrets exist.</li>
-                <li>Direct native debug builds were re-run: iOS simulator build succeeded and Android `:app:assembleDebug` succeeded with explicit JDK/SDK paths.</li>
-                <li>GitHub Actions workflows were upgraded to current Node 24-compatible action majors.</li>
-                <li>Extended proof labels were tested; missing self-hosted runners are now a documented infra blocker.</li>
-                <li>A reusable Codex skill was created for this report workflow at ~/.codex/skills/layers-cpo-release-report.</li>
-                <li>Main branch protection was fixed from legacy `Tests` / `Quality Gates` to the active AI Dev Kit and release gate names.</li>
-                <li>PROD-500 received a scoped hardening fix for invalid/natural-language action due dates on meeting detail render.</li>
-                <li>PROD-500 now has a server-side Stop/finalize contract fix and integration tests for happy path, malformed payload, natural-language due dates, and missing meeting rows.</li>
-                <li>PROD-500 now has a focused Playwright proof for successful Stop/finalize and visible finalize-failure draft retention.</li>
-                <li>Browser proof exposed and fixed a completed-meeting server/client boundary crash, hidden managed-recorder errors, and isolated in-memory store state during E2E.</li>
-                <li>The repo hook continues to version-bump report commits, so every report-only push needs a quick CI recheck before merge.</li>
+                <li>Public homepage, pricing, docs, changelog, legal shell, and Remotion now use the brand sans stack instead of Bricolage, Caveat, cursive, or italic display styling.</li>
+                <li>The completed meeting detail crash was hardened by keeping server-to-client props serializable and by making the cost panel tolerate non-renderable cost values.</li>
+                <li>Android mobile account menu now uses an opaque surface instead of a translucent panel that bled background text through the menu.</li>
+                <li>Native OAuth app ID and redirect wiring were corrected from the stale mirrorfactory identifier to com.mirafactory.layers.</li>
+                <li>Native Google OAuth no longer pins the sign-in button in a loading state while Capacitor Browser owns the flow; late browser-open failures now surface as an auth error.</li>
+                <li>iOS evidence was cleaned so screenshots do not retain visible test credentials.</li>
               </ul>
             </div>
 
             <div class="card blocked">
               <h3>What Blocks Release</h3>
               <ul>
-                <li>GitHub required review is still missing.</li>
-                <li>Any later docs/version-only report commit must still be checked on its own hosted CI head before merge.</li>
-                <li>Apple notarization secrets must be installed and proven in CI.</li>
-                <li>Android upload-key secrets must be installed and a signed AAB verified.</li>
-                <li>GitHub reports 41 default-branch Dependabot alerts: 24 high, 15 medium, 2 low.</li>
-                <li>Self-hosted `layers-web` and `layers-android` runners are not registered at repo scope.</li>
-                <li>Vercel has `dev.layers.mirrorfactory.ai` pinned to `development` and `staging.layers.mirrorfactory.ai` pinned to `staging`, but both domains are unverified until Cloudflare DNS records are added.</li>
-                <li>Cloudflare tunnel access exists, but DNS-management access is not available from this shell: no `wrangler` CLI and no Cloudflare API env vars are present.</li>
-                <li>PROD-500 browser Stop-flow proof is locally and hosted green; native follow-up is still pending.</li>
+                <li>iOS Google auth is not proven. Production simulator testing stayed on the Google button/loading state instead of completing the in-app OAuth path.</li>
+                <li>iOS email/password auth is not proven. Maestro exposed a keyboard/focus bug where password entry was appended into the email field.</li>
+                <li>The current local fixes are not committed, pushed, or hosted in CI yet, so remote green status still belongs to the previous PR head.</li>
+                <li>GitHub required review is still missing on PR #88.</li>
+                <li>Apple notarization/TestFlight secrets and Android upload-key secrets are still needed for public native distribution artifacts.</li>
+                <li>Default-branch Dependabot alerts remain until the fixed dependency branch lands through development, staging, and main.</li>
+                <li>Vercel dev/staging branch domains still need Cloudflare DNS verification before the three-domain promotion path is complete.</li>
               </ul>
             </div>
           </div>
         </section>
 
         <section>
-          <h2>AI Starter Kit Usage</h2>
-          <p>
-            Yes. The session used the AI Starter Kit gates and evidence model as
-            the backbone of QA, not just ad hoc commands.
-          </p>
+          <h2>AI Starter Kit + Claude</h2>
           <table class="scoreboard">
             <thead>
               <tr>
-                <th>Kit Surface</th>
+                <th>Surface</th>
                 <th>Status</th>
                 <th>Evidence</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Tier 0 local gate</td>
+                <td>AI Starter Kit registries</td>
+                <td><span class="stamp pass">Used</span></td>
+                <td>Feature and evidence registries remain the source of truth for route/test coverage. docs/manifest.json was regenerated after docs/report changes.</td>
+              </tr>
+              <tr>
+                <td>Claude workers</td>
+                <td><span class="stamp waiting">Used, then bounded</span></td>
+                <td>Claude produced web/platform evidence. The focused iOS Claude worker stalled without a final report, so Codex stopped it and completed the simulator proof directly.</td>
+              </tr>
+              <tr>
+                <td>Expect</td>
+                <td><span class="stamp waiting">Partial proof</span></td>
+                <td>Expect coverage passed all 22 routes. The AI TUI execution timed out, then deterministic fallback produced .evidence/expect-proof.json with pass=true.</td>
+              </tr>
+              <tr>
+                <td>Remote CI</td>
+                <td><span class="stamp waiting">Previous head green</span></td>
+                <td>PR #88 remote head 1dda53c is green for Tier 0-1, Tier 2, Vercel, and Vercel Preview Comments. New local fixes still need commit and hosted CI.</td>
+              </tr>
+              <tr>
+                <td>Local slim gate</td>
                 <td><span class="stamp pass">Passed</span></td>
-                <td>Project profile, typecheck, registry strings, and deprecations passed during commit hook.</td>
-              </tr>
-              <tr>
-                <td>Tier 1 fast gate</td>
-                <td><span class="stamp pass">Passed</span></td>
-                <td>Latest local and pre-push `pnpm test:fast` after the Stop/finalize fix passed 114 files and 664 tests. Pre-push also passed feature-proof plan, manifest drift, compliance, Expect coverage, and budget.</td>
-              </tr>
-              <tr>
-                <td>Remote release CI</td>
-                <td><span class="stamp pass">Green On Pushed Head</span></td>
-                <td>Latest fully green proof head 5eb6200 has Tier 0-1, Tier 2, Tier 3, Vercel, and Vercel Preview Comments green. Server/native proof is skipped because repo-level self-hosted runners are missing. Any later report-only head must be checked after push.</td>
-              </tr>
-              <tr>
-                <td>Compliance</td>
-                <td><span class="stamp pass">Passed</span></td>
-                <td>12 passed, 0 warnings, 0 errors after the current Stop/finalize edits.</td>
-              </tr>
-              <tr>
-                <td>Expect coverage</td>
-                <td><span class="stamp pass">Passed</span></td>
-                <td>All 22 routes have Expect specs.</td>
-              </tr>
-              <tr>
-                <td>Proof artifacts</td>
-                <td><span class="stamp pass">Recorded</span></td>
-                <td>Evidence written under .evidence/ locally and uploaded by CI for remote proof jobs.</td>
-              </tr>
-              <tr>
-                <td>AI Dev Kit Doctor</td>
-                <td><span class="stamp waiting">Drift Found</span></td>
-                <td>Full doctor reports 42 pass, 36 warnings, 5 non-blocking failures. The failures are local env/auth and catalog drift signals, not failing release tests.</td>
+                <td>typecheck passed; lint passed with 0 errors and 102 existing warnings; native OAuth tests passed 10/10; test:fast passed 115 files and 668 tests; compliance passed 12/12; deprecations passed; native config passed 13/13; Next build passed.</td>
               </tr>
             </tbody>
           </table>
         </section>
 
         <section>
-          <h2>QA Coverage Completed</h2>
+          <h2>QA Coverage</h2>
           <table class="scoreboard">
             <thead>
               <tr>
@@ -445,64 +413,49 @@
             </thead>
             <tbody>
               <tr>
-                <td>Brand/homepage</td>
+                <td>Web smoke</td>
                 <td><span class="stamp pass">Passed</span></td>
-                <td>Claude-backed Expect pass covered homepage brand fit, dark mode, responsive sizes, pricing, download, sign-in, legal, docs, and changelog.</td>
+                <td>Desktop/mobile light smoke, recording stop flow, and mobile polish passed: 58 checks.</td>
               </tr>
               <tr>
-                <td>Light/dark modes</td>
+                <td>Dark mode smoke</td>
                 <td><span class="stamp pass">Passed</span></td>
-                <td>Desktop and mobile smoke paths passed for light and dark coverage.</td>
+                <td>Desktop/mobile dark smoke passed: 34 checks.</td>
               </tr>
               <tr>
-                <td>Responsive sizes</td>
-                <td><span class="stamp pass">Passed</span></td>
-                <td>Mobile 375x812, tablet 768x1024, and desktop smoke coverage completed.</td>
+                <td>Main feature QA</td>
+                <td><span class="stamp waiting">Bugs found and patched</span></td>
+                <td>Web/macOS evidence found completed meeting detail crashes. The Date serialization and cost breakdown hardening patch is local and still needs final rerun/CI.</td>
               </tr>
               <tr>
-                <td>No serif usage</td>
-                <td><span class="stamp pass">Passed</span></td>
-                <td>Scan found only sans/mono usage and one no-serif comment in Remotion.</td>
+                <td>Brand and no-serif</td>
+                <td><span class="stamp pass">Patched</span></td>
+                <td>Public pages, legal pages, and Remotion no longer use Bricolage, Caveat, cursive, serif, or italic display styling as active brand UI.</td>
               </tr>
               <tr>
                 <td>Remotion video</td>
                 <td><span class="stamp pass">Rendered</span></td>
-                <td>Rendered out/layers-explainer.mp4, 7.2 MB, sha256 fe9f4b9e21c188ca402391bf408dc5fab2e541dbe7e40db130d1ccda63c533a4.</td>
+                <td>Rendered out/layers-explainer.mp4 with sha256 2b4cd85b0de601c4386b80f5a124b2d9ca1673776e98df4de385c8d5809ea2f3.</td>
               </tr>
               <tr>
                 <td>iOS simulator</td>
-                <td><span class="stamp pass">Built</span></td>
-                <td>`plutil` checks passed, `xcodebuild -project ios/App/App.xcodeproj -list` passed, and `xcodebuild -scheme App -configuration Debug -sdk iphonesimulator` succeeded locally.</td>
+                <td><span class="stamp blocker">Auth blocked</span></td>
+                <td>Debug build installed and launched. Production Google auth stayed loading; local-current patch removes the indefinite spinner but localhost lacks public Supabase browser env, so full OAuth return remains unproven.</td>
               </tr>
               <tr>
-                <td>Android debug APK</td>
-                <td><span class="stamp pass">Built</span></td>
-                <td>`xmllint` passed and `JAVA_HOME=/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home ANDROID_HOME=/opt/homebrew/share/android-commandlinetools ./gradlew :app:assembleDebug` succeeded locally.</td>
+                <td>Android simulator</td>
+                <td><span class="stamp waiting">Partial proof</span></td>
+                <td>Signed-in Android shell reached. Account menu visual bleed was found and patched; rerun after final gate is still needed for release evidence.</td>
               </tr>
               <tr>
                 <td>Electron/macOS</td>
-                <td><span class="stamp waiting">Partially proven</span></td>
-                <td>Local app packaged and codesigned, but Gatekeeper rejects it as unnotarized until Apple CI secrets are configured.</td>
+                <td><span class="stamp waiting">Partial proof</span></td>
+                <td>Electron/macOS evidence found the same meeting-detail crash. Patch is local; distribution still needs Apple notarization for external testers.</td>
               </tr>
               <tr>
                 <td>Security</td>
                 <td><span class="stamp waiting">Mixed</span></td>
-                <td>Full local `pnpm audit` is clean on this branch, but GitHub still reports 41 default-branch Dependabot alerts, mainly Next.js runtime advisories, until the patched dependency set reaches the default branch.</td>
-              </tr>
-              <tr>
-                <td>Recording Stop flow</td>
-                <td><span class="stamp waiting">Local Proof Green; Hosted Pending</span></td>
-                <td>Focused Playwright proof now covers Start recording through Stop/finalize, completed meeting detail render, transcript persistence, local draft cleanup, visible finalize failure, and draft retention. It passed all six local projects: mobile-light, mobile-dark, tablet-light, tablet-dark, desktop-light, and desktop-dark. The pushed code head 9918ebc and final report/version head 5eb6200 both passed hosted Tier 2 and Tier 3 proof. Treat broad external tester recording rollout as blocked until native follow-up is complete.</td>
-              </tr>
-              <tr>
-                <td>Tier 3 browser matrix</td>
-                <td><span class="stamp pass">Passed</span></td>
-                <td>Enabled `tier3:run`; AI Dev Kit Gates run 26008091341 passed Tier 3 with artifacts uploaded.</td>
-              </tr>
-              <tr>
-                <td>Self-hosted web/native CI</td>
-                <td><span class="stamp waiting">Blocked</span></td>
-                <td>Labels were created and applied, but Server Proof could not run because no repo-level self-hosted runners are registered for the required `layers-web` and `layers-android` labels.</td>
+                <td>Branch audit had no high-level local blockers previously, but GitHub default-branch Dependabot alerts remain until the branch is promoted.</td>
               </tr>
             </tbody>
           </table>
@@ -520,155 +473,86 @@
             </thead>
             <tbody>
               <tr>
-                <td>Are Apple and Android blockers store/TestFlight blockers?</td>
-                <td>Yes. Apple blocks notarized macOS distribution and iOS TestFlight upload. Android blocks a Play-ready signed AAB for internal testing. They do not block web QA or local debug smoke.</td>
-                <td>Alfonso needs to provide App Store Connect API key material and Android upload-key secrets before CI can prove public native distribution.</td>
+                <td>Are Apple and Android items for stores/TestFlight?</td>
+                <td>Yes. Apple signing/notarization/TestFlight blockers are for distributable macOS/iOS artifacts. Android upload-key blockers are for Play internal testing or production release artifacts. They do not block local simulator/debug QA.</td>
+                <td>Provide App Store Connect API key material, Developer ID/notarization credentials, and Android upload-key secrets before store-grade CI can be proven.</td>
               </tr>
               <tr>
-                <td>What about default-branch Dependabot vulnerabilities?</td>
-                <td>Current branch local audit is clean, but GitHub still reports 41 open default-branch alerts: 24 high, 15 medium, 2 low. They are mostly Next.js, protobufjs, Hono, systeminformation, and OpenTelemetry advisories.</td>
-                <td>Merge #88 into `development`, promote through staging to main, then verify Dependabot alert closure. Do not call production-ready until those alerts clear or are explicitly risk-accepted.</td>
+                <td>What do we do about Dependabot?</td>
+                <td>Treat it as a promotion blocker, not a local simulator blocker. The default branch alerts should close only after the dependency updates land through development, staging, and main.</td>
+                <td>After this branch is finalized, merge through the branch ladder, then rerun GitHub Dependabot alert checks on the default branch.</td>
               </tr>
               <tr>
-                <td>What about the three-domain promotion path?</td>
-                <td>The documented target remains dev.layers.mirrorfactory.ai, staging.layers.mirrorfactory.ai, and layers.mirrorfactory.ai. GitHub main/staging/development protections are configured, but stale `origin/dev` still needs retirement after #88 advances `development`. Vercel project ownership is now clear: `audio-layer` under `mirror-factorys-projects-836be98a` is the real Next.js CI project, and local `.vercel/project.json` was relinked to it.</td>
-                <td>Next is #88 review/merge, stale `dev` retirement, Cloudflare DNS records, Vercel domain verification, staging/dev env var separation, then a development to staging to main proof PR chain.</td>
-              </tr>
-              <tr>
-                <td>Can infra be configured from here?</td>
-                <td>GitHub branch protection/default branch can be configured from here and are now protected. Vercel CLI access exists and local project linking now points at the correct `audio-layer` project. Cloudflare tunnel access exists; DNS API/zone management is not available from this shell.</td>
-                <td>Add the required Cloudflare CNAME/TXT records for dev/staging, then verify the two branch-pinned Vercel domains in the `audio-layer` project.</td>
+                <td>What about three-domain promotion?</td>
+                <td>The target remains dev.layers.mirrorfactory.ai for development, staging.layers.mirrorfactory.ai for staging, and layers.mirrorfactory.ai for main. Vercel branch pinning exists, but DNS verification is still the missing piece.</td>
+                <td>Add Cloudflare CNAME/TXT records, verify the Vercel domains, then prove development to staging to main with separate PRs.</td>
               </tr>
               <tr>
                 <td>Is Claude still being used?</td>
-                <td>Yes. Claude Code has been used as a bounded read-only worker for cross-checking QA, docs, and infra cautions while Codex performs orchestration and durable updates.</td>
-                <td>Continue using Claude for bounded verification and sub-reviews; keep repo mutations in the orchestrated path.</td>
+                <td>Yes, but not blindly. Claude was used for bounded web/platform checks. Where Claude stalled on iOS, Codex took over direct simulator testing and recorded the blocker.</td>
+                <td>Continue using Claude for parallel review/evidence, but keep final release decisions tied to observed test output.</td>
               </tr>
               <tr>
-                <td>Is this report now standardized?</td>
-                <td>Yes. A Codex skill now exists for this exact report workflow.</td>
-                <td>Future CPO status requests should update this same HTML report first, then summarize.</td>
+                <td>Is the report standardized?</td>
+                <td>Yes. The report skill exists and this HTML file is the durable CPO update target.</td>
+                <td>Future status requests should update docs/reports/release-readiness-cpo-report.html first, then summarize in chat.</td>
               </tr>
             </tbody>
           </table>
         </section>
 
         <section>
-          <h2>Documentation Map</h2>
-          <table class="scoreboard">
-            <thead>
-              <tr>
-                <th>Need</th>
-                <th>Document</th>
-                <th>What It Covers</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Full quality system</td>
-                <td>docs/PRODUCTION_QUALITY_SYSTEM.md</td>
-                <td>Branch ladder, Tier 0-5 verification, platform coverage, native-test expectations.</td>
-              </tr>
-              <tr>
-                <td>AI Dev Kit tiers</td>
-                <td>docs/AI_HARNESS_TIERS.md and docs/AI_OPERATING_SYSTEM_IMPLEMENTATION_PLAN.md</td>
-                <td>Tier commands, proof packet expectations, Expect policy, native proof policy, dashboard plan.</td>
-              </tr>
-              <tr>
-                <td>Cross-platform QA</td>
-                <td>docs/CROSS_PLATFORM_QA.md, docs/MOBILE_VISUAL_QA.md, docs/RECORDING_MANUAL_QA.md</td>
-                <td>Web, mobile web, iOS, Android, recording, and evidence capture checklists.</td>
-              </tr>
-              <tr>
-                <td>Native distribution</td>
-                <td>docs/NATIVE_RELEASE_READINESS.md and .github/workflows/build-release.yml</td>
-                <td>iOS TestFlight, macOS notarization, Android signed AAB, and required secrets.</td>
-              </tr>
-              <tr>
-                <td>Remotion video</td>
-                <td>docs/REMOTION.md, package.json, remotion/, branding/BRAND_NARRATIVE.md, docs/evidence/2026-05-12-brand-kit/BROWSER_VERIFICATION.md</td>
-                <td>`pnpm video:dev`, `pnpm video:render`, brand-template evidence, no-serif rule, and current limitation that video output is visually reviewed rather than fully automated.</td>
-              </tr>
-              <tr>
-                <td>Remotion onboarding gap</td>
-                <td>docs/REMOTION.md and .claude/skills/layers-brand-remotion/SKILL.md</td>
-                <td>Gap closed with a non-Claude onboarding doc; the deeper authoring playbook still lives in the Claude skill.</td>
-              </tr>
-            </tbody>
-          </table>
+          <h2>Evidence Map</h2>
+          <ul>
+            <li>Web main-feature report: docs/evidence/2026-05-18-claude-main-features-qa/web/WEB_MAIN_FEATURES_REPORT.md.</li>
+            <li>iOS auth screenshots: docs/evidence/2026-05-18-claude-main-features-qa/ios/.</li>
+            <li>Android screenshots: docs/evidence/2026-05-18-claude-main-features-qa/android/.</li>
+            <li>macOS crash screenshots: docs/evidence/2026-05-18-claude-main-features-qa/macos/.</li>
+            <li>Expect proof: .evidence/expect-proof.json.</li>
+            <li>Native config proof: .evidence/native-config.json.</li>
+          </ul>
         </section>
 
         <section>
           <h2>What I Need From You</h2>
           <div class="grid">
             <div class="card blocked">
-              <h3>Review Approval</h3>
+              <h3>Auth Retest Env</h3>
               <p>
-                PR #88 is mergeable but blocked by required review. Someone
-                other than the last pusher needs to approve it before it can
-                merge into development.
+                A production-like iOS target with public Supabase browser env
+                and the patched native OAuth code is needed to prove Google
+                sign-in and deep-link return end to end.
               </p>
             </div>
 
             <div class="card blocked">
-              <h3>Apple Secrets</h3>
+              <h3>Native Distribution</h3>
               <p>
-                For real macOS tester distribution, GitHub needs the Developer
-                ID certificate secrets and complete notarization credentials.
-                The workflow now refuses a signed-but-unnotarized artifact.
-                For iOS TestFlight, GitHub needs App Store Connect API key
-                credentials before unattended archive/export/upload can run.
+                For external native distribution, provide Apple notarization
+                and App Store Connect material, plus Android upload-key secrets.
+                Debug simulator QA can continue without them.
               </p>
             </div>
 
             <div class="card blocked">
-              <h3>Android Upload Key</h3>
+              <h3>Review + DNS</h3>
               <p>
-                For Play internal testing, GitHub needs the upload keystore
-                secret set so CI can produce and publish the signed release AAB.
-              </p>
-            </div>
-
-            <div class="card blocked">
-              <h3>Vercel + Cloudflare Access</h3>
-              <p>
-                Vercel CLI access exists and local project linking now points
-                at the same `audio-layer` Next.js project used by CI. DNS setup
-                still needs Cloudflare zone-management access. Add CNAME
-                records for `dev.layers` and `staging.layers` plus the Vercel
-                TXT verification records in docs/RELEASE.md.
+                PR #88 still needs review, and the dev/staging Vercel domains
+                need Cloudflare DNS records before the full branch promotion
+                ladder can be called ready.
               </p>
             </div>
           </div>
         </section>
 
         <section>
-          <h2>Linear Tracking</h2>
-          <ul>
-            <li>PROD-501 updated with PR #88 evidence and current blocker state.</li>
-            <li>PROD-512 updated for macOS notarization gate and remaining Apple secret requirement.</li>
-            <li>PROD-365 updated for Android signed AAB gate and upload-key requirement.</li>
-            <li>PROD-383 updated to keep the three-branch, three-domain release path visible.</li>
-            <li>PROD-523 created for default-branch Dependabot vulnerability cleanup.</li>
-            <li>PROD-383 follow-up: `main` branch protection was corrected to require `Tier 0-1 Fast Gates`, `Tier 2 Focused Browser Proof`, `Web (Vercel)`, and 1 approval.</li>
-            <li>PROD-383 follow-up: GitHub default branch is now `development`; Vercel local project context has been relinked to the CI-backed `audio-layer` project.</li>
-            <li>PROD-383 follow-up: stale `origin/dev` still exists at 0.1.75 and should be retired only after #88 advances protected `development`.</li>
-            <li>PROD-500 has pushed render hardening plus finalize-route hardening; focused web Stop-flow proof is locally and hosted green, and remains open until native proof catches up.</li>
-            <li>PROD-524 created for GitHub Actions Node 24 runner transition cleanup; workflows now use current action majors plus Node 24 opt-in. Latest pushed run has Tier 0-1, Tier 2, Tier 3, and Vercel green.</li>
-            <li>Native proof follow-up: iOS simulator Debug build and Android debug APK build both pass locally; store/TestFlight release artifacts still need signing/notarization/upload-key secrets.</li>
-            <li>PROD-383 still needs Cloudflare DNS setup, Vercel domain verification, env var separation, and a promotion proof chain.</li>
-          </ul>
-        </section>
-
-        <section>
           <h2>Decision</h2>
           <p class="ticker">
-            CPO READ: Safe to continue internal QA and reviewer handoff.
-            Not safe to call production-ready until PR review, native
-            recording follow-up, Apple notarization,
-            Android signed AAB, self-hosted runner proof, Cloudflare/Vercel
-            dev-staging domain verification, Dependabot
-            remediation, and branch/domain promotion proof are closed.
+            CPO READ: Do not send to broad external testers yet. Continue
+            internal QA and patch validation. The current branch has local
+            gates green, but still needs commit/push/CI, iOS auth proof,
+            Android/menu rerun, PR review, and native distribution setup
+            before release.
           </p>
         </section>
 

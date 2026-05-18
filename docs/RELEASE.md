@@ -170,7 +170,7 @@ Each tier needs its own URLs registered upstream. Without these, OAuth bounces a
   - `https://dev.layers.mirrorfactory.ai/auth/callback`
   - `https://*-mirror-factory.vercel.app/auth/callback` (per-PR previews)
   - `http://localhost:3000/auth/callback`
-  - `com.mirrorfactory.layers://auth/callback` (Capacitor iOS/Android deep-link OAuth)
+  - `com.mirafactory.layers://auth/callback` (Capacitor iOS/Android deep-link OAuth)
 
 ### Google OAuth (Cloud Console -> Credentials -> OAuth 2.0 Client)
 - Authorised JavaScript origins: prod + staging + dev domains.
