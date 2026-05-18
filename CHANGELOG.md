@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.156] — 2026-05-18
+
+### Documentation
+- docs: refresh manifest for release test evidence (`002afba`)
+
+
 ## [0.1.155] — 2026-05-18
 
 ### Documentation
