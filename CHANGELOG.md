@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.158] — 2026-05-18
+
+### Documentation
+- docs: correct cpo report ci status (`cf43d4b`)
+
+
 ## [0.1.157] — 2026-05-18
 
 ### Documentation
