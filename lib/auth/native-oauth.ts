@@ -31,6 +31,25 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 
 export const NATIVE_OAUTH_REDIRECT_URL =
   "com.mirafactory.layers://auth/callback";
+export const NATIVE_OAUTH_WEB_CALLBACK_PATH = "/auth/callback";
+export const CANONICAL_NATIVE_OAUTH_ORIGIN = "https://layers.mirrorfactory.ai";
+
+function safeInternalPath(value: string | undefined): string {
+  if (!value?.startsWith("/")) return "/record";
+  if (value.startsWith("//")) return "/record";
+  return value;
+}
+
+export function nativeOAuthRedirectTo(next = "/record"): string {
+  const origin =
+    typeof window !== "undefined" && window.location.protocol === "https:"
+      ? window.location.origin
+      : CANONICAL_NATIVE_OAUTH_ORIGIN;
+  const callbackUrl = new URL(NATIVE_OAUTH_WEB_CALLBACK_PATH, origin);
+  callbackUrl.searchParams.set("native", "1");
+  callbackUrl.searchParams.set("next", safeInternalPath(next));
+  return callbackUrl.toString();
+}
 
 /**
  * Detect whether we're running inside Capacitor (iOS or Android).
@@ -82,13 +101,6 @@ type SignInOptions = {
 
 type NativeListenerHandle = { remove: () => Promise<void> | void };
 
-type NativeAppPlugin = {
-  addListener(
-    event: "appUrlOpen",
-    handler: (event: { url: string }) => void | Promise<void>,
-  ): Promise<NativeListenerHandle> | NativeListenerHandle;
-};
-
 type SignInDeps = {
   supabase: SupabaseClient;
   /**
@@ -103,7 +115,6 @@ type SignInDeps = {
       handler: () => void | Promise<void>,
     ) => Promise<NativeListenerHandle> | NativeListenerHandle;
   }>;
-  loadApp?: () => Promise<NativeAppPlugin>;
   /**
    * Override for tests. Defaults to `window.location.assign`.
    */
@@ -131,7 +142,7 @@ export async function signInWithGoogleNative(
   }
 
   const { supabase } = deps;
-  const next = options.next ?? "/record";
+  const next = safeInternalPath(options.next);
 
   const loadBrowser =
     deps.loadBrowser ??
@@ -142,15 +153,6 @@ export async function signInWithGoogleNative(
         open: Browser.open.bind(Browser),
         close: Browser.close?.bind(Browser),
         addListener: Browser.addListener?.bind(Browser),
-      };
-    });
-  const loadApp =
-    deps.loadApp ??
-    (async () => {
-      const mod = await import("@capacitor/app");
-      const App = mod.App;
-      return {
-        addListener: App.addListener.bind(App),
       };
     });
   const navigate =
@@ -166,7 +168,7 @@ export async function signInWithGoogleNative(
     provider: "google",
     options: {
       skipBrowserRedirect: true,
-      redirectTo: NATIVE_OAUTH_REDIRECT_URL,
+      redirectTo: nativeOAuthRedirectTo(next),
       ...(options.scopes ? { scopes: options.scopes } : {}),
     },
   });
@@ -174,15 +176,14 @@ export async function signInWithGoogleNative(
   if (error) throw error;
   if (!data?.url) throw new Error("Supabase did not return an OAuth URL");
 
-  // 2. Register the deep-link listener BEFORE opening the browser so
-  //    we never miss the redirect on a fast network.
-  const App = await loadApp();
+  // 2. Open the provider in the native browser surface. The app-wide
+  //    NativeAuthBridge owns `appUrlOpen` and performs the one-time PKCE code
+  //    exchange. Keeping the exchange in one place avoids double-consuming the
+  //    callback code when the app returns from SFSafariViewController /
+  //    Chrome Custom Tab.
   const Browser = await loadBrowser();
 
   let disposed = false;
-  const handleRef: { current: { remove: () => Promise<void> | void } | undefined } = {
-    current: undefined,
-  };
   const browserFinishedRef: {
     current: { remove: () => Promise<void> | void } | undefined;
   } = {
@@ -192,11 +193,6 @@ export async function signInWithGoogleNative(
   const dispose = async () => {
     if (disposed) return;
     disposed = true;
-    try {
-      await handleRef.current?.remove();
-    } catch {
-      // ignore
-    }
     try {
       await browserFinishedRef.current?.remove();
     } catch {
@@ -209,45 +205,14 @@ export async function signInWithGoogleNative(
     }
   };
 
-  const handleUrl = async (event: { url: string }) => {
-    // Only react to our own callback scheme; the App listener fires
-    // for every deep-link the OS hands us.
-    if (!event?.url || !event.url.startsWith(NATIVE_OAUTH_REDIRECT_URL)) {
-      return;
-    }
-
-    const { code, error: oauthError, errorDescription } =
-      parseAuthCallbackUrl(event.url);
-
-    try {
-      if (oauthError) {
-        throw new Error(errorDescription ?? oauthError);
-      }
-      if (!code) {
-        throw new Error("Missing OAuth code in callback URL");
-      }
-      const { error: exchangeError } =
-        await supabase.auth.exchangeCodeForSession(code);
-      if (exchangeError) throw exchangeError;
-
-      navigate(next);
-    } finally {
-      await dispose();
-    }
-  };
-
-  const registration = await App.addListener("appUrlOpen", handleUrl);
-  handleRef.current = registration;
-
-  const handleCancelledBrowser = async () => {
+  const handleFinishedBrowser = async () => {
     await dispose();
-    navigate("/sign-in?error=native_browser_closed");
   };
 
   if (Browser.addListener) {
     browserFinishedRef.current = await Browser.addListener(
       "browserFinished",
-      handleCancelledBrowser,
+      handleFinishedBrowser,
     );
   }
 

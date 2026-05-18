@@ -2,7 +2,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 import {
+  CANONICAL_NATIVE_OAUTH_ORIGIN,
   NATIVE_OAUTH_REDIRECT_URL,
+  NATIVE_OAUTH_WEB_CALLBACK_PATH,
+  nativeOAuthRedirectTo,
   parseAuthCallbackUrl,
   signInWithGoogleNative,
 } from "@/lib/auth/native-oauth";
@@ -19,25 +22,13 @@ vi.mock("@capacitor/core", () => ({
   },
 }));
 
-type Listener = (event: { url: string }) => void | Promise<void>;
 type BrowserFinishedListener = () => void | Promise<void>;
 
 function makeFakes() {
   const browserOpen = vi.fn().mockResolvedValue(undefined);
   const browserClose = vi.fn().mockResolvedValue(undefined);
-  const remove = vi.fn().mockResolvedValue(undefined);
   const removeBrowserFinished = vi.fn().mockResolvedValue(undefined);
-  let captured: Listener | undefined;
   let capturedBrowserFinished: BrowserFinishedListener | undefined;
-  const addListener = vi
-    .fn()
-    .mockImplementation(async (event: string, handler: Listener) => {
-      if (event === "appUrlOpen") {
-        captured = handler;
-        return { remove };
-      }
-      throw new Error(`unexpected listener: ${event}`);
-    });
   const addBrowserListener = vi
     .fn()
     .mockImplementation(async (event: string, handler: BrowserFinishedListener) => {
@@ -54,16 +45,10 @@ function makeFakes() {
       close: browserClose,
       addListener: addBrowserListener,
     },
-    App: { addListener },
-    remove,
     removeBrowserFinished,
     browserOpen,
     browserClose,
     addBrowserListener,
-    fireDeepLink: async (url: string) => {
-      if (!captured) throw new Error("listener not registered");
-      await captured({ url });
-    },
     fireBrowserFinished: async () => {
       if (!capturedBrowserFinished) {
         throw new Error("browserFinished listener not registered");
@@ -119,6 +104,23 @@ describe("parseAuthCallbackUrl", () => {
   });
 });
 
+describe("nativeOAuthRedirectTo", () => {
+  it("uses an HTTPS callback that can bounce back to the native scheme", () => {
+    const redirectTo = new URL(nativeOAuthRedirectTo("/record"));
+
+    expect(redirectTo.origin).toBe(CANONICAL_NATIVE_OAUTH_ORIGIN);
+    expect(redirectTo.pathname).toBe(NATIVE_OAUTH_WEB_CALLBACK_PATH);
+    expect(redirectTo.searchParams.get("native")).toBe("1");
+    expect(redirectTo.searchParams.get("next")).toBe("/record");
+  });
+
+  it("rejects external next paths", () => {
+    const redirectTo = new URL(nativeOAuthRedirectTo("//evil.test"));
+
+    expect(redirectTo.searchParams.get("next")).toBe("/record");
+  });
+});
+
 describe("signInWithGoogleNative", () => {
   beforeEach(() => {
     mocks.isNativePlatform.mockReset();
@@ -137,13 +139,12 @@ describe("signInWithGoogleNative", () => {
     await expect(
       signInWithGoogleNative(undefined, {
         supabase: asClient(supabase),
-        loadApp: async () => fakes.App,
         loadBrowser: async () => fakes.Browser,
       }),
     ).rejects.toThrow(/outside a native Capacitor runtime/);
   });
 
-  it("opens the Supabase OAuth URL in Browser.open and registers a deep-link listener", async () => {
+  it("opens the Supabase OAuth URL in Browser.open and leaves code exchange to NativeAuthBridge", async () => {
     mocks.isNativePlatform.mockReturnValue(true);
     const supabase = makeSupabase();
     const fakes = makeFakes();
@@ -153,7 +154,6 @@ describe("signInWithGoogleNative", () => {
       { next: "/record" },
       {
         supabase: asClient(supabase),
-        loadApp: async () => fakes.App,
         loadBrowser: async () => fakes.Browser,
         navigate,
       },
@@ -163,13 +163,10 @@ describe("signInWithGoogleNative", () => {
       provider: "google",
       options: expect.objectContaining({
         skipBrowserRedirect: true,
-        redirectTo: NATIVE_OAUTH_REDIRECT_URL,
+        redirectTo: nativeOAuthRedirectTo("/record"),
       }),
     });
-    expect(fakes.App.addListener).toHaveBeenCalledWith(
-      "appUrlOpen",
-      expect.any(Function),
-    );
+    expect(supabase.auth.exchangeCodeForSession).not.toHaveBeenCalled();
     expect(fakes.addBrowserListener).toHaveBeenCalledWith(
       "browserFinished",
       expect.any(Function),
@@ -191,17 +188,13 @@ describe("signInWithGoogleNative", () => {
       { next: "/record" },
       {
         supabase: asClient(supabase),
-        loadApp: async () => fakes.App,
         loadBrowser: async () => fakes.Browser,
       },
     );
 
     await vi.advanceTimersByTimeAsync(750);
     await expect(signIn).resolves.toMatchObject({ disposed: false });
-    expect(fakes.App.addListener).toHaveBeenCalledWith(
-      "appUrlOpen",
-      expect.any(Function),
-    );
+    expect(supabase.auth.exchangeCodeForSession).not.toHaveBeenCalled();
   });
 
   it("surfaces immediate native browser open failures", async () => {
@@ -215,7 +208,6 @@ describe("signInWithGoogleNative", () => {
       { next: "/record" },
       {
         supabase: asClient(supabase),
-        loadApp: async () => fakes.App,
         loadBrowser: async () => fakes.Browser,
       },
     );
@@ -225,7 +217,7 @@ describe("signInWithGoogleNative", () => {
     await expectation;
   });
 
-  it("exchanges the deep-link code and navigates to next on success", async () => {
+  it("disposes without redirecting when the native browser surface finishes", async () => {
     mocks.isNativePlatform.mockReturnValue(true);
     const supabase = makeSupabase();
     const fakes = makeFakes();
@@ -235,32 +227,6 @@ describe("signInWithGoogleNative", () => {
       { next: "/record" },
       {
         supabase: asClient(supabase),
-        loadApp: async () => fakes.App,
-        loadBrowser: async () => fakes.Browser,
-        navigate,
-      },
-    );
-
-    await fakes.fireDeepLink(`${NATIVE_OAUTH_REDIRECT_URL}?code=the-code`);
-
-    expect(supabase.auth.exchangeCodeForSession).toHaveBeenCalledWith("the-code");
-    expect(navigate).toHaveBeenCalledWith("/record");
-    expect(fakes.remove).toHaveBeenCalled();
-    expect(fakes.removeBrowserFinished).toHaveBeenCalled();
-    expect(fakes.browserClose).toHaveBeenCalled();
-  });
-
-  it("disposes and returns to sign-in when the native browser is cancelled", async () => {
-    mocks.isNativePlatform.mockReturnValue(true);
-    const supabase = makeSupabase();
-    const fakes = makeFakes();
-    const navigate = vi.fn();
-
-    await signInWithGoogleNative(
-      { next: "/record" },
-      {
-        supabase: asClient(supabase),
-        loadApp: async () => fakes.App,
         loadBrowser: async () => fakes.Browser,
         navigate,
       },
@@ -268,60 +234,8 @@ describe("signInWithGoogleNative", () => {
 
     await fakes.fireBrowserFinished();
 
-    expect(fakes.remove).toHaveBeenCalled();
     expect(fakes.removeBrowserFinished).toHaveBeenCalled();
     expect(fakes.browserClose).toHaveBeenCalled();
-    expect(navigate).toHaveBeenCalledWith("/sign-in?error=native_browser_closed");
-  });
-
-  it("ignores deep-link events for unrelated URL schemes", async () => {
-    mocks.isNativePlatform.mockReturnValue(true);
-    const supabase = makeSupabase();
-    const fakes = makeFakes();
-    const navigate = vi.fn();
-
-    await signInWithGoogleNative(
-      { next: "/record" },
-      {
-        supabase: asClient(supabase),
-        loadApp: async () => fakes.App,
-        loadBrowser: async () => fakes.Browser,
-        navigate,
-      },
-    );
-
-    await fakes.fireDeepLink("https://layers.mirrorfactory.ai/something");
-
-    expect(supabase.auth.exchangeCodeForSession).not.toHaveBeenCalled();
     expect(navigate).not.toHaveBeenCalled();
-    expect(fakes.remove).not.toHaveBeenCalled();
-  });
-
-  it("does not call exchange when the OAuth provider returns an error", async () => {
-    mocks.isNativePlatform.mockReturnValue(true);
-    const supabase = makeSupabase();
-    const fakes = makeFakes();
-    const navigate = vi.fn();
-
-    await signInWithGoogleNative(
-      { next: "/record" },
-      {
-        supabase: asClient(supabase),
-        loadApp: async () => fakes.App,
-        loadBrowser: async () => fakes.Browser,
-        navigate,
-      },
-    );
-
-    await expect(
-      fakes.fireDeepLink(
-        `${NATIVE_OAUTH_REDIRECT_URL}?error=access_denied&error_description=denied`,
-      ),
-    ).rejects.toThrow(/denied/);
-
-    expect(supabase.auth.exchangeCodeForSession).not.toHaveBeenCalled();
-    expect(navigate).not.toHaveBeenCalled();
-    expect(fakes.remove).toHaveBeenCalled();
-    expect(fakes.browserClose).toHaveBeenCalled();
   });
 });

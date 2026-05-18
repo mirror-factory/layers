@@ -33,10 +33,14 @@ describe("auth domain configuration", () => {
     expect(electronMain).toContain(CANONICAL_APP_URL);
   });
 
-  it("keeps native OAuth on the Layers custom scheme instead of a web fallback", () => {
+  it("keeps native OAuth on the Layers HTTPS bounce plus custom-scheme return", () => {
     const nativeOAuth = readFileSync("lib/auth/native-oauth.ts", "utf8");
+    const authCallback = readFileSync("app/auth/callback/route.ts", "utf8");
 
     expect(nativeOAuth).toContain("com.mirafactory.layers://auth/callback");
-    expect(nativeOAuth).toContain("redirectTo: NATIVE_OAUTH_REDIRECT_URL");
+    expect(nativeOAuth).toContain("nativeOAuthRedirectTo");
+    expect(nativeOAuth).toContain("https://layers.mirrorfactory.ai");
+    expect(authCallback).toContain("nativeRedirectResponse");
+    expect(authCallback).toContain("com.mirafactory.layers://auth/callback");
   });
 });

@@ -69,10 +69,16 @@ export function NativeAuthBridge() {
         await Browser.close().catch(() => undefined);
 
         const launch = await App.getLaunchUrl();
-        if (active && launch?.url) await handleNativeAuthUrl(launch.url);
+        if (active && launch?.url) {
+          await handleNativeAuthUrl(launch.url).catch(() => {
+            window.location.href = "/sign-in?error=auth_callback_failed";
+          });
+        }
 
         const listener = await App.addListener("appUrlOpen", event => {
-          void handleNativeAuthUrl(event.url);
+          void handleNativeAuthUrl(event.url).catch(() => {
+            window.location.href = "/sign-in?error=auth_callback_failed";
+          });
         });
 
         if (!active) {
